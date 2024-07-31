@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PeopleWith.RegisterPage" BackgroundColor="White"
+             xmlns:progressBar="clr-namespace:Syncfusion.Maui.ProgressBar;assembly=Syncfusion.Maui.ProgressBar"
+             xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+             xmlns:pinview="clr-namespace:PINView.Maui;assembly=PINView.Maui"
+              Shell.NavBarHasShadow="False" Shell.NavBarIsVisible="False">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" x:Name="topgrid" Margin="0,20,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="25*"/>
+                <ColumnDefinition Width="50*"/>
+                <ColumnDefinition Width="25*"/>
+            </Grid.ColumnDefinitions>
+
+
+
+            <Image Source="backbutton.png" Grid.Column="0" HorizontalOptions="Start" VerticalOptions="Center" Margin="20,0,0,0" HeightRequest="20" WidthRequest="20"/>
+
+            <progressBar:SfLinearProgressBar Progress="6" x:Name="topprogress"
+                                TrackHeight="8"  TrackFill="#BFDBF7" ProgressFill="#031926"
+                                TrackCornerRadius="5" SecondaryProgressFill="#BFDBF7"
+                                ProgressHeight="8" Margin="30,0,30,0" AnimationEasing="{x:Static Easing.CubicInOut}"
+                                Grid.Column="1" VerticalOptions="Center"
+                                            BackgroundColor="Transparent"
+                                ProgressCornerRadius="5" />
+
+            <Label 
+    Text="SKIP" FontAttributes="Bold" Grid.Column="2" HorizontalOptions="Center"
+    VerticalOptions="Center" TextColor="#031926" IsVisible="False"
+     />
+
+
+        </Grid>
+
+
+
+        <ScrollView Grid.Row="1" Margin="0,30,0,0" BackgroundColor="Transparent">
+
+            <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+
+                <StackLayout x:Name="emailframe" Margin="20,0,20,0">
+
+                    <Label
+  Text="Registration"
+  FontSize="26"
+  Margin="0,0,0,0"
+  TextColor="#031926"
+  FontFamily="HankenGroteskBold"
+  FontAttributes="Bold"
+  HorizontalOptions="Start" />
+
+                    <Label
+ Text="Start by securing your account"
+ TextColor="#031926"
+ FontFamily="HankenGroteskRegular"
+ FontAttributes="None"
+ Margin="0,0,0,0"
+ FontSize="15"
+ HorizontalOptions="Start" />
+
+
+
+
+
+                    <inputLayout:SfTextInputLayout InputViewPadding="10" ShowHint="True" x:Name="emailhelper" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,20,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5"
+                      >
+                        <Entry FontSize="Small" PlaceholderColor="Gray" x:Name="emailentry" TextChanged="emailentry_TextChanged"  FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Email Address" TextColor="#031926"/>
+
+                        <inputLayout:SfTextInputLayout.ErrorLabelStyle>
+                            <inputLayout:LabelStyle TextColor="Red"   FontFamily="HankenGroteskBold" />
+                        </inputLayout:SfTextInputLayout.ErrorLabelStyle>
+                    </inputLayout:SfTextInputLayout>
+
+
+
+                    <!--<Label
+Text="Password:"
+TextColor="#031926"
+FontFamily="HankenGroteskBold"
+FontAttributes="None"
+Margin="0,0,0,0"
+FontSize="15"
+HorizontalOptions="Start" />-->
+
+
+
+                    <inputLayout:SfTextInputLayout InputViewPadding="10" ShowHint="True" IsHintAlwaysFloated="True" x:Name="passhelper" BackgroundColor="Transparent" Margin="0,0,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5"
+                     EnablePasswordVisibilityToggle="True" >
+                        <Entry FontSize="Small" PlaceholderColor="Gray" x:Name="firstpasswordentry" TextChanged="firstpasswordentry_TextChanged" FontFamily="HankenGroteskRegular"  VerticalOptions="CenterAndExpand" Placeholder="Password" TextColor="#031926"/>
+                    </inputLayout:SfTextInputLayout>
+
+                    <Label  TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="Bold" FontSize="12" Text="Password must contain:" Margin="0,0,0,10" VerticalOptions="Center" HorizontalOptions="Start" />
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="40*"/>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="40*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Image Source="regtick.png" Grid.Column="0" Grid.Row="0" VerticalOptions="Center" HorizontalOptions="Center" Opacity="0.2" x:Name="chartick" HeightRequest="20" />
+                        <Label  TextColor="#031926" FontFamily="HankenGroteskRegular" FontSize="12" Text="Min 8 Characters" Opacity="0.2" x:Name="charlbl"  Grid.Column="1" Grid.Row="0" VerticalOptions="Center" HorizontalOptions="Start" />
+
+                        <Image Source="regtick.png" Grid.Column="2" Grid.Row="0" VerticalOptions="Center" HorizontalOptions="Center" Opacity="0.2" x:Name="specialtick" HeightRequest="20" />
+                        <Label  TextColor="#031926" FontFamily="HankenGroteskRegular" FontSize="12" Text="Special Character" Opacity="0.2" x:Name="speciallbl"  Grid.Column="3" Grid.Row="0" VerticalOptions="Center" HorizontalOptions="Start" />
+
+
+                        <Image Source="regtick.png" Grid.Column="0" Grid.Row="1" VerticalOptions="Center" HorizontalOptions="Center" Opacity="0.2" x:Name="capitaltick" HeightRequest="20" />
+                        <Label  TextColor="#031926" FontFamily="HankenGroteskRegular" FontSize="12" Text="Capital letter" Opacity="0.2" x:Name="capitallbl"  Grid.Column="1" Grid.Row="1" VerticalOptions="Center" HorizontalOptions="Start" />
+
+                        <Image Source="regtick.png" Grid.Column="2" Grid.Row="1" VerticalOptions="Center" HorizontalOptions="Center" Opacity="0.2" x:Name="numtick" HeightRequest="20" />
+                        <Label  TextColor="#031926" FontFamily="HankenGroteskRegular" FontSize="12" Text="Number" Opacity="0.2" x:Name="numlbl"  Grid.Column="3" Grid.Row="1" VerticalOptions="Center" HorizontalOptions="Start" />
+
+                    </Grid>
+
+
+
+
+                    <inputLayout:SfTextInputLayout InputViewPadding="10" x:Name="confirmpasshelper" ShowHint="True" IsHintAlwaysFloated="True"  BackgroundColor="Transparent" Margin="0,0,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5"
+                      EnablePasswordVisibilityToggle="True">
+                        <Entry FontSize="Small" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" x:Name="confirmpassentry" TextChanged="confirmpassentry_TextChanged"  VerticalOptions="CenterAndExpand" Placeholder="Confirm Password" TextColor="#031926"/>
+                        <inputLayout:SfTextInputLayout.ErrorLabelStyle>
+                            <inputLayout:LabelStyle TextColor="Red"   FontFamily="HankenGroteskBold" />
+                        </inputLayout:SfTextInputLayout.ErrorLabelStyle>
+                    </inputLayout:SfTextInputLayout>
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="40*"/>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="40*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!--<Image Source="regtick.png" Grid.Column="0" Grid.Row="0" VerticalOptions="Center" HorizontalOptions="Center" Opacity="0.2" x:Name="passmatchtick" HeightRequest="20" />
+                        <Label  TextColor="#031926" FontFamily="HankenGroteskRegular" FontSize="12" Text="Password's Match" Opacity="0.2" x:Name="passmatchlbl"  Grid.Column="1" Grid.Row="0" VerticalOptions="Center" HorizontalOptions="Start" />-->
+
+                    </Grid>
+                    
+
+                </StackLayout>
+
+                <StackLayout x:Name="confirmemailframe" Margin="20,0,20,0" IsVisible="False">
+
+                    <Label
+ Text="Confirm Email"
+ FontSize="26"
+ Margin="0,0,0,0"
+ TextColor="#031926"
+ FontFamily="HankenGroteskBold"
+ FontAttributes="Bold"
+ HorizontalOptions="Start" />
+
+                    <Label
+Text="Please enter the code sent to your email"
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,0,0,0"
+FontSize="15"
+HorizontalOptions="Start" />
+
+
+
+
+
+
+
+                    <pinview:PINView
+   BoxBackgroundColor="Transparent" Margin="0,20,0,0" x:Name="emailconfigpin"
+   BoxShape="RoundCorner" AutoDismissKeyboard="True" PropertyChanged="emailconfigpin_PropertyChanged"
+   PINLength="5" HorizontalOptions="Center" PINEntryCompleted="emailconfigpin_PINEntryCompleted"
+  BoxBorderColor="LightGray"
+   Color="#031926" />
+
+                    <Label
+Text="Invalid Code"
+TextColor="Red"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,20,0,0" x:Name="incorrectcodelbl"
+FontSize="15" IsVisible="False"
+HorizontalOptions="Center" />
+
+
+
+
+                </StackLayout>
+
+
+                <StackLayout x:Name="signupcodeframe" Margin="20,0,20,0" IsVisible="False">
+
+                    <Label
+ Text="Enter Sign-Up Code"
+ FontSize="26"
+ Margin="0,0,0,0"
+ TextColor="#031926"
+ FontFamily="HankenGroteskBold"
+ FontAttributes="Bold"
+ HorizontalOptions="Start" />
+
+                    <Label
+Text="Please enter your signup code"
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,0,0,0"
+FontSize="15"
+HorizontalOptions="Start" />
+
+
+
+
+                    <inputLayout:SfTextInputLayout InputViewPadding="10" x:Name="signupfloat" ShowHint="True" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,20,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5"
+           >
+                        <Entry FontSize="Small" PlaceholderColor="Gray" TextChanged="signupcodetext_TextChanged" x:Name="signupcodetext"  FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Sign-Up Code" TextColor="#031926">
+                            <Entry.Keyboard>
+                                <Keyboard x:FactoryMethod="Create">
+                                    <x:Arguments>
+                                        <KeyboardFlags>Suggestions,CapitalizeCharacter</KeyboardFlags>
+                                    </x:Arguments>
+                                </Keyboard>
+                            </Entry.Keyboard>
+                        </Entry>
+                        <inputLayout:SfTextInputLayout.ErrorLabelStyle>
+                            <inputLayout:LabelStyle TextColor="Red"   FontFamily="HankenGroteskBold" />
+                        </inputLayout:SfTextInputLayout.ErrorLabelStyle>
+                    </inputLayout:SfTextInputLayout>
+
+                    <Label
+Text="OR"
+FontSize="15"
+Margin="0,0,0,0"
+TextColor="#031926"
+FontFamily="HankenGroteskBold"
+FontAttributes="Bold"
+HorizontalOptions="Center" />
+
+
+                    <Button CornerRadius="10" x:Name="nosignupbtn" Clicked="nosignupbtn_Clicked" Margin="0,20,0,0" Padding="5" BorderWidth="1" Text="I don't have a sign-up code" FontFamily="HankenGroteskRegular" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="Small" BackgroundColor="Transparent" BorderColor="LightGray" />
+
+
+
+
+
+
+
+                </StackLayout>
+
+                <StackLayout x:Name="signupinfostack" Margin="20,0,20,0" IsVisible="False">
+
+
+
+                    <Label
+x:Name="signupinfotitle"
+ FontSize="26"
+ Margin="0,20,0,0"
+ TextColor="#031926"
+ FontFamily="HankenGroteskBold"
+ FontAttributes="Bold" HorizontalTextAlignment="Center"
+ HorizontalOptions="Center" />
+
+                    <Label
+Text="Thank you for joining our study! Your participation is invaluable in helping us. We deeply appreciate your willingness to contribute your time and insights to this important work. By sharing your experiences and perspectives, you are playing a crucial role in driving forward research that can lead to meaningful improvements and innovations. Your input will not only aid our current investigation but also pave the way for future studies and developments in this field."
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,20,0,0"
+FontSize="15" HorizontalTextAlignment="Center"
+HorizontalOptions="Center" />
+
+
+
+
+
+                </StackLayout>
+
+
+            </Grid>
+        </ScrollView>
+
+
+
+
+
+        <StackLayout Grid.Row="1" x:Name="bottomstack" VerticalOptions="EndAndExpand" BackgroundColor="White">
+            <Button
+   BackgroundColor="#031926"
+   HorizontalOptions="EndAndExpand"
+   TextColor="White"
+        Clicked="nextbtn_Clicked" x:Name="nextbtn"
+   FontAttributes="None" 
+        Margin="20,0,20,10"
+   FontFamily="HankenGroteskBold"
+   Text="Next" />
+
+            <ActivityIndicator IsRunning="true" x:Name="nextbtnloader" IsVisible="False" HorizontalOptions="EndAndExpand" Margin="20,0,20,10" HeightRequest="25"
+                   Color="#031926" />
+
+            <Label
+   Text="Privacy Policy"
+   TextColor="#031926"
+   FontFamily="HankenGroteskRegular"
+   FontAttributes="Bold"
+   Margin="0,0,0,10"
+   FontSize="10"
+   HorizontalOptions="Center" />
+        </StackLayout>
+
+
+    </Grid>
+</ContentPage>

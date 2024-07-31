@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" BackgroundColor="White"
+                      xmlns:progressBar="clr-namespace:Syncfusion.Maui.ProgressBar;assembly=Syncfusion.Maui.ProgressBar"
+         xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+             x:Class="PeopleWith.RegisterWithSignUpCodePage" Shell.NavBarHasShadow="False" Shell.NavBarIsVisible="False"
+             >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" x:Name="topgrid" Margin="0,20,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="25*"/>
+                <ColumnDefinition Width="50*"/>
+                <ColumnDefinition Width="25*"/>
+            </Grid.ColumnDefinitions>
+
+
+
+            <Image Source="backbutton.png" Grid.Column="0" HorizontalOptions="Start" VerticalOptions="Center" Margin="20,0,0,0" HeightRequest="20" WidthRequest="20"/>
+
+            <progressBar:SfLinearProgressBar Progress="6" x:Name="topprogress"
+                                TrackHeight="8"  TrackFill="#BFDBF7" ProgressFill="#031926"
+                                TrackCornerRadius="5" SecondaryProgressFill="#BFDBF7"
+                                ProgressHeight="8" Margin="30,0,30,0" AnimationEasing="{x:Static Easing.CubicInOut}"
+                                Grid.Column="1" VerticalOptions="Center"
+                                            BackgroundColor="Transparent"
+                                ProgressCornerRadius="5" />
+
+            <Label 
+    Text="SKIP" FontAttributes="Bold" Grid.Column="2" HorizontalOptions="Center"
+    VerticalOptions="Center" TextColor="#031926" IsVisible="False"
+     />
+
+
+        </Grid>
+
+
+
+        <ScrollView Grid.Row="1" Margin="0,30,0,0" BackgroundColor="Transparent">
+
+            <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+
+                <StackLayout x:Name="signupinfostack" Margin="20,0,20,0" IsVisible="False">
+
+
+
+                    <Label
+x:Name="signupinfotitle"
+ FontSize="26"
+ Margin="0,20,0,0"
+ TextColor="#031926"
+ FontFamily="HankenGroteskBold"
+ FontAttributes="Bold" HorizontalTextAlignment="Center"
+ HorizontalOptions="Center" />
+
+                    <Label
+Text="Thank you for joining our study! Your participation is invaluable in helping us. We deeply appreciate your willingness to contribute your time and insights to this important work. By sharing your experiences and perspectives, you are playing a crucial role in driving forward research that can lead to meaningful improvements and innovations. Your input will not only aid our current investigation but also pave the way for future studies and developments in this field."
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,20,0,0"
+FontSize="15" HorizontalTextAlignment="Center"
+HorizontalOptions="Center" />
+
+
+
+
+
+                </StackLayout>
+
+
+            </Grid>
+        </ScrollView>
+
+
+
+
+
+        <StackLayout Grid.Row="1" x:Name="bottomstack" VerticalOptions="EndAndExpand" BackgroundColor="White">
+            <Button
+   BackgroundColor="#031926"
+   HorizontalOptions="EndAndExpand"
+   TextColor="White"
+         x:Name="nextbtn"
+   FontAttributes="None" 
+        Margin="20,0,20,10"
+   FontFamily="HankenGroteskBold"
+   Text="Next" />
+
+            <ActivityIndicator IsRunning="true" x:Name="nextbtnloader" IsVisible="False" HorizontalOptions="EndAndExpand" Margin="20,0,20,10" HeightRequest="25"
+                   Color="#031926" />
+
+            <Label
+   Text="Privacy Policy"
+   TextColor="#031926"
+   FontFamily="HankenGroteskRegular"
+   FontAttributes="Bold"
+   Margin="0,0,0,10"
+   FontSize="10"
+   HorizontalOptions="Center" />
+        </StackLayout>
+
+
+    </Grid>
+
+
+</ContentPage>

@@ -1,0 +1,105 @@
+{
+  "project_info": {
+    "project_number": "1076326493942",
+    "project_id": "peoplewithhealth",
+    "storage_bucket": "peoplewithhealth.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1076326493942:android:9784929bab47bc358106d7",
+        "android_client_info": {
+          "package_name": "com.companyname.mauiapppush"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1076326493942-kp99psun64sb273micalm92n0tbr479t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIasXE3ET050V-cnQU9pksvQSr4Ll-CNw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1076326493942-kp99psun64sb273micalm92n0tbr479t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1076326493942:android:4c6115fef65fcfb58106d7",
+        "android_client_info": {
+          "package_name": "com.peoplewith.peoplewith"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1076326493942-h65qgd2ajc14gknu3kodrvha75c2lifh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.peoplewith.peoplewith",
+            "certificate_hash": "270ec88ea605bedf6bb780ef85230d60d4f7b2ce"
+          }
+        },
+        {
+          "client_id": "1076326493942-kp99psun64sb273micalm92n0tbr479t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIasXE3ET050V-cnQU9pksvQSr4Ll-CNw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1076326493942-kp99psun64sb273micalm92n0tbr479t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1076326493942:android:0323802f73ccc2ef8106d7",
+        "android_client_info": {
+          "package_name": "com.peoplewith.peoplewithresearch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1076326493942-kp99psun64sb273micalm92n0tbr479t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIasXE3ET050V-cnQU9pksvQSr4Ll-CNw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1076326493942-kp99psun64sb273micalm92n0tbr479t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

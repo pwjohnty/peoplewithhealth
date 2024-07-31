@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  Shell.NavBarIsVisible="False"
+             x:Class="PeopleWith.MainPage">
+
+    <AbsoluteLayout IgnoreSafeArea="True">
+        <!-- Background Image covering the entire page -->
+        <Image
+        Source="background.png"
+        Aspect="AspectFill"
+          
+        AbsoluteLayout.LayoutBounds="0,0,1,1"
+        AbsoluteLayout.LayoutFlags="All" />
+
+        <!-- Overlaying text on the background image -->
+        <VerticalStackLayout
+        Padding="40,0,20,0"
+        VerticalOptions="Start"
+        Spacing="0"
+        AbsoluteLayout.LayoutBounds="0,0,1,1"
+        AbsoluteLayout.LayoutFlags="All">
+
+            <Label
+            Text="Welcome to PeopleWith"
+            FontSize="36"
+            Margin="0,70,0,0"
+            TextColor="White"
+            FontFamily="HankenGroteskBold"
+            FontAttributes="Bold"
+            HorizontalOptions="Start" />
+
+            <Label
+            Text="Your health companion."
+            TextColor="#BFDBF7"
+            FontFamily="HankenGroteskRegular"
+            FontAttributes="None"
+            Margin="0,0,0,0"
+            FontSize="15"
+            HorizontalOptions="Start" />
+
+
+        </VerticalStackLayout>
+
+        <!-- Buttons at the bottom of the screen -->
+        <VerticalStackLayout
+        Padding="20,0,20,20"
+        VerticalOptions="End"
+        Spacing="10"
+        AbsoluteLayout.LayoutBounds="0,1,1,AutoSize"
+        AbsoluteLayout.LayoutFlags="PositionProportional,WidthProportional">
+
+            <Button
+            BackgroundColor="#BFDBF7"
+            HorizontalOptions="FillAndExpand"
+            TextColor="#031926"
+              Clicked="Button_Clicked"
+            FontAttributes="None"
+                 Margin="20,0,20,0"
+            FontFamily="HankenGroteskBold"
+            Text="Register" />
+
+            <Button
+            BackgroundColor="White"
+            HorizontalOptions="FillAndExpand"
+            TextColor="#031926"
+            Margin="20,0,20,0"
+            FontAttributes="None"   
+            FontFamily="HankenGroteskRegular"
+            Text="Login" />
+
+
+            <Label
+            Text="Privacy Policy"
+            TextColor="#BFDBF7"
+            FontFamily="HankenGroteskRegular"
+            FontAttributes="Bold"
+            Margin="0,10,0,0"
+            FontSize="10"
+            HorizontalOptions="Center" />
+
+        </VerticalStackLayout>
+    </AbsoluteLayout>
+
+</ContentPage>
