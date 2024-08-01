@@ -5,5 +5,7 @@
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 	<uses-permission android:name="android.permission.VIBRATE" />
-	<uses-sdk />
+  <!-- Add Health Connect permission -->
+  <uses-permission android:name="android.permission.READ_HEALTH_DATA"/>
+	<uses-sdk android:targetSdkVersion="34" />
 </manifest>

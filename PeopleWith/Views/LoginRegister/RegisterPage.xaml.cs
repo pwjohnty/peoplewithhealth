@@ -1,4 +1,3 @@
-//using AndroidX.Activity;
 using MauiApp1;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
@@ -17,10 +16,56 @@ public partial class RegisterPage : ContentPage
     user newuser = new user();
     bool nosignupcodebtn;
     HttpClient client = new HttpClient();
+    public List<string> genlist = new List<string>();
+    public List<string> ethnicitylist = new List<string>();
+    bool isEditing;
+    bool validdob;
+    signupcode signupcodeinfo;
     public RegisterPage()
 	{
 		InitializeComponent();
-	}
+
+
+        genlist.Add("Male");
+        genlist.Add("Female");
+        genlist.Add("Other");
+
+        genderlist.ItemsSource = genlist;
+
+        ethnicitylist.Add("White");
+        ethnicitylist.Add("White English");
+        ethnicitylist.Add("White Welsh");
+        ethnicitylist.Add("White Scottish");
+        ethnicitylist.Add("White Northern Irish");
+        ethnicitylist.Add("White Irish");
+        ethnicitylist.Add("White Gypsy or Irish Traveller");
+        ethnicitylist.Add("White Other");
+        ethnicitylist.Add("Mixed White and Black Caribbean");
+        ethnicitylist.Add("Mixed White and Black African");
+        ethnicitylist.Add("Mixed White Other");
+        ethnicitylist.Add("Asian Indian");
+        ethnicitylist.Add("Asian Pakistani");
+        ethnicitylist.Add("Asian Bangladeshi");
+        ethnicitylist.Add("Asian Chinese");
+        ethnicitylist.Add("Asian Other");
+        ethnicitylist.Add("Black African ");
+        ethnicitylist.Add("Black African American");
+        ethnicitylist.Add("Black Caribbean");
+        ethnicitylist.Add("Black Other");
+        ethnicitylist.Add("Arab");
+        ethnicitylist.Add("Hispanic");
+        ethnicitylist.Add("Latino");
+        ethnicitylist.Add("Native American");
+        ethnicitylist.Add("Pacific Islander");
+        ethnicitylist.Add("Other");
+        ethnicitylist.Add("Prefer not to disclose");
+
+        ethnicitylist.Sort();
+
+        ethlist.ItemsSource = ethnicitylist;
+
+
+    }
 
     private void firstpasswordentry_TextChanged(object sender, TextChangedEventArgs e)
     {
@@ -79,6 +124,19 @@ public partial class RegisterPage : ContentPage
             else if(signupcodeframe.IsVisible == true)
             {
                 Handlesignupcodeframe();
+            }
+            //add in the sign up info page here
+            else if(genderframe.IsVisible == true)
+            {
+                Handlegenderframe();
+            }
+            else if(dobstack.IsVisible == true)
+            {
+                Handledobframe();
+            }
+            else if(ethstack.IsVisible == true)
+            {
+                Handleethnicityframe();
             }
          
 
@@ -272,6 +330,14 @@ public partial class RegisterPage : ContentPage
         {
             //add in validation for confirm code
 
+            if(string.IsNullOrEmpty(emailconfigpin.PINValue))
+            {
+                // incorrectcodelbl.IsVisible = true;
+                emailconfigpin.Focus();
+                Vibration.Vibrate();
+                return;
+            }
+
             if(emailconfigpin.PINValue == newuser.validationcode)
             {
                 confirmemailframe.IsVisible = false;
@@ -283,6 +349,7 @@ public partial class RegisterPage : ContentPage
             else
             {
                 incorrectcodelbl.IsVisible = true;
+                Vibration.Vibrate();
                 return;
             }
 
@@ -304,7 +371,10 @@ public partial class RegisterPage : ContentPage
             if(nosignupcodebtn)
             {
                 //continue to gender
-
+                signupcodeframe.IsVisible = false;
+                genderframe.IsVisible = true;
+                
+                UpdateProgress();
             }
             else
             {
@@ -339,6 +409,7 @@ public partial class RegisterPage : ContentPage
                     {
                         signupinfotitle.Text = "Welcome to " + users[0].title;
 
+                        signupcodeinfo = users[0];
                         signupinfostack.IsVisible = true;
                         signupcodeframe.IsVisible = false;
                         nextbtnloader.IsVisible = false;
@@ -356,6 +427,88 @@ public partial class RegisterPage : ContentPage
 
         }
         catch(Exception ex )
+        {
+
+        }
+    }
+
+    async void Handlegenderframe()
+    {
+        try
+        {
+            if(string.IsNullOrEmpty(newuser.gender))
+            {
+                Vibration.Vibrate();
+                return;
+            }
+            else
+            {
+                genderframe.IsVisible = false;
+                dobstack.IsVisible = true;
+                UpdateProgress();
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    async void Handledobframe()
+    {
+        try
+        {
+            if(validdob)
+            {
+                newuser.dateofbirth = dateEntry.Text;
+                dobstack.IsVisible = false;
+
+                //novo dont want ethnicity
+                if (signupcodeinfo != null)
+                {
+                    if (signupcodeinfo.referral == "NOVO")
+                    {
+                        //skip to additional steps ie health kit, notifications, face id
+                    }
+                }
+                else
+                {
+
+                    ethstack.IsVisible = true;
+                }
+
+                UpdateProgress();
+            }
+            else
+            {
+                Vibration.Vibrate();
+                return;
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    async void Handleethnicityframe()
+    {
+        try
+        {
+            if(string.IsNullOrEmpty(newuser.ethnicity))
+            {
+                Vibration.Vibrate();
+                return;
+            }
+            else
+            {
+                //pass user and page progress
+                
+                UpdateProgress();
+                await Navigation.PushAsync(new RegisterFinalPage(newuser, topprogress.Progress), false);
+            }
+        }
+        catch( Exception ex )
         {
 
         }
@@ -541,6 +694,115 @@ public partial class RegisterPage : ContentPage
         try
         {
             incorrectcodelbl.IsVisible = false;
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
+    private void dateEntry_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        try
+        {
+            if (isEditing)
+                return;
+
+            isEditing = true;
+
+            string input = e.NewTextValue;
+
+            // Remove any non-numeric characters except '/'
+            input = new string(input.Where(c => char.IsDigit(c) || c == '/').ToArray());
+
+            // Remove existing slashes to reformat correctly
+            input = input.Replace("/", string.Empty);
+
+            // Limit the input to a maximum of 8 numeric characters (DDMMYYYY)
+            if (input.Length >= 8)
+            {
+                input = input.Substring(0, 8);
+                dateEntry.IsEnabled = false;
+                dateEntry.IsEnabled = true;
+            }
+
+            // Insert slashes at the appropriate positions
+            if (input.Length > 2)
+                input = input.Insert(2, "/");
+
+            if (input.Length > 5)
+                input = input.Insert(5, "/");
+
+            // Check for valid date parts and set the text color accordingly
+            if (input.Length == 10)
+            {
+                if (DateTime.TryParseExact(input, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out DateTime date))
+                {
+                    // Check if the date is between 1900 and today's year
+                    int currentYear = DateTime.Now.Year;
+                    if (date.Year >= 1900 && date.Year <= currentYear)
+                    {
+                        dateEntry.TextColor = Color.FromArgb("#031926"); // Valid date
+                        validdob = true;
+                    }
+                    else
+                    {
+                        dateEntry.TextColor = Colors.Red; // Invalid date range
+                        validdob = false;
+                    }
+                }
+                else
+                {
+                    dateEntry.TextColor = Colors.Red; // Invalid date
+                    validdob = false;
+                }
+            }
+            else
+            {
+                dateEntry.TextColor = Color.FromArgb("#031926"); // Intermediate input
+                validdob = false;
+            }
+
+            dateEntry.Text = input;
+
+            // Adjust cursor position
+            dateEntry.CursorPosition = input.Length;
+
+            isEditing = false;
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
+    private void genderlist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
+    {
+        try
+        {
+            var item = e.DataItem as string;
+
+            if (item != null)
+            {
+                newuser.gender = item;
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    private void ethlist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
+    {
+        try
+        {
+            var item = e.DataItem as string;
+
+            if (item != null)
+            {
+                newuser.ethnicity = item;
+            }
         }
         catch(Exception ex)
         {

@@ -76,8 +76,12 @@
 	  <None Remove="Resources\Images\background.png" />
 	  <None Remove="Resources\Images\erroricon.png" />
 	  <None Remove="Resources\Images\nointerneticon.png" />
+	  <None Remove="Resources\Images\notificationicon.png" />
+	  <None Remove="Resources\Images\pinicon.png" />
 	  <None Remove="Resources\Images\pwregbackgroundlight.png" />
+	  <None Remove="Resources\Images\regcompletetick.png" />
 	  <None Remove="Resources\Images\regtick.png" />
+	  <None Remove="Resources\Images\smartwatchicon.png" />
 	  <None Remove="Resources\Images\syncicon.png" />
 	  <None Remove="Resources\Images\updateicon.png" />
 	  <None Remove="Resources\Splash\splashpw.svg" />
@@ -131,6 +135,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\HelpPages\UpdatePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\LoginRegister\RegisterFinalPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\LoginRegister\RegisterPage.xaml">

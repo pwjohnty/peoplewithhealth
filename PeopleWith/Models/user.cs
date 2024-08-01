@@ -44,6 +44,8 @@ namespace MauiApp1
         public string registrycondition { get; set; }
         public string activationtimestamp { get; set; }
         public string validationcode { get; set; }
+        public string userpin { get; set; }
+        public bool usermigrated { get; set; }
     }
 
     public class UserResponse

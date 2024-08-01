@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" BackgroundColor="White"
+             xmlns:pinview="clr-namespace:PINView.Maui;assembly=PINView.Maui"
+                 xmlns:progressBar="clr-namespace:Syncfusion.Maui.ProgressBar;assembly=Syncfusion.Maui.ProgressBar"
+             x:Class="PeopleWith.RegisterFinalPage" Shell.NavBarHasShadow="False" Shell.NavBarIsVisible="False">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" x:Name="topgrid" Margin="0,20,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="25*"/>
+                <ColumnDefinition Width="50*"/>
+                <ColumnDefinition Width="25*"/>
+            </Grid.ColumnDefinitions>
+
+
+
+            <Image Source="backbutton.png" x:Name="backbtn" Grid.Column="0" HorizontalOptions="Start" IsVisible="True" VerticalOptions="Center" Margin="20,0,0,0" HeightRequest="20" WidthRequest="20"/>
+
+            <progressBar:SfLinearProgressBar Progress="6" x:Name="topprogress"
+                                TrackHeight="8"  TrackFill="#BFDBF7" ProgressFill="#031926"
+                                TrackCornerRadius="5" SecondaryProgressFill="#BFDBF7"
+                                ProgressHeight="8" Margin="30,0,30,0" AnimationEasing="{x:Static Easing.CubicInOut}"
+                                Grid.Column="1" VerticalOptions="Center"
+                                            BackgroundColor="Transparent"
+                                ProgressCornerRadius="5" />
+
+            <Label 
+    Text="SKIP" FontAttributes="Bold" Grid.Column="2" HorizontalOptions="Center"
+    VerticalOptions="Center" TextColor="#031926" IsVisible="True"
+     />
+
+
+        </Grid>
+
+
+
+        <ScrollView Grid.Row="1" Margin="0,30,0,0" BackgroundColor="Transparent">
+
+            <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+
+                <StackLayout x:Name="notificationstack" Margin="20,0,20,0" IsVisible="False">
+
+                    <Label
+ Text="Allow Notifications"
+ FontSize="26"
+ Margin="0,0,0,0"
+ TextColor="#031926"
+ FontFamily="HankenGroteskBold"
+ FontAttributes="Bold"
+ HorizontalOptions="Start" />
+
+                    <Label
+Text="Allow us to send you notifications"
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,0,0,0"
+FontSize="15"
+HorizontalOptions="Start" />
+
+
+                    <Image Source="notificationicon.png" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,50,0,0" HeightRequest="80" WidthRequest="80"/>
+
+
+                    <Label
+Text="Enable notifications to receive important updates, reminders, and alerts. Stay on top of your schedule, never miss a critical update, and get timely information right when you need it. Stay connected and in control!"
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,30,0,0"
+FontSize="15" HorizontalTextAlignment="Center"
+HorizontalOptions="Center" />
+
+    
+
+
+                </StackLayout>
+
+                <StackLayout x:Name="healthdatastack" Margin="20,0,20,0" IsVisible="False">
+
+                    <Label
+ Text="Allow Health Data"
+ FontSize="26"
+ Margin="0,0,0,0"
+ TextColor="#031926"
+ FontFamily="HankenGroteskBold"
+ FontAttributes="Bold"
+ HorizontalOptions="Start" />
+
+                    <Label
+Text="Allow us access to your health data"
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,0,0,0"
+FontSize="15"
+HorizontalOptions="Start" />
+
+
+                    <Image Source="smartwatchicon.png" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,50,0,0" HeightRequest="80" WidthRequest="80"/>
+
+
+                    <Label
+Text="Using health data from your smartwatch allows us to offer personalised insights and support for your health journey. This information helps us track your activity, monitor key health metrics, and provide tailored recommendations to keep you on track!"
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,30,0,0"
+FontSize="15" HorizontalTextAlignment="Center"
+HorizontalOptions="Center" />
+
+
+
+
+                </StackLayout>
+
+                <StackLayout x:Name="faceidstack" Margin="20,0,20,0" IsVisible="False">
+
+                    <Label
+ Text="Set up a PIN"
+ FontSize="26"
+ Margin="0,0,0,0"
+ TextColor="#031926"
+ FontFamily="HankenGroteskBold"
+ FontAttributes="Bold"
+ HorizontalOptions="Start" />
+
+                    <Label
+Text="Secure your account by setting up a PIN"
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,0,0,0"
+FontSize="15"
+HorizontalOptions="Start" />
+
+
+                    <Image Source="pinicon.png" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,50,0,0" HeightRequest="80" WidthRequest="80"/>
+
+
+                    <Label
+Text="Setting up a PIN is an important step in securing your device and keeping your personal information safe."
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,30,0,0"
+FontSize="15" HorizontalTextAlignment="Center"
+HorizontalOptions="Center" />
+
+                    <pinview:PINView
+ BoxBackgroundColor="Transparent" Margin="0,20,0,0" x:Name="codepin"
+ BoxShape="RoundCorner" AutoDismissKeyboard="True" PINEntryCompleted="codepin_PINEntryCompleted"
+ PINLength="4" HorizontalOptions="Center" IsPassword="True" PropertyChanged="codepin_PropertyChanged"
+BoxBorderColor="LightGray"
+ Color="#031926" />
+
+                    <Label
+Text="Confirm PIN"
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,20,0,0"
+FontSize="15"
+HorizontalOptions="Center" />
+
+                    <pinview:PINView
+ BoxBackgroundColor="Transparent" Margin="0,10,0,0" x:Name="confirmcodepin"
+ BoxShape="RoundCorner" AutoDismissKeyboard="True"  PINEntryCompleted="confirmcodepin_PINEntryCompleted"
+ PINLength="4" HorizontalOptions="Center" IsPassword="True" PropertyChanged="confirmcodepin_PropertyChanged"
+BoxBorderColor="LightGray"
+ Color="#031926" />
+
+                    <Label
+Text="Invalid Code"
+TextColor="Red"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,10,0,0" x:Name="incorrectcodelbl"
+FontSize="15" IsVisible="False"
+HorizontalOptions="Center" />
+
+
+
+                </StackLayout>
+
+                <StackLayout x:Name="finishstack" Margin="20,0,20,0" VerticalOptions="Center" IsVisible="False">
+
+                    <Image Source="regcompletetick.png" x:Name="regcompleteimg" HorizontalOptions="Center" VerticalOptions="Start" HeightRequest="100" WidthRequest="100" />
+
+                    <Label
+Text="Registration Complete"
+FontSize="26" x:Name="regcompletelbl"
+Margin="0,20,0,0"
+TextColor="#031926"
+FontFamily="HankenGroteskBold"
+FontAttributes="Bold"
+HorizontalOptions="Center" />
+
+
+
+
+
+
+                </StackLayout>
+
+
+            </Grid>
+        </ScrollView>
+
+
+
+
+
+        <StackLayout Grid.Row="1" x:Name="bottomstack" VerticalOptions="EndAndExpand" BackgroundColor="White">
+            <Button
+   BackgroundColor="#031926"
+   HorizontalOptions="EndAndExpand"
+   TextColor="White"
+       x:Name="nextbtn" Clicked="nextbtn_Clicked"
+   FontAttributes="None" 
+        Margin="20,0,20,10"
+   FontFamily="HankenGroteskBold"
+   Text="Next" />
+
+            <ActivityIndicator IsRunning="true" x:Name="nextbtnloader" IsVisible="False" HorizontalOptions="EndAndExpand" Margin="20,0,20,10" HeightRequest="25"
+                   Color="#031926" />
+
+            <Label
+   Text="Privacy Policy"
+   TextColor="#031926"
+   FontFamily="HankenGroteskRegular"
+   FontAttributes="Bold"
+   Margin="0,0,0,10"
+   FontSize="10"
+   HorizontalOptions="Center" />
+        </StackLayout>
+
+
+    </Grid>
+</ContentPage>

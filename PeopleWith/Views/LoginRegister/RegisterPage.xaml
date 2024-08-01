@@ -5,6 +5,7 @@
              xmlns:progressBar="clr-namespace:Syncfusion.Maui.ProgressBar;assembly=Syncfusion.Maui.ProgressBar"
              xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
              xmlns:pinview="clr-namespace:PINView.Maui;assembly=PINView.Maui"
+              xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
               Shell.NavBarHasShadow="False" Shell.NavBarIsVisible="False">
     <Grid>
         <Grid.RowDefinitions>
@@ -289,6 +290,259 @@ HorizontalOptions="Center" />
 
 
 
+                </StackLayout>
+
+                <StackLayout x:Name="genderframe" Margin="20,0,20,0" IsVisible="False" VerticalOptions="FillAndExpand">
+
+                    <Label
+ Text="Gender"
+ FontSize="26"
+ Margin="0,0,0,0"
+ TextColor="#031926"
+ FontFamily="HankenGroteskBold"
+ FontAttributes="Bold"
+ HorizontalOptions="Start" />
+
+                    <Label
+Text="Please tell us your gender"
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,0,0,0"
+FontSize="15"
+HorizontalOptions="Start" />
+
+
+                    <Label
+Text="Gender"
+FontSize="15"
+Margin="0,20,0,0"
+TextColor="#031926" IsVisible="False"
+FontFamily="HankenGroteskBold"
+FontAttributes="Bold"
+HorizontalOptions="Start" />
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100*"/>
+
+                        </Grid.ColumnDefinitions>
+
+
+                        <syncfusion:SfListView x:Name="genderlist"                                                                                             
+             AutoFitMode="Height"
+        Margin="0,10,0,0"
+                              BackgroundColor="Transparent"
+                              Grid.Column="0"
+     Grid.Row="0" 
+                      SelectionMode="Single"
+                ItemTapped="genderlist_ItemTapped"
+                       ScrollBarVisibility="Never"
+             SelectionBackground="Transparent"
+             Orientation="Vertical"                                                                                                                       
+             >
+                            <syncfusion:SfListView.HeightRequest>
+                                <OnPlatform x:TypeArguments="x:Double">
+                                    <On Platform="Android" Value="220" />
+                                    <On Platform="iOS" Value="200" />
+                                </OnPlatform>
+                            </syncfusion:SfListView.HeightRequest>
+
+                            <syncfusion:SfListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Frame CornerRadius="10" InputTransparent="True"   Margin="5,5,5,5"  HasShadow="False" Opacity="1" BackgroundColor="Transparent"
+BorderColor="LightGray">
+                                            <Grid HorizontalOptions="FillAndExpand" Margin="0" Padding="0"  >
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="100*"/>
+
+                                                </Grid.ColumnDefinitions>
+
+                                                <Label Text="{Binding .}" FontFamily="HankenGroteskRegular" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="Small" />
+
+
+
+                                            </Grid>
+                                        </Frame>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </syncfusion:SfListView.ItemTemplate>
+                            <syncfusion:SfListView.SelectedItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Frame CornerRadius="10" Margin="5,5,5,5" InputTransparent="True" BackgroundColor="#BFDBF7"  HasShadow="False" BorderColor="Transparent">
+                                            <Grid HorizontalOptions="FillAndExpand">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="100*"/>
+
+                                                </Grid.ColumnDefinitions>
+                                                <Label Text="{Binding .}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" FontAttributes="Bold"  TextColor="#031926" FontSize="Small" />
+
+                                            </Grid>
+                                        </Frame>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </syncfusion:SfListView.SelectedItemTemplate>
+                        </syncfusion:SfListView>
+
+
+
+
+
+                    </Grid>
+
+                </StackLayout>
+
+                <StackLayout x:Name="dobstack" Margin="20,0,20,0" IsVisible="False">
+
+                    <Label
+ Text="Date of Birth"
+ FontSize="26"
+ Margin="0,0,0,0"
+ TextColor="#031926"
+ FontFamily="HankenGroteskBold"
+ FontAttributes="Bold"
+ HorizontalOptions="Start" />
+
+                    <Label
+Text="Please tell us your date of birth"
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,0,0,0"
+FontSize="15"
+HorizontalOptions="Start" />
+
+                    <Label
+Text="Date of Birth"
+FontSize="15"
+Margin="0,20,0,0" IsVisible="False"
+TextColor="#031926"
+FontFamily="HankenGroteskBold"
+FontAttributes="Bold"
+HorizontalOptions="Start" />
+
+                    <inputLayout:SfTextInputLayout InputViewPadding="10" IsHintAlwaysFloated="True" BackgroundColor="Transparent" ShowHint="False" Margin="5,10,5,0" UnfocusedStrokeThickness="1" Stroke="LightGray" ContainerBackground="Transparent" ContainerType="Outlined" OutlineCornerRadius="5"
+          >
+                        <Entry FontSize="Small" PlaceholderColor="Gray" Keyboard="Numeric" FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" x:Name="dateEntry" TextChanged="dateEntry_TextChanged" Placeholder="DD/MM/YYYY" TextColor="#031926"/>
+                    </inputLayout:SfTextInputLayout>
+
+
+
+                </StackLayout>
+
+                <StackLayout x:Name="ethstack" Margin="20,0,20,0" IsVisible="False">
+
+                    <Label
+ Text="Ethnicity"
+ FontSize="26"
+ Margin="0,0,0,0"
+ TextColor="#031926"
+ FontFamily="HankenGroteskBold"
+ FontAttributes="Bold"
+ HorizontalOptions="Start" />
+
+                    <Label
+Text="Please tell us your ethnicity"
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,0,0,0"
+FontSize="15"
+HorizontalOptions="Start" />
+
+
+                    <Label
+Text="Ethnicity"
+FontSize="15"
+Margin="0,20,0,0"
+TextColor="#031926" IsVisible="False"
+FontFamily="HankenGroteskBold"
+FontAttributes="Bold"
+HorizontalOptions="Start" />
+
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100*"/>
+
+                        </Grid.ColumnDefinitions>
+
+                        <syncfusion:SfListView x:Name="ethlist"                                                                                             
+             AutoFitMode="Height"
+        Margin="0,10,0,0"
+                              BackgroundColor="Transparent"
+                         Grid.Column="0" Grid.Row="0"
+                      SelectionMode="Single"
+                        ItemTapped="ethlist_ItemTapped"
+                       ScrollBarVisibility="Never"
+             SelectionBackground="Transparent"
+             Orientation="Vertical"                                                                                                                       
+             >
+                            <syncfusion:SfListView.HeightRequest>
+                                <OnPlatform x:TypeArguments="x:Double">
+                                    <On Platform="Android" Value="2200" />
+                                    <On Platform="iOS" Value="2000" />
+                                </OnPlatform>
+                            </syncfusion:SfListView.HeightRequest>
+
+                            <syncfusion:SfListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Frame CornerRadius="10"  Margin="5,5,5,5" InputTransparent="True" HasShadow="False" Opacity="1" BackgroundColor="Transparent"
+BorderColor="LightGray">
+                                            <Grid HorizontalOptions="FillAndExpand" Margin="0" Padding="0"  >
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="90*"/>
+                                                    <ColumnDefinition Width="10*"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <Label Text="{Binding .}" FontFamily="HankenGroteskRegular" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="Small" />
+
+                                            </Grid>
+                                        </Frame>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </syncfusion:SfListView.ItemTemplate>
+                            <syncfusion:SfListView.SelectedItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Frame CornerRadius="10"  Margin="5,5,5,5" InputTransparent="True" BackgroundColor="#BFDBF7"  HasShadow="False" BorderColor="Transparent">
+                                            <Grid HorizontalOptions="FillAndExpand">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="90*"/>
+                                                    <ColumnDefinition Width="10*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Label Text="{Binding .}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" FontAttributes="Bold"  TextColor="#031926" FontSize="Small" />
+
+
+                                            </Grid>
+                                        </Frame>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </syncfusion:SfListView.SelectedItemTemplate>
+                        </syncfusion:SfListView>
+
+                    </Grid>
                 </StackLayout>
 
 
