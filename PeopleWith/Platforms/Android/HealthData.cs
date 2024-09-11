@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PeopleWith.Android;
+using PeopleWith.Platforms.Android;
 using Android.Bluetooth;
 using static Android.App.DownloadManager;
 using Android.Health.Connect;
@@ -12,12 +12,12 @@ using Android.Webkit;
 using Android.Content;
 
 [assembly: Dependency(typeof(HealthData))]
-namespace PeopleWith.Android
+namespace PeopleWith.Platforms.Android
 {
     public class HealthData : Healthinterface
     {
         //private readonly Context _context;
-        //private readonly HealthConnectClient _healthConnectClient;
+       // private readonly HealthConnectClient _healthConnectClient;
 
         public HealthData()
         {
@@ -35,6 +35,7 @@ namespace PeopleWith.Android
             //    var result = await _healthConnectClient.RequestPermissionsAsync(request);
             //    completion(result.IsSuccess);
             //});
+            
         }
 
         public void FetchSteps(Action<double> completionHandler)

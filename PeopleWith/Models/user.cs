@@ -9,7 +9,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace MauiApp1
+namespace PeopleWith
 {
     /// <summary>
     /// User Object
@@ -17,7 +17,7 @@ namespace MauiApp1
     public class user   
     {
         [System.Text.Json.Serialization.JsonIgnore]
-        public string Id { get; set; }
+        public string userid { get; set; }
         //public DateTime CreatedAt { get; set; }
         //public DateTime UpdatedAt { get; set; }
         //public string Version { get; set; }
@@ -31,12 +31,11 @@ namespace MauiApp1
         public string dateofbirth { get; set; }
         public string ethnicity { get; set; }
         public string signupcodeid { get; set; }
-        public string advertid { get; set; }
         public string referral { get; set; }
         public string deviceos { get; set; }
         public string devicemodel { get; set; }
         public string pushnotifications { get; set; }
-        public string emailnotifications { get; set; }
+        public bool emailnotifications { get; set; }
         public string externalpatientid { get; set; }
         public string primarycareid { get; set; }
         public string secondarycareid { get; set; }
@@ -48,7 +47,7 @@ namespace MauiApp1
         public bool usermigrated { get; set; }
     }
 
-    public class UserResponse
+    public class APIUserResponse
     {
         public ObservableCollection<user> Value { get; set; }
     }

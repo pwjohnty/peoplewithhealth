@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Mopups:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:Animations="clr-namespace:Mopups.Animations;assembly=Mopups"
+    xmlns:Mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+                   BackgroundInputTransparent="True"
+    CloseWhenBackgroundIsClicked="False" BackgroundColor="White"
+             x:Class="PeopleWith.PopupPageHelper"
+             >
+    <Mopups:PopupPage.Animation>
+        <Animations:ScaleAnimation
+            PositionIn="Center"
+            PositionOut="Center"
+            DurationIn="200"
+            DurationOut="200"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="False"/>
+    </Mopups:PopupPage.Animation>
+    <VerticalStackLayout Margin="40,0,40,0" VerticalOptions="Center" BackgroundColor="Transparent">
+        <Frame CornerRadius="10"  Margin="0,5,0,5"
+ BackgroundColor="Transparent" HasShadow="False"
+                BorderColor="Transparent" InputTransparent="True"
+Padding="0">
+            <StackLayout>
+       
+        <Image Source="successtick.png" HeightRequest="50" WidthRequest="50" HorizontalOptions="Center" VerticalOptions="Start" />
+                <Label x:Name="detaillbl" FontSize="20" TextColor="#031926" FontFamily="HankenGroteskBold" HorizontalOptions="Center" HorizontalTextAlignment="Center" Margin="0,10,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" />
+            </StackLayout>
+        </Frame>
+    </VerticalStackLayout>
+</Mopups:PopupPage>

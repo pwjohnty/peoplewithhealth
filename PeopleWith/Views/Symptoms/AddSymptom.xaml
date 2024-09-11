@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
+             xmlns:chip="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+             xmlns:popup="clr-namespace:Syncfusion.Maui.Popup;assembly=Syncfusion.Maui.Popup"
+             xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+             x:Class="PeopleWith.AddSymptom" NavigationPage.HasNavigationBar="True"
+             xmlns:local="clr-namespace:PeopleWith" BackgroundColor="White" 
+             >
+    <ScrollView>
+    <StackLayout>
+
+
+    
+        <Label Text="Add Symptom" FontFamily="HankenGroteskBold" FontSize="26"  Margin="20,20,0,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" />
+
+        <Label Text="To add a Symptom either type into the searchbar below or use filters icon to narrow your search, then Select Zed Symptom from the list below."  Margin="20,5,20,0" FontFamily="HankenGroteskRegular" FontSize="12"  HorizontalOptions="Center" VerticalOptions="Center" TextColor="Gray" />
+
+
+        <Grid Margin="20,10,20,0" x:Name="MainGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+
+            <Frame Padding="0" HasShadow="False" Grid.Row="0" Grid.Column="0" Margin="0,0,0,0" InputTransparent="False" BorderColor="Transparent" BackgroundColor="#fff7ea" CornerRadius="{OnPlatform Android='5', iOS='5'}" >
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="10*"/>
+                        <ColumnDefinition Width="80*"/>
+                        <ColumnDefinition Width="15*"/>
+                    </Grid.ColumnDefinitions>
+                    <Image Source="searchorange.png" HorizontalOptions="Center" HeightRequest="15" BackgroundColor="Transparent" WidthRequest="15"  Grid.Row="0" Grid.Column="0"  />
+                    <Entry Grid.Row="0" Grid.Column="1" FontFamily="HankenGroteskRegular" IsTextPredictionEnabled="False" IsSpellCheckEnabled="False" x:Name="searchbar"  ClearButtonVisibility="Never" InputTransparent="False"  TextChanged="SearchBar_TextChanged" Placeholder="Search Symptom"  BackgroundColor="Transparent" Background="Transparent" HeightRequest="60"  TextColor="Orange"/>
+                    <Image Source="filterorange.png" HeightRequest="15" BackgroundColor="Transparent" WidthRequest="15"  Grid.Row="0" Grid.Column="3"  >
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
+                        </Image.GestureRecognizers>
+                    </Image>
+                </Grid>
+            </Frame>
+
+            <StackLayout x:Name="Filterstack" Margin="0,10,0,0"  Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" IsVisible="True">
+
+                <Label Text="Filters" Margin="0,0,0,5" Grid.Row="1" Grid.Column="0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" FontSize="Small" FontFamily="HankenGroteskBold" />
+
+                <ScrollView Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Margin="0,0,0,0"  HorizontalScrollBarVisibility="Never">
+                    <chip:SfChipGroup ChipFontFamily="HankenGroteskRegular" ChipType="Choice" SelectionIndicatorColor="Transparent" ChipClicked="FilterTabs_ChipClicked" x:Name="FilterTabs"  Grid.Row="2" Grid.Column="0" SelectedChipBackground="Orange" ChipStroke="Transparent" ChipPadding="0" ChipTextSize="12" SelectedChipTextColor="White" ShowIcon="False" ChipTextColor="LightGray" ChipBackground="#fff7ea"/>
+                </ScrollView>
+            </StackLayout>
+
+
+            <ActivityIndicator x:Name="Symptomloading" Margin="0,0,0,0"  Grid.Row="3" Grid.Column="0" Grid.RowSpan="2" HorizontalOptions="Center" VerticalOptions="Start"  IsVisible="False" IsRunning="True" Color="#BFDBF7" />
+
+            <StackLayout x:Name="ListViewStack" Margin="0,20,0,0" Grid.Row="3" IsVisible="True" Grid.Column="0" Grid.RowSpan="2">
+                <Label x:Name="Results" Margin="0,0,20,0" Grid.Row="3" Grid.Column="0"  HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskBold" />
+
+
+                <syncfusion:SfListView x:Name="SymptomsListview" ItemTapped="SymptomsListview_ItemTapped" AutoFitMode="Height" BackgroundColor="Transparent"  Grid.Row="4" Grid.Column="0" Padding="5"  Margin="0,10,0,50" ScrollBarVisibility="Never">
+                    <syncfusion:SfListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+
+                                <Grid VerticalOptions="Start" Margin="0,10,0,0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Text="{Binding title}" FontFamily="HankenGroteskRegular" Margin="5,0,0,0" Grid.Row="0" Grid.Column="0" Padding="0" HorizontalOptions="Start"  VerticalOptions="Start" TextColor="#031926" FontSize="14" FontAttributes="None" />
+
+                                    <BoxView Grid.Column="0" Grid.Row="1" HeightRequest="1" HorizontalOptions="FillAndExpand" Margin="0,10,0,0" Color="#fff7ea"/>
+
+                                </Grid>
+
+
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.ItemTemplate>
+                    <syncfusion:SfListView.SelectedItemTemplate>
+                        <DataTemplate>
+
+                            <Frame HasShadow="False" CornerRadius="5" BackgroundColor="#fff7ea" Margin="0,0,0,0" BorderColor="Transparent" Padding="0">
+
+                                <Grid VerticalOptions="Start" Margin="0,10,0,0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Text="{Binding title}" FontFamily="HankenGroteskBold" Margin="5,0,0,0" Grid.Row="0" Grid.Column="0" Padding="0" HorizontalOptions="Start"  VerticalOptions="Start" TextColor="Orange" FontSize="14" FontAttributes="None" />
+
+                                    <BoxView Grid.Column="0" Grid.Row="1" HeightRequest="1" HorizontalOptions="FillAndExpand" Margin="0,10,0,0" Color="#fff7ea"/>
+
+                                </Grid>
+                            </Frame>
+                            
+                        </DataTemplate>
+                    </syncfusion:SfListView.SelectedItemTemplate>
+                </syncfusion:SfListView>
+            </StackLayout>
+        </Grid>
+        <popup:SfPopup x:Name="popup" IsOpen="False" AnimationMode="Fade"   AutoSizeMode="Height" AcceptCommand="{Binding PopupAcceptCommand}"
+                       DeclineCommand="{Binding PopupDeclineCommand}" 
+                       AcceptButtonText="Accept" DeclineButtonText="Decline" VerticalOptions="CenterAndExpand" 
+                       HorizontalOptions="CenterAndExpand" ShowFooter="True" AppearanceMode="TwoButton">
+            <popup:SfPopup.ContentTemplate>
+                <DataTemplate>
+                    <Label Text="Would you Like to add this Symptom?" FontFamily="HankenGroteskBold" TextColor="DarkGray"
+                           VerticalTextAlignment="Center" 
+                           HorizontalTextAlignment="Center" />
+                </DataTemplate>
+            </popup:SfPopup.ContentTemplate>
+            <popup:SfPopup.PopupStyle>
+                <popup:PopupStyle OverlayColor="Transparent" AcceptButtonTextColor="#031926" DeclineButtonTextColor="#031926" PopupBackground="#E5F0FB" />
+            </popup:SfPopup.PopupStyle>
+        </popup:SfPopup>
+
+
+
+    </StackLayout>
+    </ScrollView>
+</ContentPage>

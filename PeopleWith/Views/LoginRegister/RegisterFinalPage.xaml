@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" BackgroundColor="White"
              xmlns:pinview="clr-namespace:PINView.Maui;assembly=PINView.Maui"
+             HideSoftInputOnTapped="True"
                  xmlns:progressBar="clr-namespace:Syncfusion.Maui.ProgressBar;assembly=Syncfusion.Maui.ProgressBar"
              x:Class="PeopleWith.RegisterFinalPage" Shell.NavBarHasShadow="False" Shell.NavBarIsVisible="False">
     <Grid>
@@ -19,7 +20,11 @@
 
 
 
-            <Image Source="backbutton.png" x:Name="backbtn" Grid.Column="0" HorizontalOptions="Start" IsVisible="True" VerticalOptions="Center" Margin="20,0,0,0" HeightRequest="20" WidthRequest="20"/>
+            <Image Source="backbutton.png" x:Name="backbtn" Grid.Column="0" HorizontalOptions="Start" IsVisible="True" VerticalOptions="Center" Margin="20,0,0,0" HeightRequest="20" WidthRequest="20">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                </Image.GestureRecognizers>
+            </Image>
 
             <progressBar:SfLinearProgressBar Progress="6" x:Name="topprogress"
                                 TrackHeight="8"  TrackFill="#BFDBF7" ProgressFill="#031926"
@@ -31,7 +36,7 @@
 
             <Label 
     Text="SKIP" FontAttributes="Bold" Grid.Column="2" HorizontalOptions="Center"
-    VerticalOptions="Center" TextColor="#031926" IsVisible="True"
+    VerticalOptions="Center" TextColor="#031926" IsVisible="False"
      />
 
 
@@ -188,9 +193,140 @@ HorizontalOptions="Center" />
 
                 </StackLayout>
 
+                <StackLayout x:Name="tcstack" Margin="20,0,20,0" IsVisible="False">
+
+                    <Label
+ Text="Terms and Conditions"
+ FontSize="26"
+ Margin="0,0,0,0"
+ TextColor="#031926"
+ FontFamily="HankenGroteskBold"
+ FontAttributes="Bold"
+ HorizontalOptions="Start" />
+
+                    <Label
+Text="Please agree to our terms and conditions"
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,0,0,0"
+FontSize="15"
+HorizontalOptions="Start" />
+
+
+                    <Image Source="agreement.png" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,50,0,0" HeightRequest="80" WidthRequest="80"/>
+
+
+                    <StackLayout x:Name="Additonalconsentinfostack" IsVisible="False" Margin="0,20,0,0">
+
+                        <Label
+x:Name="actitle"
+TextColor="#031926"
+FontFamily="HankenGroteskBold"
+FontAttributes="None"
+Margin="0,0,0,0"
+FontSize="18" HorizontalTextAlignment="Center"
+HorizontalOptions="Center" />
+
+                        <Label
+x:Name="acsubtitle"
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,10,0,0"
+FontSize="15" HorizontalTextAlignment="Center"
+HorizontalOptions="Center" />
+
+                        <Label
+x:Name="accontent"
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,10,0,0"
+FontSize="15" HorizontalTextAlignment="Center"
+HorizontalOptions="Center" />
+
+
+                    </StackLayout>
+
+
+
+                    <Frame HasShadow="False" Padding="10" Margin="0,30,0,0" x:Name="tcframe" BackgroundColor="Transparent" BorderColor="#BFDBF7" CornerRadius="10">
+                        <Grid Margin="0,0,0,0" >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90*"/>
+                                <ColumnDefinition Width="10*"/>
+                            </Grid.ColumnDefinitions>
+                            <CheckBox Grid.Column="1" Grid.Row="0" Color="#031926"  x:Name="tccheckbox" IsChecked="False" HorizontalOptions="Start" CheckedChanged="tccheckbox_CheckedChanged" Margin="0,-20,0,0" VerticalOptions="Center" >
+                            </CheckBox>
+                            <Label Grid.Row="0" Grid.Column="0" Margin="0,0,0,10" VerticalOptions="Start" HorizontalOptions="Center" FontSize="15" >
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="I have read and agree to " TextColor="Gray" FontSize="Small" FontFamily="HankenGroteskRegular"/>
+                                        <Span Text="PeopleWith's Terms and Conditions of Use and Data Policy" TextColor="#031926" FontSize="15" FontAttributes="Bold" FontFamily="HankenGroteskRegular"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer />
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </Grid>
+                    </Frame>
+                    <Label x:Name="tcerror" FontSize="Micro" IsVisible="false" TextColor="Red" HorizontalOptions="Start" Margin="10,10,0,10" />
+
+                    <Frame HasShadow="False" Padding="10" Margin="0,10,0,0" BackgroundColor="Transparent" BorderColor="#BFDBF7" CornerRadius="10">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90*"/>
+                                <ColumnDefinition Width="10*"/>
+                            </Grid.ColumnDefinitions>
+                            <CheckBox Grid.Column="1" Grid.Row="0" Color="#031926" x:Name="notcheck" IsChecked="True" Margin="0,-5,0,0" HorizontalOptions="End" VerticalOptions="Center"/>
+                            <Label Grid.Row="0" Grid.Column="0" Margin="0,5,0,0" VerticalOptions="Center" HorizontalOptions="Center">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="I agree to allow " TextColor="Gray" FontSize="15" FontFamily="HankenGroteskRegular"/>
+                                        <Span Text="PeopleWith to send me Push Notifications" TextColor="#031926" FontSize="15" FontAttributes="Bold" FontFamily="HankenGroteskRegular"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </Grid>
+                    </Frame>
+
+                    <Frame HasShadow="False" Padding="10" Margin="0,10,0,120" BackgroundColor="Transparent" BorderColor="#BFDBF7" CornerRadius="10">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90*"/>
+                                <ColumnDefinition Width="10*"/>
+                            </Grid.ColumnDefinitions>
+                            <CheckBox Grid.Column="1" Grid.Row="0" Color="#031926" x:Name="emailcheck" IsChecked="True" Margin="0,-5,0,0" HorizontalOptions="End" VerticalOptions="Center"/>
+                            <Label Grid.Row="0" Grid.Column="0" Margin="0,5,0,0" VerticalOptions="Center" HorizontalOptions="Center">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="I agree to allow " TextColor="Gray" FontSize="15" FontFamily="HankenGroteskRegular" />
+                                        <Span Text="PeopleWith to send me Email Notifications" TextColor="#031926" FontSize="15" FontFamily="HankenGroteskRegular" FontAttributes="Bold" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </Grid>
+                    </Frame>
+
+
+
+
+                </StackLayout>
+
                 <StackLayout x:Name="finishstack" Margin="20,0,20,0" VerticalOptions="Center" IsVisible="False">
 
-                    <Image Source="regcompletetick.png" x:Name="regcompleteimg" HorizontalOptions="Center" VerticalOptions="Start" HeightRequest="100" WidthRequest="100" />
+                    <!--<Image Source="regcompletetick.png" x:Name="regcompleteimg" HorizontalOptions="Center" VerticalOptions="Start" HeightRequest="100" WidthRequest="100" />
 
                     <Label
 Text="Registration Complete"
@@ -199,10 +335,26 @@ Margin="0,20,0,0"
 TextColor="#031926"
 FontFamily="HankenGroteskBold"
 FontAttributes="Bold"
-HorizontalOptions="Center" />
+HorizontalOptions="Center" />-->
 
+                    <Image Source="peoplewithlogoanimation.gif" IsVisible="False" x:Name="imganimation" BackgroundColor="Transparent" IsAnimationPlaying="True"/>
+                    <WebView x:Name="webLogo" IsVisible="False" BackgroundColor="Transparent" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HeightRequest="300"
+                >
 
-
+                        <WebView.Source>
+                            <HtmlWebViewSource>
+                                <HtmlWebViewSource.Html>
+                                    <![CDATA[
+                        <HTML>
+                        <BODY style="background-color:#fefcfe;">
+                        <img src="peoplewithlogoanimation.gif" style="width:100%; border: 1px solid #fefcfe; opacity: 0.99;"/>
+                        </BODY>
+                        </HTML>
+                        ]]>
+                                </HtmlWebViewSource.Html>
+                            </HtmlWebViewSource>
+                        </WebView.Source>
+                    </WebView>
 
 
 
@@ -217,27 +369,58 @@ HorizontalOptions="Center" />
 
 
         <StackLayout Grid.Row="1" x:Name="bottomstack" VerticalOptions="EndAndExpand" BackgroundColor="White">
-            <Button
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50*"/>
+                    <ColumnDefinition Width="50*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Button
+BackgroundColor="White"
+HorizontalOptions="Start"
+TextColor="#031926"
+   x:Name="skipbtn" IsVisible="False" Clicked="skipbtn_Clicked"
+FontAttributes="None" Grid.Row="0" Grid.Column="0"
+     Margin="20,0,20,10"
+FontFamily="HankenGroteskBold"
+Text="Skip" />
+
+                <Button
    BackgroundColor="#031926"
    HorizontalOptions="EndAndExpand"
    TextColor="White"
-       x:Name="nextbtn" Clicked="nextbtn_Clicked"
-   FontAttributes="None" 
+        Clicked="nextbtn_Clicked" x:Name="nextbtn"
+   FontAttributes="None" Grid.Row="0" Grid.Column="1"
         Margin="20,0,20,10"
    FontFamily="HankenGroteskBold"
    Text="Next" />
 
-            <ActivityIndicator IsRunning="true" x:Name="nextbtnloader" IsVisible="False" HorizontalOptions="EndAndExpand" Margin="20,0,20,10" HeightRequest="25"
+                <ActivityIndicator IsRunning="true" Grid.Row="0" Grid.Column="1" x:Name="nextbtnloader" IsVisible="False" HorizontalOptions="EndAndExpand" Margin="20,0,20,10" HeightRequest="25"
                    Color="#031926" />
 
-            <Label
+                <Label
    Text="Privacy Policy"
    TextColor="#031926"
    FontFamily="HankenGroteskRegular"
    FontAttributes="Bold"
-   Margin="0,0,0,10"
+   Margin="0,0,0,10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
    FontSize="10"
    HorizontalOptions="Center" />
+
+                <Label
+x:Name="extidlbl"
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="Bold"
+Margin="0,0,0,10" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+FontSize="8"
+HorizontalOptions="Center" />
+            </Grid>
         </StackLayout>
 
 

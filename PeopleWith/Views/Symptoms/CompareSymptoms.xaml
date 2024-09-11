@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PeopleWith.CompareSymptoms"
+             xmlns:chip="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
+             xmlns:local="clr-namespace:PeopleWith"
+             NavigationPage.HasNavigationBar="True" BackgroundColor="White">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <DoubleCollection x:Key="dashArray">
+                <x:Double>5</x:Double>
+                <x:Double>5</x:Double>
+            </DoubleCollection>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ScrollView>
+    <VerticalStackLayout>
+        
+        <Label Text="Compare Symptoms" FontFamily="HankenGroteskBold" FontSize="26"  Margin="20,0,0,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" />
+
+            <Grid  x:Name="ChipsGrid" Margin="20,0,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
+                <Label  Text="Symptoms" IsVisible="False" Grid.Row="0" Grid.Column="0" FontFamily="HankenGroteskBold" VerticalOptions="Center" HorizontalOptions="Start"    Padding="0" FontSize="20" TextColor="#031926" />
+                <Label  Text="Select Any Symptom you would like to compare" Grid.Row="1" Grid.Column="0" FontFamily="HankenGroteskBold" VerticalOptions="Center" HorizontalOptions="Start"   Padding="0" FontSize="14" TextColor="#031926" />
+
+                <syncfusion:SfListView IsVisible="true"  x:Name="SymptomName" Grid.Row="2" ItemTapped="SymptomName_ItemTapped"  Padding="0" Margin="0" HeightRequest="35" AutoFitMode="DynamicHeight" ItemSpacing="2"  BackgroundColor="Transparent" HorizontalOptions="FillAndExpand" SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Horizontal" >
+                    <syncfusion:SfListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Frame HasShadow="False" CornerRadius="10" InputTransparent="True" Padding="5" BorderColor="Transparent"  BackgroundColor="Transparent"  Margin="0">
+                                    <Label Text="{Binding Text}" FontFamily="HankenGroteskRegular"  FontSize="16" TextColor="Gray" />
+                                </Frame>
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.ItemTemplate>
+                    <syncfusion:SfListView.SelectedItemTemplate>
+                        <DataTemplate>
+                        <Frame HasShadow="False" CornerRadius="10" InputTransparent="True" Padding="5" BorderColor="Transparent"  BackgroundColor="#fff7ea"  Margin="0">
+                                <Label Text="{Binding Text}" FontFamily="HankenGroteskBold"  FontSize="16" TextColor="Orange" />
+                            </Frame>
+                        </DataTemplate>
+                    </syncfusion:SfListView.SelectedItemTemplate>
+
+                </syncfusion:SfListView>
+
+            </Grid>
+  
+
+        
+            <Grid  x:Name="ChartGrid" Margin="0,0,0,0" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="475"/>
+                </Grid.RowDefinitions>
+                <Label  x:Name="DateRange" Grid.Row="0" Grid.Column="0" FontFamily="HankenGroteskBold" VerticalOptions="Center" HorizontalOptions="Center"   Padding="0" FontSize="14" TextColor="#031926" />
+
+                <buttons:SfSegmentedControl Grid.Row="1" Grid.Column="0" Padding="2" x:Name="segmentedControl" SelectionChanged="segmentedControl_SelectionChanged"  
+                                         StrokeThickness="1"  Stroke="#E6E6E6" SegmentWidth="75"
+                                         Margin="5,0,5,0" CornerRadius="15" HorizontalOptions="Center" VerticalOptions="Center">
+                    <buttons:SfSegmentedControl.TextStyle>
+                        <buttons:SegmentTextStyle TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" FontSize="12"/>
+                    </buttons:SfSegmentedControl.TextStyle>
+                    <buttons:SfSegmentedControl.SelectionIndicatorSettings>
+                        <buttons:SelectionIndicatorSettings Background="#fff7ea" TextColor="Orange" />
+                    </buttons:SfSegmentedControl.SelectionIndicatorSettings>
+                    <buttons:SfSegmentedControl.ItemsSource>
+                        <x:Array  Type="{x:Type x:String}">
+                            <x:String>7 Days</x:String>
+                            <x:String>14 Days</x:String>
+                            <x:String>21 Days</x:String>
+                            <x:String>All Time</x:String>
+                        </x:Array>
+                    </buttons:SfSegmentedControl.ItemsSource>
+                </buttons:SfSegmentedControl>
+                <chart:SfCartesianChart Grid.Row="2" Grid.Column="0" HeightRequest="475" Margin="0,30,0,50" BackgroundColor="Transparent"  x:Name="SymptomProgChart">
+
+                    <chart:SfCartesianChart.Legend >
+                        <chart:ChartLegend Placement="Bottom" BindingContext="{Binding Name}"/>
+                    </chart:SfCartesianChart.Legend>
+                    <chart:SfCartesianChart.XAxes>
+                        <chart:CategoryAxis  LabelRotation="0" LabelPlacement="BetweenTicks"  IsVisible="True" ShowMajorGridLines="False" >
+                            <chart:CategoryAxis.LabelStyle>
+                                <chart:ChartAxisLabelStyle FontSize="8" FontFamily="HankenGroteskRegular" TextColor="#031926"/>
+                            </chart:CategoryAxis.LabelStyle>
+                        </chart:CategoryAxis>
+                    </chart:SfCartesianChart.XAxes>
+                    <chart:SfCartesianChart.YAxes >
+                        <chart:NumericalAxis Minimum="0" Maximum="100" ShowMajorGridLines="True" Interval="10" EdgeLabelsDrawingMode="Center" ShowMinorGridLines="False">
+                            <chart:NumericalAxis.MajorGridLineStyle>
+                                <chart:ChartLineStyle StrokeDashArray="{StaticResource dashArray}" Stroke="LightGray" StrokeWidth="1"/>
+                            </chart:NumericalAxis.MajorGridLineStyle>
+                        </chart:NumericalAxis>
+                    </chart:SfCartesianChart.YAxes>
+                    <chart:SfCartesianChart.Series>
+                        <chart:SplineSeries ItemsSource="{Binding .}"  EnableTooltip="True"  XBindingPath="timestamp" YBindingPath="intensity" ShowTrackballLabel="True" ShowMarkers="True" ShowDataLabels="False" EnableAnimation="True" StrokeWidth="2" Fill="#FFC000">
+                            <chart:SplineSeries.MarkerSettings>
+                                <chart:ChartMarkerSettings Type="Circle"  StrokeWidth="0" Height="10" Width="10"  Fill="#FFC000" />
+                            </chart:SplineSeries.MarkerSettings>
+                        </chart:SplineSeries>
+                    </chart:SfCartesianChart.Series>
+                </chart:SfCartesianChart>
+            </Grid>
+
+
+
+       
+    </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

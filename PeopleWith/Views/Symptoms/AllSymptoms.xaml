@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PeopleWith.AllSymptoms"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView" 
+             xmlns:local="clr-namespace:PeopleWith"
+             NavigationPage.IconColor="#031926" NavigationPage.HasBackButton="True"        
+             NavigationPage.HasNavigationBar="True"
+             BackgroundColor="#ffffff" >
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Clicked="addNewToolbar_Clicked" Text="Add New" />
+    </ContentPage.ToolbarItems>
+
+    <ScrollView Orientation="Vertical" >
+        <VerticalStackLayout>
+
+
+            <Label Text="Symptoms" FontSize="26" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
+
+            <!-- Update & Compare Stack -->
+            <Grid Margin="10,5,10,5" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50*"/>
+                    <ColumnDefinition Width="50*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Frame HasShadow="False" Padding="0" Grid.Row="0" Grid.Column="0" HeightRequest="40" Margin="0,0,5,0" HorizontalOptions="FillAndExpand" CornerRadius="10" BorderColor="Orange" BackgroundColor="Transparent">
+                    <Grid Padding="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30*"/>
+                            <ColumnDefinition Width="70*"/>
+                        </Grid.ColumnDefinitions>
+                        <Image Source="compare.png" Grid.Row="0" Grid.Column="0" HeightRequest="20" />
+                        <Label Text="COMPARE ALL" FontFamily="HankenGroteskBold" HorizontalOptions="Start" TextColor="Orange" FontSize="12" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" VerticalOptions="Center" />
+                    </Grid>
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_3"  NumberOfTapsRequired="1"/>
+                    </Frame.GestureRecognizers>
+                </Frame>
+
+                <Frame HasShadow="False" Padding="0" Grid.Row="0" Grid.Column="1" CornerRadius="10" Margin="5,0,0,0" BorderColor="Orange" BackgroundColor="Transparent">
+                    <Grid Padding="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30*"/>
+                            <ColumnDefinition Width="70*"/>
+                        </Grid.ColumnDefinitions>
+                        <Image Source="update.png" Grid.Row="0" Grid.Column="0" HeightRequest="20" />
+                        <Label Text="UPDATE ALL" FontFamily="HankenGroteskBold" HorizontalOptions="Start" TextColor="Orange" FontSize="12" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" VerticalOptions="Center" />
+                    </Grid>
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_2" NumberOfTapsRequired="1"/>
+                    </Frame.GestureRecognizers>
+                </Frame>
+
+            </Grid>
+
+
+            <!--Empty Stack for No Symptoms -->
+
+            <Grid x:Name="EmptyStack" IsVisible="False" Margin="20,50,10,0" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="60"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Text="No Symptoms Added" FontFamily="HankenGroteskBold" FontSize="20" Grid.Row="0" Grid.Column="0" HorizontalOptions="Center" VerticalOptions="Center" TextColor="#031926" />
+                <Label Text="Try Adding a Symptom" FontFamily="HankenGroteskBold" FontSize="16" Grid.Row="1" Grid.Column="0" HorizontalOptions="Center" VerticalOptions="Center" TextColor="darkgray" />
+                <Button WidthRequest="220" Text="Add Symptom" Clicked="Button_Clicked" Grid.Row="2" Grid.Column="0" FontSize="16" Margin="0,10,0,5" FontFamily="HankenGroteskBold" TextColor="#031926" BackgroundColor="#BFDBF7" CornerRadius="10" />
+
+            </Grid>
+
+            <!-- New Symptoms Insights -->
+
+            <Grid x:Name="SymptomOverview" IsVisible="False" >
+                <syncfusion:SfListView  x:Name="AllSymptomView" Padding="0" Margin="10,5,10,50" AutoFitMode="Height"  ItemSpacing="0"  HorizontalOptions="FillAndExpand" ItemTapped="AllSymptomView_ItemTapped" IsScrollingEnabled="False"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
+                    <syncfusion:SfListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Frame CornerRadius="10"  Margin="0,5,0,5"
+        BackgroundColor="#fff7ea" HasShadow="False"
+                       BorderColor="Transparent" InputTransparent="True"
+       Padding="0">
+                                    <Grid Margin="0,10,0,0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="45*"/>
+                                            <ColumnDefinition Width="45*"/>
+                                            <ColumnDefinition Width="10*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label Text="{Binding Shorttitle}" FontFamily="HankenGroteskBold"  FontSize="14" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,0,10" TextColor="Orange" />
+                                        <Label Text="{Binding LastUpdated}" Margin="10,0,0,10" VerticalOptions="Center" HorizontalOptions="End" VerticalTextAlignment="Center"  FontFamily="HankenGroteskRegular" TextColor="Gray" FontSize="Small"   Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
+
+                                        <Label  FontFamily="HankenGroteskBold"  Margin="10,5,0,10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="{Binding CurrentIntensity}" TextColor="#031926" FontSize="35" FontFamily="HankenGroteskBold" FontAttributes="Bold"/>
+                                                    <Span Text=" " TextColor="#031926" FontSize="30" FontAttributes="Bold"/>
+                                                    <Span Text="{Binding Score}" TextColor="Gray" FontFamily="HankenGroteskRegular" FontSize="14"   />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+
+                                        <Image Source="nextdarker.png" HeightRequest="15" Margin="0,0,0,10"  Grid.Row="0" Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center" />
+
+                                    </Grid>
+                                </Frame>
+
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.ItemTemplate>
+                </syncfusion:SfListView>
+            </Grid>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

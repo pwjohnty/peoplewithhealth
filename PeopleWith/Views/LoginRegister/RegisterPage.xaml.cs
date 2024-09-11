@@ -1,11 +1,17 @@
-using MauiApp1;
+using PeopleWith;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Xml;
+//using Windows.System.UserProfile;
+using static Microsoft.Maui.ApplicationModel.Permissions;
+using static Microsoft.Maui.Controls.Device;
+//using CoreImage;
 //using static Android.Gms.Common.Apis.Api;
 //using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -21,6 +27,15 @@ public partial class RegisterPage : ContentPage
     bool isEditing;
     bool validdob;
     signupcode signupcodeinfo;
+    bool heightformatting;
+    string heightinput;
+    string weightinput;
+    List<string> heightinputlist = new List<string>();
+    ObservableCollection<question> regquestionlist = new ObservableCollection<question>();
+    ObservableCollection<answer> reganswerlist = new ObservableCollection<answer>();
+    consent additionalconsent = new consent();
+    ObservableCollection<symptom> allsymptomlist = new ObservableCollection<symptom>();
+    ObservableCollection<medication> allmedicationlist = new ObservableCollection<medication>();
     public RegisterPage()
 	{
 		InitializeComponent();
@@ -63,6 +78,14 @@ public partial class RegisterPage : ContentPage
         ethnicitylist.Sort();
 
         ethlist.ItemsSource = ethnicitylist;
+
+
+        heightinput = "Ft";
+
+        MessagingCenter.Subscribe<object>(this, "RemoveProgress", async (sender) =>
+        {
+            BackProgress();
+        });
 
 
     }
@@ -125,7 +148,10 @@ public partial class RegisterPage : ContentPage
             {
                 Handlesignupcodeframe();
             }
-            //add in the sign up info page here
+            else if(signupinfostack.IsVisible == true)
+            {
+                Handlesignupinfoframe();
+            }
             else if(genderframe.IsVisible == true)
             {
                 Handlegenderframe();
@@ -244,7 +270,7 @@ public partial class RegisterPage : ContentPage
             if(response.IsSuccessStatusCode)
             {
                 string content = await response.Content.ReadAsStringAsync();
-                var userResponse = JsonConvert.DeserializeObject<UserResponse>(content);
+                var userResponse = JsonConvert.DeserializeObject<APIUserResponse>(content);
                 ObservableCollection<user> users = userResponse.Value;
 
                 if(users.Count > 0)
@@ -288,12 +314,32 @@ public partial class RegisterPage : ContentPage
             response = await client.PostAsync(uri, contentt);
 
 
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
-                var errorResponse = await response.Content.ReadAsStringAsync();
+                string responseBody = await response.Content.ReadAsStringAsync();
+                var userResponseconsent = JsonConvert.DeserializeObject<APIUserResponse>(responseBody);
+                var consent = userResponseconsent.Value[0];
+
+                newuser = consent;
             }
 
             //email generate
+            StringContent mail_content = new StringContent(newuser.email, System.Text.Encoding.UTF8, "application/json");
+
+            var emailresponse = await client.PostAsync("https://peoplewithwebapp.azurewebsites.net/hub/email-validation.php?uid=" + newuser.email, mail_content);
+
+           // check if the response is successful
+                if (emailresponse.IsSuccessStatusCode)
+            {
+                //string content = await emailresponse.content.readasstringasync();
+                // debug.writeline(content); // uncomment this line if you want to debug the content
+            }
+            else
+            {
+                // handle the error
+              //  string errorcontent = await emailresponse.content.readasstringasync();
+                // debug.writeline($"error: {emailresponse.statuscode}, {errorcontent}");
+            }
             //// Create an instance of HttpClient
             //using (HttpClient httpClient = new HttpClient())
             //{
@@ -407,14 +453,106 @@ public partial class RegisterPage : ContentPage
                     }
                     else
                     {
-                        signupinfotitle.Text = "Welcome to " + users[0].title;
 
-                        signupcodeinfo = users[0];
-                        signupinfostack.IsVisible = true;
-                        signupcodeframe.IsVisible = false;
-                        nextbtnloader.IsVisible = false;
-                        nextbtn.IsVisible = true;
-                        UpdateProgress();
+                        //check if they have any questions and anwers
+
+                        
+                            var urll = APICalls.Checksignupregquestions + "%27" + users[0].referral + "%27";
+
+                            HttpResponseMessage responsee = await client.GetAsync(urll);
+
+                            if (responsee.IsSuccessStatusCode)
+                            {
+                                string contentt = await responsee.Content.ReadAsStringAsync();
+                                var userResponsee = JsonConvert.DeserializeObject<ApiResponseQuestion>(contentt);
+                                ObservableCollection<question> questions = userResponsee.Value;
+
+                                if (questions.Count > 0)
+                                {
+                                
+                                     foreach(var item in questions)
+                                     {
+                                         if(item.area == "Registration")
+                                         {
+
+                                             regquestionlist.Add(item);
+
+                                         }
+                                     }
+
+                                //get answers for the questions
+
+
+                                var urlanswers = APICalls.Checksignupreganswers + "%27" + users[0].referral + "%27";
+
+                                HttpResponseMessage responseeanswers = await client.GetAsync(urlanswers);
+
+                                if (responseeanswers.IsSuccessStatusCode)
+                                {
+                                    string contenttanswers = await responseeanswers.Content.ReadAsStringAsync();
+                                    var userResponseeanswer = JsonConvert.DeserializeObject<ApiResponseAnswer>(contenttanswers);
+                                    reganswerlist = userResponseeanswer.Value;
+                                }
+
+
+
+                                 }
+
+                            }
+
+                            //check if there is additional consent
+                        if(users[0].registrationconsent == true)
+                        {
+                            var urlconsent = APICalls.CheckConsentforsignupcode + "%27" + users[0].signupcodeid + "%27";
+
+                            HttpResponseMessage responseconsent = await client.GetAsync(urlconsent);
+
+                            if (responseconsent.IsSuccessStatusCode)
+                            {
+                                string contentconsent = await responseconsent.Content.ReadAsStringAsync();
+                                var userResponseconsent = JsonConvert.DeserializeObject<ApiResponseConsent>(contentconsent);
+                                var consent = userResponseconsent.Value;
+
+                                additionalconsent = consent.Where(x => x.area == "Registration").SingleOrDefault();
+
+                            }
+
+                        }
+
+                        // This code runs on the UI thread after the background task is complete
+                        // You can update the UI or perform other UI-related operations here
+                        // Update the UI on the main thread
+                       
+                        MainThread.BeginInvokeOnMainThread(() =>
+                        {
+
+                            signupinfotitle.Text = "Welcome to " + users[0].title;
+                            signupinfoimage.Source = ImageSource.FromUri(new Uri("https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/logos/" + users[0].logofilename));
+                            signupcodeinfodes.Text = users[0].description;
+                        
+                            signupcodeinfo = users[0];
+
+                            newuser.signupcodeid = signupcodeinfo.signupcodeid;
+                            newuser.referral = signupcodeinfo.referral;
+
+                            if (!string.IsNullOrEmpty(signupcodeinfo.externalidentifier))
+                            {
+                                extidlbl.Text = signupcodeinfo.externalidentifier;
+                            }
+
+                            signupinfostack.IsVisible = true;
+                            signupcodeframe.IsVisible = false;
+                            nextbtnloader.IsVisible = false;
+                            nextbtn.IsVisible = true;
+                            UpdateProgress();
+                        });
+
+                        //has medications and symptoms to get
+                        if(signupcodeinfo.referral == "SFEAT")
+                        {
+                            getmedandsymptoms();
+                        }
+                       
                     }
                   
 
@@ -430,6 +568,22 @@ public partial class RegisterPage : ContentPage
         {
 
         }
+    }
+
+    async void Handlesignupinfoframe()
+    {
+        try
+        {
+            signupinfostack.IsVisible = false;
+            genderframe.IsVisible = true;
+
+            UpdateProgress();
+        }
+        catch(Exception ex)
+        {
+
+        }
+
     }
 
     async void Handlegenderframe()
@@ -461,23 +615,36 @@ public partial class RegisterPage : ContentPage
             if(validdob)
             {
                 newuser.dateofbirth = dateEntry.Text;
-                dobstack.IsVisible = false;
+              
 
                 //novo dont want ethnicity
                 if (signupcodeinfo != null)
                 {
                     if (signupcodeinfo.referral == "NOVO")
                     {
-                        //skip to additional steps ie health kit, notifications, face id
+                        // UpdateProgress();
+                        // heightandweightframe.IsVisible = true;
+
+                        var progressnovo = topprogress.Progress + 5;
+                        
+                        await Navigation.PushAsync(new NOVO(newuser, progressnovo, signupcodeinfo, regquestionlist, reganswerlist, additionalconsent), false);
+                        return;
+                    }
+                    else
+                    {
+                        dobstack.IsVisible = false;
+                        ethstack.IsVisible = true;
                     }
                 }
                 else
                 {
-
+                    dobstack.IsVisible = false;
                     ethstack.IsVisible = true;
+                   
                 }
 
                 UpdateProgress();
+
             }
             else
             {
@@ -502,10 +669,30 @@ public partial class RegisterPage : ContentPage
             }
             else
             {
-                //pass user and page progress
-                
-                UpdateProgress();
-                await Navigation.PushAsync(new RegisterFinalPage(newuser, topprogress.Progress), false);
+                //check if they have a sign up code 
+
+                if (!string.IsNullOrEmpty(newuser.signupcodeid))
+                {
+                    //check signup code and go to page
+                    if(signupcodeinfo.referral == "SFEAT")
+                    {
+                       
+                       // UpdateProgress();
+                        await Navigation.PushAsync(new SFENRAT(newuser, allsymptomlist, allmedicationlist, signupcodeinfo, topprogress.Progress, regquestionlist, reganswerlist, additionalconsent), false);
+                    }
+
+                }
+                else
+                {
+
+
+
+
+                    //pass user and page progress
+
+                    UpdateProgress();
+                    await Navigation.PushAsync(new RegisterFinalPage(newuser, topprogress.Progress), false);
+                }
             }
         }
         catch( Exception ex )
@@ -551,6 +738,23 @@ public partial class RegisterPage : ContentPage
         {
 
             topprogress.Progress = topprogress.Progress += 11;
+
+
+        }
+        catch (Exception ex)
+        {
+
+        }
+
+    }
+
+
+    async void BackProgress()
+    {
+        try
+        {
+
+            topprogress.Progress = topprogress.Progress -= 11;
 
 
         }
@@ -677,6 +881,7 @@ public partial class RegisterPage : ContentPage
                 nosignupbtn.FontAttributes = FontAttributes.None;
                 
                 signupfloat.HasError = false;
+                nosignupcodebtn = false;
                // signupcodetext.IsEnabled = false;
                // signupcodetext.IsEnabled = true;
             }
@@ -809,4 +1014,729 @@ public partial class RegisterPage : ContentPage
 
         }
     }
+
+    private void heightinputentry_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        try
+        {
+            if (heightformatting) return;
+
+            heightformatting = true;
+
+            var currentText = e.NewTextValue;
+
+            if (heightinput == "Ft")
+            {
+
+                // Remove non-digit characters
+                var digits = new string(currentText.Where(char.IsDigit).ToArray());
+
+
+
+                // Limit to 3 digits
+                if (digits.Length >= 3)
+                {
+                    digits = digits.Substring(0, 3);
+                    heightinputentry.IsEnabled = false;
+                    heightinputentry.IsEnabled = true;
+                }
+
+                // Format the text
+                string formattedText = string.Empty;
+
+                if (digits.Length > 0)
+                {
+                    formattedText += $"{digits[0]}' ";
+                }
+
+                if (digits.Length > 2)
+                {
+
+                    // Remove existing single and double quotes to prevent duplication
+                    //formattedText.Remove(3);
+                    // formattedText.Replace("'", "").Replace("\"", "");
+                    formattedText += $"{digits[1]}";
+                    formattedText += $"{digits[2]}''";
+                }
+
+                else if (digits.Length > 1)
+                {
+                    formattedText += $"{digits[1]}''";
+                }
+             
+
+
+
+                // Update the entry text and label
+                if (!string.IsNullOrEmpty(formattedText))
+                {
+                    heightinputentry.Opacity = 0;
+                    heightinputlbl.Text = formattedText;
+                    heightinputlbl.IsVisible = true;
+                }
+                else
+                {
+                    heightinputentry.Opacity = 1;
+                    heightinputlbl.IsVisible = false;
+                }
+
+            }
+            else
+            {
+                //cm
+            }
+
+            heightformatting = false;
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
+    private void segmentedControl_SelectionChanged(object sender, Syncfusion.Maui.Buttons.SelectionChangedEventArgs e)
+    {
+        try
+        {
+            var selectedvalue = e.NewIndex;
+
+
+            if(selectedvalue != null)
+            {
+           //     heightinputentry.Opacity = 1;
+             //   heightinputentry.Text = string.Empty;
+             //   heightinputlbl.Text = string.Empty;
+
+                if (selectedvalue == 0)
+                {
+                    heightinput = "Ft";
+                    heightgauge.Minimum = 0;
+                    heightgauge.Maximum = 96;
+                    heightgauge.Interval = 12;
+
+
+                    if (!string.IsNullOrEmpty(heightinputlbl.Text))
+                    {
+                        if (heightinputlbl.Text.Contains("cm"))
+                        {
+                            //convert cm to ft
+                            var getcm = heightinputlbl.Text.Split(' ');
+
+                            var cm = Convert.ToDouble(getcm[0]);
+
+                            double totalInches = cm / 2.54;
+                            int feet = (int)(totalInches / 12);
+                            double inches = totalInches % 12;
+
+
+
+                            //update label
+                            heightinputlbl.Text = feet.ToString() + "' " + inches.ToString() + "''";
+
+                            //update guage
+                            heightpointerguage.Value = totalInches;
+
+
+                        }
+                    }
+                }
+                else
+                {
+                    heightinput = "CM";
+                    heightgauge.Minimum = 0;
+                    heightgauge.Maximum = 250;
+                    heightgauge.Interval = 25;
+
+
+                    if (!string.IsNullOrEmpty(heightinputlbl.Text))
+                    {
+                        if (heightinputlbl.Text.Contains("''"))
+                        {
+                            //convert ft to cm
+                            var ftin = heightinputlbl.Text.Split(' ');
+
+                            var ftnum = new String(ftin[0].Where(Char.IsDigit).ToArray());
+                            var innum = new String(ftin[1].Where(Char.IsDigit).ToArray());
+
+                            var ft = Convert.ToDouble(ftnum);
+                            var ins = Convert.ToDouble(innum);
+
+                            double fttotal = (ft * 30.48);
+                                
+                            double instotal =(ins * 2.54);
+
+                            var total = fttotal + instotal;
+
+                            //update label
+                            heightinputlbl.Text = fttotal.ToString() + "' " + instotal.ToString() + "''";
+
+                            //update guage
+                            heightpointerguage.Value = total;
+
+
+                        }
+                    }
+
+                }
+                
+            }
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
+    private void SfLinearGauge_LabelCreated(object sender, Syncfusion.Maui.Gauges.LabelCreatedEventArgs e)
+    {
+        try
+        {
+            if (heightinput == "Ft")
+            {
+
+                if (e.Text == "0")
+                    e.Text = "0'";
+                else if (e.Text == "12")
+                    e.Text = "1'";
+                else if (e.Text == "24")
+                    e.Text = "2'";
+                else if (e.Text == "36")
+                    e.Text = "3'";
+                else if (e.Text == "48")
+                    e.Text = "4'";
+                else if (e.Text == "60")
+                    e.Text = "5'";
+                else if (e.Text == "72")
+                    e.Text = "6'";
+                else if (e.Text == "84")
+                    e.Text = "7'";
+                else if (e.Text == "96")
+                    e.Text = "8'";
+            }
+            else
+            {
+                //do nothing for cm
+            }
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
+    private void LinearShapePointer_ValueChanged(object sender, Syncfusion.Maui.Gauges.ValueChangedEventArgs e)
+    {
+        try
+        {
+            var value = e.Value;
+
+            if (heightinput == "Ft")
+            {
+
+                int feet = (int)(value / 12); // 1 foot = 12 inches
+                int inches = (int)(value % 12); // Remaining inches
+
+                var stringvalue = feet + "' " + inches + "''";
+
+                heightinputlbl.Text = stringvalue;
+            }
+            else
+            {
+                int OtherInt = Convert.ToInt32(value);
+
+                heightinputlbl.Text = OtherInt.ToString() + " cm";
+            }
+        }
+        catch(Exception ex) 
+        { 
+        }
+
+    }
+
+    private void weightgauge_LabelCreated(object sender, Syncfusion.Maui.Gauges.LabelCreatedEventArgs e)
+    {
+        try
+        {
+            if(weightinput == "Stone")
+            {
+                if (e.Text == "0")
+                    e.Text = "0";
+                else if (e.Text == "14")
+                    e.Text = "1";
+                else if (e.Text == "28")
+                    e.Text = "2";
+                else if (e.Text == "42")
+                    e.Text = "3";
+                else if (e.Text == "56")
+                    e.Text = "4";
+                else if (e.Text == "70")
+                    e.Text = "5";
+                else if (e.Text == "84")
+                    e.Text = "6";
+                else if (e.Text == "98")
+                    e.Text = "7";
+                else if (e.Text == "112")
+                    e.Text = "8";
+                else if (e.Text == "126")
+                    e.Text = "9";
+                else if (e.Text == "140")
+                    e.Text = "10";
+                else if (e.Text == "154")
+                    e.Text = "11";
+                else if (e.Text == "168")
+                    e.Text = "12";
+                else if (e.Text == "182")
+                    e.Text = "13";
+                else if (e.Text == "196")
+                    e.Text = "14";
+                else if (e.Text == "210")
+                    e.Text = "15";
+                else if (e.Text == "224")
+                    e.Text = "16";
+                else if (e.Text == "238")
+                    e.Text = "17";
+                else if (e.Text == "252")
+                    e.Text = "18";
+                else if (e.Text == "266")
+                    e.Text = "19";
+                else if (e.Text == "280")
+                    e.Text = "20";
+                else if (e.Text == "294")
+                    e.Text = "21";
+                else if (e.Text == "308")
+                    e.Text = "22";
+                else if (e.Text == "322")
+                    e.Text = "23";
+                else if (e.Text == "336")
+                    e.Text = "24";
+                else if (e.Text == "350")
+                    e.Text = "25";
+            }
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
+    private void LinearShapePointer_ValueChanged_1(object sender, Syncfusion.Maui.Gauges.ValueChangedEventArgs e)
+    {
+        try
+        {
+            var value = e.Value;
+
+            if (weightinput == "Kg")
+            {
+
+                int OtherInt = Convert.ToInt32(value);
+
+                weightinputlbl.Text = OtherInt.ToString() + " kg";
+            }
+            else
+            {
+
+                int stone = (int)(value / 14); // 1 foot = 12 inches
+                int pounds = (int)(value % 14); // Remaining inches
+
+                var stringvalue = stone + "st " + pounds + "lbs";
+
+                weightinputlbl.Text = stringvalue;
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    private void segmentedControlweight_SelectionChanged(object sender, Syncfusion.Maui.Buttons.SelectionChangedEventArgs e)
+    {
+        try
+        {
+            var selectedvalue = e.NewIndex;
+
+          
+
+
+            if (selectedvalue != null)
+            {
+                // heightinputentry.Opacity = 1;
+                // heightinputentry.Text = string.Empty;
+
+               // weightinputlbl.Text = string.Empty;
+
+                if (selectedvalue == 0)
+                {
+                    weightinput = "Kg";
+                    weightgauge.Minimum = 0;
+                    weightgauge.Maximum = 200;
+                    weightgauge.Interval = 20;
+
+                    if (!string.IsNullOrEmpty(weightinputlbl.Text))
+                    {
+                        if (weightinputlbl.Text.Contains("st"))
+                        {
+                            //convert stone to kg
+                            var getstlbs = weightinputlbl.Text.Split(' ');
+                         
+                            var stonenum = new String(getstlbs[0].Where(Char.IsDigit).ToArray());
+                            var lbsnum = new String(getstlbs[1].Where(Char.IsDigit).ToArray());
+
+                            var convertst = Convert.ToDouble(stonenum);
+                            var convertlbs = Convert.ToDouble(lbsnum);
+
+                            double totalPounds = (convertst * 14) + convertlbs;
+                            var total = totalPounds * 0.453592;
+
+
+                            //update label
+                              weightinputlbl.Text = total.ToString() + "kg";
+
+                            //update guage
+                              weightguagepointer.Value = total;
+                        }
+                    }
+
+                }
+                else
+                {
+                    weightinput = "Stone";
+                    weightgauge.Minimum = 0;
+                    weightgauge.Maximum = 350;
+                    weightgauge.Interval = 14;
+
+                    if (!string.IsNullOrEmpty(weightinputlbl.Text))
+                    {
+                        if (weightinputlbl.Text.Contains("kg"))
+                        {
+                            //convert kg to stone
+                            var getkg = weightinputlbl.Text.Split(' ');
+                            var kg = Convert.ToDouble(getkg[0]);
+                            //stones calulation
+                            double totalPounds = kg * 2.20462;
+                            int stones = (int)(totalPounds / 14);
+                            double pounds = totalPounds % 14;
+
+                            //update label
+                            weightinputlbl.Text = stones.ToString() + "st " + pounds + "lbs";
+
+                            //update guage
+                            weightguagepointer.Value = totalPounds;
+                        }
+                    }
+
+                    // weightgauge.MaximumLabelsCount = 0;
+                }
+            }
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
+    private void SegmentedControl_ValueChanged(object sender, Plugin.Maui.SegmentedControl.ValueChangedEventArgs e)
+    {
+        try
+        {
+            var selectedvalue = e.NewValue;
+
+
+            if (selectedvalue != null)
+            {
+                //     heightinputentry.Opacity = 1;
+                //   heightinputentry.Text = string.Empty;
+                //   heightinputlbl.Text = string.Empty;
+
+                if (selectedvalue == 0)
+                {
+                    heightinput = "Ft";
+                    heightgauge.Minimum = 0;
+                    heightgauge.Maximum = 96;
+                    heightgauge.Interval = 12;
+
+
+                    if (!string.IsNullOrEmpty(heightinputlbl.Text))
+                    {
+                        if (heightinputlbl.Text.Contains("cm"))
+                        {
+                            //convert cm to ft
+                            var getcm = heightinputlbl.Text.Split(' ');
+
+                            var cm = Convert.ToDouble(getcm[0]);
+
+                            double totalInches = cm / 2.54;
+                            int feet = (int)(totalInches / 12);
+                            double inches = totalInches % 12;
+
+
+
+                            //update label
+                            heightinputlbl.Text = feet.ToString() + "' " + inches.ToString() + "''";
+
+                            //update guage
+                            heightpointerguage.Value = totalInches;
+
+
+                        }
+                    }
+                }
+                else
+                {
+                    heightinput = "CM";
+                    heightgauge.Minimum = 0;
+                    heightgauge.Maximum = 250;
+                    heightgauge.Interval = 25;
+
+
+                    if (!string.IsNullOrEmpty(heightinputlbl.Text))
+                    {
+                        if (heightinputlbl.Text.Contains("''"))
+                        {
+                            //convert ft to cm
+                            var ftin = heightinputlbl.Text.Split(' ');
+
+                            var ftnum = new String(ftin[0].Where(Char.IsDigit).ToArray());
+                            var innum = new String(ftin[1].Where(Char.IsDigit).ToArray());
+
+                            var ft = Convert.ToDouble(ftnum);
+                            var ins = Convert.ToDouble(innum);
+
+                            double fttotal = (ft * 30.48);
+
+                            double instotal = (ins * 2.54);
+
+                            var total = fttotal + instotal;
+
+                            //update label
+                            heightinputlbl.Text = fttotal.ToString() + "' " + instotal.ToString() + "''";
+
+                            //update guage
+                            heightpointerguage.Value = total;
+
+
+                        }
+                    }
+
+                }
+
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    private void SegmentedControlweight_ValueChanged(object sender, Plugin.Maui.SegmentedControl.ValueChangedEventArgs e)
+    {
+        try
+        {
+            var selectedvalue = e.NewValue;
+
+
+
+
+            if (selectedvalue != null)
+            {
+                // heightinputentry.Opacity = 1;
+                // heightinputentry.Text = string.Empty;
+
+                // weightinputlbl.Text = string.Empty;
+
+                if (selectedvalue == 0)
+                {
+                    weightinput = "Kg";
+                    weightgauge.Minimum = 0;
+                    weightgauge.Maximum = 200;
+                    weightgauge.Interval = 20;
+
+                    if (!string.IsNullOrEmpty(weightinputlbl.Text))
+                    {
+                        if (weightinputlbl.Text.Contains("st"))
+                        {
+                            //convert stone to kg
+                            var getstlbs = weightinputlbl.Text.Split(' ');
+
+                            var stonenum = new String(getstlbs[0].Where(Char.IsDigit).ToArray());
+                            var lbsnum = new String(getstlbs[1].Where(Char.IsDigit).ToArray());
+
+                            var convertst = Convert.ToDouble(stonenum);
+                            var convertlbs = Convert.ToDouble(lbsnum);
+
+                            double totalPounds = (convertst * 14) + convertlbs;
+                            var total = totalPounds * 0.453592;
+
+
+                            //update label
+                            weightinputlbl.Text = total.ToString() + "kg";
+
+                            //update guage
+                            weightguagepointer.Value = total;
+                        }
+                    }
+
+                }
+                else
+                {
+                    weightinput = "Stone";
+                    weightgauge.Minimum = 0;
+                    weightgauge.Maximum = 350;
+                    weightgauge.Interval = 14;
+
+                    if (!string.IsNullOrEmpty(weightinputlbl.Text))
+                    {
+                        if (weightinputlbl.Text.Contains("kg"))
+                        {
+                            //convert kg to stone
+                            var getkg = weightinputlbl.Text.Split(' ');
+                            var kg = Convert.ToDouble(getkg[0]);
+                            //stones calulation
+                            double totalPounds = kg * 2.20462;
+                            int stones = (int)(totalPounds / 14);
+                            double pounds = totalPounds % 14;
+
+                            //update label
+                            weightinputlbl.Text = stones.ToString() + "st " + pounds + "lbs";
+
+                            //update guage
+                            weightguagepointer.Value = totalPounds;
+                        }
+                    }
+
+                    // weightgauge.MaximumLabelsCount = 0;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    async void getmedandsymptoms()
+    {
+        try
+        {
+            //get all the symptoms
+            var urlsymptom = APICalls.GetSymptoms;
+
+            HttpResponseMessage responseconsent = await client.GetAsync(urlsymptom);
+
+            if (responseconsent.IsSuccessStatusCode)
+            {
+                string contentconsent = await responseconsent.Content.ReadAsStringAsync();
+                var userResponseconsent = JsonConvert.DeserializeObject<ApiResponseSymptom>(contentconsent);
+                var consent = userResponseconsent.Value;
+
+                allsymptomlist = consent;
+
+              //  additionalconsent = consent.Where(x => x.area == "Registration").SingleOrDefault();
+
+            }
+
+            //get all medications
+            //get all the symptoms
+            var urlmedications = APICalls.GetMedications;
+
+            HttpResponseMessage responsemeds = await client.GetAsync(urlmedications);
+
+            if (responsemeds.IsSuccessStatusCode)
+            {
+                string contentmeds = await responsemeds.Content.ReadAsStringAsync();
+                var userResponsemed = JsonConvert.DeserializeObject<ApiResponseMedication>(contentmeds);
+                var meds = userResponsemed.Value;
+
+                allmedicationlist = meds;
+
+                //  additionalconsent = consent.Where(x => x.area == "Registration").SingleOrDefault();
+            
+            }
+
+
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
+    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            //back button
+
+            if(ethstack.IsVisible == true)
+            {
+                ethstack.IsVisible = false;
+                dobstack.IsVisible = true;
+
+                BackProgress();
+            }
+            else if(dobstack.IsVisible == true)
+            {
+                dobstack.IsVisible = false;
+                genderframe.IsVisible = true;
+
+                BackProgress();
+            }
+            else if(genderframe.IsVisible == true)
+            {
+                genderframe.IsVisible = false;
+
+                if (signupcodeinfo == null)
+                {
+                    //has no sign up code
+                   
+                    signupcodeframe.IsVisible = true;
+                }
+                else
+                {
+                    signupinfostack.IsVisible = true;
+                }
+
+                BackProgress();
+            }
+            else if(signupinfostack.IsVisible == true)
+            {
+                signupinfostack.IsVisible = false;
+                signupcodeframe.IsVisible = true;
+
+                regquestionlist.Clear();
+                reganswerlist.Clear();
+                newuser.signupcodeid = null;
+                newuser.referral = null;
+              //  additionalconsent;
+                allsymptomlist.Clear();
+                allmedicationlist.Clear();
+
+                BackProgress();
+            }
+            else if(signupcodeframe.IsVisible == true)
+            {
+                signupcodeframe.IsVisible = false;
+                confirmemailframe.IsVisible = true;
+
+                BackProgress();
+            }
+            else if(confirmemailframe.IsVisible == true)
+            {
+                confirmemailframe.IsVisible = false;
+                emailframe.IsVisible = true;
+
+                BackProgress();
+            }
+            else if(emailframe.IsVisible == true)
+            {
+                Navigation.RemovePage(this);
+            }
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
+
 }

@@ -1,4 +1,5 @@
-using MauiApp1;
+using PeopleWith;
+using System;
 
 namespace PeopleWith;
 
@@ -11,7 +12,7 @@ public partial class RegisterWithSignUpCodePage : ContentPage
 		InitializeComponent();
 	}
 
-    public RegisterWithSignUpCodePage(signupcode usersignupcode, user userpass)
+    public RegisterWithSignUpCodePage(signupcode usersignupcode, user userpass, double progresspassed)
     {
         InitializeComponent();
 
@@ -19,8 +20,17 @@ public partial class RegisterWithSignUpCodePage : ContentPage
         signupcodepassed = usersignupcode;
         userpassed = userpass;
 
+        progresspassed = progresspassed + 10;
 
-        signupinfotitle.Text = "Welcome to " + signupcodepassed.title;
+        topprogress.SetProgress(progresspassed, 0);
+
+
+        if (signupcodepassed.referral == "NOVO")
+        {
+            heightandweightstack.IsVisible = true;
+        }
+
+       
 
 
     }
