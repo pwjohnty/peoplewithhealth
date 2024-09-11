@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
+             x:Class="PeopleWith.SearchAddMeasurement" BackgroundColor="White"
+             >
+    <ScrollView VerticalScrollBarVisibility="Never">
+
+
+
+
+        <StackLayout x:Name="maintack" VerticalOptions="FillAndExpand" BackgroundColor="Transparent">
+
+            <StackLayout x:Name="datastack" IsVisible="False">
+
+
+
+                <Label Text="Add a New Measurement" FontSize="20" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
+                <Label Text="Tap on a new measurement below to begin" FontSize="12" Margin="20,10,0,0" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
+
+                <syncfusion:SfListView x:Name="measurementlist" ItemTapped="measurementlist_ItemTapped" Margin="10,0,10,30" HeightRequest="500" ScrollBarVisibility="Never" SelectionBackground="Transparent" SelectionMode="Single" BackgroundColor="Transparent">
+                    <syncfusion:SfListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Frame CornerRadius="10"  Margin="0,5,0,5"
+  BackgroundColor="#e5e5e5" HasShadow="False" InputTransparent="True"
+                 BorderColor="Transparent"
+ Padding="0">
+                                    <StackLayout BackgroundColor="Transparent">
+                                        <Grid Margin="0,10,0,0" RowSpacing="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="90*"/>
+                                                <ColumnDefinition Width="10*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            <Label Text="{Binding measurementname}" TextColor="#031926" FontFamily="HankenGroteskRegular" Margin="10,5,0,10" VerticalOptions="Center" VerticalTextAlignment="Center"    Grid.Row="0" Grid.Column="0" />
+                                            <Image Source="nextdarker.png" HeightRequest="15" Margin="0,5,0,10"  Grid.Row="0" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Center" />
+                                        </Grid>
+                                    </StackLayout>
+                                </Frame>
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.ItemTemplate>
+                </syncfusion:SfListView>
+
+
+            </StackLayout>
+
+       
+            <StackLayout HorizontalOptions="Center" x:Name="loadingstack" VerticalOptions="CenterAndExpand">
+                <ActivityIndicator IsRunning="True" Color="#031926" HorizontalOptions="Center" VerticalOptions="Start" />
+                <Label Text="Loading Measurements..." TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="Center" Margin="0,5,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" />
+
+            </StackLayout>
+
+
+        </StackLayout>
+    </ScrollView>
+    
+
+</ContentPage>

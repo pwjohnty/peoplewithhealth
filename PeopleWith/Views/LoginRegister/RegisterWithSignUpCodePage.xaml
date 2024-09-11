@@ -44,27 +44,27 @@
 
             <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
 
-                <StackLayout x:Name="signupinfostack" Margin="20,0,20,0" IsVisible="False">
+                <StackLayout x:Name="heightandweightstack" Margin="20,0,20,0" IsVisible="False">
 
 
 
                     <Label
-x:Name="signupinfotitle"
+ Text="Enter Height and Weight"
  FontSize="26"
- Margin="0,20,0,0"
+ Margin="0,0,0,0"
  TextColor="#031926"
  FontFamily="HankenGroteskBold"
- FontAttributes="Bold" HorizontalTextAlignment="Center"
- HorizontalOptions="Center" />
+ FontAttributes="Bold"
+ HorizontalOptions="Start" />
 
                     <Label
-Text="Thank you for joining our study! Your participation is invaluable in helping us. We deeply appreciate your willingness to contribute your time and insights to this important work. By sharing your experiences and perspectives, you are playing a crucial role in driving forward research that can lead to meaningful improvements and innovations. Your input will not only aid our current investigation but also pave the way for future studies and developments in this field."
+Text="Please enter your height and weight"
 TextColor="#031926"
 FontFamily="HankenGroteskRegular"
 FontAttributes="None"
-Margin="0,20,0,0"
-FontSize="15" HorizontalTextAlignment="Center"
-HorizontalOptions="Center" />
+Margin="0,0,0,0"
+FontSize="15"
+HorizontalOptions="Start" />
 
 
 

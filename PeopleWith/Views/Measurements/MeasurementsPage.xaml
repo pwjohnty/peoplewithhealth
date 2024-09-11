@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+             ios:Page.UseSafeArea="True"
+              xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
+             x:Class="PeopleWith.MeasurementsPage" Shell.NavBarIsVisible="False" BackgroundColor="White"
+            >
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add New" Clicked="ToolbarItem_Clicked" />
+    </ContentPage.ToolbarItems>
+    <ScrollView VerticalScrollBarVisibility="Never">
+  
+
+        <StackLayout x:Name="maintack" VerticalOptions="FillAndExpand" BackgroundColor="Transparent">
+
+
+            <StackLayout x:Name="nodatastack" IsVisible="False" VerticalOptions="CenterAndExpand">
+                <Image Source="adddataicon.png" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="50" WidthRequest="50"/>
+                <Label Text="Add Measurement" FontSize="20" Margin="0,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Center" />
+                <Label Text="Tap here to add a measurement" FontSize="14" TextColor="#031926" FontFamily="HankenGroteskRegular" Margin="0,0,0,0" HorizontalOptions="Center" VerticalOptions="Center" VerticalTextAlignment="Center" />
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+
+                <StackLayout x:Name="datastack">
+
+
+                    <Label Text="Measurements" FontSize="26" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
+
+                    <Label Text="Recent Data" x:Name="recentlbl" IsVisible="False" FontSize="20" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
+
+                    <syncfusion:SfListView x:Name="usermeasurementlist" ItemTapped="usermeasurementlist_ItemTapped" ScrollBarVisibility="Never"  BackgroundColor="Transparent" IsVisible="False" Margin="10,0,10,50" SelectionBackground="Transparent" SelectionMode="Single" AutoFitMode="Height" >
+                        <syncfusion:SfListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Frame CornerRadius="10"  Margin="0,5,0,5"
+        BackgroundColor="#e5f0fb" HasShadow="False"
+                       BorderColor="Transparent" InputTransparent="True"
+       Padding="0">
+                                        <StackLayout BackgroundColor="Transparent">
+                                            <Grid Margin="0,10,0,0" RowSpacing="0">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="45*"/>
+                                                    <ColumnDefinition Width="45*"/>
+                                                    <ColumnDefinition Width="10*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+                                                <Label Text="{Binding measurementname}" TextColor="#031926" FontSize="14" FontAttributes="Bold" FontFamily="HankenGroteskBold" Margin="10,0,0,10" VerticalOptions="Center" VerticalTextAlignment="Center"    Grid.Row="0" Grid.Column="0" />
+                                                <Label Text="{Binding datechanged}" Margin="10,0,0,10" VerticalOptions="Center" HorizontalOptions="End" VerticalTextAlignment="Center"  FontFamily="HankenGroteskRegular" TextColor="Gray" FontSize="Small"   Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
+
+                                                <Label  FontFamily="HankenGroteskBold"  Margin="10,5,0,10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span Text="{Binding value}" TextColor="#031926" FontSize="35" FontFamily="HankenGroteskBold" FontAttributes="Bold"/>
+                                                            <Span Text=" " TextColor="#031926" FontSize="30" FontAttributes="Bold"/>
+                                                            <Span Text="{Binding unit}" TextColor="Gray" FontFamily="HankenGroteskRegular" FontSize="14"   />
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+
+                                                <Image Source="nextdarker.png" HeightRequest="15" Margin="0,0,0,10"  Grid.Row="0" Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center" />
+                                            </Grid>
+                                        </StackLayout>
+                                    </Frame>
+                                </ViewCell>
+                            </DataTemplate>
+                        </syncfusion:SfListView.ItemTemplate>
+                    </syncfusion:SfListView>
+
+
+                    <!--<Label Text="Add a New Measurement" IsVisible="False" FontSize="20" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
+                    <Label Text="Tap on a new measurement below to begin" IsVisible="False" FontSize="12" Margin="20,10,0,0" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
+
+                    <syncfusion:SfListView x:Name="measurementlist" ItemTapped="measurementlist_ItemTapped" Margin="10,0,10,30" HeightRequest="500" ScrollBarVisibility="Never" SelectionBackground="Transparent" SelectionMode="Single" BackgroundColor="Transparent">
+                        <syncfusion:SfListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Frame CornerRadius="10"  Margin="0,5,0,5"
+        BackgroundColor="#e5e5e5" HasShadow="False" InputTransparent="True"
+                       BorderColor="Transparent"
+       Padding="0">
+                                        <StackLayout BackgroundColor="Transparent">
+                                            <Grid Margin="0,10,0,0" RowSpacing="0">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="90*"/>
+                                                    <ColumnDefinition Width="10*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+                                                <Label Text="{Binding measurementname}" TextColor="#031926" FontFamily="HankenGroteskRegular" Margin="10,5,0,10" VerticalOptions="Center" VerticalTextAlignment="Center"    Grid.Row="0" Grid.Column="0" />
+                                                <Image Source="nextdarker.png" HeightRequest="15" Margin="0,5,0,10"  Grid.Row="0" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Center" />
+                                            </Grid>
+                                        </StackLayout>
+                                    </Frame>
+                                </ViewCell>
+                            </DataTemplate>
+                        </syncfusion:SfListView.ItemTemplate>
+                    </syncfusion:SfListView>
+
+
+
+                    <Label Text="Measurements" Opacity="0" FontSize="26" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />-->
+
+       
+                </StackLayout>
+          
+        </StackLayout>
+        
+        
+        
+    </ScrollView>
+</ContentPage>

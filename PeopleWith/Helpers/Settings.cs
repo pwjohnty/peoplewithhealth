@@ -27,21 +27,12 @@ namespace PeopleWith.Helpers
         }
 
 
-        private const string UserIDKey = "id";
+        private const string UserIDKey = "userid";
         private static readonly string UserKeyDefault = string.Empty;
         public static string UserKey
         {
             get => Preferences.Get(UserIDKey, UserKeyDefault);
             set => Preferences.Set(UserIDKey, value);
-        }
-
-        
-        private const string UserTitleKey = "usertitle";
-        private static readonly string UserTitleDefault = string.Empty;
-        public static string UserTitle
-        {
-            get => Preferences.Get(UserTitleKey, UserTitleDefault);
-            set => Preferences.Set(UserTitleKey, value);
         }
 
 
@@ -170,57 +161,12 @@ namespace PeopleWith.Helpers
         }
 
 
-        private const string DiagKey = "diagpopup";
-        private static readonly string DiagDefault = string.Empty;
-        public static string DiagPopup
-        {
-            get => Preferences.Get(DiagKey, DiagDefault);
-            set => Preferences.Set(DiagPopup, value);
-        }
-
-
-        private const string LowerAgeKey = "loweragekey";
-        private static readonly string LowerAgeDefault = string.Empty;
-        public static string LowerAgeBracket
-        {
-            get => Preferences.Get(LowerAgeKey, LowerAgeDefault);
-            set => Preferences.Set(LowerAgeBracket, value);
-        }
-
-
-        private const string UpperAgeKey = "upperagekey";
-        private static readonly string UpperAgeDefault = string.Empty;
-        public static string UpperAgeBracket
-        {
-            get => Preferences.Get(UpperAgeKey, UpperAgeDefault);
-            set => Preferences.Set(UpperAgeBracket, value);
-        }
-
-
-        private const string MostRecentDiagnosisKey = "mostrecentdiagkey";
-        private static readonly string MostRecentDiagnosisDefault = string.Empty;
-        public static string MostRecentDiagnosisID
-        {
-            get => Preferences.Get(MostRecentDiagnosisKey, MostRecentDiagnosisDefault);
-            set => Preferences.Set(MostRecentDiagnosisID, value);
-        }
-
-
         private const string PasswordHash = "userpasswordhash";
         private static readonly string PasswordHashDefault = string.Empty;
         public static string UserPasswordHash
         {
             get => Preferences.Get(PasswordKey, PasswordDefault);
             set => Preferences.Set(UserPasswordHash, value);
-        }
-
-
-        private const string RotationSetting = "rotationsetting";
-        private static readonly string RotationSettingDefault = string.Empty;
-        public static string RotationSettingDash
-        {
-            get => Preferences.Get(RotationSetting, RotationSettingDefault);
-            set => Preferences.Set(RotationSettingDash, value);
         }
 
 
@@ -233,156 +179,6 @@ namespace PeopleWith.Helpers
         }
 
 
-        private const string UserAdvertID = "advertID";
-        private static readonly string UserAdvertIDSettingDefault = string.Empty;
-        public static string AdvertID
-        {
-            get => Preferences.Get(UserAdvertID, UserAdvertIDSettingDefault);
-            set => Preferences.Set(UserAdvertID, value);
-        }
-
-
-        private const string DashSettings = "dashsettings";
-        private static readonly string DashSettingsSettingDefault = string.Empty;
-        public static string Dashsettings
-        {
-            get => Preferences.Get(DashSettings, DashSettingsSettingDefault);
-            set => Preferences.Set(DashSettings, value);
-        }
-
-
-        private const string CancelMedicationNotifications = "cancelmedicationnotifications";
-        private static readonly string CancelMedicationNotificationsDefault = string.Empty;
-        public static string CancelNotificationsMedications
-        {
-            get => Preferences.Get(CancelMedicationNotifications, CancelMedicationNotificationsDefault);
-            set => Preferences.Set(CancelNotificationsMedications, value);
-        }
-
-
-        private const string CancelSupplementNotifications = "cancelsupplementnotifications";
-        private static readonly string CancelSupplementNotificationsDefault = string.Empty;
-        public static string CancelNotificationsSupplements
-        {
-            get => Preferences.Get(CancelSupplementNotifications, CancelSupplementNotificationsDefault);
-            set => Preferences.Set(CancelNotificationsSupplements, value);
-        }
-
-
-        private const string CancelAppointmentNotifications = "cancelappointmentnotifications";
-        private static readonly string CancelAppointmentNotificationsDefault = string.Empty;
-        public static string CancelNotificationsAppointmentts
-        {
-            get => Preferences.Get(CancelAppointmentNotifications, CancelAppointmentNotificationsDefault);
-            set => Preferences.Set(CancelNotificationsAppointmentts, value);
-        }
-
-
-        private const string CancelSymptomNotifications = "cancelsymptomnotifications";
-        private static readonly string CancelSymptomNotificationsDefault = string.Empty;
-        public static string CancelNotificationsSymptoms
-        {
-            get => Preferences.Get(CancelSymptomNotifications, CancelSymptomNotificationsDefault);
-            set => Preferences.Set(CancelNotificationsSymptoms, value);
-        }
-
-
-        private const string CancelPushNotifications = "cancelnotificationssetting";
-        private static readonly string CancelPushNotificationsDefault = string.Empty;
-        public static string CancelNotificationsPush
-        {
-            get => Preferences.Get(CancelPushNotifications, CancelPushNotificationsDefault);
-            set => Preferences.Set(CancelNotificationsPush, value);
-        }
-
-        //Not Found 
-        private const string CancelNotificationsSetting = "cancelnotificationssetting";
-        private static readonly string CancelNotificationsSettingDefault = string.Empty;
-
-        private const string CancelAppNotificationsSetting = "cancelappnotificationssetting";
-        private static readonly string CancelAppNotificationsSettingDefault = string.Empty;
-
-
-        private const string CancelNotificationsAppointments = "cancelnotificationsappointments";
-        private static readonly string CancelNotificationsAppointmentsDefault = string.Empty;
-        public static string CancelAppointNotifications
-        {
-            get => Preferences.Get(CancelNotificationsAppointments, CancelNotificationsAppointmentsDefault);
-            set => Preferences.Set(CancelAppointNotifications, value);
-        }
-
-
-        private const string OverdueFirstDaySetting = "overduefirstdaysetting";
-        private static readonly string OverdueFirstDaySettingDefault = string.Empty;
-        public static string OverdueFirstDay
-        {
-            get => Preferences.Get(OverdueFirstDaySetting, OverdueFirstDaySettingDefault);
-            set => Preferences.Set(OverdueFirstDay, value);
-        }
-
-        private const string HasDiagnosisSetting = "hasdiagnosissetting";
-        private static readonly string HasDiagnosisSettingDefault = string.Empty;
-        public static string HasDiagnosis
-        {
-            get => Preferences.Get(HasDiagnosisSetting, HasDiagnosisSettingDefault);
-            set => Preferences.Set(HasDiagnosis, value);
-        }
-
-
-        private const string HasSymptomsSetting = "hassymptomssetting";
-        private static readonly string HasSymptomsSettingDefault = string.Empty;
-        public static string HasSymptoms
-        {
-            get => Preferences.Get(HasSymptomsSetting, HasSymptomsSettingDefault);
-            set => Preferences.Set(HasSymptoms, value);
-        }
-
-
-        private const string UserNickname = "usernickname";
-        private static readonly string HasUserNicknameDefault = string.Empty;
-        public static string UserNickName
-        {
-            get => Preferences.Get(UserNickName, HasUserNicknameDefault);
-            set => Preferences.Set(UserNickName, value);
-        }
-
-
-        private const string DictionaryJSON = "dictionaryjson";
-        private static readonly string DictionaryJSONDefault = string.Empty;
-        public static string Dictionaryjson
-        {
-            get => Preferences.Get(Dictionaryjson, DictionaryJSONDefault);
-            set => Preferences.Set(Dictionaryjson, value);
-        }
-
-
-        private const string CancelAllNotificationsSetting = "cancelallnotificationssetting";
-        private static readonly string CancelAllNotificationsSettingDefault = string.Empty;
-        public static string CancelNotifications
-        {
-            get => Preferences.Get(CancelAllNotificationsSetting, CancelAllNotificationsSettingDefault);
-            set => Preferences.Set(CancelNotifications, value);
-        }
-
-
-        private const string TurnOffSingleNotificationsSetting = "turnoffsinglenotificationssetting";
-        private static readonly string TurnOffSingleNotificationsSettingDefault = string.Empty;
-        public static string TurnOffSingleNotifications
-        {
-            get => Preferences.Get(TurnOffSingleNotificationsSetting, TurnOffSingleNotificationsSettingDefault);
-            set => Preferences.Set(TurnOffSingleNotifications, value);
-        }
-
-
-        private const string DarkModeSetting = "darkmodesetting";
-        private static readonly string DarkModeSettingDefault = string.Empty;
-        public static string DarkMode
-        {
-            get => Preferences.Get(DarkModeSetting, DarkModeSettingDefault);
-            set => Preferences.Set(DarkMode, value);
-        }
-
-
         private const string Announcmentids = "announcementids";
         private static readonly string AnnouncmentidsSettingDefault = string.Empty;
         public static string Announcment
@@ -391,23 +187,6 @@ namespace PeopleWith.Helpers
             set => Preferences.Set(Announcment, value);
         }
 
-
-        private const string HeightKey = "height";
-        private static readonly string HeightDefault = string.Empty;
-        public static string Height
-        {
-            get => Preferences.Get(HeightKey, HeightDefault);
-            set => Preferences.Set(Height, value);
-        }
-
-
-        private const string WeightKey = "weight";
-        private static readonly string WeightDefault = string.Empty;
-        public static string Weight
-        {
-            get => Preferences.Get(WeightKey, WeightDefault);
-            set => Preferences.Set(Weight, value);
-        }
 
 
         private const string DOBKey = "dob";
@@ -427,14 +206,6 @@ namespace PeopleWith.Helpers
             set => Preferences.Set(update, value);
         }
 
-        private const string Autosym = "autosym";
-        private static readonly string AutosymSettingDefault = string.Empty;
-        public static string autosym
-        {
-            get => Preferences.Get(Autosym, AutosymSettingDefault);
-            set => Preferences.Set(autosym, value);
-        }
-
 
         private const string SignUpKey = "signupcode";
         private static readonly string SignUpKeySettingDefault = string.Empty;
@@ -444,15 +215,13 @@ namespace PeopleWith.Helpers
             set => Preferences.Set(SignUp, value);
         }
 
-
-        private const string SymptomSwipeKey = "symptomswipe";
-        private static readonly string SymptomSwipeKeySettingDefault = string.Empty;
-        public static string SymptomSwipe
+        private const string PinCodeKey = "pincode";
+        private static readonly string PinCodeKeySettingDefault = string.Empty;
+        public static string PinCode
         {
-            get => Preferences.Get(SymptomSwipeKey, SymptomSwipeKeySettingDefault);
-            set => Preferences.Set(SymptomSwipe, value);
+            get => Preferences.Get(PinCodeKey, PinCodeKeySettingDefault);
+            set => Preferences.Set(PinCode, value);
         }
-
 
         private const string LaunchVideoKey = "launchvideo";
         private static readonly string LaunchVideKeySettingDefault = string.Empty;
@@ -469,161 +238,6 @@ namespace PeopleWith.Helpers
         {
             get => Preferences.Get(applicationcount, applicationcountDefault);
             set => Preferences.Set(appcount, value);
-        }
-
-
-        public const string UsersIDKey = "userid";
-        private static readonly string UsersIDDefault = string.Empty;
-        public static string UsersID
-        {
-            get => Preferences.Get(UsersIDKey, UsersIDDefault);
-            set => Preferences.Set(UsersID, value);
-        }
-
-
-        private const string AudioKey = "audio";
-        private static readonly string AudioDefault = string.Empty;
-        public static string Audio
-        {
-            get => Preferences.Get(AudioKey, AudioDefault);
-            set => Preferences.Set(Audio, value);
-        }
-
-
-        private const string VideoKey = "video";
-        private static readonly string VideoDefault = string.Empty;
-        public static string Video
-        {
-            get => Preferences.Get(VideoKey, VideoDefault);
-            set => Preferences.Set(Video, value);
-        }
-
-
-        private const string WrittenKey = "written";
-        private static readonly string WrittenDefault = string.Empty;
-        public static string Written
-        {
-            get => Preferences.Get(WrittenKey, WrittenDefault);
-            set => Preferences.Set(Written, value);
-        }
-
-
-        private const string PodcastKey = "podcasts";
-        private static readonly string PodcastDefault = string.Empty;
-        public static string Podcasts
-        {
-            get => Preferences.Get(PodcastKey, PodcastDefault);
-            set => Preferences.Set(Podcasts, value);
-        }
-
-
-        private const string ArticlesKey = "articles";
-        private static readonly string ArticlesDefault = string.Empty;
-        public static string Articles
-        {
-            get => Preferences.Get(ArticlesKey, ArticlesDefault);
-            set => Preferences.Set(Articles, value);
-        }
-
-
-        private const string ImagesKey = "images";
-        private static readonly string ImagesDefault = string.Empty;
-        public static string Images
-        {
-            get => Preferences.Get(ImagesKey, ImagesDefault);
-            set => Preferences.Set(Images, value);
-        }
-
-
-        private const string PresentationsKey = "presentations";
-        private static readonly string PresentationsDefault = string.Empty;
-        public static string Presentations
-        {
-            get => Preferences.Get(PresentationsKey, PresentationsDefault);
-            set => Preferences.Set(Presentations, value);
-        }
-
-
-        private const string EmailsKey = "emails";
-        private static readonly string EmailsDefault = string.Empty;
-        public static string Emails
-        {
-            get => Preferences.Get(EmailsKey, EmailsDefault);
-            set => Preferences.Set(Emails, value);
-        }
-
-
-        private const string DigitalMeetingKey = "digitalmeetings";
-        private static readonly string DigitalMeetingDefault = string.Empty;
-        public static string DigitalMeetings
-        {
-            get => Preferences.Get(DigitalMeetingKey, DigitalMeetingDefault);
-            set => Preferences.Set(DigitalMeetings, value);
-        }
-
-
-        public const string NotesKey = "notes";
-        private static readonly string NotesDefault = string.Empty;
-        public static string Notes
-        {
-            get => Preferences.Get(NotesKey, NotesDefault);
-            set => Preferences.Set(Notes, value);
-        }
-
-
-        // Diagnosis Feelings Question
-
-        public const string UserssIDKey = "userid";
-        private static readonly string UserssIDDefault = string.Empty;
-        public static string UserssID
-        {
-            get => Preferences.Get(UserssIDKey, UserssIDDefault);
-            set => Preferences.Set(UserssID, value);
-        }
-
-
-        public const string NoEffectKey = "noeffect";
-        private static readonly string NoEffectDefault = string.Empty;
-        public static string NoEffect
-        {
-            get => Preferences.Get(NoEffectKey, NoEffectDefault);
-            set => Preferences.Set(NoEffect, value);
-        }
-
-
-        public const string SmallEffectKey = "smalleffect";
-        private static readonly string SmallEffectDefault = string.Empty;
-        public static string SmallEffect
-        {
-            get => Preferences.Get(SmallEffectKey, SmallEffectDefault);
-            set => Preferences.Set(SmallEffect, value);
-        }
-
-
-        public const string ModerateEffectKey = "moderateeffect";
-        private static readonly string ModerateEffectDefault = string.Empty;
-        public static string ModerateEffect
-        {
-            get => Preferences.Get(ModerateEffectKey, ModerateEffectDefault);
-            set => Preferences.Set(ModerateEffect, value);
-        }
-
-
-        public const string LargeEffectKey = "largeeffect";
-        private static readonly string LargeEffectDefault = string.Empty;
-        public static string LargeEffect
-        {
-            get => Preferences.Get(LargeEffectKey, LargeEffectDefault);
-            set => Preferences.Set(LargeEffect, value);
-        }
-
-
-        public const string SevereEffectKey = "severeeffect";
-        private static readonly string SevereEffectDefault = string.Empty;
-        public static string SevereEffect
-        {
-            get => Preferences.Get(SevereEffectKey, SevereEffectDefault);
-            set => Preferences.Set(SevereEffect, value);
         }
 
 

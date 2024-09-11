@@ -16,18 +16,22 @@ namespace PeopleWith
             try
             {
                 var result = base.FinishedLaunching(application, launchOptions);
-                var authOptions = UNAuthorizationOptions.Alert | UNAuthorizationOptions.Badge | UNAuthorizationOptions.Sound;
-                UNUserNotificationCenter.Current.RequestAuthorization(authOptions, (granted, error) =>
-                {
-                    if (granted && error == null)
-                    {
-                        this.InvokeOnMainThread(() =>
-                        {
-                            UIApplication.SharedApplication.RegisterForRemoteNotifications();
-                            UNUserNotificationCenter.Current.Delegate = new UserNotificaitonCenterDelegate();
-                        });
-                    }
-                });
+
+                //removed so the user is asked on the reg about notification , check if azure notifications later
+
+                //var authOptions = UNAuthorizationOptions.Alert | UNAuthorizationOptions.Badge | UNAuthorizationOptions.Sound;
+                //UNUserNotificationCenter.Current.RequestAuthorization(authOptions, (granted, error) =>
+                //{
+                //    if (granted && error == null)
+                //    {
+                //        this.InvokeOnMainThread(() =>
+                //        {
+                //            UIApplication.SharedApplication.RegisterForRemoteNotifications();
+                //            UNUserNotificationCenter.Current.Delegate = new UserNotificaitonCenterDelegate();
+                //        });
+                //    }
+                //});
+
                 return result;
             }
             catch(Exception ex)

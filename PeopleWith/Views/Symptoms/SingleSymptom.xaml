@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+             xmlns:chip="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+             x:Class="PeopleWith.SingleSymptom" NavigationPage.HasNavigationBar="True" BackgroundColor="White">
+    <!--<ContentPage.ToolbarItems >
+        <ToolbarItem Order="Default" Priority="0" x:Name="SymptomTitle"/>
+    </ContentPage.ToolbarItems>-->
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <DoubleCollection x:Key="dashArray">
+                <x:Double>5</x:Double>
+                <x:Double>5</x:Double>
+            </DoubleCollection>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ScrollView  Orientation="Vertical">
+        <StackLayout x:Name="MainStack"  VerticalOptions="FillAndExpand" Margin="20,0,20,0" HorizontalOptions="FillAndExpand">
+
+
+            <Label x:Name="symptomlbl" FontSize="20" Margin="0,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
+
+            <Frame CornerRadius="5"  Margin="0,5,0,5"
+ BackgroundColor="#fff7ea" HasShadow="False" x:Name="dataframe"
+                BorderColor="Transparent"
+Padding="0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80*"/>
+                        <ColumnDefinition Width="20*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label  FontFamily="HankenGroteskBold"  Margin="10,10,0,0" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span x:Name="lblvalue" TextColor="#031926" FontSize="35" FontFamily="HankenGroteskBold" FontAttributes="Bold"/>
+                                <Span Text=" " TextColor="#031926" FontSize="30" FontAttributes="Bold"/>
+                                <Span x:Name="lblunit" TextColor="Gray" FontFamily="HankenGroteskRegular" FontSize="14"   />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+
+                    <Label x:Name="datelbl" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" FontSize="12" Margin="15,0,0,10" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
+
+
+                    <Image Source="charticon.png" x:Name="charticon" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" Grid.ColumnSpan="1" HeightRequest="40" WidthRequest="40" VerticalOptions="Center" HorizontalOptions="Center"/>
+
+                </Grid>
+            </Frame>
+
+  
+            <StackLayout x:Name="SymptomInsights" Margin="0,10,0,0" IsVisible="True">
+
+               
+
+        
+                      
+                        <!--<buttons:SfSegmentedControl  IsVisible="False" x:Name="segmentedControl" SelectionChanged="segmentedControl_SelectionChanged"  Stroke="#E6E6E6" SegmentWidth="80"
+                                                                StrokeThickness="1" HeightRequest="40" 
+                                                                Margin="5,0,5,0" CornerRadius="15" HorizontalOptions="Center">
+                            <buttons:SfSegmentedControl.TextStyle>
+                                <buttons:SegmentTextStyle TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" FontSize="12"/>
+                            </buttons:SfSegmentedControl.TextStyle>
+                            <buttons:SfSegmentedControl.SelectionIndicatorSettings>
+                                <buttons:SelectionIndicatorSettings Background="LightGray" TextColor="#031926" />
+                            </buttons:SfSegmentedControl.SelectionIndicatorSettings>
+                            <buttons:SfSegmentedControl.ItemsSource>
+                                <x:Array  Type="{x:Type x:String}">
+                                    <x:String>7 Days</x:String>
+                                    <x:String>14 Days</x:String>
+                                    <x:String>21 Days</x:String>
+                                    <x:String>∞</x:String>
+                                </x:Array>
+                            </buttons:SfSegmentedControl.ItemsSource>
+                        </buttons:SfSegmentedControl>-->
+                        <chart:SfCartesianChart Margin="-5,0,0,10" BackgroundColor="Transparent" x:Name="SymptomProgChart">
+                    <chart:SfCartesianChart.HeightRequest>
+                        <OnPlatform x:TypeArguments="x:Double">
+                            <On Platform="iOS" Value="350" />
+                            <On Platform="Android" Value="300" />
+                        </OnPlatform>
+                    </chart:SfCartesianChart.HeightRequest>
+                    <chart:SfCartesianChart.XAxes>
+                                <chart:NumericalAxis IsVisible="False" ShowMajorGridLines="False"  RangePadding="None" ShowMinorGridLines="False" />
+                            </chart:SfCartesianChart.XAxes>
+                            <chart:SfCartesianChart.YAxes>
+                                <chart:NumericalAxis Minimum="0" Maximum="100" EdgeLabelsDrawingMode="Center" ShowMajorGridLines="True" ShowMinorGridLines="False">
+                            
+                                </chart:NumericalAxis>
+                            </chart:SfCartesianChart.YAxes>
+                            <chart:SfCartesianChart.Series>
+                                <chart:SplineSeries ItemsSource="{Binding .}" EnableTooltip="True" XBindingPath="timestamp" YBindingPath="intensity" ShowTrackballLabel="True" ShowMarkers="True" ShowDataLabels="False" EnableAnimation="True" StrokeWidth="2" Fill="#BFDBF7">
+                                    <chart:SplineSeries.MarkerSettings>
+                                <chart:ChartMarkerSettings Type="Circle" StrokeWidth="2" Stroke="Orange"  Height="8" Width="8"  Fill="#fff7ea" />
+                                    </chart:SplineSeries.MarkerSettings>
+                                </chart:SplineSeries>
+                            </chart:SfCartesianChart.Series>
+                        </chart:SfCartesianChart>
+
+                <Label x:Name="symptomProgression"  FontFamily="HankenGroteskBold" IsVisible="False" HorizontalOptions="Center" FontSize="16"  TextColor="#031926" />
+
+               
+                <Button BackgroundColor="Orange" Clicked="Button_Clicked" HorizontalOptions="FillAndExpand" TextColor="White"  FontAttributes="None" Margin="0,10,0,10" FontFamily="HankenGroteskBold" Text="Add Data" />
+
+                <Label Text="Intensity Metrics" FontFamily="HankenGroteskBold" Margin="0,20,0,0" VerticalOptions="Center"   FontSize="20" TextColor="#031926" />
+                <StackLayout>
+                    <Frame HasShadow="false" Margin="0,10,0,0" InputTransparent="True" Padding="5" BorderColor="#fff7ea" BackgroundColor="Transparent"  CornerRadius="10">
+
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="25*"/>
+                                <ColumnDefinition Width="25*"/>
+                                <ColumnDefinition Width="25*"/>
+                                <ColumnDefinition Width="25*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Text="Highest" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="Gray" Grid.Row="0" Grid.Column="0" />
+                            <Label x:Name="Highestlbl"  FontFamily="HankenGroteskBold" VerticalOptions="Center" HorizontalOptions="Center" FontSize="20" TextColor="Orange" Grid.Row="1" Grid.Column="0" />
+
+                            <Label Text="Lowest" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="Gray" Grid.Row="0" Grid.Column="1" />
+                            <Label x:Name="Lowestlbl"  FontFamily="HankenGroteskBold" VerticalOptions="Center" HorizontalOptions="Center" FontSize="20" TextColor="Orange" Grid.Row="1" Grid.Column="1" />
+
+                            <Label Text="Average" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="Gray" Grid.Row="0" Grid.Column="2" />
+                            <Label x:Name="Averagelbl"  FontFamily="HankenGroteskBold" VerticalOptions="Center" HorizontalOptions="Center" FontSize="20" TextColor="Orange" Grid.Row="1" Grid.Column="2" />
+
+                            <Label Text="Previous Score" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="Gray" Grid.Row="0" Grid.Column="3" />
+                            <Label x:Name="Percentagelbl"  FontFamily="HankenGroteskBold" VerticalOptions="Center" HorizontalOptions="Center" FontSize="20" TextColor="Orange" Grid.Row="1" Grid.Column="3" />
+
+
+                        </Grid>
+                    </Frame>
+                </StackLayout>
+
+
+                <Frame CornerRadius="5"  Margin="0,20,0,5"
+ BackgroundColor="#fff7ea" HasShadow="False"
+                BorderColor="Transparent"
+Padding="10">
+                    <Grid HorizontalOptions="FillAndExpand" Margin="0,10,0,10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+
+                        <Label Text="Notifications" FontSize="14" Margin="0,0,0,0" Grid.Row="4" TextColor="Orange" FontFamily="HankenGroteskBold" VerticalOptions="Center" FontAttributes="None" HorizontalOptions="Start" />
+                        <Switch Margin="0,0,5,0" HeightRequest="20" Grid.Row="4" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="End" />
+
+
+
+
+                    </Grid>
+                </Frame>
+
+
+                <Label Text="Details" x:Name="detailslbl" IsVisible="True" FontSize="20" Margin="0,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
+
+                <Frame CornerRadius="5"  Margin="0,5,0,5"
+ BackgroundColor="Transparent" HasShadow="False"
+                BorderColor="#fff7ea"
+Padding="10">
+                    <Grid HorizontalOptions="FillAndExpand" Margin="0,10,0,10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Label Text="Date Started" FontSize="14" Margin="0,0,0,0" Grid.Row="0" TextColor="#031926" FontFamily="HankenGroteskRegular" VerticalOptions="Center" FontAttributes="None" HorizontalOptions="Start" />
+                        <Label x:Name="datestartedlbl" FontSize="20" Margin="0,0,5,0" Grid.Row="0" TextColor="#031926" FontFamily="HankenGroteskBold" VerticalOptions="Center" FontAttributes="None" HorizontalOptions="End" />
+
+
+                        <BoxView HorizontalOptions="FillAndExpand" Margin="0,20,0,20" Color="#fff7ea" HeightRequest="1" Grid.Row="1" />
+
+                        <Label Text="Symptom Information" FontSize="14" Margin="0,0,0,0" Grid.Row="2" TextColor="#031926" FontFamily="HankenGroteskBold" VerticalOptions="Center" FontAttributes="None" HorizontalOptions="Start" />
+                        <Image Source="nextdarker.png" HeightRequest="15" Margin="0,0,5,0"  Grid.Row="2" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="End" />
+
+                   
+
+
+
+                    </Grid>
+                </Frame>
+
+
+
+                <Button BackgroundColor="#fff7ea" Clicked="showallbtn_Clicked" HorizontalOptions="FillAndExpand" TextColor="Orange" FontAttributes="None" x:Name="showallbtn"  Margin="0,10,0,40" FontFamily="HankenGroteskBold" Text="Show all data" />
+
+
+                <Button  Text="Delete Symptom" Clicked="Button_Clicked_1" FontSize="Small" Margin="0,40,0,5" FontFamily="HankenGroteskBold" BackgroundColor="#ffe5e5" TextColor="Red" CornerRadius="10" />
+                <Label HorizontalTextAlignment="Start" Text="If your symptom is deleted you will lose all your symptom feedback, even if your symptom is restored at a later date. You can change the symptom to inactive which will allow you to reactivate at any later date and keep all your feedback data." Margin="20,0,20,20" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Start" FontSize="10" TextColor="DarkGray"  />
+
+
+
+            </StackLayout>
+            <Grid IsVisible="False">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40*"/>
+                    <ColumnDefinition Width="60*"/>
+                </Grid.ColumnDefinitions>
+                <Label x:Name="AllDataResult" Grid.Column="0" FontFamily="HankenGroteskBold" Margin="10,20,0,0" VerticalOptions="Center"   FontSize="20" TextColor="#031926" />
+
+                <chip:SfChipGroup Grid.Column="1" ChipTextSize="10" Padding="0" Margin="5,0,0,0"  ChipType="Choice"  SelectedItem="All" ChipClicked="Chips_ChipClicked" ChipTextColor="#031926" 
+                                      ChipBackground="LightGray" SelectedChipTextColor="#031926" ChipStroke="Transparent" SelectedChipBackground="#BFDBF7"  HorizontalOptions="Start" VerticalOptions="End"
+                                      x:Name="Chips"  ShowIcon="False"  />
+
+            </Grid>
+
+
+
+            <StackLayout IsVisible="False">
+                <!-- Empty Stack-->
+
+                <Label x:Name="EpmtyTriggers" IsVisible="False" FontFamily="HankenGroteskBold" Margin="0,10,0,0" HorizontalOptions="Center" FontSize="16" TextColor="#031926"/>
+
+                <syncfusion:SfListView x:Name="AllDataLV" Margin="0,5,0,0" AutoFitMode="DynamicHeight" MaximumHeightRequest="400" ItemTapped="AllDataLV_ItemTapped" SelectionMode="Single" SelectionBackground="Transparent">
+                    <syncfusion:SfListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Frame HasShadow="false" InputTransparent="False" BorderColor="Transparent" BackgroundColor="#E5E5E5" Padding="0" Margin="10,5,10,0" CornerRadius="10">
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_3" NumberOfTapsRequired="1" />
+                                    </Frame.GestureRecognizers>
+                                    <StackLayout Orientation="Vertical">
+                                        <Grid >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="20"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+
+                                                <ColumnDefinition Width="15*"/>
+                                                <ColumnDefinition Width="25*"/>
+                                                <ColumnDefinition Width="15*"/>
+                                                <ColumnDefinition Width="10*"/>
+                                                <ColumnDefinition Width="12*"/>
+                                                <ColumnDefinition Width="23*"/>
+
+                                            </Grid.ColumnDefinitions>
+                                            <Frame HasShadow="False" Margin="-5,-5,-5,0" Padding="0" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6" BackgroundColor="#BFDBF7" BorderColor="Transparent" HorizontalOptions="FillAndExpand" />
+                                            <Label Text="Date/Time:" FontFamily="HankenGroteskRegular" FontSize="10" TextColor="DarkGray" Grid.Row="0" Grid.Column="0"  VerticalOptions="Center" HorizontalOptions="Center"/>
+                                            <Label Text="{Binding timestamp}" FontSize="12" TextColor="#031926" Grid.Row="0" Grid.Column="1"  FontFamily="HankenGroteskBold" VerticalOptions="Center" HorizontalOptions="Center"/>
+                                            <Label Text="Intensity:" FontFamily="HankenGroteskRegular"  FontSize="10" TextColor="DarkGray" Grid.Row="0" Grid.Column="2"  VerticalOptions="Center" HorizontalOptions="Center"/>
+                                            <Label Text="{Binding intensity}"  FontSize="16" TextColor="#031926" Grid.Row="0" Grid.Column="3" FontFamily="HankenGroteskBold" VerticalOptions="Center" HorizontalOptions="Center"/>
+                                            <Label Text="Duration:" FontFamily="HankenGroteskRegular" FontSize="10" TextColor="DarkGray" Grid.Row="0" Grid.Column="4"  VerticalOptions="Center" HorizontalOptions="Center"/>
+                                            <Label Text="{Binding duration}" FontSize="16" TextColor="#031926" Grid.Row="0" Grid.Column="5" FontFamily="HankenGroteskBold" VerticalOptions="Center" HorizontalOptions="Center"/>
+
+
+                                        </Grid>
+
+                                        <Grid Margin="5,0,5,0">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="20*"/>
+                                                <ColumnDefinition Width="80*"/>
+                                                <!--<ColumnDefinition Width="16*"/>
+                                                <ColumnDefinition Width="34*"/>-->
+                                            </Grid.ColumnDefinitions>
+
+                                            <Label Text="Triggers:" MinimumHeightRequest="25" FontFamily="HankenGroteskRegular" IsVisible="{Binding TriggerBool}" FontSize="10" TextColor="DarkGray" Grid.Row="0" Grid.Column="0"  VerticalOptions="Center" HorizontalOptions="Start"/>
+                                            <Label Text="{Binding triggers}" MinimumHeightRequest="25" IsVisible="{Binding TriggerBool}" FontSize="12" FontFamily="HankenGroteskBold" TextColor="#031926" Grid.Row="0" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Start"/>
+                                            <Label Text="Interventions:" MinimumHeightRequest="25"  FontSize="10" IsVisible="{Binding InterventionBool}" FontFamily="HankenGroteskRegular"  TextColor="DarkGray" Grid.Row="0" Grid.Column="0"  VerticalOptions="Center" HorizontalOptions="Start"/>
+                                            <Label Text="{Binding interventions}" MinimumHeightRequest="25" IsVisible="{Binding InterventionBool}" FontFamily="HankenGroteskBold"  FontSize="12" TextColor="#031926" Grid.Row="0" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Start"/>
+                                            <Label Text="Notes:" FontSize="10" MinimumHeightRequest="25"  FontFamily="HankenGroteskRegular" TextColor="DarkGray" Grid.Row="1" Grid.Column="0"  VerticalOptions="Center" HorizontalOptions="Start"/>
+                                            <Label Text="{Binding notes}" MinimumHeightRequest="25" FontSize="12" FontFamily="HankenGroteskBold" TextColor="#031926" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" VerticalOptions="Center" HorizontalOptions="Start"/>
+                                        </Grid>
+                                    </StackLayout>
+                                </Frame>
+                                <!--</SwipeView>-->
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.ItemTemplate>
+                </syncfusion:SfListView>
+
+                <Frame x:Name="SeemoreStack" IsVisible="False" HasShadow="False" Margin="120,10,120,0" CornerRadius="10" BackgroundColor="Transparent" BorderColor="#031926" Padding="0">
+                    <StackLayout>
+                        <Label x:Name="seeall" Text="See All" VerticalOptions="Center" HorizontalOptions="Center" FontSize="16" TextColor="#031926" FontFamily="HankenGroteskBold"/>
+                        <Image x:Name="arrow" Source="backbutton.png" Rotation="270" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="15" WidthRequest="15" />
+                    </StackLayout>
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
+                    </Frame.GestureRecognizers>
+                </Frame>
+
+            </StackLayout>
+
+          
+
+            <Label Text="Options" FontFamily="HankenGroteskBold" Margin="10,20,0,0" VerticalOptions="Center" IsVisible="False"  FontSize="20" TextColor="#031926" />
+
+            <StackLayout IsVisible="False">
+                <Frame HasShadow="false" Margin="15,10,15,0" InputTransparent="True" BorderColor="Transparent" BackgroundColor="#E5E5E5" MaximumHeightRequest="400" CornerRadius="10">
+
+                    <Grid >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="2"/>
+                            <RowDefinition Height="25"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80*"/>
+                            <ColumnDefinition Width="20*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Text="Notifications" FontFamily="HankenGroteskBold" VerticalOptions="Center" HorizontalOptions="Start" FontSize="16" TextColor="#031926" Grid.Row="0" Grid.Column="0" />
+                        <Switch  VerticalOptions="Center" HorizontalOptions="End" IsToggled="True" Toggled="Switch_Toggled"   HeightRequest="10" WidthRequest="10" Grid.Row="0" Grid.Column="1" />
+                        <BoxView HeightRequest="1" HorizontalOptions="FillAndExpand" Color="#031926" VerticalOptions="Center" Grid.Row="1"  Margin="0,0,0,0" Grid.Column="0" Grid.ColumnSpan="2" />
+                        <Label  FontFamily="HankenGroteskBold" Text="Symptom Information" FontSize="16" VerticalOptions="Center" HorizontalOptions="Start"  TextColor="#031926" Grid.Row="2" Grid.Column="0" />
+                        <Image Source="rightarrow.png" VerticalOptions="Center" HorizontalOptions="End"  HeightRequest="10" WidthRequest="10" Grid.Row="2" Grid.Column="1" />
+
+                    </Grid>
+
+
+
+                </Frame>
+            </StackLayout>
+
+          
+
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

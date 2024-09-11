@@ -9,11 +9,30 @@
             InitializeComponent();
 
 
-           // Checkifappisupdated();
-
+            // Checkifappisupdated();
+            checkifuserisloggedin();
 
         }
 
+        async void checkifuserisloggedin()
+        {
+            try
+            {
+
+                var userid = Preferences.Default.Get("userid", string.Empty);
+
+                if(!string.IsNullOrEmpty(userid))
+                {
+                    Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                }
+
+
+            }
+            catch(Exception ex)
+            {
+
+            }
+        }
 
         public async Task Checkifappisupdated()
         {
@@ -36,11 +55,12 @@
         {
             try
             {
-                await Navigation.PushAsync(new RegisterPage());
+               
+                await Navigation.PushAsync(new RegisterPage(), false);
             }
             catch(Exception ex)
             {
-
+                //await DisplayAlert(ex.Message, ex.StackTrace, "OK");
             }
         }
     }

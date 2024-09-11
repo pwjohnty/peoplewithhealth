@@ -5,6 +5,11 @@
              xmlns:progressBar="clr-namespace:Syncfusion.Maui.ProgressBar;assembly=Syncfusion.Maui.ProgressBar"
              xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
              xmlns:pinview="clr-namespace:PINView.Maui;assembly=PINView.Maui"
+              xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+             xmlns:gauge="clr-namespace:Syncfusion.Maui.Gauges;assembly=Syncfusion.Maui.Gauges"
+             xmlns:controls="clr-namespace:Plugin.Maui.SegmentedControl;assembly=Plugin.Maui.SegmentedControl"
+             HideSoftInputOnTapped="True"
               Shell.NavBarHasShadow="False" Shell.NavBarIsVisible="False">
     <Grid>
         <Grid.RowDefinitions>
@@ -21,7 +26,11 @@
 
 
 
-            <Image Source="backbutton.png" Grid.Column="0" HorizontalOptions="Start" VerticalOptions="Center" Margin="20,0,0,0" HeightRequest="20" WidthRequest="20"/>
+            <Image Source="backbutton.png" Grid.Column="0" BackgroundColor="Transparent" HorizontalOptions="Start" VerticalOptions="Center" Margin="20,0,0,0" HeightRequest="20" WidthRequest="20">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                </Image.GestureRecognizers>
+            </Image>
 
             <progressBar:SfLinearProgressBar Progress="6" x:Name="topprogress"
                                 TrackHeight="8"  TrackFill="#BFDBF7" ProgressFill="#031926"
@@ -207,7 +216,7 @@ HorizontalOptions="Center" />
                 <StackLayout x:Name="signupcodeframe" Margin="20,0,20,0" IsVisible="False">
 
                     <Label
- Text="Enter Sign-Up Code"
+ Text="Sign-Up Code"
  FontSize="26"
  Margin="0,0,0,0"
  TextColor="#031926"
@@ -219,7 +228,7 @@ HorizontalOptions="Center" />
 Text="Please enter your signup code"
 TextColor="#031926"
 FontFamily="HankenGroteskRegular"
-FontAttributes="None"
+FontAttributes="None" 
 Margin="0,0,0,0"
 FontSize="15"
 HorizontalOptions="Start" />
@@ -229,7 +238,7 @@ HorizontalOptions="Start" />
 
                     <inputLayout:SfTextInputLayout InputViewPadding="10" x:Name="signupfloat" ShowHint="True" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,20,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5"
            >
-                        <Entry FontSize="Small" PlaceholderColor="Gray" TextChanged="signupcodetext_TextChanged" x:Name="signupcodetext"  FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Sign-Up Code" TextColor="#031926">
+                        <Entry FontSize="Small" PlaceholderColor="Gray" IsTextPredictionEnabled="False" TextChanged="signupcodetext_TextChanged" x:Name="signupcodetext"  FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Sign-Up Code" TextColor="#031926">
                             <Entry.Keyboard>
                                 <Keyboard x:FactoryMethod="Create">
                                     <x:Arguments>
@@ -266,6 +275,9 @@ HorizontalOptions="Center" />
                 <StackLayout x:Name="signupinfostack" Margin="20,0,20,0" IsVisible="False">
 
 
+                    <Image x:Name="signupinfoimage" HeightRequest="100" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
+
+
 
                     <Label
 x:Name="signupinfotitle"
@@ -277,13 +289,473 @@ x:Name="signupinfotitle"
  HorizontalOptions="Center" />
 
                     <Label
-Text="Thank you for joining our study! Your participation is invaluable in helping us. We deeply appreciate your willingness to contribute your time and insights to this important work. By sharing your experiences and perspectives, you are playing a crucial role in driving forward research that can lead to meaningful improvements and innovations. Your input will not only aid our current investigation but also pave the way for future studies and developments in this field."
+x:Name="signupcodeinfodes"
 TextColor="#031926"
 FontFamily="HankenGroteskRegular"
 FontAttributes="None"
 Margin="0,20,0,0"
 FontSize="15" HorizontalTextAlignment="Center"
 HorizontalOptions="Center" />
+
+
+
+
+
+                </StackLayout>
+
+                <StackLayout x:Name="genderframe" Margin="20,0,20,0" IsVisible="False" VerticalOptions="FillAndExpand">
+
+                    <Label
+ Text="Gender"
+ FontSize="26"
+ Margin="0,0,0,0"
+ TextColor="#031926"
+ FontFamily="HankenGroteskBold"
+ FontAttributes="Bold"
+ HorizontalOptions="Start" />
+
+                    <Label
+Text="Please tell us your gender"
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,0,0,0"
+FontSize="15"
+HorizontalOptions="Start" />
+
+
+                    <Label
+Text="Gender"
+FontSize="15"
+Margin="0,20,0,0"
+TextColor="#031926" IsVisible="False"
+FontFamily="HankenGroteskBold"
+FontAttributes="Bold"
+HorizontalOptions="Start" />
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100*"/>
+
+                        </Grid.ColumnDefinitions>
+
+
+                        <syncfusion:SfListView x:Name="genderlist"                                                                                             
+             AutoFitMode="Height"
+        Margin="0,10,0,0"
+                              BackgroundColor="Transparent"
+                              Grid.Column="0"
+     Grid.Row="0" 
+                      SelectionMode="Single"
+                ItemTapped="genderlist_ItemTapped"
+                       ScrollBarVisibility="Never"
+             SelectionBackground="Transparent"
+             Orientation="Vertical"                                                                                                                       
+             >
+                            <syncfusion:SfListView.HeightRequest>
+                                <OnPlatform x:TypeArguments="x:Double">
+                                    <On Platform="Android" Value="220" />
+                                    <On Platform="iOS" Value="200" />
+                                </OnPlatform>
+                            </syncfusion:SfListView.HeightRequest>
+
+                            <syncfusion:SfListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Frame CornerRadius="10" InputTransparent="True"   Margin="5,5,5,5"  HasShadow="False" Opacity="1" BackgroundColor="Transparent"
+BorderColor="LightGray">
+                                            <Grid HorizontalOptions="FillAndExpand" Margin="0" Padding="0"  >
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="100*"/>
+
+                                                </Grid.ColumnDefinitions>
+
+                                                <Label Text="{Binding .}" FontFamily="HankenGroteskRegular" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="Small" />
+
+
+
+                                            </Grid>
+                                        </Frame>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </syncfusion:SfListView.ItemTemplate>
+                            <syncfusion:SfListView.SelectedItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Frame CornerRadius="10" Margin="5,5,5,5" InputTransparent="True" BackgroundColor="#BFDBF7"  HasShadow="False" BorderColor="Transparent">
+                                            <Grid HorizontalOptions="FillAndExpand">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="100*"/>
+
+                                                </Grid.ColumnDefinitions>
+                                                <Label Text="{Binding .}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" FontAttributes="Bold"  TextColor="#031926" FontSize="Small" />
+
+                                            </Grid>
+                                        </Frame>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </syncfusion:SfListView.SelectedItemTemplate>
+                        </syncfusion:SfListView>
+
+
+
+
+
+                    </Grid>
+
+                </StackLayout>
+
+                <StackLayout x:Name="dobstack" Margin="20,0,20,0" IsVisible="False">
+
+                    <Label
+ Text="Date of Birth"
+ FontSize="26"
+ Margin="0,0,0,0"
+ TextColor="#031926"
+ FontFamily="HankenGroteskBold"
+ FontAttributes="Bold"
+ HorizontalOptions="Start" />
+
+                    <Label
+Text="Please tell us your date of birth"
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,0,0,0"
+FontSize="15"
+HorizontalOptions="Start" />
+
+                    <Label
+Text="Date of Birth"
+FontSize="15"
+Margin="0,20,0,0" IsVisible="False"
+TextColor="#031926"
+FontFamily="HankenGroteskBold"
+FontAttributes="Bold"
+HorizontalOptions="Start" />
+
+                    <inputLayout:SfTextInputLayout InputViewPadding="10" IsHintAlwaysFloated="True" BackgroundColor="Transparent" ShowHint="False" Margin="5,10,5,0" UnfocusedStrokeThickness="1" Stroke="LightGray" ContainerBackground="Transparent" ContainerType="Outlined" OutlineCornerRadius="5"
+          >
+                        <Entry FontSize="Small" PlaceholderColor="Gray" Keyboard="Numeric" FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" x:Name="dateEntry" TextChanged="dateEntry_TextChanged" Placeholder="DD/MM/YYYY" TextColor="#031926"/>
+                    </inputLayout:SfTextInputLayout>
+
+
+
+                </StackLayout>
+
+                <StackLayout x:Name="ethstack" Margin="20,0,20,0" IsVisible="False">
+
+                    <Label
+ Text="Ethnicity"
+ FontSize="26"
+ Margin="0,0,0,0"
+ TextColor="#031926"
+ FontFamily="HankenGroteskBold"
+ FontAttributes="Bold"
+ HorizontalOptions="Start" />
+
+                    <Label
+Text="Please tell us your ethnicity"
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,0,0,0"
+FontSize="15"
+HorizontalOptions="Start" />
+
+
+                    <Label
+Text="Ethnicity"
+FontSize="15"
+Margin="0,20,0,0"
+TextColor="#031926" IsVisible="False"
+FontFamily="HankenGroteskBold"
+FontAttributes="Bold"
+HorizontalOptions="Start" />
+
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100*"/>
+
+                        </Grid.ColumnDefinitions>
+
+                        <syncfusion:SfListView x:Name="ethlist"                                                                                             
+             AutoFitMode="Height"
+        Margin="0,10,0,0"
+                              BackgroundColor="Transparent"
+                         Grid.Column="0" Grid.Row="0"
+                      SelectionMode="Single"
+                        ItemTapped="ethlist_ItemTapped"
+                       ScrollBarVisibility="Never"
+             SelectionBackground="Transparent"
+             Orientation="Vertical"                                                                                                                       
+             >
+                            <syncfusion:SfListView.HeightRequest>
+                                <OnPlatform x:TypeArguments="x:Double">
+                                    <On Platform="Android" Value="2200" />
+                                    <On Platform="iOS" Value="2000" />
+                                </OnPlatform>
+                            </syncfusion:SfListView.HeightRequest>
+
+                            <syncfusion:SfListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Frame CornerRadius="10"  Margin="5,5,5,5" InputTransparent="True" HasShadow="False" Opacity="1" BackgroundColor="Transparent"
+BorderColor="LightGray">
+                                            <Grid HorizontalOptions="FillAndExpand" Margin="0" Padding="0"  >
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="90*"/>
+                                                    <ColumnDefinition Width="10*"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <Label Text="{Binding .}" FontFamily="HankenGroteskRegular" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="Small" />
+
+                                            </Grid>
+                                        </Frame>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </syncfusion:SfListView.ItemTemplate>
+                            <syncfusion:SfListView.SelectedItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Frame CornerRadius="10"  Margin="5,5,5,5" InputTransparent="True" BackgroundColor="#BFDBF7"  HasShadow="False" BorderColor="Transparent">
+                                            <Grid HorizontalOptions="FillAndExpand">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="90*"/>
+                                                    <ColumnDefinition Width="10*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Label Text="{Binding .}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" FontAttributes="Bold"  TextColor="#031926" FontSize="Small" />
+
+
+                                            </Grid>
+                                        </Frame>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </syncfusion:SfListView.SelectedItemTemplate>
+                        </syncfusion:SfListView>
+
+                    </Grid>
+                </StackLayout>
+
+                <StackLayout x:Name="heightandweightframe" Margin="20,0,20,0" IsVisible="False">
+
+                    <Label
+ Text="Height and Weight"
+ FontSize="26"
+ Margin="0,0,0,0"
+ TextColor="#031926"
+ FontFamily="HankenGroteskBold"
+ FontAttributes="Bold"
+ HorizontalOptions="Start" />
+
+                    <Label
+Text="Please enter your height and weight"
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,0,0,0"
+FontSize="15"
+HorizontalOptions="Start" />
+
+
+
+                    <Grid Margin="0,30,0,0" IsVisible="True">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="70*"/>
+                            <ColumnDefinition Width="30*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Label
+Text="Height"
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,0,0,0" Grid.Row="0" Grid.Column="0"
+FontSize="15"
+HorizontalOptions="Start" />
+
+
+                        <Entry x:Name="heightinputentry" Keyboard="Telephone" IsVisible="False"  TextColor="#031926" Grid.Row="1" Margin="0,10,0,0" TextChanged="heightinputentry_TextChanged" Grid.Column="0" Placeholder="Enter Height" FontFamily="HankenGroteskRegular"/>
+
+                        <Label
+x:Name="heightinputlbl"
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="Bold"
+Margin="0,10,0,0" Grid.Row="1" Grid.Column="0"
+FontSize="26"
+HorizontalOptions="Start" />
+
+                        <gauge:SfLinearGauge Grid.Row="2" Grid.Column="0" Margin="0,20,0,0" IsVisible="True"  x:Name="heightgauge"  LabelCreated="SfLinearGauge_LabelCreated" BackgroundColor="Transparent" ShowLabels="True" UseRangeColorForAxis="True" Minimum="0" Maximum="96" Grid.ColumnSpan="2" Interval="12"  >
+                            <gauge:SfLinearGauge.MarkerPointers>
+                                <gauge:LinearShapePointer IsInteractive="True" x:Name="heightpointerguage" ValueChanged="LinearShapePointer_ValueChanged"
+                                              Fill="#031926"/>
+                            </gauge:SfLinearGauge.MarkerPointers>
+                    
+                            <gauge:SfLinearGauge.LineStyle>
+                                <gauge:LinearLineStyle Thickness="5" 
+                                           CornerStyle="BothCurve"/>
+                            </gauge:SfLinearGauge.LineStyle>
+                       
+                            <gauge:SfLinearGauge.LabelStyle>
+                                <gauge:GaugeLabelStyle FontAttributes="Bold" FontSize="8" 
+                                           TextColor="#031926" 
+                                           FontFamily="HankenGroteskRegular"/>
+                            </gauge:SfLinearGauge.LabelStyle>
+
+
+                        </gauge:SfLinearGauge>
+
+                        
+
+                        <buttons:SfSegmentedControl x:Name="segmentedControl" IsVisible="False" SelectionChanged="segmentedControl_SelectionChanged" CornerRadius="5" SegmentWidth="50" SegmentHeight="30" SelectedIndex="0" Stroke="LightGray" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" Grid.Column="1" Grid.ColumnSpan="1" HorizontalOptions="Center">
+                            <buttons:SfSegmentedControl.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>Ft In</x:String>
+                                    <x:String>CM</x:String>
+                                </x:Array>
+                            </buttons:SfSegmentedControl.ItemsSource>
+                            <buttons:SfSegmentedControl.TextStyle>
+                                <buttons:SegmentTextStyle TextColor="#031926"  FontSize="12" FontFamily="HankenGroteskRegular"/>
+                            </buttons:SfSegmentedControl.TextStyle>
+                            <buttons:SfSegmentedControl.SelectionIndicatorSettings>
+                                <buttons:SelectionIndicatorSettings 
+                SelectionIndicatorPlacement="Fill" Background="#BFDBF7" TextColor="#031926"/>
+                            </buttons:SfSegmentedControl.SelectionIndicatorSettings>
+                        </buttons:SfSegmentedControl>
+
+                        <controls:SegmentedControl
+            x:Name="SegmentedControl" 
+            SelectedSegment="0" TextColor="#031926"
+            TintColor="#BFDBF7" HeightRequest="30" WidthRequest="100"
+            DisabledColor="White" ValueChanged="SegmentedControl_ValueChanged"
+            Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" Grid.Column="1" Grid.ColumnSpan="1" HorizontalOptions="Center"
+           SelectedTextColor="#031926"
+           >
+                            <controls:SegmentedControl.Children>
+                                <controls:SegmentedControlOption Text="Ft In"/>
+                                <controls:SegmentedControlOption Text="CM"/>
+                     
+                            </controls:SegmentedControl.Children>
+                        </controls:SegmentedControl>
+
+
+                    </Grid>
+
+
+                    <Grid Margin="0,50,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="70*"/>
+                            <ColumnDefinition Width="30*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Label
+Text="Weight"
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,0,0,0" Grid.Row="0" Grid.Column="0"
+FontSize="15"
+HorizontalOptions="Start" />
+
+
+                        <Label
+x:Name="weightinputlbl"
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="Bold"
+Margin="0,10,0,0" Grid.Row="1" Grid.Column="0"
+FontSize="26"
+HorizontalOptions="Start" />
+
+
+                        <buttons:SfSegmentedControl x:Name="segmentedControlweight" IsVisible="False" SelectionChanged="segmentedControlweight_SelectionChanged" CornerRadius="5" SegmentWidth="50" SegmentHeight="30" SelectedIndex="0" Stroke="LightGray" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" Grid.Column="1" Grid.ColumnSpan="1" HorizontalOptions="Center">
+                            <buttons:SfSegmentedControl.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>KG</x:String>
+                                    <x:String>Stone</x:String>
+                                </x:Array>
+                            </buttons:SfSegmentedControl.ItemsSource>
+                            <buttons:SfSegmentedControl.TextStyle>
+                                <buttons:SegmentTextStyle TextColor="#031926"  FontSize="12" FontFamily="HankenGroteskRegular"/>
+                            </buttons:SfSegmentedControl.TextStyle>
+                            <buttons:SfSegmentedControl.SelectionIndicatorSettings>
+                                <buttons:SelectionIndicatorSettings 
+                SelectionIndicatorPlacement="Fill" Background="#BFDBF7" TextColor="#031926"/>
+                            </buttons:SfSegmentedControl.SelectionIndicatorSettings>
+                        </buttons:SfSegmentedControl>
+
+
+                        <controls:SegmentedControl
+            x:Name="SegmentedControlweight" 
+            SelectedSegment="0" TextColor="#031926"
+            TintColor="#BFDBF7" HeightRequest="30" WidthRequest="100"
+            DisabledColor="White" ValueChanged="SegmentedControlweight_ValueChanged"
+            Grid.Row="0" Grid.RowSpan="2" VerticalOptions="Center" Grid.Column="1" Grid.ColumnSpan="1" HorizontalOptions="Center"
+           SelectedTextColor="#031926"
+           >
+                            <controls:SegmentedControl.Children>
+                                <controls:SegmentedControlOption Text="KG"/>
+                                <controls:SegmentedControlOption Text="Stone"/>
+
+                            </controls:SegmentedControl.Children>
+                        </controls:SegmentedControl>
+
+
+                        <gauge:SfLinearGauge Grid.Row="2" Grid.Column="0" Margin="0,20,0,0" x:Name="weightgauge" LabelCreated="weightgauge_LabelCreated"   BackgroundColor="Transparent" ShowLabels="True" UseRangeColorForAxis="True" Minimum="0" Maximum="200" Grid.ColumnSpan="2" Interval="20"  >
+                        <gauge:SfLinearGauge.MarkerPointers>
+                            <gauge:LinearShapePointer IsInteractive="True" x:Name="weightguagepointer" ValueChanged="LinearShapePointer_ValueChanged_1"
+                              Fill="#031926"/>
+                        </gauge:SfLinearGauge.MarkerPointers>
+
+                        <gauge:SfLinearGauge.LineStyle>
+                            <gauge:LinearLineStyle Thickness="5" 
+                           CornerStyle="BothCurve"/>
+                        </gauge:SfLinearGauge.LineStyle>
+
+                        <gauge:SfLinearGauge.LabelStyle>
+                            <gauge:GaugeLabelStyle FontAttributes="Bold" FontSize="8" 
+                           TextColor="#031926" 
+                           FontFamily="HankenGroteskRegular"/>
+                        </gauge:SfLinearGauge.LabelStyle>
+
+
+                        </gauge:SfLinearGauge>
+
+
+                    </Grid>
+
+
+
 
 
 
@@ -300,17 +772,38 @@ HorizontalOptions="Center" />
 
 
         <StackLayout Grid.Row="1" x:Name="bottomstack" VerticalOptions="EndAndExpand" BackgroundColor="White">
-            <Button
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50*"/>
+                    <ColumnDefinition Width="50*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Button
+BackgroundColor="White"
+HorizontalOptions="Start"
+TextColor="#031926"
+   x:Name="skipbtn" IsVisible="False"
+FontAttributes="None" Grid.Row="0" Grid.Column="0"
+     Margin="20,0,20,10"
+FontFamily="HankenGroteskBold"
+Text="Skip" />
+
+                <Button
    BackgroundColor="#031926"
    HorizontalOptions="EndAndExpand"
    TextColor="White"
         Clicked="nextbtn_Clicked" x:Name="nextbtn"
-   FontAttributes="None" 
+   FontAttributes="None" Grid.Row="0" Grid.Column="1"
         Margin="20,0,20,10"
    FontFamily="HankenGroteskBold"
    Text="Next" />
 
-            <ActivityIndicator IsRunning="true" x:Name="nextbtnloader" IsVisible="False" HorizontalOptions="EndAndExpand" Margin="20,0,20,10" HeightRequest="25"
+                <ActivityIndicator IsRunning="true" Grid.Row="0" Grid.Column="1" x:Name="nextbtnloader" IsVisible="False" HorizontalOptions="EndAndExpand" Margin="20,0,20,10" HeightRequest="25"
                    Color="#031926" />
 
             <Label
@@ -318,9 +811,19 @@ HorizontalOptions="Center" />
    TextColor="#031926"
    FontFamily="HankenGroteskRegular"
    FontAttributes="Bold"
-   Margin="0,0,0,10"
+   Margin="0,0,0,10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
    FontSize="10"
    HorizontalOptions="Center" />
+
+                <Label
+x:Name="extidlbl"
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="Bold"
+Margin="0,0,0,10" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+FontSize="8"
+HorizontalOptions="Center" />
+            </Grid>
         </StackLayout>
 
 
