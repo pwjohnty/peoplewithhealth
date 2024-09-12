@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PeopleWith.SingleDiagnosis"
+             xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+             BackgroundColor="White">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem x:Name="EditBtn" Text="Edit"  Clicked="EditBtn_Clicked"  />
+    </ContentPage.ToolbarItems>
+    <VerticalStackLayout>
+        <StackLayout x:Name="DiagnosisSingle">
+            <Frame HasShadow="False" CornerRadius="10"  InputTransparent="True" Padding="5" BorderColor="Transparent" BackgroundColor="#E6E6FA"  Margin="10,0,10,5">
+                <Grid >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="25"/>
+
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90*"/>
+                        <ColumnDefinition Width="10*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label x:Name="DiagnosisTitle" Margin="10,0,0,0" FontFamily="HankenGroteskBold"  FontSize="20" VerticalOptions="End" Grid.Row="0" Grid.Column="0"  TextColor="#031926" />
+                    <Label x:Name="DiagnosisDate" FontFamily="HankenGroteskBold" VerticalOptions="Start" Margin="10,0,0,0" HorizontalOptions="Start" FontSize="12" Grid.Row="1" Grid.Column="0"  TextColor="DarkGray" />
+
+                </Grid>
+            </Frame>
+
+            <Label Text="Details" Margin="10,0,0,0" FontFamily="HankenGroteskBold"  FontSize="20" VerticalOptions="Center" TextColor="#031926" />
+            <Frame HasShadow="False" BorderColor="#E5E5E5" BackgroundColor="Transparent" Margin="10,10,10,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90*"/>
+                        <ColumnDefinition Width="10*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Text="Diagnosis Information" Margin="0,0,0,0" Grid.Column="0" FontFamily="HankenGroteskBold"  FontSize="16" VerticalOptions="Center" TextColor="#031926" />
+                    <Image  Source="backbutton.png" Grid.Column="1" Rotation="180" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="15" WidthRequest="15" />
+                </Grid>
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1" NumberOfTapsRequired="1"/>
+                </Frame.GestureRecognizers>
+            </Frame>
+
+            <Button x:Name="Deletebtn" Margin="20,10,20,0"  TextColor="#031926" BackgroundColor="#E6E6FA" FontFamily="HankenGroteskBold" CornerRadius="10" Text="Delete Diagnosis" Clicked="Deletebtn_Clicked" />
+
+        </StackLayout>
+        <StackLayout x:Name="dateofBirth" IsVisible="False">
+            <Label Text="Date of Diagnosis" FontFamily="HankenGroteskBold" Margin="25,0,0,0" FontSize="20" TextColor="DarkGray"   />
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <!--<sync:SfMaskedEntry  x:Name="DateEntry"  Margin="10,0,0,0" ShowBorder="False" Placeholder="DD/MM/YYYY"  Keyboard="Numeric" PropertyChanged="SfMaskedEntry_PropertyChanged" HorizontalOptions="Start" Grid.Row="0" HeightRequest="40" WidthRequest="100" FontFamily="HankenGroteskRegualar" TextColor="#031926"
+                   Mask="00/00/0000" PromptChar="_" MaskType="Simple" ValueMaskFormat="IncludePromptAndLiterals" />-->
+                <inputLayout:SfTextInputLayout Grid.Row="0" InputViewPadding="10" IsHintAlwaysFloated="True" BackgroundColor="Transparent" ShowHint="False" Margin="5,10,5,0" UnfocusedStrokeThickness="1" Stroke="LightGray" ContainerBackground="Transparent" ContainerType="Outlined" OutlineCornerRadius="5">
+                    <Entry FontSize="Small" PlaceholderColor="Gray" Keyboard="Numeric" FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" x:Name="DateEntry" TextChanged="DateEntry_TextChanged" Placeholder="DD/MM/YYYY" TextColor="#031926"/>
+                </inputLayout:SfTextInputLayout>
+
+            </Grid>
+            <Label x:Name="EntryError" IsVisible="False" Margin="25,0,25,0"  FontFamily="HankenGroteskRegualar" FontSize="12" TextColor="Red" />
+            <Button x:Name="AddBtn" Text="Update Diagnosis" IsEnabled="False" FontFamily="HankenGroteskBold" Clicked="UpdateBtn_Clicked" BackgroundColor="#E6E6FA" TextColor="#031926" Margin="0,10,0,5" HorizontalOptions="Center" HeightRequest="40" WidthRequest="150" />
+        </StackLayout>
+
+        <!--<StackLayout x:Name="SuccessScreen" VerticalOptions="Center" HorizontalOptions="Center" IsVisible="False">
+            <Grid Margin="20,50,20,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="300"/>
+                    <RowDefinition Height="45"/>
+                </Grid.RowDefinitions>
+                <skia:SKLottieView Grid.Row="0" x:Name="Success" Source="success.json" HeightRequest="300" WidthRequest="300" RepeatCount="0" IsAnimationEnabled="False" />
+                <Label Grid.Row="1" Text="Diagnosis Edited Successfully" FontSize="20" FontFamily="HankenGroteskBold" TextColor="DarkGray" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" />
+            </Grid>
+
+        </StackLayout>-->
+
+    </VerticalStackLayout>
+</ContentPage>

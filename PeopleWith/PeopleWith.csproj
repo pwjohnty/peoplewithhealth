@@ -73,18 +73,25 @@
 	  <None Remove="Resources\Fonts\HankenGrotesk-SemiBold.ttf" />
 	  <None Remove="Resources\Images\adddataicon.png" />
 	  <None Remove="Resources\Images\agreement.png" />
+	  <None Remove="Resources\Images\angry.png" />
 	  <None Remove="Resources\Images\appconstructionicon.png" />
 	  <None Remove="Resources\Images\backbutton.png" />
 	  <None Remove="Resources\Images\background.png" />
 	  <None Remove="Resources\Images\charticon.png" />
 	  <None Remove="Resources\Images\compare.png" />
+	  <None Remove="Resources\Images\confused.png" />
+	  <None Remove="Resources\Images\crying.png" />
 	  <None Remove="Resources\Images\deleteicon.png" />
 	  <None Remove="Resources\Images\erroricon.png" />
 	  <None Remove="Resources\Images\filterorange.png" />
+	  <None Remove="Resources\Images\happy.png" />
 	  <None Remove="Resources\Images\icondate.png" />
 	  <None Remove="Resources\Images\icondatepicker.png" />
 	  <None Remove="Resources\Images\icontime.png" />
 	  <None Remove="Resources\Images\icontimepicker.png" />
+	  <None Remove="Resources\Images\laughing.png" />
+	  <None Remove="Resources\Images\loved.png" />
+	  <None Remove="Resources\Images\neutral.png" />
 	  <None Remove="Resources\Images\nextdarker.png" />
 	  <None Remove="Resources\Images\nodataicon.png" />
 	  <None Remove="Resources\Images\nointerneticon.png" />
@@ -94,11 +101,17 @@
 	  <None Remove="Resources\Images\pwregbackgroundlight.png" />
 	  <None Remove="Resources\Images\regcompletetick.png" />
 	  <None Remove="Resources\Images\regtick.png" />
+	  <None Remove="Resources\Images\sad.png" />
+	  <None Remove="Resources\Images\search.png" />
 	  <None Remove="Resources\Images\searchbaricon.png" />
 	  <None Remove="Resources\Images\searchorange.png" />
+	  <None Remove="Resources\Images\shit.png" />
+	  <None Remove="Resources\Images\sick.png" />
 	  <None Remove="Resources\Images\smartwatchicon.png" />
 	  <None Remove="Resources\Images\successtick.png" />
+	  <None Remove="Resources\Images\surprised.png" />
 	  <None Remove="Resources\Images\syncicon.png" />
+	  <None Remove="Resources\Images\tired.png" />
 	  <None Remove="Resources\Images\update.png" />
 	  <None Remove="Resources\Images\updateicon.png" />
 	  <None Remove="Resources\Splash\splashpw.svg" />
@@ -157,7 +170,25 @@
 	  <MauiXaml Update="Helpers\PopupPageHelper.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Allergies\AddAllergies.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Allergies\AllAllergies.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Allergies\SingleAllergies.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Dashboard\MainDashboard.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Diagnosis\AddDiagnosis.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Diagnosis\AllDiagnosis.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Diagnosis\SingleDiagnosis.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\HelpPages\ErrorPage.xaml">
@@ -209,6 +240,18 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Measurements\SingleMeasurement.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Mood\AddMood.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Mood\AllMood.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Mood\SingleMood.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Profile\ProfileSection.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Symptoms\AddSymptom.xaml">

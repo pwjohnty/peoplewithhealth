@@ -32,9 +32,22 @@ namespace PeopleWith
         public const string InsertUserDiagnosis = "https://pwdevapi.peoplewith.com/api/userdiagnosis/";
         public const string InsertUserMeasurements = "https://pwdevapi.peoplewith.com/api/usermeasurement/";
         public const string usersymptoms = "https://pwdevapi.peoplewith.com/api/usersymptom";
+        //CrashLog  
+        public const string CrashLog = "https://pwdevapi.peoplewith.com/api/crashlog";
 
+        //Allergies  
+        public const string Allergies = "https://pwdevapi.peoplewith.com/api/allergy";
 
+        //User Allergies  
+        public const string UserAllergies = "https://pwdevapi.peoplewith.com/api/userallergy";
 
+        //Diagnosis 
+        public const string Diagnosis = "https://pwdevapi.peoplewith.com/api/diagnosis";
+
+        //UserDiagnosis 
+        public const string UserDiagnosis = "https://pwdevapi.peoplewith.com/api/userdiagnosis";
+        // Mood  
+        public const string UserMood = "https://pwdevapi.peoplewith.com/api/usermood";
 
         public async Task<ObservableCollection<measurement>> GetMeasurements()
         {
@@ -165,6 +178,42 @@ namespace PeopleWith
             }
           
         }
+
+        //Delete User Symptom 
+        public async Task DeleteSymptom(ObservableCollection<usersymptom> Updatefeedback)
+        {
+            try
+            {
+                string id = Updatefeedback[0].id;
+                var url = $"https://pwdevapi.peoplewith.com/api/usersymptom/id/{id}";
+
+                string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = Updatefeedback[0].deleted });
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                using (var client = new HttpClient())
+                {
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+
+                    var response = await client.SendAsync(request);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                }
+
+                return;
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+        }
+
+
 
         public class SingleUserSymptom
         {
@@ -403,6 +452,483 @@ namespace PeopleWith
         }
 
 
+        //Add Crashlog Item 
+        public async Task<crashlog> InsertCrashLog(crashlog item)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                var url = APICalls.CrashLog;
+                string jsonn = System.Text.Json.JsonSerializer.Serialize<crashlog>(item);
+                StringContent contenttt = new StringContent(jsonn, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.PostAsync(url, contenttt);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    //Nothing to return
+                    return null;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+                //Error Occured on Crashlog 
+            }
+        }
+
+        //Get All Allergies Data 
+
+        public class ApiAllergies
+        {
+            public ObservableCollection<allergies> Value { get; set; }
+        }
+        public async Task<ObservableCollection<allergies>> GetAsyncAllergies()
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                var URl = APICalls.Allergies;
+                HttpResponseMessage response = await client.GetAsync(URl);
+                string data = await response.Content.ReadAsStringAsync();
+                var userResponse = JsonConvert.DeserializeObject<ApiAllergies>(data);
+                ObservableCollection<allergies> users = userResponse.Value;
+                return new ObservableCollection<allergies>(users.Take(Range.All));
+            }
+            catch (Exception ex)
+            {
+                return new ObservableCollection<allergies>();
+            }
+        }
+
+        //Post UserAllergies Data  
+        public async Task<ObservableCollection<userallergies>> PostUserAllergiesAsync(ObservableCollection<userallergies> AllergyPassed)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                var urls = APICalls.UserAllergies;
+                string jsonns = System.Text.Json.JsonSerializer.Serialize<userallergies>(AllergyPassed[0]);
+                StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync(urls, contenttts);
+                var errorResponse = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    var jsonResponse = JObject.Parse(responseContent);
+                    var id = jsonResponse["value"]?[0]?["id"]?.ToString();
+                    var createdAt = jsonResponse["value"]?[0]?["createdAt"]?.ToString();
+                    AllergyPassed[0].id = id;
+                    var AllergyDate = DateTime.Parse(createdAt);
+                    AllergyPassed[0].createdAt = AllergyDate.ToString("dd/MM/yyyy");
+                }
+                else
+                {
+                    string errorcontent = await response.Content.ReadAsStringAsync();
+                    var s = errorcontent;
+                }
+
+
+                return new ObservableCollection<userallergies>(AllergyPassed);
+            }
+
+            catch (Exception ex)
+            {
+                return new ObservableCollection<userallergies>();
+            }
+        }
+
+        //Get UserAllergies  
+
+        public class GetUserAllergies
+        {
+            public ObservableCollection<userallergies> Value { get; set; }
+        }
+
+        public async Task<ObservableCollection<userallergies>> GetUserAllergiesAsync(string USERID)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                string urlWithQuery = $"{UserAllergies}?$filter=userid eq '{USERID}'";
+                HttpResponseMessage response = await client.GetAsync(urlWithQuery);
+                string data = await response.Content.ReadAsStringAsync();
+                var userResponse = JsonConvert.DeserializeObject<GetUserAllergies>(data);
+                ObservableCollection<userallergies> users = userResponse.Value;
+                foreach (var item in userResponse.Value)
+                {
+                    string dateString = item.createdAt;
+                    DateTime parsedDate = DateTime.Parse(dateString, null, System.Globalization.DateTimeStyles.RoundtripKind);
+                    string formattedDate = parsedDate.ToString("dd/MM/yyyy");
+                    item.createdAt = formattedDate;
+                }
+
+                return new ObservableCollection<userallergies>(users.Take(Range.All));
+            }
+            catch (Exception ex)
+            {
+                return new ObservableCollection<userallergies>();
+            }
+
+        }
+
+
+        //Delete UserAllergy  
+
+        public async Task DeleteUserAllergy(ObservableCollection<userallergies> Updatefeedback)
+        {
+            try
+            {
+                string id = Updatefeedback[0].id;
+                var url = $"https://pwdevapi.peoplewith.com/api/userallergy/id/{id}";
+                string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = Updatefeedback[0].deleted });
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                using (var client = new HttpClient())
+                {
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+
+                    var response = await client.SendAsync(request);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                }
+                return;
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+        }
+
+        //Get All Diagnosis Data 
+
+        public class ApiDiagnosis
+        {
+            public ObservableCollection<diagnosis> Value { get; set; }
+        }
+        public async Task<ObservableCollection<diagnosis>> GetAsyncDiagnosis()
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                var URl = "https://pwdevapi.peoplewith.com/api/diagnosis";
+                HttpResponseMessage response = await client.GetAsync(URl);
+                string data = await response.Content.ReadAsStringAsync();
+                var userResponse = JsonConvert.DeserializeObject<ApiDiagnosis>(data);
+                ObservableCollection<diagnosis> users = userResponse.Value;
+                return new ObservableCollection<diagnosis>(users.Take(Range.All));
+            }
+            catch (Exception ex)
+            {
+                return new ObservableCollection<diagnosis>();
+            }
+        }
+
+        //Post UserDiagnosis Data  
+        public async Task<ObservableCollection<userdiagnosis>>PostUserDiagnosisAsync(ObservableCollection<userdiagnosis> UserDiagnosisPassed)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                var urls = APICalls.UserDiagnosis;
+                string jsonns = System.Text.Json.JsonSerializer.Serialize<userdiagnosis>(UserDiagnosisPassed[0]);
+                StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync(urls, contenttts);
+                var errorResponse = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    var jsonResponse = JObject.Parse(responseContent);
+                    var id = jsonResponse["value"]?[0]?["id"]?.ToString();
+                    var createdAt = jsonResponse["value"]?[0]?["createdAt"]?.ToString();
+                    UserDiagnosisPassed[0].id = id;
+                }
+                else
+                {
+                    string errorcontent = await response.Content.ReadAsStringAsync();
+                    var s = errorcontent;
+                }
+
+
+                return new ObservableCollection<userdiagnosis>(UserDiagnosisPassed);
+            }
+
+            catch (Exception ex)
+            {
+                return new ObservableCollection<userdiagnosis>();
+            }
+        }
+
+        //Get UserDiagnosis  
+
+        public class GetUserDiagnosis
+        {
+            public ObservableCollection<userdiagnosis> Value { get; set; }
+        }
+
+        public async Task<ObservableCollection<userdiagnosis>> GetUserDiagnosisAsync(string USERID)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                string urlWithQuery = $"{UserDiagnosis}?$filter=userid eq '{USERID}'";
+                HttpResponseMessage response = await client.GetAsync(urlWithQuery);
+                string data = await response.Content.ReadAsStringAsync();
+                var userResponse = JsonConvert.DeserializeObject<GetUserDiagnosis>(data);
+                ObservableCollection<userdiagnosis> users = userResponse.Value;
+                return new ObservableCollection<userdiagnosis>(users.Take(Range.All));
+            }
+            catch (Exception ex)
+            {
+                return new ObservableCollection<userdiagnosis>();
+            }
+
+        }
+
+
+        //Delete UserDiagnosis  
+
+        public async Task DeleteDiagnosis(ObservableCollection<userdiagnosis> Updatefeedback)
+        {
+            try
+            {
+                string id = Updatefeedback[0].id;
+                var url = $"https://pwdevapi.peoplewith.com/api/userdiagnosis/id/{id}";
+                string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = Updatefeedback[0].deleted });
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                using (var client = new HttpClient())
+                {
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+
+                    var response = await client.SendAsync(request);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                }
+                return;
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+        }
+
+
+
+        //Update Diagnosis Date 
+        public async Task PutDiagnosisAsync(ObservableCollection<userdiagnosis> Updatefeedback)
+        {
+            try
+            {
+
+                var id = Updatefeedback[0].id;
+                var url = $"https://pwdevapi.peoplewith.com/api/userdiagnosis/id/{id}";
+                var feedbacks = Updatefeedback[0].dateofdiagnosis;
+
+                string json = System.Text.Json.JsonSerializer.Serialize(new { dateofdiagnosis = feedbacks });
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+
+                using (var client = new HttpClient())
+                {
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+
+                    var response = await client.SendAsync(request);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Successfully updated Diagnosis Date");
+                    }
+                }
+            }
+
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        //Get User Mood 
+        public class GetUserMood
+        {
+            public ObservableCollection<usermood> Value { get; set; }
+        }
+
+        public async Task<ObservableCollection<usermood>> GetUserMoodsAsync(string USERID)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                string urlWithQuery = $"{UserMood}?$filter=userid eq '{USERID}'";
+                HttpResponseMessage response = await client.GetAsync(urlWithQuery);
+                string data = await response.Content.ReadAsStringAsync();
+                var userResponse = JsonConvert.DeserializeObject<GetUserMood>(data);
+                ObservableCollection<usermood> users = userResponse.Value;
+                foreach (var item in userResponse.Value)
+                {
+                    if (item.title != null)
+                    {
+                        string GetSource = item.title.ToLower();
+                        item.source = GetSource + ".png";
+                    }
+
+                }
+
+                return new ObservableCollection<usermood>(users.Take(Range.All));
+            }
+            catch (Exception ex)
+            {
+                return new ObservableCollection<usermood>();
+            }
+
+        }
+
+
+        //Post UserMood Data 
+        public async Task<ObservableCollection<usermood>> PostUserMoodAsync(ObservableCollection<usermood> MoodPassed)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                var urls = APICalls.UserMood;
+                string jsonns = System.Text.Json.JsonSerializer.Serialize<usermood>(MoodPassed[0]);
+                StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync(urls, contenttts);
+                var errorResponse = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    var jsonResponse = JObject.Parse(responseContent);
+                    var id = jsonResponse["value"]?[0]?["id"]?.ToString();
+                    var createdAt = jsonResponse["value"]?[0]?["createdAt"]?.ToString();
+                    MoodPassed[0].id = id;
+                    foreach (var item in MoodPassed)
+                    {
+                        string GetSource = item.title.ToLower();
+                        item.source = GetSource + ".png";
+                    }
+
+                }
+                else
+                {
+                    string errorcontent = await response.Content.ReadAsStringAsync();
+                    var s = errorcontent;
+                }
+
+
+                return new ObservableCollection<usermood>(MoodPassed);
+            }
+
+            catch (Exception ex)
+            {
+                return new ObservableCollection<usermood>();
+            }
+        }
+
+
+
+        //Delete UserMood Data 
+
+        public async Task DeleteUserMood(ObservableCollection<usermood> Updatefeedback)
+        {
+            try
+            {
+                string id = Updatefeedback[0].id;
+                var url = $"https://pwdevapi.peoplewith.com/api/usermood/id/{id}";
+                string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = Updatefeedback[0].deleted });
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                using (var client = new HttpClient())
+                {
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+
+                    var response = await client.SendAsync(request);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                }
+                return;
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+        }
+
+
+
+        //Update User Mood 
+        public async Task PutMoodAsync(ObservableCollection<usermood> Updatefeedback)
+        {
+            try
+            {
+
+                var id = Updatefeedback[0].id;
+                var url = $"https://pwdevapi.peoplewith.com/api/usermood/id/{id}";
+                var feedbacks = Updatefeedback[0];
+
+                //Change the following   
+                string json = System.Text.Json.JsonSerializer.Serialize(new
+                {
+                    title = feedbacks.title,
+                    datetime = feedbacks.datetime,
+                    notes = feedbacks.notes
+                });
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                using (var client = new HttpClient())
+                {
+
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+
+                    var response = await client.SendAsync(request);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Successfully updated Mood");
+                    }
+                }
+            }
+
+            catch (Exception ex)
+            {
+
+            }
+        }
 
     }
 }

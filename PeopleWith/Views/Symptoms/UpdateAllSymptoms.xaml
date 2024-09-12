@@ -9,7 +9,7 @@
              xmlns:picker="clr-namespace:Syncfusion.Maui.Picker;assembly=Syncfusion.Maui.Picker"
              NavigationPage.HasNavigationBar="True" BackgroundColor="White">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Select All" Clicked="ToolbarItem_Clicked"/>
+        <ToolbarItem Text="Select All" x:Name="SelectAll" Clicked="ToolbarItem_Clicked"/>
     </ContentPage.ToolbarItems>
     <ScrollView Orientation="Vertical">
         <VerticalStackLayout x:Name="Mainstack">

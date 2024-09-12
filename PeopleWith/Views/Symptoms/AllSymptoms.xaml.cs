@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.Messaging;
 using Syncfusion.Maui.ListView;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations.Schema;
 namespace PeopleWith;
 public partial class AllSymptoms : ContentPage
 {
@@ -12,11 +13,33 @@ public partial class AllSymptoms : ContentPage
     string previous;
     APICalls aPICalls = new APICalls();
     bool addsymptom;
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch(Exception ex)
+        {
+            //Dunno 
+        }
+    }
 
     public AllSymptoms()
     {
-        InitializeComponent();
-        GetUserSymptoms();
+        try
+        {
+            InitializeComponent();
+            GetUserSymptoms();
+            //CrashTest();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+      
     }
 
     public AllSymptoms(ObservableCollection<usersymptom> AllSymptoms)
@@ -29,13 +52,28 @@ public partial class AllSymptoms : ContentPage
 
             AllUserSymptoms = AllSymptoms;
             GetUserSymptoms();
+           
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-            //show error stack 
+            NotasyncMethod(Ex);
         }
 
     }
+
+    //async private void CrashTest()
+    //{
+    //    try
+    //    {
+    //        int number = 10;
+    //        int result = number / 0;
+    //    }
+    //    catch(Exception Ex)
+    //    {    
+    //        await crashHandler.CrashDetectedSend(Ex);
+    //    }
+       
+    //}
     async private void GetUserSymptoms()
     {
         try
@@ -130,7 +168,7 @@ public partial class AllSymptoms : ContentPage
 
             SymptomOverview.IsVisible = true;
 
-            return;
+          
 
             foreach (var item in AllUserSymptoms)
             {
@@ -152,12 +190,13 @@ public partial class AllSymptoms : ContentPage
             {
                 EmptyStack.IsVisible = false;
                 SymptomOverview.IsVisible = true;
-                populatelsitview();
+                //populatelsitview();
             }
 
         }
         catch (Exception Ex)
         {
+            await crashHandler.CrashDetectedSend(Ex);
         }
 
 
@@ -264,36 +303,62 @@ public partial class AllSymptoms : ContentPage
     }
     public static int FindLargest(List<int> list)
     {
-        int max = int.MinValue;
-        foreach (var num in list)
+        try
         {
-            if (num > max)
+            int max = int.MinValue;
+            foreach (var num in list)
             {
-                max = num;
+                if (num > max)
+                {
+                    max = num;
+                }
             }
+            return max;
         }
-        return max;
+        catch(Exception Ex)
+        {
+            //Fix Crash Log 
+            return 0;
+        }      
     }
     public static int FindSmallest(List<int> list)
     {
-        int min = int.MaxValue;
-        foreach (var num in list)
+        try
         {
-            if (num < min)
+            int min = int.MaxValue;
+            foreach (var num in list)
             {
-                min = num;
+                if (num < min)
+                {
+                    min = num;
+                }
             }
+            return min;
         }
-        return min;
+        catch
+        {
+            //Add Crash log
+            return 0;
+        }
+     
     }
     public static double CalculateAverage(List<int> list)
     {
-        int sum = 0;
-        foreach (var num in list)
+        try
         {
-            sum += num;
+            int sum = 0;
+            foreach (var num in list)
+            {
+                sum += num;
+            }
+            return (double)sum / list.Count;
         }
-        return (double)sum / list.Count;
+        catch
+        {
+            //Add Crash log
+            return 0;
+        }
+        
     }
     async private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
@@ -301,8 +366,9 @@ public partial class AllSymptoms : ContentPage
         {
             await Navigation.PushAsync(new AddSymptom(AllUserSymptoms));
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
+            await crashHandler.CrashDetectedSend(Ex);
         }
     }
     async private void AllSymptomView_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
@@ -318,14 +384,22 @@ public partial class AllSymptoms : ContentPage
 
             await Navigation.PushAsync(new SingleSymptom(UserSymptomPassed, AllUserSymptoms), false);
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            await crashHandler.CrashDetectedSend(Ex);
         }
     }
     async private void TapGestureRecognizer_Tapped_1(object sender, TappedEventArgs e)
     {
-        await Navigation.PopAsync();
+        try
+        {
+           await Navigation.PopAsync();
+        }
+        catch(Exception Ex)
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+       
     }
     async private void TapGestureRecognizer_Tapped_2(object sender, TappedEventArgs e)
     {
@@ -341,19 +415,27 @@ public partial class AllSymptoms : ContentPage
             }
 
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
+            await crashHandler.CrashDetectedSend(Ex);
         }
     }
     async private void TapGestureRecognizer_Tapped_3(object sender, TappedEventArgs e)
     {
-        if (AllUserSymptoms.Count == 0)
+        try
         {
-            await DisplayAlert("No Symptoms Added", "Try adding a symptom to access this feature", "Close");
+            if (AllUserSymptoms.Count == 0)
+            {
+                await DisplayAlert("No Symptoms Added", "Try adding a symptom to access this feature", "Close");
+            }
+            else
+            {
+                await Navigation.PushAsync(new CompareSymptoms(AllUserSymptoms));
+            }
         }
-        else
+        catch (Exception Ex)
         {
-            await Navigation.PushAsync(new CompareSymptoms(AllUserSymptoms));
+            await crashHandler.CrashDetectedSend(Ex);
         }
 
     }
@@ -363,8 +445,9 @@ public partial class AllSymptoms : ContentPage
         {
             //await Navigation.PushAsync(new AddSymptom(AllUserSymptoms));
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
+            await crashHandler.CrashDetectedSend(Ex);
         }
     }
     async private void addNewToolbar_Clicked(object sender, EventArgs e)
@@ -373,8 +456,9 @@ public partial class AllSymptoms : ContentPage
         {
             await Navigation.PushAsync(new AddSymptom(AllUserSymptoms));
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
+            await crashHandler.CrashDetectedSend(Ex);
         }
     }
 }

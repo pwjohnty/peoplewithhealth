@@ -59,8 +59,18 @@
 
 
             <!--Empty Stack for No Symptoms -->
+            <StackLayout x:Name="EmptyStack" Margin="0,150,0,0" IsVisible="False" VerticalOptions="CenterAndExpand">
+                <Image Source="adddataicon.png" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="50" WidthRequest="50"/>
+                <Label Text="Add Symptom" FontSize="20" Margin="0,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Center" />
+                <Label Text="Tap here to add a Symptom" FontSize="14" TextColor="#031926" FontFamily="HankenGroteskRegular" Margin="0,0,0,0" HorizontalOptions="Center" VerticalOptions="Center" VerticalTextAlignment="Center" />
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="addNewToolbar_Clicked"/>
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
 
-            <Grid x:Name="EmptyStack" IsVisible="False" Margin="20,50,10,0" >
+            <!--Empty Stack for No Symptoms -->
+
+            <!--  <Grid x:Name="EmptyStack" IsVisible="False" Margin="20,50,10,0" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="25"/>
                     <RowDefinition Height="20"/>
@@ -73,7 +83,7 @@
                 <Label Text="Try Adding a Symptom" FontFamily="HankenGroteskBold" FontSize="16" Grid.Row="1" Grid.Column="0" HorizontalOptions="Center" VerticalOptions="Center" TextColor="darkgray" />
                 <Button WidthRequest="220" Text="Add Symptom" Clicked="Button_Clicked" Grid.Row="2" Grid.Column="0" FontSize="16" Margin="0,10,0,5" FontFamily="HankenGroteskBold" TextColor="#031926" BackgroundColor="#BFDBF7" CornerRadius="10" />
 
-            </Grid>
+            </Grid>-->
 
             <!-- New Symptoms Insights -->
 
