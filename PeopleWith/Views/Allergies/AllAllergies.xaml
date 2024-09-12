@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PeopleWith.AllAllergies" xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView" 
+             xmlns:local="clr-namespace:PeopleWith" NavigationPage.IconColor="#031926"  BackgroundColor="White">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Clicked="ToolbarItem_Clicked" Text="ADD NEW" />
+    </ContentPage.ToolbarItems>
+    <VerticalStackLayout>
+        
+        <Label Text="Allergies" FontFamily="HankenGroteskBold" FontSize="25"  Margin="20,0,0,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" />
+
+        <!--Empty Stack for No Allergies -->
+        <StackLayout x:Name="EmptyStack" Margin="0,150,0,0" IsVisible="False" VerticalOptions="CenterAndExpand">
+            <Image Source="adddataicon.png" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="50" WidthRequest="50"/>
+            <Label Text="Add Allergy" FontSize="20" Margin="0,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Center" />
+            <Label Text="Tap here to add a Allergy" FontSize="14" TextColor="#031926" FontFamily="HankenGroteskRegular" Margin="0,0,0,0" HorizontalOptions="Center" VerticalOptions="Center" VerticalTextAlignment="Center" />
+            <StackLayout.GestureRecognizers>
+                <TapGestureRecognizer Tapped="ToolbarItem_Clicked"/>
+            </StackLayout.GestureRecognizers>
+        </StackLayout>
+
+        <!-- All Allergies Listview -->
+        <Grid x:Name="DiagnosisOverview" IsVisible="True" >
+            <syncfusion:SfListView  x:Name="AllAllergiesView" Padding="0" Margin="0,5,0,0" AutoFitMode="Height" ItemSpacing="0" BackgroundColor="Transparent" HorizontalOptions="FillAndExpand" ItemTapped="AllAllergiesView_ItemTapped" IsScrollingEnabled="True"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
+                <syncfusion:SfListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Frame HasShadow="False" CornerRadius="10"  InputTransparent="True" Padding="5" BorderColor="Transparent" BackgroundColor="#FFF5EE"  Margin="10,0,10,5">
+                                <Grid >
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="25"/>
+                                        <RowDefinition Height="25"/>
+
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90*"/>
+                                        <ColumnDefinition Width="10*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Text="{Binding title}" Margin="10,0,0,0" FontFamily="HankenGroteskBold"  FontSize="14" VerticalOptions="End" Grid.Row="0" Grid.Column="0"  TextColor="#031926" />
+                                    <Label Text="{Binding createdAt}" FontFamily="HankenGroteskBold" VerticalOptions="Start" Margin="10,0,0,0" HorizontalOptions="Start" FontSize="12" Grid.Row="1" Grid.Column="0"  TextColor="DarkGray" />
+
+                                    <Image Source="nextdarker.png" Grid.Row="0" Grid.Column="2"  Grid.RowSpan="2"  Margin="0,0,0,0"  HeightRequest="12" WidthRequest="12" VerticalOptions="Center" HorizontalOptions="End" />
+
+                                </Grid>
+                            </Frame>
+
+                        </ViewCell>
+                    </DataTemplate>
+                </syncfusion:SfListView.ItemTemplate>
+            </syncfusion:SfListView>
+        </Grid>
+
+
+    </VerticalStackLayout>
+</ContentPage>

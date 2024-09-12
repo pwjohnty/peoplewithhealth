@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
+             xmlns:popup="clr-namespace:Syncfusion.Maui.Popup;assembly=Syncfusion.Maui.Popup"
+             xmlns:picker="clr-namespace:Syncfusion.Maui.Picker;assembly=Syncfusion.Maui.Picker"
+             x:Class="PeopleWith.AddMood" NavigationPage.IconColor="#031926"  BackgroundColor="White">
+    <ScrollView>
+        <VerticalStackLayout x:Name="Mainstack">
+            <StackLayout>
+                <Label Text="Add Mood" FontFamily="HankenGroteskBold" Margin="20,10,0,0"  VerticalOptions="Center" HorizontalOptions="Start"   FontSize="25" TextColor="#031926" />
+
+                <!-- DateTime Pickers-->
+
+
+                <Border Stroke="LightGray" StrokeThickness="1" Margin="20,10,20,0" StrokeShape="RoundRectangle 10" Background="Transparent" HorizontalOptions="FillAndExpand">
+
+                    <Grid HorizontalOptions="FillAndExpand">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50*"/>
+                            <ColumnDefinition Width="50*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid HorizontalOptions="FillAndExpand" Grid.Column="0" Grid.Row="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="15*"/>
+                                <ColumnDefinition Width="35*"/>
+
+                            </Grid.ColumnDefinitions>
+                            
+                            <Image Source="icondatepicker.png"  VerticalOptions="CenterAndExpand" HorizontalOptions="Center" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" HeightRequest="25" WidthRequest="25" />
+                            <Label Text="Date" Grid.Row="0" Grid.Column="1" FontSize="10" Margin="0,10,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
+                            <DatePicker x:Name="adddatepicker" BackgroundColor="Transparent" Grid.Row="1" Grid.Column="1" FontSize="16" Margin="-5,-10,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
+
+                        </Grid>
+
+                        <Grid HorizontalOptions="FillAndExpand" Grid.Column="1" Grid.Row="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="15*"/>
+                                <ColumnDefinition Width="35*"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <Image Source="icontimepicker.png" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" HeightRequest="25" WidthRequest="25" />
+                            <Label Text="Time" Grid.Row="0" Grid.Column="3" FontSize="10" Margin="0,10,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
+                            <TimePicker x:Name="addtimepicker"  Format="hh:mm" Grid.Row="1" Grid.Column="1"  FontSize="16" Margin="-5,-10,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
+
+                        </Grid>
+
+
+
+                    </Grid>
+
+
+                </Border>
+
+                <!--<Frame HasShadow="False" Margin="20,5,20,0" BorderColor="#E5E5E5" BackgroundColor="Transparent" CornerRadius="10"  Padding="0" >
+                    <Grid Margin="20,10,20,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="45"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="15*"/>
+                            <ColumnDefinition Width="35*"/>
+                            <ColumnDefinition Width="15*"/>
+                            <ColumnDefinition Width="35*"/>
+                        </Grid.ColumnDefinitions>
+                        <Frame HasShadow="False" Margin="2.5,0,2.5,0" BorderColor="Transparent" BackgroundColor="Transparent" CornerRadius="10" Grid.Row="0" Grid.Column="0" Padding="0" Grid.ColumnSpan="2">
+                            <Grid Margin="5,0,5,0" Padding="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Image Grid.Row="0" Grid.Column="0" HeightRequest="30" WidthRequest="30" VerticalOptions="Center" Source="icondatepicker.png"  />
+                                <Label x:Name="Datelbl" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="0" Grid.Column="1" FontSize="20" TextColor="#031926" />
+                            </Grid>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
+                            </Frame.GestureRecognizers>
+                        </Frame>
+
+                        <Frame HasShadow="False" Margin="2.5,0,2.5,0" BorderColor="Transparent" Padding="0" BackgroundColor="Transparent" CornerRadius="10" Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2">
+                            <Grid Margin="5,0,5,0" Padding="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Image Grid.Row="0" Grid.Column="0" HeightRequest="30" WidthRequest="30" Source="icontimepicker.png" />
+                                <Label x:Name="Timelbl" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="0" Grid.Column="1" FontSize="20" TextColor="#031926" />
+                            </Grid>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1" NumberOfTapsRequired="1"/>
+                            </Frame.GestureRecognizers>
+                        </Frame>
+                    </Grid>
+                </Frame>-->
+
+                <Label Text="How are you Feeling?" FontFamily="HankenGroteskBold" Margin="20,10,0,0"  VerticalOptions="Center" HorizontalOptions="Start"   FontSize="16" TextColor="DarkGray" />
+
+                <!-- Emoji Picker -->
+                <syncfusion:SfListView x:Name="MoodListview"
+                       Orientation="Horizontal"
+                       ItemSpacing="0"
+                       ItemTapped="MoodListview_ItemTapped"
+                       HeightRequest="120"
+                       ScrollBarVisibility="Never"
+                       AutoFitMode="DynamicHeight"
+                       BackgroundColor="Transparent">
+                    <syncfusion:SfListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Frame HasShadow="False" CornerRadius="10" Padding="10" Margin="5"  InputTransparent="True" WidthRequest="100" BorderColor="Transparent" BackgroundColor="#E5E5E5" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+                                    <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Spacing="5">
+                                        <Image Source="{Binding ImageSource}" WidthRequest="50" HeightRequest="50" />
+                                        <Label Text="{Binding Text}" FontAttributes="Bold" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#031926" HorizontalTextAlignment="Center" />
+                                    </StackLayout>
+                                </Frame>
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.ItemTemplate>
+                    <syncfusion:SfListView.SelectedItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Frame HasShadow="False" CornerRadius="10" Padding="10" Margin="5" InputTransparent="True" WidthRequest="100"  BorderColor="Transparent" BackgroundColor="#FFF8DC" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+                                    <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Spacing="5">
+                                        <Image Source="{Binding ImageSource}" WidthRequest="50" HeightRequest="50" />
+                                        <Label Text="{Binding Text}" FontAttributes="Bold" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#031926" HorizontalTextAlignment="Center" />
+                                    </StackLayout>
+                                </Frame>
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.SelectedItemTemplate>
+                </syncfusion:SfListView>
+
+
+
+                <Label Text="Add Notes" FontFamily="HankenGroteskBold" Margin="20,10,0,0"  VerticalOptions="Center" HorizontalOptions="Start"   FontSize="16" TextColor="DarkGray" />
+                <Frame  BorderColor="#E6E6E6" BackgroundColor="Transparent" HasShadow="False" CornerRadius="10" Padding="-10" Margin="5,5,5,0">
+                    <ScrollView Orientation="Vertical" HorizontalScrollBarVisibility="Never">
+                        <Editor x:Name="Notes" HeightRequest="80" TextColor="#031926" FontFamily="HankenGroteskRegular" BackgroundColor="Transparent"  HorizontalTextAlignment="Start"  Margin="20,5,5,0"  />
+                    </ScrollView>
+                </Frame>
+
+
+                <Button x:Name="AddMoodBtn" Text="Add Mood" FontFamily="HankenGroteskBold" Clicked="AddMoodBtn_Clicked" BackgroundColor="#FFF8DC" TextColor="#031926" Margin="20,10,20,0" HorizontalOptions="Center" WidthRequest="300" HeightRequest="40"  />
+            </StackLayout>
+
+            <!--<StackLayout x:Name="SuccessScreen" VerticalOptions="Center" HorizontalOptions="Center" IsVisible="False">
+                <Grid Margin="20,50,20,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="300"/>
+                        <RowDefinition Height="45"/>
+                    </Grid.RowDefinitions>
+                    <skia:SKLottieView Grid.Row="0" x:Name="Success" Source="success.json" HeightRequest="300" WidthRequest="300" RepeatCount="0" IsAnimationEnabled="False" />
+                    <Label Grid.Row="1" Text="Allergy Added Successfully" FontSize="20" FontFamily="HankenGroteskBold" TextColor="DarkGray" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" />
+                </Grid>
+            </StackLayout>-->
+
+            <popup:SfPopup x:Name="Schedulepopup" IsOpen="False" Closed="Schedulepopup_Closed" AnimationMode="Fade"   AutoSizeMode="Height"
+        VerticalOptions="CenterAndExpand" 
+          HorizontalOptions="CenterAndExpand" ShowFooter="False" ShowHeader="False" >
+                <popup:SfPopup.ContentTemplate>
+                    <DataTemplate>
+                        <picker:SfDatePicker x:Name="SelectDatePicker" Format="dd_MM_yyyy" 
+                              MaximumDate="{Binding MaximumDate}"
+                              MinimumDate="{Binding MinimumDate}"
+                              SelectedDate="{Binding SelectedDate}"  BackgroundColor="White"  SelectionChanged="SelectDatePicker_SelectionChanged">
+                            <picker:SfDatePicker.SelectedTextStyle >
+                                <picker:PickerTextStyle FontSize="15" FontFamily="HankenGroteskBold" TextColor="White"/>
+                            </picker:SfDatePicker.SelectedTextStyle>
+                            <picker:SfDatePicker.SelectionView >
+                                <picker:PickerSelectionView CornerRadius="10" Padding="10, 5, 10, 5" Background="#FFF8DC" />
+                            </picker:SfDatePicker.SelectionView>
+                            <picker:SfDatePicker.ColumnHeaderView >
+                                <picker:DatePickerColumnHeaderView Background="#FFF8DC">
+                                    <picker:DatePickerColumnHeaderView.TextStyle >
+                                        <picker:PickerTextStyle FontSize="15" FontFamily="HankenGroteskBold" TextColor="#031926" />
+                                    </picker:DatePickerColumnHeaderView.TextStyle>
+                                </picker:DatePickerColumnHeaderView>
+                            </picker:SfDatePicker.ColumnHeaderView>
+                        </picker:SfDatePicker>
+                    </DataTemplate>
+                </popup:SfPopup.ContentTemplate>
+                <popup:SfPopup.PopupStyle>
+                    <popup:PopupStyle OverlayColor="Transparent" PopupBackground="White" />
+                </popup:SfPopup.PopupStyle>
+            </popup:SfPopup>
+
+
+            <popup:SfPopup x:Name="Timepopup" Closed="Timepopup_Closed"  IsOpen="False" AnimationMode="Fade"   AutoSizeMode="Height"
+VerticalOptions="CenterAndExpand" 
+  HorizontalOptions="CenterAndExpand" ShowFooter="False" ShowHeader="False" >
+                <popup:SfPopup.ContentTemplate>
+                    <DataTemplate>
+                        <picker:SfTimePicker x:Name="TimePicker" SelectedTime="{Binding SelectedTime}"  BackgroundColor="White" SelectionChanged="TimePicker_SelectionChanged"
+          Format="HH_mm">
+                            <picker:SfTimePicker.SelectedTextStyle >
+                                <picker:PickerTextStyle FontSize="15" FontFamily="HankenGroteskBold" TextColor="White"/>
+                            </picker:SfTimePicker.SelectedTextStyle>
+                            <picker:SfTimePicker.SelectionView >
+                                <picker:PickerSelectionView CornerRadius="10" Padding="10, 5, 10, 5" Background="#FFF8DC" />
+                            </picker:SfTimePicker.SelectionView>
+                            <picker:SfTimePicker.ColumnHeaderView >
+                                <picker:TimePickerColumnHeaderView Background="#FFF8DC">
+                                    <picker:TimePickerColumnHeaderView.TextStyle >
+                                        <picker:PickerTextStyle FontSize="15" FontFamily="HankenGroteskBold" TextColor="#031926" />
+                                    </picker:TimePickerColumnHeaderView.TextStyle>
+                                </picker:TimePickerColumnHeaderView>
+                            </picker:SfTimePicker.ColumnHeaderView>
+                        </picker:SfTimePicker>
+                    </DataTemplate>
+                </popup:SfPopup.ContentTemplate>
+                <popup:SfPopup.PopupStyle>
+                    <popup:PopupStyle OverlayColor="Transparent" PopupBackground="White" />
+                </popup:SfPopup.PopupStyle>
+            </popup:SfPopup>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

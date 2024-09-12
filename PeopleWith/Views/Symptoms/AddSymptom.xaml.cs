@@ -21,12 +21,33 @@ public partial class AddSymptom : ContentPage
     public ObservableCollection<symptom> AlreadyAdded = new ObservableCollection<symptom>();
   // private PopupViewModel viewModel;
     string previous;
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
     public AddSymptom(ObservableCollection<usersymptom> ItemsPassed)
     {
-        InitializeComponent();
-        SymptomsPassed = ItemsPassed;
-        GetBCCall();
-        //viewModel = BindingContext as PopupViewModel;
+        try
+        {
+            InitializeComponent();
+            SymptomsPassed = ItemsPassed;
+            GetBCCall();
+            //viewModel = BindingContext as PopupViewModel;
+        }
+        catch(Exception Ex) 
+        {
+            NotasyncMethod(Ex);
+        }
+
 
     }
     async public void GetBCCall()
@@ -81,9 +102,9 @@ public partial class AddSymptom : ContentPage
             FilterTabs.DisplayMemberPath = "classification";
             Symptomloading.IsVisible = false;
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            await crashHandler.CrashDetectedSend(Ex);
         }
     }
     private async void SymptomsListview_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
@@ -95,16 +116,12 @@ public partial class AddSymptom : ContentPage
             var result = await DisplayAlert("Confirm Symptom", "Are you sure you want to add " + symptom.title + "?", "Cancel", "OK");
             if (result)
             {
-                ((ListView)sender).SelectedItem = null;
+                
+                SymptomsListview.SelectedItems.Clear(); 
                 return;
             }
             else
             {
-
-
-
-
-
                // popup.HeaderTitle = symptom.title.ToString();
               //  popup.IsOpen = true;
                 var usersymptom = new symptomfeedback();
@@ -199,8 +216,9 @@ public partial class AddSymptom : ContentPage
             //    await Navigation.PopAsync();
             //}
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
+            await crashHandler.CrashDetectedSend(Ex);
         }
     }
     private void SearchBar_TextChanged(object sender, TextChangedEventArgs e)
@@ -213,9 +231,9 @@ public partial class AddSymptom : ContentPage
             var count = filteredSymptoms.Count().ToString();
             Results.Text = "Results" + " (" + count + ")";
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
     private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
@@ -225,7 +243,15 @@ public partial class AddSymptom : ContentPage
             if (Filterstack.IsVisible == true)
             {
                 Filterstack.IsVisible = false;
-                ListViewStack.Margin = new Thickness(0, -50, 0, 0);
+                if(DeviceInfo.Platform == DevicePlatform.Android)
+                {
+                    ListViewStack.Margin = new Thickness(0, 0, 0, 0);
+                }
+                else if(DeviceInfo.Platform == DevicePlatform.iOS)
+                {
+                    ListViewStack.Margin = new Thickness(0, -50, 0, 0);
+                }
+                
             }
             else
             {
@@ -233,9 +259,9 @@ public partial class AddSymptom : ContentPage
                 ListViewStack.Margin = new Thickness(0, 0, 0, 0);
             }
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
     private void FilterTabs_ChipClicked(object sender, EventArgs e)
@@ -249,14 +275,21 @@ public partial class AddSymptom : ContentPage
             Results.Text = "Results" + " (" + count + ")";
             SymptomsListview.ItemsSource = filteredSymptoms;
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
     async private void TapGestureRecognizer_Tapped_1(object sender, TappedEventArgs e)
     {
-        await Navigation.PopAsync();
+        try
+        {
+            await Navigation.PopAsync();
+        }
+        catch (Exception Ex)
+        {
+            await crashHandler.CrashDetectedSend(Ex); 
+        }    
     }
     private void TapGestureRecognizer_Tapped_2(object sender, TappedEventArgs e)
     {

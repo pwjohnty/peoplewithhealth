@@ -9,6 +9,19 @@ public partial class ShowAllSymptomData : ContentPage
     ObservableCollection<symptomfeedback> SymptomFeedback = new ObservableCollection<symptomfeedback>();
     ObservableCollection<symptomfeedback> Feedbacksymptom = new ObservableCollection<symptomfeedback>();
     ObservableCollection<symptomfeedback> itemstoremove = new ObservableCollection<symptomfeedback>();
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
     public ShowAllSymptomData()
     {
         InitializeComponent();
@@ -57,14 +70,16 @@ public partial class ShowAllSymptomData : ContentPage
             }
             AllDataLV.ItemsSource = SymptomFeedback;
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
+            NotasyncMethod(Ex);
         }
     }
     async private void EditBtn_Clicked(object sender, EventArgs e)
     {
         try
         {
+           
             bool hasDateSelected = SymptomFeedback.Any(item => item.DeleteSelected);
             if (!hasDateSelected)
             {
@@ -72,6 +87,7 @@ public partial class ShowAllSymptomData : ContentPage
 
                 if (DeleteVisible)
                 {
+                    deletelbl.IsVisible = false; 
                     // Set DeleteCheck and DeleteSelected to false for all items in SymptomFeedback
                     foreach (var item in SymptomFeedback)
                     {
@@ -83,6 +99,7 @@ public partial class ShowAllSymptomData : ContentPage
                 }
                 else
                 {
+                    deletelbl.IsVisible = true;
                     foreach (var item in SymptomFeedback)
                     {
                         if (item.symptomfeedbackid == SymptomFeedback[0].symptomfeedbackid)
@@ -153,6 +170,7 @@ public partial class ShowAllSymptomData : ContentPage
                     await Navigation.PushAsync(new AllSymptoms(AllSymptomsData));
                     var pageToRemove = Navigation.NavigationStack.FirstOrDefault(x => x is AllSymptoms);
                     var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is SingleSymptom);
+
                     if (pageToRemove != null)
                     {
                         Navigation.RemovePage(pageToRemove);
@@ -170,8 +188,9 @@ public partial class ShowAllSymptomData : ContentPage
                 }
             }
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
+            await crashHandler.CrashDetectedSend(Ex);
         }
     }
     async private void AllDataLV_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
@@ -229,8 +248,9 @@ public partial class ShowAllSymptomData : ContentPage
 
 
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
+            await crashHandler.CrashDetectedSend(Ex);
         }
     }
 }

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView" 
+             x:Class="PeopleWith.ProfileSection"
+             NavigationPage.IconColor="#031926" NavigationPage.HasBackButton="True"        
+             NavigationPage.HasNavigationBar="True" BackgroundColor="#ffffff">
+
+    <ScrollView>
+        <VerticalStackLayout>
+            <!-- Logo & Name-->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Frame Grid.Row="0" CornerRadius="100" HasShadow="False" WidthRequest="70" BackgroundColor="#E5F0FB" BorderColor="Transparent">
+                    <Label x:Name="Initals" Text="CF" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" FontFamily="HankenGroteskBold" FontSize="22" TextColor="#031926"/>
+                </Frame>
+                <Label Grid.Row="1" Text="Conal Fullen" HorizontalOptions="Center" x:Name="Namelbl" FontFamily="HankenGroteskBold" FontSize="25" TextColor="#031926"/>
+            </Grid>
+
+            <!-- Health Details-->
+            <Frame HasShadow="false" Margin="20,5,20,0" BorderColor="#E8E8E8" Padding="0" BackgroundColor="Transparent" >
+                <syncfusion:SfListView x:Name="UserDetails" SelectionBackground="Transparent" ItemTapped="UserDetails_ItemTapped" AutoFitMode="Height" >
+                    <syncfusion:SfListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ViewCell.View>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label HorizontalOptions="StartAndExpand" Text="{Binding SettingsTitle}" HeightRequest="20" FontSize="Micro" VerticalOptions="Center" Grid.Row="0" Grid.Column="0" Margin="10,10,0,0" TextColor="Gray" ></Label>
+                                        <Label HorizontalOptions="StartAndExpand" Text="{Binding SettingsItem}" HeightRequest="25" VerticalOptions="Center" FontSize="Small" Grid.Row="1" Grid.Column="0" Margin="10,0,0,0" FontAttributes="Bold" TextColor="Black" ></Label>
+                                        <Image Source="backbutton.png" Rotation="180" Grid.Row="0" HeightRequest="10" WidthRequest="10" Grid.RowSpan="2" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="End" Margin="0,10,10,0" />
+
+                                        <BoxView HeightRequest="1" Color="#E8E8E8"  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="1" Margin="10,0,10,0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+
+                                    </Grid>
+                                </ViewCell.View>
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.ItemTemplate>
+                </syncfusion:SfListView>
+            </Frame>
+
+            <!-- Other Details-->
+            <Frame HasShadow="false" Margin="20,5,20,0" BorderColor="#E8E8E8" Padding="0" BackgroundColor="Transparent" >
+                <syncfusion:SfListView x:Name="OtherDetails" SelectionBackground="Transparent" ItemTapped="OtherDetails_ItemTapped" AutoFitMode="Height" >
+                    <syncfusion:SfListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ViewCell.View>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label HorizontalOptions="StartAndExpand" Text="{Binding SettingsTitle}" HeightRequest="20" FontSize="Micro" VerticalOptions="Center" Grid.Row="0" Grid.Column="0" Margin="10,10,0,0" TextColor="Gray" ></Label>
+                                        <Label HorizontalOptions="StartAndExpand" Text="{Binding SettingsItem}" HeightRequest="25" VerticalOptions="Center" FontSize="Small" Grid.Row="1" Grid.Column="0" Margin="10,0,0,0" FontAttributes="Bold" TextColor="Black" ></Label>
+                                        <Image Source="backbutton.png" Rotation="180" Grid.Row="0" HeightRequest="10" WidthRequest="10" Grid.RowSpan="2" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="End" Margin="0,10,10,0" />
+
+                                        <BoxView HeightRequest="1" Color="#E8E8E8"  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="1" Margin="10,0,10,0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+
+                                    </Grid>
+                                </ViewCell.View>
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.ItemTemplate>
+                </syncfusion:SfListView>
+            </Frame>
+
+            <!-- Settings List -->
+
+            <syncfusion:SfListView x:Name="Settings" ItemTapped="Settings_ItemTapped"  SelectionBackground="Transparent" HeightRequest="170" AutoFitMode="Height" >
+                <syncfusion:SfListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <ViewCell.View>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label HorizontalOptions="StartAndExpand" Text="{Binding}" FontSize="16" FontAttributes="None" VerticalOptions="Center" Grid.Row="0" Grid.Column="0" Margin="10,10,0,0" TextColor="Black" ></Label>
+                                    <Image Source="backbutton.png" Rotation="270" Grid.Row="0" Grid.RowSpan="1" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="End" Margin="0,10,10,0" />
+
+                                    <BoxView HeightRequest="1" Color="#E8E8E8"  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="1" Margin="20,0,0,0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+
+                                </Grid>
+                            </ViewCell.View>
+                        </ViewCell>
+                    </DataTemplate>
+                </syncfusion:SfListView.ItemTemplate>
+            </syncfusion:SfListView>
+
+
+            <!-- -->
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

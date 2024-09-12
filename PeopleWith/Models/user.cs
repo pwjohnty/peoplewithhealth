@@ -45,6 +45,11 @@ namespace PeopleWith
         public string validationcode { get; set; }
         public string userpin { get; set; }
         public bool usermigrated { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string SettingsTitle { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string SettingsItem { get; set; }
     }
 
     public class APIUserResponse

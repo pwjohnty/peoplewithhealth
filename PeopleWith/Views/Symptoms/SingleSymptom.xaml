@@ -214,7 +214,7 @@ Padding="10">
 
 
             </StackLayout>
-            <Grid IsVisible="False">
+            <!--<Grid IsVisible="False">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="40*"/>
                     <ColumnDefinition Width="60*"/>
@@ -225,12 +225,12 @@ Padding="10">
                                       ChipBackground="LightGray" SelectedChipTextColor="#031926" ChipStroke="Transparent" SelectedChipBackground="#BFDBF7"  HorizontalOptions="Start" VerticalOptions="End"
                                       x:Name="Chips"  ShowIcon="False"  />
 
-            </Grid>
+            </Grid>-->
 
 
 
-            <StackLayout IsVisible="False">
-                <!-- Empty Stack-->
+            <!--<StackLayout IsVisible="False">
+                --><!-- Empty Stack--><!--
 
                 <Label x:Name="EpmtyTriggers" IsVisible="False" FontFamily="HankenGroteskBold" Margin="0,10,0,0" HorizontalOptions="Center" FontSize="16" TextColor="#031926"/>
 
@@ -276,8 +276,8 @@ Padding="10">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="20*"/>
                                                 <ColumnDefinition Width="80*"/>
-                                                <!--<ColumnDefinition Width="16*"/>
-                                                <ColumnDefinition Width="34*"/>-->
+                                                --><!--<ColumnDefinition Width="16*"/>
+                                                <ColumnDefinition Width="34*"/>--><!--
                                             </Grid.ColumnDefinitions>
 
                                             <Label Text="Triggers:" MinimumHeightRequest="25" FontFamily="HankenGroteskRegular" IsVisible="{Binding TriggerBool}" FontSize="10" TextColor="DarkGray" Grid.Row="0" Grid.Column="0"  VerticalOptions="Center" HorizontalOptions="Start"/>
@@ -289,13 +289,13 @@ Padding="10">
                                         </Grid>
                                     </StackLayout>
                                 </Frame>
-                                <!--</SwipeView>-->
+                                --><!--</SwipeView>--><!--
                             </ViewCell>
                         </DataTemplate>
                     </syncfusion:SfListView.ItemTemplate>
                 </syncfusion:SfListView>
 
-                <Frame x:Name="SeemoreStack" IsVisible="False" HasShadow="False" Margin="120,10,120,0" CornerRadius="10" BackgroundColor="Transparent" BorderColor="#031926" Padding="0">
+                --><!--<Frame x:Name="SeemoreStack" IsVisible="False" HasShadow="False" Margin="120,10,120,0" CornerRadius="10" BackgroundColor="Transparent" BorderColor="#031926" Padding="0">
                     <StackLayout>
                         <Label x:Name="seeall" Text="See All" VerticalOptions="Center" HorizontalOptions="Center" FontSize="16" TextColor="#031926" FontFamily="HankenGroteskBold"/>
                         <Image x:Name="arrow" Source="backbutton.png" Rotation="270" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="15" WidthRequest="15" />
@@ -303,9 +303,9 @@ Padding="10">
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
                     </Frame.GestureRecognizers>
-                </Frame>
+                </Frame>--><!--
 
-            </StackLayout>
+            </StackLayout>-->
 
           
 

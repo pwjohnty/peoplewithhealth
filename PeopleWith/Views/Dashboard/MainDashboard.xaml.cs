@@ -36,4 +36,41 @@ public partial class MainDashboard : ContentPage
 
 		}
     }
+
+    private async void Button_Clicked_2(object sender, EventArgs e)
+    {
+		try
+		{
+			await Navigation.PushAsync(new AllAllergies(), false); 
+		}
+		catch (Exception Ex)
+		{
+			
+		}
+
+    }
+
+    private async void Button_Clicked_3(object sender, EventArgs e)
+    {
+        try
+        {
+            await Navigation.PushAsync(new AllDiagnosis(), false);
+        }
+        catch (Exception Ex)
+        {
+
+        }
+    }
+
+    async private void Button_Clicked_4(object sender, EventArgs e)
+    {
+        try
+        {
+            await Navigation.PushAsync(new AllMood(), false);
+        }
+        catch (Exception Ex)
+        {
+
+        }
+    }
 }

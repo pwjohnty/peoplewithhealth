@@ -13,48 +13,75 @@ public partial class CompareSymptoms : ContentPage
     public ObservableCollection<ChipItem> ChipItems { get; set; }
     string CurrentChip;
     string DateRangetxt;
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
     protected override void OnDisappearing()
     {
-        base.OnDisappearing();
-        SymptomProgChart.Series.Clear();
+        try
+        {
+            base.OnDisappearing();
+            SymptomProgChart.Series.Clear();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex); 
+        }
+    
     }
-    //public List<string> ChipListView = new List<string>(); 
     public CompareSymptoms(ObservableCollection<usersymptom> AllSymptoms)
     {
-        InitializeComponent();
-        AllUserSymptoms = AllSymptoms;
-        ChipItems = new ObservableCollection<ChipItem>();
-        BindingContext = new ChipItems();
-        if (AllUserSymptoms.Count == 1)
+        try
         {
-            //Dont Need All for one item
-        }
-        else
-        {
-            //ChipListView.Add("All")
-            ChipItem add = new ChipItem
+            InitializeComponent();
+            AllUserSymptoms = AllSymptoms;
+            ChipItems = new ObservableCollection<ChipItem>();
+            BindingContext = new ChipItems();
+            if (AllUserSymptoms.Count == 1)
             {
-                Text = "All",
-                IsSelected = true
-            };
-            ChipItems.Add(add);
-        }
-        foreach (var item in AllUserSymptoms)
-        {
-            ChipItem add = new ChipItem
+                //Dont Need All for one item
+            }
+            else
             {
-                Text = item.symptomtitle,
-                IsSelected = false
-            };
-            ChipItems.Add(add);
-            //ChipListView.Add(item.symptomtitle);          
+                //ChipListView.Add("All")
+                ChipItem add = new ChipItem
+                {
+                    Text = "All",
+                    IsSelected = true
+                };
+                ChipItems.Add(add);
+            }
+            foreach (var item in AllUserSymptoms)
+            {
+                ChipItem add = new ChipItem
+                {
+                    Text = item.symptomtitle,
+                    IsSelected = false
+                };
+                ChipItems.Add(add);
+                //ChipListView.Add(item.symptomtitle);          
+            }
+            SymptomName.ItemsSource = ChipItems;
+            SymptomName.BindingContext = ChipItems;
+            SymptomName.SelectedItem = ChipItems[0];
+            CurrentChip = ChipItems[0].Text;
+            DateRange.Text = "DateRange: " + "All Time";
+            ConfigureChart(isAllTime: true);
         }
-        SymptomName.ItemsSource = ChipItems;
-        SymptomName.BindingContext = ChipItems;
-        SymptomName.SelectedItem = ChipItems[0];
-        CurrentChip = ChipItems[0].Text;
-        DateRange.Text = "DateRange: " + "All Time";
-        ConfigureChart(isAllTime: true);
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
     async private void ConfigureChart(int? numero = null, bool isAllTime = false)
     {
@@ -151,9 +178,9 @@ public partial class CompareSymptoms : ContentPage
                 DateRange.Text = "No data available for the selected range";
             }
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            await crashHandler.CrashDetectedSend(Ex); 
         }
     }
     async private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
@@ -162,9 +189,9 @@ public partial class CompareSymptoms : ContentPage
         {
             await Navigation.PopAsync();
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            await crashHandler.CrashDetectedSend(Ex);
         }
     }
     private void segmentedControl_SelectionChanged(object sender, Syncfusion.Maui.Buttons.SelectionChangedEventArgs e)
@@ -199,9 +226,9 @@ public partial class CompareSymptoms : ContentPage
                 DateRange.Text = "DateRange: " + "All Time";
             }
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            NotasyncMethod(Ex); 
         }
     }
     private void SymptomName_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
@@ -266,9 +293,9 @@ public partial class CompareSymptoms : ContentPage
                 //DateRange.Text = "DateRange: " + DateRangetxt;
             }
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
 
     }

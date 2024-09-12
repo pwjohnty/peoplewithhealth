@@ -11,49 +11,58 @@ public partial class UpdateAllSymptoms : ContentPage
     string SelectedTime;
     string SelectedDate;
     string previous;
-    public UpdateAllSymptoms(ObservableCollection<usersymptom> AllUserSymptoms)
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            NotasyncMethod(Ex);
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
+
+    public UpdateAllSymptoms()
     {
         InitializeComponent();
-        UserSymptomsPassed = AllUserSymptoms;
-
-        foreach(var item in UserSymptomsPassed)
+    }
+        public UpdateAllSymptoms(ObservableCollection<usersymptom> AllUserSymptoms)
+    {
+        try
         {
-            item.Enabled = false;
-            item.Opacity = 0.5;
-            item.Slidervalue = Convert.ToDouble(item.CurrentIntensity);
-            item.SlidervalueUA = Convert.ToDouble(item.CurrentIntensity);
-            item.CurrentIntensityUA = item.CurrentIntensity;
-            var dt = DateTime.Parse(item.feedback[item.feedback.Count - 1].timestamp).ToString("dd MMM, HH:mm");
-            item.DateUpdatedAll = "Last updated: " + dt;
-        }
-      //  Schedulepopup.BindingContext = new DatePickerViewModel();
-        Datelbl.Text = DateTime.Now.ToString("dd MMM");
-        Timelbl.Text = DateTime.Now.ToString("HH:mm");
-        addtimepicker.Time = DateTime.Now.TimeOfDay;
-       // UpdateBtn.IsEnabled = false;
-        //foreach (var item in UserSymptomsPassed)
-        //{
-        //   var NewUpdate = new symptomupdate();
-        //    NewUpdate.Id = item.id;
-        //    NewUpdate.Opacity = 0.5;
-        //    NewUpdate.Enabled = false;
-        //    NewUpdate.LastUpdate = item.LastUpdated;
-        //    NewUpdate.SliderValue = Int32.Parse(item.CurrentIntensity);
-        //    NewUpdate.SymptomName = item.symptomtitle;
-        //    SymptomUpdatelist.Add(NewUpdate);
-        //}
+            InitializeComponent();
+            UserSymptomsPassed = AllUserSymptoms;
 
-        if (DeviceInfo.Platform == DevicePlatform.iOS)
-        {
-            SymptomUpdateLV.HeightRequest = UserSymptomsPassed.Count * 100;
+            foreach (var item in UserSymptomsPassed)
+            {
+                item.Enabled = false;
+                item.Opacity = 0.5;
+                item.Slidervalue = Convert.ToDouble(item.CurrentIntensity);
+                item.SlidervalueUA = Convert.ToDouble(item.CurrentIntensity);
+                item.CurrentIntensityUA = item.CurrentIntensity;
+                var dt = DateTime.Parse(item.feedback[item.feedback.Count - 1].timestamp).ToString("dd MMM, HH:mm");
+                item.DateUpdatedAll = "Last updated: " + dt;
+            }
+            Datelbl.Text = DateTime.Now.ToString("dd MMM");
+            Timelbl.Text = DateTime.Now.ToString("HH:mm");
+            addtimepicker.Time = DateTime.Now.TimeOfDay;
+
+            if (DeviceInfo.Platform == DevicePlatform.iOS)
+            {
+                SymptomUpdateLV.HeightRequest = UserSymptomsPassed.Count * 100;
+            }
+            var sortedSymptoms = UserSymptomsPassed.OrderByDescending(f => DateTime.Parse(f.LastUpdated)).ToList();
+            SymptomUpdateLV.ItemsSource = UserSymptomsPassed;
+
         }
-        var sortedSymptoms = UserSymptomsPassed.OrderByDescending(f => DateTime.Parse(f.LastUpdated)).ToList();
-        //SymptomUpdatelist.Clear();
-        //foreach (var symptom in sortedSymptoms)
-        //{
-        //    SymptomUpdatelist.Add(symptom);
-        //}
-        SymptomUpdateLV.ItemsSource = UserSymptomsPassed;
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex); 
+        }
     }
     private void SfSlider_ValueChanged(object sender, Syncfusion.Maui.Sliders.SliderValueChangedEventArgs e)
     {
@@ -65,66 +74,47 @@ public partial class UpdateAllSymptoms : ContentPage
             selectedItem.CurrentIntensityUA = slidvalue.ToString();
 
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
     async private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
-        await Navigation.PopAsync();
+        try
+        {
+            await Navigation.PopAsync();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+     
     }
     async private void Button_Clicked(object sender, EventArgs e)
     {
         try
-        {
-          
+        {        
                     foreach (var symptom in UserSymptomsPassed)
                     {
 
                         if (symptom.Enabled == true)
                         {
-                            
-                            
-                                var items = new symptomfeedback();
-                    SelectedDate = adddatepicker.Date.ToString("dd/MM/yyyy");
-                    SelectedTime = addtimepicker.Time.ToString(@"hh\:mm");
-                    //if (string.IsNullOrEmpty(SelectedDate) || SelectedDate == null)
-                    //            {
-                    //                var Date = DateTime.Now;
-                    //                SelectedDate = Date.ToString("dd /MM/yyyy");
-                    //            }
-                    //            else
-                    //            {
-                    //               // var Date = DateTime.Parse(adddatepicker.Date);
-                    //                SelectedDate = adddatepicker.Date.ToString("dd/MM/yyyy");
-                    //            }
-                    //if (string.IsNullOrEmpty(SelectedTime) || SelectedTime == null)
-                    //            {
-                    //                var time = DateTime.Now;
-                    //                SelectedTime = time.ToString("HH:mm");
-                    //            }
-                    //            else
-                    //            {
-                    //               // var time = DateTime.Parse(addtimepicker.Time);
-                    //                SelectedTime = addtimepicker.Time.ToString("HH:mm");
-                    //            }
-            
-                                items.timestamp = SelectedDate + " " + SelectedTime;
-                                Guid newUUID = Guid.NewGuid();
-                                items.symptomfeedbackid = newUUID.ToString().ToUpper();
-                                items.intensity = symptom.Slidervalue.ToString();
-                                items.notes = null;
-                                items.triggers = null;
-                                items.interventions = null;
-                                items.duration = null;
-                                symptom.feedback.Add(items);
-                                SymptomUpdateNewlist.Add(symptom);
-                            
-                        }
+                            var items = new symptomfeedback();
+                            SelectedDate = adddatepicker.Date.ToString("dd/MM/yyyy");
+                            SelectedTime = addtimepicker.Time.ToString(@"hh\:mm");
 
-                    
-                
+                            items.timestamp = SelectedDate + " " + SelectedTime;
+                            Guid newUUID = Guid.NewGuid();
+                            items.symptomfeedbackid = newUUID.ToString().ToUpper();
+                            items.intensity = symptom.Slidervalue.ToString();
+                            items.notes = null;
+                            items.triggers = null;
+                            items.interventions = null;
+                            items.duration = null;
+                            symptom.feedback.Add(items);
+                            SymptomUpdateNewlist.Add(symptom);                          
+                        }               
             }
             //Need Loading Screen
             APICalls database = new APICalls();
@@ -144,53 +134,96 @@ public partial class UpdateAllSymptoms : ContentPage
             }
             Navigation.RemovePage(this);
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            await crashHandler.CrashDetectedSend(Ex); 
         }
     }
     private void SelectDatePicker_SelectionChanged(object sender, Syncfusion.Maui.Picker.DatePickerSelectionChangedEventArgs e)
     {
-        var Date = e.NewValue;
-        Datelbl.Text = Date.ToString("dd MMM");
-        var split = Date.ToString().Split(' ');
-        SelectedDate = split[0];
+        try
+        {
+            var Date = e.NewValue;
+            Datelbl.Text = Date.ToString("dd MMM");
+            var split = Date.ToString().Split(' ');
+            SelectedDate = split[0];
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
     private void TimePicker_SelectionChanged(object sender, Syncfusion.Maui.Picker.TimePickerSelectionChangedEventArgs e)
     {
-        if (e.NewValue > DateTime.Now.TimeOfDay)
+        try
         {
-            int secondsToVibrate = Random.Shared.Next(1, 1);
-            TimeSpan vibrationLength = TimeSpan.FromSeconds(secondsToVibrate);
-            Vibration.Default.Vibrate(vibrationLength);
-            return;
+            if (e.NewValue > DateTime.Now.TimeOfDay)
+            {
+                int secondsToVibrate = Random.Shared.Next(1, 1);
+                TimeSpan vibrationLength = TimeSpan.FromSeconds(secondsToVibrate);
+                Vibration.Default.Vibrate(vibrationLength);
+                return;
+            }
+            else
+            {
+                var Time = e.NewValue.ToString();
+                var split = Time.Split(':');
+                Timelbl.Text = split[0] + ":" + split[1];
+                var getTime = split[0] + ":" + split[1] + ":" + "00";
+                SelectedTime = getTime;
+            }
         }
-        else
+        catch(Exception Ex)
         {
-            var Time = e.NewValue.ToString();
-            var split = Time.Split(':');
-            Timelbl.Text = split[0] + ":" + split[1];
-            var getTime = split[0] + ":" + split[1] + ":" + "00";
-            SelectedTime = getTime;
+            NotasyncMethod(Ex);
         }
+       
     }
     private void TapGestureRecognizer_Tapped_1(object sender, TappedEventArgs e)
     {
-        Schedulepopup.IsOpen = true;
-        Mainstack.Opacity = 0.2;
+        try
+        {
+            Schedulepopup.IsOpen = true;
+            Mainstack.Opacity = 0.2;
+        }
+        catch(Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
     private void TapGestureRecognizer_Tapped_2(object sender, TappedEventArgs e)
     {
-        Timepopup.IsOpen = true;
-        Mainstack.Opacity = 0.2;
+        try
+        {
+            Timepopup.IsOpen = true;
+            Mainstack.Opacity = 0.2;
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
     private void TimePicker_Closed(object sender, EventArgs e)
     {
-        Mainstack.Opacity = 1;
+        try
+        {
+            Mainstack.Opacity = 1;
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
     private void Schedulepopup_Closed(object sender, EventArgs e)
     {
-        Mainstack.Opacity = 1;
+        try
+        {
+            Mainstack.Opacity = 1;
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
     private void TapGestureRecognizer_Tapped_3(object sender, TappedEventArgs e)
     {
@@ -221,9 +254,9 @@ public partial class UpdateAllSymptoms : ContentPage
             SymptomUpdateLV.ItemsSource = null;
             SymptomUpdateLV.ItemsSource = UserSymptomsPassed;
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
     async private void SelectAllBtn_Clicked(object sender, EventArgs e)
@@ -257,16 +290,52 @@ public partial class UpdateAllSymptoms : ContentPage
     {
         try
         {
-            SymptomUpdateLV.SelectAll();
-            foreach(var item in UserSymptomsPassed)
-            {
-                item.Enabled = true;
-            }
-            UpdateBtn.IsEnabled = true;
-        }
-        catch(Exception ex)
-        {
+                this.ToolbarItems.Clear();
 
+                ToolbarItem itemm = new ToolbarItem
+                {
+                    Text = "UnSelect All"
+
+                };
+                itemm.Clicked += OnItemClicked;
+
+                this.ToolbarItems.Add(itemm);
+                SymptomUpdateLV.SelectAll();
+                foreach (var item in UserSymptomsPassed)
+                {
+                    item.Enabled = true;
+                }
+                UpdateBtn.IsEnabled = true;
+        }
+        catch(Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    private async void OnItemClicked(object sender, EventArgs e)
+    {
+        try
+        {
+            this.ToolbarItems.Clear();
+
+            ToolbarItem itemm = new ToolbarItem
+            {
+                Text = "Select All"
+
+            };
+            itemm.Clicked += ToolbarItem_Clicked;
+            this.ToolbarItems.Add(itemm);
+            SymptomUpdateLV.SelectedItems.Clear();
+            foreach (var item in UserSymptomsPassed)
+            {
+                item.Enabled = false;
+            }
+            UpdateBtn.IsEnabled = false;
+        
+        }
+        catch (Exception Ex)
+        {
         }
     }
 
@@ -289,9 +358,9 @@ public partial class UpdateAllSymptoms : ContentPage
             }
 
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            NotasyncMethod(Ex); 
         }
     }
 }
