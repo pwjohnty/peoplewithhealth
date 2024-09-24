@@ -311,7 +311,6 @@ public partial class AddDiagnosis : ContentPage
             if (input.Length >= 8)
             {
                 input = input.Substring(0, 8);
-                DateEntry.IsEnabled = false;
                 DateEntry.IsEnabled = true;
             }
 

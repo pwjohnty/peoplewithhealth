@@ -1,4 +1,6 @@
+using Mopups.Services;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace PeopleWith;
 
@@ -9,6 +11,7 @@ public partial class AllAllergies : ContentPage
     public ObservableCollection<userallergies> PassedAllergy = new ObservableCollection<userallergies>();
     public ObservableCollection<allergies> AllergiesList = new ObservableCollection<allergies>();
     bool InitalLoad;
+    public Stopwatch stopWatch = new Stopwatch();
 
     public AllAllergies()
     {
@@ -47,8 +50,25 @@ public partial class AllAllergies : ContentPage
             {
                 var Userid = Helpers.Settings.UserKey;
                 APICalls database = new APICalls();
-                AllUserAllergies = await database.GetUserAllergiesAsync(Userid);
-                AllergiesList = await database.GetAsyncAllergies();
+              
+                var getAllUserAllergiesTask = database.GetUserAllergiesAsync(Userid);
+                var getAllergiesListTask = database.GetAsyncAllergies();
+
+                var delayTask = Task.Delay(1000);
+
+                
+                if (await Task.WhenAny(Task.WhenAll(getAllUserAllergiesTask, getAllergiesListTask), delayTask) == delayTask)
+                {
+                   
+                    await MopupService.Instance.PushAsync(new GettingReady("Loading Allergies") { });
+                }
+                
+                AllUserAllergies = await getAllUserAllergiesTask;
+                AllergiesList = await getAllergiesListTask;
+
+                await MopupService.Instance.PopAllAsync(false);
+
+
                 foreach (var item in AllUserAllergies)
                 {
                     for (int i = 0; i < AllergiesList.Count; i++)
@@ -59,6 +79,8 @@ public partial class AllAllergies : ContentPage
                         }
                     }
                 }
+                //stopWatch.Stop();
+                await MopupService.Instance.PopAllAsync(false);
             }
             foreach (var item in AllUserAllergies)
             {

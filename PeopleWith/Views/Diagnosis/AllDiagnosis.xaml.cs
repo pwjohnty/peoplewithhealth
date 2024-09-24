@@ -1,3 +1,4 @@
+using Mopups.Services;
 using System.Collections.ObjectModel;
 
 namespace PeopleWith;
@@ -38,7 +39,19 @@ public partial class AllDiagnosis : ContentPage
             {
                 var Userid = Helpers.Settings.UserKey;
                 APICalls database = new APICalls();
-                DiagnosisList = await database.GetUserDiagnosisAsync(Userid);
+
+                var getDiagnosisTask = database.GetUserDiagnosisAsync(Userid);
+
+                var delayTask = Task.Delay(1000);
+
+                if (await Task.WhenAny(getDiagnosisTask, delayTask) == delayTask)
+                {
+                    await MopupService.Instance.PushAsync(new GettingReady("Loading Diagnosis") { });
+                }
+
+                DiagnosisList = await getDiagnosisTask;
+
+                await MopupService.Instance.PopAllAsync(false);
             }
     
             foreach (var item in DiagnosisList)

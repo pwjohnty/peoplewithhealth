@@ -82,8 +82,23 @@ public partial class MeasurementsPage : ContentPage
             }
             else
             {
+                //Original 
+                //UserMeasurements = await aPICalls.GetUserMeasurements();
 
-                UserMeasurements = await aPICalls.GetUserMeasurements();
+
+                APICalls database = new APICalls();
+                var getMeasurementsTask = database.GetUserMeasurements();
+
+                var delayTask = Task.Delay(1000);
+
+                if (await Task.WhenAny(getMeasurementsTask, delayTask) == delayTask)
+                {
+                    await MopupService.Instance.PushAsync(new GettingReady("Loading Measurements") { });
+                }
+
+                UserMeasurements = await getMeasurementsTask;
+
+                await MopupService.Instance.PopAllAsync(false);
 
             }
 

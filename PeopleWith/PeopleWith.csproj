@@ -40,8 +40,9 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios'">
-	  <CodesignKey>Apple Development: Created via API (9AF7WV24ZX)</CodesignKey>
+	  <CodesignKey>Apple Development: Created via API (QB732BRMZC)</CodesignKey>
 	  <CodesignProvision>VS: com.peoplewith.peoplewith Development</CodesignProvision>
+	  <ProvisioningType>manual</ProvisioningType>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -81,15 +82,20 @@
 	  <None Remove="Resources\Images\compare.png" />
 	  <None Remove="Resources\Images\confused.png" />
 	  <None Remove="Resources\Images\crying.png" />
+	  <None Remove="Resources\Images\delete.png" />
 	  <None Remove="Resources\Images\deleteicon.png" />
 	  <None Remove="Resources\Images\erroricon.png" />
+	  <None Remove="Resources\Images\faceid.png" />
 	  <None Remove="Resources\Images\filterorange.png" />
+	  <None Remove="Resources\Images\finger.png" />
+	  <None Remove="Resources\Images\fingerprint.png" />
 	  <None Remove="Resources\Images\happy.png" />
 	  <None Remove="Resources\Images\icondate.png" />
 	  <None Remove="Resources\Images\icondatepicker.png" />
 	  <None Remove="Resources\Images\icontime.png" />
 	  <None Remove="Resources\Images\icontimepicker.png" />
 	  <None Remove="Resources\Images\laughing.png" />
+	  <None Remove="Resources\Images\logo.png" />
 	  <None Remove="Resources\Images\loved.png" />
 	  <None Remove="Resources\Images\neutral.png" />
 	  <None Remove="Resources\Images\nextdarker.png" />
@@ -97,6 +103,7 @@
 	  <None Remove="Resources\Images\nointerneticon.png" />
 	  <None Remove="Resources\Images\notificationicon.png" />
 	  <None Remove="Resources\Images\peoplewithlogoanimation.gif" />
+	  <None Remove="Resources\Images\pincode.png" />
 	  <None Remove="Resources\Images\pinicon.png" />
 	  <None Remove="Resources\Images\pwregbackgroundlight.png" />
 	  <None Remove="Resources\Images\regcompletetick.png" />
@@ -130,7 +137,9 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 		<PackageReference Include="Mopups" Version="1.3.1" />
 		<PackageReference Include="PINView.MAUI" Version="1.0.2" />
+		<PackageReference Include="Plugin.Fingerprint" Version="2.1.5" />
 		<PackageReference Include="Plugin.FirebasePushNotification" Version="3.4.35" />
+		<PackageReference Include="Plugin.Maui.Biometric" Version="0.0.2" />
 		<PackageReference Include="Plugin.Maui.SegmentedControl" Version="1.0.8" />
 		<PackageReference Include="Syncfusion.Maui.Buttons" Version="25.2.5" />
 		<PackageReference Include="Syncfusion.Maui.Calendar" Version="25.2.5" />
@@ -161,12 +170,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Helpers\GettingReady.xaml.cs">
+	    <DependentUpon>GettingReady.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Helpers\PopupPageHelper.xaml.cs">
 	    <DependentUpon>PopupPageHelper.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Helpers\GettingReady.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Helpers\PopupPageHelper.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -177,6 +192,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Allergies\SingleAllergies.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Biometrics\BiometricsLogin.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Dashboard\MainDashboard.xaml">
@@ -207,6 +225,12 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\HelpPages\UpdatePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\LoginRegister\ForgottenPassword.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\LoginRegister\LoginPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\LoginRegister\RegisterFinalPage.xaml">
@@ -251,6 +275,12 @@
 	  <MauiXaml Update="Views\Mood\SingleMood.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Privacy\PrivacyPolicy.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Profile\ProfileEdit.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Profile\ProfileSection.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -275,6 +305,10 @@
 	  <MauiXaml Update="Views\Symptoms\UpdateSingleSymptom.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Views\Appointments\" />
 	</ItemGroup>
 
 </Project>

@@ -1,7 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 using Mopups.Hosting;
 using Plugin.Maui.SegmentedControl;
+using Plugin.Fingerprint.Abstractions;
+using Plugin.Fingerprint;
 using Syncfusion.Maui.Core.Hosting;
+using Plugin.Maui.Biometric;
 
 namespace PeopleWith
 {
@@ -14,6 +17,9 @@ namespace PeopleWith
                 .ConfigureSyncfusionCore()
                 .UseMauiApp<App>()
                 .UseSegmentedControl()
+#if ANDROID
+                .ConfigureMauiHandlers(handlers => handlers.AddHandler<Microsoft.Maui.Controls.Entry, PINView.Maui.Platforms.Android.Handlers.EntryHandler>())
+#endif
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -25,8 +31,9 @@ namespace PeopleWith
                 })
                 .ConfigureMopups();
 
+
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             builder.UseMauiApp<App>().ConfigureMauiHandlers((handlers) => {
@@ -34,7 +41,10 @@ namespace PeopleWith
                handlers.AddHandler(typeof(Shell), typeof(CustomShellRenderer));  
 #endif
             });
+            //builder.Services.AddSingleton(typeof(IFingerprint), CrossFingerprint.Current);
 
+            // Use with Dependency Injection
+            builder.Services.AddSingleton<IBiometric>(BiometricAuthenticationService.Default);
             return builder.Build();
         }
     }

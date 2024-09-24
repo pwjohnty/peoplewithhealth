@@ -18,6 +18,7 @@ namespace PeopleWith
     {
         //add the names of the api followed with the url connection
         public const string Checkuseremail = "https://pwdevapi.peoplewith.com/api/user?$filter=email%20eq%20";
+        public const string CheckuserPassword = "https://pwdevapi.peoplewith.com/api/user?$filter=password%20eq%20";
         public const string AddCrash = "https://pwdevapi.peoplewith.com/api/crashlog";
         public const string CheckSignUpCode = "https://pwdevapi.peoplewith.com/api/signupcode?$filter=signupcodeid%20eq%20";
         public const string Checksignupregquestions = "https://pwdevapi.peoplewith.com/api/question?$filter=signupcodereferral%20eq%20";
@@ -48,6 +49,44 @@ namespace PeopleWith
         public const string UserDiagnosis = "https://pwdevapi.peoplewith.com/api/userdiagnosis";
         // Mood  
         public const string UserMood = "https://pwdevapi.peoplewith.com/api/usermood";
+
+
+        //Get User Details 
+        public async Task<ObservableCollection<user>> GetuserDetails()
+        {
+            try
+            {
+                var USERID = Helpers.Settings.UserKey; 
+                var url = $"https://pwdevapi.peoplewith.com/api/user/userid/{USERID}";
+                HttpClient client = new HttpClient();
+                HttpResponseMessage responseconsent = await client.GetAsync(url);
+
+                if (responseconsent.IsSuccessStatusCode)
+                {
+                    string contentconsent = await responseconsent.Content.ReadAsStringAsync();
+                    var userResponseconsent = JsonConvert.DeserializeObject<APIUserResponse>(contentconsent);
+                    var consent = userResponseconsent.Value;
+
+                    return new ObservableCollection<user>(consent);
+
+                }
+                else
+                {
+
+                    return null;
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        //Update User Details 
+
 
         public async Task<ObservableCollection<measurement>> GetMeasurements()
         {

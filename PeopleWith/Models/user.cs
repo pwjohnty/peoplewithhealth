@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace PeopleWith
         //public DateTime CreatedAt { get; set; }
         //public DateTime UpdatedAt { get; set; }
         //public string Version { get; set; }
-        //public bool Deleted { get; set; }
+        public bool deleted { get; set; }
         public string firstname { get; set; }
         public string surname { get; set; }
         public string email { get; set; }
@@ -35,7 +36,7 @@ namespace PeopleWith
         public string deviceos { get; set; }
         public string devicemodel { get; set; }
         public string pushnotifications { get; set; }
-        public bool emailnotifications { get; set; }
+        public bool? emailnotifications { get; set; }
         public string externalpatientid { get; set; }
         public string primarycareid { get; set; }
         public string secondarycareid { get; set; }
@@ -44,18 +45,23 @@ namespace PeopleWith
         public string activationtimestamp { get; set; }
         public string validationcode { get; set; }
         public string userpin { get; set; }
-        public bool usermigrated { get; set; }
+        public bool? usermigrated { get; set; }
+
+        public bool? biometrics { get; set; }
 
         [System.Text.Json.Serialization.JsonIgnore]
         public string SettingsTitle { get; set; }
         [System.Text.Json.Serialization.JsonIgnore]
         public string SettingsItem { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool pintoggled { get; set; }
+
     }
 
     public class APIUserResponse
     {
         public ObservableCollection<user> Value { get; set; }
     }
-
 
 }

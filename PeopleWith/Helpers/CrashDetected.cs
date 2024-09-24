@@ -37,7 +37,7 @@ namespace PeopleWith
                         deleted = false,
                         userid = Helpers.Settings.UserKey,
                         stacktrace = Ex.StackTrace,
-                        deviceos = GetOS.ToString(),  // Uncomment if needed
+                        deviceos = DeviceInfo.Current.VersionString,  // Uncomment if needed
                         devicemodel = GetModel.ToString()  // Uncomment if needed
                     };
                     await DBCall(errorDetails); // Make sure to await DBCall

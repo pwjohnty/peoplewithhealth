@@ -9,7 +9,33 @@ namespace PeopleWith.Helpers
 {
     public static class Settings
     {
-
+        public static bool? biometrics
+        {
+            get
+            {
+                if (Preferences.ContainsKey(nameof(biometrics)))
+                {
+                    // Get the value or return true if the value is null
+                    bool? value = Preferences.Get(nameof(biometrics), true);
+                    return value ?? true; 
+                }
+                else
+                {
+                    return true; // Return true if the key doesn't exist
+                }
+            }
+            set
+            {
+                if (value.HasValue)
+                {
+                    Preferences.Set(nameof(biometrics), value.Value); 
+                }
+                else
+                {
+                    Preferences.Set(nameof(biometrics), true); // If value is null, set it to true
+                }
+            }
+        }
         public static bool FirstRun
         {
             get => Preferences.Get(nameof(FirstRun), true);
