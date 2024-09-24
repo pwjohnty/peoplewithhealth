@@ -36,4 +36,28 @@ public partial class MainDashboard : ContentPage
 
 		}
     }
+
+    private async void Button_Clicked_2(object sender, EventArgs e)
+    {
+        try
+        {
+            await Navigation.PushAsync(new AllMedications(), false);
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    private async void Button_Clicked_3(object sender, EventArgs e)
+    {
+        try
+        {
+            await Navigation.PushAsync(new MainSchedule(), false);
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
 }
