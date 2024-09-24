@@ -15,8 +15,22 @@ public partial class AllMedications : ContentPage
 
 	}
 
+    public AllMedications(ObservableCollection<usermedication> AllUsermeds)
+    {
+        InitializeComponent();
 
-	async void getusermedications()
+		AllUserMedications.Clear();
+
+        AllUserMedications = AllUsermeds;
+
+        AllUserMedsList.ItemsSource = AllUserMedications;
+
+        // getusermedications();
+
+    }
+
+
+    async void getusermedications()
 	{
 		try
 		{
@@ -35,7 +49,7 @@ public partial class AllMedications : ContentPage
     {
 		try
 		{
-			await Navigation.PushAsync(new AddMedication(), false);
+			await Navigation.PushAsync(new AddMedication(AllUserMedications), false);
 		}
 		catch(Exception ex)
 		{

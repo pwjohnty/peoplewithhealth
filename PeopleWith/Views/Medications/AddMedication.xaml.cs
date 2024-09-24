@@ -43,6 +43,7 @@ public partial class AddMedication : ContentPage
     string freqstring;
 
     ObservableCollection<MedtimesDosages> medtimesanddosages = new ObservableCollection<MedtimesDosages>();
+    ObservableCollection<usermedication> UserMedications = new ObservableCollection<usermedication>();
     public AddMedication()
 	{
 		InitializeComponent();
@@ -290,9 +291,256 @@ public partial class AddMedication : ContentPage
 
     }
 
+    public AddMedication(ObservableCollection<usermedication> AllUsermedications)
+    {
+        InitializeComponent();
 
 
-async void Getmedications()
+        UserMedications = AllUsermedications;
+
+        Getmedications();
+
+        var new1 = new preparation();
+        new1.title = "Daily";
+        medfreq.Add(new1);
+
+        var new2 = new preparation();
+        new2.title = "Specfic Days of the Week";
+        medfreq.Add(new2);
+
+        var new3 = new preparation();
+        new3.title = "Days Interval";
+        medfreq.Add(new3);
+
+        var new4 = new preparation();
+        new4.title = "As Required";
+        medfreq.Add(new4);
+
+
+        medfreqlistview.ItemsSource = medfreq;
+
+
+        timesperdaylist.Add("OD\nOnce Daily");
+        timesperdaylist.Add("BD\nTwice Daily");
+        timesperdaylist.Add("TDS\nThree Times Daily");
+        timesperdaylist.Add("QDS\nFour Times Daily");
+        timesperdaylist.Add("5x\nFive Times Daily");
+        timesperdaylist.Add("6x\nSix Times Daily");
+        timesperdaylist.Add("7x\nSeven Times Daily");
+        timesperdaylist.Add("8x\nEight Times Daily");
+
+        dailytimeslistview.ItemsSource = timesperdaylist;
+
+
+        ODlist.Add("MANE\nMorning");
+        ODlist.Add("NOCTE\nNight");
+        ODlist.Add("Set\nown time");
+
+        oncedailylistview.ItemsSource = ODlist;
+
+
+
+        weekdayslist.Add("Sun");
+        weekdayslist.Add("Mon");
+        weekdayslist.Add("Tues");
+        weekdayslist.Add("Wed");
+        weekdayslist.Add("Thrus");
+        weekdayslist.Add("Fri");
+        weekdayslist.Add("Sat");
+
+        weeklydayslist.ItemsSource = weekdayslist;
+
+        weekfreqlist.Add("One");
+        weekfreqlist.Add("Two");
+        weekfreqlist.Add("Three");
+        weekfreqlist.Add("Four");
+        weekfreqlist.Add("Five");
+        weekfreqlist.Add("Six");
+        weekfreqlist.Add("Seven");
+        weekfreqlist.Add("Eight");
+
+        weekfreqlistview.ItemsSource = weekfreqlist;
+        ditimesperdaylist.ItemsSource = weekfreqlist;
+
+
+        daysintervallist.Add("Every other day");
+        daysintervallist.Add("Every 3 days");
+        daysintervallist.Add("Every 7 days");
+        daysintervallist.Add("Every 14 days");
+        daysintervallist.Add("Every 21 days");
+        daysintervallist.Add("Every 28 days");
+        daysintervallist.Add("Every 30 days");
+        daysintervallist.Add("Every 5 weeks");
+        daysintervallist.Add("Every 6 weeks");
+        daysintervallist.Add("Every 7 weeks");
+        daysintervallist.Add("Every 8 weeks");
+        daysintervallist.Add("Every 9 weeks");
+        daysintervallist.Add("Every 10 weeks");
+
+        daysintervallistview.ItemsSource = daysintervallist;
+
+        weeklydosagesame.Add("Yes");
+        weeklydosagesame.Add("No");
+
+        samedosageweeklylist.ItemsSource = weeklydosagesame;
+        samedosageweeklylist2.ItemsSource = weeklydosagesame;
+        disamedosagequestionlist.ItemsSource = weeklydosagesame;
+
+        // dosageunitlbl.Text = newusermedication.unit;
+
+
+
+        // Define a dictionary to store the options and their corresponding MedtimesDosages
+        frequencyOptions = new Dictionary<string, List<MedtimesDosages>>()
+{
+    { "Morning", new List<MedtimesDosages> {
+         new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+    }},
+       { "Night", new List<MedtimesDosages> {
+         new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+    }},
+          { "own time", new List<MedtimesDosages> {
+         new MedtimesDosages { time = DateTime.Now.ToString("HH:mm"), timeconverted = DateTime.Now.TimeOfDay, Dosage = string.Empty,  dosageunit = newusermedication.unit}
+    }},
+    {
+    "Twice Daily", new List<MedtimesDosages> {
+        new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+    }},
+    {
+    "Three Times Daily", new List<MedtimesDosages> {
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+    }},
+       {
+    "Four Times Daily", new List<MedtimesDosages> {
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "12:00", timeconverted = new TimeSpan(12, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "16:00", timeconverted = new TimeSpan(16, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+    }},
+            {
+    "Five Times Daily", new List<MedtimesDosages> {
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "11:00", timeconverted = new TimeSpan(11, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "17:00", timeconverted = new TimeSpan(17, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+    }},
+                        {
+    "Six Times Daily", new List<MedtimesDosages> {
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "10:30", timeconverted = new TimeSpan(10, 30, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "13:00", timeconverted = new TimeSpan(13, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "15:30", timeconverted = new TimeSpan(15, 30, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "18:00", timeconverted = new TimeSpan(18, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+    }},
+                                                {
+    "Seven Times Daily", new List<MedtimesDosages> {
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "10:00", timeconverted = new TimeSpan(10, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "12:00", timeconverted = new TimeSpan(12, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "16:00", timeconverted = new TimeSpan(16, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "18:00", timeconverted = new TimeSpan(18, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+    }},
+                                                                                                {
+    "Eight Times Daily", new List<MedtimesDosages> {
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "09:45", timeconverted = new TimeSpan(9, 45, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "11:30", timeconverted = new TimeSpan(11, 30, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "13:15", timeconverted = new TimeSpan(13, 15, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "15:00", timeconverted = new TimeSpan(15, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+             new MedtimesDosages { time = "16:45", timeconverted = new TimeSpan(16, 45, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "18:30", timeconverted = new TimeSpan(18, 30, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+    }},
+    // Add the other options similarly
+};
+
+        frequencyOptionsWDI = new Dictionary<string, List<MedtimesDosages>>()
+{
+    { "One", new List<MedtimesDosages> {
+        new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+    }},
+    {
+    "Two", new List<MedtimesDosages> {
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+    }},
+    {
+    "Three", new List<MedtimesDosages> {
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+    }},
+       {
+    "Four", new List<MedtimesDosages> {
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "12:00", timeconverted = new TimeSpan(12, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "16:00", timeconverted = new TimeSpan(16, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+    }},
+            {
+    "Five", new List<MedtimesDosages> {
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "11:00", timeconverted = new TimeSpan(11, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "17:00", timeconverted = new TimeSpan(17, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+    }},
+                        {
+    "Six", new List<MedtimesDosages> {
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "10:30", timeconverted = new TimeSpan(10, 30, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "13:00", timeconverted = new TimeSpan(13, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "15:30", timeconverted = new TimeSpan(15, 30, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "18:00", timeconverted = new TimeSpan(18, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+    }},
+                                                {
+    "Seven", new List<MedtimesDosages> {
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "10:00", timeconverted = new TimeSpan(10, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "12:00", timeconverted = new TimeSpan(12, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "16:00", timeconverted = new TimeSpan(16, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "18:00", timeconverted = new TimeSpan(18, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+    }},
+                                                                                                {
+    "Eight", new List<MedtimesDosages> {
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "09:45", timeconverted = new TimeSpan(9, 45, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "11:30", timeconverted = new TimeSpan(11, 30, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "13:15", timeconverted = new TimeSpan(13, 15, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "15:00", timeconverted = new TimeSpan(15, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+             new MedtimesDosages { time = "16:45", timeconverted = new TimeSpan(16, 45, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "18:30", timeconverted = new TimeSpan(18, 30, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+    }},
+    // Add the other options similarly
+};
+
+
+        dayOrder = new Dictionary<string, int>
+{
+    { "Sun", 1 },
+    { "Mon", 2 },
+    { "Tues", 3 },
+    { "Wed", 4 },
+    { "Thurs", 5 },
+    { "Fri", 6 },
+    { "Sat", 7 }
+};
+
+
+    }
+
+    async void Getmedications()
 	{
 		try
 		{
@@ -1939,13 +2187,13 @@ async void Getmedications()
             newusermedication.userid = userid;
             var returnedsymptom = await database.PostMedicationAsync(newusermedication);
 
-           // SymptomsPassed.Add(returnedsymptom);
+            UserMedications.Add(newusermedication);
 
             await MopupService.Instance.PushAsync(new PopupPageHelper("Medication Added") { });
             await Task.Delay(1500);
 
             //await Navigation.PushAsync(new AllSymptoms(SymptomsPassed));
-            await Navigation.PushAsync(new AllMedications());
+            await Navigation.PushAsync(new AllMedications(UserMedications));
 
 
             await MopupService.Instance.PopAllAsync(false);
