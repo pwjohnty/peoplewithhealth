@@ -15,5 +15,12 @@ namespace PeopleWith
         public string medicationtitle { get; set; }
         public string schedule { get; set; }
 
+        public string frequency { get; set; }
+        public string startdate { get; set; }
+
+        public string enddate { get; set; }
+
+        public string feedback { get; set; }
+
     }
 }

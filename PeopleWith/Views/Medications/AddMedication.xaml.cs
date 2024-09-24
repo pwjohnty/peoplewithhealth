@@ -2164,11 +2164,11 @@ public partial class AddMedication : ContentPage
                     newweeknum = "8";
                 }
 
-                newusermedication.frequency = "Weekly" + " | " + joindays + " | " + newweeknum;
+                newusermedication.frequency = "Weekly" + "|" + joindays + "|" + newweeknum;
             }
             else if (freqstring == "Days Interval")
             {
-                newusermedication.frequency = "Days Interval" + " | " + daycount.ToString() + " | " + selectedDosages.Count.ToString();
+                newusermedication.frequency = "Days Interval" + "|" + daycount.ToString() + "|" + selectedDosages.Count.ToString();
             }
             else
             {

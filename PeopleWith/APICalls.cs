@@ -483,6 +483,8 @@ namespace PeopleWith
 
 
 
+
+
         public async Task<ObservableCollection<usermedication>> GetUserMedicationsAsync()
         {
             try
@@ -509,7 +511,11 @@ namespace PeopleWith
                             userid = rawSymptom.userid,
                             medicationid = rawSymptom.medicationid,
                             medicationtitle = rawSymptom.medicationtitle,
-                            schedule = new ObservableCollection<MedtimesDosages>()
+                            startdate = rawSymptom.startdate,
+                            enddate = rawSymptom.enddate,
+                            frequency = rawSymptom.frequency,
+                            schedule = new ObservableCollection<MedtimesDosages>(),
+                            feedback = new ObservableCollection<MedSuppFeedback>(),
                             
                         };
                         // Deserialize the feedback string into the FeedbackList
@@ -520,6 +526,21 @@ namespace PeopleWith
                         {
                             newUserSymptom.schedule.Add(feedback);
                         }
+
+                        if (rawSymptom.feedback == null)
+                        {
+
+                        }
+                        else
+                        {
+                            var medfeedback = JsonConvert.DeserializeObject<List<MedSuppFeedback>>(rawSymptom.feedback);
+
+                            foreach (var feedback in medfeedback)
+                            {
+                                newUserSymptom.feedback.Add(feedback);
+                            }
+                        }
+
                         userSymptomsList.Add(newUserSymptom);
                     }
                 }
@@ -528,6 +549,42 @@ namespace PeopleWith
             catch (Exception ex)
             {
                 return new ObservableCollection<usermedication>();
+            }
+        }
+
+
+        //Update medication feedback Data
+        public async Task UpdateMedicationFeedbackAsync(usermedication Updatefeedback)
+        {
+            try
+            {
+                var id = Updatefeedback.id;
+                var url = $"https://pwdevapi.peoplewith.com/api/usermedication/id/{id}";
+                var feedbacks = Updatefeedback.feedback;
+                string json = System.Text.Json.JsonSerializer.Serialize(new { feedback = feedbacks });
+                //string json = System.Text.Json.JsonSerializer.Serialize(new { feedback = feedbacks }, serializerOptions);
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                using (var client = new HttpClient())
+                {
+                    //works with patch
+                    //var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+                    var response = await client.SendAsync(request);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Successfully updated feedback");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
             }
         }
 

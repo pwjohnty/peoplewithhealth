@@ -19,7 +19,7 @@ public partial class AllMedications : ContentPage
     {
         InitializeComponent();
 
-		AllUserMedications.Clear();
+		//AllUserMedications.Clear();
 
         AllUserMedications = AllUsermeds;
 

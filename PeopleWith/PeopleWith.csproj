@@ -97,6 +97,8 @@
 	  <None Remove="Resources\Images\pwregbackgroundlight.png" />
 	  <None Remove="Resources\Images\regcompletetick.png" />
 	  <None Remove="Resources\Images\regtick.png" />
+	  <None Remove="Resources\Images\scheduletick.png" />
+	  <None Remove="Resources\Images\schedulex.png" />
 	  <None Remove="Resources\Images\searchbaricon.png" />
 	  <None Remove="Resources\Images\searchorange.png" />
 	  <None Remove="Resources\Images\searchteal.png" />

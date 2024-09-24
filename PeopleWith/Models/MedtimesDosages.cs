@@ -16,6 +16,8 @@ namespace PeopleWith
 
         public int id { get; set; }
         public string time { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
         public TimeSpan timeconverted { get; set; }
         //public string createdAt { get; set; }
         //public string updatedAt { get; set; }
@@ -37,7 +39,10 @@ namespace PeopleWith
 
         public string dosageunit { get; set; }
 
+
         private string day;
+
+        [System.Text.Json.Serialization.JsonIgnore]
         public string Day
         {
             get { return day; }
@@ -51,7 +56,10 @@ namespace PeopleWith
             }
         }
 
+  
         private bool alldosage;
+
+        [System.Text.Json.Serialization.JsonIgnore]
         public bool Alldosage
         {
             get { return alldosage; }
@@ -65,7 +73,10 @@ namespace PeopleWith
             }
         }
 
+       
         private bool checkboxchecked;
+
+        [System.Text.Json.Serialization.JsonIgnore]
         public bool Checkboxchecked
         {
             get { return checkboxchecked; }
@@ -79,7 +90,9 @@ namespace PeopleWith
             }
         }
 
+   
         private bool labelvis;
+        [System.Text.Json.Serialization.JsonIgnore]
         public bool Labelvis
         {
             get { return labelvis; }
@@ -93,7 +106,10 @@ namespace PeopleWith
             }
         }
 
+     
         private bool entryvis;
+
+        [System.Text.Json.Serialization.JsonIgnore]
         public bool Entryvis
         {
             get { return entryvis; }
@@ -103,6 +119,104 @@ namespace PeopleWith
                 if (PropertyChanged != null)
                 {
                     PropertyChanged(this, new PropertyChangedEventArgs(nameof(Entryvis)));
+                }
+            }
+        }
+
+        private string name;
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string Name
+        {
+            get { return name; }
+            set
+            {
+                name = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(Name)));
+                }
+            }
+        }
+
+        private double buttonop;
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public double Buttonop
+        {
+            get { return buttonop; }
+            set
+            {
+                buttonop = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(Buttonop)));
+                }
+            }
+        }
+
+        private double buttonntop;
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public double Buttonntop
+        {
+            get { return buttonntop; }
+            set
+            {
+                buttonntop = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(Buttonntop)));
+                }
+            }
+        }
+
+        private bool buttonenabled;
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool Buttonenabled
+        {
+            get { return buttonenabled; }
+            set
+            {
+                buttonenabled = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(Buttonenabled)));
+                }
+            }
+        }
+
+
+        private string feedbackid;
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string Feedbackid
+        {
+            get { return feedbackid; }
+            set
+            {
+                feedbackid = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(Feedbackid)));
+                }
+            }
+        }
+
+
+        private string usermedid;
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string Usermedid
+        {
+            get { return usermedid; }
+            set
+            {
+                usermedid = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(Usermedid)));
                 }
             }
         }
