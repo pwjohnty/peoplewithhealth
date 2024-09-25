@@ -2,6 +2,7 @@
 using Mopups.Hosting;
 using Plugin.Maui.SegmentedControl;
 using Syncfusion.Maui.Core.Hosting;
+using Plugin.LocalNotification;
 
 namespace PeopleWith
 {
@@ -13,6 +14,7 @@ namespace PeopleWith
             builder
                 .ConfigureSyncfusionCore()
                 .UseMauiApp<App>()
+                .UseLocalNotification()
                 .UseSegmentedControl()
                 .ConfigureFonts(fonts =>
                 {

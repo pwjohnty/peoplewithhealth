@@ -27,12 +27,15 @@ namespace PeopleWith
         public string startdate { get; set; }
         public string enddate { get; set; }
         public string frequency { get; set; }
-        public string schedule { get; set; }
+
+        [JsonConverter(typeof(MedSuppTimesConverter))]
+        public ObservableCollection<MedtimesDosages> schedule { get; set; }
         public string diagnosis { get; set; }
         public string status { get; set; }
-        public string feedback { get; set; }
 
-
+        [JsonConverter(typeof(MedSuppFeedbackCoventer))]
+        public ObservableCollection<MedSuppFeedback> feedback { get; set; }
+        public string details { get; set; }
 
     }
 

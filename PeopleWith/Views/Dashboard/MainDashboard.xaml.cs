@@ -1,3 +1,5 @@
+using System;
+
 namespace PeopleWith;
 
 public partial class MainDashboard : ContentPage
@@ -47,7 +49,19 @@ public partial class MainDashboard : ContentPage
 		{
 			
 		}
+    }
 
+
+    private async void Button_Clicked_2Medications(object sender, EventArgs e)
+    {
+        try
+        {
+            await Navigation.PushAsync(new AllMedications(), false);
+        }
+        catch (Exception ex)
+        {
+
+        }
     }
 
     private async void Button_Clicked_3(object sender, EventArgs e)
@@ -73,4 +87,17 @@ public partial class MainDashboard : ContentPage
 
         }
     }
+
+    async private void Button_Clicked_4Schedule(object sender, EventArgs e)
+    {
+        try
+        {
+            await Navigation.PushAsync(new MainSchedule(), false);
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
 }

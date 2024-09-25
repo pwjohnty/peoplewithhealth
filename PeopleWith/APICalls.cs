@@ -34,6 +34,7 @@ namespace PeopleWith
         public const string usersymptoms = "https://pwdevapi.peoplewith.com/api/usersymptom";
         //CrashLog  
         public const string CrashLog = "https://pwdevapi.peoplewith.com/api/crashlog";
+        public const string usermedications = "https://pwdevapi.peoplewith.com/api/usermedication";
 
         //Allergies  
         public const string Allergies = "https://pwdevapi.peoplewith.com/api/allergy";
@@ -448,6 +449,191 @@ namespace PeopleWith
             catch (Exception ex)
             {
                 return new ObservableCollection<interventiontrigger>();
+            }
+        }
+
+        public async Task<ObservableCollection<preparation>> GetMedPreparation()
+        {
+            try
+            {
+                var url = "https://pwdevapi.peoplewith.com/api/preparation/";
+                HttpClient client = new HttpClient();
+                HttpResponseMessage responseconsent = await client.GetAsync(url);
+
+                if (responseconsent.IsSuccessStatusCode)
+                {
+                    string contentconsent = await responseconsent.Content.ReadAsStringAsync();
+                    var userResponseconsent = JsonConvert.DeserializeObject<ApiResponsePrepartion>(contentconsent);
+                    var consent = userResponseconsent.Value;
+
+                    return new ObservableCollection<preparation>(consent);
+
+                }
+                else
+                {
+                    var errorResponse = await responseconsent.Content.ReadAsStringAsync();
+                    return null;
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public async Task<usermedication> PostMedicationAsync(usermedication usermedpassed)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                var url = "https://pwdevapi.peoplewith.com/api/usermedication";
+                string jsonns = System.Text.Json.JsonSerializer.Serialize<usermedication>(usermedpassed);
+                StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync(url, contenttts);
+                var errorResponse = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    // Read the response content as a string
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    var jsonResponse = JObject.Parse(responseContent);
+
+                    var id = jsonResponse["value"]?[0]?["id"]?.ToString();
+
+                    usermedpassed.id = id;
+                    // Return the inserted item
+                    return usermedpassed;
+
+
+                }
+                else
+                {
+                    string errorcontent = await response.Content.ReadAsStringAsync();
+                    var s = errorcontent;
+                    return null;
+                }
+                // return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
+        public class SingleUserMedication
+        {
+            public ObservableCollection<rawusermedication> Value { get; set; }
+        }
+
+
+
+
+
+
+        public async Task<ObservableCollection<usermedication>> GetUserMedicationsAsync()
+        {
+            try
+            {
+
+
+                HttpClient client = new HttpClient();
+                string userid = Preferences.Default.Get("userid", "Unknown");
+                //var url = $"https://pwdevapi.peoplewith.com/api/usermedication/userid/{USERID}";
+                string urlWithQuery = $"{usermedications}?$filter=userid eq '{userid}'";
+                //string urlWithQuery = $"{usersymptoms}?$filter=userid eq '{USERID}'&$select=id,userid,symptomid,feedback,symptomtitle";
+                HttpResponseMessage response = await client.GetAsync(urlWithQuery);
+                string data = await response.Content.ReadAsStringAsync();
+                // Deserialize the response into a generic structure
+                var rawResponse = JsonConvert.DeserializeObject<SingleUserMedication>(data);
+                var userSymptomsList = new List<usermedication>();
+                if (rawResponse?.Value != null)
+                {
+                    foreach (var rawSymptom in rawResponse.Value)
+                    {
+                        var newUserSymptom = new usermedication
+                        {
+                            id = rawSymptom.id,
+                            userid = rawSymptom.userid,
+                            medicationid = rawSymptom.medicationid,
+                            medicationtitle = rawSymptom.medicationtitle,
+                            startdate = rawSymptom.startdate,
+                            enddate = rawSymptom.enddate,
+                            frequency = rawSymptom.frequency,
+                            schedule = new ObservableCollection<MedtimesDosages>(),
+                            feedback = new ObservableCollection<MedSuppFeedback>(),
+                            
+                        };
+                        // Deserialize the feedback string into the FeedbackList
+                        var feedbackSymptoms = JsonConvert.DeserializeObject<List<MedtimesDosages>>(rawSymptom.schedule);
+                        // Add only the relevant feedback to this usersymptom
+
+                        foreach (var feedback in feedbackSymptoms)
+                        {
+                            newUserSymptom.schedule.Add(feedback);
+                        }
+
+                        if (rawSymptom.feedback == null)
+                        {
+
+                        }
+                        else
+                        {
+                            var medfeedback = JsonConvert.DeserializeObject<List<MedSuppFeedback>>(rawSymptom.feedback);
+
+                            foreach (var feedback in medfeedback)
+                            {
+                                newUserSymptom.feedback.Add(feedback);
+                            }
+                        }
+
+                        userSymptomsList.Add(newUserSymptom);
+                    }
+                }
+                return new ObservableCollection<usermedication>(userSymptomsList);
+            }
+            catch (Exception ex)
+            {
+                return new ObservableCollection<usermedication>();
+            }
+        }
+
+
+        //Update medication feedback Data
+        public async Task UpdateMedicationFeedbackAsync(usermedication Updatefeedback)
+        {
+            try
+            {
+                var id = Updatefeedback.id;
+                var url = $"https://pwdevapi.peoplewith.com/api/usermedication/id/{id}";
+                var feedbacks = Updatefeedback.feedback;
+                string json = System.Text.Json.JsonSerializer.Serialize(new { feedback = feedbacks });
+                //string json = System.Text.Json.JsonSerializer.Serialize(new { feedback = feedbacks }, serializerOptions);
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                using (var client = new HttpClient())
+                {
+                    //works with patch
+                    //var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+                    var response = await client.SendAsync(request);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Successfully updated feedback");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
             }
         }
 

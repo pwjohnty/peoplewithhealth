@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
+             xmlns:data="clr-namespace:Syncfusion.Maui.DataSource;assembly=Syncfusion.Maui.DataSource"
+             xmlns:local="clr-namespace:PeopleWith"
+             x:Class="PeopleWith.MainSchedule" BackgroundColor="White"
+           >
+    <ScrollView VerticalScrollBarVisibility="Never">
+
+        <StackLayout VerticalOptions="FillAndExpand" BackgroundColor="Transparent">
+
+            <Label x:Name="datelbl" FontFamily="HankenGroteskBold" Margin="20,20,0,10" HorizontalOptions="Start"  VerticalOptions="Start" TextColor="#031926" FontSize="20" FontAttributes="None" />
+
+
+
+            <syncfusion:SfListView x:Name="scheduledatelist" Orientation="Horizontal" AutoFitMode="Height" HeightRequest="80" BackgroundColor="Transparent" ItemTapped="scheduledatelist_ItemTapped" Grid.Row="4" Grid.Column="0" Padding="5"  Margin="0,0,0,0" ScrollBarVisibility="Never">
+                <syncfusion:SfListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+
+                            <Grid VerticalOptions="Start" Margin="10,10,10,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Frame  HeightRequest="30" WidthRequest="30" CornerRadius="15" BorderColor="{Binding Bordercolour}" Opacity="{Binding Op}"  Grid.Row="0" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,5,0,0" Grid.Column="0" Padding="5"  BackgroundColor="{Binding Bgcolour}">
+                                    <Label Text="{Binding Day}" FontFamily="HankenGroteskBold" Margin="0,0,0,0" Grid.Row="2" Grid.Column="0" Padding="0" HorizontalOptions="Center"  VerticalOptions="Start" TextColor="#031926" FontSize="14" FontAttributes="None" />
+
+                                </Frame>
+
+
+                                <Label Text="{Binding Date}" FontFamily="HankenGroteskRegular" Margin="0,5,0,0" Grid.Row="1" Grid.Column="0" Padding="0" HorizontalOptions="Center"  VerticalOptions="Start" TextColor="Gray" FontSize="10" FontAttributes="None" />
+
+
+                   
+                           
+                            </Grid>
+
+
+                        </ViewCell>
+                    </DataTemplate>
+                </syncfusion:SfListView.ItemTemplate>
+                <syncfusion:SfListView.SelectedItemTemplate>
+                    <DataTemplate>
+
+
+                        <Grid VerticalOptions="Start" Margin="10,10,10,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+
+                            <Frame  HeightRequest="30" WidthRequest="30" CornerRadius="15" BorderColor="Transparent" Grid.Row="0" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,5,0,0" Grid.Column="0" Padding="5"  BackgroundColor="#031926">
+                                <Label Text="{Binding Day}" FontFamily="HankenGroteskBold" Margin="0,0,0,0" Grid.Row="2" Grid.Column="0" Padding="0" HorizontalOptions="Center"  VerticalOptions="Start" TextColor="White" FontSize="14" FontAttributes="None" />
+
+                            </Frame>
+
+
+                            <Label Text="{Binding Date}" FontFamily="HankenGroteskBold" Margin="0,5,0,0" Grid.Row="1" Grid.Column="0" Padding="0" HorizontalOptions="Center"  VerticalOptions="Start" TextColor="#031926" FontSize="10" FontAttributes="None" />
+
+
+                          
+                        </Grid>
+
+                    </DataTemplate>
+                </syncfusion:SfListView.SelectedItemTemplate>
+            </syncfusion:SfListView>
+
+
+
+
+            <Button
+BorderColor="Transparent" BorderWidth="1"
+HorizontalOptions="FillAndExpand"
+TextColor="#031926" BackgroundColor="#eff6fc"
+HeightRequest="30" VerticalOptions="Start"
+FontAttributes="None" x:Name="asrequiredbtn" 
+     Margin="20,10,20,10"
+FontFamily="HankenGroteskBold"
+Text="As Required Medications/Supplements" />
+
+
+            <syncfusion:SfListView x:Name="mainschedulelistview"
+                               AutoFitMode="Height"
+                                                 
+                          Margin="0,0,10,50"
+                                                GroupHeaderSize="20"          
+                                                BackgroundColor="Transparent"
+                                        SelectionMode="None"
+                                           VerticalOptions="StartAndExpand"
+                                 
+                               Orientation="Vertical"
+                               >
+                <syncfusion:SfListView.DataSource>
+                    <data:DataSource>
+                        <data:DataSource.GroupDescriptors>
+                            <data:GroupDescriptor PropertyName="time"/>
+                        </data:DataSource.GroupDescriptors>
+                    </data:DataSource>
+                </syncfusion:SfListView.DataSource>
+                <syncfusion:SfListView.GroupHeaderTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout BackgroundColor="Transparent" Padding="10">
+                                <Label Text="{Binding Key}" FontSize="26" Margin="10,0,0,0" FontFamily="HankenGroteskBold" TextColor="#031926" />
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </syncfusion:SfListView.GroupHeaderTemplate>
+                <syncfusion:SfListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout>
+                              
+                                <Frame CornerRadius="10"  Margin="10,0,10,5" Padding="5" HasShadow="False" BorderColor="Transparent" InputTransparent="True" BackgroundColor="#e5f9f4">
+                                    <Grid HorizontalOptions="FillAndExpand">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="70*"/>
+                                            <ColumnDefinition Width="15*"/>
+                                            <ColumnDefinition Width="15*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Text="{Binding Name}" FontSize="16" Grid.Row="0" Margin="20,0,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
+
+                                        <Label FontSize="14" Grid.Row="1" Margin="20,0,0,0" VerticalOptions="Start" TextColor="Teal" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="{Binding Dosage}" TextColor="Teal" FontFamily="HankenGroteskBold" />
+                                                    <Span Text=" " />
+                                                    <Span Text="{Binding dosageunit}" TextColor="Teal" FontFamily="HankenGroteskBold" />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+
+                             
+
+
+
+                                    </Grid>
+                                </Frame>
+
+                                <HorizontalStackLayout HorizontalOptions="Center">
+
+
+                                    <local:ExtendedImage Source="scheduletick.png" Opacity="{Binding Buttonop}" Margin="0,0,20,10" FeedbackID="{Binding Feedbackid}" UsermedID="{Binding Usermedid}"  HeightRequest="40" WidthRequest="40" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                                    <local:ExtendedImage.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                                    </local:ExtendedImage.GestureRecognizers>
+                                </local:ExtendedImage>
+
+                                    <local:ExtendedImage Source="schedulex.png" Opacity="{Binding Buttonntop}" Margin="0,0,0,10" FeedbackID="{Binding Feedbackid}" UsermedID="{Binding Usermedid}" HeightRequest="40" WidthRequest="40"  Grid.Row="0"  HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                                        <local:ExtendedImage.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1"/>
+                                    </local:ExtendedImage.GestureRecognizers>
+                                </local:ExtendedImage>
+                                </HorizontalStackLayout>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </syncfusion:SfListView.ItemTemplate>
+
+            </syncfusion:SfListView>
+
+
+            <StackLayout x:Name="nodatastack" IsVisible="False" Margin="0,50,0,0" VerticalOptions="StartAndExpand">
+                <Image Source="adddataicon.png" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="50" WidthRequest="50"/>
+                <Label Text="Nothing Due Today" FontSize="20" Margin="0,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Center" />
+            </StackLayout>
+
+
+
+
+
+
+
+        </StackLayout>
+
+
+
+
+
+        </ScrollView>
+
+</ContentPage>
