@@ -53,7 +53,7 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
-            await Navigation.PushAsync(new MainSchedule(), false);
+            //await Navigation.PushAsync(new MainSchedule(), false);
         }
         catch (Exception ex)
         {

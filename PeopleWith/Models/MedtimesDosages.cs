@@ -107,6 +107,9 @@ namespace PeopleWith
             }
         }
 
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string Times { get; set; }
+
 
         // event handler for updating the list views
         public event PropertyChangedEventHandler PropertyChanged;
