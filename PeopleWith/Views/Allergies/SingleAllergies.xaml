@@ -38,7 +38,8 @@
                 </Frame.GestureRecognizers>
             </Frame>
 
-            <Button x:Name="Deletebtn" Margin="20,10,20,0"  TextColor="#031926" BackgroundColor="#FFF5EE" FontFamily="HankenGroteskBold" CornerRadius="10" Text="Delete Allergy" Clicked="Deletebtn_Clicked" />
+            <Button x:Name="Deletebtn" Margin="20,50,20,0"  FontSize="Small" TextColor="Red" BackgroundColor="#FFF5EE" FontFamily="HankenGroteskBold" CornerRadius="10" Text="Delete Allergy" Clicked="Deletebtn_Clicked" />
+            <Label HorizontalTextAlignment="Start" Text="If this Allergy is deleted, you will lose all your Allergy Data." Margin="20,0,20,20" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="Red"  />
 
         </StackLayout>
     </VerticalStackLayout>

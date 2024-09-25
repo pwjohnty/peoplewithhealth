@@ -1,3 +1,4 @@
+using Mopups.Services;
 using System.Collections.ObjectModel;
 
 namespace PeopleWith;
@@ -44,7 +45,20 @@ public partial class AllMood : ContentPage
             {
                 var Userid = Helpers.Settings.UserKey;
                 APICalls database = new APICalls();
-                AllMoods = await database.GetUserMoodsAsync(Userid);
+
+                var getMoodsTask = database.GetUserMoodsAsync(Userid);
+
+                var delayTask = Task.Delay(1000);
+
+                if (await Task.WhenAny(getMoodsTask, delayTask) == delayTask)
+                {
+                    await MopupService.Instance.PushAsync(new GettingReady("Just Getting Mood Ready for you") { });
+                }
+
+                AllMoods = await getMoodsTask;
+
+                await MopupService.Instance.PopAllAsync(false);
+
             }
 
             foreach (var item in AllMoods)

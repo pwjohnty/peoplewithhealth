@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PeopleWith.ProfileEdit" HideSoftInputOnTapped="True"
+             xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
+             xmlns:pinview="clr-namespace:PINView.Maui;assembly=PINView.Maui"
+             NavigationPage.IconColor="#031926" NavigationPage.HasBackButton="True" 
+             xmlns:sync="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+             NavigationPage.HasNavigationBar="True" BackgroundColor="#ffffff">
+    <ScrollView>
+    <VerticalStackLayout>
+        
+      <!-- Health Details -->
+        <StackLayout x:Name="HealthDetailsStack" IsVisible="False">
+
+            <Label x:Name="HealthDetailslbl" HorizontalOptions="StartAndExpand" Margin="20,0,0,0" FontFamily="HankenGroteskBold" FontSize="25" TextColor="#031926"/>
+            
+            <!-- Name-->
+            <Grid x:Name="NameStack" Margin="10,0,10,0" ColumnSpacing="10" IsVisible="False">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                        
+                <inputLayout:SfTextInputLayout Grid.Row="0" Grid.Column="0" InputViewPadding="10" ShowHint="True" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,20,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
+                    <Entry FontSize="Small" Grid.Row="0" Grid.Column="0" PlaceholderColor="Gray" x:Name="FirstNameEntry" TextChanged="FirstNameENtry_TextChanged"  FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Firstname" TextColor="#031926"/>
+                </inputLayout:SfTextInputLayout>
+
+                <inputLayout:SfTextInputLayout Grid.Row="0"  Grid.Column="1" InputViewPadding="10" ShowHint="True" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,20,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
+                    <Entry FontSize="Small" Grid.Row="0"  Grid.Column="1" PlaceholderColor="Gray" x:Name="SurNameEntry" TextChanged="SurNameEntry_TextChanged"  FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Surname" TextColor="#031926"/>
+                </inputLayout:SfTextInputLayout>
+            </Grid>
+            
+            <!-- Email-->
+            <Grid x:Name="EmailStack" Margin="10,0,10,0" IsVisible="False">
+                <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <inputLayout:SfTextInputLayout x:Name="emailhelper" Grid.Row="0" Grid.Column="0" InputViewPadding="10" ShowHint="True" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,20,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
+                    <Entry FontSize="Small" PlaceholderColor="Gray" x:Name="EmailEntry" TextChanged="EmailEntry_TextChanged"  FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Email Address" TextColor="#031926"/>
+                    <inputLayout:SfTextInputLayout.ErrorLabelStyle>
+                        <inputLayout:LabelStyle TextColor="Red"   FontFamily="HankenGroteskBold" />
+                    </inputLayout:SfTextInputLayout.ErrorLabelStyle>
+                </inputLayout:SfTextInputLayout>
+
+
+                </Grid>
+
+            <!-- Date of Birth-->
+            <Grid x:Name="DateofBirthStack" Margin="10,0,10,0" IsVisible="False">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                    <inputLayout:SfTextInputLayout Grid.Row="0" Grid.Column="0" InputViewPadding="10" IsHintAlwaysFloated="True" BackgroundColor="Transparent" ShowHint="False" Margin="5,10,5,0" UnfocusedStrokeThickness="1" Stroke="LightGray" ContainerBackground="Transparent" ContainerType="Outlined" OutlineCornerRadius="5">
+                        <Entry FontSize="Small" PlaceholderColor="Gray" Keyboard="Numeric" FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" x:Name="DateofBirthEntry" TextChanged="DateofBirthEntry_TextChanged" Placeholder="DD/MM/YYYY" TextColor="#031926"/>
+                    </inputLayout:SfTextInputLayout>
+                </Grid>
+
+            <!-- Gender-->
+
+            <Grid x:Name="GenderStack" Margin="10,0,10,0" IsVisible="False">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <syncfusion:SfListView x:Name="genderlist" AutoFitMode="Height"
+                                       Margin="0,10,0,0" BackgroundColor="Transparent"
+                                       Grid.Column="0" Grid.Row="0" Orientation="Vertical"  
+                                       SelectionMode="Single" ItemTapped="genderlist_ItemTapped"
+                                       ScrollBarVisibility="Never" SelectionBackground="Transparent">
+                    <syncfusion:SfListView.HeightRequest>
+                        <OnPlatform x:TypeArguments="x:Double">
+                            <On Platform="Android" Value="220" />
+                            <On Platform="iOS" Value="200" />
+                        </OnPlatform>
+                    </syncfusion:SfListView.HeightRequest>
+
+                    <syncfusion:SfListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Frame CornerRadius="10" InputTransparent="True"   Margin="5,5,5,5"  HasShadow="False" Opacity="1" BackgroundColor="Transparent" BorderColor="LightGray">
+                                    <Grid HorizontalOptions="FillAndExpand" Margin="0" Padding="0"  >
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="100*"/>
+
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label Text="{Binding .}" FontFamily="HankenGroteskRegular" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="Small" />
+
+                                    </Grid>
+                                </Frame>
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.ItemTemplate>
+                    <syncfusion:SfListView.SelectedItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Frame CornerRadius="10" Margin="5,5,5,5" InputTransparent="True" BackgroundColor="#BFDBF7"  HasShadow="False" BorderColor="Transparent">
+                                    <Grid HorizontalOptions="FillAndExpand">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="100*"/>
+
+                                        </Grid.ColumnDefinitions>
+                                        <Label Text="{Binding .}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" FontAttributes="Bold"  TextColor="#031926" FontSize="Small" />
+
+                                    </Grid>
+                                </Frame>
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.SelectedItemTemplate>
+                </syncfusion:SfListView>
+            </Grid>
+
+            <!-- Ethnicity-->
+            <Grid x:Name="EthnicityStack" Margin="10,0,10,0" IsVisible="False">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <syncfusion:SfListView x:Name="ethlist" AutoFitMode="Height"
+                                       Margin="0,10,0,0" BackgroundColor="Transparent"
+                                       Grid.Column="0" Grid.Row="0" SelectionMode="Single"
+                                       ItemTapped="ethlist_ItemTapped" ScrollBarVisibility="Never"
+                                       SelectionBackground="Transparent" Orientation="Vertical">
+                    <syncfusion:SfListView.HeightRequest>
+                        <OnPlatform x:TypeArguments="x:Double">
+                            <On Platform="Android" Value="550" />
+                            <On Platform="iOS" Value="550" />
+                        </OnPlatform>
+                    </syncfusion:SfListView.HeightRequest>
+
+                    <syncfusion:SfListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Frame CornerRadius="10"  Margin="5,5,5,5" InputTransparent="True" HasShadow="False" Opacity="1" BackgroundColor="Transparent" BorderColor="LightGray">
+                                    <Grid HorizontalOptions="FillAndExpand" Margin="0" Padding="0"  >
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="90*"/>
+                                            <ColumnDefinition Width="10*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label Text="{Binding .}" FontFamily="HankenGroteskRegular" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="Small" />
+
+                                    </Grid>
+                                </Frame>
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.ItemTemplate>
+                    <syncfusion:SfListView.SelectedItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Frame CornerRadius="10"  Margin="5,5,5,5" InputTransparent="True" BackgroundColor="#BFDBF7"  HasShadow="False" BorderColor="Transparent">
+                                    <Grid HorizontalOptions="FillAndExpand">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="90*"/>
+                                            <ColumnDefinition Width="10*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Text="{Binding .}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" FontAttributes="Bold"  TextColor="#031926" FontSize="Small" />
+
+                                    </Grid>
+                                </Frame>
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.SelectedItemTemplate>
+                </syncfusion:SfListView>
+            </Grid>
+
+            <Button x:Name="HealthDetailsUpdate" Clicked="HealthDetailsUpdate_Clicked" Margin="20,10,20,0" Padding="0" BackgroundColor="#E5F0FB" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#031926" />
+        </StackLayout>
+
+        <!-- Settings -->
+  
+            <StackLayout x:Name="SettingsStack" IsVisible="False">
+
+                <Label x:Name="SettingsStacklbl" HorizontalOptions="StartAndExpand" Margin="20,0,0,0" FontFamily="HankenGroteskBold" FontSize="25" TextColor="#031926"/>
+
+                <!-- Reset Password-->
+                <Grid x:Name="EmailConfirmStack" Margin="10,0,10,0" IsVisible="False">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <inputLayout:SfTextInputLayout Grid.Row="0" InputViewPadding="10" ShowHint="True" IsHintAlwaysFloated="True" x:Name="InitalPassword" BackgroundColor="Transparent" Margin="0,0,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5"
+                         EnablePasswordVisibilityToggle="True" >
+                        <Entry FontSize="Small" PlaceholderColor="Gray" x:Name="InitialPasswordEntry"  FontFamily="HankenGroteskRegular"  VerticalOptions="CenterAndExpand" Placeholder="Enter Current Password" TextColor="#031926"/>
+                        <inputLayout:SfTextInputLayout.ErrorLabelStyle>
+                        <inputLayout:LabelStyle TextColor="Red"   FontFamily="HankenGroteskBold" />
+                    </inputLayout:SfTextInputLayout.ErrorLabelStyle>
+                    </inputLayout:SfTextInputLayout>
+
+
+
+
+                    <!--<pinview:PINView Grid.Row="0" BoxBackgroundColor="Transparent" Focused="emailconfigpin_Focused" Margin="0,80,0,0" x:Name="emailconfigpin" BoxShape="RoundCorner" AutoDismissKeyboard="False" PropertyChanged="emailconfigpin_PropertyChanged"
+                    PINLength="5" HorizontalOptions="Center" PINEntryCompleted="emailconfigpin_PINEntryCompleted" BoxBorderColor="LightGray" Color="#031926" />-->
+
+                    <Label Grid.Row="1" Text="Invalid Code" TextColor="Red" FontFamily="HankenGroteskRegular" FontAttributes="None" Margin="0,20,0,0" x:Name="incorrectcodelbl" FontSize="15" IsVisible="False" HorizontalOptions="Center" />
+                </Grid>
+                <Grid x:Name="PasswordStack" Margin="10,0,10,0" IsVisible="False">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <inputLayout:SfTextInputLayout Grid.Row="0" InputViewPadding="10" ShowHint="True" IsHintAlwaysFloated="True" x:Name="passhelper" BackgroundColor="Transparent" Margin="0,0,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5"
+  EnablePasswordVisibilityToggle="True" >
+                        <Entry FontSize="Small" PlaceholderColor="Gray" x:Name="firstpasswordentry" TextChanged="firstpasswordentry_TextChanged" FontFamily="HankenGroteskRegular"  VerticalOptions="CenterAndExpand" Placeholder="New Password" TextColor="#031926"/>
+                    </inputLayout:SfTextInputLayout>
+
+                    <Label  Grid.Row="1" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="Bold" FontSize="12" Text="Password must contain:" Margin="0,0,0,10" VerticalOptions="Center" HorizontalOptions="Start" />
+
+                    <Grid Grid.Row="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="40*"/>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="40*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Image Source="regtick.png" Grid.Column="0" Grid.Row="0" VerticalOptions="Center" HorizontalOptions="Center" Opacity="0.2" x:Name="chartick" HeightRequest="20" />
+                        <Label  TextColor="#031926" FontFamily="HankenGroteskRegular" FontSize="12" Text="Min 8 Characters" Opacity="0.2" x:Name="charlbl"  Grid.Column="1" Grid.Row="0" VerticalOptions="Center" HorizontalOptions="Start" />
+
+                        <Image Source="regtick.png" Grid.Column="2" Grid.Row="0" VerticalOptions="Center" HorizontalOptions="Center" Opacity="0.2" x:Name="specialtick" HeightRequest="20" />
+                        <Label  TextColor="#031926" FontFamily="HankenGroteskRegular" FontSize="12" Text="Special Character" Opacity="0.2" x:Name="speciallbl"  Grid.Column="3" Grid.Row="0" VerticalOptions="Center" HorizontalOptions="Start" />
+
+
+                        <Image Source="regtick.png" Grid.Column="0" Grid.Row="1" VerticalOptions="Center" HorizontalOptions="Center" Opacity="0.2" x:Name="capitaltick" HeightRequest="20" />
+                        <Label  TextColor="#031926" FontFamily="HankenGroteskRegular" FontSize="12" Text="Capital letter" Opacity="0.2" x:Name="capitallbl"  Grid.Column="1" Grid.Row="1" VerticalOptions="Center" HorizontalOptions="Start" />
+
+                        <Image Source="regtick.png" Grid.Column="2" Grid.Row="1" VerticalOptions="Center" HorizontalOptions="Center" Opacity="0.2" x:Name="numtick" HeightRequest="20" />
+                        <Label  TextColor="#031926" FontFamily="HankenGroteskRegular" FontSize="12" Text="Number" Opacity="0.2" x:Name="numlbl"  Grid.Column="3" Grid.Row="1" VerticalOptions="Center" HorizontalOptions="Start" />
+
+                    </Grid>
+
+
+
+
+                    <inputLayout:SfTextInputLayout Grid.Row="3" InputViewPadding="10" x:Name="confirmpasshelper" ShowHint="True" IsHintAlwaysFloated="True"  BackgroundColor="Transparent" Margin="0,0,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5"
+   EnablePasswordVisibilityToggle="True">
+                        <Entry FontSize="Small" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" x:Name="confirmpassentry" TextChanged="confirmpassentry_TextChanged"  VerticalOptions="CenterAndExpand" Placeholder="Confirm New Password" TextColor="#031926"/>
+                        <inputLayout:SfTextInputLayout.ErrorLabelStyle>
+                            <inputLayout:LabelStyle TextColor="Red"   FontFamily="HankenGroteskBold" />
+                        </inputLayout:SfTextInputLayout.ErrorLabelStyle>
+                    </inputLayout:SfTextInputLayout>
+
+                </Grid>
+                
+                <!--Notifications [Needs Added] -->
+                <Grid x:Name="NotificationsStack" Margin="10,0,10,0" IsVisible="False">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                </Grid>
+
+                           
+                <!-- Sign-up Code-->                                          
+                <Grid x:Name="SignupcodeStack" Margin="10,0,10,0" IsVisible="False">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <inputLayout:SfTextInputLayout InputViewPadding="10" x:Name="signupfloat" ShowHint="True" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,20,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5"
+>
+                        <Entry FontSize="Small" PlaceholderColor="Gray" IsTextPredictionEnabled="False" TextChanged="signupcodetext_TextChanged" x:Name="signupcodetext"  FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Sign-Up Code" TextColor="#031926">
+                            <Entry.Keyboard>
+                                <Keyboard x:FactoryMethod="Create">
+                                    <x:Arguments>
+                                        <KeyboardFlags>Suggestions,CapitalizeCharacter</KeyboardFlags>
+                                    </x:Arguments>
+                                </Keyboard>
+                            </Entry.Keyboard>
+                        </Entry>
+                        <inputLayout:SfTextInputLayout.ErrorLabelStyle>
+                            <inputLayout:LabelStyle TextColor="Red"   FontFamily="HankenGroteskBold" />
+                        </inputLayout:SfTextInputLayout.ErrorLabelStyle>
+                    </inputLayout:SfTextInputLayout>
+
+
+                </Grid>
+
+                <Button x:Name="SettingsUpdate" Clicked="SettingsUpdate_Clicked" Margin="20,10,20,0" Padding="0" BackgroundColor="#E5F0FB" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#031926" />
+
+            </StackLayout>
+        
+               
+            <!-- Privacy -->
+            <StackLayout x:Name="PrivacyStack" IsVisible="False">
+            <Label x:Name="PrivacyStacklbl" HorizontalOptions="StartAndExpand" Margin="20,0,0,0" FontFamily="HankenGroteskBold" FontSize="25" TextColor="#031926"/>
+                
+            <!-- Pin code-->
+                <Grid x:Name="CurrentPinCodeStack" Margin="10,0,10,0" IsVisible="False">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Image Grid.Row="0" Source="pinicon.png" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,50,0,0" HeightRequest="80" WidthRequest="80"/>
+
+                    <pinview:PINView Grid.Row="1" BoxBackgroundColor="Transparent" Margin="0,20,0,0" x:Name="CurrentPin" BoxShape="RoundCorner" AutoDismissKeyboard="True" PINEntryCompleted="CurrentPin_PINEntryCompleted"
+                    PINLength="4" HorizontalOptions="Center" IsPassword="True" PropertyChanged="CurrentPin_PropertyChanged" BoxBorderColor="LightGray" Color="#031926" />
+
+                    <Label Grid.Row="2" Text="Invalid Code" TextColor="Red" FontFamily="HankenGroteskRegular" FontAttributes="None" Margin="0,10,0,0" x:Name="CurrentPinErrorlbl" FontSize="15" IsVisible="False"
+                     HorizontalOptions="Center" />
+
+                </Grid>
+                
+                <Grid x:Name="PinCodeStack" Margin="10,0,10,0" IsVisible="False">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Image Grid.Row="0" Source="pinicon.png" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,50,0,0" HeightRequest="80" WidthRequest="80"/>
+
+                    <Label Grid.Row="1" Text="Setting up a PIN is an important step in securing your device and keeping your personal information safe." TextColor="#031926"
+                    FontFamily="HankenGroteskRegular" FontAttributes="None" Margin="0,30,0,0" FontSize="15" HorizontalTextAlignment="Center" HorizontalOptions="Center" />
+
+                    <pinview:PINView Grid.Row="2" BoxBackgroundColor="Transparent" Margin="0,20,0,0" x:Name="codepin" BoxShape="RoundCorner" AutoDismissKeyboard="True" PINEntryCompleted="codepin_PINEntryCompleted"
+                     PINLength="4" HorizontalOptions="Center" IsPassword="True" PropertyChanged="codepin_PropertyChanged" BoxBorderColor="LightGray" Color="#031926" />
+
+                    <Label Grid.Row="3" Text="Confirm PIN" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" Margin="0,20,0,0" FontSize="15" HorizontalOptions="Center" />
+
+                    <pinview:PINView Grid.Row="4" BoxBackgroundColor="Transparent" Margin="0,10,0,0" x:Name="confirmcodepin" BoxShape="RoundCorner" AutoDismissKeyboard="True"  PINEntryCompleted="confirmcodepin_PINEntryCompleted"
+                     PINLength="4" HorizontalOptions="Center" IsPassword="True" PropertyChanged="confirmcodepin_PropertyChanged" BoxBorderColor="LightGray" Color="#031926" />
+
+                    <Label Grid.Row="5" Text="Invalid Code" TextColor="Red" FontFamily="HankenGroteskRegular" FontAttributes="None" Margin="0,10,0,0" x:Name="Pinincorrectlbl" FontSize="15" IsVisible="False"
+                     HorizontalOptions="Center" />
+
+                </Grid>
+
+                <!-- Permissions-->
+                <Grid x:Name="PermissionsStack" Margin="15,10,15,0" Padding="-2" IsVisible="False">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Frame HasShadow="false" Margin="0,5,0,0"  BorderColor="#E8E8E8"  BackgroundColor="Transparent" >
+                        <Grid Grid.Row="0" RowSpacing="5" Grid.Column="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="4*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Image Source="pincode.png" Grid.Row="0" Grid.Column="0" HeightRequest="40" WidthRequest="40" HorizontalOptions="Start" VerticalOptions="Center" />
+                            <Label TextColor="#031926" Grid.Row="0" Grid.Column="1" FontFamily="HankenGroteskRegular" FontSize="16" Text="Use Pin Code to Unlock"  VerticalOptions="Center" HorizontalOptions="Start" />
+                            <Switch x:Name="PinSwitch" Toggled="PinSwitch_Toggled"  Grid.Row="0" Grid.Column="2"  OnColor="Green"  ThumbColor="#E5E5E5" HeightRequest="40" WidthRequest="40"  />
+                            <BoxView HeightRequest="1" Color="#E8E8E8" Margin="0,5,0,5" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"  HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+                            <Image Source="finger.png" Grid.Row="2" Grid.Column="0" HeightRequest="40" WidthRequest="40" HorizontalOptions="Start" VerticalOptions="Center"/>
+                            <Label  TextColor="#031926" Grid.Row="2" Grid.Column="1" FontFamily="HankenGroteskRegular" FontSize="16" Text="Use Fingerprint to Unlock" VerticalOptions="Center" HorizontalOptions="Start" />
+                            <Switch x:Name="FingerSwitch" Toggled="FingerSwitch_Toggled" Grid.Row="2" Grid.Column="2"  OnColor="Green" ThumbColor="#E5E5E5" HeightRequest="40" WidthRequest="40" />
+
+                        </Grid>
+                </Frame>
+                    
+                </Grid>
+
+                <Button x:Name="PrivacyUpdate" Clicked="PrivacyUpdate_Clicked" Margin="20,10,20,0" Padding="0" BackgroundColor="#E5F0FB" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#031926" />
+
+            </StackLayout>
+        
+    </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

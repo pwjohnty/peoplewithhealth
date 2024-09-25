@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  Shell.NavBarIsVisible="False"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  Shell.NavBarIsVisible="False" NavigationPage.HasNavigationBar="False"
              x:Class="PeopleWith.MainPage">
 
     <AbsoluteLayout IgnoreSafeArea="True">
@@ -63,6 +63,7 @@
             BackgroundColor="White"
             HorizontalOptions="FillAndExpand"
             TextColor="#031926"
+                Clicked="Button_Clicked_1"
             Margin="20,0,20,0"
             FontAttributes="None"   
             FontFamily="HankenGroteskRegular"

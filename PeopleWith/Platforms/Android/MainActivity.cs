@@ -5,6 +5,7 @@ using Android.OS;
 using AndroidX.AppCompat.App;
 using Firebase.Messaging;
 using Microsoft.Azure.NotificationHubs;
+using Plugin.Fingerprint;
 using static Android.Provider.Settings;
 using static Android.Provider.SyncStateContract;
 
@@ -19,8 +20,11 @@ namespace PeopleWith
         protected override async void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-           // Window.SetStatusBarColor(Android.Graphics.Color.Transparent);
-           // Window.SetNavigationBarColor(Android.Graphics.Color.Transparent);
+            // Window.SetStatusBarColor(Android.Graphics.Color.Transparent);
+            // Window.SetNavigationBarColor(Android.Graphics.Color.Transparent);
+
+            //Initalize Fingerprint 
+            //CrossFingerprint.SetCurrentActivityResolver(() => this);
 
             // Set the screen orientation to portrait
             RequestedOrientation = ScreenOrientation.Portrait;

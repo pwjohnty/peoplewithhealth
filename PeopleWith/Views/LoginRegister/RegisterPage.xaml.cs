@@ -178,9 +178,7 @@ public partial class RegisterPage : ContentPage
     async void Handleemailframe()
     {
         try
-        {
-   
-       
+        {      
             //check email validation
             if(string.IsNullOrEmpty(emailentry.Text) )
             {
@@ -295,6 +293,7 @@ public partial class RegisterPage : ContentPage
 
             //add the user into the db with onboarding as the status
             newuser.email = emailentry.Text;
+            //Spelling Mistake (Change)
             newuser.registrationstatus = "Onbaording";
 
             //generate validation code

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+             x:Class="PeopleWith.LoginPage" NavigationPage.IconColor="#031926" NavigationPage.HasBackButton="True"        
+             NavigationPage.HasNavigationBar="True" BackgroundColor="#ffffff">
+    <VerticalStackLayout>
+
+        <Label Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="Bold" FontSize="25" Text="Login Page" VerticalOptions="Center" HorizontalOptions="Start" />
+
+        <Grid Margin="20,0,20,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <inputLayout:SfTextInputLayout Grid.Row="0" InputViewPadding="10" ShowHint="True" x:Name="emailhelper" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,20,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
+                <Entry FontSize="Small" PlaceholderColor="Gray" x:Name="emailentry" TextChanged="emailentry_TextChanged"  FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Email Address" TextColor="#031926"/>
+
+                <inputLayout:SfTextInputLayout.ErrorLabelStyle>
+                    <inputLayout:LabelStyle TextColor="Red"   FontFamily="HankenGroteskBold" />
+                </inputLayout:SfTextInputLayout.ErrorLabelStyle>
+            </inputLayout:SfTextInputLayout>
+
+            <inputLayout:SfTextInputLayout Grid.Row="1" InputViewPadding="10" ShowHint="True" IsHintAlwaysFloated="True" x:Name="passhelper" BackgroundColor="Transparent" Margin="0,0,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5"
+                     EnablePasswordVisibilityToggle="True" >
+                <Entry FontSize="Small" PlaceholderColor="Gray" x:Name="firstpasswordentry" TextChanged="firstpasswordentry_TextChanged" FontFamily="HankenGroteskRegular"  VerticalOptions="CenterAndExpand" Placeholder="Password" TextColor="#031926"/>
+                
+                <inputLayout:SfTextInputLayout.ErrorLabelStyle>
+                    <inputLayout:LabelStyle TextColor="Red"   FontFamily="HankenGroteskBold" />
+                </inputLayout:SfTextInputLayout.ErrorLabelStyle>
+
+            </inputLayout:SfTextInputLayout>
+
+            <Label Grid.Row="2" TextColor="#BFDBF7" FontFamily="HankenGroteskRegular" FontAttributes="Bold" FontSize="12" Text="Forgotten Password?" Margin="0,0,0,10" VerticalOptions="Center" HorizontalOptions="End" >
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
+                </Label.GestureRecognizers>
+            </Label>
+
+            <Label Grid.Row="3" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="Bold" FontSize="12" Text="Password must contain:" Margin="0,0,0,10" VerticalOptions="Center" HorizontalOptions="Start" />
+
+            <Grid Grid.Row="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="40*"/>
+                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="40*"/>
+                </Grid.ColumnDefinitions>
+
+                <Image Source="regtick.png" Grid.Column="0" Grid.Row="0" VerticalOptions="Center" HorizontalOptions="Center" Opacity="0.2" x:Name="chartick" HeightRequest="20" />
+                <Label  TextColor="#031926" FontFamily="HankenGroteskRegular" FontSize="12" Text="Min 8 Characters" Opacity="0.2" x:Name="charlbl"  Grid.Column="1" Grid.Row="0" VerticalOptions="Center" HorizontalOptions="Start" />
+
+                <Image Source="regtick.png" Grid.Column="2" Grid.Row="0" VerticalOptions="Center" HorizontalOptions="Center" Opacity="0.2" x:Name="specialtick" HeightRequest="20" />
+                <Label  TextColor="#031926" FontFamily="HankenGroteskRegular" FontSize="12" Text="Special Character" Opacity="0.2" x:Name="speciallbl"  Grid.Column="3" Grid.Row="0" VerticalOptions="Center" HorizontalOptions="Start" />
+
+
+                <Image Source="regtick.png" Grid.Column="0" Grid.Row="1" VerticalOptions="Center" HorizontalOptions="Center" Opacity="0.2" x:Name="capitaltick" HeightRequest="20" />
+                <Label  TextColor="#031926" FontFamily="HankenGroteskRegular" FontSize="12" Text="Capital letter" Opacity="0.2" x:Name="capitallbl"  Grid.Column="1" Grid.Row="1" VerticalOptions="Center" HorizontalOptions="Start" />
+
+                <Image Source="regtick.png" Grid.Column="2" Grid.Row="1" VerticalOptions="Center" HorizontalOptions="Center" Opacity="0.2" x:Name="numtick" HeightRequest="20" />
+                <Label  TextColor="#031926" FontFamily="HankenGroteskRegular" FontSize="12" Text="Number" Opacity="0.2" x:Name="numlbl"  Grid.Column="3" Grid.Row="1" VerticalOptions="Center" HorizontalOptions="Start" />
+
+            </Grid>
+
+            <Button Grid.Row="5" x:Name="Signin" Text="Sign in" Clicked="Signin_Clicked" Margin="0,20,0,0" Padding="0" BackgroundColor="#E5F0FB" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#031926" />
+
+        </Grid>
+        
+        
+    </VerticalStackLayout>
+</ContentPage>

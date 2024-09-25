@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using Syncfusion.Maui.ListView;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
+using Mopups.Services;
 namespace PeopleWith;
 public partial class AllSymptoms : ContentPage
 {
@@ -80,7 +81,20 @@ public partial class AllSymptoms : ContentPage
         {
             if (!addsymptom)
             {
-                AllUserSymptoms = await aPICalls.GetUserSymptomAsync();
+                APICalls aPICalls = new APICalls();
+
+                var getSymptomsTask = aPICalls.GetUserSymptomAsync();
+
+                var delayTask = Task.Delay(1000);
+
+                if (await Task.WhenAny(getSymptomsTask, delayTask) == delayTask)
+                {
+                    await MopupService.Instance.PushAsync(new GettingReady("Loading Symptoms") { });
+                }
+
+                AllUserSymptoms = await getSymptomsTask;
+
+                await MopupService.Instance.PopAllAsync(false);
             }
 
 
