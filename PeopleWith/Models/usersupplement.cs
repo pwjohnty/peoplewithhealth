@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace PeopleWith
 {
-    public class usermedication
+    public class usersupplement
     {
-
         //[JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         public string id { get; set; }
@@ -19,8 +18,8 @@ namespace PeopleWith
         //public string version { get; set; }
         //public bool deleted { get; set; }
         public string userid { get; set; }
-        public string medicationid { get; set; }
-        public string medicationtitle { get; set; }
+        public string supplementid { get; set; }
+        public string supplementtitle { get; set; }
         public string preparation { get; set; }
         public string formulation { get; set; }
         public string unit { get; set; }
@@ -32,24 +31,13 @@ namespace PeopleWith
         public ObservableCollection<MedtimesDosages> schedule { get; set; }
         public string diagnosis { get; set; }
         public string status { get; set; }
-
-        [JsonConverter(typeof(MedSuppFeedbackCoventer))]
-        public ObservableCollection<MedSuppFeedback> feedback { get; set; }
-        public string details { get; set; }
-
-        [System.Text.Json.Serialization.JsonIgnore]
-        public List<string> TimeDosage { get; set; } = new List<string>();
-
-        [System.Text.Json.Serialization.JsonIgnore]
-        public string NextTime { get; set; }
-
-        [System.Text.Json.Serialization.JsonIgnore]
-        public string NextDosage { get; set; }
+        public string feedback { get; set; }
+        //public string details { get; set; }
 
     }
 
-    public class ApiResponseUserMedication
+    public class ApiResponseUserSupplement
     {
-        public ObservableCollection<usermedication> Value { get; set; }
+        public ObservableCollection<usersupplement> Value { get; set; }
     }
 }

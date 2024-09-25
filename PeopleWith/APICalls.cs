@@ -1,6 +1,8 @@
 ﻿//using Android.Net.Wifi.Aware;
+using Internal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Syncfusion.Maui.Calendar;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,19 +15,22 @@ using System.Threading.Tasks;
 
 namespace PeopleWith
 {
-    
     public class APICalls
     {
         //add the names of the api followed with the url connection
         public const string Checkuseremail = "https://pwdevapi.peoplewith.com/api/user?$filter=email%20eq%20";
         public const string CheckuserPassword = "https://pwdevapi.peoplewith.com/api/user?$filter=password%20eq%20";
+       
+        //Crash
         public const string AddCrash = "https://pwdevapi.peoplewith.com/api/crashlog";
+
+        //Sign-Up Code
         public const string CheckSignUpCode = "https://pwdevapi.peoplewith.com/api/signupcode?$filter=signupcodeid%20eq%20";
         public const string Checksignupregquestions = "https://pwdevapi.peoplewith.com/api/question?$filter=signupcodereferral%20eq%20";
         public const string Checksignupreganswers = "https://pwdevapi.peoplewith.com/api/answer?$filter=signupcodereferral%20eq%20";
         public const string CheckConsentforsignupcode = "https://pwdevapi.peoplewith.com/api/consent?$filter=signupcodeid%20eq%20";
-        public const string GetSymptoms = "https://pwdevapi.peoplewith.com/api/symptom?$select=symptomid,title";
-        public const string GetMedications = "https://pwdevapi.peoplewith.com/api/medication?$select=medicationid,title";
+      
+        //User
         public const string InsertUser = "https://pwdevapi.peoplewith.com/api/user/";
         public const string InsertUserResponse = "https://pwdevapi.peoplewith.com/api/userresponse/";
         public const string InsertUserSymptoms = "https://pwdevapi.peoplewith.com/api/usersymptom/";
@@ -35,10 +40,22 @@ namespace PeopleWith
         public const string usersymptoms = "https://pwdevapi.peoplewith.com/api/usersymptom";
         //CrashLog  
         public const string CrashLog = "https://pwdevapi.peoplewith.com/api/crashlog";
-        public const string usermedications = "https://pwdevapi.peoplewith.com/api/usermedication";
 
         //Allergies  
         public const string Allergies = "https://pwdevapi.peoplewith.com/api/allergy";
+
+        
+        //Symptoms
+        public const string GetSymptoms = "https://pwdevapi.peoplewith.com/api/symptom?$select=symptomid,title";
+
+        //Medications 
+        public const string usermedications = "https://pwdevapi.peoplewith.com/api/usermedication";
+        public const string GetMedications = "https://pwdevapi.peoplewith.com/api/medication?$select=medicationid,title";
+
+        //Supplements
+        public const string usersupplements = "https://pwdevapi.peoplewith.com/api/usersupplement";
+        public const string InsertUserSupplements = "https://pwdevapi.peoplewith.com/api/usersupplement";
+        public const string GetSupplements = "https://pwdevapi.peoplewith.com/api/supplement?$select=supplementid,title";
 
         //User Allergies  
         public const string UserAllergies = "https://pwdevapi.peoplewith.com/api/userallergy";
@@ -114,7 +131,7 @@ namespace PeopleWith
 
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return null;
             }
@@ -127,7 +144,7 @@ namespace PeopleWith
             {
                 string userid = Preferences.Default.Get("userid", "Unknown");
 
-                var url = "https://pwdevapi.peoplewith.com/api/usermeasurement?$filter=userid%20eq%20" +"%27" + userid + "%27";
+                var url = "https://pwdevapi.peoplewith.com/api/usermeasurement?$filter=userid%20eq%20" + "%27" + userid + "%27";
                 HttpClient client = new HttpClient();
                 HttpResponseMessage responseconsent = await client.GetAsync(url);
 
@@ -185,7 +202,7 @@ namespace PeopleWith
                     //throw new Exception("Failed to insert user measurement: " + response.ReasonPhrase);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return null;
                 // Handle exceptions
@@ -212,11 +229,11 @@ namespace PeopleWith
                 }
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
-          
+
         }
 
         //Delete User Symptom 
@@ -286,7 +303,7 @@ namespace PeopleWith
                             userid = rawSymptom.userid,
                             symptomid = rawSymptom.symptomid,
                             symptomtitle = rawSymptom.symptomtitle,
-                            deleted = rawSymptom.deleted, 
+                            deleted = rawSymptom.deleted,
                             feedback = new ObservableCollection<symptomfeedback>()
                         };
                         // Deserialize the feedback string into the FeedbackList
@@ -388,13 +405,13 @@ namespace PeopleWith
                 {
                     string errorcontent = await response.Content.ReadAsStringAsync();
                     var s = errorcontent;
-                     return null;
+                    return null;
                 }
                 // return null;
             }
             catch (Exception ex)
             {
-                return null ;
+                return null;
             }
         }
 
@@ -491,6 +508,7 @@ namespace PeopleWith
             }
         }
 
+        //Get All Medication Preperation
         public async Task<ObservableCollection<preparation>> GetMedPreparation()
         {
             try
@@ -523,6 +541,7 @@ namespace PeopleWith
             }
         }
 
+        //Update UserMedication in DB 
         public async Task<usermedication> PostMedicationAsync(usermedication usermedpassed)
         {
             try
@@ -571,14 +590,11 @@ namespace PeopleWith
 
 
 
-
-
+        //Get All User Medications 
         public async Task<ObservableCollection<usermedication>> GetUserMedicationsAsync()
         {
             try
             {
-
-
                 HttpClient client = new HttpClient();
                 string userid = Preferences.Default.Get("userid", "Unknown");
                 //var url = $"https://pwdevapi.peoplewith.com/api/usermedication/userid/{USERID}";
@@ -602,9 +618,14 @@ namespace PeopleWith
                             startdate = rawSymptom.startdate,
                             enddate = rawSymptom.enddate,
                             frequency = rawSymptom.frequency,
-                            schedule = new ObservableCollection<MedtimesDosages>(),
-                            feedback = new ObservableCollection<MedSuppFeedback>(),
-                            
+                            diagnosis = rawSymptom.diagnosis,
+                            status = rawSymptom.status,
+                            feedback = rawSymptom.feedback,
+                            details = rawSymptom.details,
+                            formulation = rawSymptom.formulation,
+                            preparation = rawSymptom.preparation,
+                            unit = rawSymptom.unit,
+                            schedule = new ObservableCollection<MedtimesDosages>()
                         };
                         // Deserialize the feedback string into the FeedbackList
                         var feedbackSymptoms = JsonConvert.DeserializeObject<List<MedtimesDosages>>(rawSymptom.schedule);
@@ -613,6 +634,23 @@ namespace PeopleWith
                         foreach (var feedback in feedbackSymptoms)
                         {
                             newUserSymptom.schedule.Add(feedback);
+                            var dosage = feedback.Dosage;
+                            var time = feedback.time;
+                            //Daily
+                            var getfreq = newUserSymptom.frequency.Split('|'); 
+                            if (getfreq[0] == "Daily" || getfreq[0] == "Days Interval")
+                            {
+                                var DosageTime = time + "|" + dosage;
+                                newUserSymptom.TimeDosage.Add(DosageTime);
+                            }
+                            //Weekly
+                            else if (getfreq[0] == "Weekly" || getfreq[0] == "Weekly ")
+                            {
+                                var day = feedback.Day;
+                                var DosageTime = time + "|" + dosage + "|" + day;
+                                newUserSymptom.TimeDosage.Add(DosageTime);
+                            }
+
                         }
 
                         if (rawSymptom.feedback == null)
@@ -704,13 +742,14 @@ namespace PeopleWith
                 //Error Occured on Crashlog 
             }
         }
-
+            
         //Get All Allergies Data 
 
         public class ApiAllergies
         {
             public ObservableCollection<allergies> Value { get; set; }
         }
+
         public async Task<ObservableCollection<allergies>> GetAsyncAllergies()
         {
             try
@@ -953,8 +992,6 @@ namespace PeopleWith
             }
         }
 
-
-
         //Update Diagnosis Date 
         public async Task PutDiagnosisAsync(ObservableCollection<userdiagnosis> Updatefeedback)
         {
@@ -994,6 +1031,124 @@ namespace PeopleWith
 
             }
         }
+
+
+
+
+        //Supplements 
+
+        //Update UserSupplements in DB 
+        public async Task<usersupplement> PostSupplementAsync(usersupplement usersuppassed)
+        {
+
+            try
+            {
+                HttpClient client = new HttpClient();
+                var url = "https://pwdevapi.peoplewith.com/api/usersupplement";
+                string jsonns = System.Text.Json.JsonSerializer.Serialize<usersupplement>(usersuppassed);
+                StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync(url, contenttts);
+                var errorResponse = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    // Read the response content as a string
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    var jsonResponse = JObject.Parse(responseContent);
+
+                    var id = jsonResponse["value"]?[0]?["id"]?.ToString();
+
+                    usersuppassed.id = id;
+                    // Return the inserted item
+                    return usersuppassed;
+
+
+                }
+                else
+                {
+                    string errorcontent = await response.Content.ReadAsStringAsync();
+                    var s = errorcontent;
+                    return null;
+                }
+                // return null;
+            }
+
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+        }
+
+
+        public class SingleUserSupplement
+        {
+            public ObservableCollection<rawusersupplement> Value { get; set; }
+        }
+
+
+
+        //Get All User Supplements
+        public async Task<ObservableCollection<usersupplement>> GetUserSupplementsAsync()
+        {
+            try
+            {
+
+
+                HttpClient client = new HttpClient();
+                string userid = Preferences.Default.Get("userid", "Unknown");
+                string urlWithQuery = $"{usersupplements}?$filter=userid eq '{userid}'";
+                HttpResponseMessage response = await client.GetAsync(urlWithQuery);
+                string data = await response.Content.ReadAsStringAsync();
+                // Deserialize the response into a generic structure
+                var rawResponse = JsonConvert.DeserializeObject<SingleUserSupplement>(data);
+                var userSymptomsList = new List<usersupplement>();
+                if (rawResponse?.Value != null)
+                {
+                    foreach (var rawSymptom in rawResponse.Value)
+                    {
+                        var newUserSymptom = new usersupplement
+                        {
+                            id = rawSymptom.id,
+                            userid = rawSymptom.userid,
+                            supplementid = rawSymptom.supplementid,
+                            supplementtitle = rawSymptom.supplementtitle,
+                            startdate = rawSymptom.startdate,
+                            enddate = rawSymptom.enddate,
+                            frequency = rawSymptom.frequency,
+                            diagnosis = rawSymptom.diagnosis,
+                            status = rawSymptom.status,
+                            feedback = rawSymptom.feedback,
+                            //details = rawSymptom.details,
+                            formulation = rawSymptom.formulation,
+                            preparation = rawSymptom.preparation,
+                            unit = rawSymptom.unit,
+                            schedule = new ObservableCollection<MedtimesDosages>()
+
+                        };
+                        // Deserialize the feedback string into the FeedbackList
+                        var feedbackSymptoms = JsonConvert.DeserializeObject<List<MedtimesDosages>>(rawSymptom.schedule);
+                        // Add only the relevant feedback to this usersymptom
+
+                        foreach (var feedback in feedbackSymptoms)
+                        {
+                            newUserSymptom.schedule.Add(feedback);
+                        }
+                        userSymptomsList.Add(newUserSymptom);
+                        //userSymptomsList[0].dosage
+
+                    }
+                }
+                return new ObservableCollection<usersupplement>(userSymptomsList);
+            }
+            catch (Exception ex)
+            {
+                return new ObservableCollection<usersupplement>();
+            }
+        }
+
+
+        
 
         //Get User Mood 
         public class GetUserMood
@@ -1154,6 +1309,5 @@ namespace PeopleWith
 
             }
         }
-
     }
 }

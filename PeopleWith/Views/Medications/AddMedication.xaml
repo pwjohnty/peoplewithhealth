@@ -8,8 +8,7 @@
              xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
              x:Class="PeopleWith.AddMedication" NavigationPage.HasNavigationBar="False"
              HideSoftInputOnTapped="True"
-             xmlns:local="clr-namespace:PeopleWith" BackgroundColor="White" 
-             >
+             xmlns:local="clr-namespace:PeopleWith" BackgroundColor="White" >
     <ContentPage.ToolbarItems>
      
     </ContentPage.ToolbarItems>
