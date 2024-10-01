@@ -1,5 +1,4 @@
 ﻿//using Android.Net.Wifi.Aware;
-using Internal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Syncfusion.Maui.Calendar;
@@ -620,7 +619,8 @@ namespace PeopleWith
                             frequency = rawSymptom.frequency,
                             diagnosis = rawSymptom.diagnosis,
                             status = rawSymptom.status,
-                            feedback = rawSymptom.feedback,
+                            deleted = rawSymptom.deleted,
+                            //feedback = rawSymptom.feedback,
                             details = rawSymptom.details,
                             formulation = rawSymptom.formulation,
                             preparation = rawSymptom.preparation,
@@ -661,13 +661,25 @@ namespace PeopleWith
                         {
                             var medfeedback = JsonConvert.DeserializeObject<List<MedSuppFeedback>>(rawSymptom.feedback);
 
+                            if (newUserSymptom.feedback == null)
+                            {
+                                newUserSymptom.feedback = new ObservableCollection<MedSuppFeedback>(); 
+                            }
                             foreach (var feedback in medfeedback)
                             {
                                 newUserSymptom.feedback.Add(feedback);
                             }
                         }
 
-                        userSymptomsList.Add(newUserSymptom);
+                        if(newUserSymptom.deleted == true)
+                        {
+                            //Ignore
+                        }
+                        else
+                        {
+                            userSymptomsList.Add(newUserSymptom);
+                        }
+                        
                     }
                 }
                 return new ObservableCollection<usermedication>(userSymptomsList);
@@ -677,6 +689,116 @@ namespace PeopleWith
                 return new ObservableCollection<usermedication>();
             }
         }
+
+        //Delete Usermedication 
+        public async Task DeleteMedication(usermedication Updatefeedback)
+        {
+            try
+            {
+                string id = Updatefeedback.id;
+                var url = $"https://pwdevapi.peoplewith.com/api/usermedication/id/{id}";
+
+                string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = Updatefeedback.deleted });
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                using (var client = new HttpClient())
+                {
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+
+                    var response = await client.SendAsync(request);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                }
+
+                return;
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+        }
+
+        //Update Medicaiton Details 
+        public async Task UpdateMedicationDetails(usermedication Updatefeedback)
+        {
+            try
+            {
+                string id = Updatefeedback.id;
+                var url = $"https://pwdevapi.peoplewith.com/api/usermedication/id/{id}";
+
+                var payload = new
+                {
+                    preparation = Updatefeedback.preparation,
+                    formulation = Updatefeedback.formulation,
+                    unit = Updatefeedback.unit
+                };
+
+                // Serialize the object into JSON
+                string json = System.Text.Json.JsonSerializer.Serialize(payload);
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                using (var client = new HttpClient())
+                {
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+
+                    var response = await client.SendAsync(request);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                }
+
+                return;
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+        }
+
+        //Update Medicaiton schedule unit 
+        //public async Task UpdateScheduleUnit(usermedication Updatefeedback)
+        //{
+        //    try
+        //    {
+        //        string id = Updatefeedback.id;
+        //        var url = $"https://pwdevapi.peoplewith.com/api/usermedication/id/{id}";
+
+        //        string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = Updatefeedback.deleted });
+        //        StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        //        using (var client = new HttpClient())
+        //        {
+        //            var request = new HttpRequestMessage(HttpMethod.Patch, url)
+        //            {
+        //                Content = content
+        //            };
+
+        //            var response = await client.SendAsync(request);
+
+        //            if (!response.IsSuccessStatusCode)
+        //            {
+        //                var errorResponse = await response.Content.ReadAsStringAsync();
+        //            }
+        //        }
+
+        //        return;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return;
+        //    }
+        //}
 
 
         //Update medication feedback Data

@@ -23,13 +23,7 @@ namespace PeopleWith
         public string status { get; set; }
         public string feedback { get; set; }
         public string details { get; set; }
-
-        public string frequency { get; set; }
-        public string startdate { get; set; }
-
-        public string enddate { get; set; }
-
-        public string feedback { get; set; }
+        public bool deleted { get; set; }
 
     }
 }

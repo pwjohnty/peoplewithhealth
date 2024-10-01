@@ -262,9 +262,9 @@ public partial class LoginPage : ContentPage
                 Preferences.Set("clinicaltrial", "Yes");
    
                 //Add Push Notification Tags
-                AddBackTags(); 
-                await Navigation.PushAsync(new MainDashboard(), false);
-                
+                AddBackTags();
+                Application.Current.MainPage = new NavigationPage(new MainDashboard());
+
             }
             else
             {

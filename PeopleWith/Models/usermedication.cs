@@ -17,7 +17,7 @@ namespace PeopleWith
         //public string createdAt { get; set; }
         //public string updatedAt { get; set; }
         //public string version { get; set; }
-        //public bool deleted { get; set; }
+        public bool deleted { get; set; }
         public string userid { get; set; }
         public string medicationid { get; set; }
         public string medicationtitle { get; set; }
@@ -45,6 +45,24 @@ namespace PeopleWith
 
         [System.Text.Json.Serialization.JsonIgnore]
         public string NextDosage { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public DateTime DatetimeOrder { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string Dosage { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string MedDateTime { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string Action { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public Color Colour { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string EditMedSection { get; set; }
 
     }
 
