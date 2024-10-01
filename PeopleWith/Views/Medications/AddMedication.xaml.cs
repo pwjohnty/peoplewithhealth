@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq.Expressions;
 using Plugin.LocalNotification;
 using Mopups.Services;
+using Xamarin.Google.Crypto.Tink.Proto;
 //using Windows.Foundation.Metadata;
 
 namespace PeopleWith;
@@ -25,6 +26,8 @@ public partial class AddMedication : ContentPage
     List<string> daysintervallist = new List<string>();
     List<string> ODlist = new List<string>();
     List<string> weekfreqlist = new List<string>();
+    usermedication SelectedMed = new usermedication();
+    bool IsEdit = false; 
 
     List<string> timesfordailylist = new List<string>();
     public string usermedunit;
@@ -41,6 +44,11 @@ public partial class AddMedication : ContentPage
     List<string> weekdaynamelist = new List<string>();
     List<string> weeklydosagesame = new List<string>();
     string freqstring;
+    bool TimeOfDaySelected = false;
+    string DailysameDosageSelected;
+    string WeeklyDaysSelected;
+    string WeeklyHowManyTimes; 
+    string WeeklysameDosageSelected;
 
     ObservableCollection<MedtimesDosages> medtimesanddosages = new ObservableCollection<MedtimesDosages>();
     ObservableCollection<usermedication> UserMedications = new ObservableCollection<usermedication>();
@@ -291,14 +299,23 @@ public partial class AddMedication : ContentPage
 
     }
 
-    public AddMedication(ObservableCollection<usermedication> AllUsermedications)
+    public AddMedication(ObservableCollection<usermedication> AllUsermedications, usermedication MedSelected)
     {
         InitializeComponent();
 
 
         UserMedications = AllUsermedications;
+        if(string.IsNullOrEmpty(MedSelected.id))
+        {
 
-        Getmedications();
+        }
+        else
+        {
+            SelectedMed = MedSelected;
+            IsEdit = true; 
+        }
+    
+       Getmedications();
 
         var new1 = new preparation();
         new1.title = "Daily";
@@ -536,16 +553,115 @@ public partial class AddMedication : ContentPage
     { "Fri", 6 },
     { "Sat", 7 }
 };
+       
+
+    }
+
+    async void PopulateEditMed()
+    {
+
+        try
+        {
+            //Details 
+            if (SelectedMed.EditMedSection == "Details")
+            {
+                nextbtn.Text = "Update Details";
+                topprogress.IsVisible = false; 
+                firststack.IsVisible = false;
+                secondstack.IsVisible = true;
+                mednamelbl.Text = SelectedMed.medicationtitle;
+                medpreparationslistview.ItemsSource = MedPreparations;
+
+                for (int i = 0; i < MedPreparations.Count; i++)
+                {
+                    if (MedPreparations[i].title == SelectedMed.preparation)
+                    {
+                        medformulations = MedPreparations[i].formulation.Split(',').ToList();
+                        meddosages = MedPreparations[i].unit.Split(',').ToList();
+                    }
+                }
+
+                medformulationslistview.ItemsSource = medformulations;
+                mflbl.IsVisible = true;
+                mf2lbl.IsVisible = true;
+                medformulationslistview.IsVisible = true;
+
+                meddosageunitlistview.ItemsSource = meddosages;
+                dflbl.IsVisible = true;
+                df2lbl.IsVisible = true;
+                meddosageunitlistview.IsVisible = true;
+
+                //newusermedication.preparation = item.title;
 
 
+                //Preperation 
+                var selectedPreparation = MedPreparations.FirstOrDefault(p => p.title == SelectedMed.preparation);
+
+
+                if (selectedPreparation != null)
+                {
+                    medpreparationslistview.SelectedItem = selectedPreparation;
+                }
+
+                //Medication Formulation 
+                if (SelectedMed.formulation != null)
+                {
+                    medformulationslistview.SelectedItem = SelectedMed.formulation;
+                }
+
+
+                //Dosageunit 
+                if (SelectedMed.unit != null)
+                {
+                    meddosageunitlistview.SelectedItem = SelectedMed.unit;
+                }
+
+            }
+            //Edit Schedule 
+            else
+            {
+                topprogress.SegmentCount = 4;
+                topprogress.IsVisible = true;
+                topprogress.Progress = 25; 
+                firststack.IsVisible = false; 
+                thirdstack.IsVisible = true;
+                medname2lbl.Text = SelectedMed.medicationtitle; 
+
+                //Start and EndDate
+                startdatepicker.Date = DateTime.Parse(SelectedMed.startdate);
+
+                if (string.IsNullOrEmpty(SelectedMed.enddate))
+                {
+                    enddatepicker.Date = DateTime.Parse(SelectedMed.enddate);
+                    enddatecheck.IsChecked = true;
+                }
+            }
+        }
+        catch (Exception Ex)
+        {
+
+        }
     }
 
     async void Getmedications()
 	{
 		try
 		{
+            await RetrieveallMedications(); 
+
+        }
+		catch(Exception ex)
+		{
+
+		}
+	}
+
+    async Task RetrieveallMedications()
+    {
+        try
+        {
             //get all medications
-           // medsloading.IsVisible = true;
+            // medsloading.IsVisible = true;
 
             var urlmedications = APICalls.GetMedications;
 
@@ -561,24 +677,33 @@ public partial class AddMedication : ContentPage
 
                 Medicationslistview.ItemsSource = allmedicationlist;
 
-               // medsloading.IsVisible = false;
+                // medsloading.IsVisible = false;
 
-               
+
 
             }
-
-
             //get the preparations
-            MedPreparations = await aPICalls.GetMedPreparation();
-            
+            var getMedPreperation = aPICalls.GetMedPreparation();
 
+            MedPreparations = await getMedPreperation;
+
+            if (IsEdit == true)
+            {
+                firststack.IsVisible = false;
+                PopulateEditMed();
+            }
+            else
+            {
+                firststack.IsVisible = true;
+                topprogress.IsVisible = true; 
+            }
 
         }
-		catch(Exception ex)
-		{
+        catch (Exception ex)
+        {
 
-		}
-	}
+        }
+    }
 
     private void searchbar_TextChanged(object sender, TextChangedEventArgs e)
     {
@@ -648,149 +773,568 @@ public partial class AddMedication : ContentPage
     {
         try
         {
-            if (firststack.IsVisible == true)
-            {
-                //check if they have selected a medication
-                if (Medicationslistview.SelectedItem == null)
-                {
-                    Vibration.Vibrate();
-                    await DisplayAlert("Select Medication", "Please select a medication from this list", "Ok");
-                    return;
-                }
-                else
-                {
-                    medpreparationslistview.ItemsSource = MedPreparations;
-                    firststack.IsVisible = false;
-                    secondstack.IsVisible = true;
-                    backbtn.IsVisible = true;
-                    topprogress.Progress = 40;
-                    backbtn.Text = "Back";
-                }
-            }
-
-            else if(secondstack.IsVisible == true)
-            {
-                if(medpreparationslistview.SelectedItem == null)
-                {
-                    Vibration.Vibrate();
-                    await DisplayAlert("Select Medication Preparation", "Please select a medication preparation from this list", "Ok");
-                    return;
-                }
-
-                else if (meddosageunitlistview.SelectedItem == null)
-                {
-                    Vibration.Vibrate();
-                    await DisplayAlert("Select Dosage Unit", "Please select a dosage unit from this list", "Ok");
-                    return;
-                }
-                else
-                {
-                    secondstack.IsVisible = false;
-                    thirdstack.IsVisible = true;
-                    topprogress.Progress = 60;
-                }
-            }
-            else if(thirdstack.IsVisible == true)
+            if (IsEdit == true)
             {
 
-                if(enddatecheck.IsChecked)
+                if (SelectedMed.EditMedSection == "Details")
                 {
-                    newusermedication.enddate = enddatepicker.Date.ToString("dd/MM/yyyy");
+
+                    //Preperation 
+                    if (medpreparationslistview.SelectedItem != null)
+                    {
+                        SelectedMed.preparation = medpreparationslistview.SelectedItem.ToString();
+                    }
+
+
+                    //Medication Formulation 
+                    if (medformulationslistview.SelectedItem != null)
+                    {
+                        SelectedMed.formulation = medformulationslistview.SelectedItem.ToString();
+                    }
+
+
+                    //Dosageunit 
+                    if (meddosageunitlistview.SelectedItem != null)
+                    {
+                        SelectedMed.unit = meddosageunitlistview.SelectedItem.ToString();
+
+                    }
+
+                    //Update items 
+                    var id = SelectedMed.id;
+                    APICalls database = new APICalls();
+                    await database.UpdateMedicationDetails(SelectedMed);
+
+                    //Update Schedule unit 
+
+                    //update Notifications to include new unit 
+
+
+
                 }
+                else
+                {
+                    if(thirdstack.IsVisible == true)
+                    {
+                        medname3lbl.Text = SelectedMed.medicationtitle; 
+                        backbtn.Text = "Back";
+                        thirdstack.IsVisible = false;
+                        fourthstack.IsVisible = true;
+                        topprogress.Progress = 50;
+                        medfreqlistview.IsVisible = true;
+                        string SelectedFreq; 
+                        if (SelectedMed.frequency.Contains("|"))
+                        {
+                            var freq = SelectedMed.frequency.Split('|');
+                            if(freq[0] == "Weekly" || freq[0] == "Weekly ")
+                            {
+                                var selectedFrequency = medfreq.FirstOrDefault(p => p.title == "Specfic Days of the Week");
+                                medfreqlistview.SelectedItem = selectedFrequency;
+                                SelectedFreq = "Specfic Days of the Week";
+                            }
+                            else
+                            {
+                                var selectedFrequency = medfreq.FirstOrDefault(p => p.title == freq[0]);
+                                medfreqlistview.SelectedItem = selectedFrequency;
+                                SelectedFreq = freq[0];
+                            }
+                        }
+                        else
+                        {
+                            var selectedFrequency = medfreq.FirstOrDefault(p => p.title == "As Required");
+                            medfreqlistview.SelectedItem = selectedFrequency;
+                            SelectedFreq = "As Required";
+                        }
 
-                newusermedication.startdate = startdatepicker.Date.ToString("dd/MM/yyyy");
+                        if(SelectedFreq == "As Required")
+                        {
+
+                        }
+                        else if (SelectedFreq == "Specfic Days of the Week")
+                        {
+                            weeklydayslist.IsVisible = true;
+                            weekfreqlbl.IsVisible = true;
+                            weekfreqlistview.IsVisible = true;
+                            freqlbl.Text = "Which Days";
+
+                            //Set Days 
+                            var freq = SelectedMed.frequency.Split('|');
+                            var getdays = freq[1];
+                            if (getdays.Contains(","))
+                            {
+                                var days = freq[1].Split(',').ToList();
+                                for(int i = 0; i < days.Count; i++)
+                                {
+                                    weeklydayslist.SelectedItem = days[i];
+                                }
+                               
+                            }
+                            else
+                            {
+                                weeklydayslist.SelectedItem = getdays;
+                            }
+                            var gettimes = freq[2];
+                            string numberAsText = NumberToText(Int32.Parse(gettimes));
+                            weekfreqlistview.SelectedItem = weekfreqlist.FirstOrDefault(p => p == numberAsText);
+                            timeanddosagelbl2.IsVisible = true;
+                            timesanddosageslistview.IsVisible = true;
+                            foreach(var item in SelectedMed.schedule)
+                            {
+                                item.Labelvis = false;
+                                item.Entryvis = true;
+                                item.TimepickerVis = true;
+                                item.AsReqlblVis = false; 
+                            }
+                            timesanddosageslistview.ItemsSource = SelectedMed.schedule; 
+                        }
+                        else if (SelectedFreq == "Daily")
+                        {
+                            dailytimeslistview.IsVisible = true;
+                            onedailylbl.IsVisible = true;
+                            oncedailylistview.IsVisible = true; 
+                        }
+                        else if (SelectedFreq == "Days Interval")
+                        {
+
+                        }
 
 
-                thirdstack.IsVisible = false;
-                fourthstack.IsVisible = true;
-                topprogress.Progress = 80;
-                medfreqlistview.IsVisible = true;
+                    }
+                    else if(fourthstack.IsVisible == true)
+                    {
+                        topprogress.Progress = 75;
+                        fourthstack.IsVisible = false;
+                        detailsstack.IsVisible = true;
 
+                        if(SelectedMed.details != "--|--")
+                        {
+                            var split = SelectedMed.details.Split('|'); 
+                            if (string.IsNullOrEmpty(split[0]))
+                            {
+                                displaynameentry.Text = split[0]; 
+                                
+                            }
+                            if (string.IsNullOrEmpty(split[1]))
+                            {
+                                notesentry.Text = split[1];
+                            }
+                        }
+                    }
+                    else if(detailsstack.IsVisible == true)
+                    {
+                        ConfirmBtn.Text = "Update Medication";
+                        var newlist = new List<string>();
+
+                        if (string.IsNullOrEmpty(displaynameentry.Text))
+                        {
+                            newlist.Add("--");
+                            confirmdisplaynamelbl.Text = SelectedMed.medicationtitle;
+                        }
+                        else
+                        {
+                            newlist.Add(displaynameentry.Text);
+                            confirmdisplaynamelbl.Text = displaynameentry.Text;
+                        }
+
+
+                        if (string.IsNullOrEmpty(notesentry.Text))
+                        {
+                            newlist.Add("--");
+                            confirmnoteslbl.Text = "--";
+                        }
+                        else
+                        {
+                            newlist.Add(notesentry.Text);
+                            confirmnoteslbl.Text = notesentry.Text;
+                        }
+
+
+                        var joinlist = string.Join('|', newlist);
+
+                        newusermedication.details = joinlist;
+
+                        //add all the details to the confirm page
+                        confirmpreplbl.Text = SelectedMed.preparation;
+
+                        if (string.IsNullOrEmpty(SelectedMed.formulation))
+                        {
+                            confirmformlbl.Text = "--";
+                        }
+                        else
+                        {
+                            confirmformlbl.Text = SelectedMed.formulation;
+                        }
+
+                        confirmdulbl.Text = SelectedMed.unit;
+                        confirmsdlbl.Text = newusermedication.startdate;
+
+                        if (string.IsNullOrEmpty(newusermedication.enddate))
+                        {
+                            confirmedlbl.Text = "--";
+                        }
+                        else
+                        {
+                            confirmedlbl.Text = newusermedication.enddate;
+                        }
+
+                        confirmfreqlbl.Text = freqstring;
+
+
+                        confirmtimesanddosageslistview.ItemsSource = selectedDosages;
+                        confirmtimesanddosageslistview.HeightRequest = selectedDosages.Count * 130;
+                        //  confirmtimesanddosageslistview.IsEnabled = false;
+
+                        detailsstack.IsVisible = false;
+                        confirmstack.IsVisible = true;
+                        topprogress.Progress = 100;
+                        nextbtn.IsVisible = false;
+                    }
+
+                }
             }
-
-            else if(fourthstack.IsVisible == true)
+            else
             {
-                //add validation here
+                //Normal Add Medication Click through
+                if (firststack.IsVisible == true)
+                {
+                    //check if they have selected a medication
+                    if (Medicationslistview.SelectedItem == null)
+                    {
+                        Vibration.Vibrate();
+                        await DisplayAlert("Select Medication", "Please select a medication from this list", "Ok");
+                        return;
+                    }
+                    else
+                    {
+                        medpreparationslistview.ItemsSource = MedPreparations;
+                        firststack.IsVisible = false;
+                        secondstack.IsVisible = true;
+                        backbtn.IsVisible = true;
+                        topprogress.Progress = 33.34;
+                        backbtn.Text = "Back";
+                    }
+                }
+
+                else if (secondstack.IsVisible == true)
+                {
+                    if (medpreparationslistview.SelectedItem == null)
+                    {
+                        Vibration.Vibrate();
+                        await DisplayAlert("Select Medication Preparation", "Please select a medication preparation from this list", "Ok");
+                        return;
+                    }
+
+                    else if (meddosageunitlistview.SelectedItem == null)
+                    {
+                        Vibration.Vibrate();
+                        await DisplayAlert("Select Dosage Unit", "Please select a dosage unit from this list", "Ok");
+                        return;
+                    }
+                    else
+                    {
+                        secondstack.IsVisible = false;
+                        thirdstack.IsVisible = true;
+                        topprogress.Progress = 50.01;
+                    }
+                }
+                else if (thirdstack.IsVisible == true)
+                {
+
+                    if (enddatecheck.IsChecked)
+                    {
+                        newusermedication.enddate = enddatepicker.Date.ToString("dd/MM/yyyy");
+                    }
+
+                    newusermedication.startdate = startdatepicker.Date.ToString("dd/MM/yyyy");
 
 
-                fourthstack.IsVisible = false;
-                detailsstack.IsVisible = true;
+                    thirdstack.IsVisible = false;
+                    fourthstack.IsVisible = true;
+                    topprogress.Progress = 66.68;
+                    medfreqlistview.IsVisible = true;
+
+                }
+
+                else if (fourthstack.IsVisible == true)
+                {
+
+                    if (medfreqlistview.SelectedItem == null)
+                    {
+                        Vibration.Vibrate();
+                        await DisplayAlert("Select Medication Frequency", "Please select a medication Frequency from this list", "Ok");
+                        return;
+                    }
+                    else
+                    {
+                        var Selecteditem = medfreqlistview.SelectedItem as preparation;
+                        //Daily Validation 
+                        if (Selecteditem.title == "Daily")
+                        {
+
+                            //How Many times per Day 
+                            if (dailytimeslistview.SelectedItem == null)
+                            {
+                                Vibration.Vibrate();
+                                await DisplayAlert("Select how many Times", "Please select how many Times from this list", "Ok");
+                                return;
+                            }
+                            else
+                            {
+                                //Once Daily Selected
+                                if (dailytimeslistview.SelectedItem.ToString() == "OD\nOnce Daily")
+                                {
+                                    if (TimeOfDaySelected == false)
+                                    {
+                                        Vibration.Vibrate();
+                                        await DisplayAlert("Select Time of Day", "Please select Time of Day from this list", "Ok");
+                                        return;
+                                    }
+                                }
+                                //More than Once Daily Selected 
+                                else
+                                {
+                                    if (string.IsNullOrEmpty(DailysameDosageSelected))
+                                    {
+                                        Vibration.Vibrate();
+                                        await DisplayAlert("Select Is Dosage the same", "Please select Is Dosage the same from this list", "Ok");
+                                        return;
+                                    }
+                                    else if (DailysameDosageSelected == "Yes")
+                                    {
+                                        if (String.IsNullOrEmpty(samedosageentry.Text))
+                                        {
+                                            Vibration.Vibrate();
+                                            await DisplayAlert("Enter a Dosage for all Times", "Please Enter a Dosage for all Times", "Ok");
+                                            return;
+                                        }
+                                    }
+                                    else if (DailysameDosageSelected == "No")
+                                    {
+                                        // Do Nothing 
+                                    }
+                                }
+                            }
+                        }
+
+                        //Days of Week Validation 
+                        else if (Selecteditem.title == "Specfic Days of the Week")
+                        {
+                            //Which Days 
+                            if (weeklydayslist.SelectedItem == null)
+                            {
+                                Vibration.Vibrate();
+                                await DisplayAlert("Select Which Days", "Please Select Which Days for your Medication", "Ok");
+                                return;
+                            }
+                            //How many times
+                            if (weekfreqlistview.SelectedItem == null)
+                            {
+                                Vibration.Vibrate();
+                                await DisplayAlert("Select How many Times", "Please Select How many Times for your Medication", "Ok");
+                                return;
+                            }
+                            else
+                            {
+                                //Once Weekly Selected
+                                if (weekfreqlistview.SelectedItem.ToString() == "One")
+                                {
+                                    //do nothing
+                                }
+                                //More than Once Weekly Selected 
+                                else
+                                {
+                                    if (samedosageweeklylist2.SelectedItem == null)
+                                    {
+                                        Vibration.Vibrate();
+                                        await DisplayAlert("Select Is Dosage the same", "Please select Is Dosage the same from this list", "Ok");
+                                        return;
+                                    }
+                                    else if (samedosageweeklylist2.SelectedItem.ToString() == "Yes")
+                                    {
+                                        if (String.IsNullOrEmpty(samedosageentry.Text))
+                                        {
+                                            Vibration.Vibrate();
+                                            await DisplayAlert("Enter a Dosage for all Times", "Please Enter a Dosage for all Times", "Ok");
+                                            return;
+                                        }
+                                    }
+                                    else if (samedosageweeklylist2.SelectedItem.ToString() == "No")
+                                    {
+                                        // Do Nothing 
+                                    }
+                                }
+                            }
+                        }
+
+                        //Days Interval Validation 
+                        else if (Selecteditem.title == "Days Interval")
+                        {
+                            //How Often 
+                            if (daysintervallistview.SelectedItem == null)
+                            {
+                                Vibration.Vibrate();
+                                await DisplayAlert("Select How Often", "Please Select How often you take your Medication", "Ok");
+                                return;
+                            }
+
+                            //How many times per day 
+                            if (ditimesperdaylist.SelectedItem == null)
+                            {
+                                Vibration.Vibrate();
+                                await DisplayAlert("Select How many Times", "Please Select How many Times for your Medication", "Ok");
+                                return;
+                            }
+                            else
+                            {
+                                //Once Weekly Selected
+                                if (ditimesperdaylist.SelectedItem.ToString() == "One")
+                                {
+                                    //do nothing
+                                }
+                                //More than Once Weekly Selected 
+                                else
+                                {
+                                    if (disamedosagequestionlist.SelectedItem == null)
+                                    {
+                                        Vibration.Vibrate();
+                                        await DisplayAlert("Select Is Dosage the same", "Please select Is Dosage the same from this list", "Ok");
+                                        return;
+                                    }
+                                    else if (disamedosagequestionlist.SelectedItem.ToString() == "Yes")
+                                    {
+                                        if (String.IsNullOrEmpty(samedosageentry.Text))
+                                        {
+                                            Vibration.Vibrate();
+                                            await DisplayAlert("Enter a Dosage for all Times", "Please Enter a Dosage for all Times", "Ok");
+                                            return;
+                                        }
+                                    }
+                                    else if (disamedosagequestionlist.SelectedItem.ToString() == "No")
+                                    {
+                                        // Do Nothing 
+                                    }
+                                }
+                            }
+
+                        }
+                        //As Required Validation 
+                        else if (Selecteditem.title == "As Required")
+                        {
+                            if (string.IsNullOrEmpty(newusermedication.Dosage))
+                            {
+                                Vibration.Vibrate();
+                                await DisplayAlert("Enter Dosage Unit", "Please Enter a dosage unit from this list", "Ok");
+                                return;
+                            }
+                        }
+                    }
+
+                    foreach (var item in selectedDosages)
+                    {
+                        if (string.IsNullOrEmpty(item.Dosage))
+                        {
+                            Vibration.Vibrate();
+                            await DisplayAlert("Enter Dosage Unit", "Please Enter a dosage unit from this list", "Ok");
+                            return;
+                        }
+                    }
+                    topprogress.Progress = 83.35;
+                    fourthstack.IsVisible = false;
+                    detailsstack.IsVisible = true;
+
+                }
+                else if (detailsstack.IsVisible == true)
+                {
+                    var newlist = new List<string>();
+
+                    if (string.IsNullOrEmpty(displaynameentry.Text))
+                    {
+                        newlist.Add("--");
+                        confirmdisplaynamelbl.Text = newusermedication.medicationtitle;
+                    }
+                    else
+                    {
+                        newlist.Add(displaynameentry.Text);
+                        confirmdisplaynamelbl.Text = displaynameentry.Text;
+                    }
+
+
+                    if (string.IsNullOrEmpty(notesentry.Text))
+                    {
+                        newlist.Add("--");
+                        confirmnoteslbl.Text = "--";
+                    }
+                    else
+                    {
+                        newlist.Add(notesentry.Text);
+                        confirmnoteslbl.Text = notesentry.Text;
+                    }
+
+
+                    var joinlist = string.Join('|', newlist);
+
+                    newusermedication.details = joinlist;
+
+                    //add all the details to the confirm page
+                    confirmpreplbl.Text = newusermedication.preparation;
+
+                    if (string.IsNullOrEmpty(newusermedication.formulation))
+                    {
+                        confirmformlbl.Text = "--";
+                    }
+                    else
+                    {
+                        confirmformlbl.Text = newusermedication.formulation;
+                    }
+
+                    confirmdulbl.Text = newusermedication.unit;
+                    confirmsdlbl.Text = newusermedication.startdate;
+
+                    if (string.IsNullOrEmpty(newusermedication.enddate))
+                    {
+                        confirmedlbl.Text = "--";
+                    }
+                    else
+                    {
+                        confirmedlbl.Text = newusermedication.enddate;
+                    }
+
+                    confirmfreqlbl.Text = freqstring;
+
+
+                    confirmtimesanddosageslistview.ItemsSource = selectedDosages;
+                    confirmtimesanddosageslistview.HeightRequest = selectedDosages.Count * 130;
+                    //  confirmtimesanddosageslistview.IsEnabled = false;
+
+                    detailsstack.IsVisible = false;
+                    confirmstack.IsVisible = true;
+                    topprogress.Progress = 100;
+                    nextbtn.IsVisible = false;
+
+                }
+
+
             }
-            else if(detailsstack.IsVisible == true)
-            {
-                var newlist = new List<string>();
-
-                if(string.IsNullOrEmpty(displaynameentry.Text))
-                {
-                    newlist.Add("--");
-                    confirmdisplaynamelbl.Text = newusermedication.medicationtitle;
-                }
-                else
-                {
-                    newlist.Add(displaynameentry.Text);
-                    confirmdisplaynamelbl.Text = displaynameentry.Text;
-                }
-
-
-                if (string.IsNullOrEmpty(notesentry.Text))
-                {
-                    newlist.Add("--");
-                    confirmnoteslbl.Text = "--";
-                }
-                else
-                {
-                    newlist.Add(notesentry.Text);
-                    confirmnoteslbl.Text = notesentry.Text;
-                }
-
-
-                var joinlist = string.Join('|', newlist);
-
-                newusermedication.details = joinlist;
-
-                //add all the details to the confirm page
-                confirmpreplbl.Text = newusermedication.preparation;
-
-                if(string.IsNullOrEmpty(newusermedication.formulation))
-                {
-                    confirmformlbl.Text = "--";
-                }
-                else
-                {
-                    confirmformlbl.Text = newusermedication.formulation;
-                }
-
-                confirmdulbl.Text = newusermedication.unit;
-                confirmsdlbl.Text = newusermedication.startdate;
-
-                if(string.IsNullOrEmpty(newusermedication.enddate))
-                {
-                    confirmedlbl.Text = "--";
-                }
-                else
-                {
-                    confirmedlbl.Text = newusermedication.enddate;
-                }
-
-                confirmfreqlbl.Text = freqstring;
-
-                
-                confirmtimesanddosageslistview.ItemsSource = selectedDosages;
-                confirmtimesanddosageslistview.HeightRequest = selectedDosages.Count * 130;
-              //  confirmtimesanddosageslistview.IsEnabled = false;
-
-                detailsstack.IsVisible = false;
-                confirmstack.IsVisible = true;
-                nextbtn.IsVisible = false;
-
-            }
-
-
-
         }
         catch (Exception ex)
         {
 
+        }
+    }
+
+    public string NumberToText(int number)
+    {
+        switch (number)
+        {
+            case 1: return "One";
+            case 2: return "Two";
+            case 3: return "Three";
+            case 4: return "Four";
+            case 5: return "Five";
+            case 6: return "Six";
+            case 7: return "Seven";
+            case 8: return "Eight";
+            default: return "Invalid number"; 
         }
     }
 
@@ -861,7 +1405,7 @@ public partial class AddMedication : ContentPage
             var item = e.DataItem as preparation;
 
             freqstring = item.title;
-
+            newusermedication.frequency = item.title;
             btnyes.BackgroundColor = Colors.White;
             btnyes.TextColor = Colors.Teal;
 
@@ -892,6 +1436,9 @@ public partial class AddMedication : ContentPage
             disamedosagequestionlist.IsVisible = false;
             disamedosagequestionlist.SelectedItem = null;
 
+            timeanddosagelbl.Text = "Times and Dosages";
+            timeanddosagelbl2.Text = "Select your medication times and dosages from the list below. To adjust the time, simply tap on it."; 
+
 
             if (item.title == "Daily")
             {
@@ -910,7 +1457,7 @@ public partial class AddMedication : ContentPage
                 weekfreqlistview.IsVisible = false;
                 samedosageweeklylist.IsVisible = false;
 
-
+                
                 daysintervallistview.SelectedItems.Clear();
                 weeklydayslist.SelectedItems.Clear();
                 weekfreqlistview.SelectedItems.Clear();
@@ -957,6 +1504,8 @@ public partial class AddMedication : ContentPage
             }
             else
             {
+                timeanddosagelbl.Text = "Add Dosage";
+                timeanddosagelbl2.Text = "Select your dosage from the item below";
                 freqlbl.Text = string.Empty;
                 dailytimeslistview.IsVisible = false;
                 weeklydayslist.IsVisible = false;
@@ -968,6 +1517,35 @@ public partial class AddMedication : ContentPage
                 weekfreqlistview.IsVisible = false;
                 samedosageweeklylist.IsVisible = false;
                 sameweeklydosage.IsVisible = false;
+
+                var medDosagesList = new ObservableCollection<MedtimesDosages>();
+
+                // Create a new MedtimesDosages object
+                var newMd = new MedtimesDosages()
+                {
+                    Dosage = newusermedication.preparation,
+                    dosageunit = newusermedication.unit,
+                };
+
+                // Add the new object to the collection
+                medDosagesList.Add(newMd);
+
+                // Iterate over the collection (if it has multiple items) or directly manipulate `newMd`
+                foreach (var itemm in medDosagesList)
+                {
+                    itemm.Labelvis = false;
+                    itemm.Entryvis = true;
+                    itemm.Dosage = string.Empty;
+                    itemm.TimepickerVis = false;
+                    itemm.AsReqlblVis = true;
+                }
+
+                // Bind the MedtimesDosages list to the ListView
+                timesanddosageslistview.ItemsSource = medDosagesList;
+                timesanddosageslistview.IsVisible = true;
+                timeanddosagelbl.IsVisible = true;
+                timeanddosagelbl2.IsVisible = true;
+                timesanddosageslistview.HeightRequest = medDosagesList.Count * 100;
 
                 dailytimeslistview.SelectedItems.Clear();
                 oncedailylistview.SelectedItems.Clear();
@@ -1030,6 +1608,8 @@ public partial class AddMedication : ContentPage
                     foreach(var itemm in selectedDosages)
                     {
                         itemm.Dosage = string.Empty;
+                        itemm.TimepickerVis = true;
+                        itemm.AsReqlblVis = false;
                     }
 
                     // Bind the MedtimesDosages list to the ListView
@@ -1054,7 +1634,7 @@ public partial class AddMedication : ContentPage
         {
 
             var item = e.DataItem as string;
-
+            WeeklyDaysSelected = item; 
             timeanddosagelbl.IsVisible = false;
             timeanddosagelbl2.IsVisible = false;
             timesanddosageslistview.IsVisible = false;
@@ -1154,32 +1734,38 @@ public partial class AddMedication : ContentPage
         }
     }
 
-    private void Entry_TextChanged(object sender, TextChangedEventArgs e)
+    private async void Entry_TextChanged(object sender, TextChangedEventArgs e)
     {
         try
         {
 
             // Get the Entry that triggered the event
             var entry = (Entry)sender;
+            
 
-            // Check if the BindingContext of the Entry is the first item in the list
-            if (entry.BindingContext == selectedDosages[0])
+            if (newusermedication.frequency == "As Required")
             {
-                if (!string.IsNullOrEmpty(e.NewTextValue))
+                newusermedication.Dosage = e.NewTextValue;
+            }
+            else
+            {
+                // Check if the BindingContext of the Entry is the first item in the list
+                if (entry.BindingContext == selectedDosages[0])
                 {
-                    // Check if the list has more than one entry
-                    if (selectedDosages.Count > 1)
+                    if (!string.IsNullOrEmpty(e.NewTextValue))
                     {
-                      //  selectedDosages[0].Alldosage = true;
+                        // Check if the list has more than one entry
+                        if (selectedDosages.Count > 1)
+                        {
+                            //  selectedDosages[0].Alldosage = true;
+                        }
+                    }
+                    else
+                    {
+                        selectedDosages[0].Alldosage = false;
                     }
                 }
-                else
-                {
-                    selectedDosages[0].Alldosage = false;
-                }
             }
-
-
 
         }
         catch(Exception ex)
@@ -1223,7 +1809,7 @@ public partial class AddMedication : ContentPage
             //weekly how many times per day
 
             var item = e.DataItem as string;
-
+            WeeklyHowManyTimes = item; 
             samedosageweeklylist.SelectedItem = null;
             samedosageweeklylist2.IsVisible = false;
             samedosageweeklylist2.SelectedItem = null;
@@ -1303,6 +1889,8 @@ public partial class AddMedication : ContentPage
                     {
                         itemm.Labelvis = false;
                         itemm.Entryvis = true;
+                        itemm.TimepickerVis = true;
+                        itemm.AsReqlblVis = false;
                     }
                         itemm.Dosage = string.Empty;
                 }
@@ -1396,6 +1984,8 @@ public partial class AddMedication : ContentPage
                         sd.Dosage = string.Empty;
                         sd.Entryvis = false;
                         sd.Labelvis = true;
+                        sd.TimepickerVis = true;
+                        sd.AsReqlblVis = false;
                     }
 
                     adddosagelbl.IsVisible = true;
@@ -1450,6 +2040,8 @@ public partial class AddMedication : ContentPage
                         sd.Dosage = string.Empty;
                         sd.Entryvis = true;
                         sd.Labelvis = false;
+                        sd.TimepickerVis = true;
+                        sd.AsReqlblVis = false;
                     }
 
                     adddosagelbl.IsVisible = false;
@@ -1503,8 +2095,9 @@ public partial class AddMedication : ContentPage
                    
                         itemm.Labelvis = false;
                         itemm.Entryvis = true;
-                    
-                    itemm.Dosage = string.Empty;
+                        itemm.Dosage = string.Empty;
+                        itemm.TimepickerVis = true;
+                        itemm.AsReqlblVis = false;
                 }
 
                 timesanddosageslistview.ItemsSource = selectedDosages;
@@ -1569,6 +2162,7 @@ public partial class AddMedication : ContentPage
         {
 
             var item = e.DataItem as string;
+            DailysameDosageSelected = item; 
 
             samedosageentry.Text = string.Empty;
 
@@ -1586,6 +2180,8 @@ public partial class AddMedication : ContentPage
                         sd.Dosage = string.Empty;
                         sd.Entryvis = false;
                         sd.Labelvis = true;
+                        sd.TimepickerVis = true;
+                        sd.AsReqlblVis = false;
                     }
 
                     adddosagelbl.IsVisible = true;
@@ -1605,6 +2201,8 @@ public partial class AddMedication : ContentPage
                         sd.Dosage = string.Empty;
                         sd.Entryvis = false;
                         sd.Labelvis = true;
+                        sd.TimepickerVis = true;
+                        sd.AsReqlblVis = false;
                     }
 
                     adddosagelbl.IsVisible = true;
@@ -1635,6 +2233,8 @@ public partial class AddMedication : ContentPage
                         sd.Dosage = string.Empty;
                         sd.Entryvis = true;
                         sd.Labelvis = false;
+                        sd.TimepickerVis = true;
+                        sd.AsReqlblVis = false;
                     }
 
 
@@ -1655,6 +2255,8 @@ public partial class AddMedication : ContentPage
                         sd.Dosage = string.Empty;
                         sd.Entryvis = true;
                         sd.Labelvis = false;
+                        sd.TimepickerVis = true;
+                        sd.AsReqlblVis = false;
                     }
 
 
@@ -1695,7 +2297,7 @@ public partial class AddMedication : ContentPage
 
             var item = e.DataItem as string;
 
-
+            TimeOfDaySelected = true; 
             var splititem = item.Split('\n');
             // Check if the selected option exists in the dictionary
             if (frequencyOptions.ContainsKey(splititem[1]))
@@ -1710,12 +2312,14 @@ public partial class AddMedication : ContentPage
                     itemm.Labelvis = false;
                     itemm.Entryvis = true;
                     itemm.Dosage = string.Empty;
+                    itemm.TimepickerVis = true;
+                    itemm.AsReqlblVis = false; 
                 }
 
                 // Bind the MedtimesDosages list to the ListView
                 timesanddosageslistview.ItemsSource = selectedDosages;
-                 timesanddosageslistview.IsVisible = true;
-                 timeanddosagelbl.IsVisible = true;
+                timesanddosageslistview.IsVisible = true;
+                timeanddosagelbl.IsVisible = true;
                 timeanddosagelbl2.IsVisible = true;
                 timesanddosageslistview.HeightRequest = selectedDosages.Count * 100;
             }
@@ -1798,6 +2402,8 @@ public partial class AddMedication : ContentPage
                 {
                     itemm.Entryvis = true;
                     itemm.Labelvis = false;
+                    itemm.TimepickerVis = true;
+                    itemm.AsReqlblVis = false;
                 }
 
                 timesanddosageslistview.IsVisible = true;
@@ -1843,6 +2449,8 @@ public partial class AddMedication : ContentPage
                     sd.Dosage = string.Empty;
                     sd.Entryvis = false;
                     sd.Labelvis = true;
+                    sd.TimepickerVis = true;
+                    sd.AsReqlblVis = false;
                 }
             }
             else
@@ -1856,6 +2464,8 @@ public partial class AddMedication : ContentPage
                     sd.Dosage = string.Empty;
                     sd.Entryvis = true;
                     sd.Labelvis = false;
+                    sd.TimepickerVis = true;
+                    sd.AsReqlblVis = false;
                 }
             }
 
@@ -1904,40 +2514,76 @@ public partial class AddMedication : ContentPage
         //back button clicked
         try
         {
+            if (SelectedMed.EditMedSection == "Schedule")
+            {
+                if (backbtn.Text == "Cancel")
+                {
+                    Navigation.RemovePage(this);
+                }
+                else if (confirmstack.IsVisible == true)
+                {
+                    confirmstack.IsVisible = false;
+                    detailsstack.IsVisible = true;
+                    backbtn.Text = "Back";
+                    nextbtn.IsVisible = true;
+                    topprogress.Progress = 75;
+                }
+                else if (detailsstack.IsVisible == true)
+                {
+                    detailsstack.IsVisible = false;
+                    fourthstack.IsVisible = true;
+                    topprogress.Progress = 50;
+                }
+                else if (fourthstack.IsVisible == true)
+                {
+                    fourthstack.IsVisible = false;
+                    thirdstack.IsVisible = true;
+                    topprogress.Progress = 25;
+                    backbtn.Text = "Cancel";
+                }
+            }
+            else
+            {
+                if (backbtn.Text == "Cancel")
+                {
+                    Navigation.RemovePage(this);
+                }
+                else if (confirmstack.IsVisible == true)
+                {
+                    confirmstack.IsVisible = false;
+                    detailsstack.IsVisible = true;
+                    backbtn.Text = "Back";
+                    nextbtn.IsVisible = true;
+                    topprogress.Progress = 83.35;
+                }
+                else if (detailsstack.IsVisible == true)
+                {
+                    detailsstack.IsVisible = false;
+                    fourthstack.IsVisible = true;
+                    topprogress.Progress = 66.68;
+                }
+                else if (fourthstack.IsVisible == true)
+                {
+                    fourthstack.IsVisible = false;
+                    thirdstack.IsVisible = true;
+                    topprogress.Progress = 50.01;
+                }
+                else if (thirdstack.IsVisible == true)
+                {
+                    thirdstack.IsVisible = false;
+                    secondstack.IsVisible = true;
+                    topprogress.Progress = 33.34;
+                }
+                else if (secondstack.IsVisible == true)
+                {
+                    secondstack.IsVisible = false;
+                    firststack.IsVisible = true;
+                    backbtn.Text = "Cancel";
+                    topprogress.Progress = 16.67;
 
-            if(backbtn.Text == "Cancel")
-            {
-                Navigation.RemovePage(this);
+                }
             }
-            else if(confirmstack.IsVisible == true)
-            {
-                confirmstack.IsVisible = false;
-                detailsstack.IsVisible = true;
-                backbtn.Text = "Back";
-                nextbtn.IsVisible = true;
-            }
-            else if(detailsstack.IsVisible == true)
-            {
-                detailsstack.IsVisible = false;
-                fourthstack.IsVisible = true;
-            }
-            else if (fourthstack.IsVisible == true)
-            {
-                fourthstack.IsVisible = false;
-                thirdstack.IsVisible = true;
-            }
-            else if(thirdstack.IsVisible == true)
-            {
-                thirdstack.IsVisible = false;
-                secondstack.IsVisible = true;
-            }
-            else if(secondstack.IsVisible == true)
-            {
-                secondstack.IsVisible = false;
-                firststack.IsVisible = true;
-                backbtn.Text = "Cancel";
-                    
-            }
+          
 
         }
         catch(Exception ex)
@@ -2172,7 +2818,7 @@ public partial class AddMedication : ContentPage
             }
             else
             {
-                newusermedication.frequency = "As Required";
+                newusermedication.frequency = "As Required" + "|" + newusermedication.Dosage;
             }
 
             // Convert list to ObservableCollection

@@ -14,6 +14,7 @@ public partial class MainSchedule : ContentPage
     APICalls aPICalls = new APICalls();
     public ObservableCollection<usermedication> AllUserMedications = new ObservableCollection<usermedication>();
     public ObservableCollection<MedtimesDosages> ScheduleList = new ObservableCollection<MedtimesDosages>();
+    public ObservableCollection<MedtimesDosages> AsRequiredList = new ObservableCollection<MedtimesDosages>();
     public DateTime dateforschedule = new DateTime();
     public ObservableCollection<IGrouping<string, MedtimesDosages>> GroupedScheduleList { get; set; }
 
@@ -224,14 +225,8 @@ public partial class MainSchedule : ContentPage
                                     medtimes.Name = item.medicationtitle;
                                     ScheduleList.Add(medtimes);
                                 }
-                            }
-
-                         
-
-
+                            }            
                         }
-
-
                     }
                     else
                     {
@@ -281,11 +276,7 @@ public partial class MainSchedule : ContentPage
                                     ScheduleList.Add(medtimes);
                                 }
                             }
-
-
                         }
-
-
                     }
                     else
                     {
@@ -315,9 +306,9 @@ public partial class MainSchedule : ContentPage
                 }
                 else if (splitstring[0] == "As Required")
                 {
-
+             
+                    //Dont Add 
                 }
-
 
             }
 
@@ -338,53 +329,54 @@ public partial class MainSchedule : ContentPage
                     {
                         med.Buttonenabled = true;
                         med.Buttonop = 0.2;
-                    med.Buttonntop = 0.2;
+                        med.Buttonntop = 0.2;
 
                     //check feedback here
                     var getuseremed = AllUserMedications.Where(x => x.id == med.Usermedid).FirstOrDefault();
 
                     var dt = dateforschedule.ToString("dd/MM/yyyy");
 
-                    var getfeedbackitem = getuseremed.feedback.Where(x => x.id == med.Feedbackid).Where(x => x.datetime.Contains(dt)).FirstOrDefault();
 
-                    if(getfeedbackitem != null)
+                    // Check if feedback is null before trying to access it
+                    if (getuseremed.feedback != null)
                     {
-                        //check if matches date
-                       
-                      
-                            if(getfeedbackitem.Recorded == "Taken")
+                        // Attempt to find the feedback item
+                        var getfeedbackitem = getuseremed.feedback
+                            .Where(x => x.id == med.Feedbackid)
+                            .Where(x => x.datetime.Contains(dt))
+                            .FirstOrDefault();
+
+                        if (getfeedbackitem != null)
+                        {
+     
+                            if (getfeedbackitem.Recorded == "Taken")
                             {
-                                med.Buttonop = 1;
+                                //Medication Taken 
+                                med.Buttonop = 1;  
                                 med.Buttonntop = 0;
                             }
                             else
                             {
-                                med.Buttonop = 0;
-                                med.Buttonntop = 1;
+                                //Not Taken
+                                med.Buttonop = 0;   
+                                med.Buttonntop = 1; 
                             }
-                        
+                        }
+                        else
+                        {
+                            //Not Recorded
+                            med.Buttonop = 0.2;
+                            med.Buttonntop = 0.2;
+                        }
                     }
-
-                    //if (getuseremed != null && getuseremed.feedback.Any(f => f.id == med.Feedbackid))
-                    //{
-                    //    var dt = dateforschedule.ToString("dd/MM/yyyy");
-
-                    //   if(getuseremed.feedback.Any(x => x.datetime.Contains(dt)))
-                    //    {
-
-                    //    }
-
-
-                    //}
-
-
-
-                }
-
-
-
-
-
+                    else
+                    {
+                        //Not Recorded
+                        med.Buttonop = 0.2;   
+                        med.Buttonntop = 0.2;
+                    }
+                
+                  }
                 }
 
 
@@ -392,19 +384,65 @@ public partial class MainSchedule : ContentPage
             //group the listview so all days are the same
             if (ScheduleList.Count == 0)
             {
+                //No items Due for today 
                 mainschedulelistview.IsVisible = false;
                 nodatastack.IsVisible = true;
             }
             else
             {
+                //populate mainschedulelistview 
                 mainschedulelistview.IsVisible = true;
                 nodatastack.IsVisible = false;
                 mainschedulelistview.ItemsSource = ScheduleList;
                 //   int totalItems = GroupedScheduleList.Sum(g => g.Count()) + GroupedScheduleList.Count; // Items + Group headers
-                mainschedulelistview.HeightRequest = ScheduleList.Count * 180;
+                mainschedulelistview.HeightRequest = ScheduleList.Count * 100;
             }
         }
         catch(Exception ex)
+        {
+
+        }
+    }
+
+    async void populateAsRequired()
+    {
+        try
+        {
+            AsRequiredList.Clear(); 
+            foreach (var item in AllUserMedications)
+            {
+                if (item.frequency.Contains("|"))
+                {
+                    var splitstring = item.frequency.Split('|');
+
+                    if (splitstring[0] == "As Required")
+                    {
+                        var Medtime = new MedtimesDosages();
+                        Medtime.Usermedid = item.id;
+                        Medtime.Name = item.medicationtitle;
+                        Medtime.Dosage = splitstring[1];
+                        Medtime.dosageunit = item.unit;
+                        Medtime.time = "As Required"; 
+                        AsRequiredList.Add(Medtime);
+                    }
+                }
+                else 
+                {
+                    if (item.frequency == "As Required")
+                    {
+                        var Medtime = new MedtimesDosages();
+                        Medtime.Usermedid = item.id;
+                        Medtime.Name = item.medicationtitle;
+                        Medtime.Dosage = "N/A";
+                        Medtime.dosageunit = item.unit;
+                        Medtime.time = "As Required";
+                        AsRequiredList.Add(Medtime);
+                    }
+                }
+              
+            }
+        }
+        catch(Exception Ex)
         {
 
         }
@@ -430,7 +468,6 @@ public partial class MainSchedule : ContentPage
 
                 getitem.Buttonop = 1;
 
-
                 var newfeedback = new MedSuppFeedback();
                 newfeedback.id = label.FeedbackID;
                 newfeedback.Recorded = "Taken";
@@ -438,20 +475,15 @@ public partial class MainSchedule : ContentPage
                 var dt = dateforschedule.Date + timeSpan;
                 newfeedback.datetime = dt.ToString("HH:mm, dd/MM/yyyy");
 
+                if (getusermeditem.feedback == null || !getusermeditem.feedback.Any())
+                {
+                    //feedback is null initalize before hand 
+                    getusermeditem.feedback = new ObservableCollection<MedSuppFeedback>();
+                }
 
                 getusermeditem.feedback.Add(newfeedback);
-
-
-               await aPICalls.UpdateMedicationFeedbackAsync(getusermeditem);
-
-
+                await aPICalls.UpdateMedicationFeedbackAsync(getusermeditem);
             }
-
-
-
-
-
-
         }
         catch(Exception ex )
         {
@@ -479,7 +511,6 @@ public partial class MainSchedule : ContentPage
 
                 getitem.Buttonntop = 1;
 
-
                 var newfeedback = new MedSuppFeedback();
                 newfeedback.id = label.FeedbackID;
                 newfeedback.Recorded = "Not Taken";
@@ -502,5 +533,50 @@ public partial class MainSchedule : ContentPage
         {
 
         }
+    }
+
+    async private void asrequiredbtn_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            populateAsRequired();
+            if (asrequiredbtn.Text == "As Required Medications/Supplements")
+            {
+                asrequiredbtn.Text = "Medication/Supplement Schedule";
+                // Group by time and create the grouped collection
+                //group the listview so all days are the same
+                if (AsRequiredList.Count == 0)
+                {
+
+                    await DisplayAlert("As Required", "No As Required Medications or Supplements are added, Try Adding Some to Access this Feature", "Close"); 
+                    ////No items Due for today 
+                    //mainschedulelistview.IsVisible = false;
+                    //AsRequiredlistview.IsVisible = false; 
+                    //nodatastack.IsVisible = true;
+                }
+                else
+                {
+                   
+                    //populate mainschedulelistview 
+                    mainschedulelistview.IsVisible = false;
+                    AsRequiredlistview.IsVisible = true;
+                    nodatastack.IsVisible = false;
+                    AsRequiredlistview.ItemsSource = AsRequiredList;
+                    AsRequiredlistview.HeightRequest = AsRequiredList.Count * 100;
+                }
+            }
+            else
+            {
+                asrequiredbtn.Text = "As Required Medications/Supplements";
+
+            }
+
+           
+        }
+        catch (Exception Ex)
+        {
+
+        }
+        
     }
 }

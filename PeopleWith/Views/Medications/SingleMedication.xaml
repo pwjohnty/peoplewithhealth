@@ -5,6 +5,9 @@
              xmlns:chart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"
              xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
              BackgroundColor="White" >
+    <ContentPage.ToolbarItems>
+        <ToolbarItem x:Name="EditMed" Clicked="EditMed_Clicked" Text="Edit Medication"/>
+    </ContentPage.ToolbarItems>
     <ScrollView>
 
         <StackLayout VerticalOptions="FillAndExpand" Margin="20,0,20,0" HorizontalOptions="FillAndExpand">
@@ -68,7 +71,7 @@ Padding="0">
 
                     <Label Text="Schedule"  FontSize="20" Margin="0,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
 
-                    <Frame CornerRadius="5"  Margin="0,5,0,0" BackgroundColor="White" BorderColor="Transparent" HasShadow="False" x:Name="Frequencyframe"  Padding="0">
+                    <!--<Frame CornerRadius="5"  Margin="0,5,0,0" BackgroundColor="White" BorderColor="Transparent" HasShadow="False" x:Name="Frequencyframe"  Padding="0">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -84,8 +87,8 @@ Padding="0">
                                 </Label.FormattedText>
                             </Label>
                         </Grid>
-                    </Frame>
-                    <Frame CornerRadius="10"  Margin="0,1,0,1" BackgroundColor="#e5f9f4" HasShadow="False" BorderColor="#e5f9f4" InputTransparent="True" Padding="-4">
+                    </Frame>-->
+                    <Frame CornerRadius="10"  Margin="0,10,0,10" BackgroundColor="#e5f9f4" HasShadow="False" BorderColor="#e5f9f4" InputTransparent="True" Padding="-4">
                         <syncfusion:SfListView  x:Name="ScheduleTimes" Padding="0" Margin="10,5,10,0"  AutoFitMode="Height"  ItemSpacing="0"  HorizontalOptions="FillAndExpand" IsScrollingEnabled="False"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
                         <syncfusion:SfListView.ItemTemplate>
                             <DataTemplate>
@@ -99,11 +102,14 @@ Padding="0">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*"/>
                                                 <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
                                             </Grid.ColumnDefinitions>
 
-                                            <Label Text="{Binding time}" Margin="20,0,0,0" FontFamily="HankenGroteskBold" HeightRequest="30" FontSize="14" Grid.Row="0" Grid.Column="0" VerticalTextAlignment="Center" HorizontalOptions="Start"  TextColor="#031926" />
-                                            <Label Text="{Binding Times}" Margin="0,0,20,0" FontFamily="HankenGroteskBold" HeightRequest="30" FontSize="14" Grid.Row="0" Grid.Column="1" VerticalTextAlignment="Center" HorizontalOptions="End"  TextColor="#031926" />
-                                            <BoxView HeightRequest="1" BackgroundColor="Teal" Grid.Row="1" Grid.ColumnSpan="2"/>
+                                            <Label Text="{Binding time}" Margin="20,0,0,0" FontFamily="HankenGroteskBold" HeightRequest="30" FontSize="14" Grid.Row="0" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" HorizontalOptions="Center"  TextColor="#031926" />
+                                            <Label Text="{Binding Times}" Margin="0,0,20,0" FontFamily="HankenGroteskBold" HeightRequest="30" FontSize="14" Grid.Row="0" Grid.Column="1" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" HorizontalOptions="Center"  TextColor="#031926" />
+                                            <Label Text="{Binding Type}" Margin="0,0,20,0" FontFamily="HankenGroteskBold" HeightRequest="30" FontSize="14" Grid.Row="0" Grid.Column="2" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" HorizontalOptions="Center"  TextColor="#031926" />
+
+                                            <BoxView HeightRequest="1" BackgroundColor="Teal" Grid.Row="1" Grid.ColumnSpan="3"/>
 
                                         </Grid>
                                  
@@ -180,6 +186,8 @@ FontFamily="HankenGroteskBold"
 Text="Show all data" />
 
 
+                <Button x:Name="DeleteBtn" Text="Delete Medication" Clicked="DeleteBtn_Clicked" FontSize="Small" Margin="0,40,0,5" FontFamily="HankenGroteskBold" BackgroundColor="#ffe5e5" TextColor="Red" CornerRadius="10" />
+                <Label HorizontalTextAlignment="Center" Text="If your Medication is deleted you will lose all your Medication feedback, even if your Medication is restored at a later date." Margin="20,0,20,20" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="DarkGray"  />
 
 
 

@@ -90,7 +90,38 @@ namespace PeopleWith
             }
         }
 
-   
+
+        private bool asReqlblVis;
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool AsReqlblVis
+        {
+            get { return asReqlblVis; }
+            set
+            {
+                asReqlblVis = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(AsReqlblVis)));
+                }
+            }
+        }
+
+
+        private bool timepickerVis;
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool TimepickerVis
+        {
+            get { return timepickerVis; }
+            set
+            {
+                timepickerVis = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(TimepickerVis)));
+                }
+            }
+        }
+
         private bool labelvis;
         [System.Text.Json.Serialization.JsonIgnore]
         public bool Labelvis
@@ -223,6 +254,9 @@ namespace PeopleWith
 
         [System.Text.Json.Serialization.JsonIgnore]
         public string Times { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string Type { get; set; }
 
         // event handler for updating the list views
         public event PropertyChangedEventHandler PropertyChanged;

@@ -1,3 +1,5 @@
+using Android.Views;
+using Mopups.Services;
 using System.Collections.ObjectModel;
 
 namespace PeopleWith;
@@ -6,7 +8,9 @@ public partial class SingleMedication : ContentPage
 {
     ObservableCollection<usermedication> UserMedications = new ObservableCollection<usermedication>();
     ObservableCollection<MedtimesDosages> Schedule = new ObservableCollection<MedtimesDosages>();
-    usermedication MedSelected = new usermedication(); 
+    usermedication MedSelected = new usermedication();
+    string[] freqSplit;
+    CrashDetected crashHandler = new CrashDetected();
 
     //public SingleMedication()
     //{
@@ -23,28 +27,68 @@ public partial class SingleMedication : ContentPage
             Schedule = MedSelected.schedule; 
 
             Medicationname.Text = MedSelected.medicationtitle;
-            lblvalue.Text = MedSelected.schedule[0].Dosage; 
+            if (MedSelected.frequency.Contains("|"))
+            {
+                var freq = MedSelected.frequency.Split('|');
+                if (freq[0] == "As Required")
+                {
+                    if (Schedule.Count == 0)
+                    {
+                        MedtimesDosages NewSchedule = new MedtimesDosages();
+                        NewSchedule.Times = freq[0];
+                        Schedule.Add(NewSchedule);
+                    }
+                    else
+                    {
+                        foreach (var item in Schedule)
+                        {
+                            item.Times = freq[0];
+                        }
+                    }
+                    lblvalue.Text = freq[1];
+                }
+                else
+                {
+                        lblvalue.Text = MedSelected.schedule[0].Dosage;
+                        freqSplit = MedSelected.frequency.Split('|');
+
+                        foreach (var item in Schedule)
+                        {
+                            if (freqSplit[0] == "Weekly" || freqSplit[0] == "Weekly ")
+                            {
+                                item.Times = "1 " + MedSelected.preparation;
+                                item.Type = item.Day;
+                            }
+                            else
+                            {
+                                item.Times = "1 " + MedSelected.preparation;
+                                item.Type = freqSplit[0];
+                            }
+
+                        }
+                    }
+                }
+            else 
+            {
+                if (Schedule.Count == 0)
+                {
+                    MedtimesDosages NewSchedule = new MedtimesDosages();
+                    NewSchedule.Times = MedSelected.frequency;
+                    Schedule.Add(NewSchedule);
+                }
+                else
+                {
+                    foreach (var item in Schedule)
+                    {
+                        item.Times = MedSelected.frequency;
+                    }
+                }
+                lblvalue.Text = "N/A";
+            }
+
             lblunit.Text = MedSelected.unit;
             unitlbl.Text = MedSelected.unit;
-            var freqSplit = MedSelected.frequency.Split('|');
-            if(freqSplit[0] == "Daily")
-            {
-                lblfreq.Text = "Every Day";
-            }
-            else
-            {
-                lblfreq.Text = freqSplit[0];
-            }
-            
-            //if(freqSplit[1] == "1")
-            //{
-            //    lbltimes.Text = "Once";
-            //}
-            //else
-            //{
-            //    lbltimes.Text = freqSplit[1] + " Times";
-            //}
-           
+                    
             lblStart.Text = MedSelected.startdate;
             if (string.IsNullOrEmpty(MedSelected.enddate))
             {
@@ -55,10 +99,7 @@ public partial class SingleMedication : ContentPage
                 lblEnd.Text = MedSelected.enddate;
             }
 
-            foreach(var item in Schedule)
-            {
-                item.Times = "1 " + MedSelected.preparation;
-            }
+           
             ScheduleTimes.ItemsSource = Schedule; 
 
 
@@ -74,7 +115,7 @@ public partial class SingleMedication : ContentPage
     {
         try
         {
-            //await Navigation.PushAsync(new Schedule(),false)
+            await Navigation.PushAsync(new MainSchedule(), false);
         }
         catch 
         { 
@@ -85,10 +126,80 @@ public partial class SingleMedication : ContentPage
     {
         try
         {
-            await Navigation.PushAsync(new ShowAllMedication(), false); 
+            await Navigation.PushAsync(new ShowAllMedication(MedSelected), false); 
         }
         catch
         {
         }
+    }
+
+   async private void DeleteBtn_Clicked(object sender, EventArgs e)
+    {
+        //Delete Medication 
+        try
+        {
+            bool Result = await DisplayAlert("Delete Medication", "Are you sure you would like to Delete this Medicaiton, it cannot be retrieved once Deleted", "Delete", "Cancel");
+            if (Result)
+            {
+                //Delete
+                MedSelected.deleted = true; 
+
+                APICalls database = new APICalls();
+                await database.DeleteMedication(MedSelected);
+
+                //Symptom Deleted Message
+                await MopupService.Instance.PushAsync(new PopupPageHelper("Medication Deleted") { });
+                await Task.Delay(1500);
+
+
+                await MopupService.Instance.PopAllAsync(false);
+
+
+                UserMedications.Remove(MedSelected); 
+
+                await Navigation.PushAsync(new AllMedications(UserMedications));
+                var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(p => p is AllMedications);
+                if (pageToRemoves != null)
+                {
+                    Navigation.RemovePage(pageToRemoves);
+                }
+                Navigation.RemovePage(this);
+            }
+            else
+            {
+                //Cancel
+                return; 
+            }
+          
+
+
+        }
+        catch (Exception Ex)
+        {
+            //await crashHandler.CrashDetectedSend(Ex);
+        }
+    }
+
+    async private void EditMed_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            string action = await DisplayActionSheet("Edit Medication", "Cancel", null, "Details", "Schedule");
+
+            if (action == "Details")
+            {
+                MedSelected.EditMedSection = "Details"; 
+                await Navigation.PushAsync(new AddMedication(UserMedications, MedSelected));
+            }
+            else if (action == "Schedule")
+            {
+                MedSelected.EditMedSection = "Schedule"; 
+                await Navigation.PushAsync(new AddMedication(UserMedications, MedSelected));
+            }
+        }
+        catch (Exception Ex)
+        {
+        }
+
     }
 }

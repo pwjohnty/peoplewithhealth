@@ -31,7 +31,7 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Frame  HeightRequest="30" WidthRequest="30" CornerRadius="15" BorderColor="{Binding Bordercolour}" Opacity="{Binding Op}"  Grid.Row="0" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,5,0,0" Grid.Column="0" Padding="5"  BackgroundColor="{Binding Bgcolour}">
+                                <Frame  HeightRequest="30" WidthRequest="30" InputTransparent="True" CornerRadius="15" BorderColor="{Binding Bordercolour}" Opacity="{Binding Op}"  Grid.Row="0" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,5,0,0" Grid.Column="0" Padding="5"  BackgroundColor="{Binding Bgcolour}">
                                     <Label Text="{Binding Day}" FontFamily="HankenGroteskBold" Margin="0,0,0,0" Grid.Row="2" Grid.Column="0" Padding="0" HorizontalOptions="Center"  VerticalOptions="Start" TextColor="#031926" FontSize="14" FontAttributes="None" />
 
                                 </Frame>
@@ -86,21 +86,18 @@
 
             <Button
 BorderColor="Transparent" BorderWidth="1"
-HorizontalOptions="FillAndExpand"
+HorizontalOptions="FillAndExpand" Padding="0"
 TextColor="#031926" BackgroundColor="#eff6fc"
-HeightRequest="30" VerticalOptions="Start"
+HeightRequest="50" VerticalOptions="Start"
 FontAttributes="None" x:Name="asrequiredbtn" 
-     Margin="20,10,20,10"
+Margin="20,10,20,10" Clicked="asrequiredbtn_Clicked"
 FontFamily="HankenGroteskBold"
 Text="As Required Medications/Supplements" />
 
 
             <syncfusion:SfListView x:Name="mainschedulelistview"
-                               AutoFitMode="Height"
-                                                 
-                          Margin="0,0,10,50"
-                                                GroupHeaderSize="20"          
-                                                BackgroundColor="Transparent"
+                               AutoFitMode="Height" Margin="0,0,10,10"
+                               GroupHeaderSize="20" BackgroundColor="Transparent"
                                         SelectionMode="None"
                                            VerticalOptions="StartAndExpand"
                                  
@@ -127,16 +124,16 @@ Text="As Required Medications/Supplements" />
                         <ViewCell>
                             <StackLayout>
                               
-                                <Frame CornerRadius="10"  Margin="10,0,10,5" Padding="5" HasShadow="False" BorderColor="Transparent" InputTransparent="True" BackgroundColor="#e5f9f4">
-                                    <Grid HorizontalOptions="FillAndExpand">
+                                <Frame CornerRadius="10"  Margin="10,0,10,5"  Padding="5" HasShadow="False" BorderColor="Transparent" InputTransparent="False" BackgroundColor="#e5f9f4">
+                                    <Grid  HorizontalOptions="FillAndExpand">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="70*"/>
-                                            <ColumnDefinition Width="15*"/>
-                                            <ColumnDefinition Width="15*"/>
+                                            <ColumnDefinition Width="80*"/>
+                                            <ColumnDefinition Width="10*"/>
+                                            <ColumnDefinition Width="10*"/>
                                         </Grid.ColumnDefinitions>
                                         <Label Text="{Binding Name}" FontSize="16" Grid.Row="0" Margin="20,0,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
 
@@ -150,28 +147,21 @@ Text="As Required Medications/Supplements" />
                                             </Label.FormattedText>
                                         </Label>
 
-                             
+                                        <local:ExtendedImage  Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Source="scheduletick.png" Opacity="{Binding Buttonop}" Margin="0,0,10,0" FeedbackID="{Binding Feedbackid}" UsermedID="{Binding Usermedid}"  HeightRequest="40" WidthRequest="40" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                                            <local:ExtendedImage.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                                            </local:ExtendedImage.GestureRecognizers>
+                                        </local:ExtendedImage>
 
-
+                                        <local:ExtendedImage  Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Source="schedulex.png" Opacity="{Binding Buttonntop}" Margin="0,0,5,0" FeedbackID="{Binding Feedbackid}" UsermedID="{Binding Usermedid}" HeightRequest="38" WidthRequest="38" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                                            <local:ExtendedImage.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1"/>
+                                            </local:ExtendedImage.GestureRecognizers>
+                                        </local:ExtendedImage>
 
                                     </Grid>
                                 </Frame>
 
-                                <HorizontalStackLayout HorizontalOptions="Center">
-
-
-                                    <local:ExtendedImage Source="scheduletick.png" Opacity="{Binding Buttonop}" Margin="0,0,20,10" FeedbackID="{Binding Feedbackid}" UsermedID="{Binding Usermedid}"  HeightRequest="40" WidthRequest="40" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-                                    <local:ExtendedImage.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
-                                    </local:ExtendedImage.GestureRecognizers>
-                                </local:ExtendedImage>
-
-                                    <local:ExtendedImage Source="schedulex.png" Opacity="{Binding Buttonntop}" Margin="0,0,0,10" FeedbackID="{Binding Feedbackid}" UsermedID="{Binding Usermedid}" HeightRequest="40" WidthRequest="40"  Grid.Row="0"  HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-                                        <local:ExtendedImage.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1"/>
-                                    </local:ExtendedImage.GestureRecognizers>
-                                </local:ExtendedImage>
-                                </HorizontalStackLayout>
                             </StackLayout>
                         </ViewCell>
                     </DataTemplate>
@@ -180,16 +170,73 @@ Text="As Required Medications/Supplements" />
             </syncfusion:SfListView>
 
 
+            <syncfusion:SfListView x:Name="AsRequiredlistview"
+                    AutoFitMode="Height" Margin="0,0,10,10"
+                    GroupHeaderSize="20" BackgroundColor="Transparent"
+                     SelectionMode="None" VerticalOptions="StartAndExpand"  Orientation="Vertical">
+                <syncfusion:SfListView.DataSource>
+                    <data:DataSource>
+                        <data:DataSource.GroupDescriptors>
+                            <data:GroupDescriptor PropertyName="time"/>
+                        </data:DataSource.GroupDescriptors>
+                    </data:DataSource>
+                </syncfusion:SfListView.DataSource>
+                <syncfusion:SfListView.GroupHeaderTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout BackgroundColor="Transparent" Padding="10">
+                                <Label Text="{Binding Key}" FontSize="26" Margin="10,0,0,0" FontFamily="HankenGroteskBold" TextColor="#031926" />
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </syncfusion:SfListView.GroupHeaderTemplate>
+                <syncfusion:SfListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout>
+
+                                <Frame CornerRadius="10"  Margin="10,0,10,5"  Padding="5" HasShadow="False" BorderColor="Transparent" InputTransparent="False" BackgroundColor="#e5f9f4">
+                                    <Grid  HorizontalOptions="FillAndExpand">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="70*"/>
+                                            <ColumnDefinition Width="30*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Text="{Binding Name}" FontSize="16" Grid.Row="0" Margin="20,0,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
+
+                                        <Label FontSize="14" Grid.Row="1" Margin="20,0,0,0" VerticalOptions="Start" TextColor="Teal" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="{Binding Dosage}" TextColor="Teal" FontFamily="HankenGroteskBold" />
+                                                    <Span Text=" " />
+                                                    <Span Text="{Binding dosageunit}" TextColor="Teal" FontFamily="HankenGroteskBold" />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+
+                                        <Button Text="Taken" Margin="0,0,5,0" Grid.Row="0" Grid.Column="1"  HeightRequest="30" Grid.RowSpan="2" BackgroundColor="Transparent" BorderColor="Teal" BorderWidth="1" FontFamily="HankenGroteskBold" FontSize="12" TextColor="Black" Padding="0"/>
+
+
+                                    </Grid>
+                                </Frame>
+
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </syncfusion:SfListView.ItemTemplate>
+
+            </syncfusion:SfListView>
+
+
+
+            <!-- No Data Stack -->
             <StackLayout x:Name="nodatastack" IsVisible="False" Margin="0,50,0,0" VerticalOptions="StartAndExpand">
                 <Image Source="adddataicon.png" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="50" WidthRequest="50"/>
                 <Label Text="Nothing Due Today" FontSize="20" Margin="0,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Center" />
             </StackLayout>
-
-
-
-
-
-
 
         </StackLayout>
 
