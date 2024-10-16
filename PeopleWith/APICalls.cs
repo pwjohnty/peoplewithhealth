@@ -769,59 +769,60 @@ namespace PeopleWith
                         if (rawSymptom.schedule == null)
                         {
                         var feedbackSymptoms = JsonConvert.DeserializeObject<List<MedtimesDosages>>(rawSymptom.schedule);
-                        // Add only the relevant feedback to this usersymptom
-                        if (newUserSymptom.deleted == true)
-                        {
-                            //Do Nothing
-                        }
-                        else
-                        {
-                            int index = 0;
-                            foreach (var feedback in feedbackSymptoms)
+                            // Add only the relevant feedback to this usersymptom
+                            if (newUserSymptom.deleted == true)
                             {
-                                newUserSymptom.schedule.Add(feedback);
-                                var dosage = feedback.Dosage;
-                                var time = feedback.time;
-                                //Daily
-                                var getfreq = newUserSymptom.frequency.Split('|');
-                                if (getfreq[0] == "Daily" || getfreq[0] == "Days Interval")
+                                //Do Nothing
+                            }
+                            else
+                            {
+                                int index = 0;
+                                foreach (var feedback in feedbackSymptoms)
                                 {
-                                    var DosageTime = time + "|" + dosage;
-                                    newUserSymptom.TimeDosage.Add(DosageTime);
-                                }
-                                //Weekly
-                                else if (getfreq[0] == "Weekly" || getfreq[0] == "Weekly ")
-                                {
-                                    var freq = newUserSymptom.frequency.Split('|');
-                                    if (freq[1].Contains(","))
+                                    newUserSymptom.schedule.Add(feedback);
+                                    var dosage = feedback.Dosage;
+                                    var time = feedback.time;
+                                    //Daily
+                                    var getfreq = newUserSymptom.frequency.Split('|');
+                                    if (getfreq[0] == "Daily" || getfreq[0] == "Days Interval")
                                     {
-                                        var days = freq[1].Split(',').ToList();
-                                        int GetCount = feedbackSymptoms.Count / days.Count;
-                                        var duplicatedDays = Enumerable.Repeat(days, GetCount).SelectMany(x => x).ToList();
-                                        feedback.Day = duplicatedDays[index];
-                                        if (newUserSymptom.TimeDosage.Count == feedbackSymptoms.Count)
+                                        var DosageTime = time + "|" + dosage;
+                                        newUserSymptom.TimeDosage.Add(DosageTime);
+                                    }
+                                    //Weekly
+                                    else if (getfreq[0] == "Weekly" || getfreq[0] == "Weekly ")
+                                    {
+                                        var freq = newUserSymptom.frequency.Split('|');
+                                        if (freq[1].Contains(","))
                                         {
-                                            //Do nothing 
+                                            var days = freq[1].Split(',').ToList();
+                                            int GetCount = feedbackSymptoms.Count / days.Count;
+                                            var duplicatedDays = Enumerable.Repeat(days, GetCount).SelectMany(x => x).ToList();
+                                            feedback.Day = duplicatedDays[index];
+                                            if (newUserSymptom.TimeDosage.Count == feedbackSymptoms.Count)
+                                            {
+                                                //Do nothing 
+                                            }
+                                            else
+                                            {
+                                                for (int i = 0; i < feedbackSymptoms.Count; i++)
+                                                {
+                                                    var getday = duplicatedDays[i];
+                                                    var DosageTimes = time + "|" + dosage + "|" + getday;
+                                                    newUserSymptom.TimeDosage.Add(DosageTimes);
+                                                }
+                                            }
+
                                         }
                                         else
                                         {
-                                            for (int i = 0; i < feedbackSymptoms.Count; i++)
-                                            {
-                                                var getday = duplicatedDays[i];
-                                                var DosageTimes = time + "|" + dosage + "|" + getday;
-                                                newUserSymptom.TimeDosage.Add(DosageTimes);
-                                            }
+                                            var getday = freq[1];
+                                            var DosageTimes = time + "|" + dosage + "|" + getday;
+                                            newUserSymptom.TimeDosage.Add(DosageTimes);
                                         }
-
                                     }
-                                    else
-                                    {
-                                        var getday = freq[1];
-                                        var DosageTimes = time + "|" + dosage + "|" + getday;
-                                        newUserSymptom.TimeDosage.Add(DosageTimes);
-                                    }
+                                    index = index + 1;
                                 }
-                                index = index + 1;
                             }
 
                         }
@@ -883,6 +884,7 @@ namespace PeopleWith
                     }
                 }
                 return new ObservableCollection<usermedication>(userSymptomsList);
+
             }
             catch (Exception ex)
             {
@@ -1104,7 +1106,7 @@ namespace PeopleWith
                 var payload = new
                 {
                     status = updatedmed.status
-                    schedule = Updatefeedback.schedule
+                    
                 };
 
                 // Serialize the object into JSON
@@ -1713,63 +1715,63 @@ namespace PeopleWith
 
 
         //Get All User Supplements
-        public async Task<ObservableCollection<usersupplement>> GetUserSupplementsAsync()
-        {
-            try
-            {
+        //public async Task<ObservableCollection<usersupplement>> GetUserSupplementsAsync()
+        //{
+        //    try
+        //    {
 
 
-                HttpClient client = new HttpClient();
-                string userid = Preferences.Default.Get("userid", "Unknown");
-                string urlWithQuery = $"{usersupplements}?$filter=userid eq '{userid}'";
-                HttpResponseMessage response = await client.GetAsync(urlWithQuery);
-                string data = await response.Content.ReadAsStringAsync();
-                // Deserialize the response into a generic structure
-                var rawResponse = JsonConvert.DeserializeObject<SingleUserSupplement>(data);
-                var userSymptomsList = new List<usersupplement>();
-                if (rawResponse?.Value != null)
-                {
-                    foreach (var rawSymptom in rawResponse.Value)
-                    {
-                        var newUserSymptom = new usersupplement
-                        {
-                            id = rawSymptom.id,
-                            userid = rawSymptom.userid,
-                            supplementid = rawSymptom.supplementid,
-                            supplementtitle = rawSymptom.supplementtitle,
-                            startdate = rawSymptom.startdate,
-                            enddate = rawSymptom.enddate,
-                            frequency = rawSymptom.frequency,
-                            diagnosis = rawSymptom.diagnosis,
-                            status = rawSymptom.status,
-                            feedback = rawSymptom.feedback,
-                            //details = rawSymptom.details,
-                            formulation = rawSymptom.formulation,
-                            preparation = rawSymptom.preparation,
-                            unit = rawSymptom.unit,
-                            schedule = new ObservableCollection<MedtimesDosages>()
+        //        HttpClient client = new HttpClient();
+        //        string userid = Preferences.Default.Get("userid", "Unknown");
+        //        string urlWithQuery = $"{usersupplements}?$filter=userid eq '{userid}'";
+        //        HttpResponseMessage response = await client.GetAsync(urlWithQuery);
+        //        string data = await response.Content.ReadAsStringAsync();
+        //        // Deserialize the response into a generic structure
+        //        var rawResponse = JsonConvert.DeserializeObject<SingleUserSupplement>(data);
+        //        var userSymptomsList = new List<usersupplement>();
+        //        if (rawResponse?.Value != null)
+        //        {
+        //            foreach (var rawSymptom in rawResponse.Value)
+        //            {
+        //                var newUserSymptom = new usersupplement
+        //                {
+        //                    id = rawSymptom.id,
+        //                    userid = rawSymptom.userid,
+        //                    supplementid = rawSymptom.supplementid,
+        //                    supplementtitle = rawSymptom.supplementtitle,
+        //                    startdate = rawSymptom.startdate,
+        //                    enddate = rawSymptom.enddate,
+        //                    frequency = rawSymptom.frequency,
+        //                    diagnosis = rawSymptom.diagnosis,
+        //                    status = rawSymptom.status,
+        //                    feedback = rawSymptom.feedback,
+        //                    //details = rawSymptom.details,
+        //                    formulation = rawSymptom.formulation,
+        //                    preparation = rawSymptom.preparation,
+        //                    unit = rawSymptom.unit,
+        //                    schedule = new ObservableCollection<MedtimesDosages>()
 
-                        };
-                        // Deserialize the feedback string into the FeedbackList
-                        var feedbackSymptoms = JsonConvert.DeserializeObject<List<MedtimesDosages>>(rawSymptom.schedule);
-                        // Add only the relevant feedback to this usersymptom
+        //                };
+        //                // Deserialize the feedback string into the FeedbackList
+        //                var feedbackSymptoms = JsonConvert.DeserializeObject<List<MedtimesDosages>>(rawSymptom.schedule);
+        //                // Add only the relevant feedback to this usersymptom
 
-                        foreach (var feedback in feedbackSymptoms)
-                        {
-                            newUserSymptom.schedule.Add(feedback);
-                        }
-                        userSymptomsList.Add(newUserSymptom);
-                        //userSymptomsList[0].dosage
+        //                foreach (var feedback in feedbackSymptoms)
+        //                {
+        //                    newUserSymptom.schedule.Add(feedback);
+        //                }
+        //                userSymptomsList.Add(newUserSymptom);
+        //                //userSymptomsList[0].dosage
 
-                    }
-                }
-                return new ObservableCollection<usersupplement>(userSymptomsList);
-            }
-            catch (Exception ex)
-            {
-                return new ObservableCollection<usersupplement>();
-            }
-        }
+        //            }
+        //        }
+        //        return new ObservableCollection<usersupplement>(userSymptomsList);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new ObservableCollection<usersupplement>();
+        //    }
+        //}
 
 
 
