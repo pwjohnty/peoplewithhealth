@@ -57,6 +57,9 @@ public partial class UpdateAllSymptoms : ContentPage
             }
             var sortedSymptoms = UserSymptomsPassed.OrderByDescending(f => DateTime.Parse(f.LastUpdated)).ToList();
             SymptomUpdateLV.ItemsSource = UserSymptomsPassed;
+            //change visual state on page load, as button is not updating;
+            UpdateBtn.IsEnabled = true;
+            UpdateBtn.IsEnabled = false;
 
         }
         catch (Exception Ex)
@@ -94,7 +97,8 @@ public partial class UpdateAllSymptoms : ContentPage
     async private void Button_Clicked(object sender, EventArgs e)
     {
         try
-        {        
+        {
+            UpdateBtn.IsEnabled = false; 
                     foreach (var symptom in UserSymptomsPassed)
                     {
 
@@ -343,6 +347,7 @@ public partial class UpdateAllSymptoms : ContentPage
     {
         try
         {
+            
             var item = e.DataItem as usersymptom;
 
             if(item != null)
@@ -355,6 +360,16 @@ public partial class UpdateAllSymptoms : ContentPage
                 {
                     item.Enabled = true;
                 }
+            }
+
+            bool hasEnabledItem = UserSymptomsPassed.Any(item => item.Enabled == true);
+            if (hasEnabledItem)
+            {
+                UpdateBtn.IsEnabled = true;
+            }
+            else
+            {
+                UpdateBtn.IsEnabled = false;
             }
 
         }

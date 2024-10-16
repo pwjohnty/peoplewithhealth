@@ -478,8 +478,8 @@ public partial class RegisterFinalPage : ContentPage
                
 
                 await Task.Delay(3000);
-                await Navigation.PushAsync(new MainDashboard(), false);
-            
+                Application.Current.MainPage = new NavigationPage(new MainDashboard());
+
 
             }
             else
@@ -648,6 +648,19 @@ public partial class RegisterFinalPage : ContentPage
             }
         }
         catch(Exception ex)
+        {
+
+        }
+    }
+
+    async private void TapGestureRecognizer_Tapped_1(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            string BackArrow = "PeopleWith";
+            await Navigation.PushAsync(new PrivacyPolicy(BackArrow), false);
+        }
+        catch (Exception Ex)
         {
 
         }

@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView" 
+             x:Class="PeopleWith.SingleHCP" BackgroundColor="White"
+             NavigationPage.HasNavigationBar="True">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Clicked="ToolbarItem_Clicked" Text="Edit HCP" />
+    </ContentPage.ToolbarItems>
+    <ScrollView>
+    <VerticalStackLayout >
+       
+            <!--Title-->
+            <Label Text="Health Care Practitioner"  FontSize="26" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
+                
+            <!--Name, Role, Location-->
+            <Frame CornerRadius="5"  Margin="10,5,10,5" BackgroundColor="#CBC3E3" BorderColor="Transparent" HasShadow="False" x:Name="dataframe" Padding="0">
+                <Grid Margin="0,10,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="90*"/>
+                            <ColumnDefinition Width="10*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <Label  FontFamily="HankenGroteskBold"  Margin="10,0,0,5" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span x:Name="Namelbl" TextColor="#9F2B68" FontSize="18" FontFamily="HankenGroteskBold" FontAttributes="Bold"/>
+                                    <Span Text=" " TextColor="#031926" FontSize="20" FontAttributes="Bold"/>
+                                    <Span x:Name="Rolelbl" TextColor="Gray" FontFamily="HankenGroteskRegular" FontSize="14"   />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label x:Name="locationlbl" Margin="10,5,0,10" VerticalOptions="Center" HorizontalOptions="Start" VerticalTextAlignment="Center" TextColor="#031926" FontSize="25" FontFamily="HankenGroteskBold" FontAttributes="Bold"   Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" />
+                    </Grid>
+            </Frame>
+
+            <!-- Appointments with HCP-->
+            <StackLayout>
+
+                <!-- Appointments Empty Stack -->
+                <StackLayout x:Name="NoAppointmentsStack" IsVisible="False" Margin="10,0,10,0">
+
+                    <Frame  Margin="10,10,10,0" BorderColor="Transparent" CornerRadius="10" BackgroundColor="#CBC3E3" HasShadow="false" Padding="10" >
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Label Text="No Appointments Recorded" FontFamily="HankenGroteskBold" TextColor="#9F2B68" HorizontalOptions="Center"  FontAttributes="Bold" FontSize="Small" Grid.Row="0"/>
+                            <Label Text="Tap to Add Appointment" FontFamily="HankenGroteskBold" HorizontalOptions="Center" VerticalOptions="Center" TextColor="#9F2B68" FontAttributes="Bold" FontSize="Small" Grid.Row="1"  />
+
+                        </Grid>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="ToolbarItem_Clicked"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
+
+                </StackLayout>
+
+                <!-- Appointment Listview-->
+                <StackLayout x:Name="AppointmentsListviewStack" VerticalOptions="FillAndExpand" IsVisible="false" Margin="0">
+
+                    <Label Text="Upcoming Appointments" x:Name="Upcominglbl" IsVisible="False" TextDecorations="Underline" Margin="20,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="20" />
+                    <syncfusion:SfListView x:Name="UpcomingListview" IsVisible="False" AutoFitMode="DynamicHeight" ItemTapped="AppointmentsListview_ItemTapped" SelectionBackground="Transparent"
+                    SelectionMode="None"  CachingStrategy="RecycleTemplate"  Margin="10,10,10,0">
+                        <syncfusion:SfListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="20*"/>
+                                            <ColumnDefinition Width="80*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Date Section -->
+                                        <StackLayout Grid.Row="0" Grid.Column="0" Margin="0,11,0,10">
+                                            <StackLayout>
+                                                <Label Text="{Binding datetimeConverted, StringFormat='{0:MMM}'}" FontFamily="HankenGroteskBold"  Padding="5,0,1,0"  CharacterSpacing="0.5"   TextColor="#9F2B68"
+                                FontAttributes="Bold" FontSize="16" VerticalOptions="Center" HorizontalOptions="Center" />
+
+                                                <Frame BackgroundColor="#CBC3E3"  HasShadow="False" Margin="4,0,0,0" CornerRadius="20"
+                                HeightRequest="40" WidthRequest="40" Padding="1,0,1,0" HorizontalOptions="Center" VerticalOptions="Center" BorderColor="Transparent">
+
+                                                    <Label HorizontalTextAlignment="Center" FontFamily="HankenGroteskBold" VerticalTextAlignment="Center" Text="{Binding datetimeConverted, StringFormat='{0:dd}'}"   TextColor="White" FontSize="20"
+                                    FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" />
+
+                                                </Frame>
+                                            </StackLayout>
+                                        </StackLayout>
+
+                                        <!-- Appointment Details Section -->
+                                        <Frame Grid.Row="0"  Grid.Column="1"  CornerRadius="10"  BackgroundColor="#CBC3E3" HeightRequest="75" HasShadow="False" Padding="0" BorderColor="White">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+
+                                                <Label  Margin="10,10,0,0" FontFamily="HankenGroteskBold" Text="{Binding datetimeConverted, StringFormat='{0:HH:mm tt }'}" TextColor="#9F2B68" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center" />
+
+                                                <Label HorizontalOptions="StartAndExpand" FontFamily="HankenGroteskBold" Margin="10,0,0,0" Grid.Row="1">
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span Text="{Binding type}" FontFamily="HankenGroteskBold" TextColor="#9F2B68" FontSize="Medium" />
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                            </Grid>
+                                        </Frame>
+                                    </Grid>
+                                </ViewCell>
+                            </DataTemplate>
+                        </syncfusion:SfListView.ItemTemplate>
+                    </syncfusion:SfListView>
+                </StackLayout>
+
+
+                   <!-- Historical Appointemnt --> 
+                <Label Text="Historical Appointments" x:Name="Historicalbl" IsVisible="False" TextDecorations="Underline" Margin="20,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="20" />
+                <syncfusion:SfListView x:Name="HistoricalListview" AutoFitMode="DynamicHeight"  ItemTapped="HistoricalListview_ItemTapped" SelectionBackground="Transparent"
+    SelectionMode="Single"  CachingStrategy="RecycleTemplate" IsVisible="False" Margin="10,10,10,0">
+                    <syncfusion:SfListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="20*"/>
+                                        <ColumnDefinition Width="80*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Date Section -->
+                                    <StackLayout Grid.Row="0" Grid.Column="0" Margin="0,11,0,10">
+                                        <StackLayout>
+                                            <Label Text="{Binding datetimeConverted, StringFormat='{0:MMM}'}" FontFamily="HankenGroteskBold"  Padding="5,0,1,0"  CharacterSpacing="0.5"   TextColor="#9F2B68"
+                FontAttributes="Bold" FontSize="16" VerticalOptions="Center" HorizontalOptions="Center" />
+
+                                            <Frame BackgroundColor="#CBC3E3"  HasShadow="False" Margin="4,0,0,0" CornerRadius="20" InputTransparent="True"
+                HeightRequest="40" WidthRequest="40" Padding="1,0,1,0" HorizontalOptions="Center" VerticalOptions="Center" BorderColor="Transparent">
+
+                                                <Label HorizontalTextAlignment="Center" FontFamily="HankenGroteskBold" VerticalTextAlignment="Center" Text="{Binding datetimeConverted, StringFormat='{0:dd}'}"   TextColor="White" FontSize="20"
+                    FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" />
+
+                                            </Frame>
+                                        </StackLayout>
+                                    </StackLayout>
+
+                                    <!-- Appointment Details Section -->
+                                    <Frame Grid.Row="0"  Grid.Column="1"  CornerRadius="10" InputTransparent="True" BackgroundColor="#CBC3E3" HeightRequest="75" HasShadow="False" Padding="0" BorderColor="White">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+
+                                            <Label Margin="10,10,0,0" FontFamily="HankenGroteskBold" Text="{Binding datetimeConverted, StringFormat='{0:HH:mm tt }'}" TextColor="#9F2B68" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center" />
+
+                                            <Label HorizontalOptions="StartAndExpand" FontFamily="HankenGroteskBold" Margin="10,0,0,0" Grid.Row="1">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{Binding type}" FontFamily="HankenGroteskBold" TextColor="#9F2B68" FontSize="Medium" />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </Grid>
+                                    </Frame>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.ItemTemplate>
+                </syncfusion:SfListView>
+            </StackLayout>
+
+
+            <!-- Contact Details -->
+            <Label Text="Contact Details"  FontSize="20" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
+        
+        <!-- Appointments Assocaited with Doc-->
+            <Frame HasShadow="false" Margin="10,5,10,0" BorderColor="#CBC3E3" Padding="-2" BackgroundColor="Transparent" >
+                <syncfusion:SfListView x:Name="HCPContactDetails" SelectionBackground="Transparent" AutoFitMode="Height" >
+                    <syncfusion:SfListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ViewCell.View>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label HorizontalOptions="StartAndExpand" Text="{Binding ContactTitle}" FontFamily="HankenGroteskRegular" HeightRequest="20" FontSize="Micro" VerticalOptions="Center" Grid.Row="0" Grid.Column="0" Margin="10,10,0,0" TextColor="#9F2B68" />
+                                        <Label HorizontalOptions="StartAndExpand" Text="{Binding ContactItem}" FontFamily="HankenGroteskBold" HeightRequest="30" VerticalOptions="Center" FontSize="Small" Grid.Row="1" Grid.Column="0" Margin="10,0,0,0" FontAttributes="Bold" TextColor="#031926" />
+
+                                        <BoxView HeightRequest="1" Color="#CBC3E3"  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="1" Margin="10,0,10,0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+
+                                    </Grid>
+                                </ViewCell.View>
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.ItemTemplate>
+                </syncfusion:SfListView>
+            </Frame>
+        
+       
+
+
+                <!-- Delete HCP Button -->
+            <Button  Text="Delete HCP" Clicked="Button_Clicked" FontSize="Small" Margin="20,40,20,5" FontFamily="HankenGroteskBold" BackgroundColor="#ffe5e5" TextColor="Red" CornerRadius="10" />
+            <Label HorizontalTextAlignment="Center" Text="If your HCP is deleted you will lose all relevant information." Margin="20,0,20,20"  FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="DarkGray"  />
+
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

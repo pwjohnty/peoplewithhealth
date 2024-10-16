@@ -18,7 +18,7 @@ namespace PeopleWith
         //public string createdAt { get; set; }
         //public string updatedAt { get; set; }
         //public string version { get; set; }
-        //public bool deleted { get; set; }
+        public bool deleted { get; set; }
         public string userid { get; set; }
         public string measurementid { get; set; }
         public string measurementname { get; set; }

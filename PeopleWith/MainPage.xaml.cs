@@ -35,7 +35,25 @@
                     }
                     else
                     {
-                        Application.Current.MainPage = new NavigationPage(new BiometricsLogin());
+                        if (pincode.Contains(","))
+                        {
+                            var split = pincode.Split(',');
+                            if (split[0] == "On" || biometrics == true)
+                            {
+
+                                Application.Current.MainPage = new NavigationPage(new BiometricsLogin());
+                            }
+                            else
+                            {
+                                //Set to Mainpage
+                            }
+
+                        }
+                        else
+                        {
+                            Application.Current.MainPage = new NavigationPage(new BiometricsLogin());
+                        }
+                        
                     }
 
 
@@ -97,6 +115,19 @@
             catch (Exception ex)
             {
                 //await DisplayAlert(ex.Message, ex.StackTrace, "OK");
+            }
+        }
+
+        async private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+        {
+            try
+            {
+                string BackArrow = "PeopleWith"; 
+                await Navigation.PushAsync(new PrivacyPolicy(BackArrow), false);
+            }
+            catch (Exception Ex)
+            {
+
             }
         }
     }

@@ -231,13 +231,34 @@ public partial class ProfileEdit : ContentPage
                 if (string.IsNullOrEmpty(AllUserData.userpin))
                 {
                     AllUserData.pintoggled = false;
+                    PinSwitch.IsToggled = AllUserData.pintoggled;
                 }
                 else
                 {
-                    AllUserData.pintoggled = true;
+                    if (AllUserData.userpin.Contains(","))
+                    {
+                        var split = AllUserData.userpin.Split(',');
+                        if (split[0] == "Off")
+                        {
+                            AllUserData.pintoggled = false;
+                            PinSwitch.IsToggled = AllUserData.pintoggled;
+                        }
+                        else
+                        {
+                            AllUserData.pintoggled = true;
+                            PinSwitch.IsToggled = AllUserData.pintoggled;
+                        }
+                    }
+                    else
+                    {
+                        AllUserData.pintoggled = true;
+                        PinSwitch.IsToggled = AllUserData.pintoggled;
+                    }
+                  
                 }
 
-                PinSwitch.IsToggled = AllUserData.pintoggled;
+
+               
                 if (AllUserData.biometrics == true)
                 {
                     FingerSwitch.IsToggled = true;
@@ -1310,7 +1331,8 @@ public partial class ProfileEdit : ContentPage
             {
                 //Udpate DateofBirth in the Db 
                 bool PinChanged = false;
-                string PinCode = codepin.PINValue;
+
+                string PinCode = string.Join("On,",codepin.PINValue);
                 string id = Helpers.Settings.UserKey;
                 var URL = $"https://pwdevapi.peoplewith.com/api/user/userid/{id}";
 
@@ -1361,7 +1383,7 @@ public partial class ProfileEdit : ContentPage
             }
             else
             {
-                Pinincorrectlbl.Text = "PINs does not match";
+                Pinincorrectlbl.Text = "PIN's do not match";
                 Pinincorrectlbl.IsVisible = true;
                 Vibration.Vibrate();
                 return;
@@ -1439,13 +1461,29 @@ public partial class ProfileEdit : ContentPage
     {
             try
             {
-            //false Sets it to null 
+            string UserPinjoin = String.Empty;
+            string PinOnOff = String.Empty; 
             if (e.Value == false)
             {
+                PinOnOff = "Off,";
+            }
+            else
+            {
+                PinOnOff = "On,";
+            }
                 string id = Helpers.Settings.UserKey;
                 var URL = $"https://pwdevapi.peoplewith.com/api/user/userid/{id}";
-    
-                string json = System.Text.Json.JsonSerializer.Serialize(new { userpin = (string)null });
+                if (AllUserData.userpin.Contains(","))
+                {
+                    var split = AllUserData.userpin.Split(',');
+                    UserPinjoin = PinOnOff + split[1];
+                }
+                else
+                {
+                     UserPinjoin = PinOnOff + AllUserData.userpin;
+                }
+                
+                string json = System.Text.Json.JsonSerializer.Serialize(new { userpin = UserPinjoin });
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 using (var client = new HttpClient())
@@ -1464,16 +1502,10 @@ public partial class ProfileEdit : ContentPage
                     else
                     {
                         //Remove Pin Code 
-                        Preferences.Set("pincode", string.Empty);
+                        Preferences.Set("pincode", UserPinjoin);
                     }
                 }
-             
-            }
-            else
-            {
-                //Set to true (Reset PinCode) 
-            }
-           
+
             }
             catch (Exception Ex)
             {

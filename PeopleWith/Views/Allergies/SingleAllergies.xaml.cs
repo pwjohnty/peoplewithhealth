@@ -33,11 +33,11 @@ public partial class SingleAllergies : ContentPage
 
     }
 
-    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    async private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
         try
         {
-            //Allergy Information
+            await DisplayAlert("Allergy Information", "There is no Information against this Allergy", "Close");
         }
         catch (Exception ex)
         {
@@ -49,7 +49,7 @@ public partial class SingleAllergies : ContentPage
     {
         try
         {
-            bool Delete = await DisplayAlert("Delete Allergy", "Are you sure you would like the delete this Allergy?. Once deleted it cannot be retrieved", "Delete", "Cancel");
+            bool Delete = await DisplayAlert("Delete Allergy", "Are you sure you would like the delete this Allergy? Once deleted it cannot be retrieved", "Delete", "Cancel");
             if (Delete == true)
             {
 

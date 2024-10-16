@@ -136,4 +136,16 @@ public partial class AllDiagnosis : ContentPage
             //Add Crash log
         }
     }
+
+   async private void DiagInfoTapped(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            await MopupService.Instance.PushAsync(new Infopopup("diag") { });
+        }
+        catch (Exception Ex)
+        {
+            //await crashHandler.CrashDetectedSend(Ex);
+        }
+    }
 }

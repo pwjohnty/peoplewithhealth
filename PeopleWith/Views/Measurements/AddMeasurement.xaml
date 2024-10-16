@@ -4,8 +4,7 @@
                xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
              xmlns:picker="clr-namespace:Syncfusion.Maui.Picker;assembly=Syncfusion.Maui.Picker"
              xmlns:calendar="clr-namespace:Syncfusion.Maui.Calendar;assembly=Syncfusion.Maui.Calendar"
-             x:Class="PeopleWith.AddMeasurement" BackgroundColor="White" HideSoftInputOnTapped="True"
-             >
+             x:Class="PeopleWith.AddMeasurement" BackgroundColor="White" HideSoftInputOnTapped="True" >
 
     <StackLayout VerticalOptions="FillAndExpand" Margin="20,0,20,0" HorizontalOptions="FillAndExpand">
 

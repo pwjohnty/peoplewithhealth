@@ -4,12 +4,12 @@
              x:Class="PeopleWith.SingleAllergies"
              BackgroundColor="White">
     <VerticalStackLayout>
-        <StackLayout x:Name="AllergySingle">
+        <StackLayout x:Name="AllergySingle" >
             <Frame HasShadow="False" CornerRadius="10"  InputTransparent="True" Padding="5" BorderColor="Transparent" BackgroundColor="#FFF5EE"  Margin="10,0,10,5">
                 <Grid >
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="35"/>
-                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
 
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
@@ -17,8 +17,8 @@
                         <ColumnDefinition Width="10*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Label x:Name="AlergyTitle" Margin="10,0,0,0" FontFamily="HankenGroteskBold"  FontSize="20" VerticalOptions="End" Grid.Row="0" Grid.Column="0"  TextColor="#031926" />
-                    <Label x:Name="AllergyDate" FontFamily="HankenGroteskBold" VerticalOptions="Start" Margin="10,0,0,0" HorizontalOptions="Start" FontSize="12" Grid.Row="1" Grid.Column="0"  TextColor="DarkGray" />
+                    <Label x:Name="AlergyTitle" HeightRequest="35" Margin="10,0,0,0" FontFamily="HankenGroteskBold"  FontSize="20" VerticalOptions="End" Grid.Row="0" Grid.Column="0"  TextColor="#031926" />
+                    <Label x:Name="AllergyDate" HeightRequest="25" FontFamily="HankenGroteskBold" VerticalOptions="Start" Margin="10,0,0,0" HorizontalOptions="Start" FontSize="12" Grid.Row="1" Grid.Column="0"  TextColor="DarkGray" />
 
                 </Grid>
             </Frame>
@@ -38,9 +38,14 @@
                 </Frame.GestureRecognizers>
             </Frame>
 
-            <Button x:Name="Deletebtn" Margin="20,50,20,0"  FontSize="Small" TextColor="Red" BackgroundColor="#FFF5EE" FontFamily="HankenGroteskBold" CornerRadius="10" Text="Delete Allergy" Clicked="Deletebtn_Clicked" />
-            <Label HorizontalTextAlignment="Start" Text="If this Allergy is deleted, you will lose all your Allergy Data." Margin="20,0,20,20" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="Red"  />
-
+            <Grid  >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Button x:Name="Deletebtn" Grid.Row="0" Margin="20,50,20,0"  FontSize="Small" TextColor="Red" BackgroundColor="#ffe5e5" FontFamily="HankenGroteskBold" CornerRadius="10" Text="Delete Allergy" Clicked="Deletebtn_Clicked" />
+            <Label HorizontalTextAlignment="Start" Grid.Row="1" Text="If this Allergy is deleted, you will lose all of your Allergy Data." Margin="20,0,20,20" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="DarkGray"  />
+            </Grid>
         </StackLayout>
     </VerticalStackLayout>
 </ContentPage>

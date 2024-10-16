@@ -249,36 +249,42 @@ public partial class SingleSymptom : ContentPage
         //Delete Symptom 
         try
         {
-            foreach (var item in PassedSymptom)
+            bool Delete = await DisplayAlert("Delete Symptom", "Are you sure you would like the delete this Symptom? Once deleted it cannot be retrieved", "Delete", "Cancel");
+            if (Delete == true)
             {
-                item.deleted = true;
-            }
-            APICalls database = new APICalls();
-            await database.DeleteSymptom( PassedSymptom);
-
-            //Symptom Deleted Message
-            await MopupService.Instance.PushAsync(new PopupPageHelper("Symptom Deleted") { });
-            await Task.Delay(1500);
-
-
-            await MopupService.Instance.PopAllAsync(false);
-
-            foreach (var item in AllSymptomData)
-            {
-                if (item.id == PassedSymptom[0].id)
+                foreach (var item in PassedSymptom)
                 {
-                    item.deleted = PassedSymptom[0].deleted;
+                    item.deleted = true;
                 }
-            }
-            await Navigation.PushAsync(new AllSymptoms(AllSymptomData));
-            var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(p => p is AllSymptoms);
-            if (pageToRemoves != null)
-            {
-                Navigation.RemovePage(pageToRemoves);
-            }
-            Navigation.RemovePage(this);
+                APICalls database = new APICalls();
+                await database.DeleteSymptom(PassedSymptom);
 
-           
+                //Symptom Deleted Message
+                await MopupService.Instance.PushAsync(new PopupPageHelper("Symptom Deleted") { });
+                await Task.Delay(1500);
+
+
+                await MopupService.Instance.PopAllAsync(false);
+
+                foreach (var item in AllSymptomData)
+                {
+                    if (item.id == PassedSymptom[0].id)
+                    {
+                        item.deleted = PassedSymptom[0].deleted;
+                    }
+                }
+                await Navigation.PushAsync(new AllSymptoms(AllSymptomData));
+                var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(p => p is AllSymptoms);
+                if (pageToRemoves != null)
+                {
+                    Navigation.RemovePage(pageToRemoves);
+                }
+                Navigation.RemovePage(this);
+            }
+            else
+            {
+                return;
+            }        
         }
         catch (Exception Ex)
         {

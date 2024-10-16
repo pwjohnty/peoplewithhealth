@@ -23,23 +23,30 @@ namespace PeopleWith
 
         private async void OnConnectivityChanged(object sender, bool isConnected)
         {
-            if (!isConnected)
+            try
             {
-                // Check if NoInternetPage is already on the navigation stack
-                var currentPage = MainPage.Navigation.NavigationStack.LastOrDefault();
-                if (!(currentPage is NoInternetPage))
+                if (!isConnected)
                 {
-                    await MainPage.Navigation.PushAsync(new NoInternetPage());
+                    // Check if NoInternetPage is already on the navigation stack
+                    var currentPage = MainPage.Navigation.NavigationStack.LastOrDefault();
+                    if (!(currentPage is NoInternetPage))
+                    {
+                        await MainPage.Navigation.PushAsync(new NoInternetPage());
+                    }
+                }
+                else
+                {
+                    // Check if NoInternetPage is on the navigation stack and pop it
+                    var noInternetPage = MainPage.Navigation.NavigationStack.FirstOrDefault(p => p is NoInternetPage);
+                    if (noInternetPage != null)
+                    {
+                        await MainPage.Navigation.PopAsync();
+                    }
                 }
             }
-            else
+            catch(Exception Ex)
             {
-                // Check if NoInternetPage is on the navigation stack and pop it
-                var noInternetPage = MainPage.Navigation.NavigationStack.FirstOrDefault(p => p is NoInternetPage);
-                if (noInternetPage != null)
-                {
-                    await MainPage.Navigation.PopAsync();
-                }
+
             }
         }
     }

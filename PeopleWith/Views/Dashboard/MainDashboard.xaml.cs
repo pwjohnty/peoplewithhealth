@@ -54,9 +54,19 @@ public partial class MainDashboard : ContentPage
 
             AllUserDetails.biometrics = UserDetails[0].biometrics;
             Helpers.Settings.biometrics = UserDetails[0].biometrics;
-            
-            AllUserDetails.userpin = UserDetails[0].userpin;
-            Helpers.Settings.PinCode = UserDetails[0].userpin;
+
+            //if (UserDetails[0].userpin.Contains(","))
+            //{
+            //    var split = UserDetails[0].userpin.Split(','); 
+            //    AllUserDetails.userpin = split[1];
+            //    Helpers.Settings.PinCode = split[1];
+            //}
+            //else
+            //{
+                AllUserDetails.userpin = UserDetails[0].userpin;
+                Helpers.Settings.PinCode = UserDetails[0].userpin;
+            //}
+
 
             AllUserDetails.password = UserDetails[0].password; 
             Helpers.Settings.Password = UserDetails[0].password;
@@ -168,4 +178,40 @@ public partial class MainDashboard : ContentPage
 
     }
 
+    async private void AppointBtn_Clicked(object sender, EventArgs e)
+    {
+
+        try
+        {
+            await Navigation.PushAsync(new Appointments(), false);
+        }
+        catch (Exception Ex)
+        {
+
+        }
+    }
+
+    async private void HCPBtn_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            await Navigation.PushAsync(new HCPs(), false);
+        }
+        catch (Exception Ex)
+        {
+
+        }
+    }
+
+    async private void VideoBtn_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            await Navigation.PushAsync(new AllVideos(), false);
+        }
+        catch (Exception Ex)
+        {
+
+        }
+    }
 }

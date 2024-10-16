@@ -7,7 +7,21 @@
              NavigationPage.HasNavigationBar="True" BackgroundColor="#ffffff">
     <ScrollView>
     <VerticalStackLayout>
-        <Grid Margin="10,0,10,0" RowSpacing="10">
+
+            <Grid x:Name="BackArrow" Margin="0,20,0,0" IsVisible="False">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Image Source="backbutton.png" Grid.Column="0" BackgroundColor="Transparent" HorizontalOptions="Start" VerticalOptions="Center" Margin="20,0,0,0" HeightRequest="20" WidthRequest="20">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                    </Image.GestureRecognizers>
+                </Image>
+            </Grid>
+
+            <Grid x:Name="ListViewGrid" Margin="10,0,10,0" RowSpacing="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>

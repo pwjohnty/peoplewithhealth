@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PeopleWith.AddAppointment" BackgroundColor="White"
+             xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+             xmlns:picker="clr-namespace:Syncfusion.Maui.Picker;assembly=Syncfusion.Maui.Picker"
+             xmlns:chip="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+             NavigationPage.HasNavigationBar="True">
+    <ScrollView>
+    <VerticalStackLayout>
+        
+        <!-- Title-->
+            <Label Text="Add Appointment" FontSize="26" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
+
+
+        <!-- Date/Time Picker-->
+            <Border Stroke="LightGray" StrokeThickness="1" Margin="20,10,20,0" StrokeShape="RoundRectangle 10" Background="Transparent" HorizontalOptions="FillAndExpand">
+
+                <Grid HorizontalOptions="FillAndExpand">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50*"/>
+                        <ColumnDefinition Width="50*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid HorizontalOptions="FillAndExpand" Grid.Column="0" Grid.Row="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="15*"/>
+                            <ColumnDefinition Width="35*"/>
+
+                        </Grid.ColumnDefinitions>
+
+                        <Image Source="icondatepicker.png"  VerticalOptions="CenterAndExpand" HorizontalOptions="Center" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" HeightRequest="25" WidthRequest="25" />
+                        <Label Text="Date" Grid.Row="0" Grid.Column="1" FontSize="10" Margin="0,10,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
+
+                        <DatePicker x:Name="adddatepicker" BackgroundColor="Transparent" PropertyChanged="adddatepicker_PropertyChanged" Grid.Row="1" Grid.Column="1" FontSize="16" Margin="-5,-10,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
+
+                    </Grid>
+
+                    <Grid HorizontalOptions="FillAndExpand" Grid.Column="1" Grid.Row="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="15*"/>
+                            <ColumnDefinition Width="35*"/>
+
+                        </Grid.ColumnDefinitions>
+
+                        <Image Source="icontimepicker.png" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" HeightRequest="25" WidthRequest="25" />
+
+                        <Label Text="Time" Grid.Row="0" Grid.Column="3" FontSize="10" Margin="0,10,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
+                        <Label Text="12:45" Grid.Row="1" Grid.Column="3" IsVisible="False"  FontSize="16" Margin="0,-5,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
+                        <TimePicker x:Name="addtimepicker" Grid.Row="1" Grid.Column="1" PropertyChanged="addtimepicker_PropertyChanged" FontSize="16" Margin="-5,-10,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
+
+                    </Grid>
+                </Grid>
+            </Border>
+
+        
+        
+        <!-- Location-->
+            <Label Text="Location" FontSize="16" Margin="20,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
+            <ScrollView Orientation="Horizontal" HeightRequest="75" HorizontalScrollBarVisibility="Never">
+                <chip:SfChipGroup ChipType="Choice" x:Name="locationChips" BackgroundColor="Transparent" SelectionChanged="locationChips_SelectionChanged" 
+                      ChipStrokeThickness="1" ShowIcon="False" ChipTextColor="Gray" VerticalOptions="Center" Margin="0,10,0,10" 
+                      ChipBackground="Transparent" SelectedChipBackground="#ffcccb" ChipStroke="LightGray" SelectedChipTextColor="#031926" 
+                      SelectionIndicatorColor="Transparent" ChipPadding="4,4,0,0" ChipTextSize="Micro" DisplayMemberPath="Description">
+
+                    <chip:SfChipGroup.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="{Binding location}" FontSize="Small" TextColor="#031926" FontAttributes="Bold" VerticalOptions="Center" Padding="10" Margin="0" />
+                            </StackLayout>
+                        </DataTemplate>
+                    </chip:SfChipGroup.ItemTemplate>
+
+                    <chip:SfChipGroup.ChipLayout>
+                        <FlexLayout HorizontalOptions="Start" VerticalOptions="Center" Direction="Row" Wrap="NoWrap" 
+                        Margin="0,0,0,0" JustifyContent="Start" AlignContent="Start" AlignItems="Center"/>
+                    </chip:SfChipGroup.ChipLayout>
+                </chip:SfChipGroup>
+            </ScrollView>
+            <!-- Appointment Type-->
+            <Label Text="Type of Appointment" FontSize="16" Margin="20,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
+            <chip:SfChipGroup ChipType="Choice" x:Name="TypeChips"  BackgroundColor="Transparent" SelectionChanged="TypeChips_SelectionChanged" ChipStrokeThickness="1"
+                   ShowIcon="False" ChipTextColor="Gray" VerticalOptions="Center" Margin="0,10,0,10" ChipBackground="Transparent" SelectedChipBackground="#ffcccb" ChipStroke="LightGray"
+                   SelectedChipTextColor="#031926" SelectionIndicatorColor="Transparent" ChipPadding="4,4,0,0" ChipTextSize="Micro" DisplayMemberPath="Description">
+
+                <chip:SfChipGroup.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="{Binding type}" FontSize="Small" TextColor="#031926" FontAttributes="Bold" VerticalOptions="Center" Padding="10" Margin="0" />
+                        </StackLayout>
+                    </DataTemplate>
+                </chip:SfChipGroup.ItemTemplate>
+                <chip:SfChipGroup.ChipLayout>
+                    <FlexLayout HorizontalOptions="Start" VerticalOptions="Center" 	Direction="Row" Wrap="Wrap"  Margin="0,0,0,0" JustifyContent="Start" AlignContent="Start" AlignItems="Center"/>
+                </chip:SfChipGroup.ChipLayout>
+            </chip:SfChipGroup>
+
+            <!-- Select HCP-->
+            <Label Text="Select HCP" FontSize="16" Margin="20,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
+            <Grid>
+                <picker:SfPicker x:Name="hcpPicker"  HeightRequest="120" Margin="20,0,20,0" BackgroundColor="Transparent"  SelectionChanged="HCPPicker_SelectionChanged">
+                    <picker:SfPicker.SelectionView >
+                        <picker:PickerSelectionView CornerRadius="10" Padding="5,5,5,5" Background="#ffcccb" />
+                    </picker:SfPicker.SelectionView>
+                    <picker:SfPicker.SelectedTextStyle>
+                        <picker:PickerTextStyle TextColor="#031926" />
+                    </picker:SfPicker.SelectedTextStyle>
+                </picker:SfPicker>
+            </Grid>
+
+            <!--Expected Duration  -->
+            <Label Text="Select Duration" FontFamily="HankenGroteskBold" Margin="20,10,0,0"   VerticalOptions="Center" HorizontalOptions="Start"   FontSize="16" TextColor="#031926" />
+
+            <Frame HasShadow="False" Margin="20,10,20,10" BorderColor="Transparent"  Padding="5" CornerRadius="20"  BackgroundColor="#ffcccb" >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50*"/>
+                        <ColumnDefinition Width="50*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Text="Hours" FontFamily="HankenGroteskBold" Margin="0,0,0,0"   VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="0" Grid.Column="0"   FontSize="10" TextColor="Red" />
+                    <Label Text="Minutes" FontFamily="HankenGroteskBold" Margin="0,0,0,0"   VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="0" Grid.Column="1"   FontSize="10" TextColor="Red" />
+
+
+                    <picker:SfTimePicker x:Name="DurationPicker"  Padding="0" Margin="0,10,0,10" ColumnDividerColor="Red" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"  HeightRequest="75"  BackgroundColor="Transparent" 
+                 SelectionChanged="DurationPicker_SelectionChanged" Format="HH_mm">
+                        <picker:SfTimePicker.SelectedTextStyle >
+                            <picker:PickerTextStyle FontSize="30"  FontFamily="HankenGroteskBold" TextColor="#031926"/>
+                        </picker:SfTimePicker.SelectedTextStyle>
+                        <picker:SfTimePicker.SelectionView >
+                            <picker:PickerSelectionView CornerRadius="10" Padding="10, 5, 10, 5" Background="Transparent" />
+                        </picker:SfTimePicker.SelectionView>
+                        <picker:SfTimePicker.ColumnHeaderView >
+                            <picker:TimePickerColumnHeaderView Background="#BFDBF7" Height="0">
+                                <picker:TimePickerColumnHeaderView.TextStyle >
+                                    <picker:PickerTextStyle FontSize="10"  FontFamily="HankenGroteskRegular" TextColor="LightGray" />
+                                </picker:TimePickerColumnHeaderView.TextStyle>
+                            </picker:TimePickerColumnHeaderView>
+                        </picker:SfTimePicker.ColumnHeaderView>
+                    </picker:SfTimePicker>
+                </Grid>
+            </Frame>
+
+
+            <!--Appointment Reminder  -->
+            <Label x:Name="AppointRemlbl" Text="Appointment Reminder" FontFamily="HankenGroteskBold" Margin="20,10,0,0"   VerticalOptions="Center" HorizontalOptions="Start"   FontSize="16" TextColor="#031926" />
+
+            <ScrollView Orientation="Horizontal" HeightRequest="75" HorizontalScrollBarVisibility="Never">
+                
+                
+                
+                <chip:SfChipGroup ChipType="Choice" x:Name="AppointmentReminder"  BackgroundColor="Transparent" SelectionChanged="AppointmentReminder_SelectionChanged" 
+           ChipStrokeThickness="1" ShowIcon="False" ChipTextColor="Gray" VerticalOptions="Center" Margin="0,10,0,10" 
+           ChipBackground="Transparent" SelectedChipBackground="#ffcccb" ChipStroke="LightGray" SelectedChipTextColor="#031926" 
+           SelectionIndicatorColor="Transparent" ChipPadding="4,4,0,0" ChipTextSize="Micro" DisplayMemberPath="Description">
+
+                    <chip:SfChipGroup.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="{Binding .}" FontSize="Small" TextColor="#031926" FontAttributes="Bold" VerticalOptions="Center" Padding="10" Margin="0" />
+                            </StackLayout>
+                        </DataTemplate>
+                    </chip:SfChipGroup.ItemTemplate>
+
+                    <chip:SfChipGroup.ChipLayout>
+                        <FlexLayout HorizontalOptions="Start" VerticalOptions="Center" Direction="Row" Wrap="NoWrap" 
+             Margin="0,0,0,0" JustifyContent="Start" AlignContent="Start" AlignItems="Center"/>
+                    </chip:SfChipGroup.ChipLayout>
+                </chip:SfChipGroup>
+            </ScrollView>
+
+
+
+            <!--Notes -->
+
+            <Label Text="Notes" FontFamily="HankenGroteskBold" Margin="20,10,0,0"   VerticalOptions="Center" HorizontalOptions="Start"   FontSize="16" TextColor="#031926" />
+            <StackLayout>
+                <Border Stroke="#ffcccb" StrokeThickness="1" Margin="20,10,20,0" StrokeShape="RoundRectangle 10" HeightRequest="150" Background="Transparent" HorizontalOptions="FillAndExpand">
+                <Editor  Placeholder="Add Notes" x:Name="notesentry" PlaceholderColor="LightGray" VerticalOptions="FillAndExpand" TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="FillAndExpand" />
+            </Border>
+            </StackLayout>
+
+            <!--Add Appointment -->
+            <Button x:Name="AppointmentAdd" Text="Add Appointment" Clicked="AppointmentAdd_Clicked" Margin="20,20,20,20" Padding="0" BackgroundColor="#ffcccb" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#031926" />
+
+         
+     
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

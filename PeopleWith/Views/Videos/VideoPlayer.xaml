@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="PeopleWith.VideoPlayer" NavigationPage.HasNavigationBar="True" BackgroundColor="White">
+    <StackLayout>
+        <Grid x:Name="VideoDetails" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand" HorizontalOptions="FillAndExpand">
+                <Image x:Name="VideoThumbnail" Aspect="AspectFill" HeightRequest="250" Source="your_video_thumbnail_here.jpg">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
+                    </Image.GestureRecognizers>
+                </Image>
+
+                <Image HeightRequest="60" WidthRequest="60" Source="playbutton.png" HorizontalOptions="Center" VerticalOptions="Center"/>
+
+                <Frame HasShadow="False" BackgroundColor="Black" Padding="5" CornerRadius="5" HorizontalOptions="End" VerticalOptions="End" Margin="10" Opacity="0.8">
+                    <Label x:Name="lengthlbl" Text="12:45" TextColor="White" FontSize="14" FontAttributes="Bold"/>
+                </Frame>
+            </Grid>
+
+            <Label x:Name="Titlelbl" Grid.Row="1" Grid.Column="0" Margin="20,10,20,0" TextColor="#031926" FontSize="22" FontAttributes="Bold" VerticalOptions="Start"/>
+            <Label x:Name="SubTitlelbl" Grid.Row="2" Grid.Column="0" Margin="20,0,20,5"  TextColor="#606060" FontSize="16" FontAttributes="Bold"/>
+            <Label x:Name="Dateandlenthlbl" Grid.Row="3" Grid.Column="0" Margin="20,0,20,10" TextColor="#909090" FontSize="14"/>
+
+        </Grid>
+
+
+        <Grid x:Name="Video" IsVisible="False" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+            <toolkit:MediaElement 
+                x:Name="MediaElement" Grid.Row="0" Grid.Column="0"  Aspect="AspectFit"
+                ShouldAutoPlay="False" SizeChanged="MediaElement_SizeChanged"
+                HorizontalOptions="Center" Background="Black" BackgroundColor="Black" 
+                MediaEnded="MediaElement_MediaEnded" 
+                MediaFailed="MediaElement_MediaFailed"
+                PositionChanged="MediaElement_PositionChanged"
+                StateChanged="MediaElement_StateChanged" />
+
+        </Grid>
+    </StackLayout>
+</ContentPage>

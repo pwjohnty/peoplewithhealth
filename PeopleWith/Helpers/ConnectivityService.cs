@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,8 +19,8 @@ namespace PeopleWith
 
         private void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
         {
-            var isConnected = e.NetworkAccess == NetworkAccess.Internet;
-            ConnectivityChanged?.Invoke(this, isConnected);
+                var isConnected = e.NetworkAccess == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
         }
     }
 }

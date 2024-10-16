@@ -1737,5 +1737,16 @@ public partial class RegisterPage : ContentPage
         }
     }
 
+    async private void TapGestureRecognizer_Tapped_1(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            string BackArrow = "PeopleWith";
+            await Navigation.PushAsync(new PrivacyPolicy(BackArrow), false);
+        }
+        catch (Exception Ex)
+        {
 
+        }
+    }
 }

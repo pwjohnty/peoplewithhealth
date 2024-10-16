@@ -11,6 +11,8 @@ public partial class SingleDiagnosis : ContentPage
     string DateofDiagnosis;
     bool isEditing;
     bool validdob;
+    string WebpageLink;
+    public string WeborPdf; 
     protected override bool OnBackButtonPressed()
     {
         try
@@ -20,6 +22,13 @@ public partial class SingleDiagnosis : ContentPage
                 DiagnosisSingle.IsVisible = true;
                 dateofBirth.IsVisible = false;
                 Title = null;
+                return true;
+            }
+            else if(WebViewerStack.IsVisible == true)
+            {
+                WebViewerStack.IsVisible = false;
+                DiagnosisSingle.IsVisible = true;
+                EditBtn.IsEnabled = true;
                 return true;
             }
             else
@@ -52,10 +61,55 @@ public partial class SingleDiagnosis : ContentPage
             DateofDiagnosis = DiagnosisPassed[0].dateofdiagnosis;
             DateEntry.Text = date.ToString("dd/MM/yyyy");
 
+            loadMedInformation(); 
+
         }
         catch (Exception Ex)
         {
             //Add Crash log
+        }
+    }
+    async void loadMedInformation()
+    {
+        try
+        {
+            var id = DiagnosisPassed[0].diagnosisid;
+            APICalls datbase = new APICalls();
+            var selectedDiagnosis = await datbase.GetAsyncSingleDiagnosis(id);
+            //var selectedDiagnosis = DiagnosisList.FirstOrDefault(d => d.Diagnosisid == id);
+
+            if (selectedDiagnosis != null)
+            {
+                if (string.IsNullOrEmpty(selectedDiagnosis[0].Diagnosisinformation))
+                {
+                    NoDiagDetails.IsVisible = true; 
+                }
+                else
+                {
+                    var Split = selectedDiagnosis[0].Diagnosisinformation.Split('|');
+                    DiagDetails.IsVisible = true;
+                    DiagDetailslbl.Text = Split[0];
+                    WebpageLink = Split[1];
+                    if (Split[2] == "Web")
+                    {
+                        DiagDetailsIMG.Source = "link.png";
+                        WebView.Source = WebpageLink;
+                        WeborPdf = "Web";
+                    }
+                    else 
+                    {
+                        DiagDetailsIMG.Source = "pdf.png";
+                        WebView.Source = WebpageLink;
+                        WeborPdf = "Pdf"; 
+                    }
+                   
+                }
+                // Do something with selectedDiagnosis
+            }
+        }
+        catch (Exception Ex)
+        {
+
         }
     }
 
@@ -134,7 +188,7 @@ public partial class SingleDiagnosis : ContentPage
     {
         try
         {
-            bool Delete = await DisplayAlert("Delete Diagnosis", "Are you sure you would like the delete this Diagnosis?. Once deleted it cannot be retrieved", "Delete", "Cancel");
+            bool Delete = await DisplayAlert("Delete Diagnosis", "Are you sure you would like the delete this Diagnosis? Once deleted it cannot be retrieved", "Delete", "Cancel");
             if (Delete == true)
             {
 
@@ -221,6 +275,7 @@ public partial class SingleDiagnosis : ContentPage
         {
             DiagnosisSingle.IsVisible = false;
             dateofBirth.IsVisible = true;
+            Diagnosislbl.Text = DiagnosisPassed[0].diagnosistitle;
         }
         catch (Exception Ex)
         {
@@ -228,12 +283,12 @@ public partial class SingleDiagnosis : ContentPage
         }
     }
 
-    private void TapGestureRecognizer_Tapped_1(object sender, TappedEventArgs e)
+    private async void TapGestureRecognizer_Tapped_1(object sender, TappedEventArgs e)
     {
 
         try
         {
-            //Diagnosis Information Tapped 
+            await DisplayAlert("Diagnosis Information", "No Information saved agasint this Diagnosis", "Close");
         }
         catch (Exception Ex)
         {
@@ -309,6 +364,32 @@ public partial class SingleDiagnosis : ContentPage
             AddBtn.IsEnabled = true;
             isEditing = false;
             DateofDiagnosis = DateEntry.Text;
+        }
+        catch (Exception Ex)
+        {
+
+        }
+    }
+
+    async private void TapGestureRecognizer_Tapped_2(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            DiagnosisSingle.IsVisible = false;          
+            if(WeborPdf == "Web") 
+            {
+                WebViewerStack.IsVisible = true;
+            }
+            else
+            {
+                PDfStack.IsVisible = true;
+            }
+      
+            EditBtn.IsEnabled = false;
+            if (DeviceInfo.Current.Platform == DevicePlatform.Android)
+            {
+                WebView.HeightRequest = 700;
+            }
         }
         catch (Exception Ex)
         {

@@ -165,4 +165,16 @@ public partial class AllAllergies : ContentPage
         }
 
     }
+
+    async private void AllInfoTapped(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            await MopupService.Instance.PushAsync(new Infopopup("allergy") { });
+        }
+        catch (Exception Ex)
+        {
+            //await crashHandler.CrashDetectedSend(Ex);
+        }
+    }
 }

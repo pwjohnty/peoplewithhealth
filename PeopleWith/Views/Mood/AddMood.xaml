@@ -53,7 +53,7 @@
                             
                             <Image Source="icontimepicker.png" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" HeightRequest="25" WidthRequest="25" />
                             <Label Text="Time" Grid.Row="0" Grid.Column="3" FontSize="10" Margin="0,10,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
-                            <TimePicker x:Name="addtimepicker"  Format="hh:mm" Grid.Row="1" Grid.Column="1"  FontSize="16" Margin="-5,-10,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
+                            <TimePicker x:Name="addtimepicker"  Grid.Row="1" Grid.Column="1"  FontSize="16" Margin="-5,-10,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
 
                         </Grid>
 
@@ -105,7 +105,7 @@
                     </Grid>
                 </Frame>-->
 
-                <Label Text="How are you Feeling?" FontFamily="HankenGroteskBold" Margin="20,10,0,0"  VerticalOptions="Center" HorizontalOptions="Start"   FontSize="16" TextColor="DarkGray" />
+                <Label Text="How are you Feeling?" FontFamily="HankenGroteskBold" Margin="20,10,0,0"  VerticalOptions="Center" HorizontalOptions="Start"   FontSize="16" TextColor="#031926" />
 
                 <!-- Emoji Picker -->
                 <syncfusion:SfListView x:Name="MoodListview"
@@ -144,7 +144,7 @@
 
 
 
-                <Label Text="Add Notes" FontFamily="HankenGroteskBold" Margin="20,10,0,0"  VerticalOptions="Center" HorizontalOptions="Start"   FontSize="16" TextColor="DarkGray" />
+                <Label Text="Add Notes" FontFamily="HankenGroteskBold" Margin="20,10,0,0"  VerticalOptions="Center" HorizontalOptions="Start"   FontSize="16" TextColor="#031926" />
                 <Frame  BorderColor="#E6E6E6" BackgroundColor="Transparent" HasShadow="False" CornerRadius="10" Padding="-10" Margin="5,5,5,0">
                     <ScrollView Orientation="Vertical" HorizontalScrollBarVisibility="Never">
                         <Editor x:Name="Notes" HeightRequest="80" TextColor="#031926" FontFamily="HankenGroteskRegular" BackgroundColor="Transparent"  HorizontalTextAlignment="Start"  Margin="20,5,5,0"  />
@@ -152,7 +152,7 @@
                 </Frame>
 
 
-                <Button x:Name="AddMoodBtn" Text="Add Mood" FontFamily="HankenGroteskBold" Clicked="AddMoodBtn_Clicked" BackgroundColor="#FFF8DC" TextColor="#031926" Margin="20,10,20,0" HorizontalOptions="Center" WidthRequest="300" HeightRequest="40"  />
+                <Button x:Name="AddMoodBtn" Text="Add Mood" FontFamily="HankenGroteskBold" Clicked="AddMoodBtn_Clicked" BackgroundColor="#FFF8DC" TextColor="#B8860B" Margin="20,10,20,0" HorizontalOptions="Center" WidthRequest="300" HeightRequest="40"  />
             </StackLayout>
 
             <!--<StackLayout x:Name="SuccessScreen" VerticalOptions="Center" HorizontalOptions="Center" IsVisible="False">

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:Calendar="clr-namespace:Syncfusion.Maui.Scheduler;assembly=Syncfusion.Maui.Scheduler"
+             x:Class="PeopleWith.Appointments" NavigationPage.HasNavigationBar="True" BackgroundColor="White">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Clicked="ToolbarItem_Clicked" x:Name="AddAppoint" Text="Add Appointment" />
+    </ContentPage.ToolbarItems>
+    <VerticalStackLayout >
+        <StackLayout x:Name="AppointmentCalendar">
+            <Calendar:SfScheduler x:Name="Calendar" CellBorderBrush="#f0f0f0" Tapped="Calendar_Tapped" HeightRequest="690" VerticalOptions="FillAndExpand"  View="Month">
+                <Calendar:SfScheduler.MonthView>
+                    <Calendar:SchedulerMonthView   AppointmentDisplayMode="Indicator"/>
+                </Calendar:SfScheduler.MonthView>
+                <Calendar:SfScheduler.HeaderView>
+                    <Calendar:SchedulerHeaderView Height="50" Background="Transparent">
+                    </Calendar:SchedulerHeaderView>
+                </Calendar:SfScheduler.HeaderView>
+                <Calendar:SfScheduler.CellSelectionView>
+                    <Calendar:SchedulerCellSelectionView Stroke="Transparent"/>
+                </Calendar:SfScheduler.CellSelectionView>
+            </Calendar:SfScheduler>
+        </StackLayout>
+        <ScrollView>
+            <StackLayout x:Name="AppointmentDetails" IsVisible="False">
+
+            <Grid RowSpacing="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="5*"/>
+                </Grid.ColumnDefinitions>
+                <!-- title-->
+                <RoundRectangle Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" HeightRequest="30" WidthRequest="30" CornerRadius="5" BackgroundColor="#ffcccb" />
+                <Label x:Name="Titlelbl" Grid.Row="0" Grid.Column="1" Padding="0" FontFamily="HankenGroteskBold"  VerticalTextAlignment="Start" HorizontalTextAlignment="Start" FontSize="18" TextColor="#031926"/>
+                <Label x:Name="DateTimelbl" Grid.Row="1" Grid.Column="1" Padding="0" Margin="0,-20,0,0" VerticalTextAlignment="Start" HorizontalTextAlignment="Start" FontFamily="HankenGroteskRegular" FontSize="16" TextColor="#031926"/>
+
+                <Image Source="location.png" Grid.Row="2" Grid.Column="0" HeightRequest="25" WidthRequest="25"/>
+                <Label x:Name="locationlbl" Grid.Row="2" Grid.Column="1" VerticalTextAlignment="Center" HorizontalTextAlignment="Start" FontFamily="HankenGroteskRegular" FontSize="14" TextColor="#031926"/>
+
+                    <Image Source="doctor.png" Grid.Row="3" Grid.Column="0" HeightRequest="25" WidthRequest="25"/>
+                <Label x:Name="typelbl" Grid.Row="3" Grid.Column="1" VerticalTextAlignment="Center" HorizontalTextAlignment="Start" FontFamily="HankenGroteskRegular" FontSize="14" TextColor="#031926"/>
+
+                    <Image Source="alarm.png" Grid.Row="4" Grid.Column="0" HeightRequest="25" WidthRequest="25"/>
+                <Label x:Name="reminderlbl" Grid.Row="4" Grid.Column="1" VerticalTextAlignment="Center" HorizontalTextAlignment="Start" FontFamily="HankenGroteskRegular" FontSize="14" TextColor="#031926"/>
+
+                    <Image Source="notes.png" Grid.Row="5" Grid.Column="0" HeightRequest="25" WidthRequest="25"/>
+                <Label x:Name="noteslbl" Grid.Row="5" Grid.Column="1" VerticalTextAlignment="Center" HorizontalTextAlignment="Start" FontFamily="HankenGroteskRegular" FontSize="14" TextColor="#031926"/>
+
+                <Label x:Name="Feedbacktitle" Text="Would you like to add Feedback?" HorizontalOptions="Center" Margin="0,0,0,0" IsVisible="False" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" FontFamily="HankenGroteskBold" FontSize="20" TextColor="#031926"/>
+                <Button x:Name="Feedbackbtn" IsVisible="False" CornerRadius="10" Margin="10,0,10,0" Text="Add Feedback" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Clicked="Feedbackbtn_Clicked" FontFamily="HankenGroteskRegular" FontSize="16" TextColor="#031926" BackgroundColor="#ffcccb" />
+
+                <Grid x:Name="FeedbackRecorded" RowSpacing="15" ColumnSpacing="10" Padding="10" Margin="20,0,20,0" IsVisible="False" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        
+                   </Grid.ColumnDefinitions>
+                    
+                    <Label Text="Appointment Feedback" TextDecorations="Underline" HorizontalOptions="Center" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontFamily="HankenGroteskBold" FontSize="24" TextColor="#031926"/>
+
+                    <Label Text="Attended" HorizontalOptions="Start"  Grid.Row="1" Grid.Column="0" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#031926"/>
+                        <Frame BorderColor="#ffcccb" BackgroundColor="#ffcccb" HorizontalOptions="Start" HeightRequest="30" HasShadow="False" WidthRequest="75" Padding="5" Grid.Row="1" Grid.Column="1">
+                            <Label x:Name="Attendedlbl" HorizontalOptions="Center" Margin="0,0,0,0" Grid.Row="1" Grid.Column="1" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="14" TextColor="#031926"/>
+                        </Frame>
+
+                    <Label Text="Actual Duration" HorizontalOptions="Start"   Grid.Row="2" Grid.Column="0" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#031926"/>
+                    <Label x:Name="ActualDurationlbl" HorizontalOptions="Start" Margin="0,0,0,0" Grid.Row="2" Grid.Column="1" FontFamily="HankenGroteskRegular" FontSize="14" TextColor="#031926"/>
+
+                    <Label Text="Doctors Notes/Feedback" HorizontalOptions="Start" Grid.Row="3"  Grid.Column="0" Grid.ColumnSpan="2" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#031926"/>
+                        <Border Stroke="#ffcccb" StrokeThickness="1" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Padding="5" StrokeShape="RoundRectangle 5"  Background="Transparent" HorizontalOptions="FillAndExpand">
+                        <Label x:Name="DoctorsNotesbl"  HorizontalOptions="Start" Margin="0,0,0,0" Grid.ColumnSpan="2" Grid.Row="6" Grid.Column="0"  FontFamily="HankenGroteskRegular" FontSize="14" TextColor="#031926"/>
+                    </Border>
+
+                    <Label Text="Additional Notes" HorizontalOptions="Start"  Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#031926"/>
+                        <Border Stroke="#ffcccb" StrokeThickness="1" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"  Padding="5" StrokeShape="RoundRectangle 5"   Background="Transparent" HorizontalOptions="FillAndExpand">
+                        <Label x:Name="AddNoteslbl"  HorizontalOptions="Start" Margin="0,0,0,0" Grid.ColumnSpan="2"  Grid.Row="8" Grid.Column="0" FontFamily="HankenGroteskRegular" FontSize="14" TextColor="#031926"/>
+                    </Border>
+                </Grid>
+
+                <Grid x:Name="FeedbackNotRecorded" Margin="20,0,20,0"  IsVisible="False" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Label Text="Feedback" HorizontalOptions="Center" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" FontFamily="HankenGroteskBold" FontSize="20" TextColor="#031926"/>
+
+                    <Label Text="Attended" HorizontalOptions="Start" Margin="20,0,0,0"  Grid.Row="1" Grid.Column="0" FontFamily="HankenGroteskBold" FontSize="20" TextColor="#031926"/>
+                    <Label Text="Appointment Not Attended" HorizontalOptions="Center" Margin="0,0,0,0" Grid.Row="2" Grid.Column="0" FontFamily="HankenGroteskRegular" FontSize="14" TextColor="#031926"/>
+
+                </Grid>
+            </Grid>
+
+        </StackLayout>
+        </ScrollView>
+    
+    </VerticalStackLayout>
+    
+</ContentPage>

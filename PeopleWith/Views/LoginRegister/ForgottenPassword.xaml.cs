@@ -127,4 +127,16 @@ public partial class ForgottenPassword : ContentPage
             }
         }
     }
+
+    async private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            Navigation.RemovePage(this);
+        }
+        catch (Exception Ex)
+        {
+           
+        }
+    }
 }

@@ -260,7 +260,9 @@ public partial class LoginPage : ContentPage
                 Preferences.Set("pincode", users[0].userpin);
                 Preferences.Set("launchvideo", "seen");
                 Preferences.Set("clinicaltrial", "Yes");
-   
+                //Change based on User Having Notifcations Enabled/Disabled
+                Preferences.Set("NotificationsEnabled", true);
+
                 //Add Push Notification Tags
                 AddBackTags();
                 Application.Current.MainPage = new NavigationPage(new MainDashboard());
@@ -349,5 +351,17 @@ public partial class LoginPage : ContentPage
             }
         });
 #pragma warning restore CS8603 // Possible null reference return.
+    }
+
+    async private void TapGestureRecognizer_Tapped_1(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            Navigation.RemovePage(this);
+        }
+        catch (Exception Ex)
+        {
+           
+        }
     }
 }

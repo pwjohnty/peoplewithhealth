@@ -475,4 +475,16 @@ public partial class AllSymptoms : ContentPage
             await crashHandler.CrashDetectedSend(Ex);
         }
     }
+
+    async private void SympInfoTapped(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            await MopupService.Instance.PushAsync(new Infopopup("symptom") { });
+        }
+        catch (Exception Ex)
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+    }
 }
