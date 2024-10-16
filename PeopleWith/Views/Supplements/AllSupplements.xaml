@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="PeopleWith.AllSupplements" Shell.NavBarIsVisible="False" BackgroundColor="White" 
              xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
              ios:Page.UseSafeArea="True"
-             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView" >
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
+             x:Class="PeopleWith.AllSupplements" Shell.NavBarIsVisible="False" BackgroundColor="White" >
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Add New" Clicked="ToolbarItem_Clicked" />
     </ContentPage.ToolbarItems>
@@ -17,52 +18,346 @@
             <StackLayout x:Name="nodatastack" IsVisible="False" VerticalOptions="CenterAndExpand">
                 <Image Source="adddataicon.png" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="50" WidthRequest="50"/>
                 <Label Text="Add Supplement" FontSize="20" Margin="0,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Center" />
-                <Label Text="Tap here to add a Supplement" FontSize="14" TextColor="#031926" FontFamily="HankenGroteskRegular" Margin="0,0,0,0" HorizontalOptions="Center" VerticalOptions="Center" VerticalTextAlignment="Center" />
+                <Label Text="Tap here to add a supplement" FontSize="14" TextColor="#031926" FontFamily="HankenGroteskRegular" Margin="0,0,0,0" HorizontalOptions="Center" VerticalOptions="Center" VerticalTextAlignment="Center" />
+
             </StackLayout>
 
             <StackLayout x:Name="datastack">
 
+
                 <Label Text="Supplements" FontSize="26" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
-                <syncfusion:SfListView  x:Name="AllUserSuppsList" Padding="0" Margin="10,5,10,50" ItemTapped="AllUserSuppsList_ItemTapped" AutoFitMode="Height"  ItemSpacing="0"  HorizontalOptions="FillAndExpand" IsScrollingEnabled="False"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
+
+                <buttons:SfSegmentedControl x:Name="segmentedControl" SelectionChanged="segmentedControl_SelectionChanged" SegmentBackground="#f9f4e5" Stroke="LightGray"  SelectedIndex="0" DisabledSegmentTextColor="Gray" CornerRadius="5"
+                Margin="8,8,8,0">
+                    <buttons:SfSegmentedControl.TextStyle>
+                        <buttons:SegmentTextStyle TextColor="#ac5735" FontFamily="HankenGroteskBold" FontAttributes="None" FontSize="12"/>
+                    </buttons:SfSegmentedControl.TextStyle>
+                    <buttons:SfSegmentedControl.SelectionIndicatorSettings>
+                        <buttons:SelectionIndicatorSettings 
+                SelectionIndicatorPlacement="Fill"
+                Background="#ac5735"/>
+                    </buttons:SfSegmentedControl.SelectionIndicatorSettings>
+                    <buttons:SfSegmentedControl.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Current</x:String>
+                            <x:String>As Required</x:String>
+                            <x:String>Completed</x:String>
+                        </x:Array>
+                    </buttons:SfSegmentedControl.ItemsSource>
+
+                </buttons:SfSegmentedControl>
+
+                <syncfusion:SfListView  x:Name="AllUserMedsList" Padding="0" Margin="10,10,10,50" ItemTapped="AllUserMedsList_ItemTapped" AutoFitMode="Height"  ItemSpacing="0"  HorizontalOptions="FillAndExpand" IsScrollingEnabled="False"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <Frame CornerRadius="10"  Margin="0,5,0,5" BackgroundColor="#e5f9f4" HasShadow="False" BorderColor="Transparent" InputTransparent="True" Padding="0">
-                                    <Grid Margin="0,10,0,0">
+                                <StackLayout>
+                                    <Frame CornerRadius="10"  Margin="0,5,0,5"
+ BackgroundColor="#f9f4e5" HasShadow="False" IsVisible="{Binding ActiveMeds}"
+                BorderColor="Transparent" InputTransparent="True"
+Padding="0">
+                                        <Grid Margin="0,10,0,0">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="15*"/>
+                                                <ColumnDefinition Width="75*"/>
+                                                <ColumnDefinition Width="10*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Label Text="{Binding ChangedMedName}" FontFamily="HankenGroteskBold"  FontSize="14" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Margin="10,0,0,0" TextColor="#031926" />
+
+                                            <Label Text="{Binding medicationtitle}" IsVisible="{Binding ChangedMed}" FontFamily="HankenGroteskBold"  FontSize="12" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Margin="10,-5,0,5" TextColor="Gray" />
+
+
+                                            <Image Opacity="1" Source="medcalendericon.png" Margin="0,0,0,5" Grid.Row="2" Grid.Column="0" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="20" WidthRequest="20"/>
+
+                                            <Label Text="{Binding MedFrequency}" FontFamily="HankenGroteskBold"  FontSize="12" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="1" VerticalOptions="Center" HorizontalOptions="Start" VerticalTextAlignment="Center" Margin="0,0,0,10" TextColor="#ac5735" />
+
+                                            <Image Opacity="1" Source="medpillicon.png" Grid.Row="3" Grid.Column="0" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="20" WidthRequest="20"/>
+
+                                            <Label Text="{Binding NextTime}" FontFamily="HankenGroteskBold"  FontSize="12" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="1" VerticalOptions="End" HorizontalOptions="Start" VerticalTextAlignment="Center" Margin="0,0,0,10" TextColor="#ac5735"/>
+
+
+                                            <Image Opacity="1" Source="notesicon.png" Grid.Row="4" Grid.Column="0" VerticalOptions="Start" IsVisible="{Binding ChangedNotes}" HorizontalOptions="Center" HeightRequest="20" WidthRequest="20"/>
+
+
+                                            <Label Text="{Binding ChangedMedNotes}" FontFamily="HankenGroteskBold"  FontSize="12" Grid.Row="4" IsVisible="{Binding ChangedNotes}" Grid.Column="1" Grid.ColumnSpan="1" Margin="0,0,0,10" TextColor="Gray" />
+
+
+                                            <Label FontFamily="HankenGroteskRegular" IsVisible="False"  FontSize="10" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="End" HorizontalOptions="Start" VerticalTextAlignment="Center" Margin="15,0,0,10" TextColor="Gray" >
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="Start Date - " TextColor="Gray" FontFamily="HankenGroteskRegular" FontSize="10"/>
+                                                        <Span Text="21/09/24" TextColor="#031926"  FontFamily="HankenGroteskBold" FontSize="10" FontAttributes="Bold"/>
+                                                        <Span Text="     End Date - " TextColor="Gray" FontFamily="HankenGroteskRegular" FontSize="10"   />
+                                                        <Span Text="21/11/24" TextColor="#031926"  FontFamily="HankenGroteskBold" FontSize="10" FontAttributes="Bold"/>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+
+
+
+                                            <Label  FontFamily="HankenGroteskBold" IsVisible="False" Margin="10,10,0,10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{Binding NextDosage}" TextColor="#031926" FontSize="35" FontFamily="HankenGroteskBold" FontAttributes="Bold"/>
+                                                        <Span Text=" " TextColor="#031926" FontSize="30" FontAttributes="Bold"/>
+                                                        <Span Text="{Binding unit}" TextColor="Gray" FontFamily="HankenGroteskRegular" FontSize="14"   />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+
+                                            <Label Text="{Binding NextTime}" IsVisible="False" FontFamily="HankenGroteskRegular"  FontSize="Small" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="Center" HorizontalOptions="End" VerticalTextAlignment="Center" Margin="10,0,0,10" TextColor="gray" />
+
+                                            <Image Source="nextdarker.png" HeightRequest="15" Margin="0,0,0,10"  Grid.Row="0" Grid.Column="4" VerticalOptions="Center" HorizontalOptions="Center" />
+
+                                        </Grid>
+                                    </Frame>
+                                    <Grid IsVisible="{Binding PendingMeds}">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
+
 
                                         </Grid.RowDefinitions>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="45*"/>
-                                            <ColumnDefinition Width="45*"/>
+                                            <ColumnDefinition Width="15*"/>
+                                            <ColumnDefinition Width="85*"/>
+
+                                        </Grid.ColumnDefinitions>
+                                        <Image Opacity="1" Source="warningicon.png" Margin="0,0,0,0" Grid.Row="0" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="30" WidthRequest="30"/>
+
+                                        <Frame CornerRadius="10"  Margin="0,5,0,5"
+ BackgroundColor="#f9f4e5" HasShadow="False" Grid.Row="0" Grid.Column="1"
+                BorderColor="Transparent" InputTransparent="True"
+Padding="0">
+                                            <Grid Margin="0,10,0,0">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
+
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="15*"/>
+                                                    <ColumnDefinition Width="75*"/>
+                                                    <ColumnDefinition Width="10*"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <Label Text="{Binding ChangedMedName}" FontFamily="HankenGroteskBold"  FontSize="14" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Margin="10,0,0,0" TextColor="#031926" />
+
+
+                                                <Label Text="Finish setting up medication" FontFamily="HankenGroteskBold"  FontSize="12" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="Center" HorizontalOptions="Start" VerticalTextAlignment="Center" Margin="10,0,0,10" TextColor="#ac5735" />
+
+
+
+
+                                            </Grid>
+                                        </Frame>
+                                    </Grid>
+                                    <Grid Margin="0,5,0,0" Padding="0" IsVisible="{Binding EndingSoon}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+
+
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="10*"/>
+                                            <ColumnDefinition Width="85*"/>
+
                                         </Grid.ColumnDefinitions>
 
-                                        <Label Text="{Binding supplementtitle}" FontFamily="HankenGroteskBold"  FontSize="14" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,0,10" TextColor="Teal" />
-                                        <!--<Label Text="{Binding LastUpdated}" Margin="10,0,0,10" VerticalOptions="Center" HorizontalOptions="End" VerticalTextAlignment="Center"  FontFamily="HankenGroteskRegular" TextColor="Gray" FontSize="Small"   Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
+                                        <Image Source="warningicon.png" Grid.Row="0" Grid.Column="0" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="20" WidthRequest="20"/>
 
-                                        <Label  FontFamily="HankenGroteskBold"  Margin="10,5,0,10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
-                                            <Label.FormattedText>
-                                                <FormattedString>
-                                                    <Span Text="{Binding CurrentIntensity}" TextColor="#031926" FontSize="35" FontFamily="HankenGroteskBold" FontAttributes="Bold"/>
-                                                    <Span Text=" " TextColor="#031926" FontSize="30" FontAttributes="Bold"/>
-                                                    <Span Text="{Binding Score}" TextColor="Gray" FontFamily="HankenGroteskRegular" FontSize="14"   />
-                                                </FormattedString>
-                                            </Label.FormattedText>
-                                        </Label>-->
 
-                                        <Image Source="nextdarker.png" HeightRequest="15" Margin="0,0,0,10"  Grid.Row="0" Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center" />
+
+                                        <Label Text="Medication finishes in 3 days" FontFamily="HankenGroteskBold" VerticalOptions="Center" HorizontalOptions="Start"  FontSize="10" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" Margin="0,5,0,10" TextColor="#ac5735" />
+
 
                                     </Grid>
-                                </Frame>
-
+                                </StackLayout>
                             </ViewCell>
                         </DataTemplate>
                     </syncfusion:SfListView.ItemTemplate>
                 </syncfusion:SfListView>
+
+
+                <syncfusion:SfListView  x:Name="AsRequiredList" ItemTapped="AsRequiredList_ItemTapped" IsVisible="False" Padding="0" Margin="10,10,10,50" AutoFitMode="Height"  ItemSpacing="0"  HorizontalOptions="FillAndExpand" IsScrollingEnabled="False"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
+                    <syncfusion:SfListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout>
+                                    <Frame CornerRadius="10"  Margin="0,5,0,5"
+ BackgroundColor="#f9f4e5" HasShadow="False"
+                BorderColor="Transparent" InputTransparent="True"
+Padding="0">
+                                        <Grid Margin="0,10,0,0">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="15*"/>
+                                                <ColumnDefinition Width="75*"/>
+                                                <ColumnDefinition Width="10*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Label Text="{Binding ChangedMedName}" FontFamily="HankenGroteskBold"  FontSize="14" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Margin="10,0,0,10" TextColor="#031926" />
+
+
+                                            <Image Opacity="1" Source="medcalendericon.png" Margin="0,0,0,5" Grid.Row="2" Grid.Column="0" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="20" WidthRequest="20"/>
+
+                                            <Label Text="Take as you require" FontFamily="HankenGroteskBold"  FontSize="12" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="1" VerticalOptions="Center" HorizontalOptions="Start" VerticalTextAlignment="Center" Margin="0,0,0,10" TextColor="#ac5735" />
+
+
+
+
+
+
+
+                                            <Label  FontFamily="HankenGroteskBold" IsVisible="False" Margin="10,10,0,10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{Binding NextDosage}" TextColor="#031926" FontSize="35" FontFamily="HankenGroteskBold" FontAttributes="Bold"/>
+                                                        <Span Text=" " TextColor="#031926" FontSize="30" FontAttributes="Bold"/>
+                                                        <Span Text="{Binding unit}" TextColor="Gray" FontFamily="HankenGroteskRegular" FontSize="14"   />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+
+                                            <Label Text="{Binding NextTime}" IsVisible="False" FontFamily="HankenGroteskRegular"  FontSize="Small" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="Center" HorizontalOptions="End" VerticalTextAlignment="Center" Margin="10,0,0,10" TextColor="gray" />
+
+                                            <Image Source="nextdarker.png" HeightRequest="15" Margin="0,0,0,10"  Grid.Row="0" Grid.Column="4" VerticalOptions="Center" HorizontalOptions="Center" />
+
+                                        </Grid>
+                                    </Frame>
+                                    <Grid Margin="0,5,0,0" Padding="0" IsVisible="{Binding EndingSoon}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+
+
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="10*"/>
+                                            <ColumnDefinition Width="85*"/>
+
+                                        </Grid.ColumnDefinitions>
+
+                                        <Image Source="warningicon.png" Grid.Row="0" Grid.Column="0" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="20" WidthRequest="20"/>
+
+
+
+                                        <Label Text="Medication finishes in 3 days" FontFamily="HankenGroteskBold" VerticalOptions="Center" HorizontalOptions="Start"  FontSize="10" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" Margin="0,5,0,10" TextColor="#ac5735" />
+
+
+                                    </Grid>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.ItemTemplate>
+                </syncfusion:SfListView>
+                <Label Text="No As Requried Supplements added" x:Name="noARmedlbl" IsVisible="False" FontSize="14" TextColor="#031926" FontFamily="HankenGroteskRegular" Margin="0,50,0,0" HorizontalOptions="Center" VerticalOptions="Center" VerticalTextAlignment="Center" />
+
+
+
+                <syncfusion:SfListView  x:Name="CompletedMedsList" IsVisible="False" Padding="0" Margin="10,10,10,50" AutoFitMode="Height"  ItemSpacing="0"  HorizontalOptions="FillAndExpand" IsScrollingEnabled="False"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
+                    <syncfusion:SfListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout>
+                                    <Frame CornerRadius="10"  Margin="0,5,0,5"
+ BackgroundColor="#f9f4e5" HasShadow="False"
+                BorderColor="Transparent" InputTransparent="True"
+Padding="0">
+                                        <Grid Margin="0,10,0,0">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="15*"/>
+                                                <ColumnDefinition Width="75*"/>
+                                                <ColumnDefinition Width="10*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Label Text="{Binding ChangedMedName}" FontFamily="HankenGroteskBold"  FontSize="14" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Margin="10,0,0,10" TextColor="#031926" />
+
+
+
+
+
+                                            <Label FontFamily="HankenGroteskRegular"  FontSize="12" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="End" HorizontalOptions="Start" VerticalTextAlignment="Center" Margin="15,0,0,10" TextColor="Gray" >
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="Started - " TextColor="Gray" FontFamily="HankenGroteskRegular" FontSize="12"/>
+                                                        <Span Text="{Binding startdate}" TextColor="#031926"  FontFamily="HankenGroteskBold" FontSize="12" FontAttributes="Bold"/>
+                                                        <Span Text="     Finished - " TextColor="Gray" FontFamily="HankenGroteskRegular" FontSize="12"   />
+                                                        <Span Text="{Binding enddate}" TextColor="#031926"  FontFamily="HankenGroteskBold" FontSize="12" FontAttributes="Bold"/>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+
+
+
+                                            <Label  FontFamily="HankenGroteskBold" IsVisible="False" Margin="10,10,0,10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{Binding NextDosage}" TextColor="#031926" FontSize="35" FontFamily="HankenGroteskBold" FontAttributes="Bold"/>
+                                                        <Span Text=" " TextColor="#031926" FontSize="30" FontAttributes="Bold"/>
+                                                        <Span Text="{Binding unit}" TextColor="Gray" FontFamily="HankenGroteskRegular" FontSize="14"   />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+
+                                            <Label Text="{Binding NextTime}" IsVisible="False" FontFamily="HankenGroteskRegular"  FontSize="Small" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="Center" HorizontalOptions="End" VerticalTextAlignment="Center" Margin="10,0,0,10" TextColor="gray" />
+
+                                            <Image Source="nextdarker.png" HeightRequest="15" IsVisible="False" Margin="0,0,0,10"  Grid.Row="0" Grid.Column="4" VerticalOptions="Center" HorizontalOptions="Center" />
+
+                                        </Grid>
+                                    </Frame>
+                                    <Grid Margin="0,5,0,0" Padding="0" IsVisible="{Binding EndingSoon}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+
+
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="10*"/>
+                                            <ColumnDefinition Width="85*"/>
+
+                                        </Grid.ColumnDefinitions>
+
+                                        <Image Source="warningicon.png" Grid.Row="0" Grid.Column="0" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="20" WidthRequest="20"/>
+
+
+
+                                        <Label Text="Medication finishes in 3 days" FontFamily="HankenGroteskBold" VerticalOptions="Center" HorizontalOptions="Start"  FontSize="10" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" Margin="0,5,0,10" TextColor="#ac5735" />
+
+
+                                    </Grid>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.ItemTemplate>
+                </syncfusion:SfListView>
+                <Label Text="No Completed Supplements" x:Name="noCompletedmedlbl" IsVisible="False" FontSize="14" TextColor="#031926" FontFamily="HankenGroteskRegular" Margin="0,50,0,0" HorizontalOptions="Center" VerticalOptions="Center" VerticalTextAlignment="Center" />
+
+
+
 
             </StackLayout>
 
@@ -71,5 +366,4 @@
 
 
     </ScrollView>
-
 </ContentPage>

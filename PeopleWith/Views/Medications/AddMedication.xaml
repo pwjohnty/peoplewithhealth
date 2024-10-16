@@ -13,6 +13,9 @@
      
     </ContentPage.ToolbarItems>
 
+  
+ 
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -54,13 +57,21 @@
        Margin="10,0,0,0"
   FontFamily="HankenGroteskBold"
   Text="Cancel" />
+            
+    <Label Text="EDIT MEDICATION" x:Name="editframe" IsVisible="False"  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,0,0,0" FontFamily="HankenGroteskBold" FontSize="14"  HorizontalOptions="Center" VerticalOptions="Center" TextColor="Teal" />
+            
 
         </Grid>
 
         <ScrollView Grid.Row="1">
             <StackLayout>
 
-        
+
+                <StackLayout HorizontalOptions="Center" IsVisible="False" x:Name="loadingstack" VerticalOptions="CenterAndExpand">
+                    <ActivityIndicator IsRunning="True" Color="#031926" HorizontalOptions="Center" VerticalOptions="Start" />
+                    <Label Text="Loading Medications..." TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="Center" Margin="0,5,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" />
+
+                </StackLayout>
 
                 <StackLayout x:Name="firststack" IsVisible="False">
                     <Label Text="Add Medication" FontFamily="HankenGroteskBold" FontSize="26"  Margin="20,20,0,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" />
@@ -103,13 +114,14 @@
                             <Label x:Name="Results" Margin="0,0,20,0" Grid.Row="3" Grid.Column="0"  HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskBold" />
 
 
-                            <syncfusion:SfListView x:Name="Medicationslistview" ItemTapped="Medicationslistview_ItemTapped" IsVisible="False" AutoFitMode="Height" BackgroundColor="Transparent"  Grid.Row="4" Grid.Column="0" Padding="5"  Margin="0,0,0,50" ScrollBarVisibility="Never">
+                            <syncfusion:SfListView x:Name="Medicationslistview" SelectionMode="Single" ItemTapped="Medicationslistview_ItemTapped" IsVisible="False" AutoFitMode="Height" BackgroundColor="Transparent"  Grid.Row="4" Grid.Column="0" Padding="5"  Margin="0,0,0,50" ScrollBarVisibility="Never">
                                 <syncfusion:SfListView.ItemTemplate>
                                     <DataTemplate>
                                         <ViewCell>
 
                                             <Grid VerticalOptions="Start" Margin="0,10,0,0">
                                                 <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
                                                     <RowDefinition Height="Auto"/>
                                                     <RowDefinition Height="Auto"/>
                                                 </Grid.RowDefinitions>
@@ -119,7 +131,10 @@
 
                                                 <Label Text="{Binding title}" FontFamily="HankenGroteskRegular" Margin="5,0,0,0" Grid.Row="0" Grid.Column="0" Padding="0" HorizontalOptions="Start"  VerticalOptions="Start" TextColor="#031926" FontSize="14" FontAttributes="None" />
 
-                                                <BoxView Grid.Column="0" Grid.Row="1" HeightRequest="1" HorizontalOptions="FillAndExpand" Margin="0,10,0,0" Color="#e5f9f4"/>
+                                                <Label Text="Medication Already Added" IsVisible="{Binding AlreadySelected}"  FontFamily="HankenGroteskBold" Margin="5,5,0,5" Grid.Row="1" Grid.Column="0" Padding="0" HorizontalOptions="Start"  VerticalOptions="Start" TextColor="Teal" FontSize="12" FontAttributes="None" />
+
+
+                                                <BoxView Grid.Column="0" Grid.Row="2" HeightRequest="1" HorizontalOptions="FillAndExpand" Margin="0,5,0,5" Color="#e5f9f4"/>
 
                                             </Grid>
 
@@ -136,14 +151,18 @@
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="Auto"/>
                                                     <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="Auto"/>
                                                 </Grid.RowDefinitions>
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*"/>
                                                 </Grid.ColumnDefinitions>
 
-                                                <Label Text="{Binding title}" FontFamily="HankenGroteskBold" Margin="5,0,0,0" Grid.Row="0" Grid.Column="0" Padding="0" HorizontalOptions="Start"  VerticalOptions="Start" TextColor="Teal" FontSize="14" FontAttributes="None" />
+                                                <Label Text="{Binding title}" FontFamily="HankenGroteskRegular" Margin="5,0,0,0" Grid.Row="0" Grid.Column="0" Padding="0" HorizontalOptions="Start"  VerticalOptions="Start" TextColor="#031926" FontSize="14" FontAttributes="None" />
 
-                                                <BoxView Grid.Column="0" Grid.Row="1" HeightRequest="1" HorizontalOptions="FillAndExpand" Margin="0,10,0,0" Color="#e5f9f4"/>
+                                                <Label Text="Medication Already Added" IsVisible="{Binding AlreadySelected}"  FontFamily="HankenGroteskBold" Margin="5,5,0,5" Grid.Row="1" Grid.Column="0" Padding="0" HorizontalOptions="Start"  VerticalOptions="Start" TextColor="Teal" FontSize="12" FontAttributes="None" />
+
+
+                                                <BoxView Grid.Column="0" Grid.Row="2" HeightRequest="1" HorizontalOptions="FillAndExpand" Margin="0,5,0,5" Color="#e5f9f4"/>
 
                                             </Grid>
                                         </Frame>
@@ -248,7 +267,7 @@ BorderColor="Transparent">
 
                                             <!--<Image Source="compare.png" Grid.Row="0" HeightRequest="20" VerticalOptions="Start"  Margin="0,0,0,5"/>-->
 
-                                            <Label Text="{Binding .}" Margin="0,0,0,0" FontFamily="HankenGroteskRegular"  Grid.Row="1" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="14" />
+                                            <Label Text="{Binding .}" Margin="0,0,0,0" HorizontalTextAlignment="Center" FontFamily="HankenGroteskRegular"  Grid.Row="1" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="14" />
                                         </Grid>
                                     </Frame>
                                 </ViewCell>
@@ -267,7 +286,7 @@ BorderColor="Transparent">
 
                                             <!--<Image Source="compare.png" Grid.Row="0" HeightRequest="20" VerticalOptions="Start"  Margin="0,0,0,5"/>-->
 
-                                            <Label Text="{Binding .}" Margin="0,0,0,0" FontFamily="HankenGroteskBold"  Grid.Row="1" VerticalOptions="StartAndExpand"  TextColor="Teal" FontSize="14" />
+                                            <Label Text="{Binding .}" Margin="0,0,0,0"  HorizontalTextAlignment="Center"  FontFamily="HankenGroteskBold"  Grid.Row="1" VerticalOptions="StartAndExpand"  TextColor="Teal" FontSize="14" />
                                         </Grid>
                                     </Frame>
                                 </ViewCell>
@@ -1025,16 +1044,17 @@ BorderColor="Transparent">
                         <Grid >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="20*"/>
-                                <ColumnDefinition Width="50*"/>
+                                <ColumnDefinition Width="30*"/>
+                                <ColumnDefinition Width="20*"/>
                                 <ColumnDefinition Width="30*"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
                             <Image Source="pillicon.png" HorizontalOptions="FillAndExpand" HeightRequest="30" BackgroundColor="Transparent" WidthRequest="35"  Grid.Row="0" Grid.Column="0"  />
-                            <Entry Grid.Row="0" Grid.Column="1" FontSize="16" HorizontalTextAlignment="Center" Completed="samedosageentry_Completed" HorizontalOptions="FillAndExpand" FontFamily="HankenGroteskRegular" Keyboard="Numeric" x:Name="samedosageentry" TextChanged="Entry_TextChanged_1" IsTextPredictionEnabled="False" IsSpellCheckEnabled="False"   ClearButtonVisibility="Never" InputTransparent="False"   Placeholder="Add Dosage"  BackgroundColor="Transparent" Background="Transparent" HeightRequest="60"  TextColor="#031926"/>
+                            <Entry Grid.Row="0" Grid.Column="1" FontSize="16" HorizontalTextAlignment="Center" Completed="samedosageentry_Completed" HorizontalOptions="FillAndExpand" FontFamily="HankenGroteskRegular" Keyboard="Numeric" x:Name="samedosageentry" TextChanged="Entry_TextChanged_1" IsTextPredictionEnabled="False" IsSpellCheckEnabled="False"   ClearButtonVisibility="Never" InputTransparent="False"   Placeholder="Add"  BackgroundColor="Transparent" Background="Transparent" HeightRequest="60"  TextColor="#031926"/>
                             <Label IsVisible="True" x:Name="dosageunitlbl" Grid.Row="0" Grid.Column="2" FontSize="12" Margin="0,0,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" VerticalOptions="Center" />
-                          
+                            <Entry Grid.Row="0" Grid.Column="3" FontSize="16" HorizontalTextAlignment="Center" IsVisible="False" HorizontalOptions="FillAndExpand" FontFamily="HankenGroteskRegular" Keyboard="Numeric" x:Name="samedosageentry2" TextChanged="samedosageentry2_TextChanged_1" IsTextPredictionEnabled="False" IsSpellCheckEnabled="False"   ClearButtonVisibility="Never" InputTransparent="False"   Placeholder="Add"  BackgroundColor="Transparent" Background="Transparent" HeightRequest="60"  TextColor="#031926"/>
 
                         </Grid>
                     </Frame>
@@ -1048,11 +1068,15 @@ BorderColor="Transparent">
 
 
 
+  
+           
+
+
                     <syncfusion:SfListView x:Name="timesanddosageslistview"
                                AutoFitMode="Height"
                                                     IsVisible="False"
                           Margin="0,0,10,50"
-                                                          
+                                              ItemTapped="timesanddosageslistview_ItemTapped"
                                                 BackgroundColor="Transparent"
                                         SelectionMode="None"
                                            VerticalOptions="CenterAndExpand"
@@ -1066,9 +1090,9 @@ BorderColor="Transparent">
                             <DataTemplate>
                                 <ViewCell>
                                     <StackLayout>
-                                        <Label Text="{Binding Day}" FontSize="12" Margin="20,0,0,0" VerticalOptions="Start" TextColor="Teal" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
+                                        <Label Text="{Binding Day}" FontSize="12" Margin="20,0,0,0" VerticalOptions="Start" TextColor="Teal"   FontAttributes="None" HorizontalOptions="Start" />
 
-                                        <Frame CornerRadius="10"  Margin="5,5,5,5" Padding="5" HasShadow="False" BackgroundColor="Transparent" InputTransparent="False"
+                                        <Frame CornerRadius="10"  Margin="5,5,5,5" IsVisible="{Binding NormalDosage}" Padding="5" HasShadow="False" BackgroundColor="Transparent" InputTransparent="False"
 BorderColor="#e5f9f4">
                                             <Grid HorizontalOptions="FillAndExpand">
                                                 <Grid.RowDefinitions>
@@ -1127,8 +1151,12 @@ BorderColor="#e5f9f4">
                                                             </FormattedString>
                                                         </Label.FormattedText>
                                                     </Label>
-                                                    <Label Text="{Binding Dosage}" IsVisible="{Binding Labelvis}" Margin="0,10,0,0" FontFamily="HankenGroteskBold" HorizontalTextAlignment="Center" HorizontalOptions="Start"  Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" VerticalOptions="Center"  TextColor="Teal" FontSize="26" />
-                                                    <Entry Placeholder="Dosage" IsVisible="{Binding Entryvis}" Text="{Binding Dosage}" ReturnType="Done" PlaceholderColor="LightGrey" Margin="0,10,0,0" FontFamily="HankenGroteskBold" Keyboard="Numeric" HorizontalTextAlignment="Start" HorizontalOptions="Start"  Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" VerticalOptions="Center"  TextColor="Teal" FontSize="26" TextChanged="Entry_TextChanged" />
+                                                    <local:ExtendedLabel Text="{Binding Dosage}" IsVisible="{Binding Labelvis}" Margin="0,10,0,0" FontFamily="HankenGroteskBold" HorizontalTextAlignment="Center" HorizontalOptions="Start"  Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" VerticalOptions="Center"  TextColor="Teal" FontSize="26" >
+                                                        <local:ExtendedLabel.GestureRecognizers>
+                                                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                                                        </local:ExtendedLabel.GestureRecognizers>
+                                                    </local:ExtendedLabel>
+                                                    <Entry Placeholder="Dosage" x:Name="DosageEntry" IsVisible="{Binding Entryvis}" Text="{Binding Dosage}" ReturnType="Done" PlaceholderColor="LightGrey" Margin="0,10,0,0" FontFamily="HankenGroteskBold" Keyboard="Numeric" HorizontalTextAlignment="Start" HorizontalOptions="Start"  Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" VerticalOptions="Center"  TextColor="Teal" FontSize="26" TextChanged="Entry_TextChanged" />
 
                                                     <!--<Label Text="{Binding dosageunit}" Margin="0,0,0,-5" FontFamily="HankenGroteskRegular" HorizontalOptions="Center"  Grid.Row="2" Grid.RowSpan="1" Grid.Column="4" VerticalOptions="End"  TextColor="Gray" FontSize="12" />-->
 
@@ -1137,42 +1165,84 @@ BorderColor="#e5f9f4">
                                                     </TimePicker>
 
                                                 </Grid>
-                                                <!--<Grid HorizontalOptions="FillAndExpand" Grid.Column="1" Grid.Row="0">
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="Auto"/>
-                                                        <RowDefinition Height="Auto"/>
-                                                    </Grid.RowDefinitions>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="15*"/>
-                                                        <ColumnDefinition Width="35*"/>
-
-                                                    </Grid.ColumnDefinitions>
-
-                                                    <Image Source="pillicon.png" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" HeightRequest="25" VerticalOptions="Center" HorizontalOptions="Start"  Margin="0,10,0,0"/>
-
-                                                    <Label Text="{Binding Dosage}" IsVisible="{Binding Labelvis}" Margin="0,10,0,0" FontFamily="HankenGroteskBold" HorizontalTextAlignment="Center" HorizontalOptions="Center"  Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" VerticalOptions="Center"  TextColor="#031926" FontSize="26" />
-                                                    <Entry Placeholder="Dosage" IsVisible="{Binding Entryvis}" Text="{Binding Dosage}" ReturnType="Done" PlaceholderColor="LightGrey" Margin="0,10,0,0" FontFamily="HankenGroteskBold" Keyboard="Numeric" HorizontalTextAlignment="Center" HorizontalOptions="Center"  Grid.Row="0" Grid.RowSpan="2" Grid.Column="3" VerticalOptions="Center"  TextColor="#031926" FontSize="16" TextChanged="Entry_TextChanged" />
-                                                    <Label Text="{Binding dosageunit}" Margin="0,10,0,0" FontFamily="HankenGroteskRegular" HorizontalOptions="Start"  Grid.Row="0" Grid.RowSpan="2" Grid.Column="4" VerticalOptions="Center"  TextColor="Gray" FontSize="12" />
-                                                </Grid>-->
+                                         
 
                                             </Grid>
                                         </Frame>
-                                        <!--<Frame CornerRadius="10" IsVisible="{Binding Alldosage}" Margin="5,5,15,5" Padding="5" HasShadow="False" BackgroundColor="#e5f9f4" InputTransparent="False"
-BorderColor="Transparent">
-                                            <Grid Grid.Row="1"  >
+
+                                        <Frame CornerRadius="10" IsVisible="{Binding DoubleDosage}"  Margin="5,5,5,5" Padding="5" HasShadow="False" BackgroundColor="Transparent" InputTransparent="False"
+BorderColor="#e5f9f4">
+                                            <Grid HorizontalOptions="FillAndExpand">
                                                 <Grid.RowDefinitions>
-                                                    <RowDefinition Height="30"/>
+                                                    <RowDefinition Height="Auto"/>
                                                 </Grid.RowDefinitions>
                                                 <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="90*"/>
                                                     <ColumnDefinition Width="10*"/>
+                                                    <ColumnDefinition Width="25*"/>
+                                                    <ColumnDefinition Width="15*"/>
+                                                    <ColumnDefinition Width="25*"/>
+                                                    <ColumnDefinition Width="25*"/>
+                                                    <ColumnDefinition Width="30*"/>
                                                 </Grid.ColumnDefinitions>
+                                                
+
+                           
+
+                                                    <Image Source="icontimepicker.png" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" HeightRequest="20" VerticalOptions="Center" HorizontalOptions="Center"  Margin="5,10,0,0"/>
 
 
-                                                <Label Text="APPLY DOSAGE TO ALL TIMES"  FontFamily="HankenGroteskRegular" TextColor="Gray" VerticalOptions="Center"  FontSize="Micro" Grid.Row="0" Grid.Column="0" HorizontalOptions="End"/>
-                                                <CheckBox BackgroundColor="Transparent" Color="Teal" Grid.Row="0" IsChecked="{Binding Checkboxchecked}" Grid.Column="1" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" CheckedChanged="CheckBox_CheckedChanged_1" />
+                                                    <Label Text="Time" Grid.Row="0" Grid.Column="1" FontSize="10" Margin="0,5,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
+
+
+                                                    <Label Text="N/A" IsVisible="{Binding AsReqlblVis}" Margin="0,20,0,0" FontFamily="HankenGroteskBold" HorizontalOptions="Start"  Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" BackgroundColor="Transparent"  VerticalOptions="Center"  TextColor="#031926" FontSize="26"/>
+
+
+                                                    <TimePicker Time="{Binding timeconverted}" IsVisible="{Binding TimepickerVis}" Margin="0,10,0,0" FontFamily="HankenGroteskBold" HorizontalOptions="Start"  Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" BackgroundColor="Transparent"  VerticalOptions="Center"  TextColor="#031926" FontSize="18">
+
+                                                    </TimePicker>
+                                
+
+                                                    <Image Source="pillicon.png" Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" HeightRequest="20" VerticalOptions="Center" HorizontalOptions="Start"  Margin="5,10,0,0"/>
+
+
+                                                    <Label Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="3" FontSize="10" Margin="0,5,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start">
+                                                        <Label.FormattedText>
+                                                            <FormattedString>
+                                                                <Span Text="Dosage - " TextColor="#031926" />
+                                                                <Span Text="{Binding dosageunit}" TextColor="Teal"  FontAttributes="Bold"/>
+                                                            </FormattedString>
+                                                        </Label.FormattedText>
+                                                    </Label>
+                                                    <local:ExtendedLabel Text="{Binding Dosage}" IsVisible="{Binding Labelvis}" Margin="0,10,0,0" FontFamily="HankenGroteskBold" HorizontalTextAlignment="Center" HorizontalOptions="Start"  Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" VerticalOptions="Center"  TextColor="Teal" FontSize="18" >
+                                                        <local:ExtendedLabel.GestureRecognizers>
+                                                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                                                        </local:ExtendedLabel.GestureRecognizers>
+                                                    </local:ExtendedLabel>
+                                                    <Entry Placeholder="Dosage"  IsVisible="{Binding Entryvis}" Text="{Binding Dosage}" ReturnType="Done" PlaceholderColor="LightGrey" Margin="0,10,0,0" FontFamily="HankenGroteskBold" Keyboard="Numeric" HorizontalTextAlignment="Start" HorizontalOptions="Start"  Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" VerticalOptions="Center"  TextColor="Teal" FontSize="18" TextChanged="Entry_TextChanged" />
+
+                                                    <!--<Label Text="{Binding dosageunit}" Margin="0,0,0,-5" FontFamily="HankenGroteskRegular" HorizontalOptions="Center"  Grid.Row="2" Grid.RowSpan="1" Grid.Column="4" VerticalOptions="End"  TextColor="Gray" FontSize="12" />-->
+
+
+                                                    <Label Grid.Row="0" Grid.RowSpan="2" Grid.Column="4" Grid.ColumnSpan="1" FontSize="8" Margin="0,5,0,0" VerticalOptions="Center" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Center">
+                                                        <Label.FormattedText>
+                                                            <FormattedString>
+
+                                                            <Span Text="{Binding dosageunit}" TextColor="#031926"  FontAttributes="Bold"/>
+                                                            </FormattedString>
+                                                        </Label.FormattedText>
+                                                    </Label>
+
+                                                <local:ExtendedLabel Text="{Binding Dosage2}" IsVisible="{Binding Labelvis}" Margin="0,10,0,0" FontFamily="HankenGroteskBold" HorizontalTextAlignment="Center" HorizontalOptions="Start"  Grid.Row="0" Grid.Column="5" Grid.RowSpan="2" VerticalOptions="Center"  TextColor="Teal" FontSize="18" >
+                                              
+                                                </local:ExtendedLabel>
+                                                <Entry Placeholder="Dosage"  IsVisible="{Binding Entryvis}" Text="{Binding Dosage2}" ReturnType="Done" PlaceholderColor="LightGrey" Margin="0,10,0,0" FontFamily="HankenGroteskBold" Keyboard="Numeric" HorizontalTextAlignment="Start" HorizontalOptions="Start"  Grid.Row="0" Grid.Column="5" Grid.RowSpan="2" VerticalOptions="Center"  TextColor="Teal" FontSize="18" TextChanged="Entry_TextChanged" />
+
+
+
                                             </Grid>
-                                        </Frame>-->
+                                        </Frame>
+
+
 
                                     </StackLayout>
                                 </ViewCell>
@@ -1312,7 +1382,7 @@ HorizontalOptions="FillAndExpand">
                             <syncfusion:SfListView x:Name="confirmtimesanddosageslistview"
                                AutoFitMode="Height"
                                                   
-                          Margin="0,0,10,50"
+                          Margin="0,0,10,20"
                                                           
                                                 BackgroundColor="Transparent"
                                         SelectionMode="None"
@@ -1408,18 +1478,20 @@ BorderColor="#e5f9f4">
 
                             </syncfusion:SfListView>
 
-                            <Button x:Name="ConfirmBtn"
+
+                        </StackLayout>
+                    </Border>
+
+
+                    <Button x:Name="ConfirmBtn"
 BackgroundColor="Teal"
 HorizontalOptions="FillAndExpand"
 TextColor="White"
  Clicked="Button_Clicked"
 FontAttributes="None"
-     Margin="0,0,0,10"
+     Margin="0,10,20,10"
 FontFamily="HankenGroteskBold"
 Text="Confirm Medication" />
-
-                        </StackLayout>
-                    </Border>
 
                 </StackLayout>
 
@@ -1429,4 +1501,5 @@ Text="Confirm Medication" />
     
 
     </Grid>
+ 
 </ContentPage>

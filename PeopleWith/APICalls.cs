@@ -549,7 +549,18 @@ namespace PeopleWith
                 var url = "https://pwdevapi.peoplewith.com/api/usermedication";
                 string jsonns = System.Text.Json.JsonSerializer.Serialize<usermedication>(usermedpassed);
                 StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
-                var response = await client.PostAsync(url, contenttts);
+                HttpResponseMessage response;
+
+                // Choose POST or PATCH based on whether the ID is null or empty
+                if (string.IsNullOrEmpty(usermedpassed.id))
+                {
+                    response = await client.PostAsync(url, contenttts);
+                }
+                else
+                {
+                    response = await client.PatchAsync(url, contenttts);
+                }
+
                 var errorResponse = await response.Content.ReadAsStringAsync();
                 if (response.IsSuccessStatusCode)
                 {
@@ -581,10 +592,101 @@ namespace PeopleWith
         }
 
 
+        public async Task<usersupplement> PostSupplementAsync(usersupplement usermedpassed)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                var url = "https://pwdevapi.peoplewith.com/api/usersupplement";
+                string jsonns = System.Text.Json.JsonSerializer.Serialize<usersupplement>(usermedpassed);
+                StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
+                HttpResponseMessage response;
+
+                // Choose POST or PATCH based on whether the ID is null or empty
+                if (string.IsNullOrEmpty(usermedpassed.id))
+                {
+                    response = await client.PostAsync(url, contenttts);
+                }
+                else
+                {
+                    response = await client.PatchAsync(url, contenttts);
+                }
+
+                var errorResponse = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    // Read the response content as a string
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    var jsonResponse = JObject.Parse(responseContent);
+
+                    var id = jsonResponse["value"]?[0]?["id"]?.ToString();
+
+                    usermedpassed.id = id;
+                    // Return the inserted item
+                    return usermedpassed;
+
+
+                }
+                else
+                {
+                    string errorcontent = await response.Content.ReadAsStringAsync();
+                    var s = errorcontent;
+                    return null;
+                }
+                // return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public async Task UpdateEditMedication(usermedication usermedpassed)
+        {
+            try
+            {
+               // HttpClient client = new HttpClient();
+                var id = usermedpassed.id;
+                var url = $"https://pwdevapi.peoplewith.com/api/usermedication/{id}";
+                string jsonns = System.Text.Json.JsonSerializer.Serialize<usermedication>(usermedpassed);
+                StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
+                HttpResponseMessage response;
+
+                StringContent content = new StringContent(jsonns, Encoding.UTF8, "application/json");
+                using (var client = new HttpClient())
+                {
+                    //works with patch
+                    //var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+                    var responsee = await client.SendAsync(request);
+                    if (!responsee.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await responsee.Content.ReadAsStringAsync();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Successfully updated feedback");
+                    }
+                }
+
+           
+              
+            }
+            catch (Exception ex)
+            {
+                
+            }
+        }
+
         public class SingleUserMedication
         {
             public ObservableCollection<rawusermedication> Value { get; set; }
         }
+
 
 
 
@@ -625,32 +727,40 @@ namespace PeopleWith
                             formulation = rawSymptom.formulation,
                             preparation = rawSymptom.preparation,
                             unit = rawSymptom.unit,
-                            schedule = new ObservableCollection<MedtimesDosages>()
+                            schedule = new ObservableCollection<MedtimesDosages>(),
+                            medicationquestions = rawSymptom.medicationquestions
                         };
                         // Deserialize the feedback string into the FeedbackList
-                        var feedbackSymptoms = JsonConvert.DeserializeObject<List<MedtimesDosages>>(rawSymptom.schedule);
-                        // Add only the relevant feedback to this usersymptom
-
-                        foreach (var feedback in feedbackSymptoms)
+                        if (rawSymptom.schedule == null)
                         {
-                            newUserSymptom.schedule.Add(feedback);
-                            var dosage = feedback.Dosage;
-                            var time = feedback.time;
-                            //Daily
-                            var getfreq = newUserSymptom.frequency.Split('|'); 
-                            if (getfreq[0] == "Daily" || getfreq[0] == "Days Interval")
-                            {
-                                var DosageTime = time + "|" + dosage;
-                                newUserSymptom.TimeDosage.Add(DosageTime);
-                            }
-                            //Weekly
-                            else if (getfreq[0] == "Weekly" || getfreq[0] == "Weekly ")
-                            {
-                                var day = feedback.Day;
-                                var DosageTime = time + "|" + dosage + "|" + day;
-                                newUserSymptom.TimeDosage.Add(DosageTime);
-                            }
 
+                        }
+                        else
+                        {
+                            var feedbackSymptoms = JsonConvert.DeserializeObject<List<MedtimesDosages>>(rawSymptom.schedule);
+                            // Add only the relevant feedback to this usersymptom
+
+                            foreach (var feedback in feedbackSymptoms)
+                            {
+                                newUserSymptom.schedule.Add(feedback);
+                                var dosage = feedback.Dosage;
+                                var time = feedback.time;
+                                //Daily
+                                var getfreq = newUserSymptom.frequency.Split('|');
+                                if (getfreq[0] == "Daily" || getfreq[0] == "Days Interval")
+                                {
+                                    var DosageTime = time + "|" + dosage;
+                                    newUserSymptom.TimeDosage.Add(DosageTime);
+                                }
+                                //Weekly
+                                else if (getfreq[0] == "Weekly" || getfreq[0] == "Weekly ")
+                                {
+                                    var day = feedback.Day;
+                                    var DosageTime = time + "|" + dosage + "|" + day;
+                                    newUserSymptom.TimeDosage.Add(DosageTime);
+                                }
+
+                            }
                         }
 
                         if (rawSymptom.feedback == null)
@@ -724,6 +834,40 @@ namespace PeopleWith
             }
         }
 
+
+        public async Task DeleteSupplement(usersupplement Updatefeedback)
+        {
+            try
+            {
+                string id = Updatefeedback.id;
+                var url = $"https://pwdevapi.peoplewith.com/api/usersupplement/id/{id}";
+
+                string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = Updatefeedback.deleted });
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                using (var client = new HttpClient())
+                {
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+
+                    var response = await client.SendAsync(request);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                }
+
+                return;
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+        }
+
         //Update Medicaiton Details 
         public async Task UpdateMedicationDetails(usermedication Updatefeedback)
         {
@@ -736,7 +880,140 @@ namespace PeopleWith
                 {
                     preparation = Updatefeedback.preparation,
                     formulation = Updatefeedback.formulation,
-                    unit = Updatefeedback.unit
+                    unit = Updatefeedback.unit,
+                    startdate = Updatefeedback.startdate,
+                    enddate = Updatefeedback.enddate,
+                    frequency = Updatefeedback.frequency,
+                    schedule = Updatefeedback.schedule,
+                    status = Updatefeedback.status,
+                    details = Updatefeedback.details,
+                    medicationquestions = Updatefeedback.medicationquestions
+                };
+
+                // Serialize the object into JSON
+                string json = System.Text.Json.JsonSerializer.Serialize(payload);
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                using (var client = new HttpClient())
+                {
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+
+                    var response = await client.SendAsync(request);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                }
+
+                return;
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+        }
+
+        public async Task UpdateSupplementDetails(usersupplement Updatefeedback)
+        {
+            try
+            {
+                string id = Updatefeedback.id;
+                var url = $"https://pwdevapi.peoplewith.com/api/usersupplement/id/{id}";
+
+                var payload = new
+                {
+                    preparation = Updatefeedback.preparation,
+                    formulation = Updatefeedback.formulation,
+                    unit = Updatefeedback.unit,
+                    startdate = Updatefeedback.startdate,
+                    enddate = Updatefeedback.enddate,
+                    frequency = Updatefeedback.frequency,
+                    schedule = Updatefeedback.schedule,
+                    status = Updatefeedback.status,
+                    details = Updatefeedback.details,
+                    supplementquestions = Updatefeedback.supplementquestions
+                };
+
+                // Serialize the object into JSON
+                string json = System.Text.Json.JsonSerializer.Serialize(payload);
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                using (var client = new HttpClient())
+                {
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+
+                    var response = await client.SendAsync(request);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                }
+
+                return;
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+        }
+
+        public async Task UpdateCompletedMedication(usermedication updatedmed)
+        {
+            try
+            {
+                string id = updatedmed.id;
+                var url = $"https://pwdevapi.peoplewith.com/api/usermedication/id/{id}";
+
+                var payload = new
+                {
+                    status = updatedmed.status
+                };
+
+                // Serialize the object into JSON
+                string json = System.Text.Json.JsonSerializer.Serialize(payload);
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                using (var client = new HttpClient())
+                {
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+
+                    var response = await client.SendAsync(request);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                }
+
+                return;
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+        }
+
+        public async Task UpdateCompletedSupplement(usersupplement updatedmed)
+        {
+            try
+            {
+                string id = updatedmed.id;
+                var url = $"https://pwdevapi.peoplewith.com/api/usersupplement/id/{id}";
+
+                var payload = new
+                {
+                    status = updatedmed.status
                 };
 
                 // Serialize the object into JSON
@@ -835,6 +1112,152 @@ namespace PeopleWith
             {
             }
         }
+
+        public async Task UpdateSupplementFeedbackAsync(usersupplement Updatefeedback)
+        {
+            try
+            {
+                var id = Updatefeedback.id;
+                var url = $"https://pwdevapi.peoplewith.com/api/usersupplement/id/{id}";
+                var feedbacks = Updatefeedback.feedback;
+                string json = System.Text.Json.JsonSerializer.Serialize(new { feedback = feedbacks });
+                //string json = System.Text.Json.JsonSerializer.Serialize(new { feedback = feedbacks }, serializerOptions);
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                using (var client = new HttpClient())
+                {
+                    //works with patch
+                    //var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+                    var response = await client.SendAsync(request);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Successfully updated feedback");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+
+
+        //supplments
+        public async Task<ObservableCollection<usersupplement>> GetUserSupplementsAsync()
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                string userid = Preferences.Default.Get("userid", "Unknown");
+                //var url = $"https://pwdevapi.peoplewith.com/api/usersupplement/userid/{USERID}";
+                string urlWithQuery = $"{usersupplements}?$filter=userid eq '{userid}'";
+                //string urlWithQuery = $"{usersymptoms}?$filter=userid eq '{USERID}'&$select=id,userid,symptomid,feedback,symptomtitle";
+                HttpResponseMessage response = await client.GetAsync(urlWithQuery);
+                string data = await response.Content.ReadAsStringAsync();
+                // Deserialize the response into a generic structure
+                var rawResponse = JsonConvert.DeserializeObject<SingleUserSupplement>(data);
+                var userSymptomsList = new List<usersupplement>();
+                if (rawResponse?.Value != null)
+                {
+                    foreach (var rawSymptom in rawResponse.Value)
+                    {
+                        var newUserSymptom = new usersupplement
+                        {
+                            id = rawSymptom.id,
+                            userid = rawSymptom.userid,
+                            supplementid = rawSymptom.supplementid,
+                            supplementtitle = rawSymptom.supplementtitle,
+                            startdate = rawSymptom.startdate,
+                            enddate = rawSymptom.enddate,
+                            frequency = rawSymptom.frequency,
+                            diagnosis = rawSymptom.diagnosis,
+                            status = rawSymptom.status,
+                            deleted = rawSymptom.deleted,
+                            //feedback = rawSymptom.feedback,
+                            details = rawSymptom.details,
+                            formulation = rawSymptom.formulation,
+                            preparation = rawSymptom.preparation,
+                            unit = rawSymptom.unit,
+                            schedule = new ObservableCollection<MedtimesDosages>(),
+                            supplementquestions = rawSymptom.supplementquestions
+                        };
+                        // Deserialize the feedback string into the FeedbackList
+                        if (rawSymptom.schedule == null)
+                        {
+
+                        }
+                        else
+                        {
+                            var feedbackSymptoms = JsonConvert.DeserializeObject<List<MedtimesDosages>>(rawSymptom.schedule);
+                            // Add only the relevant feedback to this usersymptom
+
+                            foreach (var feedback in feedbackSymptoms)
+                            {
+                                newUserSymptom.schedule.Add(feedback);
+                                var dosage = feedback.Dosage;
+                                var time = feedback.time;
+                                //Daily
+                                var getfreq = newUserSymptom.frequency.Split('|');
+                                if (getfreq[0] == "Daily" || getfreq[0] == "Days Interval")
+                                {
+                                    var DosageTime = time + "|" + dosage;
+                                    newUserSymptom.TimeDosage.Add(DosageTime);
+                                }
+                                //Weekly
+                                else if (getfreq[0] == "Weekly" || getfreq[0] == "Weekly ")
+                                {
+                                    var day = feedback.Day;
+                                    var DosageTime = time + "|" + dosage + "|" + day;
+                                    newUserSymptom.TimeDosage.Add(DosageTime);
+                                }
+
+                            }
+                        }
+
+                        if (rawSymptom.feedback == null)
+                        {
+
+                        }
+                        else
+                        {
+                            var medfeedback = JsonConvert.DeserializeObject<List<MedSuppFeedback>>(rawSymptom.feedback);
+
+                            if (newUserSymptom.feedback == null)
+                            {
+                                newUserSymptom.feedback = new ObservableCollection<MedSuppFeedback>();
+                            }
+                            foreach (var feedback in medfeedback)
+                            {
+                                newUserSymptom.feedback.Add(feedback);
+                            }
+                        }
+
+                        if (newUserSymptom.deleted == true)
+                        {
+                            //Ignore
+                        }
+                        else
+                        {
+                            userSymptomsList.Add(newUserSymptom);
+                        }
+
+                    }
+                }
+                return new ObservableCollection<usersupplement>(userSymptomsList);
+            }
+            catch (Exception ex)
+            {
+                return new ObservableCollection<usersupplement>();
+            }
+        }
+
 
 
         //Add Crashlog Item 
@@ -1160,48 +1583,7 @@ namespace PeopleWith
         //Supplements 
 
         //Update UserSupplements in DB 
-        public async Task<usersupplement> PostSupplementAsync(usersupplement usersuppassed)
-        {
-
-            try
-            {
-                HttpClient client = new HttpClient();
-                var url = "https://pwdevapi.peoplewith.com/api/usersupplement";
-                string jsonns = System.Text.Json.JsonSerializer.Serialize<usersupplement>(usersuppassed);
-                StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
-                var response = await client.PostAsync(url, contenttts);
-                var errorResponse = await response.Content.ReadAsStringAsync();
-                if (response.IsSuccessStatusCode)
-                {
-                    // Read the response content as a string
-                    string responseContent = await response.Content.ReadAsStringAsync();
-
-                    var jsonResponse = JObject.Parse(responseContent);
-
-                    var id = jsonResponse["value"]?[0]?["id"]?.ToString();
-
-                    usersuppassed.id = id;
-                    // Return the inserted item
-                    return usersuppassed;
-
-
-                }
-                else
-                {
-                    string errorcontent = await response.Content.ReadAsStringAsync();
-                    var s = errorcontent;
-                    return null;
-                }
-                // return null;
-            }
-
-            catch (Exception ex)
-            {
-                return null;
-            }
-
-        }
-
+    
 
         public class SingleUserSupplement
         {
@@ -1209,68 +1591,6 @@ namespace PeopleWith
         }
 
 
-
-        //Get All User Supplements
-        public async Task<ObservableCollection<usersupplement>> GetUserSupplementsAsync()
-        {
-            try
-            {
-
-
-                HttpClient client = new HttpClient();
-                string userid = Preferences.Default.Get("userid", "Unknown");
-                string urlWithQuery = $"{usersupplements}?$filter=userid eq '{userid}'";
-                HttpResponseMessage response = await client.GetAsync(urlWithQuery);
-                string data = await response.Content.ReadAsStringAsync();
-                // Deserialize the response into a generic structure
-                var rawResponse = JsonConvert.DeserializeObject<SingleUserSupplement>(data);
-                var userSymptomsList = new List<usersupplement>();
-                if (rawResponse?.Value != null)
-                {
-                    foreach (var rawSymptom in rawResponse.Value)
-                    {
-                        var newUserSymptom = new usersupplement
-                        {
-                            id = rawSymptom.id,
-                            userid = rawSymptom.userid,
-                            supplementid = rawSymptom.supplementid,
-                            supplementtitle = rawSymptom.supplementtitle,
-                            startdate = rawSymptom.startdate,
-                            enddate = rawSymptom.enddate,
-                            frequency = rawSymptom.frequency,
-                            diagnosis = rawSymptom.diagnosis,
-                            status = rawSymptom.status,
-                            feedback = rawSymptom.feedback,
-                            //details = rawSymptom.details,
-                            formulation = rawSymptom.formulation,
-                            preparation = rawSymptom.preparation,
-                            unit = rawSymptom.unit,
-                            schedule = new ObservableCollection<MedtimesDosages>()
-
-                        };
-                        // Deserialize the feedback string into the FeedbackList
-                        var feedbackSymptoms = JsonConvert.DeserializeObject<List<MedtimesDosages>>(rawSymptom.schedule);
-                        // Add only the relevant feedback to this usersymptom
-
-                        foreach (var feedback in feedbackSymptoms)
-                        {
-                            newUserSymptom.schedule.Add(feedback);
-                        }
-                        userSymptomsList.Add(newUserSymptom);
-                        //userSymptomsList[0].dosage
-
-                    }
-                }
-                return new ObservableCollection<usersupplement>(userSymptomsList);
-            }
-            catch (Exception ex)
-            {
-                return new ObservableCollection<usersupplement>();
-            }
-        }
-
-
-        
 
         //Get User Mood 
         public class GetUserMood

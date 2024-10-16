@@ -3,6 +3,7 @@ using Syncfusion.Maui.DataSource;
 using Syncfusion.Maui.DataSource.Extensions;
 using Syncfusion.Maui.ListView;
 using System.Collections.ObjectModel;
+using Mopups.Services;
 
 namespace PeopleWith;
 
@@ -13,6 +14,7 @@ public partial class MainSchedule : ContentPage
 
     APICalls aPICalls = new APICalls();
     public ObservableCollection<usermedication> AllUserMedications = new ObservableCollection<usermedication>();
+    public ObservableCollection<usersupplement> AllUserSupplements = new ObservableCollection<usersupplement>();
     public ObservableCollection<MedtimesDosages> ScheduleList = new ObservableCollection<MedtimesDosages>();
     public ObservableCollection<MedtimesDosages> AsRequiredList = new ObservableCollection<MedtimesDosages>();
     public DateTime dateforschedule = new DateTime();
@@ -23,7 +25,7 @@ public partial class MainSchedule : ContentPage
 		InitializeComponent();
 
 
-        getusermeds();
+        getusermedsandsupps();
 
         //get 7 days before and 7 days after todays date
 
@@ -114,12 +116,14 @@ public partial class MainSchedule : ContentPage
         }
     }
 
-    async void getusermeds()
+    async void getusermedsandsupps()
     {
         try
         {
 
             AllUserMedications = await aPICalls.GetUserMedicationsAsync();
+
+            AllUserSupplements = await aPICalls.GetUserSupplementsAsync();
 
             populateschedule();
 
@@ -172,6 +176,7 @@ public partial class MainSchedule : ContentPage
                             //add all the items 
                             foreach(var medtimes in item.schedule)
                             {
+                                medtimes.Type = "Medication";
                                 medtimes.Usermedid = item.id;
                                 medtimes.Feedbackid = medtimes.id.ToString();
                                 medtimes.Name = item.medicationtitle;
@@ -191,6 +196,7 @@ public partial class MainSchedule : ContentPage
                             //add all the items 
                             foreach (var medtimes in item.schedule)
                             {
+                                medtimes.Type = "Medication";
                                 medtimes.Usermedid = item.id;
                                 medtimes.Feedbackid = medtimes.id.ToString();
                                 medtimes.Name = item.medicationtitle;
@@ -220,6 +226,7 @@ public partial class MainSchedule : ContentPage
                                 //add all the items 
                                 foreach (var medtimes in item.schedule)
                                 {
+                                    medtimes.Type = "Medication";
                                     medtimes.Usermedid = item.id;
                                     medtimes.Feedbackid = medtimes.id.ToString();
                                     medtimes.Name = item.medicationtitle;
@@ -240,6 +247,7 @@ public partial class MainSchedule : ContentPage
                                 //add all the items 
                                 foreach (var medtimes in item.schedule)
                                 {
+                                    medtimes.Type = "Medication";
                                     medtimes.Usermedid = item.id;
                                     medtimes.Feedbackid = medtimes.id.ToString();
                                     medtimes.Name = item.medicationtitle;
@@ -270,6 +278,7 @@ public partial class MainSchedule : ContentPage
                                 // Add all the items for today
                                 foreach (var medtimes in item.schedule)
                                 {
+                                    medtimes.Type = "Medication";
                                     medtimes.Usermedid = item.id;
                                     medtimes.Feedbackid = medtimes.id.ToString();
                                     medtimes.Name = item.medicationtitle;
@@ -292,6 +301,7 @@ public partial class MainSchedule : ContentPage
                                 // Add all the items for today
                                 foreach (var medtimes in item.schedule)
                                 {
+                                    medtimes.Type = "Medication";
                                     medtimes.Usermedid = item.id;
                                     medtimes.Feedbackid = medtimes.id.ToString();
                                     medtimes.Name = item.medicationtitle;
@@ -306,20 +316,250 @@ public partial class MainSchedule : ContentPage
                 }
                 else if (splitstring[0] == "As Required")
                 {
-             
-                    //Dont Add 
+                    if (item.feedback != null)
+                    {
+
+                        foreach (var medtimes in item.feedback)
+                        {
+                            var convertdate = DateTime.Parse(medtimes.datetime);
+    
+                            if(convertdate.Date == dateforschedule.Date)
+                            {
+                                var newitem = new MedtimesDosages();
+                                newitem.Type = "Medication";
+                                newitem.Usermedid = item.id;
+                                newitem.Feedbackid = medtimes.id.ToString();
+                                newitem.Name = item.medicationtitle;
+                                newitem.Dosage = medtimes.Recorded + " " + item.unit;
+                                newitem.time = "00:00";
+                                newitem.Buttonop = 1;
+                                newitem.Buttonntop = 0;
+                                newitem.AsReqlblVis = true;
+                                ScheduleList.Add(newitem);
+                            }
+                        }
+                    }
+
+
                 }
 
             }
 
-            
-                if(dateforschedule.Date > DateTime.Now.Date)
+            foreach (var item in AllUserSupplements)
+            {
+                sd = DateTime.Parse(item.startdate);
+
+                if (!string.IsNullOrEmpty(item.enddate))
+                {
+                    ed = DateTime.Parse(item.enddate);
+                }
+                else
+                {
+                    hasnoendate = true;
+                }
+
+                //find out if it is daily, weekly or days interval
+
+                var splitstring = item.frequency.Split('|');
+
+                if (splitstring[0] == "Daily")
+                {
+
+                    if (hasnoendate)
+                    {
+
+                        if (dateforschedule >= sd)
+                        {
+
+                            //add all the items 
+                            foreach (var medtimes in item.schedule)
+                            {
+                                medtimes.Type = "Supplement";
+                                medtimes.Usermedid = item.id;
+                                medtimes.Feedbackid = medtimes.id.ToString();
+                                medtimes.Name = item.supplementtitle;
+                                ScheduleList.Add(medtimes);
+                            }
+
+
+                        }
+
+
+                    }
+                    else
+                    {
+
+                        if (dateforschedule >= sd && dateforschedule <= ed)
+                        {
+                            //add all the items 
+                            foreach (var medtimes in item.schedule)
+                            {
+                                medtimes.Type = "Supplement";
+                                medtimes.Usermedid = item.id;
+                                medtimes.Feedbackid = medtimes.id.ToString();
+                                medtimes.Name = item.supplementtitle;
+                                ScheduleList.Add(medtimes);
+                            }
+                        }
+
+                    }
+
+
+
+
+
+                }
+                else if (splitstring[0] == "Weekly")
+                {
+                    if (hasnoendate)
+                    {
+
+                        if (dateforschedule >= sd)
+                        {
+
+                            var dayname = dateforschedule.ToString("ddd");
+                            //check if today is within the days list
+                            if (splitstring[1].Contains(dayname))
+                            {
+                                //add all the items 
+                                foreach (var medtimes in item.schedule)
+                                {
+                                    medtimes.Type = "Supplement";
+                                    medtimes.Usermedid = item.id;
+                                    medtimes.Feedbackid = medtimes.id.ToString();
+                                    medtimes.Name = item.supplementtitle;
+                                    ScheduleList.Add(medtimes);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+
+                        if (dateforschedule >= sd && dateforschedule <= ed)
+                        {
+                            var dayname = dateforschedule.ToString("ddd");
+                            //check if today is within the days list
+                            if (splitstring[1].Contains(dayname))
+                            {
+                                //add all the items 
+                                foreach (var medtimes in item.schedule)
+                                {
+                                    medtimes.Type = "Supplement";
+                                    medtimes.Usermedid = item.id;
+                                    medtimes.Feedbackid = medtimes.id.ToString();
+                                    medtimes.Name = item.supplementtitle;
+                                    ScheduleList.Add(medtimes);
+                                }
+                            }
+                        }
+
+                    }
+                }
+                else if (splitstring[0] == "Days Interval")
+                {
+
+                    var daycount = Convert.ToInt32(splitstring[1]);
+
+                    if (hasnoendate)
+                    {
+
+                        if (dateforschedule >= sd)
+                        {
+
+                            // Calculate the difference in days from the start date
+                            var daysDifference = (DateTime.Now - sd).Days;
+
+                            // Check if today's date is a multiple of the daycount (e.g., every 3rd day)
+                            if (daysDifference % daycount == 0)
+                            {
+                                // Add all the items for today
+                                foreach (var medtimes in item.schedule)
+                                {
+                                    medtimes.Type = "Supplement";
+                                    medtimes.Usermedid = item.id;
+                                    medtimes.Feedbackid = medtimes.id.ToString();
+                                    medtimes.Name = item.supplementtitle;
+                                    ScheduleList.Add(medtimes);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+
+                        if (dateforschedule >= sd && dateforschedule <= ed)
+                        {
+                            // Calculate the difference in days from the start date
+                            var daysDifference = (DateTime.Now - sd).TotalDays;
+
+                            // Check if today's date is a multiple of the daycount (e.g., every 3rd day)
+                            if (daysDifference % daycount == 0)
+                            {
+                                // Add all the items for today
+                                foreach (var medtimes in item.schedule)
+                                {
+                                    medtimes.Type = "Supplement";
+                                    medtimes.Usermedid = item.id;
+                                    medtimes.Feedbackid = medtimes.id.ToString();
+                                    medtimes.Name = item.supplementtitle;
+                                    ScheduleList.Add(medtimes);
+                                }
+                            }
+                        }
+
+                    }
+
+
+                }
+                else if (splitstring[0] == "As Required")
+                {
+                    if (item.feedback != null)
+                    {
+
+                        foreach (var medtimes in item.feedback)
+                        {
+                            var convertdate = DateTime.Parse(medtimes.datetime);
+
+                            if (convertdate.Date == dateforschedule.Date)
+                            {
+                                var newitem = new MedtimesDosages();
+                                newitem.Type = "Supplement";
+                                newitem.Usermedid = item.id;
+                                newitem.Feedbackid = medtimes.id.ToString();
+                                newitem.Name = item.supplementtitle;
+                                newitem.Dosage = medtimes.Recorded + " " + item.unit;
+                                newitem.time = "00:00";
+                                newitem.Buttonop = 1;
+                                newitem.Buttonntop = 0;
+                                newitem.AsReqlblVis = true;
+                                ScheduleList.Add(newitem);
+                            }
+                        }
+                    }
+                }
+
+            }
+
+
+
+            if (dateforschedule.Date > DateTime.Now.Date)
                 {
                    foreach(var med in ScheduleList)
                     {
                         med.Buttonenabled = false;
                         med.Buttonop = 0;
                          med.Buttonntop = 0;
+
+                    if(med.Type == "Medication")
+                    {
+                        med.ListBackgroundColor = Color.FromArgb("#e5f9f4");
+                   
+                    }
+                    else
+                    {
+                        med.ListBackgroundColor = Color.FromArgb("#f9f4e5");
+                    }
                         
                     }
                 }
@@ -331,35 +571,53 @@ public partial class MainSchedule : ContentPage
                         med.Buttonop = 0.2;
                         med.Buttonntop = 0.2;
 
-                    //check feedback here
-                    var getuseremed = AllUserMedications.Where(x => x.id == med.Usermedid).FirstOrDefault();
-
-                    var dt = dateforschedule.ToString("dd/MM/yyyy");
-
-
-                    // Check if feedback is null before trying to access it
-                    if (getuseremed.feedback != null)
+                    if (med.Type == "Medication")
                     {
-                        // Attempt to find the feedback item
-                        var getfeedbackitem = getuseremed.feedback
-                            .Where(x => x.id == med.Feedbackid)
-                            .Where(x => x.datetime.Contains(dt))
-                            .FirstOrDefault();
 
-                        if (getfeedbackitem != null)
+                        med.ListBackgroundColor = Color.FromArgb("#e5f9f4");
+
+                        //check feedback here
+                        var getuseremed = AllUserMedications.Where(x => x.id == med.Usermedid).FirstOrDefault();
+
+                        var dt = dateforschedule.ToString("dd/MM/yyyy");
+
+
+                        // Check if feedback is null before trying to access it
+                        if (getuseremed.feedback != null)
                         {
-     
-                            if (getfeedbackitem.Recorded == "Taken")
+                            // Attempt to find the feedback item
+                            var getfeedbackitem = getuseremed.feedback
+                                .Where(x => x.id == med.Feedbackid)
+                                .Where(x => x.datetime.Contains(dt))
+                                .FirstOrDefault();
+
+                            if (getfeedbackitem != null)
                             {
-                                //Medication Taken 
-                                med.Buttonop = 1;  
-                                med.Buttonntop = 0;
+                              
+                                if (getfeedbackitem.Recorded == "Taken")
+                                {
+                                    //Medication Taken 
+                                    med.Buttonop = 1;
+                                    med.Buttonntop = 0;
+                                }
+                                else if(getfeedbackitem.Recorded == "Not Taken")
+                                {
+                                    //Not Taken
+                                 
+                                    med.Buttonop = 0;
+                                    med.Buttonntop = 1;
+                                }
+                                else
+                                {
+                                    med.Buttonop = 1;
+                                    med.Buttonntop = 0;
+                                }
                             }
                             else
                             {
-                                //Not Taken
-                                med.Buttonop = 0;   
-                                med.Buttonntop = 1; 
+                                //Not Recorded
+                                med.Buttonop = 0.2;
+                                med.Buttonntop = 0.2;
                             }
                         }
                         else
@@ -371,12 +629,62 @@ public partial class MainSchedule : ContentPage
                     }
                     else
                     {
-                        //Not Recorded
-                        med.Buttonop = 0.2;   
-                        med.Buttonntop = 0.2;
+
+
+                        med.ListBackgroundColor = Color.FromArgb("#f9f4e5");
+
+                        //check feedback here
+                        var getusersupp = AllUserSupplements.Where(x => x.id == med.Usermedid).FirstOrDefault();
+
+                        var dtsupp = dateforschedule.ToString("dd/MM/yyyy");
+
+
+                        // Check if feedback is null before trying to access it
+                        if (getusersupp.feedback != null)
+                        {
+                            // Attempt to find the feedback item
+                            var getfeedbackitemsupp = getusersupp.feedback
+                                .Where(x => x.id == med.Feedbackid)
+                                .Where(x => x.datetime.Contains(dtsupp))
+                                .FirstOrDefault();
+
+                            if (getfeedbackitemsupp != null)
+                            {
+
+                                if (getfeedbackitemsupp.Recorded == "Taken")
+                                {
+                                    //Medication Taken 
+                                    med.Buttonop = 1;
+                                    med.Buttonntop = 0;
+                                }
+                                else if(getfeedbackitemsupp.Recorded == "Not Recorded")
+                                {
+                                    //Not Taken
+                                    med.Buttonop = 0;
+                                    med.Buttonntop = 1;
+                                }
+                                else
+                                {
+                                    med.Buttonop = 1;
+                                    med.Buttonntop = 0;
+                                }
+                            }
+                            else
+                            {
+                                //Not Recorded
+                                med.Buttonop = 0.2;
+                                med.Buttonntop = 0.2;
+                            }
+                        }
+                        else
+                        {
+                            //Not Recorded
+                            med.Buttonop = 0.2;
+                            med.Buttonntop = 0.2;
+                        }
                     }
-                
-                  }
+
+                }
                 }
 
 
@@ -393,9 +701,20 @@ public partial class MainSchedule : ContentPage
                 //populate mainschedulelistview 
                 mainschedulelistview.IsVisible = true;
                 nodatastack.IsVisible = false;
-                mainschedulelistview.ItemsSource = ScheduleList;
+
+                var orderbytime = ScheduleList.OrderBy(x => TimeSpan.Parse(x.time)).ToList();
+
+                foreach(var item in orderbytime)
+                {
+                    if(item.AsReqlblVis == true)
+                    {
+                        item.time = "As Required";
+                    }
+                }
+
+                mainschedulelistview.ItemsSource = orderbytime;
                 //   int totalItems = GroupedScheduleList.Sum(g => g.Count()) + GroupedScheduleList.Count; // Items + Group headers
-                mainschedulelistview.HeightRequest = ScheduleList.Count * 100;
+                mainschedulelistview.HeightRequest = ScheduleList.Count * 110;
             }
         }
         catch(Exception ex)
@@ -422,7 +741,9 @@ public partial class MainSchedule : ContentPage
                         Medtime.Name = item.medicationtitle;
                         Medtime.Dosage = splitstring[1];
                         Medtime.dosageunit = item.unit;
-                        Medtime.time = "As Required"; 
+                        Medtime.time = "As Required";
+                        Medtime.Type = "Medication";
+                        Medtime.ListBackgroundColor = Color.FromArgb("#e5f9f4");
                         AsRequiredList.Add(Medtime);
                     }
                 }
@@ -436,10 +757,49 @@ public partial class MainSchedule : ContentPage
                         Medtime.Dosage = "N/A";
                         Medtime.dosageunit = item.unit;
                         Medtime.time = "As Required";
+                        Medtime.Type = "Medication";
+                        Medtime.ListBackgroundColor = Color.FromArgb("#e5f9f4");
                         AsRequiredList.Add(Medtime);
                     }
                 }
               
+            }
+
+            foreach (var item in AllUserSupplements)
+            {
+                if (item.frequency.Contains("|"))
+                {
+                    var splitstring = item.frequency.Split('|');
+
+                    if (splitstring[0] == "As Required")
+                    {
+                        var Medtime = new MedtimesDosages();
+                        Medtime.Usermedid = item.id;
+                        Medtime.Name = item.supplementtitle;
+                        Medtime.Dosage = splitstring[1];
+                        Medtime.dosageunit = item.unit;
+                        Medtime.time = "As Required";
+                        Medtime.Type = "Supplement";
+                        Medtime.ListBackgroundColor = Color.FromArgb("#f9f4e5");
+                        AsRequiredList.Add(Medtime);
+                    }
+                }
+                else
+                {
+                    if (item.frequency == "As Required")
+                    {
+                        var Medtime = new MedtimesDosages();
+                        Medtime.Usermedid = item.id;
+                        Medtime.Name = item.supplementtitle;
+                        Medtime.Dosage = "N/A";
+                        Medtime.dosageunit = item.unit;
+                        Medtime.time = "As Required";
+                        Medtime.Type = "Supplement";
+                        Medtime.ListBackgroundColor = Color.FromArgb("#f9f4e5");
+                        AsRequiredList.Add(Medtime);
+                    }
+                }
+
             }
         }
         catch(Exception Ex)
@@ -459,30 +819,62 @@ public partial class MainSchedule : ContentPage
 
             var getitem = ScheduleList.Where(x => x.Feedbackid == label.FeedbackID).FirstOrDefault();
 
-            var getusermeditem = AllUserMedications.Where(x => x.id == label.UsermedID).FirstOrDefault();
-
-
-
             if (getitem != null)
             {
 
-                getitem.Buttonop = 1;
 
-                var newfeedback = new MedSuppFeedback();
-                newfeedback.id = label.FeedbackID;
-                newfeedback.Recorded = "Taken";
-                TimeSpan timeSpan = TimeSpan.Parse(getitem.time);
-                var dt = dateforschedule.Date + timeSpan;
-                newfeedback.datetime = dt.ToString("HH:mm, dd/MM/yyyy");
-
-                if (getusermeditem.feedback == null || !getusermeditem.feedback.Any())
+                if (getitem.Type == "Medication")
                 {
-                    //feedback is null initalize before hand 
-                    getusermeditem.feedback = new ObservableCollection<MedSuppFeedback>();
-                }
 
-                getusermeditem.feedback.Add(newfeedback);
-                await aPICalls.UpdateMedicationFeedbackAsync(getusermeditem);
+                    var getusermeditem = AllUserMedications.Where(x => x.id == label.UsermedID).FirstOrDefault();
+
+
+
+
+                    getitem.Buttonop = 1;
+
+                    var newfeedback = new MedSuppFeedback();
+                    newfeedback.id = label.FeedbackID;
+                    newfeedback.Recorded = "Taken";
+                    TimeSpan timeSpan = TimeSpan.Parse(getitem.time);
+                    var dt = dateforschedule.Date + timeSpan;
+                    newfeedback.datetime = dt.ToString("HH:mm, dd/MM/yyyy");
+
+                    if (getusermeditem.feedback == null || !getusermeditem.feedback.Any())
+                    {
+                        //feedback is null initalize before hand 
+                        getusermeditem.feedback = new ObservableCollection<MedSuppFeedback>();
+                    }
+
+                    getusermeditem.feedback.Add(newfeedback);
+                    await aPICalls.UpdateMedicationFeedbackAsync(getusermeditem);
+
+                }
+                else
+                {
+                    //update supplement feedback
+                    var getusermeditem = AllUserSupplements.Where(x => x.id == label.UsermedID).FirstOrDefault();
+
+
+                        getitem.Buttonop = 1;
+
+                        var newfeedback = new MedSuppFeedback();
+                        newfeedback.id = label.FeedbackID;
+                        newfeedback.Recorded = "Taken";
+                        TimeSpan timeSpan = TimeSpan.Parse(getitem.time);
+                        var dt = dateforschedule.Date + timeSpan;
+                        newfeedback.datetime = dt.ToString("HH:mm, dd/MM/yyyy");
+
+                        if (getusermeditem.feedback == null || !getusermeditem.feedback.Any())
+                        {
+                            //feedback is null initalize before hand 
+                            getusermeditem.feedback = new ObservableCollection<MedSuppFeedback>();
+                        }
+
+                        getusermeditem.feedback.Add(newfeedback);
+                        await aPICalls.UpdateSupplementFeedbackAsync(getusermeditem);
+                    
+                }
             }
         }
         catch(Exception ex )
@@ -501,30 +893,62 @@ public partial class MainSchedule : ContentPage
             ExtendedImage label = (ExtendedImage)sender;
 
             var getitem = ScheduleList.Where(x => x.Feedbackid == label.FeedbackID).FirstOrDefault();
-
-            var getusermeditem = AllUserMedications.Where(x => x.id == label.UsermedID).FirstOrDefault();
-
-
-
             if (getitem != null)
             {
 
-                getitem.Buttonntop = 1;
 
-                var newfeedback = new MedSuppFeedback();
-                newfeedback.id = label.FeedbackID;
-                newfeedback.Recorded = "Not Taken";
-                TimeSpan timeSpan = TimeSpan.Parse(getitem.time);
-                var dt = dateforschedule.Date + timeSpan;
-                newfeedback.datetime = dt.ToString("HH:mm, dd/MM/yyyy");
+                if (getitem.Type == "Medication")
+                {
+
+                    var getusermeditem = AllUserMedications.Where(x => x.id == label.UsermedID).FirstOrDefault();
 
 
-                getusermeditem.feedback.Add(newfeedback);
 
 
-                await aPICalls.UpdateMedicationFeedbackAsync(getusermeditem);
+                    getitem.Buttonntop = 1;
+
+                    var newfeedback = new MedSuppFeedback();
+                    newfeedback.id = label.FeedbackID;
+                    newfeedback.Recorded = "Not Taken";
+                    TimeSpan timeSpan = TimeSpan.Parse(getitem.time);
+                    var dt = dateforschedule.Date + timeSpan;
+                    newfeedback.datetime = dt.ToString("HH:mm, dd/MM/yyyy");
+
+                    if (getusermeditem.feedback == null || !getusermeditem.feedback.Any())
+                    {
+                        //feedback is null initalize before hand 
+                        getusermeditem.feedback = new ObservableCollection<MedSuppFeedback>();
+                    }
+
+                    getusermeditem.feedback.Add(newfeedback);
+                    await aPICalls.UpdateMedicationFeedbackAsync(getusermeditem);
+
+                }
+                else
+                {
+                    //update supplement feedback
+                    var getusermeditem = AllUserSupplements.Where(x => x.id == label.UsermedID).FirstOrDefault();
 
 
+                    getitem.Buttonntop = 1;
+
+                    var newfeedback = new MedSuppFeedback();
+                    newfeedback.id = label.FeedbackID;
+                    newfeedback.Recorded = "Not Taken";
+                    TimeSpan timeSpan = TimeSpan.Parse(getitem.time);
+                    var dt = dateforschedule.Date + timeSpan;
+                    newfeedback.datetime = dt.ToString("HH:mm, dd/MM/yyyy");
+
+                    if (getusermeditem.feedback == null || !getusermeditem.feedback.Any())
+                    {
+                        //feedback is null initalize before hand 
+                        getusermeditem.feedback = new ObservableCollection<MedSuppFeedback>();
+                    }
+
+                    getusermeditem.feedback.Add(newfeedback);
+                    await aPICalls.UpdateSupplementFeedbackAsync(getusermeditem);
+
+                }
             }
 
 
@@ -542,7 +966,7 @@ public partial class MainSchedule : ContentPage
             populateAsRequired();
             if (asrequiredbtn.Text == "As Required Medications/Supplements")
             {
-                asrequiredbtn.Text = "Medication/Supplement Schedule";
+               // asrequiredbtn.Text = "Medication/Supplement Schedule";
                 // Group by time and create the grouped collection
                 //group the listview so all days are the same
                 if (AsRequiredList.Count == 0)
@@ -556,8 +980,9 @@ public partial class MainSchedule : ContentPage
                 }
                 else
                 {
-                   
+
                     //populate mainschedulelistview 
+                    asrequiredbtn.Text = "Medication/Supplement Schedule";
                     mainschedulelistview.IsVisible = false;
                     AsRequiredlistview.IsVisible = true;
                     nodatastack.IsVisible = false;
@@ -569,6 +994,11 @@ public partial class MainSchedule : ContentPage
             {
                 asrequiredbtn.Text = "As Required Medications/Supplements";
 
+              
+                mainschedulelistview.IsVisible = true;
+                AsRequiredlistview.IsVisible = false;
+               
+
             }
 
            
@@ -578,5 +1008,33 @@ public partial class MainSchedule : ContentPage
 
         }
         
+    }
+
+    private async void AsRequiredlistview_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
+    {
+        try
+        {
+            var item = e.DataItem as MedtimesDosages;
+
+
+            if(item.Type == "Medication")
+            {
+                var findmed = AllUserMedications.Where(x => x.id == item.Usermedid).FirstOrDefault();
+                await Navigation.PushAsync(new AddAsRequiredDosage(item, findmed), false);
+            }
+            else
+            {
+                var findsupp = AllUserSupplements.Where(x => x.id == item.Usermedid).FirstOrDefault();
+                await Navigation.PushAsync(new AddAsRequiredDosage(item, findsupp), false);
+            }
+
+            
+           // await MopupService.Instance.PushAsync(new AddAsRequiredDosage(item) { });
+           // await Task.Delay(1000);
+        }
+        catch(Exception ex)
+        {
+
+        }
     }
 }

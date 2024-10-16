@@ -8,18 +8,18 @@ using System.Threading.Tasks;
 
 namespace PeopleWith
 {
-    public class medication
+    public class supplement
     {
 
         //[JsonIgnore]
-        public string medicationid { get; set; }
+        public string supplementid { get; set; }
         //public string createdAt { get; set; }
         //public string updatedAt { get; set; }
         //public string version { get; set; }
         //public bool deleted { get; set; }
         public string title { get; set; }
         public string description { get; set; }
-        public string medicationinformation { get; set; }
+        public string supplementinformation { get; set; }
         public string status { get; set; }
         public string userid { get; set; }
         public string SNOWMED { get; set; }
@@ -33,8 +33,8 @@ namespace PeopleWith
 
     }
 
-    public class ApiResponseMedication
+    public class ApiResponseSupplement
     {
-        public ObservableCollection<medication> Value { get; set; }
+        public ObservableCollection<supplement> Value { get; set; }
     }
 }

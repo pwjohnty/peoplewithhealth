@@ -37,6 +37,23 @@ namespace PeopleWith
             }
         }
 
+        private string dosage2;
+
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string Dosage2
+        {
+            get { return dosage2; }
+            set
+            {
+                dosage2 = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(Dosage2)));
+                }
+            }
+        }
+
         public string dosageunit { get; set; }
 
 
@@ -154,6 +171,38 @@ namespace PeopleWith
             }
         }
 
+        private bool labelvis2;
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool Labelvis2
+        {
+            get { return labelvis2; }
+            set
+            {
+                labelvis2 = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(Labelvis2)));
+                }
+            }
+        }
+
+
+        private bool entryvis2;
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool Entryvis2
+        {
+            get { return entryvis2; }
+            set
+            {
+                entryvis2 = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(Entryvis2)));
+                }
+            }
+        }
+
         private string name;
 
         [System.Text.Json.Serialization.JsonIgnore]
@@ -257,6 +306,16 @@ namespace PeopleWith
 
         [System.Text.Json.Serialization.JsonIgnore]
         public string Type { get; set; }
+
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool NormalDosage { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool DoubleDosage { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public Color ListBackgroundColor { get; set; }
 
         // event handler for updating the list views
         public event PropertyChangedEventHandler PropertyChanged;

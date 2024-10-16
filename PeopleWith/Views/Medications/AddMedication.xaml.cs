@@ -4,7 +4,12 @@ using System.Drawing;
 using System.Linq.Expressions;
 using Plugin.LocalNotification;
 using Mopups.Services;
-using Xamarin.Google.Crypto.Tink.Proto;
+using Microsoft.Maui;
+using Color = Microsoft.Maui.Graphics.Color;
+using Syncfusion.Maui.ListView.Helpers;
+using System.Linq;
+//using Android.App;
+//using Xamarin.Google.Crypto.Tink.Proto;
 //using Windows.Foundation.Metadata;
 
 namespace PeopleWith;
@@ -49,6 +54,7 @@ public partial class AddMedication : ContentPage
     string WeeklyDaysSelected;
     string WeeklyHowManyTimes; 
     string WeeklysameDosageSelected;
+    private int clickCount = 0;
 
     ObservableCollection<MedtimesDosages> medtimesanddosages = new ObservableCollection<MedtimesDosages>();
     ObservableCollection<usermedication> UserMedications = new ObservableCollection<usermedication>();
@@ -153,69 +159,69 @@ public partial class AddMedication : ContentPage
         frequencyOptions = new Dictionary<string, List<MedtimesDosages>>()
 {
     { "Morning", new List<MedtimesDosages> {
-         new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+         new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit}
     }},
        { "Night", new List<MedtimesDosages> {
-         new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+         new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit}
     }},
           { "own time", new List<MedtimesDosages> {
-         new MedtimesDosages { time = DateTime.Now.ToString("HH:mm"), timeconverted = DateTime.Now.TimeOfDay, Dosage = string.Empty,  dosageunit = newusermedication.unit}
+         new MedtimesDosages { time = DateTime.Now.ToString("HH:mm"), timeconverted = DateTime.Now.TimeOfDay, Dosage2 = string.Empty, Dosage = string.Empty,  dosageunit = newusermedication.unit}
     }},
     {
     "Twice Daily", new List<MedtimesDosages> {
-        new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+        new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit}
     }},
     {
     "Three Times Daily", new List<MedtimesDosages> {
-      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-       new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit}
     }},
        {
     "Four Times Daily", new List<MedtimesDosages> {
-      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-       new MedtimesDosages { time = "12:00", timeconverted = new TimeSpan(12, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "16:00", timeconverted = new TimeSpan(16, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "12:00", timeconverted = new TimeSpan(12, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "16:00", timeconverted = new TimeSpan(16, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit}
     }},
             {
     "Five Times Daily", new List<MedtimesDosages> {
-      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-       new MedtimesDosages { time = "11:00", timeconverted = new TimeSpan(11, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "17:00", timeconverted = new TimeSpan(17, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "11:00", timeconverted = new TimeSpan(11, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "17:00", timeconverted = new TimeSpan(17, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit}
     }},
                         {
     "Six Times Daily", new List<MedtimesDosages> {
-      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-       new MedtimesDosages { time = "10:30", timeconverted = new TimeSpan(10, 30, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "13:00", timeconverted = new TimeSpan(13, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "15:30", timeconverted = new TimeSpan(15, 30, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-         new MedtimesDosages { time = "18:00", timeconverted = new TimeSpan(18, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "10:30", timeconverted = new TimeSpan(10, 30, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "13:00", timeconverted = new TimeSpan(13, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "15:30", timeconverted = new TimeSpan(15, 30, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "18:00", timeconverted = new TimeSpan(18, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit}
     }},
                                                 {
     "Seven Times Daily", new List<MedtimesDosages> {
-      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-       new MedtimesDosages { time = "10:00", timeconverted = new TimeSpan(10, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "12:00", timeconverted = new TimeSpan(12, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-         new MedtimesDosages { time = "16:00", timeconverted = new TimeSpan(16, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-         new MedtimesDosages { time = "18:00", timeconverted = new TimeSpan(18, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "10:00", timeconverted = new TimeSpan(10, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "12:00", timeconverted = new TimeSpan(12, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "16:00", timeconverted = new TimeSpan(16, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "18:00", timeconverted = new TimeSpan(18, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit}
     }},
                                                                                                 {
     "Eight Times Daily", new List<MedtimesDosages> {
-      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-       new MedtimesDosages { time = "09:45", timeconverted = new TimeSpan(9, 45, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "11:30", timeconverted = new TimeSpan(11, 30, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "13:15", timeconverted = new TimeSpan(13, 15, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-         new MedtimesDosages { time = "15:00", timeconverted = new TimeSpan(15, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-             new MedtimesDosages { time = "16:45", timeconverted = new TimeSpan(16, 45, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-         new MedtimesDosages { time = "18:30", timeconverted = new TimeSpan(18, 30, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "09:45", timeconverted = new TimeSpan(9, 45, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "11:30", timeconverted = new TimeSpan(11, 30, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "13:15", timeconverted = new TimeSpan(13, 15, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "15:00", timeconverted = new TimeSpan(15, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+             new MedtimesDosages { time = "16:45", timeconverted = new TimeSpan(16, 45, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "18:30", timeconverted = new TimeSpan(18, 30, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit}
     }},
     // Add the other options similarly
 };
@@ -223,63 +229,63 @@ public partial class AddMedication : ContentPage
         frequencyOptionsWDI = new Dictionary<string, List<MedtimesDosages>>()
 {
     { "One", new List<MedtimesDosages> {
-        new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+        new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit}
     }},
     {
     "Two", new List<MedtimesDosages> {
-      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit}
     }},
     {
     "Three", new List<MedtimesDosages> {
-      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-       new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit}
     }},
        {
     "Four", new List<MedtimesDosages> {
-      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-       new MedtimesDosages { time = "12:00", timeconverted = new TimeSpan(12, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "16:00", timeconverted = new TimeSpan(16, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "12:00", timeconverted = new TimeSpan(12, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "16:00", timeconverted = new TimeSpan(16, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit}
     }},
             {
     "Five", new List<MedtimesDosages> {
-      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-       new MedtimesDosages { time = "11:00", timeconverted = new TimeSpan(11, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "17:00", timeconverted = new TimeSpan(17, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "11:00", timeconverted = new TimeSpan(11, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "17:00", timeconverted = new TimeSpan(17, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit}
     }},
                         {
     "Six", new List<MedtimesDosages> {
-      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-       new MedtimesDosages { time = "10:30", timeconverted = new TimeSpan(10, 30, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "13:00", timeconverted = new TimeSpan(13, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "15:30", timeconverted = new TimeSpan(15, 30, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-         new MedtimesDosages { time = "18:00", timeconverted = new TimeSpan(18, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "10:30", timeconverted = new TimeSpan(10, 30, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "13:00", timeconverted = new TimeSpan(13, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "15:30", timeconverted = new TimeSpan(15, 30, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "18:00", timeconverted = new TimeSpan(18, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit}
     }},
                                                 {
     "Seven", new List<MedtimesDosages> {
-      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-       new MedtimesDosages { time = "10:00", timeconverted = new TimeSpan(10, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "12:00", timeconverted = new TimeSpan(12, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-         new MedtimesDosages { time = "16:00", timeconverted = new TimeSpan(16, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-         new MedtimesDosages { time = "18:00", timeconverted = new TimeSpan(18, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "10:00", timeconverted = new TimeSpan(10, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "12:00", timeconverted = new TimeSpan(12, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "16:00", timeconverted = new TimeSpan(16, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "18:00", timeconverted = new TimeSpan(18, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit}
     }},
                                                                                                 {
     "Eight", new List<MedtimesDosages> {
-      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-       new MedtimesDosages { time = "09:45", timeconverted = new TimeSpan(9, 45, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "11:30", timeconverted = new TimeSpan(11, 30, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "13:15", timeconverted = new TimeSpan(13, 15, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-         new MedtimesDosages { time = "15:00", timeconverted = new TimeSpan(15, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-             new MedtimesDosages { time = "16:45", timeconverted = new TimeSpan(16, 45, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-         new MedtimesDosages { time = "18:30", timeconverted = new TimeSpan(18, 30, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "09:45", timeconverted = new TimeSpan(9, 45, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "11:30", timeconverted = new TimeSpan(11, 30, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "13:15", timeconverted = new TimeSpan(13, 15, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "15:00", timeconverted = new TimeSpan(15, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+             new MedtimesDosages { time = "16:45", timeconverted = new TimeSpan(16, 45, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "18:30", timeconverted = new TimeSpan(18, 30, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit}
     }},
     // Add the other options similarly
 };
@@ -299,6 +305,7 @@ public partial class AddMedication : ContentPage
 
     }
 
+
     public AddMedication(ObservableCollection<usermedication> AllUsermedications, usermedication MedSelected)
     {
         InitializeComponent();
@@ -311,8 +318,15 @@ public partial class AddMedication : ContentPage
         }
         else
         {
-            SelectedMed = MedSelected;
-            IsEdit = true; 
+         
+                // newusermedication = MedSelected;
+                SelectedMed = MedSelected;
+                IsEdit = true;
+                editframe.IsVisible = true;
+                topprogress.IsVisible = true;
+                //loadingstack.IsVisible = false;
+                //datastack.IsVisible = true;
+            
         }
     
        Getmedications();
@@ -405,75 +419,78 @@ public partial class AddMedication : ContentPage
 
         // dosageunitlbl.Text = newusermedication.unit;
 
-
+        if(IsEdit)
+        {
+            newusermedication.unit = MedSelected.unit;
+        }
 
         // Define a dictionary to store the options and their corresponding MedtimesDosages
         frequencyOptions = new Dictionary<string, List<MedtimesDosages>>()
 {
     { "Morning", new List<MedtimesDosages> {
-         new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+         new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit}
     }},
        { "Night", new List<MedtimesDosages> {
-         new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+         new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit}
     }},
           { "own time", new List<MedtimesDosages> {
-         new MedtimesDosages { time = DateTime.Now.ToString("HH:mm"), timeconverted = DateTime.Now.TimeOfDay, Dosage = string.Empty,  dosageunit = newusermedication.unit}
+         new MedtimesDosages { time = DateTime.Now.ToString("HH:mm"), timeconverted = DateTime.Now.TimeOfDay, Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit}
     }},
     {
     "Twice Daily", new List<MedtimesDosages> {
-        new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+        new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit}
     }},
     {
     "Three Times Daily", new List<MedtimesDosages> {
-      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-       new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit}
     }},
        {
     "Four Times Daily", new List<MedtimesDosages> {
-      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-       new MedtimesDosages { time = "12:00", timeconverted = new TimeSpan(12, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "16:00", timeconverted = new TimeSpan(16, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "12:00", timeconverted = new TimeSpan(12, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "16:00", timeconverted = new TimeSpan(16, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit}
     }},
             {
     "Five Times Daily", new List<MedtimesDosages> {
-      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-       new MedtimesDosages { time = "11:00", timeconverted = new TimeSpan(11, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "17:00", timeconverted = new TimeSpan(17, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "11:00", timeconverted = new TimeSpan(11, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "17:00", timeconverted = new TimeSpan(17, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit}
     }},
                         {
     "Six Times Daily", new List<MedtimesDosages> {
-      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-       new MedtimesDosages { time = "10:30", timeconverted = new TimeSpan(10, 30, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "13:00", timeconverted = new TimeSpan(13, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "15:30", timeconverted = new TimeSpan(15, 30, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-         new MedtimesDosages { time = "18:00", timeconverted = new TimeSpan(18, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "10:30", timeconverted = new TimeSpan(10, 30, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "13:00", timeconverted = new TimeSpan(13, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "15:30", timeconverted = new TimeSpan(15, 30, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "18:00", timeconverted = new TimeSpan(18, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit}
     }},
                                                 {
     "Seven Times Daily", new List<MedtimesDosages> {
-      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-       new MedtimesDosages { time = "10:00", timeconverted = new TimeSpan(10, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "12:00", timeconverted = new TimeSpan(12, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-         new MedtimesDosages { time = "16:00", timeconverted = new TimeSpan(16, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-         new MedtimesDosages { time = "18:00", timeconverted = new TimeSpan(18, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "10:00", timeconverted = new TimeSpan(10, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "12:00", timeconverted = new TimeSpan(12, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "16:00", timeconverted = new TimeSpan(16, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "18:00", timeconverted = new TimeSpan(18, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit}
     }},
                                                                                                 {
     "Eight Times Daily", new List<MedtimesDosages> {
-      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-       new MedtimesDosages { time = "09:45", timeconverted = new TimeSpan(9, 45, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "11:30", timeconverted = new TimeSpan(11, 30, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "13:15", timeconverted = new TimeSpan(13, 15, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-         new MedtimesDosages { time = "15:00", timeconverted = new TimeSpan(15, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-             new MedtimesDosages { time = "16:45", timeconverted = new TimeSpan(16, 45, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-         new MedtimesDosages { time = "18:30", timeconverted = new TimeSpan(18, 30, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "09:45", timeconverted = new TimeSpan(9, 45, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "11:30", timeconverted = new TimeSpan(11, 30, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "13:15", timeconverted = new TimeSpan(13, 15, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "15:00", timeconverted = new TimeSpan(15, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+             new MedtimesDosages { time = "16:45", timeconverted = new TimeSpan(16, 45, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "18:30", timeconverted = new TimeSpan(18, 30, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit}
     }},
     // Add the other options similarly
 };
@@ -481,63 +498,63 @@ public partial class AddMedication : ContentPage
         frequencyOptionsWDI = new Dictionary<string, List<MedtimesDosages>>()
 {
     { "One", new List<MedtimesDosages> {
-        new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+        new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit}
     }},
     {
     "Two", new List<MedtimesDosages> {
-      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit}
     }},
     {
     "Three", new List<MedtimesDosages> {
-      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-       new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit}
     }},
        {
     "Four", new List<MedtimesDosages> {
-      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-       new MedtimesDosages { time = "12:00", timeconverted = new TimeSpan(12, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "16:00", timeconverted = new TimeSpan(16, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "12:00", timeconverted = new TimeSpan(12, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "16:00", timeconverted = new TimeSpan(16, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit}
     }},
             {
     "Five", new List<MedtimesDosages> {
-      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-       new MedtimesDosages { time = "11:00", timeconverted = new TimeSpan(11, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "17:00", timeconverted = new TimeSpan(17, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "11:00", timeconverted = new TimeSpan(11, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "17:00", timeconverted = new TimeSpan(17, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit}
     }},
                         {
     "Six", new List<MedtimesDosages> {
-      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-       new MedtimesDosages { time = "10:30", timeconverted = new TimeSpan(10, 30, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "13:00", timeconverted = new TimeSpan(13, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "15:30", timeconverted = new TimeSpan(15, 30, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-         new MedtimesDosages { time = "18:00", timeconverted = new TimeSpan(18, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "10:30", timeconverted = new TimeSpan(10, 30, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "13:00", timeconverted = new TimeSpan(13, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "15:30", timeconverted = new TimeSpan(15, 30, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "18:00", timeconverted = new TimeSpan(18, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit}
     }},
                                                 {
     "Seven", new List<MedtimesDosages> {
-      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-       new MedtimesDosages { time = "10:00", timeconverted = new TimeSpan(10, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "12:00", timeconverted = new TimeSpan(12, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-         new MedtimesDosages { time = "16:00", timeconverted = new TimeSpan(16, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-         new MedtimesDosages { time = "18:00", timeconverted = new TimeSpan(18, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "10:00", timeconverted = new TimeSpan(10, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "12:00", timeconverted = new TimeSpan(12, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "14:00", timeconverted = new TimeSpan(14, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "16:00", timeconverted = new TimeSpan(16, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "18:00", timeconverted = new TimeSpan(18, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit}
     }},
                                                                                                 {
     "Eight", new List<MedtimesDosages> {
-      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-       new MedtimesDosages { time = "09:45", timeconverted = new TimeSpan(9, 45, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "11:30", timeconverted = new TimeSpan(11, 30, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "13:15", timeconverted = new TimeSpan(13, 15, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-         new MedtimesDosages { time = "15:00", timeconverted = new TimeSpan(15, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-             new MedtimesDosages { time = "16:45", timeconverted = new TimeSpan(16, 45, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-         new MedtimesDosages { time = "18:30", timeconverted = new TimeSpan(18, 30, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit},
-        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty,  dosageunit = newusermedication.unit}
+      new MedtimesDosages { time = "08:00", timeconverted = new TimeSpan(8, 0, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+       new MedtimesDosages { time = "09:45", timeconverted = new TimeSpan(9, 45, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "11:30", timeconverted = new TimeSpan(11, 30, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "13:15", timeconverted = new TimeSpan(13, 15, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "15:00", timeconverted = new TimeSpan(15, 0, 0), Dosage = string.Empty,   Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+             new MedtimesDosages { time = "16:45", timeconverted = new TimeSpan(16, 45, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit},
+         new MedtimesDosages { time = "18:30", timeconverted = new TimeSpan(18, 30, 0), Dosage = string.Empty,  Dosage2 = string.Empty, dosageunit = newusermedication.unit},
+        new MedtimesDosages { time = "20:00", timeconverted = new TimeSpan(20, 0, 0), Dosage = string.Empty, Dosage2 = string.Empty,  dosageunit = newusermedication.unit}
     }},
     // Add the other options similarly
 };
@@ -565,12 +582,24 @@ public partial class AddMedication : ContentPage
             //Details 
             if (SelectedMed.EditMedSection == "Details")
             {
-                nextbtn.Text = "Update Details";
-                topprogress.IsVisible = false; 
+               // nextbtn.Text = "Update Details";
+               // topprogress.IsVisible = false; 
                 firststack.IsVisible = false;
                 secondstack.IsVisible = true;
                 mednamelbl.Text = SelectedMed.medicationtitle;
                 medpreparationslistview.ItemsSource = MedPreparations;
+
+                if(SelectedMed.status == "Pending")
+                {
+                    IsEdit = false;
+                    newusermedication = SelectedMed;
+                    mednamelbl.Text = SelectedMed.medicationtitle;
+                    medname2lbl.Text = SelectedMed.medicationtitle;
+                    medname3lbl.Text = SelectedMed.medicationtitle;
+                    medname4lbl.Text = SelectedMed.medicationtitle;
+                    medname5lbl.Text = SelectedMed.medicationtitle;
+                    return;
+                }
 
                 for (int i = 0; i < MedPreparations.Count; i++)
                 {
@@ -660,28 +689,48 @@ public partial class AddMedication : ContentPage
     {
         try
         {
+
             //get all medications
             // medsloading.IsVisible = true;
-
-            var urlmedications = APICalls.GetMedications;
-
-            HttpResponseMessage responsemeds = await client.GetAsync(urlmedications);
-
-            if (responsemeds.IsSuccessStatusCode)
+            if (!IsEdit)
             {
-                string contentmeds = await responsemeds.Content.ReadAsStringAsync();
-                var userResponsemed = JsonConvert.DeserializeObject<ApiResponseMedication>(contentmeds);
-                var meds = userResponsemed.Value;
 
-                allmedicationlist = meds;
+                loadingstack.IsVisible = true;
+                nextbtn.IsVisible = false;
+                backbtn.IsVisible = false;
 
-                Medicationslistview.ItemsSource = allmedicationlist;
+                var urlmedications = APICalls.GetMedications;
 
-                // medsloading.IsVisible = false;
+                HttpResponseMessage responsemeds = await client.GetAsync(urlmedications);
+
+                if (responsemeds.IsSuccessStatusCode)
+                {
+                    string contentmeds = await responsemeds.Content.ReadAsStringAsync();
+                    var userResponsemed = JsonConvert.DeserializeObject<ApiResponseMedication>(contentmeds);
+                    var meds = userResponsemed.Value;
+
+                    allmedicationlist = meds;
+
+                   
 
 
+                    foreach(var item in UserMedications)
+                    {
+                       var med = allmedicationlist.Where(x => x.medicationid == item.medicationid).FirstOrDefault();
 
+                        med.AlreadySelected = true;
+                    }
+
+                    // medsloading.IsVisible = false;
+                    Medicationslistview.ItemsSource = allmedicationlist;
+
+
+                    loadingstack.IsVisible = false;
+                    nextbtn.IsVisible = true;
+                    backbtn.IsVisible = true;
+                }
             }
+
             //get the preparations
             var getMedPreperation = aPICalls.GetMedPreparation();
 
@@ -751,6 +800,13 @@ public partial class AddMedication : ContentPage
 
             var item = e.DataItem as medication;
 
+            if(item.AlreadySelected)
+            {
+                Medicationslistview.SelectedItem = null;
+                Medicationslistview.SelectedItems.Clear();
+                return;
+            }
+
 
             newusermedication.medicationid = item.medicationid;
             newusermedication.medicationtitle = item.title;
@@ -776,145 +832,842 @@ public partial class AddMedication : ContentPage
             if (IsEdit == true)
             {
 
-                if (SelectedMed.EditMedSection == "Details")
+                if (secondstack.IsVisible == true)
                 {
 
                     //Preperation 
-                    if (medpreparationslistview.SelectedItem != null)
+                    if (medpreparationslistview.SelectedItem == null)
                     {
-                        SelectedMed.preparation = medpreparationslistview.SelectedItem.ToString();
+                        Vibration.Vibrate();
+                        return;
+                        //SelectedMed.preparation = newusermedication.preparation;
+                        // SelectedMed.preparation = medpreparationslistview.SelectedItem.ToString();
                     }
 
 
                     //Medication Formulation 
                     if (medformulationslistview.SelectedItem != null)
                     {
-                        SelectedMed.formulation = medformulationslistview.SelectedItem.ToString();
+
+                        // SelectedMed.formulation = medformulationslistview.SelectedItem.ToString();
                     }
 
 
                     //Dosageunit 
-                    if (meddosageunitlistview.SelectedItem != null)
+                    if (meddosageunitlistview.SelectedItem == null)
                     {
-                        SelectedMed.unit = meddosageunitlistview.SelectedItem.ToString();
+                        Vibration.Vibrate();
+                        return;
+                        //SelectedMed.unit = meddosageunitlistview.SelectedItem.ToString();
 
                     }
 
                     //Update items 
                     var id = SelectedMed.id;
-                    APICalls database = new APICalls();
-                    await database.UpdateMedicationDetails(SelectedMed);
+                    // APICalls database = new APICalls();
+                    //   await database.UpdateMedicationDetails(SelectedMed);
 
                     //Update Schedule unit 
 
                     //update Notifications to include new unit 
 
+                    secondstack.IsVisible = false;
+                    thirdstack.IsVisible = true;
+                    medname2lbl.IsVisible = true;
+                    medname2lbl.Text = SelectedMed.medicationtitle;
+                    backbtn.Text = "Back";
 
+
+                    //Start and EndDate
+                    startdatepicker.Date = DateTime.Parse(SelectedMed.startdate);
+
+                    if (!string.IsNullOrEmpty(SelectedMed.enddate))
+                    {
+                        enddatepicker.Date = DateTime.Parse(SelectedMed.enddate);
+                        enddatecheck.IsChecked = true;
+                    }
 
                 }
-                else
+                else if (thirdstack.IsVisible == true)
                 {
-                    if(thirdstack.IsVisible == true)
+                    medname3lbl.Text = SelectedMed.medicationtitle;
+                    backbtn.Text = "Back";
+                    thirdstack.IsVisible = false;
+                    fourthstack.IsVisible = true;
+                    topprogress.Progress = 50;
+                    medfreqlistview.IsVisible = true;
+
+
+                    if (enddatecheck.IsChecked)
                     {
-                        medname3lbl.Text = SelectedMed.medicationtitle; 
-                        backbtn.Text = "Back";
-                        thirdstack.IsVisible = false;
-                        fourthstack.IsVisible = true;
-                        topprogress.Progress = 50;
-                        medfreqlistview.IsVisible = true;
-                        string SelectedFreq; 
-                        if (SelectedMed.frequency.Contains("|"))
+                         SelectedMed.enddate = enddatepicker.Date.ToString("dd/MM/yyyy");
+                    }
+
+                    SelectedMed.startdate = startdatepicker.Date.ToString("dd/MM/yyyy");
+
+                    string SelectedFreq;
+                    if (SelectedMed.frequency.Contains("|"))
+                    {
+                        var freq = SelectedMed.frequency.Split('|');
+                        if (freq[0] == "Weekly" || freq[0] == "Weekly ")
                         {
-                            var freq = SelectedMed.frequency.Split('|');
-                            if(freq[0] == "Weekly" || freq[0] == "Weekly ")
-                            {
-                                var selectedFrequency = medfreq.FirstOrDefault(p => p.title == "Specfic Days of the Week");
-                                medfreqlistview.SelectedItem = selectedFrequency;
-                                SelectedFreq = "Specfic Days of the Week";
-                            }
-                            else
-                            {
-                                var selectedFrequency = medfreq.FirstOrDefault(p => p.title == freq[0]);
-                                medfreqlistview.SelectedItem = selectedFrequency;
-                                SelectedFreq = freq[0];
-                            }
+                            var selectedFrequency = medfreq.FirstOrDefault(p => p.title == "Specfic Days of the Week");
+                            medfreqlistview.SelectedItem = selectedFrequency;
+                            SelectedFreq = "Specfic Days of the Week";
                         }
                         else
                         {
-                            var selectedFrequency = medfreq.FirstOrDefault(p => p.title == "As Required");
+                            var selectedFrequency = medfreq.FirstOrDefault(p => p.title == freq[0]);
                             medfreqlistview.SelectedItem = selectedFrequency;
-                            SelectedFreq = "As Required";
+                            SelectedFreq = freq[0];
                         }
+                    }
+                    else
+                    {
+                        var selectedFrequency = medfreq.FirstOrDefault(p => p.title == "As Required");
+                        medfreqlistview.SelectedItem = selectedFrequency;
+                        SelectedFreq = "As Required";
+                    }
 
-                        if(SelectedFreq == "As Required")
+                    freqstring = SelectedFreq;
+                    timeanddosagelbl2.Text = "Select your medication times and dosages from the list below. To adjust the time, simply tap on it.";
+
+                    if (SelectedFreq == "As Required")
+                    {
+
+                        //timeanddosagelbl2.Text = "Select your dosage from the item below";
+
+                    }
+                    else if (SelectedFreq == "Specfic Days of the Week")
+                    {
+                        samedosageweeklylist.SelectedItems.Clear();
+                        samedosageweeklylist2.SelectedItems.Clear();
+                        weeklydayslist.IsVisible = true;
+                        weekfreqlbl.IsVisible = true;
+                        weekfreqlistview.IsVisible = true;
+                        freqlbl.Text = "Which Days";
+
+                        //Set Days 
+                        var freq = SelectedMed.frequency.Split('|');
+                        var getdays = freq[1];
+                        if (getdays.Contains(","))
                         {
-
-                        }
-                        else if (SelectedFreq == "Specfic Days of the Week")
-                        {
-                            weeklydayslist.IsVisible = true;
-                            weekfreqlbl.IsVisible = true;
-                            weekfreqlistview.IsVisible = true;
-                            freqlbl.Text = "Which Days";
-
-                            //Set Days 
-                            var freq = SelectedMed.frequency.Split('|');
-                            var getdays = freq[1];
-                            if (getdays.Contains(","))
+                            var days = freq[1].Split(',').ToList();
+                            for (int i = 0; i < days.Count; i++)
                             {
-                                var days = freq[1].Split(',').ToList();
-                                for(int i = 0; i < days.Count; i++)
+                                weeklydayslist.SelectedItem = days[i];
+                            }
+
+                        }
+                        else
+                        {
+                            weeklydayslist.SelectedItem = getdays;
+                        }
+                        var gettimes = freq[2];
+                        string numberAsText = NumberToText(Int32.Parse(gettimes));
+                        weekfreqlistview.SelectedItem = weekfreqlist.FirstOrDefault(p => p == numberAsText);
+
+                        var daycount = Convert.ToInt32(freq[2]);
+
+                        //check if dosage is same across all days 
+                        if (daycount > 1)
+                        {
+                            sameweeklydosage.IsVisible = true;
+                            samedosageweeklylist.IsVisible = true;
+
+                            if (SelectedMed.medicationquestions.Contains("|"))
+                            {
+                                //means both questions answered
+
+                                samedosageweeklylist.SelectedItems.Add("Yes");
+
+                                var split = SelectedMed.medicationquestions.Split('|');
+
+                                if (split[1] == "Yes")
                                 {
-                                    weeklydayslist.SelectedItem = days[i];
+                                    samedosageweeklylist2.SelectedItems.Add("Yes");
+
+                                    adddosagelbl.IsVisible = true;
+                                    adddosage2lbl.IsVisible = true;
+
+                                    adddosageframe.IsVisible = true;
+
+                                    samedosageentry.Text = SelectedMed.schedule[0].Dosage;
+                                    dosageunitlbl.Text = SelectedMed.schedule[0].dosageunit;
                                 }
-                               
+                                else
+                                {
+
+                                    samedosageweeklylist2.SelectedItems.Add("No");
+                                }
+
+
+
+                                sameweeklydosage2.IsVisible = true;
+                                samedosageweeklylist2.IsVisible = true;
+
+                                weeklynumperday = weekfreqlistview.SelectedItem.ToString();
+
+                                selectedDosages = frequencyOptionsWDI[weeklynumperday];
+
+                                var listofdays = weeklydayslist.SelectedItems.Cast<string>().ToList();
+
+                                listofdays = listofdays.OrderBy(x => dayOrder[x]).ToList();
+
+                                string joinedDays = String.Join(", ", listofdays);
+
+
+                                if (split[1] == "Yes")
+                                {
+                                    var i = 0;
+
+                                    foreach (var itemm in selectedDosages)
+                                    {
+                                        itemm.Labelvis = true;
+                                        itemm.Entryvis = false;
+                                        itemm.dosageunit = SelectedMed.schedule[0].dosageunit;
+                                        itemm.Dosage = SelectedMed.schedule[0].Dosage;
+                                        itemm.TimepickerVis = true;
+                                        itemm.AsReqlblVis = false;
+                                        itemm.time = SelectedMed.schedule[i].time;
+                                        var timeconverted = TimeSpan.Parse(SelectedMed.schedule[i].time);
+                                        itemm.timeconverted = timeconverted;
+                                        itemm.Day = joinedDays;
+                                        i++;
+                                    }
+                                }
+                                else
+                                {
+                                    var i = 0;
+
+                                    foreach (var itemm in selectedDosages)
+                                    {
+                                        itemm.Labelvis = true;
+                                        itemm.Entryvis = false;
+                                        itemm.dosageunit = SelectedMed.schedule[0].dosageunit;
+                                        itemm.Dosage = SelectedMed.schedule[i].Dosage;
+                                        itemm.TimepickerVis = true;
+                                        itemm.AsReqlblVis = false;
+                                        itemm.time = SelectedMed.schedule[i].time;
+                                        var timeconverted = TimeSpan.Parse(SelectedMed.schedule[i].time);
+                                        itemm.timeconverted = timeconverted;
+                                        itemm.Day = joinedDays;
+                                        i++;
+                                    }
+                                }
+
+
+                                //selectedDosages = selectedDosages.OrderBy(md => dayOrder[md.Day]).ToList();
+
                             }
                             else
                             {
-                                weeklydayslist.SelectedItem = getdays;
+                                samedosageweeklylist.SelectedItems.Add("No");
+
+                                weeklynumperday = weekfreqlistview.SelectedItem.ToString();
+
+                                selectedDosages = frequencyOptionsWDI[weeklynumperday];
+
+                                var listofdays = weeklydayslist.SelectedItems.Cast<string>().ToList();
+
+                                listofdays = listofdays.OrderBy(x => dayOrder[x]).ToList();
+
+                                var ii = 0;
+
+                                foreach (var d in listofdays) // Iterate over the list of days first
+                                {
+                                    for (int i = 0; i < selectedDosages.Count; i++) // Then iterate over selectedDosages for each day
+                                    {
+                                        var md = selectedDosages[i];
+                                        Random random = new Random();
+                                        int randomNumber = random.Next(100000, 100000001);
+
+                                        var timeconverted = TimeSpan.Parse(SelectedMed.schedule[ii].time);
+                                        // Create a new instance of MedtimesDosages and copy the relevant properties
+                                        var newMd = new MedtimesDosages
+                                        {
+                                            id = randomNumber,
+                                            Dosage = SelectedMed.schedule[ii].Dosage,
+                                            dosageunit = md.dosageunit,
+                                            time = SelectedMed.schedule[ii].time,
+                                            timeconverted = timeconverted,
+                                            Day = d // Assign the current day
+                                        };
+
+                                        WeeklyChangedselectedDosages.Add(newMd); // Add the new instance to the collection
+                                        ii++;
+                                    }
+                                }
+
+                                selectedDosages = WeeklyChangedselectedDosages;
+
+                                foreach (var itemm in selectedDosages)
+                                {
+                                    itemm.Labelvis = false;
+                                    itemm.Entryvis = true;
+
+                                    itemm.TimepickerVis = true;
+                                    itemm.AsReqlblVis = false;
+
+                                }
+
+
                             }
-                            var gettimes = freq[2];
-                            string numberAsText = NumberToText(Int32.Parse(gettimes));
-                            weekfreqlistview.SelectedItem = weekfreqlist.FirstOrDefault(p => p == numberAsText);
-                            timeanddosagelbl2.IsVisible = true;
-                            timesanddosageslistview.IsVisible = true;
-                            foreach(var item in SelectedMed.schedule)
-                            {
-                                item.Labelvis = false;
-                                item.Entryvis = true;
-                                item.TimepickerVis = true;
-                                item.AsReqlblVis = false; 
-                            }
-                            timesanddosageslistview.ItemsSource = SelectedMed.schedule; 
-                        }
-                        else if (SelectedFreq == "Daily")
-                        {
-                            dailytimeslistview.IsVisible = true;
-                            onedailylbl.IsVisible = true;
-                            oncedailylistview.IsVisible = true; 
-                        }
-                        else if (SelectedFreq == "Days Interval")
-                        {
+
+
 
                         }
+                        else
+                        {
+                            //one time
+                            sameweeklydosage.IsVisible = true;
+                            samedosageweeklylist.IsVisible = true;
+                            samedosageweeklylist.SelectedItems.Add(SelectedMed.medicationquestions);
+
+                            if (SelectedMed.medicationquestions == "Yes")
+                            {
+                                adddosagelbl.IsVisible = true;
+                                adddosage2lbl.IsVisible = true;
+
+                                adddosageframe.IsVisible = true;
+
+                                samedosageentry.Text = SelectedMed.schedule[0].Dosage;
+                                dosageunitlbl.Text = SelectedMed.schedule[0].dosageunit;
+
+
+                                weeklynumperday = weekfreqlistview.SelectedItem.ToString();
+
+                                selectedDosages = frequencyOptionsWDI[weeklynumperday];
+
+                                var listofdays = weeklydayslist.SelectedItems.Cast<string>().ToList();
+
+                                listofdays = listofdays.OrderBy(x => dayOrder[x]).ToList();
+
+                                string joinedDays = String.Join(", ", listofdays);
+
+                                var ii = 0;
+
+                                foreach (var d in listofdays) // Iterate over the list of days first
+                                {
+                                    for (int i = 0; i < selectedDosages.Count; i++) // Then iterate over selectedDosages for each day
+                                    {
+                                        var md = selectedDosages[i];
+                                        Random random = new Random();
+                                        int randomNumber = random.Next(100000, 100000001);
+
+                                        var timeconverted = TimeSpan.Parse(SelectedMed.schedule[ii].time);
+                                        // Create a new instance of MedtimesDosages and copy the relevant properties
+                                        var newMd = new MedtimesDosages
+                                        {
+                                            id = randomNumber,
+                                            Dosage = SelectedMed.schedule[0].Dosage,
+                                            dosageunit = md.dosageunit,
+                                            time = SelectedMed.schedule[ii].time,
+                                            timeconverted = timeconverted,
+                                            Day = d // Assign the current day
+                                        };
+
+                                        WeeklyChangedselectedDosages.Add(newMd); // Add the new instance to the collection
+                                        ii++;
+                                    }
+                                }
+
+                                selectedDosages = WeeklyChangedselectedDosages;
+
+                                foreach (var itemm in selectedDosages)
+                                {
+                                    itemm.Labelvis = true;
+                                    itemm.Entryvis = false;
+
+                                    itemm.TimepickerVis = true;
+                                    itemm.AsReqlblVis = false;
+                                }
+
+                            }
+                            else
+                            {
+                                weeklynumperday = weekfreqlistview.SelectedItem.ToString();
+
+                                selectedDosages = frequencyOptionsWDI[weeklynumperday];
+
+                                var listofdays = weeklydayslist.SelectedItems.Cast<string>().ToList();
+
+                                listofdays = listofdays.OrderBy(x => dayOrder[x]).ToList();
+
+                                string joinedDays = String.Join(", ", listofdays);
+
+                                var ii = 0;
+
+                                foreach (var d in listofdays) // Iterate over the list of days first
+                                {
+                                    for (int i = 0; i < selectedDosages.Count; i++) // Then iterate over selectedDosages for each day
+                                    {
+                                        var md = selectedDosages[i];
+                                        Random random = new Random();
+                                        int randomNumber = random.Next(100000, 100000001);
+
+                                        var timeconverted = TimeSpan.Parse(SelectedMed.schedule[ii].time);
+                                        // Create a new instance of MedtimesDosages and copy the relevant properties
+                                        var newMd = new MedtimesDosages
+                                        {
+                                            id = randomNumber,
+                                            Dosage = SelectedMed.schedule[ii].Dosage,
+                                            dosageunit = md.dosageunit,
+                                            time = SelectedMed.schedule[ii].time,
+                                            timeconverted = timeconverted,
+                                            Day = d // Assign the current day
+                                        };
+
+                                        WeeklyChangedselectedDosages.Add(newMd); // Add the new instance to the collection
+                                        ii++;
+                                    }
+                                }
+
+                                selectedDosages = WeeklyChangedselectedDosages;
+
+                                foreach (var itemm in selectedDosages)
+                                {
+                                    itemm.Labelvis = false;
+                                    itemm.Entryvis = true;
+
+                                    itemm.TimepickerVis = true;
+                                    itemm.AsReqlblVis = false;
+                                }
+
+
+
+
+                            }
+
+
+                        }
+
+
+                        timeanddosagelbl.IsVisible = true;
+                        timeanddosagelbl2.IsVisible = true;
+                        timesanddosageslistview.IsVisible = true;
+
+                        foreach (var itemm in selectedDosages)
+                        {
+
+                            if (itemm.dosageunit.Contains("per"))
+                            {
+                                itemm.DoubleDosage = true;
+                                itemm.NormalDosage = false;
+                                var splitdosage = itemm.Dosage.Split('|');
+                                itemm.Dosage = splitdosage[0];
+                                itemm.Dosage2 = splitdosage[1];
+
+                            }
+                            else
+                            {
+                                itemm.DoubleDosage = false;
+                                itemm.NormalDosage = true;
+
+                            }
+
+                        }
+
+                        if (selectedDosages[0].dosageunit.Contains("per"))
+                        {
+                            samedosageentry2.IsVisible = true;
+                        }
+                        else
+                        {
+                            samedosageentry2.IsVisible = false;
+                        }
+
+
+                        timesanddosageslistview.ItemsSource = selectedDosages;
+
+
 
 
                     }
+                    else if (SelectedFreq == "Daily")
+                    {
+                        dailytimeslistview.IsVisible = true;
+                        onedailylbl.IsVisible = true;
+                        oncedailylistview.IsVisible = true;
+
+                        freqlbl.Text = "How many times per day";
+
+                        var freq = SelectedMed.frequency.Split('|');
+
+                        var checkdailycount = Convert.ToInt32(freq[1]);
+
+                        checkdailycount = checkdailycount - 1;
+
+                        dailytimeslistview.SelectedItems.Clear();
+
+                        dailytimeslistview.SelectedItems.Add(timesperdaylist[checkdailycount]);
+
+
+
+                        //check the time
+                        if (checkdailycount == 0)
+                        {
+                            // Get the corresponding MedtimesDosages list for the selected option
+
+
+
+
+                            //means there is only one time
+                            onedailylbl.IsVisible = true;
+                            oncedailylistview.IsVisible = true;
+
+                            oncedailylistview.SelectedItems.Clear();
+
+                            if (SelectedMed.schedule[0].time == "08:00")
+                            {
+                                oncedailylistview.SelectedItems.Add(ODlist[0]);
+                            }
+                            else if (SelectedMed.schedule[0].time == "20:00")
+                            {
+                                oncedailylistview.SelectedItems.Add(ODlist[1]);
+                            }
+                            else
+                            {
+                                oncedailylistview.SelectedItems.Add(ODlist[2]);
+                            }
+
+                            var itemoflist = oncedailylistview.SelectedItem.ToString();
+
+                            var splititem = itemoflist.Split('\n');
+                            selectedDosages = frequencyOptions[splititem[1]];
+
+                            //selectedDosages[0].Alldosage = false;
+
+                            foreach (var itemm in selectedDosages)
+                            {
+                                itemm.Labelvis = false;
+                                itemm.Entryvis = true;
+                                itemm.dosageunit = SelectedMed.schedule[0].dosageunit;
+                                itemm.Dosage = SelectedMed.schedule[0].Dosage;
+                                itemm.TimepickerVis = true;
+                                itemm.AsReqlblVis = false;
+                                itemm.time = SelectedMed.schedule[0].time;
+                                var timeconverted = TimeSpan.Parse(SelectedMed.schedule[0].time);
+                                itemm.timeconverted = timeconverted;
+
+                            }
+
+
+                        }
+                        else
+                        {
+                            // Get the corresponding MedtimesDosages list for the selected option
+                            var itemoflist = dailytimeslistview.SelectedItem.ToString();
+
+                            var splititem = itemoflist.Split('\n');
+                            selectedDosages = frequencyOptions[splititem[1]];
+
+                           // selectedDosages[0].Alldosage = false;
+
+                            onedailylbl.IsVisible = false;
+                            oncedailylistview.IsVisible = false;
+
+                            sameweeklydosage2.IsVisible = true;
+                            samedosageweeklylist2.IsVisible = true;
+
+                            //check if dosages are same
+                            bool areAllDosagesSame = SelectedMed.schedule.All(m => m.Dosage == SelectedMed.schedule[0].Dosage);
+
+                            if (areAllDosagesSame)
+                            {
+
+                                samedosageweeklylist2.SelectedItem = "Yes";
+
+                                adddosagelbl.IsVisible = true;
+                                adddosage2lbl.IsVisible = true;
+                                adddosageframe.IsVisible = true;
+
+                                samedosageentry.Text = SelectedMed.schedule[0].Dosage;
+                                dosageunitlbl.Text = SelectedMed.schedule[0].dosageunit;
+
+                                var ii = 0;
+
+                                foreach (var itemm in selectedDosages)
+                                {
+                                    itemm.Labelvis = true;
+                                    itemm.Entryvis = false;
+                                    itemm.Dosage = SelectedMed.schedule[0].Dosage;
+                                    itemm.dosageunit = SelectedMed.schedule[0].dosageunit;
+                                    itemm.TimepickerVis = true;
+                                    itemm.AsReqlblVis = false;
+                                    itemm.time = SelectedMed.schedule[ii].time;
+                                    var timeconverted = TimeSpan.Parse(SelectedMed.schedule[ii].time);
+                                    itemm.timeconverted = timeconverted;
+                                    ii++;
+                                }
+
+
+                            }
+                            else
+                            {
+                                samedosageweeklylist2.SelectedItem = "No";
+
+                                var i = 0;
+
+                                foreach (var itemm in selectedDosages)
+                                {
+                                    itemm.Labelvis = true;
+                                    itemm.Entryvis = false;
+                                    itemm.Dosage = SelectedMed.schedule[i].Dosage;
+                                    itemm.dosageunit = SelectedMed.schedule[0].dosageunit;
+                                    itemm.TimepickerVis = true;
+                                    itemm.AsReqlblVis = false;
+                                    itemm.time = SelectedMed.schedule[i].time;
+                                    var timeconverted = TimeSpan.Parse(SelectedMed.schedule[i].time);
+                                    itemm.timeconverted = timeconverted;
+
+                                    i++;
+                                }
+
+
+                            }
+
+                        }
+
+
+
+
+                        foreach (var itemm in selectedDosages)
+                        {
+
+                            if (itemm.dosageunit.Contains("per"))
+                            {
+                                itemm.DoubleDosage = true;
+                                itemm.NormalDosage = false;
+                                var splitdosage = itemm.Dosage.Split('|');
+                                itemm.Dosage = splitdosage[0];
+                                itemm.Dosage2 = splitdosage[1];
+
+                            }
+                            else
+                            {
+                                itemm.DoubleDosage = false;
+                                itemm.NormalDosage = true;
+
+                            }
+
+                        }
+
+                        if (selectedDosages[0].dosageunit.Contains("per"))
+                        {
+                            samedosageentry2.IsVisible = true;
+                        }
+                        else
+                        {
+                            samedosageentry2.IsVisible = false;
+                        }
+
+                        // Bind the MedtimesDosages list to the ListView
+                        timesanddosageslistview.ItemsSource = selectedDosages;
+                        timesanddosageslistview.IsVisible = true;
+                        timeanddosagelbl.IsVisible = true;
+                        timeanddosagelbl2.IsVisible = true;
+                        timesanddosageslistview.HeightRequest = selectedDosages.Count * 100;
+
+
+
+                    }
+                    else if (SelectedFreq == "Days Interval")
+                    {
+
+                        ditimesperdaylist.SelectedItems.Clear();
+                        daysintervallistview.SelectedItems.Clear();
+                        freqlbl.Text = "How often";
+                        daysintervallistview.IsVisible = true;
+
+                        var split = SelectedMed.frequency.Split('|');
+
+                        if (split[1] == "2")
+                        {
+                            daysintervallistview.SelectedItems.Add("Every other day");
+                        }
+                        else if (split[1] == "3")
+                        {
+                            daysintervallistview.SelectedItems.Add("Every 3 days");
+                        }
+                        else if (split[1] == "7")
+                        {
+                            daysintervallistview.SelectedItems.Add("Every 7 days");
+                        }
+                        else if (split[1] == "14")
+                        {
+                            daysintervallistview.SelectedItems.Add("Every 14 days");
+                        }
+                        else if (split[1] == "21")
+                        {
+                            daysintervallistview.SelectedItems.Add("Every 21 days");
+                        }
+                        else if (split[1] == "28")
+                        {
+                            daysintervallistview.SelectedItems.Add("Every 28 days");
+                        }
+                        else if (split[1] == "30")
+                        {
+                            daysintervallistview.SelectedItems.Add("Every 30 days");
+                        }
+                        else if (split[1] == "35")
+                        {
+                            daysintervallistview.SelectedItems.Add("Every 5 weeks");
+                        }
+                        else if (split[1] == "42")
+                        {
+                            daysintervallistview.SelectedItems.Add("Every 6 weeks");
+                        }
+                        else if (split[1] == "49")
+                        {
+                            daysintervallistview.SelectedItems.Add("Every 7 weeks");
+                        }
+                        else if (split[1] == "56")
+                        {
+                            daysintervallistview.SelectedItems.Add("Every 8 weeks");
+                        }
+                        else if (split[1] == "63")
+                        {
+                            daysintervallistview.SelectedItems.Add("Every 9 weeks");
+                        }
+                        else if (split[1] == "70")
+                        {
+                            daysintervallistview.SelectedItems.Add("Every 10 weeks");
+                        }
+
+
+                        difreqlbl.IsVisible = true;
+                        ditimesperdaylist.IsVisible = true;
+
+                        var convertint = Convert.ToInt32(split[2]);
+
+                        var num = convertint - 1;
+
+                        ditimesperdaylist.SelectedItems.Add((weekfreqlist[num]));
+
+
+                        if (convertint > 1)
+                        {
+                            disamedosagelbl.IsVisible = true;
+                            disamedosagequestionlist.IsVisible = true;
+
+                            if (!string.IsNullOrEmpty(SelectedMed.medicationquestions))
+                            {
+
+
+
+
+                                disamedosagequestionlist.SelectedItems.Add(SelectedMed.medicationquestions);
+
+                                if (SelectedMed.medicationquestions == "Yes")
+                                {
+                                    adddosagelbl.IsVisible = true;
+                                    adddosage2lbl.IsVisible = true;
+
+                                    adddosageframe.IsVisible = true;
+
+                                    samedosageentry.Text = SelectedMed.schedule[0].Dosage;
+                                    dosageunitlbl.Text = SelectedMed.schedule[0].dosageunit;
+
+                                }
+                            }
+
+                        }
+                        else
+                        {
+                            disamedosagequestionlist.IsVisible = false;
+                        }
+
+
+
+                    weeklynumperday = ditimesperdaylist.SelectedItem.ToString();
+
+                    selectedDosages = frequencyOptionsWDI[weeklynumperday];
+
+                    var iii = 0;
+
+                    foreach (var itemm in selectedDosages)
+                    {
+                        if (SelectedMed.medicationquestions == "Yes")
+                        {
+                            itemm.Labelvis = true;
+                            itemm.Entryvis = false;
+                            itemm.Dosage = SelectedMed.schedule[0].Dosage;
+                        }
+                        else
+                        {
+                            itemm.Labelvis = false;
+                            itemm.Entryvis = true;
+                            itemm.Dosage = SelectedMed.schedule[iii].Dosage;
+                        }
+
+
+                        itemm.dosageunit = SelectedMed.schedule[0].dosageunit;
+                        itemm.TimepickerVis = true;
+                        itemm.AsReqlblVis = false;
+                        itemm.time = SelectedMed.schedule[iii].time;
+                        var timeconverted = TimeSpan.Parse(SelectedMed.schedule[iii].time);
+                        itemm.timeconverted = timeconverted;
+
+                        iii++;
+                    }
+
+                        foreach (var itemm in selectedDosages)
+                        {
+
+                            if (itemm.dosageunit.Contains("per"))
+                            {
+                                var splitdosage = itemm.Dosage.Split('|');
+                                itemm.Dosage = splitdosage[0];
+                                itemm.Dosage2 = splitdosage[1];
+                                itemm.DoubleDosage = true;
+                                itemm.NormalDosage = false;
+
+                            }
+                            else
+                            {
+                                itemm.DoubleDosage = false;
+                                itemm.NormalDosage = true;
+
+                            }
+
+                        }
+
+                        if (selectedDosages[0].dosageunit.Contains("per"))
+                        {
+                            samedosageentry2.IsVisible = true;
+                        }
+                        else
+                        {
+                            samedosageentry2.IsVisible = false;
+                        }
+
+                        timesanddosageslistview.ItemsSource = selectedDosages;
+
+                    timeanddosagelbl.IsVisible = true;
+                    timeanddosagelbl2.IsVisible = true;
+                    timesanddosageslistview.IsVisible = true;
+                    }
+
+               
+
+                }
                     else if(fourthstack.IsVisible == true)
                     {
                         topprogress.Progress = 75;
                         fourthstack.IsVisible = false;
                         detailsstack.IsVisible = true;
+                        medname4lbl.Text = SelectedMed.medicationtitle;
 
-                        if(SelectedMed.details != "--|--")
+                        if (SelectedMed.details != "--|--")
                         {
                             var split = SelectedMed.details.Split('|'); 
-                            if (string.IsNullOrEmpty(split[0]))
+                            if (!string.IsNullOrEmpty(split[0]))
                             {
                                 displaynameentry.Text = split[0]; 
                                 
                             }
-                            if (string.IsNullOrEmpty(split[1]))
+                            if (!string.IsNullOrEmpty(split[1]))
                             {
                                 notesentry.Text = split[1];
                             }
@@ -922,6 +1675,8 @@ public partial class AddMedication : ContentPage
                     }
                     else if(detailsstack.IsVisible == true)
                     {
+
+                    medname5lbl.Text = SelectedMed.medicationtitle;
                         ConfirmBtn.Text = "Update Medication";
                         var newlist = new List<string>();
 
@@ -951,7 +1706,7 @@ public partial class AddMedication : ContentPage
 
                         var joinlist = string.Join('|', newlist);
 
-                        newusermedication.details = joinlist;
+                        SelectedMed.details = joinlist;
 
                         //add all the details to the confirm page
                         confirmpreplbl.Text = SelectedMed.preparation;
@@ -966,22 +1721,36 @@ public partial class AddMedication : ContentPage
                         }
 
                         confirmdulbl.Text = SelectedMed.unit;
-                        confirmsdlbl.Text = newusermedication.startdate;
+                        confirmsdlbl.Text = SelectedMed.startdate;
 
-                        if (string.IsNullOrEmpty(newusermedication.enddate))
+                        if (string.IsNullOrEmpty(SelectedMed.enddate))
                         {
                             confirmedlbl.Text = "--";
                         }
                         else
                         {
-                            confirmedlbl.Text = newusermedication.enddate;
+                            confirmedlbl.Text = SelectedMed.enddate;
                         }
 
                         confirmfreqlbl.Text = freqstring;
 
 
+                    foreach(var item in selectedDosages)
+                    {
+                        item.Labelvis = true;
+                        item.Entryvis = false;
+
+                        if (item.dosageunit.Contains("per"))
+                        {
+                            if (!string.IsNullOrEmpty(item.Dosage2))
+                            {
+                                item.Dosage = item.Dosage + "|" + item.Dosage2;
+                            }
+                        }
+                    }
+
                         confirmtimesanddosageslistview.ItemsSource = selectedDosages;
-                        confirmtimesanddosageslistview.HeightRequest = selectedDosages.Count * 130;
+                        confirmtimesanddosageslistview.HeightRequest = selectedDosages.Count * 110;
                         //  confirmtimesanddosageslistview.IsEnabled = false;
 
                         detailsstack.IsVisible = false;
@@ -990,7 +1759,7 @@ public partial class AddMedication : ContentPage
                         nextbtn.IsVisible = false;
                     }
 
-                }
+                
             }
             else
             {
@@ -1004,8 +1773,18 @@ public partial class AddMedication : ContentPage
                         await DisplayAlert("Select Medication", "Please select a medication from this list", "Ok");
                         return;
                     }
+                    
                     else
                     {
+                        var med = Medicationslistview.SelectedItem as medication;
+
+                        if(med.AlreadySelected == true)
+                        {
+                            Vibration.Vibrate();
+                            await DisplayAlert("Medication Already Added", "Please select another medication from this list", "Ok");
+                            return;
+                        }
+
                         medpreparationslistview.ItemsSource = MedPreparations;
                         firststack.IsVisible = false;
                         secondstack.IsVisible = true;
@@ -1035,6 +1814,11 @@ public partial class AddMedication : ContentPage
                         secondstack.IsVisible = false;
                         thirdstack.IsVisible = true;
                         topprogress.Progress = 50.01;
+                    }
+
+                    if(newusermedication.status == "Pending")
+                    {
+                        backbtn.Text = "Back";
                     }
                 }
                 else if (thirdstack.IsVisible == true)
@@ -1143,24 +1927,27 @@ public partial class AddMedication : ContentPage
                                 //More than Once Weekly Selected 
                                 else
                                 {
-                                    if (samedosageweeklylist2.SelectedItem == null)
+                                    if (samedosageweeklylist2.IsVisible)
                                     {
-                                        Vibration.Vibrate();
-                                        await DisplayAlert("Select Is Dosage the same", "Please select Is Dosage the same from this list", "Ok");
-                                        return;
-                                    }
-                                    else if (samedosageweeklylist2.SelectedItem.ToString() == "Yes")
-                                    {
-                                        if (String.IsNullOrEmpty(samedosageentry.Text))
+                                        if (samedosageweeklylist2.SelectedItem == null)
                                         {
                                             Vibration.Vibrate();
-                                            await DisplayAlert("Enter a Dosage for all Times", "Please Enter a Dosage for all Times", "Ok");
+                                            await DisplayAlert("Select Is Dosage the same", "Please select Is Dosage the same from this list", "Ok");
                                             return;
                                         }
-                                    }
-                                    else if (samedosageweeklylist2.SelectedItem.ToString() == "No")
-                                    {
-                                        // Do Nothing 
+                                        else if (samedosageweeklylist2.SelectedItem.ToString() == "Yes")
+                                        {
+                                            if (String.IsNullOrEmpty(samedosageentry.Text))
+                                            {
+                                                Vibration.Vibrate();
+                                                await DisplayAlert("Enter a Dosage for all Times", "Please Enter a Dosage for all Times", "Ok");
+                                                return;
+                                            }
+                                        }
+                                        else if (samedosageweeklylist2.SelectedItem.ToString() == "No")
+                                        {
+                                            // Do Nothing 
+                                        }
                                     }
                                 }
                             }
@@ -1220,12 +2007,12 @@ public partial class AddMedication : ContentPage
                         //As Required Validation 
                         else if (Selecteditem.title == "As Required")
                         {
-                            if (string.IsNullOrEmpty(newusermedication.Dosage))
-                            {
-                                Vibration.Vibrate();
-                                await DisplayAlert("Enter Dosage Unit", "Please Enter a dosage unit from this list", "Ok");
-                                return;
-                            }
+                           // if (string.IsNullOrEmpty(newusermedication.Dosage))
+                           // {
+                               // Vibration.Vibrate();
+                               // await DisplayAlert("Enter Dosage Unit", "Please Enter a dosage unit from this list", "Ok");
+                             //   return;
+                           // }
                         }
                     }
 
@@ -1301,9 +2088,24 @@ public partial class AddMedication : ContentPage
 
                     confirmfreqlbl.Text = freqstring;
 
+                    foreach (var item in selectedDosages)
+                    {
+                        item.Labelvis = true;
+                        item.Entryvis = false;
+
+
+                        if (item.dosageunit.Contains("per"))
+                        {
+                            if (!string.IsNullOrEmpty(item.Dosage2))
+                            {
+                                item.Dosage = item.Dosage + "|" + item.Dosage2;
+                            }
+                        }
+                    }
+
 
                     confirmtimesanddosageslistview.ItemsSource = selectedDosages;
-                    confirmtimesanddosageslistview.HeightRequest = selectedDosages.Count * 130;
+                    confirmtimesanddosageslistview.HeightRequest = selectedDosages.Count * 110;
                     //  confirmtimesanddosageslistview.IsEnabled = false;
 
                     detailsstack.IsVisible = false;
@@ -1360,6 +2162,11 @@ public partial class AddMedication : ContentPage
             meddosageunitlistview.IsVisible = true;
 
             newusermedication.preparation = item.title;
+
+            if(IsEdit)
+            {
+                SelectedMed.preparation = item.title;
+            }
             
         }
         catch(Exception ex)
@@ -1504,8 +2311,8 @@ public partial class AddMedication : ContentPage
             }
             else
             {
-                timeanddosagelbl.Text = "Add Dosage";
-                timeanddosagelbl2.Text = "Select your dosage from the item below";
+              //  timeanddosagelbl.Text = "Add Dosage";
+              //  timeanddosagelbl2.Text = "Select your dosage from the item below";
                 freqlbl.Text = string.Empty;
                 dailytimeslistview.IsVisible = false;
                 weeklydayslist.IsVisible = false;
@@ -1518,34 +2325,34 @@ public partial class AddMedication : ContentPage
                 samedosageweeklylist.IsVisible = false;
                 sameweeklydosage.IsVisible = false;
 
-                var medDosagesList = new ObservableCollection<MedtimesDosages>();
+             //   var medDosagesList = new ObservableCollection<MedtimesDosages>();
 
                 // Create a new MedtimesDosages object
-                var newMd = new MedtimesDosages()
-                {
-                    Dosage = newusermedication.preparation,
-                    dosageunit = newusermedication.unit,
-                };
+              //  var newMd = new MedtimesDosages()
+              //  {
+              //      Dosage = newusermedication.preparation,
+              //      dosageunit = newusermedication.unit,
+              //  };
 
                 // Add the new object to the collection
-                medDosagesList.Add(newMd);
+              //  medDosagesList.Add(newMd);
 
                 // Iterate over the collection (if it has multiple items) or directly manipulate `newMd`
-                foreach (var itemm in medDosagesList)
-                {
-                    itemm.Labelvis = false;
-                    itemm.Entryvis = true;
-                    itemm.Dosage = string.Empty;
-                    itemm.TimepickerVis = false;
-                    itemm.AsReqlblVis = true;
-                }
+             //   foreach (var itemm in medDosagesList)
+             //   {
+              //      itemm.Labelvis = false;
+              //      itemm.Entryvis = true;
+              //      itemm.Dosage = string.Empty;
+              //      itemm.TimepickerVis = false;
+              //      itemm.AsReqlblVis = true;
+              //  }
 
                 // Bind the MedtimesDosages list to the ListView
-                timesanddosageslistview.ItemsSource = medDosagesList;
-                timesanddosageslistview.IsVisible = true;
-                timeanddosagelbl.IsVisible = true;
-                timeanddosagelbl2.IsVisible = true;
-                timesanddosageslistview.HeightRequest = medDosagesList.Count * 100;
+              //  timesanddosageslistview.ItemsSource = medDosagesList;
+              //  timesanddosageslistview.IsVisible = true;
+              //  timeanddosagelbl.IsVisible = true;
+              //  timeanddosagelbl2.IsVisible = true;
+              //  timesanddosageslistview.HeightRequest = medDosagesList.Count * 100;
 
                 dailytimeslistview.SelectedItems.Clear();
                 oncedailylistview.SelectedItems.Clear();
@@ -1603,13 +2410,38 @@ public partial class AddMedication : ContentPage
                     // Get the corresponding MedtimesDosages list for the selected option
                     selectedDosages = frequencyOptions[splititem[1]];
 
-                    selectedDosages[0].Alldosage = false;
+                    //selectedDosages[0].Alldosage = false;
 
                     foreach(var itemm in selectedDosages)
                     {
                         itemm.Dosage = string.Empty;
+                        itemm.Dosage2 = string.Empty;
                         itemm.TimepickerVis = true;
                         itemm.AsReqlblVis = false;
+
+                        if(itemm.dosageunit.Contains("per"))
+                        {
+                            itemm.DoubleDosage = true;
+                            itemm.NormalDosage = false;
+                           
+                        }
+                        else
+                        {
+                            itemm.DoubleDosage = false;
+                            itemm.NormalDosage = true;
+                          
+                        }
+
+                    }
+
+
+                    if (selectedDosages[0].dosageunit.Contains("per"))
+                    {
+                        samedosageentry2.IsVisible = true;
+                    }
+                    else
+                    {
+                        samedosageentry2.IsVisible = false;
                     }
 
                     // Bind the MedtimesDosages list to the ListView
@@ -1651,6 +2483,7 @@ public partial class AddMedication : ContentPage
             adddosage2lbl.IsVisible = false;
             adddosageframe.IsVisible = false;
             samedosageentry.Text = string.Empty;
+            samedosageentry2.Text = string.Empty;
 
 
             if (weekdaynamelist.Contains(item))
@@ -1708,6 +2541,11 @@ public partial class AddMedication : ContentPage
 
             newusermedication.unit = item;
 
+            if(IsEdit)
+            {
+                SelectedMed.unit = item;
+            }
+
             dosageunitlbl.Text = item;
 
 
@@ -1762,7 +2600,7 @@ public partial class AddMedication : ContentPage
                     }
                     else
                     {
-                        selectedDosages[0].Alldosage = false;
+                        //selectedDosages[0].Alldosage = false;
                     }
                 }
             }
@@ -1787,7 +2625,7 @@ public partial class AddMedication : ContentPage
                     item.Dosage = firstdosage;
                 }
 
-                selectedDosages[0].Alldosage = false;
+                //selectedDosages[0].Alldosage = false;
                 selectedDosages[0].Checkboxchecked = false;
 
                 timesanddosageslistview.HeightRequest = timesanddosageslistview.Height + 100;
@@ -1824,6 +2662,7 @@ public partial class AddMedication : ContentPage
             adddosage2lbl.IsVisible = false;
             adddosageframe.IsVisible = false;
             samedosageentry.Text = string.Empty;
+            samedosageentry2.Text = string.Empty;
 
 
             //check if there is more than one day, if not dont show list
@@ -1893,6 +2732,20 @@ public partial class AddMedication : ContentPage
                         itemm.AsReqlblVis = false;
                     }
                         itemm.Dosage = string.Empty;
+                         itemm.Dosage2 = string.Empty;
+
+                    if (itemm.dosageunit.Contains("per"))
+                    {
+                        itemm.DoubleDosage = true;
+                        itemm.NormalDosage = false;
+
+                    }
+                    else
+                    {
+                        itemm.DoubleDosage = false;
+                        itemm.NormalDosage = true;
+
+                    }
                 }
 
                 if(weeklynumperday == "One" && weeklydayslist.SelectedItems.Count == 1)
@@ -1982,6 +2835,7 @@ public partial class AddMedication : ContentPage
                     foreach (var sd in selectedDosages)
                     {
                         sd.Dosage = string.Empty;
+                        sd.Dosage2 = string.Empty;
                         sd.Entryvis = false;
                         sd.Labelvis = true;
                         sd.TimepickerVis = true;
@@ -1991,6 +2845,33 @@ public partial class AddMedication : ContentPage
                     adddosagelbl.IsVisible = true;
                     adddosage2lbl.IsVisible = true;
                     adddosageframe.IsVisible = true;
+
+                    foreach (var itemm in selectedDosages)
+                    {
+
+                        if (itemm.dosageunit.Contains("per"))
+                        {
+                            itemm.DoubleDosage = true;
+                            itemm.NormalDosage = false;
+
+                        }
+                        else
+                        {
+                            itemm.DoubleDosage = false;
+                            itemm.NormalDosage = true;
+
+                        }
+
+                    }
+
+                    if (selectedDosages[0].dosageunit.Contains("per"))
+                    {
+                        samedosageentry2.IsVisible = true;
+                    }
+                    else
+                    {
+                        samedosageentry2.IsVisible = false;
+                    }
 
                     timesanddosageslistview.HeightRequest = selectedDosages.Count * 130;
                     timesanddosageslistview.ItemsSource = selectedDosages;
@@ -2021,6 +2902,33 @@ public partial class AddMedication : ContentPage
 
                     selectedDosages = groupedCollection;
 
+                    foreach (var itemm in selectedDosages)
+                    {
+
+                        if (itemm.dosageunit.Contains("per"))
+                        {
+                            itemm.DoubleDosage = true;
+                            itemm.NormalDosage = false;
+
+                        }
+                        else
+                        {
+                            itemm.DoubleDosage = false;
+                            itemm.NormalDosage = true;
+
+                        }
+
+                    }
+
+                    if (selectedDosages[0].dosageunit.Contains("per"))
+                    {
+                        samedosageentry2.IsVisible = true;
+                    }
+                    else
+                    {
+                        samedosageentry2.IsVisible = false;
+                    }
+
                     timesanddosageslistview.ItemsSource = selectedDosages;
                     timesanddosageslistview.HeightRequest = selectedDosages.Count * 130;
 
@@ -2038,6 +2946,7 @@ public partial class AddMedication : ContentPage
                     foreach (var sd in selectedDosages)
                     {
                         sd.Dosage = string.Empty;
+                        sd.Dosage2 = string.Empty;
                         sd.Entryvis = true;
                         sd.Labelvis = false;
                         sd.TimepickerVis = true;
@@ -2056,7 +2965,7 @@ public partial class AddMedication : ContentPage
                 // Get the corresponding MedtimesDosages list for the selected option
                 selectedDosages = frequencyOptionsWDI[weeklynumperday];
 
-                selectedDosages[0].Alldosage = false;
+                //selectedDosages[0].Alldosage = false;
 
                 var newcollection = new List<MedtimesDosages>();
 
@@ -2096,8 +3005,36 @@ public partial class AddMedication : ContentPage
                         itemm.Labelvis = false;
                         itemm.Entryvis = true;
                         itemm.Dosage = string.Empty;
-                        itemm.TimepickerVis = true;
+                    itemm.Dosage2 = string.Empty;
+                    itemm.TimepickerVis = true;
                         itemm.AsReqlblVis = false;
+                }
+
+                foreach (var itemm in selectedDosages)
+                {
+
+                    if (itemm.dosageunit.Contains("per"))
+                    {
+                        itemm.DoubleDosage = true;
+                        itemm.NormalDosage = false;
+
+                    }
+                    else
+                    {
+                        itemm.DoubleDosage = false;
+                        itemm.NormalDosage = true;
+
+                    }
+
+                }
+
+                if (selectedDosages[0].dosageunit.Contains("per"))
+                {
+                    samedosageentry2.IsVisible = true;
+                }
+                else
+                {
+                    samedosageentry2.IsVisible = false;
                 }
 
                 timesanddosageslistview.ItemsSource = selectedDosages;
@@ -2107,6 +3044,7 @@ public partial class AddMedication : ContentPage
                 adddosage2lbl.IsVisible = false;
                 adddosageframe.IsVisible = false;
                 samedosageentry.Text = string.Empty;
+                samedosageentry2.Text = string.Empty;
 
                 timesanddosageslistview.IsVisible = true;
                 timeanddosagelbl.IsVisible = true;
@@ -2165,6 +3103,12 @@ public partial class AddMedication : ContentPage
             DailysameDosageSelected = item; 
 
             samedosageentry.Text = string.Empty;
+            samedosageentry2.Text = string.Empty;
+
+            if (IsEdit)
+            {
+                dosageunitlbl.Text = SelectedMed.schedule[0].dosageunit;
+            }
 
             if (item == "Yes")
             {
@@ -2178,6 +3122,7 @@ public partial class AddMedication : ContentPage
                     foreach (var sd in selectedDosages)
                     {
                         sd.Dosage = string.Empty;
+                        sd.Dosage2 = string.Empty;
                         sd.Entryvis = false;
                         sd.Labelvis = true;
                         sd.TimepickerVis = true;
@@ -2199,6 +3144,7 @@ public partial class AddMedication : ContentPage
                     foreach (var sd in selectedDosages)
                     {
                         sd.Dosage = string.Empty;
+                        sd.Dosage2 = string.Empty;
                         sd.Entryvis = false;
                         sd.Labelvis = true;
                         sd.TimepickerVis = true;
@@ -2208,6 +3154,33 @@ public partial class AddMedication : ContentPage
                     adddosagelbl.IsVisible = true;
                     adddosage2lbl.IsVisible = true;
                     adddosageframe.IsVisible = true;
+
+                    foreach (var itemm in selectedDosages)
+                    {
+
+                        if (itemm.dosageunit.Contains("per"))
+                        {
+                            itemm.DoubleDosage = true;
+                            itemm.NormalDosage = false;
+
+                        }
+                        else
+                        {
+                            itemm.DoubleDosage = false;
+                            itemm.NormalDosage = true;
+
+                        }
+
+                    }
+
+                    if (selectedDosages[0].dosageunit.Contains("per"))
+                    {
+                        samedosageentry2.IsVisible = true;
+                    }
+                    else
+                    {
+                        samedosageentry2.IsVisible = false;
+                    }
 
                     timesanddosageslistview.HeightRequest = selectedDosages.Count * 130;
                     timesanddosageslistview.ItemsSource = selectedDosages;
@@ -2231,6 +3204,7 @@ public partial class AddMedication : ContentPage
                     foreach (var sd in selectedDosages)
                     {
                         sd.Dosage = string.Empty;
+                        sd.Dosage2 = string.Empty;
                         sd.Entryvis = true;
                         sd.Labelvis = false;
                         sd.TimepickerVis = true;
@@ -2253,6 +3227,7 @@ public partial class AddMedication : ContentPage
                     foreach (var sd in selectedDosages)
                     {
                         sd.Dosage = string.Empty;
+                        sd.Dosage2 = string.Empty;
                         sd.Entryvis = true;
                         sd.Labelvis = false;
                         sd.TimepickerVis = true;
@@ -2305,15 +3280,43 @@ public partial class AddMedication : ContentPage
                 // Get the corresponding MedtimesDosages list for the selected option
                 selectedDosages = frequencyOptions[splititem[1]];
 
-                selectedDosages[0].Alldosage = false;
+               // selectedDosages[0].Alldosage = false;
 
                 foreach (var itemm in selectedDosages)
                 {
                     itemm.Labelvis = false;
                     itemm.Entryvis = true;
                     itemm.Dosage = string.Empty;
+                    itemm.Dosage2 = string.Empty;
                     itemm.TimepickerVis = true;
                     itemm.AsReqlblVis = false; 
+                }
+
+                foreach (var itemm in selectedDosages)
+                {
+
+                    if (itemm.dosageunit.Contains("per"))
+                    {
+                        itemm.DoubleDosage = true;
+                        itemm.NormalDosage = false;
+
+                    }
+                    else
+                    {
+                        itemm.DoubleDosage = false;
+                        itemm.NormalDosage = true;
+
+                    }
+
+                }
+
+                if (selectedDosages[0].dosageunit.Contains("per"))
+                {
+                    samedosageentry2.IsVisible = true;
+                }
+                else
+                {
+                    samedosageentry2.IsVisible = false;
                 }
 
                 // Bind the MedtimesDosages list to the ListView
@@ -2378,11 +3381,39 @@ public partial class AddMedication : ContentPage
                 // Get the corresponding MedtimesDosages list for the selected option
                 selectedDosages = frequencyOptionsWDI[item];
 
-                selectedDosages[0].Alldosage = false;
+               // selectedDosages[0].Alldosage = false;
 
                 foreach (var itemm in selectedDosages)
                 {
                     itemm.Dosage = string.Empty;
+                    itemm.Dosage2 = string.Empty;
+                }
+
+                foreach (var itemm in selectedDosages)
+                {
+
+                    if (itemm.dosageunit.Contains("per"))
+                    {
+                        itemm.DoubleDosage = true;
+                        itemm.NormalDosage = false;
+
+                    }
+                    else
+                    {
+                        itemm.DoubleDosage = false;
+                        itemm.NormalDosage = true;
+
+                    }
+
+                }
+
+                if (selectedDosages[0].dosageunit.Contains("per"))
+                {
+                    samedosageentry2.IsVisible = true;
+                }
+                else
+                {
+                    samedosageentry2.IsVisible = false;
                 }
 
                 // Bind the MedtimesDosages list to the ListView
@@ -2436,9 +3467,10 @@ public partial class AddMedication : ContentPage
             var item = e.DataItem as string;
 
             samedosageentry.Text = string.Empty;
+            samedosageentry2.Text = string.Empty;
 
 
-            if(item == "Yes")
+            if (item == "Yes")
             {
                 adddosagelbl.IsVisible = true;
                 adddosage2lbl.IsVisible = true;
@@ -2447,6 +3479,7 @@ public partial class AddMedication : ContentPage
                 foreach(var sd in selectedDosages)
                 {
                     sd.Dosage = string.Empty;
+                    sd.Dosage2 = string.Empty;
                     sd.Entryvis = false;
                     sd.Labelvis = true;
                     sd.TimepickerVis = true;
@@ -2462,6 +3495,7 @@ public partial class AddMedication : ContentPage
                 foreach (var sd in selectedDosages)
                 {
                     sd.Dosage = string.Empty;
+                    sd.Dosage2 = string.Empty;
                     sd.Entryvis = true;
                     sd.Labelvis = false;
                     sd.TimepickerVis = true;
@@ -2490,6 +3524,11 @@ public partial class AddMedication : ContentPage
 
 
             newusermedication.formulation = item;
+
+            if(IsEdit)
+            {
+                SelectedMed.formulation = item;
+            }
         }
         catch(Exception ex)
         {
@@ -2514,7 +3553,7 @@ public partial class AddMedication : ContentPage
         //back button clicked
         try
         {
-            if (SelectedMed.EditMedSection == "Schedule")
+            if (IsEdit)
             {
                 if (backbtn.Text == "Cancel")
                 {
@@ -2539,6 +3578,14 @@ public partial class AddMedication : ContentPage
                     fourthstack.IsVisible = false;
                     thirdstack.IsVisible = true;
                     topprogress.Progress = 25;
+                   // backbtn.Text = "Cancel";
+                }
+                else if (thirdstack.IsVisible == true)
+                {
+                  
+                    thirdstack.IsVisible = false;
+                    secondstack.IsVisible = true;
+                    topprogress.Progress = 0;
                     backbtn.Text = "Cancel";
                 }
             }
@@ -2573,6 +3620,11 @@ public partial class AddMedication : ContentPage
                     thirdstack.IsVisible = false;
                     secondstack.IsVisible = true;
                     topprogress.Progress = 33.34;
+
+                    if(newusermedication.status == "Pending")
+                    {
+                        backbtn.Text = "Cancel";
+                    }
                 }
                 else if (secondstack.IsVisible == true)
                 {
@@ -2584,7 +3636,6 @@ public partial class AddMedication : ContentPage
                 }
             }
           
-
         }
         catch(Exception ex)
         {
@@ -2596,7 +3647,28 @@ public partial class AddMedication : ContentPage
     {
         try
         {
+            //delete any notifications
+            if(IsEdit)
+            {
+                newusermedication = SelectedMed;
+                  
+                foreach(var item in newusermedication.schedule)
+                {
+                    LocalNotificationCenter.Current.Cancel(item.id);
+                }
 
+                //add the details
+              //  SelectedMed.preparation = newusermedication.preparation;
+              //  SelectedMed.formulation = medformulationslistview.SelectedItem.ToString();
+              //  SelectedMed.unit = meddosageunitlistview.SelectedItem.ToString();
+              //  SelectedMed.startdate = startdatepicker.Date.ToString("dd/MM/yyyy");
+
+              //  if(enddatecheck.IsChecked)
+              //  {
+              //      SelectedMed.enddate = enddatepicker.Date.ToString("dd/MM/yyyy");
+              //  }
+
+            }
 
             //schedule notifications
 
@@ -2612,6 +3684,8 @@ public partial class AddMedication : ContentPage
                 int randomNumber = random.Next(100000, 100000001);
 
                 item.id = randomNumber;
+
+                item.time = item.timeconverted.ToString(@"hh\:mm");
 
 
                 if(freqstring == "Daily")
@@ -2711,14 +3785,15 @@ public partial class AddMedication : ContentPage
                 if (selectedDosages[0].Day.Contains(','))
                 {
 
-                    foreach (var md in selectedDosages)
+                    foreach (var d in listofdays) // Iterate over the list of days first
                     {
-                        for (int i = 0; i < listofdays.Count; i++)
+                        for (int i = 0; i < selectedDosages.Count; i++) // Then iterate over selectedDosages for each day
                         {
-                            var d = listofdays[i];
+                            var md = selectedDosages[i];
                             Random random = new Random();
                             int randomNumber = random.Next(100000, 100000001);
-                            // Create a new instance of MedtimesDosages (assuming md is of this type) and copy the relevant properties
+
+                            // Create a new instance of MedtimesDosages and copy the relevant properties
                             var newMd = new MedtimesDosages
                             {
                                 id = randomNumber,
@@ -2811,14 +3886,38 @@ public partial class AddMedication : ContentPage
                 }
 
                 newusermedication.frequency = "Weekly" + "|" + joindays + "|" + newweeknum;
+
+                //add the questions
+                if(sameweeklydosage2.IsVisible == true && sameweeklydosage.IsVisible == true)
+                {
+                    newusermedication.medicationquestions = samedosageweeklylist.SelectedItem.ToString() + "|" + samedosageweeklylist2.SelectedItem.ToString();
+                }
+                else if (sameweeklydosage2.IsVisible == true && sameweeklydosage.IsVisible == false)
+                {
+                    newusermedication.medicationquestions = samedosageweeklylist2.SelectedItem.ToString();
+                }
+                else if(sameweeklydosage2.IsVisible == false && sameweeklydosage.IsVisible == false)
+                {
+                    //do nothing
+                }
+                else
+                {
+                    newusermedication.medicationquestions = samedosageweeklylist.SelectedItem.ToString();
+                }
+
             }
             else if (freqstring == "Days Interval")
             {
                 newusermedication.frequency = "Days Interval" + "|" + daycount.ToString() + "|" + selectedDosages.Count.ToString();
+
+                if (disamedosagequestionlist.IsVisible)
+                {
+                    newusermedication.medicationquestions = disamedosagequestionlist.SelectedItem.ToString();
+                }
             }
             else
             {
-                newusermedication.frequency = "As Required" + "|" + newusermedication.Dosage;
+                newusermedication.frequency = "As Required" + "|" + "0";
             }
 
             // Convert list to ObservableCollection
@@ -2830,16 +3929,110 @@ public partial class AddMedication : ContentPage
             //insert to db
             string userid = Preferences.Default.Get("userid", "Unknown");
 
+            newusermedication.status = "Active";
             newusermedication.userid = userid;
-            var returnedsymptom = await database.PostMedicationAsync(newusermedication);
 
-            UserMedications.Add(newusermedication);
+            //add timedosages so i can update ok locally 
+            var Split = newusermedication.frequency.Split('|');
+        
+            if (newusermedication.TimeDosage.Count == 0)
+            {
+                foreach (var feedback in newusermedication.schedule)
+                {
+                    var dosage = feedback.Dosage;
+                    var time = feedback.time;
+                    //Daily
+                    var getfreq = newusermedication.frequency.Split('|');
+                    if (getfreq[0] == "Daily" || getfreq[0] == "Days Interval")
+                    {
+                        var DosageTime = time + "|" + dosage;
+                        newusermedication.TimeDosage.Add(DosageTime);
+                    }
+                    //Weekly
+                    else if (getfreq[0] == "Weekly" || getfreq[0] == "Weekly ")
+                    {
+                        var freq = newusermedication.frequency.Split('|');
+                        if (freq[1].Contains(","))
+                        {
+                            var days = freq[1].Split(',').ToList();
+                            for (int i = 0; i < days.Count; i++)
+                            {
+                                var day = days[i];
+                                var DosageTime = time + "|" + dosage + "|" + day;
+                                newusermedication.TimeDosage.Add(DosageTime);
+                            }
+                        }
+                        else
+                        {
+                            var day = freq[1];
+                            var DosageTime = time + "|" + dosage + "|" + day;
+                            newusermedication.TimeDosage.Add(DosageTime);
+                        }
 
-            await MopupService.Instance.PushAsync(new PopupPageHelper("Medication Added") { });
-            await Task.Delay(1500);
 
-            //await Navigation.PushAsync(new AllSymptoms(SymptomsPassed));
-            await Navigation.PushAsync(new AllMedications(UserMedications));
+                    }
+                }
+            }
+
+
+            if (!string.IsNullOrEmpty(newusermedication.id))
+            {
+                var findmed = UserMedications.Where(med => med.id == newusermedication.id).First();
+
+                UserMedications.Remove(findmed);
+
+                await database.UpdateMedicationDetails(newusermedication);
+
+
+
+                newusermedication.TimeDosage.Clear();
+
+                foreach (var feedback in newusermedication.schedule)
+                {
+                 
+                    var dosage = feedback.Dosage;
+                    var time = feedback.time;
+                    //Daily
+                    var getfreq = newusermedication.frequency.Split('|');
+                    if (getfreq[0] == "Daily" || getfreq[0] == "Days Interval")
+                    {
+                        var DosageTime = time + "|" + dosage;
+                        newusermedication.TimeDosage.Add(DosageTime);
+                    }
+                    //Weekly
+                    else if (getfreq[0] == "Weekly" || getfreq[0] == "Weekly ")
+                    {
+                        var day = feedback.Day;
+                        var DosageTime = time + "|" + dosage + "|" + day;
+                        newusermedication.TimeDosage.Add(DosageTime);
+                    }
+
+                }
+
+
+                UserMedications.Add(newusermedication);
+            }
+            else
+            {
+                var returnedsymptom = await database.PostMedicationAsync(newusermedication);
+                UserMedications.Add(newusermedication);
+            }
+
+            if (IsEdit)
+            {
+                await MopupService.Instance.PushAsync(new PopupPageHelper("Medication Updated") { });
+                await Task.Delay(1500);
+            }
+            else
+            {
+                await MopupService.Instance.PushAsync(new PopupPageHelper("Medication Added") { });
+                await Task.Delay(1500);
+            }
+
+      
+
+                //await Navigation.PushAsync(new AllSymptoms(SymptomsPassed));
+                await Navigation.PushAsync(new AllMedications(UserMedications));
 
 
             await MopupService.Instance.PopAllAsync(false);
@@ -2863,6 +4056,89 @@ public partial class AddMedication : ContentPage
                 }
                 ii++;
             }
+
+
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    private void timesanddosageslistview_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
+    {
+        try
+        {
+
+            if(IsEdit)
+            {
+                var item = e.DataItem as MedtimesDosages;
+
+                //var finditem = selectedDosages.Where(x => x.time == item.time).Where(x => x.Dosage == item.Dosage).FirstOrDefault();
+
+     
+
+            }
+
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
+    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        try
+        {
+
+            //taken (tick) tapped on schedule
+
+            // Get the tapped Image
+            ExtendedLabel label = (ExtendedLabel)sender;
+
+            var getitem = selectedDosages.Where(x => x.time == label.Time).Where(x => x.Dosage == label.Dosage).FirstOrDefault();
+
+
+            getitem.Labelvis = false;
+            getitem.Dosage = string.Empty;
+            getitem.Dosage2 = string.Empty;
+            getitem.Entryvis = true;
+     
+
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
+
+    private void samedosageentry2_TextChanged_1(object sender, TextChangedEventArgs e)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(e.NewTextValue))
+            {
+
+            }
+            else
+            {
+                foreach (var item in selectedDosages)
+                {
+                    item.Dosage2 = e.NewTextValue;
+                }
+            }
+
+
+            //if (!string.IsNullOrEmpty(e.NewTextValue))
+            //{
+            //    // Get the current text without the unit
+            //    string currentTextWithoutUnit = samedosageentry.Text.Replace($" {newusermedication.unit}", "");
+
+            //    // Set the new text with the unit appended only once
+            //    samedosageentry.Text = e.NewTextValue + " " + newusermedication.unit;
+            //}
 
 
         }

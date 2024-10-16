@@ -123,8 +123,8 @@ Text="As Required Medications/Supplements" />
                     <DataTemplate>
                         <ViewCell>
                             <StackLayout>
-                              
-                                <Frame CornerRadius="10"  Margin="10,0,10,5"  Padding="5" HasShadow="False" BorderColor="Transparent" InputTransparent="False" BackgroundColor="#e5f9f4">
+
+                                <Frame CornerRadius="10"  Margin="10,0,10,5"  Padding="5" HasShadow="False" BorderColor="Transparent" InputTransparent="False" BackgroundColor="{Binding ListBackgroundColor}">
                                     <Grid  HorizontalOptions="FillAndExpand">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -171,7 +171,7 @@ Text="As Required Medications/Supplements" />
 
 
             <syncfusion:SfListView x:Name="AsRequiredlistview"
-                    AutoFitMode="Height" Margin="0,0,10,10"
+                    AutoFitMode="Height" Margin="0,0,10,10" ItemTapped="AsRequiredlistview_ItemTapped"
                     GroupHeaderSize="20" BackgroundColor="Transparent"
                      SelectionMode="None" VerticalOptions="StartAndExpand"  Orientation="Vertical">
                 <syncfusion:SfListView.DataSource>
@@ -195,19 +195,23 @@ Text="As Required Medications/Supplements" />
                         <ViewCell>
                             <StackLayout>
 
-                                <Frame CornerRadius="10"  Margin="10,0,10,5"  Padding="5" HasShadow="False" BorderColor="Transparent" InputTransparent="False" BackgroundColor="#e5f9f4">
+                                <Frame CornerRadius="10"  Margin="10,0,10,5"  Padding="5" HasShadow="False" BorderColor="Transparent" InputTransparent="True" BackgroundColor="{Binding ListBackgroundColor}">
                                     <Grid  HorizontalOptions="FillAndExpand">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="70*"/>
-                                            <ColumnDefinition Width="30*"/>
+                                            <ColumnDefinition Width="100*"/>
+                                       
                                         </Grid.ColumnDefinitions>
-                                        <Label Text="{Binding Name}" FontSize="16" Grid.Row="0" Margin="20,0,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
+                                        <Label Text="{Binding Name}" FontSize="16" Grid.Row="0" Margin="20,0,0,0" VerticalOptions="Center" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
 
-                                        <Label FontSize="14" Grid.Row="1" Margin="20,0,0,0" VerticalOptions="Start" TextColor="Teal" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start">
+                                        <Label Text="Tap to record dosage" FontSize="12" Grid.Row="1" Margin="20,0,0,0" VerticalOptions="Center" TextColor="Gray" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
+
+
+
+                                        <Label FontSize="14" Grid.Row="1" IsVisible="False" Margin="20,0,0,0" VerticalOptions="Start" TextColor="Teal" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start">
                                             <Label.FormattedText>
                                                 <FormattedString>
                                                     <Span Text="{Binding Dosage}" TextColor="Teal" FontFamily="HankenGroteskBold" />
@@ -217,7 +221,7 @@ Text="As Required Medications/Supplements" />
                                             </Label.FormattedText>
                                         </Label>
 
-                                        <Button Text="Taken" Margin="0,0,5,0" Grid.Row="0" Grid.Column="1"  HeightRequest="30" Grid.RowSpan="2" BackgroundColor="Transparent" BorderColor="Teal" BorderWidth="1" FontFamily="HankenGroteskBold" FontSize="12" TextColor="Black" Padding="0"/>
+                                        <Button Text="Taken" IsVisible="False" Margin="0,0,5,0" Grid.Row="0" Grid.Column="1"  HeightRequest="30" Grid.RowSpan="2" BackgroundColor="Transparent" BorderColor="Teal" BorderWidth="1" FontFamily="HankenGroteskBold" FontSize="12" TextColor="Black" Padding="0"/>
 
 
                                     </Grid>
@@ -233,7 +237,7 @@ Text="As Required Medications/Supplements" />
 
 
             <!-- No Data Stack -->
-            <StackLayout x:Name="nodatastack" IsVisible="False" Margin="0,50,0,0" VerticalOptions="StartAndExpand">
+            <StackLayout x:Name="nodatastack" IsVisible="False" Margin="0,20,0,0" VerticalOptions="StartAndExpand">
                 <Image Source="adddataicon.png" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="50" WidthRequest="50"/>
                 <Label Text="Nothing Due Today" FontSize="20" Margin="0,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Center" />
             </StackLayout>

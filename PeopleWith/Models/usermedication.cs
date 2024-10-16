@@ -2,13 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace PeopleWith
 {
-    public class usermedication
+    public class usermedication : INotifyPropertyChanged
     {
 
         //[JsonIgnore]
@@ -37,11 +38,26 @@ namespace PeopleWith
         public ObservableCollection<MedSuppFeedback> feedback { get; set; }
         public string details { get; set; }
 
+        public string medicationquestions { get; set; }
+
         [System.Text.Json.Serialization.JsonIgnore]
         public List<string> TimeDosage { get; set; } = new List<string>();
 
+        private string nexttime;
+
         [System.Text.Json.Serialization.JsonIgnore]
-        public string NextTime { get; set; }
+        public string NextTime
+        {
+            get { return nexttime; }
+            set
+            {
+                nexttime = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(NextTime)));
+                }
+            }
+        }
 
         [System.Text.Json.Serialization.JsonIgnore]
         public string NextDosage { get; set; }
@@ -63,6 +79,56 @@ namespace PeopleWith
 
         [System.Text.Json.Serialization.JsonIgnore]
         public string EditMedSection { get; set; }
+
+        private string medfrequency;
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string MedFrequency
+        {
+            get { return medfrequency; }
+            set
+            {
+                medfrequency = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(MedFrequency)));
+                }
+            }
+        }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool EndingSoon { get; set; }
+
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string ChangedMedName { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool ChangedMed { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string ChangedMedNotes { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool ChangedNotes { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool PendingMeds { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool ActiveMeds { get; set; }
+
+        // event handler for updating the list views
+        public event PropertyChangedEventHandler PropertyChanged;
+        //  public void OnPropertyChanged()
+        //{
+        //  PropertyChanged?.Invoke(this, new PropertyChangedEventArgs());
+        // PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(""));
+        // }
+        public void OnPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
 
     }
 
