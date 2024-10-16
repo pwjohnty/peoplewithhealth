@@ -119,8 +119,13 @@ public partial class ShowAllData : ContentPage
                 allusermeasurements.Remove(item);
             }
 
+            foreach(var item in deleeteusermeasurementlistpassed)
+            {
+                item.deleted = true;
+            }
+
             //update single view
-            WeakReferenceMessenger.Default.Send(new SendItemMessage(allusermeasurements));
+            WeakReferenceMessenger.Default.Send(new SendItemMessage(usermeasurementlistpassed));
 
             var filteredMeasurements = allusermeasurements
         .GroupBy(m => m.measurementid)
@@ -134,6 +139,7 @@ public partial class ShowAllData : ContentPage
 
             //update main page
             WeakReferenceMessenger.Default.Send(new UpdateListMainPage(observableFilteredMeasurements));
+            
 
             await MopupService.Instance.PushAsync(new PopupPageHelper("Measurement Feedback Updated") { });
 

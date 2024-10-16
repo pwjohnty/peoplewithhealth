@@ -9,7 +9,7 @@
              xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
              xmlns:gauge="clr-namespace:Syncfusion.Maui.Gauges;assembly=Syncfusion.Maui.Gauges"
              xmlns:controls="clr-namespace:Plugin.Maui.SegmentedControl;assembly=Plugin.Maui.SegmentedControl"
-             HideSoftInputOnTapped="True"
+             HideSoftInputOnTapped="True" NavigationPage.HasNavigationBar="False"
              Shell.NavBarHasShadow="False" Shell.NavBarIsVisible="False">
     <Grid>
         <Grid.RowDefinitions>
@@ -358,7 +358,7 @@ HorizontalOptions="Start" />
                             <syncfusion:SfListView.HeightRequest>
                                 <OnPlatform x:TypeArguments="x:Double">
                                     <On Platform="Android" Value="220" />
-                                    <On Platform="iOS" Value="200" />
+                                    <On Platform="iOS" Value="220" />
                                 </OnPlatform>
                             </syncfusion:SfListView.HeightRequest>
 
@@ -806,14 +806,18 @@ Text="Skip" />
                 <ActivityIndicator IsRunning="true" Grid.Row="0" Grid.Column="1" x:Name="nextbtnloader" IsVisible="False" HorizontalOptions="EndAndExpand" Margin="20,0,20,10" HeightRequest="25"
                    Color="#031926" />
 
-            <Label
+                <Label
    Text="Privacy Policy"
    TextColor="#031926"
    FontFamily="HankenGroteskRegular"
    FontAttributes="Bold"
    Margin="0,0,0,10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
    FontSize="10"
-   HorizontalOptions="Center" />
+   HorizontalOptions="Center" >
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1" NumberOfTapsRequired="1"/>
+                    </Label.GestureRecognizers>
+                </Label>
 
                 <Label
 x:Name="extidlbl"

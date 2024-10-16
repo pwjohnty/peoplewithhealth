@@ -110,6 +110,8 @@ FontFamily="HankenGroteskBold"
 Text="Show all data" />
 
 
+                <Button  Text="Delete Measurement" x:Name="Deltebtn" Clicked="Deltebtn_Clicked" FontSize="Small" Margin="0,40,0,5" FontFamily="HankenGroteskBold" BackgroundColor="#ffe5e5" TextColor="Red" CornerRadius="10" />
+                <Label HorizontalTextAlignment="Start" Text="If your Measurement is deleted you will lose all your Measurement feedback" Margin="10,0,10,20" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Start" FontSize="10" TextColor="DarkGray"  />
 
 
 

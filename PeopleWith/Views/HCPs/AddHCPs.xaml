@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             NavigationPage.HasNavigationBar="True"
+             xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+             x:Class="PeopleWith.AddHCPs" BackgroundColor="White">
+    <ScrollView>
+    <VerticalStackLayout >
+        
+        <!--Title-->
+        <Label Text="Add HCP" FontSize="26" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
+      
+        <!--firstname & Surname-->
+            <Grid x:Name="NameStack" Margin="20,0,20,0" HeightRequest="85" Padding="0" ColumnSpacing="10" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <inputLayout:SfTextInputLayout x:Name="FirstNameTIL" Grid.Row="0" Grid.Column="0" InputViewPadding="10" ShowHint="False" Hint="Firstname" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,20,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
+                <Entry FontSize="Small" Grid.Row="0" Grid.Column="0" PlaceholderColor="Gray" x:Name="FirstNameEntry" TextChanged="FirstNameEntry_TextChanged" FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Firstname"  TextColor="#031926"/>
+                    <inputLayout:SfTextInputLayout.ErrorLabelStyle>
+                        <inputLayout:LabelStyle TextColor="Red"   FontFamily="HankenGroteskBold" />
+                    </inputLayout:SfTextInputLayout.ErrorLabelStyle>
+                </inputLayout:SfTextInputLayout>
+
+                <inputLayout:SfTextInputLayout x:Name="SurNameTIL" Grid.Row="0" Grid.Column="1" InputViewPadding="10" ShowHint="False" Hint="Surname" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,20,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
+                <Entry FontSize="Small" Grid.Row="0"  Grid.Column="1" PlaceholderColor="Gray" x:Name="SurNameEntry" TextChanged="SurNameEntry_TextChanged" FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Surname" TextColor="#031926"/>
+                    <inputLayout:SfTextInputLayout.ErrorLabelStyle>
+                        <inputLayout:LabelStyle TextColor="Red"   FontFamily="HankenGroteskBold" />
+                    </inputLayout:SfTextInputLayout.ErrorLabelStyle>
+                </inputLayout:SfTextInputLayout>
+        </Grid>
+
+        <!--locationname-->
+        <Grid x:Name="LocationStack" Padding="0" HeightRequest="85" Margin="20,0,20,0" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+                <inputLayout:SfTextInputLayout x:Name="LocationTIL" Grid.Row="0" Grid.Column="0" InputViewPadding="10" ShowHint="False" Hint="Location Name" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,20,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
+                <Entry FontSize="Small" TextChanged="LocationEntry_TextChanged" Grid.Row="0" Grid.Column="0" PlaceholderColor="Gray" x:Name="LocationEntry"  FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Location Name" TextColor="#031926"/>
+                    <inputLayout:SfTextInputLayout.ErrorLabelStyle>
+                        <inputLayout:LabelStyle TextColor="Red"   FontFamily="HankenGroteskBold" />
+                    </inputLayout:SfTextInputLayout.ErrorLabelStyle>
+                </inputLayout:SfTextInputLayout>
+
+        </Grid>
+
+        <!--role-->
+
+            <Grid x:Name="RoleStack" Padding="0" HeightRequest="85" Margin="20,0,20,0" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <inputLayout:SfTextInputLayout x:Name="RoleTIL" Grid.Row="0" Grid.Column="0" InputViewPadding="10" ShowHint="False" Hint="Role" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,20,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
+                    <Entry FontSize="Small" TextChanged="RoleEntry_TextChanged" Grid.Row="0" Grid.Column="0" PlaceholderColor="Gray" x:Name="RoleEntry"  FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Role" TextColor="#031926"/>
+                    <inputLayout:SfTextInputLayout.ErrorLabelStyle>
+                        <inputLayout:LabelStyle TextColor="Red"   FontFamily="HankenGroteskBold" />
+                    </inputLayout:SfTextInputLayout.ErrorLabelStyle>
+                </inputLayout:SfTextInputLayout>
+
+            </Grid>
+        
+        <!-- Optional Stack-->
+            <Grid x:Name="OptionalStack" Padding="10" Margin="20,0,20,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Text="(Optional) Add Contact Details" Grid.Row="0" Grid.Column="0"  FontSize="16" Margin="20,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" VerticalOptions="CenterAndExpand" VerticalTextAlignment="Center" HorizontalOptions="Start" />
+                <CheckBox x:Name="CheckBox" IsChecked="False" Color="#CBC3E3" HorizontalOptions="Start" Margin="0,10,0,0" VerticalOptions="CenterAndExpand" CheckedChanged="CheckBox_CheckedChanged" Grid.Row="0" Grid.Column="1"/>
+
+            </Grid>
+
+            <!--addresslineone-->
+        <Grid x:Name="addresslineoneStack" Padding="0" HeightRequest="85" Margin="20,-25,20,0" IsVisible="False">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+                <inputLayout:SfTextInputLayout x:Name="AddressTIL" Grid.Row="0" Grid.Column="0" InputViewPadding="10" ShowHint="False" Hint="Address" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,20,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
+                <Entry FontSize="Small" TextChanged="addresslineoneEntry_TextChanged" Grid.Row="0" Grid.Column="0" PlaceholderColor="Gray" x:Name="addresslineoneEntry"  FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Address" TextColor="#031926"/>
+            </inputLayout:SfTextInputLayout>
+
+        </Grid>
+
+
+        <!--towncity-->
+            <Grid x:Name="towncity" Padding="0" HeightRequest="85" Margin="20,0,20,0" IsVisible="False">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+                <inputLayout:SfTextInputLayout x:Name="towncityTIL" Grid.Row="0" Grid.Column="0" InputViewPadding="10" ShowHint="False" Hint="Town/City" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,20,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
+                <Entry FontSize="Small" TextChanged="towncityEntry_TextChanged" Grid.Row="0" Grid.Column="0" PlaceholderColor="Gray" x:Name="towncityEntry"  FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Town/City" TextColor="#031926"/>
+            </inputLayout:SfTextInputLayout>
+
+        </Grid>
+
+        <!--country-->
+            <Grid x:Name="country" Padding="0" HeightRequest="85" Margin="20,0,20,0" IsVisible="False">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+                <inputLayout:SfTextInputLayout x:Name="countryTIL" Grid.Row="0" Grid.Column="0" InputViewPadding="10" ShowHint="False" Hint="Country" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,20,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
+                <Entry FontSize="Small" TextChanged="countryEntry_TextChanged" Grid.Row="0" Grid.Column="0" PlaceholderColor="Gray" x:Name="countryEntry"  FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Country" TextColor="#031926"/>
+            </inputLayout:SfTextInputLayout>
+
+        </Grid>
+
+        <!--county-->
+            <Grid x:Name="county" Padding="0" HeightRequest="85" Margin="20,0,20,0" IsVisible="False">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+                <inputLayout:SfTextInputLayout x:Name="countyTIL" Grid.Row="0" Grid.Column="0" InputViewPadding="10" ShowHint="False" Hint="County" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,20,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
+                <Entry FontSize="Small" TextChanged="countyEntry_TextChanged" Grid.Row="0" Grid.Column="0" PlaceholderColor="Gray" x:Name="countyEntry"  FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="County" TextColor="#031926"/>
+            </inputLayout:SfTextInputLayout>
+
+        </Grid>
+
+        <!--postcode-->
+            <Grid x:Name="postcode" Padding="0" HeightRequest="85" Margin="20,0,20,0" IsVisible="False">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+                <inputLayout:SfTextInputLayout x:Name="PostcodeTIL" Grid.Row="0" Grid.Column="0" InputViewPadding="10" ShowHint="False" Hint="Postcode" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,20,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
+                <Entry FontSize="Small" TextChanged="postcodeEntry_TextChanged" Grid.Row="0" Grid.Column="0" PlaceholderColor="Gray" x:Name="postcodeEntry"  FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Postcode" TextColor="#031926"/>
+            </inputLayout:SfTextInputLayout>
+
+        </Grid>
+
+        <!--telephone-->
+            <Grid x:Name="telephoneStack" Padding="0" HeightRequest="85" Margin="20,0,20,0" IsVisible="False">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+                <inputLayout:SfTextInputLayout x:Name="telephonehelper" Grid.Row="0" Grid.Column="0" InputViewPadding="10" Hint="Telephone Number" ShowHint="False" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,20,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
+                <Entry FontSize="Small" PlaceholderColor="Gray" x:Name="telephoneEntry" TextChanged="telephoneEntry_TextChanged"  FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Telephone Number" TextColor="#031926"/>
+                <inputLayout:SfTextInputLayout.ErrorLabelStyle>
+                    <inputLayout:LabelStyle TextColor="Red"   FontFamily="HankenGroteskBold" />
+                </inputLayout:SfTextInputLayout.ErrorLabelStyle>
+            </inputLayout:SfTextInputLayout>
+
+
+        </Grid>
+
+        <!--Email-->
+            <Grid x:Name="EmailStack" Padding="0" HeightRequest="100" Margin="20,0,20,0" IsVisible="False">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+                <inputLayout:SfTextInputLayout x:Name="emailhelper" Grid.Row="0" Grid.Column="0" InputViewPadding="10" ShowHint="False" Hint="Email" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,20,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
+                    <Entry FontSize="Small" PlaceholderColor="Gray" x:Name="EmailEntry" TextChanged="EmailEntry_TextChanged"  FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Email Address" TextColor="#031926"/>
+                    <inputLayout:SfTextInputLayout.ErrorLabelStyle>
+                        <inputLayout:LabelStyle TextColor="Red"   FontFamily="HankenGroteskBold" />
+                    </inputLayout:SfTextInputLayout.ErrorLabelStyle>
+                </inputLayout:SfTextInputLayout>
+
+            </Grid>
+
+            <Button x:Name="HCPAdd" Text="Add HCP" Clicked="HCPAdd_Clicked" Margin="20,10,20,10" Padding="0" BackgroundColor="#CBC3E3" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#9F2B68" />
+
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

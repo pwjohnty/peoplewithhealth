@@ -44,8 +44,8 @@
                 </Frame.GestureRecognizers>
             </Frame>
 
-            <Button x:Name="Deletebtn" Margin="20,50,20,0"  TextColor="Red" BackgroundColor="#FFF8DC" FontFamily="HankenGroteskBold" CornerRadius="10" Text="Delete Mood" Clicked="Deletebtn_Clicked" />
-            <Label HorizontalTextAlignment="Start" Text="If this Mood is deleted, you will lose all your Mood Data." Margin="20,0,20,20" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="Red"  />
+            <Button x:Name="Deletebtn" Margin="20,50,20,0"  TextColor="Red" BackgroundColor="#ffe5e5" FontFamily="HankenGroteskBold" CornerRadius="10" Text="Delete Mood" Clicked="Deletebtn_Clicked" />
+            <Label HorizontalTextAlignment="Start" Text="If this Mood is deleted, you will lose all of your Mood Data" Margin="20,0,20,20" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="DarkGray"  />
 
         </StackLayout>
 

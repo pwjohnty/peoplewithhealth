@@ -358,7 +358,7 @@ public partial class SFENRAT : ContentPage
                     // emptyframe.IsVisible = false;
                     // resultsframe.IsVisible = true;
                     additionlsymlist.ItemsSource = collectionone;
-                    additionlsymlist.HeightRequest = 400;
+                    additionlsymlist.HeightRequest = count * 60;
                     additionlsymlist.IsVisible = true;
          
                 }
@@ -909,7 +909,7 @@ public partial class SFENRAT : ContentPage
                     // emptyframe.IsVisible = false;
                     // resultsframe.IsVisible = true;
                     additionlmedlist.ItemsSource = collectionone;
-                    additionlmedlist.HeightRequest = 400;
+                    additionlmedlist.HeightRequest = count * 60;
                     additionlmedlist.IsVisible = true;
 
                 }
@@ -1069,6 +1069,19 @@ public partial class SFENRAT : ContentPage
 
         }
         catch(Exception ex)
+        {
+
+        }
+    }
+
+    async private void TapGestureRecognizer_Tapped_1(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            string BackArrow = "PeopleWith";
+            await Navigation.PushAsync(new PrivacyPolicy(BackArrow), false);
+        }
+        catch (Exception Ex)
         {
 
         }

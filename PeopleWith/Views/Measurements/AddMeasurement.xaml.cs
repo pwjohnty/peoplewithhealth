@@ -3228,10 +3228,52 @@ public partial class AddMeasurement : ContentPage
                 }
                 else if (measurementnamestring == "Sleep Duration")
                 {
+                    var convertoint = Convert.ToInt32(e.NewTextValue);
+                    if (inputvalue == "Hours")
+                    {
+                        if (e.NewTextValue.Length >= 1 && e.NewTextValue.Length <= 2)
+                        {
+                            if (convertoint > 0 && convertoint < 37)
+                            {
+                                SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                validinput = true;
+                                numvalueconverted = convertoint.ToString();
+                            }
+                            else
+                            {
+                                validinput = false;
 
-                    unitlist.IsVisible = false;
-                   // SleepDuration.IsVisible = true;
+                            }
+                        }
+                        else
+                        {
+                            validinput = false;
 
+                        }
+                    }
+                    else
+                    {
+
+                        if (e.NewTextValue.Length >= 1 && e.NewTextValue.Length <= 2)
+                        {
+                            if (convertoint > 0 && convertoint < 2161)
+                            {
+                                SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                validinput = true;
+                                numvalueconverted = convertoint.ToString();
+                            }
+                            else
+                            {
+                                validinput = false;
+
+                            }
+                        }
+                        else
+                        {
+                            validinput = false;
+
+                        }
+                    }
 
                 }
 

@@ -27,7 +27,7 @@ public partial class BiometricsLogin : ContentPage
                 fingerprint.Source = "faceid.png";
             }
 
-                var Nameone = Helpers.Settings.FirstName;
+            var Nameone = Helpers.Settings.FirstName;
             var Nametwo = Helpers.Settings.Surname;
             if (!string.IsNullOrEmpty(Nameone))
             {
@@ -49,6 +49,37 @@ public partial class BiometricsLogin : ContentPage
                 Initals.Text = "PW";
                 //Name.Text = "Enter Pin Code";
             }
+
+            //Set Page Visible/Not Visible 
+            var biometrics = Preferences.Default.Get("biometrics", true);
+            var pincode = Preferences.Default.Get("pincode", string.Empty);
+            if (pincode.Contains(","))
+            {
+                var split = pincode.Split(',');
+                if (split[0] == "On")
+                {
+                    if (biometrics == false)
+                    {
+                        fingerprint.IsVisible = true;
+                    }
+                }
+                else
+                {
+                    //Hide PinCode 
+                    Pincode.IsVisible = false;
+                    incorrectcodelbl.IsVisible = false;
+                    PinKeyPad.IsVisible = false;
+                    ForgotPassword.IsVisible = false;
+                    Name.IsVisible = false;
+
+                    if (biometrics == true)
+                    {
+                        CallFingerPrint();
+                    }
+                    //Set to Mainpage
+                }
+            }
+
         }
         catch (Exception Ex)
         {
@@ -57,23 +88,77 @@ public partial class BiometricsLogin : ContentPage
 
     }
 
-
-   
-
-    async private void Pincode_PINEntryCompleted(object sender, PINView.Maui.Helpers.PINCompletedEventArgs e)
+    async public void CallFingerPrint()
     {
         try
         {
-            var GetPin = Helpers.Settings.PinCode; 
-            if(Helpers.Settings.PinCode == e.PIN)
+
+           await Fingerprint();
+        }
+        catch (Exception Ex)
+        {
+
+        }
+    }
+
+    async public Task Fingerprint()
+    {
+        try
+        {
+            await Task.Delay(2000);
+            var result = await BiometricAuthenticationService.Default.AuthenticateAsync(new AuthenticationRequest()
+            {
+                Title = "Confirm your fingerprint to access your account",
+                NegativeText = "USE PIN"
+            }, CancellationToken.None);
+
+            if (result.Status == BiometricResponseStatus.Success)
             {
                 Application.Current.MainPage = new NavigationPage(new MainDashboard());
             }
             else
             {
-                Pincode.PINValue = null;
-                Vibration.Vibrate();
+               
             }
+        }
+        catch (Exception Ex)
+        {
+
+        }
+    }
+
+
+    async private void Pincode_PINEntryCompleted(object sender, PINView.Maui.Helpers.PINCompletedEventArgs e)
+    {
+        try
+        {
+            var GetPin = Helpers.Settings.PinCode;
+            if (GetPin.Contains(","))
+            {
+                var GetPinSplit = GetPin.Split(','); 
+                if (GetPinSplit[1] == e.PIN)
+                {
+                    Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                }
+                else
+                {
+                    Pincode.PINValue = null;
+                    Vibration.Vibrate();
+                }
+            }
+            else
+            {
+                if (Helpers.Settings.PinCode == e.PIN)
+                {
+                    Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                }
+                else
+                {
+                    Pincode.PINValue = null;
+                    Vibration.Vibrate();
+                }
+            }
+           
         }
         catch (Exception Ex)
         {

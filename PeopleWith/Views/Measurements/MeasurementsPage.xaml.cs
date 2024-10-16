@@ -287,4 +287,17 @@ public partial class MeasurementsPage : ContentPage
 
         }
     }
+
+    async private void MeasureInfoTapped(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            await MopupService.Instance.PushAsync(new Infopopup("measure") { });
+        }
+        catch (Exception Ex)
+        {
+            //await crashHandler.CrashDetectedSend(Ex);
+        }
+
+    }
 }

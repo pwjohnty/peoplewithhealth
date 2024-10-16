@@ -354,7 +354,7 @@ ChipTextSize="Micro"
                         <chip:SfChipGroup.ItemTemplate>
                             <DataTemplate>
                                 <StackLayout Orientation="Horizontal">
-                                    <Label Text="{Binding title}" FontSize="Micro" TextColor="#031926" FontAttributes="Bold" Padding="10" Margin="0" />
+                                    <Label Text="{Binding title}" FontSize="Micro" TextColor="#031926" FontAttributes="Bold" VerticalOptions="Center" Padding="10" Margin="0" />
                                     <!-- Remove or customize the indicator here -->
                                 </StackLayout>
                             </DataTemplate>
@@ -384,19 +384,19 @@ Text="Additional Added Symptoms"
                     <chip:SfChipGroup
 	ChipType="Filter"
 	x:Name="additionalsymptomchiplistnrat" IsVisible="False"
-                                    BackgroundColor="Transparent"
-                                    
-                                       ChipStrokeThickness="1"
-                                ShowIcon="False" ChipTextColor="#031926"
-                    VerticalOptions="Center" 
-                        Margin="0,10,0,10" ChipFontAttributes="Bold"
-                   ChipBackground="#BFDBF7" 
+    BackgroundColor="Transparent"
+    SelectionChanged="symptomchiplistnrat_SelectionChanged"
+    ChipStrokeThickness="1"
+    ShowIcon="False" ChipTextColor="Gray"
+    VerticalOptions="Center"
+    Margin="0,10,0,10"
+    ChipBackground="Transparent" 
 	SelectedChipBackground="#BFDBF7"
-   ChipStroke="Transparent"
-                        SelectedChipTextColor="#031926"
-                       SelectionIndicatorColor="Transparent"
+    ChipStroke="LightGray"
+    SelectedChipTextColor="#031926"
+    SelectionIndicatorColor="Transparent"
 	ChipPadding="4,4,0,0"
-ChipTextSize="Micro"
+    ChipTextSize="Micro"
 	DisplayMemberPath="Description">
 
                         <chip:SfChipGroup.ItemTemplate>
@@ -410,13 +410,13 @@ ChipTextSize="Micro"
                         <chip:SfChipGroup.ChipLayout>
                             <FlexLayout
 			HorizontalOptions="Start"
-			VerticalOptions="Center"
-			Direction="Row"
-			Wrap="Wrap"
+            VerticalOptions="Center"
+            Direction="Row"
+            Wrap="Wrap"
             Margin="0,0,0,5"
-			JustifyContent="Start"
-			AlignContent="Start"
-			AlignItems="Center"/>
+            JustifyContent="Start"
+            AlignContent="Start"
+            AlignItems="Center"/>
                         </chip:SfChipGroup.ChipLayout>
                     </chip:SfChipGroup>
 
@@ -451,7 +451,7 @@ HorizontalOptions="Start" />
                         </Grid.ColumnDefinitions>
 
                         <Image Source="searchbaricon.png" HorizontalOptions="Center" VerticalOptions="Center" HeightRequest="15" WidthRequest="15" Grid.Row="0" Grid.Column="0"/>
-                        <Entry BackgroundColor="Transparent" x:Name="searchsymsentry" TextChanged="Entry_TextChanged" Placeholder="Search Symptoms" Margin="5,0,10,0" PlaceholderColor="LightGray" Grid.Row="0" Grid.Column="1" IsTextPredictionEnabled="False" Keyboard="Text" TextColor="#031926" FontFamily="HankenGroteskRegular"/>
+                        <Entry BackgroundColor="Transparent" x:Name="searchsymsentry" Background="Transparent"   TextChanged="Entry_TextChanged" Placeholder="Search Symptoms" Margin="5,0,10,0" PlaceholderColor="LightGray" Grid.Row="0" Grid.Column="1" IsTextPredictionEnabled="False" Keyboard="Text" TextColor="#031926" FontFamily="HankenGroteskRegular"/>
                         
                     </Grid>
                     </Frame>
@@ -479,12 +479,12 @@ HorizontalOptions="Start" />
              SelectionBackground="Transparent"
              Orientation="Vertical"                                                                                                                       
              >
-                            <syncfusion:SfListView.HeightRequest>
+                            <!--<syncfusion:SfListView.HeightRequest>
                                 <OnPlatform x:TypeArguments="x:Double">
-                                    <On Platform="Android" Value="300" />
+                                    <On Platform="Android" Value="500" />
                                     <On Platform="iOS" Value="300" />
                                 </OnPlatform>
-                            </syncfusion:SfListView.HeightRequest>
+                            </syncfusion:SfListView.HeightRequest>-->
 
                             <syncfusion:SfListView.ItemTemplate>
                                 <DataTemplate>
@@ -563,20 +563,20 @@ HorizontalOptions="Start" />
                     <chip:SfChipGroup
 	ChipType="Filter"
 	x:Name="medicationchiplistnrat"
-                                    BackgroundColor="Transparent"
-                                     
-                                       ChipStrokeThickness="1"
-                                ShowIcon="False" ChipTextColor="Gray"
-                    VerticalOptions="Center"
-                        Margin="0,10,0,10"
-                   ChipBackground="Transparent" 
-	SelectedChipBackground="#BFDBF7"
-   ChipStroke="LightGray" SelectionChanged="medicationchiplistnrat_SelectionChanged"
-                        SelectedChipTextColor="#031926"
-                       SelectionIndicatorColor="Transparent"
-	ChipPadding="4,4,0,0"
-ChipTextSize="Micro"
-	DisplayMemberPath="Description">
+    BackgroundColor="Transparent"
+    SelectionChanged="symptomchiplistnrat_SelectionChanged"
+    ChipStrokeThickness="1"
+    ShowIcon="False" ChipTextColor="Gray"
+    VerticalOptions="Center"
+    Margin="0,10,0,10"
+    ChipBackground="Transparent" 
+    SelectedChipBackground="#BFDBF7"
+    ChipStroke="LightGray"
+    SelectedChipTextColor="#031926"
+    SelectionIndicatorColor="Transparent"
+    ChipPadding="4,4,0,0"
+    ChipTextSize="Micro"
+    DisplayMemberPath="Description">
 
                         <chip:SfChipGroup.ItemTemplate>
                             <DataTemplate>
@@ -589,13 +589,13 @@ ChipTextSize="Micro"
                         <chip:SfChipGroup.ChipLayout>
                             <FlexLayout
 			HorizontalOptions="Start"
-			VerticalOptions="Center"
-			Direction="Row"
-			Wrap="Wrap"
+            VerticalOptions="Center"
+            Direction="Row"
+            Wrap="Wrap"
             Margin="0,0,0,5"
-			JustifyContent="Start"
-			AlignContent="Start"
-			AlignItems="Center"/>
+            JustifyContent="Start"
+            AlignContent="Start"
+            AlignItems="Center"/>
                         </chip:SfChipGroup.ChipLayout>
                     </chip:SfChipGroup>
 
@@ -609,22 +609,22 @@ Text="Additional Added Medications"
  HorizontalOptions="Start" />
 
                     <chip:SfChipGroup
-	ChipType="Filter"
+	ChipType="Filter" 
 	x:Name="additionalmedicationchiplistnrat" IsVisible="False"
-                                    BackgroundColor="Transparent"
-                                    
-                                       ChipStrokeThickness="1"
-                                ShowIcon="False" ChipTextColor="#031926"
-                    VerticalOptions="Center" 
-                        Margin="0,10,0,10" ChipFontAttributes="Bold"
-                   ChipBackground="#BFDBF7" 
-	SelectedChipBackground="#BFDBF7"
-   ChipStroke="Transparent"
-                        SelectedChipTextColor="#031926"
-                       SelectionIndicatorColor="Transparent"
-	ChipPadding="4,4,0,0"
-ChipTextSize="Micro"
-	DisplayMemberPath="Description">
+    BackgroundColor="Transparent"
+    SelectionChanged="symptomchiplistnrat_SelectionChanged"
+    ChipStrokeThickness="1"
+    ShowIcon="False" ChipTextColor="Gray"
+    VerticalOptions="Center"
+    Margin="0,10,0,10"
+    ChipBackground="Transparent" 
+    SelectedChipBackground="#BFDBF7"
+    ChipStroke="LightGray"
+    SelectedChipTextColor="#031926"
+    SelectionIndicatorColor="Transparent"
+    ChipPadding="4,4,0,0"
+    ChipTextSize="Micro"
+    DisplayMemberPath="Description">
 
                         <chip:SfChipGroup.ItemTemplate>
                             <DataTemplate>
@@ -636,14 +636,14 @@ ChipTextSize="Micro"
                         </chip:SfChipGroup.ItemTemplate>
                         <chip:SfChipGroup.ChipLayout>
                             <FlexLayout
-			HorizontalOptions="Start"
-			VerticalOptions="Center"
-			Direction="Row"
-			Wrap="Wrap"
-            Margin="0,0,0,5"
-			JustifyContent="Start"
-			AlignContent="Start"
-			AlignItems="Center"/>
+                    HorizontalOptions="Start"
+                    VerticalOptions="Center"
+                    Direction="Row"
+                    Wrap="Wrap"
+                    Margin="0,0,0,5"
+                    JustifyContent="Start"
+                    AlignContent="Start"
+                    AlignItems="Center"/>
                         </chip:SfChipGroup.ChipLayout>
                     </chip:SfChipGroup>
 
@@ -678,7 +678,7 @@ HorizontalOptions="Start" />
                             </Grid.ColumnDefinitions>
 
                             <Image Source="searchbaricon.png" HorizontalOptions="Center" VerticalOptions="Center" HeightRequest="15" WidthRequest="15" Grid.Row="0" Grid.Column="0"/>
-                            <Entry BackgroundColor="Transparent" x:Name="searchmedentry" TextChanged="searchmedentry_TextChanged"  Placeholder="Search Medications" Margin="5,0,10,0" PlaceholderColor="LightGray" Grid.Row="0" Grid.Column="1" IsTextPredictionEnabled="False" Keyboard="Text" TextColor="#031926" FontFamily="HankenGroteskRegular"/>
+                            <Entry BackgroundColor="Transparent" Background="Transparent" x:Name="searchmedentry" TextChanged="searchmedentry_TextChanged"  Placeholder="Search Medications" Margin="5,0,10,0" PlaceholderColor="LightGray" Grid.Row="0" Grid.Column="1" IsTextPredictionEnabled="False" Keyboard="Text" TextColor="#031926" FontFamily="HankenGroteskRegular"/>
 
                         </Grid>
                     </Frame>
@@ -1020,7 +1020,11 @@ Text="Skip" />
    FontAttributes="Bold"
    Margin="0,0,0,10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
    FontSize="10"
-   HorizontalOptions="Center" />
+   HorizontalOptions="Center" >
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1" NumberOfTapsRequired="1"/>
+                    </Label.GestureRecognizers>
+                </Label>
 
                 <Label
 x:Name="extidlbl"

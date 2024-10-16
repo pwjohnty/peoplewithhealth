@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.Messaging;
+using Mopups.Services;
 using Syncfusion.Maui.Charts;
 using System.Collections.ObjectModel;
 
@@ -12,7 +13,22 @@ public partial class SingleMeasurement : ContentPage
     ObservableCollection<usermeasurement> usermeasurementchartlist = new ObservableCollection<usermeasurement>();
     ObservableCollection<usermeasurement> orderlistbydate = new ObservableCollection<usermeasurement>();
     ObservableCollection<measurement> measurementlist = new ObservableCollection<measurement>();
+    ObservableCollection<usermeasurement> deleeteusermeasurementlistpassed = new ObservableCollection<usermeasurement>();
     bool newmeasurement;
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            NotasyncMethod(Ex);
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
     public SingleMeasurement()
 	{
 		InitializeComponent();
@@ -321,13 +337,13 @@ public partial class SingleMeasurement : ContentPage
             }
 
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            await crashHandler.CrashDetectedSend(Ex);
         }
     }
 
-    private void OnSelectionChanged(object sender, ChartSelectionChangedEventArgs e)
+    async private void OnSelectionChanged(object sender, ChartSelectionChangedEventArgs e)
     {
         try
         {
@@ -342,9 +358,9 @@ public partial class SingleMeasurement : ContentPage
 
 
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            await crashHandler.CrashDetectedSend(Ex);
         }
     }
 
@@ -361,9 +377,9 @@ public partial class SingleMeasurement : ContentPage
                 await Navigation.PushAsync(new AddMeasurement(usermeasurementpassed, usermeasurementlistpassed, measurementlist), false);
             }
         }
-        catch(Exception ex )
+        catch(Exception Ex )
         {
-
+            await crashHandler.CrashDetectedSend(Ex);
         }
     }
 
@@ -375,9 +391,71 @@ public partial class SingleMeasurement : ContentPage
             var usermeasurementalldatalist = new ObservableCollection<usermeasurement>(usermeasurementlistpassed.Where(x => x.measurementid == usermeasurementpassed.measurementid));
             await Navigation.PushAsync(new ShowAllData(usermeasurementalldatalist, usermeasurementlistpassed, measurementlist), false);
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            await crashHandler.CrashDetectedSend(Ex);
         }
+    }
+
+    async private void Deltebtn_Clicked(object sender, EventArgs e)
+    {
+        //Delete Symptom 
+        try
+        {
+            bool Delete = await DisplayAlert("Delete Measurement", "Are you sure you would like the delete this Measurement? Once deleted it cannot be retrieved", "Delete", "Cancel");
+            if (Delete == true)
+            {
+                foreach(var item in usermeasurementlistpassed)
+                {
+                    if(usermeasurementpassed.measurementid == item.measurementid)
+                    {
+                        item.deleted = true; 
+                        deleeteusermeasurementlistpassed.Add(item); 
+                    }
+                }
+
+                foreach(var item in deleeteusermeasurementlistpassed)
+                {
+                    usermeasurementlistpassed.Remove(item); 
+                }
+                APICalls database = new APICalls();
+
+            //    var filteredMeasurements = usermeasurementlistpassed
+            //.GroupBy(m => m.measurementid)
+            //.Select(g => g.OrderByDescending(m => DateTime.Parse(m.inputdatetime))
+            //.First())
+            //.OrderByDescending(x => DateTime.Parse(x.inputdatetime))
+            //.ToList();
+
+                // Convert the filtered and sorted list to an ObservableCollection
+                ObservableCollection<usermeasurement> observableFilteredMeasurements = new ObservableCollection<usermeasurement>(usermeasurementlistpassed);
+                await MopupService.Instance.PushAsync(new PopupPageHelper("Measurement Deleted") { });
+
+                //update main page
+                //WeakReferenceMessenger.Default.Send(new UpdateListMainPage(observableFilteredMeasurements));
+
+                await database.DeleteUserMeasurements(deleeteusermeasurementlistpassed);
+               
+
+               
+                await Navigation.PushAsync(new MeasurementsPage());
+                var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(p => p is MeasurementsPage);
+                if (pageToRemoves != null)
+                {
+                    Navigation.RemovePage(pageToRemoves);
+                }
+                Navigation.RemovePage(this);
+                await Task.Delay(1500);
+                await MopupService.Instance.PopAllAsync(false);
+            }
+            else
+            {
+                return;
+            }
+        }
+        catch (Exception Ex)
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }   
     }
 }

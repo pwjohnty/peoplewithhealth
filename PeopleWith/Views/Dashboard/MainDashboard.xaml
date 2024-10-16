@@ -4,6 +4,7 @@
              Shell.NavBarHasShadow="False" Shell.NavBarIsVisible="False"
              x:Class="PeopleWith.MainDashboard" BackgroundColor="White"
              >
+    <ScrollView>
     <VerticalStackLayout>
         <Label 
             FontSize="40" TextColor="Red"
@@ -21,9 +22,16 @@
 
         <Button Text="Schedule" BackgroundColor="Blue" Margin="0,20,0,0" Clicked="Button_Clicked_4Schedule"/>
 
+        <Button Text="Appointments" x:Name="AppointBtn" BackgroundColor="Green" Margin="0,20,0,0" Clicked="AppointBtn_Clicked"/>
+        <Button Text="HCPs" x:Name="HCPBtn" BackgroundColor="Green" Margin="0,20,0,0" Clicked="HCPBtn_Clicked"/>
 
         <Button Text="Supplements" BackgroundColor="Orange" Margin="0,20,0,0" Clicked="Button_Clicked_6"/>
 
+        <Button Text="Videos" x:Name="VideoBtn" BackgroundColor="Orange" Margin="0,20,0,0" Clicked="VideoBtn_Clicked"/>
 
     </VerticalStackLayout>
+
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

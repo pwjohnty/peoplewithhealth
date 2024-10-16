@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Syncfusion.Maui.Calendar;
+using Syncfusion.Maui.DataSource.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,7 +20,7 @@ namespace PeopleWith
         //add the names of the api followed with the url connection
         public const string Checkuseremail = "https://pwdevapi.peoplewith.com/api/user?$filter=email%20eq%20";
         public const string CheckuserPassword = "https://pwdevapi.peoplewith.com/api/user?$filter=password%20eq%20";
-       
+
         //Crash
         public const string AddCrash = "https://pwdevapi.peoplewith.com/api/crashlog";
 
@@ -28,7 +29,7 @@ namespace PeopleWith
         public const string Checksignupregquestions = "https://pwdevapi.peoplewith.com/api/question?$filter=signupcodereferral%20eq%20";
         public const string Checksignupreganswers = "https://pwdevapi.peoplewith.com/api/answer?$filter=signupcodereferral%20eq%20";
         public const string CheckConsentforsignupcode = "https://pwdevapi.peoplewith.com/api/consent?$filter=signupcodeid%20eq%20";
-      
+
         //User
         public const string InsertUser = "https://pwdevapi.peoplewith.com/api/user/";
         public const string InsertUserResponse = "https://pwdevapi.peoplewith.com/api/userresponse/";
@@ -43,7 +44,7 @@ namespace PeopleWith
         //Allergies  
         public const string Allergies = "https://pwdevapi.peoplewith.com/api/allergy";
 
-        
+
         //Symptoms
         public const string GetSymptoms = "https://pwdevapi.peoplewith.com/api/symptom?$select=symptomid,title";
 
@@ -67,13 +68,25 @@ namespace PeopleWith
         // Mood  
         public const string UserMood = "https://pwdevapi.peoplewith.com/api/usermood";
 
+        //HCPS
+        public const string UserHCPs = "https://pwdevapi.peoplewith.com/api/hcp";
+
+        //Appointment
+        public const string Appointments = "https://pwdevapi.peoplewith.com/api/appointment";
+
+        //Videos 
+        public const string Videos = "https://pwdevapi.peoplewith.com/api/video";
+        //Videos engagement
+        public const string VideosEngage = "https://pwdevapi.peoplewith.com/api/videoengagementdata";
+
+
 
         //Get User Details 
         public async Task<ObservableCollection<user>> GetuserDetails()
         {
             try
             {
-                var USERID = Helpers.Settings.UserKey; 
+                var USERID = Helpers.Settings.UserKey;
                 var url = $"https://pwdevapi.peoplewith.com/api/user/userid/{USERID}";
                 HttpClient client = new HttpClient();
                 HttpResponseMessage responseconsent = await client.GetAsync(url);
@@ -141,6 +154,7 @@ namespace PeopleWith
         {
             try
             {
+                ObservableCollection<usermeasurement> itemstoremove = new ObservableCollection<usermeasurement>();
                 string userid = Preferences.Default.Get("userid", "Unknown");
 
                 var url = "https://pwdevapi.peoplewith.com/api/usermeasurement?$filter=userid%20eq%20" + "%27" + userid + "%27";
@@ -152,6 +166,18 @@ namespace PeopleWith
                     string contentconsent = await responseconsent.Content.ReadAsStringAsync();
                     var userResponseconsent = JsonConvert.DeserializeObject<ApiResponseUserMeasurement>(contentconsent);
                     var consent = userResponseconsent.Value;
+
+                    foreach(var item in consent)
+                    {
+                        if(item.deleted == true)
+                        {
+                            itemstoremove.Add(item);
+                        }
+                    }
+                    foreach(var i in itemstoremove)
+                    {
+                        consent.Remove(i);
+                    }
 
                     return new ObservableCollection<usermeasurement>(consent);
 
@@ -209,24 +235,33 @@ namespace PeopleWith
             }
         }
 
+        //Delete User Measurement 
+     
         public async Task DeleteUserMeasurements(ObservableCollection<usermeasurement> deletelistpassed)
         {
             try
             {
-                //string userid = Preferences.Default.Get("userid", "Unknown");
                 for (int i = 0; i < deletelistpassed.Count; i++)
                 {
-
-
                     var url = $"https://pwdevapi.peoplewith.com/api/usermeasurement/id/{deletelistpassed[i].id}";
-                    HttpClient client = new HttpClient();
-                    HttpResponseMessage responseconsent = await client.DeleteAsync(url);
+                    string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = deletelistpassed[i].deleted });
+                    StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                    if (responseconsent.IsSuccessStatusCode)
+                    using (var client = new HttpClient())
                     {
+                        var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                        {
+                            Content = content
+                        };
+
+                        var response = await client.SendAsync(request);
+
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            var errorResponse = await response.Content.ReadAsStringAsync();
+                        }
                     }
                 }
-
             }
             catch (Exception ex)
             {
@@ -733,6 +768,61 @@ namespace PeopleWith
                         // Deserialize the feedback string into the FeedbackList
                         if (rawSymptom.schedule == null)
                         {
+                        var feedbackSymptoms = JsonConvert.DeserializeObject<List<MedtimesDosages>>(rawSymptom.schedule);
+                        // Add only the relevant feedback to this usersymptom
+                        if (newUserSymptom.deleted == true)
+                        {
+                            //Do Nothing
+                        }
+                        else
+                        {
+                            int index = 0;
+                            foreach (var feedback in feedbackSymptoms)
+                            {
+                                newUserSymptom.schedule.Add(feedback);
+                                var dosage = feedback.Dosage;
+                                var time = feedback.time;
+                                //Daily
+                                var getfreq = newUserSymptom.frequency.Split('|');
+                                if (getfreq[0] == "Daily" || getfreq[0] == "Days Interval")
+                                {
+                                    var DosageTime = time + "|" + dosage;
+                                    newUserSymptom.TimeDosage.Add(DosageTime);
+                                }
+                                //Weekly
+                                else if (getfreq[0] == "Weekly" || getfreq[0] == "Weekly ")
+                                {
+                                    var freq = newUserSymptom.frequency.Split('|');
+                                    if (freq[1].Contains(","))
+                                    {
+                                        var days = freq[1].Split(',').ToList();
+                                        int GetCount = feedbackSymptoms.Count / days.Count;
+                                        var duplicatedDays = Enumerable.Repeat(days, GetCount).SelectMany(x => x).ToList();
+                                        feedback.Day = duplicatedDays[index];
+                                        if (newUserSymptom.TimeDosage.Count == feedbackSymptoms.Count)
+                                        {
+                                            //Do nothing 
+                                        }
+                                        else
+                                        {
+                                            for (int i = 0; i < feedbackSymptoms.Count; i++)
+                                            {
+                                                var getday = duplicatedDays[i];
+                                                var DosageTimes = time + "|" + dosage + "|" + getday;
+                                                newUserSymptom.TimeDosage.Add(DosageTimes);
+                                            }
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        var getday = freq[1];
+                                        var DosageTimes = time + "|" + dosage + "|" + getday;
+                                        newUserSymptom.TimeDosage.Add(DosageTimes);
+                                    }
+                                }
+                                index = index + 1;
+                            }
 
                         }
                         else
@@ -773,7 +863,7 @@ namespace PeopleWith
 
                             if (newUserSymptom.feedback == null)
                             {
-                                newUserSymptom.feedback = new ObservableCollection<MedSuppFeedback>(); 
+                                newUserSymptom.feedback = new ObservableCollection<MedSuppFeedback>();
                             }
                             foreach (var feedback in medfeedback)
                             {
@@ -781,7 +871,7 @@ namespace PeopleWith
                             }
                         }
 
-                        if(newUserSymptom.deleted == true)
+                        if (newUserSymptom.deleted == true)
                         {
                             //Ignore
                         }
@@ -789,7 +879,7 @@ namespace PeopleWith
                         {
                             userSymptomsList.Add(newUserSymptom);
                         }
-                        
+
                     }
                 }
                 return new ObservableCollection<usermedication>(userSymptomsList);
@@ -1014,6 +1104,7 @@ namespace PeopleWith
                 var payload = new
                 {
                     status = updatedmed.status
+                    schedule = Updatefeedback.schedule
                 };
 
                 // Serialize the object into JSON
@@ -1287,7 +1378,7 @@ namespace PeopleWith
                 //Error Occured on Crashlog 
             }
         }
-            
+
         //Get All Allergies Data 
 
         public class ApiAllergies
@@ -1442,8 +1533,37 @@ namespace PeopleWith
             }
         }
 
+        //public class ApiSingleDiagnosis
+        //{
+        //    public List<diagnosis> Value { get; set; }
+        //}
+
+        //Get Single Diagnosis Information
+        public async Task<ObservableCollection<diagnosis>> GetAsyncSingleDiagnosis(string Diagid)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+
+                // Use string interpolation to insert Diagid
+                var URl = $"https://pwdevapi.peoplewith.com/api/diagnosis/diagnosisid/{Diagid}";
+
+                HttpResponseMessage response = await client.GetAsync(URl);
+                string data = await response.Content.ReadAsStringAsync();
+
+                var userResponse = JsonConvert.DeserializeObject<ApiDiagnosis>(data);
+                ObservableCollection<diagnosis> users = userResponse.Value;
+                return new ObservableCollection<diagnosis>(users.Take(Range.All));
+
+            }
+            catch (Exception ex)
+            {
+                return new ObservableCollection<diagnosis>();
+            }
+        }
+
         //Post UserDiagnosis Data  
-        public async Task<ObservableCollection<userdiagnosis>>PostUserDiagnosisAsync(ObservableCollection<userdiagnosis> UserDiagnosisPassed)
+        public async Task<ObservableCollection<userdiagnosis>> PostUserDiagnosisAsync(ObservableCollection<userdiagnosis> UserDiagnosisPassed)
         {
             try
             {
@@ -1589,6 +1709,68 @@ namespace PeopleWith
         {
             public ObservableCollection<rawusersupplement> Value { get; set; }
         }
+
+
+
+        //Get All User Supplements
+        public async Task<ObservableCollection<usersupplement>> GetUserSupplementsAsync()
+        {
+            try
+            {
+
+
+                HttpClient client = new HttpClient();
+                string userid = Preferences.Default.Get("userid", "Unknown");
+                string urlWithQuery = $"{usersupplements}?$filter=userid eq '{userid}'";
+                HttpResponseMessage response = await client.GetAsync(urlWithQuery);
+                string data = await response.Content.ReadAsStringAsync();
+                // Deserialize the response into a generic structure
+                var rawResponse = JsonConvert.DeserializeObject<SingleUserSupplement>(data);
+                var userSymptomsList = new List<usersupplement>();
+                if (rawResponse?.Value != null)
+                {
+                    foreach (var rawSymptom in rawResponse.Value)
+                    {
+                        var newUserSymptom = new usersupplement
+                        {
+                            id = rawSymptom.id,
+                            userid = rawSymptom.userid,
+                            supplementid = rawSymptom.supplementid,
+                            supplementtitle = rawSymptom.supplementtitle,
+                            startdate = rawSymptom.startdate,
+                            enddate = rawSymptom.enddate,
+                            frequency = rawSymptom.frequency,
+                            diagnosis = rawSymptom.diagnosis,
+                            status = rawSymptom.status,
+                            feedback = rawSymptom.feedback,
+                            //details = rawSymptom.details,
+                            formulation = rawSymptom.formulation,
+                            preparation = rawSymptom.preparation,
+                            unit = rawSymptom.unit,
+                            schedule = new ObservableCollection<MedtimesDosages>()
+
+                        };
+                        // Deserialize the feedback string into the FeedbackList
+                        var feedbackSymptoms = JsonConvert.DeserializeObject<List<MedtimesDosages>>(rawSymptom.schedule);
+                        // Add only the relevant feedback to this usersymptom
+
+                        foreach (var feedback in feedbackSymptoms)
+                        {
+                            newUserSymptom.schedule.Add(feedback);
+                        }
+                        userSymptomsList.Add(newUserSymptom);
+                        //userSymptomsList[0].dosage
+
+                    }
+                }
+                return new ObservableCollection<usersupplement>(userSymptomsList);
+            }
+            catch (Exception ex)
+            {
+                return new ObservableCollection<usersupplement>();
+            }
+        }
+
 
 
 
@@ -1751,5 +1933,402 @@ namespace PeopleWith
 
             }
         }
+
+
+        //Get All User HCP'S
+        public async Task<ObservableCollection<hcp>> GetUserHCP()
+        {
+            try
+            {
+                ObservableCollection<hcp> itemstoremove = new ObservableCollection<hcp>();
+                var userid = Helpers.Settings.UserKey;
+                string urlWithQuery = $"{UserHCPs}?$filter=userid eq '{userid}'";
+                HttpClient client = new HttpClient();
+                HttpResponseMessage responseconsent = await client.GetAsync(urlWithQuery);
+
+                if (responseconsent.IsSuccessStatusCode)
+                {
+                    string contentconsent = await responseconsent.Content.ReadAsStringAsync();
+                    var userResponseconsent = JsonConvert.DeserializeObject<ApiResponeHCP>(contentconsent);
+                    var consent = userResponseconsent.Value;
+
+                    //Remove All Deleted Items 
+                    foreach (var item in consent)
+                    {
+                        if (item.deleted == true)
+                        {
+                            itemstoremove.Add(item);
+                        }
+                    }
+
+                    foreach (var item in itemstoremove)
+                    {
+                        consent.Remove(item);
+                    }
+
+                    return new ObservableCollection<hcp>(consent);
+
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
+        //Add User HCP's
+        public async Task<ObservableCollection<hcp>> PostUserHCPAsync(ObservableCollection<hcp> HCPPassed)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                var urls = APICalls.UserHCPs;
+                string jsonns = System.Text.Json.JsonSerializer.Serialize<hcp>(HCPPassed[0]);
+                StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync(urls, contenttts);
+                var errorResponse = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    var jsonResponse = JObject.Parse(responseContent);
+                    var id = jsonResponse["value"]?[0]?["hcpid"]?.ToString();
+                    HCPPassed[0].hcpid = id;
+
+                }
+                else
+                {
+                    string errorcontent = await response.Content.ReadAsStringAsync();
+                    var s = errorcontent;
+                }
+
+
+                return new ObservableCollection<hcp>(HCPPassed);
+            }
+
+            catch (Exception ex)
+            {
+                return new ObservableCollection<hcp>();
+            }
+        }
+
+        //Update HCP Exisiting Item 
+        public async Task UpdateHCPItem(hcp Updatefeedback)
+        {
+            try
+            {
+                string id = Updatefeedback.hcpid;
+                var url = $"https://pwdevapi.peoplewith.com/api/hcp/hcpid/{id}";
+                string json = System.Text.Json.JsonSerializer.Serialize(Updatefeedback);
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                using (var client = new HttpClient())
+                {
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+
+                    var response = await client.SendAsync(request);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                }
+                return;
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+        }
+
+
+
+
+        //Delete User HCP
+        public async Task DeleteUserHCP(hcp Updatefeedback)
+        {
+            try
+            {
+                string id = Updatefeedback.hcpid;
+                var url = $"https://pwdevapi.peoplewith.com/api/hcp/hcpid/{id}";
+                string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = Updatefeedback.deleted });
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                using (var client = new HttpClient())
+                {
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+
+                    var response = await client.SendAsync(request);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                }
+                return;
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+        }
+
+
+        //Get All User Appointments 
+
+        public async Task<ObservableCollection<appointment>> GetUserAppointment()
+        {
+            try
+            {
+                ObservableCollection<appointment> itemstoremove = new ObservableCollection<appointment>();
+                var userid = Helpers.Settings.UserKey;
+                string urlWithQuery = $"{Appointments}?$filter=userid eq '{userid}'";
+                HttpClient client = new HttpClient();
+                HttpResponseMessage responseconsent = await client.GetAsync(urlWithQuery);
+
+                if (responseconsent.IsSuccessStatusCode)
+                {
+                    string contentconsent = await responseconsent.Content.ReadAsStringAsync();
+                    // Add Feedback Converter
+                    var settings = new JsonSerializerSettings();
+                    settings.Converters.Add(new AppointmentFeedbackConverter());
+                    var userResponseconsent = JsonConvert.DeserializeObject<ApiResponeAppointment>(contentconsent, settings);
+                    var consent = userResponseconsent.Value;
+
+                    //Remove All Deleted Items 
+                    foreach (var item in consent)
+                    {
+                        if (item.deleted == true)
+                        {
+                            itemstoremove.Add(item);
+                        }
+                    }
+
+                    foreach (var item in itemstoremove)
+                    {
+                        consent.Remove(item);
+                    }
+
+                    return new ObservableCollection<appointment>(consent);
+
+                }
+                else
+                {
+                    return null;
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        //Update User Appointment
+
+        public async Task UpdateAppointmentItem(appointment Updatefeedback)
+        {
+            try
+            {
+                string id = Updatefeedback.id;
+                var url = $"https://pwdevapi.peoplewith.com/api/appointment/id/{id}";
+
+                string json = System.Text.Json.JsonSerializer.Serialize(Updatefeedback);
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                using (var client = new HttpClient())
+                {
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+
+                    var response = await client.SendAsync(request);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                }
+                return;
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+        }
+
+        //Delete User Appointment 
+
+        public async Task DeleteUserAppointment(appointment Updatefeedback)
+        {
+            try
+            {
+                string id = Updatefeedback.id;
+                var url = $"https://pwdevapi.peoplewith.com/api/appointment/id/{id}";
+                string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = Updatefeedback.deleted });
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                using (var client = new HttpClient())
+                {
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+
+                    var response = await client.SendAsync(request);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                }
+                return;
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+        }
+
+        //Add User Appointment
+        public async Task<ObservableCollection<appointment>> PostUserAppointmentAsync(ObservableCollection<appointment> AppointmentPassed)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                var urls = APICalls.Appointments;
+
+                string jsonns = System.Text.Json.JsonSerializer.Serialize<appointment>(AppointmentPassed[0]);
+                StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
+
+                var response = await client.PostAsync(urls, contenttts);
+                var errorResponse = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    var jsonResponse = JObject.Parse(responseContent);
+                    var id = jsonResponse["value"]?[0]?["id"]?.ToString();
+                    AppointmentPassed[0].id = id;
+
+                }
+                else
+                {
+                    string errorcontent = await response.Content.ReadAsStringAsync();
+                    var s = errorcontent;
+                }
+
+
+                return new ObservableCollection<appointment>(AppointmentPassed);
+            }
+
+            catch (Exception ex)
+            {
+                return new ObservableCollection<appointment>();
+            }
+        }
+
+
+        //Get All User Videos
+        public async Task<ObservableCollection<videos>> GetAllVideos()
+        {
+            try
+            {
+                ObservableCollection<videos> itemstoremove = new ObservableCollection<videos>();
+                var urls = APICalls.Videos;
+                HttpClient client = new HttpClient();
+                HttpResponseMessage responseconsent = await client.GetAsync(urls);
+
+                if (responseconsent.IsSuccessStatusCode)
+                {
+                    string contentconsent = await responseconsent.Content.ReadAsStringAsync();
+                    var userResponseconsent = JsonConvert.DeserializeObject<ApiResponseVideos>(contentconsent);
+                    var consent = userResponseconsent.Value;
+
+                    //Remove All Deleted Items 
+                    foreach (var item in consent)
+                    {
+                        if (item.deleted == true)
+                        {
+                            itemstoremove.Add(item);
+                        }
+
+                        item.dateandlength = item.dateadded + " " + "Length: " + item.lenght;
+                        item.thumbnail = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/" + item.thumbnail;
+                        item.filename = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/" + item.filename;
+
+                        if(item.subtitle.Length > 122)
+                        {
+                            var SubString = item.subtitle.Substring(0, 122) + "...";
+                            item.subtitleshort = SubString;
+                        }
+                        else
+                        {
+                            item.subtitleshort = item.subtitle;
+                        }
+                    }
+
+                    foreach (var item in itemstoremove)
+                    {
+                        consent.Remove(item);
+                    }
+
+                    return new ObservableCollection<videos>(consent);
+
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        //Update Video Engagement 
+        public async Task<videoengage> PostEngagementAsync(videoengage PassedEngagement)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                var url = APICalls.VideosEngage;
+                string jsonns = System.Text.Json.JsonSerializer.Serialize<videoengage>(PassedEngagement);
+                StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync(url, contenttts);
+                var errorResponse = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    //Do Nothing 
+                    return null; 
+                }
+                else
+                {
+                    string errorcontent = await response.Content.ReadAsStringAsync();
+                    var s = errorcontent;
+                    return null;
+                }
+                // return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
     }
+    
 }

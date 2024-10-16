@@ -52,6 +52,12 @@ namespace PeopleWith.Helpers
             set => Preferences.Set(nameof(IsActive), false);
         }
 
+        public static bool NotificationsEnabled
+        {
+            get => Preferences.Get(nameof(NotificationsEnabled), true);
+            set => Preferences.Set(nameof(NotificationsEnabled), false);
+        }
+
 
         private const string UserIDKey = "userid";
         private static readonly string UserKeyDefault = string.Empty;

@@ -69,7 +69,7 @@ public partial class SingleMood : ContentPage
     {
         try
         {
-            bool Delete = await DisplayAlert("Delete Mood", "Are you sure you would like the delete this Mood?. Once deleted it cannot be retrieved", "Delete", "Cancel");
+            bool Delete = await DisplayAlert("Delete Mood", "Are you sure you would like the delete this Mood? Once deleted it cannot be retrieved", "Delete", "Cancel");
             if (Delete == true)
             {
 

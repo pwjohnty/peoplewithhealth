@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PeopleWith.SingleDiagnosis"
              xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+             xmlns:PdfViewer="clr-namespace:Syncfusion.Maui.PdfViewer;assembly=Syncfusion.Maui.PdfViewer"
              BackgroundColor="White">
     <ContentPage.ToolbarItems>
         <ToolbarItem x:Name="EditBtn" Text="Edit"  Clicked="EditBtn_Clicked"  />
@@ -28,7 +29,7 @@
             </Frame>
 
             <Label Text="Details" Margin="10,0,0,0" FontFamily="HankenGroteskBold"  FontSize="20" VerticalOptions="Center" TextColor="#031926" />
-            <Frame HasShadow="False" BorderColor="#E5E5E5" BackgroundColor="Transparent" Margin="10,10,10,0">
+            <Frame x:Name="NoDiagDetails" IsVisible="False"  HasShadow="False" BorderColor="#E5E5E5" BackgroundColor="Transparent" Margin="10,10,10,0">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="90*"/>
@@ -41,13 +42,62 @@
                     <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1" NumberOfTapsRequired="1"/>
                 </Frame.GestureRecognizers>
             </Frame>
+            <Frame x:Name="DiagDetails" IsVisible="False"  HasShadow="False" BorderColor="#E5E5E5" BackgroundColor="Transparent" Margin="10,10,10,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="15*"/>
+                        <ColumnDefinition Width="75*"/>
+                        <ColumnDefinition Width="10*"/>
+                    </Grid.ColumnDefinitions>
+                    <Image  x:Name="DiagDetailsIMG" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Start" HeightRequest="30" WidthRequest="30" />
+                    <Label x:Name="DiagDetailslbl" Text="Diagnosis Information" Margin="0,0,0,0" Grid.Column="1" FontFamily="HankenGroteskBold"  FontSize="16" VerticalOptions="Center" TextColor="#031926" />
+                    <Image  Source="backbutton.png" Grid.Column="2" Rotation="180" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="15" WidthRequest="15" />
+                </Grid>
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_2" NumberOfTapsRequired="1"/>
+                </Frame.GestureRecognizers>
+            </Frame>
 
-            <Button x:Name="Deletebtn" Margin="20,50,20,0"  TextColor="Red" BackgroundColor="#E6E6FA" FontFamily="HankenGroteskBold" CornerRadius="10" Text="Delete Diagnosis" Clicked="Deletebtn_Clicked" />
-            <Label HorizontalTextAlignment="Start" Text="If this Diagnosis is deleted, you will lose all your Diagnosis Data." Margin="20,0,20,20" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="Red"  />
+
+
+
+            <Button x:Name="Deletebtn" Margin="20,50,20,0"  TextColor="Red" BackgroundColor="#ffe5e5" FontFamily="HankenGroteskBold" CornerRadius="10" Text="Delete Diagnosis" Clicked="Deletebtn_Clicked" />
+            <Label HorizontalTextAlignment="Start" Text="If this Diagnosis is deleted, you will lose all of your Diagnosis Data" Margin="20,0,20,20" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="DarkGray"   />
 
         </StackLayout>
+
+
+
+
+            <Grid  x:Name="WebViewerStack" IsVisible="False">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <WebView x:Name="WebView" Grid.Row="0" IsEnabled="True"  HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"  />
+            </Grid>
+
+        <Grid  x:Name="PDfStack" IsVisible="False">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <PdfViewer:SfPdfViewer x:Name="PdfView" Grid.Row="0" IsEnabled="True"  HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"  />
+        </Grid>
+
+
+
+
         <StackLayout x:Name="dateofBirth" IsVisible="False">
-            <Label Text="Date of Diagnosis" FontFamily="HankenGroteskBold" Margin="25,0,0,0" FontSize="20" TextColor="DarkGray"   />
+            <Label x:Name="Diagnosislbl" FontFamily="HankenGroteskBold" Margin="25,0,0,0" FontSize="26" TextColor="#031926"   />
+
+            <Label Text="Date of Diagnosis" FontFamily="HankenGroteskBold" Margin="25,10,0,0" FontSize="16" TextColor="#031926"   />
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -60,9 +110,8 @@
 
             </Grid>
             <Label x:Name="EntryError" IsVisible="False" Margin="25,0,25,0"  FontFamily="HankenGroteskRegualar" FontSize="12" TextColor="Red" />
-            <Button x:Name="AddBtn" Text="Update Diagnosis" IsEnabled="False" FontFamily="HankenGroteskBold" Clicked="UpdateBtn_Clicked" BackgroundColor="#E6E6FA" TextColor="#031926" Margin="0,10,0,5" HorizontalOptions="Center" HeightRequest="40" WidthRequest="150" />
+            <Button x:Name="AddBtn" Text="Update Diagnosis" IsEnabled="False" FontFamily="HankenGroteskBold" Clicked="UpdateBtn_Clicked" BackgroundColor="#E6E6FA" TextColor="#702963" Margin="20,10,20,5" HorizontalOptions="CenterAndExpand" HeightRequest="40" WidthRequest="300" />
         </StackLayout>
-
         <!--<StackLayout x:Name="SuccessScreen" VerticalOptions="Center" HorizontalOptions="Center" IsVisible="False">
             <Grid Margin="20,50,20,0">
                 <Grid.RowDefinitions>

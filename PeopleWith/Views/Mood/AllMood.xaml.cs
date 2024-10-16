@@ -142,4 +142,16 @@ public partial class AllMood : ContentPage
             //Add Crash log
         }
     }
+
+    async private void MoodInfoTapped(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            await MopupService.Instance.PushAsync(new Infopopup("mood") { });
+        }
+        catch (Exception Ex)
+        {
+            //await crashHandler.CrashDetectedSend(Ex);
+        }
+    }
 }

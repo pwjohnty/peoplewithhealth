@@ -37,19 +37,19 @@
                 <Image Grid.Column="1" HorizontalOptions="Start" IsVisible="False" HeightRequest="20" WidthRequest="20" Source="pinicon.png" />
             </Grid>
 
-            <pinview:PINView Grid.Row="3" PINValue="{Binding PinValue}" Focused="Pincode_Focused" IsPassword="True" BoxBackgroundColor="Transparent" Margin="0,10,0,0" x:Name="Pincode" BoxShape="Circle" AutoDismissKeyboard="True" PropertyChanged="Pincode_PropertyChanged"
+            <pinview:PINView x:Name="Pincode" Grid.Row="3" PINValue="{Binding PinValue}" Focused="Pincode_Focused" IsPassword="True" BoxBackgroundColor="Transparent" Margin="0,10,0,0"  BoxShape="Circle" AutoDismissKeyboard="True" PropertyChanged="Pincode_PropertyChanged"
              PINLength="4" HorizontalOptions="Center" PINEntryCompleted="Pincode_PINEntryCompleted" BoxBorderColor="LightGray" Color="#031926" >
             </pinview:PINView>
 
-            <Label Grid.Row="4" Text="Invalid Code" TextColor="Red" FontFamily="HankenGroteskRegular" FontAttributes="None" Margin="0,20,0,0" x:Name="incorrectcodelbl" FontSize="15" IsVisible="False" HorizontalOptions="Center" />
+            <Label x:Name="incorrectcodelbl" Grid.Row="4" Text="Invalid Code" TextColor="Red" FontFamily="HankenGroteskRegular" FontAttributes="None" Margin="0,20,0,0" FontSize="15" IsVisible="False" HorizontalOptions="Center" />
 
-            <Label Grid.Row="5" Text="Forgotten your Pin Code?" TextColor="#7393B3" FontFamily="HankenGroteskRegular" FontAttributes="None" Margin="0,20,0,0" FontSize="15" HorizontalOptions="Center" >
+            <Label x:Name="ForgotPassword" Grid.Row="5" Text="Forgotten your Pin Code?" TextColor="#7393B3" FontFamily="HankenGroteskRegular" FontAttributes="None" Margin="0,20,0,0" FontSize="15" HorizontalOptions="Center" >
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
                 </Label.GestureRecognizers>
             </Label>
 
-            <Grid Grid.Row="6" Margin="0,50,0,0">
+            <Grid x:Name="PinKeyPad" Grid.Row="6" Margin="0,50,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -75,11 +75,10 @@
                 <Button Text="9" Command="{Binding KeyTapped}" Padding="0" BackgroundColor="Transparent" CommandParameter="9" HeightRequest="60" TextColor="#031926" Grid.Row="2" Grid.Column="2" x:Name="Numnine" FontFamily="HankenGroteskBold" FontAttributes="None" FontSize="25" HorizontalOptions="Center" />
 
                 <ImageButton Command="{Binding FingerprintTapped}"  HeightRequest="30" WidthRequest="30" Grid.Row="3" Grid.Column="0" x:Name="fingerprint" HorizontalOptions="Center" VerticalOptions="Center" />
-                <Button Command="{Binding KeyTapped}" Padding="0" BackgroundColor="Transparent" CommandParameter="6" HeightRequest="60" TextColor="#031926" Text="0" Grid.Row="3" Grid.Column="1" x:Name="Numzero" FontFamily="HankenGroteskBold" FontAttributes="None" FontSize="25" HorizontalOptions="Center" VerticalOptions="Center" />
+                <Button Command="{Binding KeyTapped}" Padding="0" BackgroundColor="Transparent" CommandParameter="0" HeightRequest="60" TextColor="#031926" Text="0" Grid.Row="3" Grid.Column="1" x:Name="Numzero" FontFamily="HankenGroteskBold" FontAttributes="None" FontSize="25" HorizontalOptions="Center" VerticalOptions="Center" />
                 <ImageButton Source="delete.png" Command="{Binding DeleteTapped}" HeightRequest="30" WidthRequest="30" Grid.Row="3" Grid.Column="2" x:Name="delete" HorizontalOptions="Center"  VerticalOptions="Center"/>
 
             </Grid>
-
         </Grid>
     </VerticalStackLayout>
 </ContentPage>

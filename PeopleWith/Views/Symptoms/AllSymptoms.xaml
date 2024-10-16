@@ -14,9 +14,20 @@
     <ScrollView Orientation="Vertical" >
         <VerticalStackLayout>
 
-
-            <Label Text="Symptoms" FontSize="26" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
-
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+            <Label Text="Symptoms" FontSize="26" Grid.Column="0" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
+                <Frame x:Name="SympInfo" HasShadow="False" Padding="0" CornerRadius="5" Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,0,20,0" BorderColor="Orange" BackgroundColor="#fff7ea">
+                    <Label Text="i" FontFamily="HankenGroteskBold" HorizontalOptions="Center" TextColor="Orange" FontSize="12"  Grid.Column="1" VerticalOptions="Center" />
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="SympInfoTapped" NumberOfTapsRequired="1"/>
+                    </Frame.GestureRecognizers>
+                </Frame>
+                
+            </Grid>
             <!-- Update & Compare Stack -->
             <Grid Margin="10,5,10,5" >
                 <Grid.ColumnDefinitions>

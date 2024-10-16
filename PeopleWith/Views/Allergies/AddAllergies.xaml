@@ -7,9 +7,9 @@
              xmlns:local="clr-namespace:PeopleWith" BackgroundColor="White" >
     <VerticalStackLayout>
         <StackLayout x:Name="AllergyAdd" >
-            <Label Text="Add Allergy" FontFamily="HankenGroteskBold" FontSize="25"  Margin="20,0,0,0" HorizontalOptions="Center" VerticalOptions="Center" TextColor="#031926" />
+            <Label Text="Add Allergy" FontFamily="HankenGroteskBold" FontSize="25"  Margin="20,0,0,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" />
 
-            <Label Text="To add a Allergy type into the searchbar below to narrow your search, then Select Zed Allergy from the list below."  Margin="20,0,0,0" FontFamily="HankenGroteskRegular" FontSize="12"  HorizontalOptions="Center" VerticalOptions="Center" TextColor="DarkGray" />
+            <Label Text="To add a Allergy type into the searchbar below to narrow your search, then Select an Allergy from the list below"  Margin="20,0,0,0" FontFamily="HankenGroteskRegular" FontSize="12"  HorizontalOptions="Center" VerticalOptions="Center" TextColor="DarkGray" />
 
 
             <Grid Margin="20,10,20,0" x:Name="MainGrid">
@@ -20,14 +20,14 @@
                 </Grid.RowDefinitions>
 
 
-                <Frame Padding="0" HasShadow="False" Grid.Row="0" Grid.Column="0" Margin="0,0,0,0" InputTransparent="False" BorderColor="#E6E6E6" BackgroundColor="#E6E6E6" CornerRadius="{OnPlatform Android='25', iOS='20'}" >
+                <Frame Padding="0" HasShadow="False" Grid.Row="0" Grid.Column="0" Margin="0,0,0,0" InputTransparent="False" BorderColor="Transparent" BackgroundColor="#FFF5EE" CornerRadius="{OnPlatform Android='5', iOS='5'}" >
                     <Grid >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="10*"/>
                             <ColumnDefinition Width="90*"/>
                         </Grid.ColumnDefinitions>
-                        <Image Source="search.png" HeightRequest="15" BackgroundColor="Transparent" WidthRequest="15"  Grid.Row="0" Grid.Column="0"  />
-                        <Entry Grid.Row="0" Grid.Column="1" x:Name="searchbar"  ClearButtonVisibility="WhileEditing" InputTransparent="False"  TextChanged="searchbar_TextChanged" Placeholder="Add Allergy"  BackgroundColor="Transparent" Background="Transparent" HeightRequest="60"  TextColor="#031926"/>
+                        <Image Source="searchbrown.png" HeightRequest="15" BackgroundColor="Transparent" WidthRequest="15"  Grid.Row="0" Grid.Column="0"  />
+                        <Entry Grid.Row="0" Grid.Column="1" x:Name="searchbar" IsTextPredictionEnabled="False" IsSpellCheckEnabled="False"  ClearButtonVisibility="WhileEditing" InputTransparent="False"  TextChanged="searchbar_TextChanged" Placeholder="Add Allergy"  BackgroundColor="Transparent" Background="Transparent" HeightRequest="60"  TextColor="#031926"/>
                     </Grid>
                 </Frame>
 
@@ -51,7 +51,7 @@
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <Label Text="{Binding Title}" FontFamily="HankenGroteskRegular" Margin="5,0,0,0" Grid.Row="0" Grid.Column="0" Padding="0" HorizontalOptions="Start"  VerticalOptions="Center" TextColor="#031926" FontSize="14" FontAttributes="Bold" />
+                                        <Label Text="{Binding Title}" FontFamily="HankenGroteskRegular" Margin="5,0,0,0" Grid.Row="0" Grid.Column="0" Padding="0" HorizontalOptions="Start"  VerticalOptions="Center" TextColor="#031926" FontSize="14" FontAttributes="None" />
 
                                     </Grid>
 

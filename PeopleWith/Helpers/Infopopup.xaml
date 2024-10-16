@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Mopups:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                  xmlns:Animations="clr-namespace:Mopups.Animations;assembly=Mopups"
+                  xmlns:Mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+                  BackgroundInputTransparent="True"
+                  CloseWhenBackgroundIsClicked="False" BackgroundColor="White"
+                  x:Class="PeopleWith.Infopopup">
+    <Mopups:PopupPage.Animation>
+        <Animations:ScaleAnimation
+            PositionIn="Center"
+            PositionOut="Center"
+            DurationIn="200"
+            DurationOut="200"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="False"/>
+    </Mopups:PopupPage.Animation>
+    <VerticalStackLayout Margin="0" VerticalOptions="Center" BackgroundColor="Transparent">
+
+        <Grid Margin="20,0,20,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="6*"/>
+            </Grid.ColumnDefinitions>
+
+
+            <Image Source="backbutton.png" Grid.Row="0" Grid.Column="0" VerticalOptions="End" Margin="0,0,0,6" HorizontalOptions="Start" HeightRequest="20" WidthRequest="20">
+            <Image.GestureRecognizers>
+                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+            </Image.GestureRecognizers>
+        </Image>
+
+            <Label x:Name="titlelbl" HorizontalOptions="Start" VerticalOptions="Start" Grid.Row="0" Grid.Column="1" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="26" ></Label>
+
+            <!-- Symptoms -->
+
+            <Grid  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,10,0" RowSpacing="10" x:Name="syminfo" IsVisible="false">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                    <Label Text="A Symptom is commonly known as a physical or mental problem that a person may experience."  Grid.Row="0" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="Gray"  FontSize="16" FontFamily="HankenGroteskBold" />
+                    <Label Text="This can become an 'indication' towards a condition or a disease."  VerticalOptions="Center" Grid.Row="1" VerticalTextAlignment="Center" TextColor="Gray" FontSize="16" FontFamily="HankenGroteskBold"  />
+                    <Label Text="Common examples of Symptoms consist of headaches, stomach aches, upper back pains, fast heartbeats, flashbacks, etc. " Grid.Row="2"  VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="Gray" FontSize="16" FontFamily="HankenGroteskBold"  />
+                    <Label Text="Even though patients may experience these symptoms at the time, it can either deteriorate as a result of a person doing something or side effects, such as having bad headaches due to emotional stress or a change in sleeping pattern." Grid.Row="3" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="Gray" FontSize="16" FontFamily="HankenGroteskBold"  />
+                    <Label Text="On the other hand, a patient's symptom can improve when they take the right medications given to them by their doctor. For instance, if a patient has serious back pains they can do some stretching exercises as well as taking medication to relief the pain." Grid.Row="4" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="Gray" FontSize="16" FontFamily="HankenGroteskBold"  />
+                </Grid>
+
+        <!-- Medications -->
+
+            <Grid  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" RowSpacing="10" x:Name="medinfo" IsVisible="false">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Text="A Medication is a drug or other form of medicine that is used to treat or prevent diseases." Grid.Row="0" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="Gray" FontSize="16" FontFamily="HankenGroteskBold"  />
+                <Label Text="Medications can be used to cure a disease or condition, treat a medical condition or relieve symptoms of an illness." Grid.Row="1" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="Gray" FontSize="16" FontFamily="HankenGroteskBold"  />
+                <Label Text="The most common route for medications is orally (by mouth) in the form of pills, capsules or liquids. However, if the person is unable to take medications in this way, or if the medication is not available in oral form, medications can enter the body by other routes." Grid.Row="2"  VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="Gray" FontSize="16" FontFamily="HankenGroteskBold"  />
+                <Label Text="Always ensure your Medication is taken as directed by the health care professional that prescribed it." VerticalOptions="Center" VerticalTextAlignment="Center" Grid.Row="3" TextColor="Gray" FontSize="16" FontFamily="HankenGroteskBold"  />
+            </Grid>
+
+
+
+            <!-- Supplements -->
+
+            <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" RowSpacing="10" x:Name="suppinfo" IsVisible="false">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Text="A supplement or vitamin is a product intended to supplement a persons diet by taking a pill, capsule, table, powder or liquid." Grid.Row="0"  VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="Gray" FontSize="16" FontFamily="HankenGroteskBold"  />
+                    <Label Text="A supplement or vitamin can provide nutrients extracted from food sources, natural elements or are synthetic in order to increase the quantity of their consumption." Grid.Row="1"  VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="Gray" FontSize="16" FontFamily="HankenGroteskBold"  />
+                    <Label Text="The class of nutrient compounds includes; vitamins, minerals, fibre, fatty acids and amino acids." Grid.Row="1" VerticalTextAlignment="Center" TextColor="Gray" FontSize="16" FontFamily="HankenGroteskBold"  />
+            </Grid>
+
+
+
+        
+        <!-- Measurements -->
+
+            <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" RowSpacing="10" x:Name="measurementinfo" IsVisible="false">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Text="A measurement or as they are often referred to, Biomarkers, are health related measurements that can be quantified." Grid.Row="0"  VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="Gray" FontSize="16" FontFamily="HankenGroteskBold"  />
+                    <Label Text="A measurement or biomarker may be used to see how well the body responds to a treatment for a disease or condition." Grid.Row="1" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="Gray" FontSize="16" FontFamily="HankenGroteskBold"  />
+                    <Label Text="Home devices, wearables and clinical assessments can capture measurements and biomarkers."  VerticalOptions="Center" Grid.Row="2" VerticalTextAlignment="Center" TextColor="Gray" FontSize="16" FontFamily="HankenGroteskBold"  />
+                </Grid>
+
+
+
+
+        <!-- Daignosis -->
+
+            <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" RowSpacing="10" x:Name="diaginfo" IsVisible="false">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Text="Diagnosis is the endpoint of a complex process centred on a patient, collaborating with both the patient and other sources of clinical information such as PeopleWith, to reason backward as to the potential health issue causing the patient’s current condition." Grid.Row="0" VerticalOptions="Center"
+                 VerticalTextAlignment="Center" TextColor="Gray" FontSize="16" FontFamily="HankenGroteskBold"  />
+                <Label Text="Diagnosis in healthcare is among the most important processes since the protocol for patient treatment depends on this step. Even more, health research and policy draw on this area for their validity. For instance, research focuses are determined largely by diagnoses." Grid.Row="1" VerticalOptions="Center"
+                VerticalTextAlignment="Center" TextColor="Gray" FontSize="16" FontFamily="HankenGroteskBold"  />
+            </Grid>
+
+
+
+
+        <!-- Mood -->
+
+            <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" RowSpacing="10" x:Name="moodinfo" IsVisible="false">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Text="Mood can be defined as a relatively stable affective state often described as positive or negative. " Grid.Row="0" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="Gray" FontSize="16" FontFamily="HankenGroteskBold"  />
+                    <Label Text="Sometimes mood is described as one’s subjective feeling state and affects the outward expression of it. " Grid.Row="1" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="Gray" FontSize="16" FontFamily="HankenGroteskBold"  />
+                <Label Text="PeopleWith enables you to capture your mood and emotions, which provides a way to reflect and record of your mood at that time." Grid.Row="2" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="Gray" FontSize="16" FontFamily="HankenGroteskBold"  />
+            </Grid>
+    
+
+
+        <!-- Questionaires -->
+
+
+            <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" RowSpacing="10" x:Name="questioninfo" IsVisible="false">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                        <Label Text="Sometimes in assessments of health questionnaires or surveys are carried out to benchmark your health. A Health questionnaire is usually a multiple choice report that is carried out by you the individual, a healthcare professional or in some cases a parent or guardian." Grid.Row="0" VerticalOptions="Center"
+                         VerticalTextAlignment="Center" TextColor="Gray" FontSize="16" FontFamily="HankenGroteskBold"  />
+                       <Label Text="PeopleWith provide the ability for you to take health related questionnaires, suited to your condition." VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="Gray" Grid.Row="1" FontSize="16" FontFamily="HankenGroteskBold"  />
+                </Grid>
+
+
+
+        <!-- Allergies -->
+
+            <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" RowSpacing="10" x:Name="allergyinfo" IsVisible="false">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Text="An allergy is where your body reacts to something that's normally harmless like pollen, dust or animal fur. " Grid.Row="0" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="Gray" FontSize="16" FontFamily="HankenGroteskBold"  />
+                    <Label Text="The symptoms can be mild, but for some people they can be very serious " Grid.Row="1" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="Gray" FontSize="16" FontFamily="HankenGroteskBold"  />
+                <Label Text="PeopleWith enables you to capture your allergens at any given time." Grid.Row="2" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="Gray" FontSize="16" FontFamily="HankenGroteskBold"  />
+            </Grid>
+
+
+        <!-- hcp's -->
+
+            <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" RowSpacing="10" x:Name="hcpinfo" IsVisible="false">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Text="A Health Care Practitioner (HCP) is a professional who provides health care services to individuals, such as doctors, nurses, and specialists." Grid.Row="0" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="Gray" FontSize="16" FontFamily="HankenGroteskBold"  />
+                    <Label Text="HCPs can diagnose and treat various health conditions, and are essential in maintaining patient health." Grid.Row="1" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="Gray" FontSize="16" FontFamily="HankenGroteskBold"  />
+                    <Label Text="PeopleWith enables you to record your HCPs and manage your Appointments effectively." Grid.Row="2" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="Gray" FontSize="16" FontFamily="HankenGroteskBold"  />
+                </Grid>
+
+        </Grid>
+    </VerticalStackLayout>
+</Mopups:PopupPage>

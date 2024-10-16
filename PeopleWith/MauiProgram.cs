@@ -6,6 +6,8 @@ using Plugin.Fingerprint;
 using Syncfusion.Maui.Core.Hosting;
 using Plugin.LocalNotification;
 using Plugin.Maui.Biometric;
+using SkiaSharp.Views.Maui.Controls.Hosting;
+using CommunityToolkit.Maui;
 
 namespace PeopleWith
 {
@@ -16,9 +18,12 @@ namespace PeopleWith
             var builder = MauiApp.CreateBuilder();
             builder
                 .ConfigureSyncfusionCore()
+                .UseMauiCommunityToolkitMediaElement()
+                .UseMauiCommunityToolkit()
                 .UseMauiApp<App>()
                 .UseLocalNotification()
                 .UseSegmentedControl()
+                .UseSkiaSharp()
 #if ANDROID
                 .ConfigureMauiHandlers(handlers => handlers.AddHandler<Microsoft.Maui.Controls.Entry, PINView.Maui.Platforms.Android.Handlers.EntryHandler>())
 #endif
@@ -44,6 +49,7 @@ namespace PeopleWith
 #endif
             });
             //builder.Services.AddSingleton(typeof(IFingerprint), CrossFingerprint.Current);
+            builder.ConfigureSyncfusionCore();  
 
             // Use with Dependency Injection
             builder.Services.AddSingleton<IBiometric>(BiometricAuthenticationService.Default);

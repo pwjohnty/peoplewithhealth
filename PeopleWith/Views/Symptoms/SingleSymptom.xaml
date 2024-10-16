@@ -209,7 +209,7 @@ Padding="10">
 
 
                 <Button  Text="Delete Symptom" Clicked="Button_Clicked_1" FontSize="Small" Margin="0,40,0,5" FontFamily="HankenGroteskBold" BackgroundColor="#ffe5e5" TextColor="Red" CornerRadius="10" />
-                <Label HorizontalTextAlignment="Start" Text="If your symptom is deleted you will lose all your symptom feedback, even if your symptom is restored at a later date. You can change the symptom to inactive which will allow you to reactivate at any later date and keep all your feedback data." Margin="20,0,20,20" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Start" FontSize="10" TextColor="DarkGray"  />
+                <Label HorizontalTextAlignment="Start" Text="If your symptom is deleted you will lose all your symptom feedback" Margin="20,0,20,20" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Start" FontSize="10" TextColor="DarkGray"  />
 
 
 

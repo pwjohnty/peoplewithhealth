@@ -10,7 +10,6 @@ public partial class AddDiagnosis : ContentPage
     public ObservableCollection<diagnosis> DiagnosisList = new ObservableCollection<diagnosis>();
     public ObservableCollection<diagnosis> itemstoremove = new ObservableCollection<diagnosis>();
     public ObservableCollection<diagnosis> FilterResults = new ObservableCollection<diagnosis>();
-    public ObservableCollection<userdiagnosis> AllUserDiagnosis = new ObservableCollection<userdiagnosis>();
     public ObservableCollection<userdiagnosis> DiagnosistoAdd = new ObservableCollection<userdiagnosis>();
     public ObservableCollection<userdiagnosis> DiagnosisPassed = new ObservableCollection<userdiagnosis>();
     public ObservableCollection<userdiagnosis> DiagnosisAdded = new ObservableCollection<userdiagnosis>();
@@ -160,7 +159,7 @@ public partial class AddDiagnosis : ContentPage
             {
                 InitalDiagnosisAdd.IsVisible = false;
                 dateofBirth.IsVisible = true;
-                Title = Diagnos.Title;
+                Diagnosislbl.Text = Diagnos.Title;
                 diagnosistitle = Diagnos.Title;
                 foreach (var item in DiagnosisList)
                 {
@@ -215,10 +214,10 @@ public partial class AddDiagnosis : ContentPage
                     await Task.Delay(1500);
                     foreach ( var item in DiagnosisAdded)
                     {
-                        AllUserDiagnosis.Add(item); 
+                        DiagnosisPassed.Add(item); 
                     }
                     await MopupService.Instance.PopAllAsync(false);
-                    await Navigation.PushAsync(new AllDiagnosis(AllUserDiagnosis));
+                    await Navigation.PushAsync(new AllDiagnosis(DiagnosisPassed));
                     var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is AllDiagnosis);
                     if (pageToRemoves != null)
                     {
