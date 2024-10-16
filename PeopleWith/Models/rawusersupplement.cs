@@ -22,6 +22,9 @@ namespace PeopleWith
         public string diagnosis { get; set; }
         public string status { get; set; }
         public string feedback { get; set; }
-        //public string details { get; set; }
+        public string details { get; set; }
+        public bool deleted { get; set; }
+
+        public string supplementquestions { get; set; }
     }
 }

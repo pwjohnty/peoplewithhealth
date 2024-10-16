@@ -25,5 +25,7 @@ namespace PeopleWith
         public string details { get; set; }
         public bool deleted { get; set; }
 
+        public string medicationquestions { get; set ; }
+
     }
 }

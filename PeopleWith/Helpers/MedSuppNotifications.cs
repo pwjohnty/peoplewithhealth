@@ -19,13 +19,25 @@ namespace PeopleWith
             {
 
                 //calaulte the time to start notification
-               
+
 
                 var sd = DateTime.Parse(startdate);
 
                 var startdateandtime = sd + time;
 
-                var notdescription = dosage + dosageunit + " " + name + " due";
+                var notdescription = "";
+
+                if (dosage.Contains("|"))
+                {
+                    var split = dosage.Split('|');
+
+                    notdescription = split[0] + " " + dosageunit + " " + split[1] + " " + name + " due";
+                }
+                else
+                {
+
+                    notdescription = dosage + dosageunit + " " + name + " due";
+                }
 
                 var notification = new NotificationRequest
                 {
@@ -65,9 +77,21 @@ namespace PeopleWith
                 var startdateandtime = sd + time;
                 var enddatewithtime = ed + time;
 
-                var notdescription = dosage + dosageunit + " " + name + " due";
+                var notdescription = "";
 
-                    var notification = new NotificationRequest
+                if (dosage.Contains("|"))
+                {
+                    var split = dosage.Split('|');
+
+                    notdescription = split[0] + " " + dosageunit + " " + split[1] + " " + name + " due";
+                }
+                else
+                {
+
+                    notdescription = dosage + dosageunit + " " + name + " due";
+                }
+
+                var notification = new NotificationRequest
                     {
                         NotificationId = notid, 
                         Title = nottitle,
@@ -129,7 +153,19 @@ namespace PeopleWith
                 }
 
 
-                var notdescription = dosage + dosageunit + " " + name + " due";
+                var notdescription = "";
+
+                if (dosage.Contains("|"))
+                {
+                    var split = dosage.Split('|');
+
+                    notdescription = split[0] + " " + dosageunit + " " + split[1] + " " + name + " due";
+                }
+                else
+                {
+
+                    notdescription = dosage + dosageunit + " " + name + " due";
+                }
 
                 var notification = new NotificationRequest
                 {
@@ -196,7 +232,19 @@ namespace PeopleWith
                 }
 
 
-                var notdescription = dosage + dosageunit + " " + name + " due";
+                var notdescription = "";
+
+                if (dosage.Contains("|"))
+                {
+                    var split = dosage.Split('|');
+
+                    notdescription = split[0] + " " + dosageunit + " " + split[1] + " " + name + " due";
+                }
+                else
+                {
+
+                    notdescription = dosage + dosageunit + " " + name + " due";
+                }
 
                 var notification = new NotificationRequest
                 {
@@ -256,7 +304,19 @@ namespace PeopleWith
 
                 var startdateandtime = sd + time;
 
-                var notdescription = dosage + dosageunit + " " + name + " due";
+                var notdescription = "";
+
+                if (dosage.Contains("|"))
+                {
+                    var split = dosage.Split('|');
+
+                    notdescription = split[0] + " " + dosageunit + " " + split[1] + " " + name + " due";
+                }
+                else
+                {
+
+                    notdescription = dosage + dosageunit + " " + name + " due";
+                }
 
                 var notification = new NotificationRequest
                 {
@@ -300,7 +360,19 @@ namespace PeopleWith
                 var startdateandtime = sd + time;
                 var endateandtime = ed + time;
 
-                var notdescription = dosage + dosageunit + " " + name + " due";
+                var notdescription = "";
+
+                if (dosage.Contains("|"))
+                {
+                    var split = dosage.Split('|');
+
+                    notdescription = split[0] + " " + dosageunit + " " + split[1] + " " + name + " due";
+                }
+                else
+                {
+
+                    notdescription = dosage + dosageunit + " " + name + " due";
+                }
 
                 var notification = new NotificationRequest
                 {

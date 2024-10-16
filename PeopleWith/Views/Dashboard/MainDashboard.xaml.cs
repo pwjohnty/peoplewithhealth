@@ -168,4 +168,15 @@ public partial class MainDashboard : ContentPage
 
     }
 
+    private async void Button_Clicked_6(object sender, EventArgs e)
+    {
+        try
+        {
+            await Navigation.PushAsync(new AllSupplements(), false);
+        }
+        catch (Exception Ex)
+        {
+
+        }
+    }
 }

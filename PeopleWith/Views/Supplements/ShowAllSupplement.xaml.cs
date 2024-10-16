@@ -2,96 +2,96 @@ using System.Collections.ObjectModel;
 
 namespace PeopleWith;
 
-public partial class ShowAllMedication : ContentPage
+public partial class ShowAllSupplement : ContentPage
 {
-	usermedication MedSelected = new usermedication();
-	ObservableCollection<usermedication> MedicationList = new ObservableCollection<usermedication>();
-    ObservableCollection<usermedication> MedicationNotRecordedList = new ObservableCollection<usermedication>();
-    Color SetColour; 
+    usersupplement MedSelected = new usersupplement();
+    ObservableCollection<usersupplement> MedicationList = new ObservableCollection<usersupplement>();
+    ObservableCollection<usersupplement> MedicationNotRecordedList = new ObservableCollection<usersupplement>();
+    Color SetColour;
 
-    public ShowAllMedication(usermedication SelectedMed)
-	{
-		try
-		{
-			InitializeComponent();
-			MedSelected = SelectedMed;
-			MedicationName.Text = MedSelected.medicationtitle;
+    public ShowAllSupplement(usersupplement SelectedMed)
+    {
+        try
+        {
+            InitializeComponent();
+            MedSelected = SelectedMed;
+            MedicationName.Text = MedSelected.supplementtitle;
 
-            PopulateListView(); 
-			
-		}
-		catch (Exception Ex)
-		{
+            PopulateListView();
 
-		}
+        }
+        catch (Exception Ex)
+        {
 
-	}
+        }
 
-	async private void PopulateListView()
-	{
-		try
-		{
+    }
 
-			if (MedSelected.frequency.Contains("|"))
-			{
-				var Freq = MedSelected.frequency.Split('|');
+    async private void PopulateListView()
+    {
+        try
+        {
 
-				//As Required Medication 
-				if (Freq[0] == "As Required")
-				{
-					//Only Populate With Feedback items 
-					if(MedSelected.feedback == null)
-					{
-						nodatastack.IsVisible = true;
-						datastack.IsVisible = false; 
+            if (MedSelected.frequency.Contains("|"))
+            {
+                var Freq = MedSelected.frequency.Split('|');
+
+                //As Required Medication 
+                if (Freq[0] == "As Required")
+                {
+                    //Only Populate With Feedback items 
+                    if (MedSelected.feedback == null)
+                    {
+                        nodatastack.IsVisible = true;
+                        datastack.IsVisible = false;
 
                     }
-					else
-					{
+                    else
+                    {
                         nodatastack.IsVisible = false;
                         datastack.IsVisible = true;
 
-						foreach(var item in MedSelected.feedback)
-						{
+                        foreach (var item in MedSelected.feedback)
+                        {
 
-							var RecordTime = DateTime.Parse(item.datetime).ToString("dd MMMM yy, HH:mm");
-							if (item.Recorded == "Taken")
-							{
-								 SetColour = Colors.LightGreen;
-							}
-							else
-							{
-                                 SetColour = Color.FromArgb("#ff6666");
+                            var RecordTime = DateTime.Parse(item.datetime).ToString("dd MMMM yy, HH:mm");
+                            if (item.Recorded == "Taken")
+                            {
+                                SetColour = Colors.LightGreen;
                             }
-							var NewMed = new usermedication();
-							NewMed.MedDateTime = RecordTime;
-						    NewMed.Colour = SetColour;
+                            else
+                            {
+                                SetColour = Color.FromArgb("#ff6666");
+                            }
+                            var NewMed = new usersupplement();
+                            NewMed.MedDateTime = RecordTime;
+                            NewMed.Colour = SetColour;
                             NewMed.Action = item.Recorded;
-							NewMed.id = item.id; 
-						    MedicationList.Add(NewMed);
+                            NewMed.id = item.id;
+                            MedicationList.Add(NewMed);
 
                         }
 
-						foreach(var item in MedicationList)
-						{
-							foreach(var x in MedSelected.schedule)
-							{
-								if(item.id == x.id.ToString())
-								{
-									item.Dosage = x.Dosage;
-									item.unit = x.dosageunit; 
-								}
-							}
-						}
+                        foreach (var item in MedicationList)
+                        {
+                            foreach (var x in MedSelected.schedule)
+                            {
+                                if (item.id == x.id.ToString())
+                                {
+                                    item.Dosage = x.Dosage;
+                                    item.unit = x.dosageunit;
+                                }
+                            }
+                        }
 
 
-				    var sortedlist = MedicationList.OrderBy(t => t.MedDateTime);
-					UserMedicationSchedule.ItemsSource = sortedlist; 
+                        var sortedlist = MedicationList.OrderBy(t => t.MedDateTime);
+                        UserMedicationSchedule.ItemsSource = sortedlist;
 
                     }
-				}
-				else if(Freq[0] == "Daily")
-			    {
+                }
+                else if (Freq[0] == "Daily")
+                {
                     //Populate with Schedule and Medications Not Taken 
                     nodatastack.IsVisible = false;
                     datastack.IsVisible = true;
@@ -115,7 +115,7 @@ public partial class ShowAllMedication : ContentPage
                             {
                                 SetColour = Color.FromArgb("#ff6666");
                             }
-                            var NewMed = new usermedication();
+                            var NewMed = new usersupplement();
                             NewMed.MedDateTime = RecordTime;
                             NewMed.Colour = SetColour;
                             NewMed.Action = item.Recorded;
@@ -137,7 +137,7 @@ public partial class ShowAllMedication : ContentPage
                         }
                     }
 
-					var startdate = DateTime.Parse(MedSelected.startdate);
+                    var startdate = DateTime.Parse(MedSelected.startdate);
                     DateTime currentDateTime = DateTime.Now;
 
                     for (DateTime date = startdate.Date; date <= currentDateTime.Date; date = date.AddDays(1))
@@ -148,24 +148,24 @@ public partial class ShowAllMedication : ContentPage
 
                             if (date == currentDateTime.Date && scheduleDateTime.TimeOfDay > currentDateTime.TimeOfDay)
                             {
-                                continue; 
+                                continue;
                             }
 
-                            var newItem = new usermedication
+                            var newItem = new usersupplement
                             {
                                 id = item.id.ToString(),
                                 MedDateTime = scheduleDateTime.ToString("dd MMMM yy, HH:mm"),
                                 Dosage = item.Dosage,
-                                unit = item.dosageunit, 
+                                unit = item.dosageunit,
                                 Colour = Colors.LightGray,
                                 Action = "Not Recorded",
-                          };
+                            };
 
                             MedicationNotRecordedList.Add(newItem);
                         }
                     }
 
-                    foreach(var item in MedicationNotRecordedList)
+                    foreach (var item in MedicationNotRecordedList)
                     {
                         if (!MedicationList.Any(m => m.MedDateTime == item.MedDateTime))
                         {
@@ -200,7 +200,7 @@ public partial class ShowAllMedication : ContentPage
                             {
                                 SetColour = Color.FromArgb("#ff6666");
                             }
-                            var NewMed = new usermedication();
+                            var NewMed = new usersupplement();
                             NewMed.MedDateTime = RecordTime;
                             NewMed.Colour = SetColour;
                             NewMed.Action = item.Recorded;
@@ -237,10 +237,10 @@ public partial class ShowAllMedication : ContentPage
 
                         var num = numoftimes - 1;
 
-                        foreach(var item in MedSelected.schedule)
+                        foreach (var item in MedSelected.schedule)
                         {
 
-                            if(ii == num)
+                            if (ii == num)
                             {
                                 item.Day = splitdays[i];
                                 i++;
@@ -278,7 +278,7 @@ public partial class ShowAllMedication : ContentPage
                             {
                                 continue;
                             }
-                            var newItem = new usermedication
+                            var newItem = new usersupplement
                             {
                                 id = item.id.ToString(),
                                 MedDateTime = scheduleDateTime.ToString("dd MMMM yy, HH:mm"),
@@ -332,7 +332,7 @@ public partial class ShowAllMedication : ContentPage
                             {
                                 SetColour = Color.FromArgb("#ff6666");
                             }
-                            var NewMed = new usermedication();
+                            var NewMed = new usersupplement();
                             NewMed.MedDateTime = RecordTime;
                             NewMed.Colour = SetColour;
                             NewMed.Action = item.Recorded;
@@ -363,7 +363,7 @@ public partial class ShowAllMedication : ContentPage
                             {
                                 continue;
                             }
-                            var newItem = new usermedication
+                            var newItem = new usersupplement
                             {
                                 id = item.id.ToString(),
                                 MedDateTime = scheduleDateTime.ToString("dd MMMM yy, HH:mm"),

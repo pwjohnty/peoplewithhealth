@@ -40,7 +40,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios'">
-	  <CodesignKey>Apple Development: Created via API (QB732BRMZC)</CodesignKey>
+	  <CodesignKey>Apple Development: Created via API (9AF7WV24ZX)</CodesignKey>
 	  <CodesignProvision>VS: com.peoplewith.peoplewith Development</CodesignProvision>
 	  <ProvisioningType>manual</ProvisioningType>
 	</PropertyGroup>
@@ -97,12 +97,15 @@
 	  <None Remove="Resources\Images\laughing.png" />
 	  <None Remove="Resources\Images\logo.png" />
 	  <None Remove="Resources\Images\loved.png" />
+	  <None Remove="Resources\Images\medcalendericon.png" />
+	  <None Remove="Resources\Images\medpillicon.png" />
 	  <None Remove="Resources\Images\neutral.png" />
 	  <None Remove="Resources\Images\medtime.png" />
 	  <None Remove="Resources\Images\medtimelg.png" />
 	  <None Remove="Resources\Images\nextdarker.png" />
 	  <None Remove="Resources\Images\nodataicon.png" />
 	  <None Remove="Resources\Images\nointerneticon.png" />
+	  <None Remove="Resources\Images\notesicon.png" />
 	  <None Remove="Resources\Images\notificationicon.png" />
 	  <None Remove="Resources\Images\peoplewithlogoanimation.gif" />
 	  <None Remove="Resources\Images\pillicon.png" />
@@ -129,6 +132,7 @@
 	  <None Remove="Resources\Images\tired.png" />
 	  <None Remove="Resources\Images\update.png" />
 	  <None Remove="Resources\Images\updateicon.png" />
+	  <None Remove="Resources\Images\warningicon.png" />
 	  <None Remove="Resources\Splash\splashpw.svg" />
 	</ItemGroup>
 
@@ -305,6 +309,9 @@
 	  <MauiXaml Update="Views\Medications\SingleMedication.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Schedule\AddAsRequiredDosage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Schedule\MainSchedule.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -312,6 +319,12 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Supplements\AllSupplements.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Supplements\ShowAllSupplement.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Supplements\SingleSupplement.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Symptoms\AddSymptom.xaml">
