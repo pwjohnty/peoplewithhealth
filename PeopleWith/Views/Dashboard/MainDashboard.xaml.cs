@@ -183,6 +183,16 @@ public partial class MainDashboard : ContentPage
         try
         {
             await Navigation.PushAsync(new AllSupplements(), false);
+
+
+
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
     async private void AppointBtn_Clicked(object sender, EventArgs e)
     {
 
@@ -194,7 +204,7 @@ public partial class MainDashboard : ContentPage
         {
 
         }
-    }
+    
     }
 
     async private void HCPBtn_Clicked(object sender, EventArgs e)
