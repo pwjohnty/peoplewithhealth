@@ -1,4 +1,5 @@
 //using Microsoft.Maui.Controls.Compatibility.Platform.Android;
+using CommunityToolkit.Mvvm.Messaging;
 using Mopups.Services;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -19,7 +20,14 @@ public partial class AllMedications : ContentPage
 		InitializeComponent();
 		getusermedications();
 
-	}
+        WeakReferenceMessenger.Default.Register<UpdateAllMeds>(this, (r, m) =>
+        {
+
+            AllUserMedications = (ObservableCollection<usermedication>)m.Value;
+
+        });
+
+    }
 
     public AllMedications(ObservableCollection<usermedication> AllUsermeds)
     {

@@ -45,25 +45,29 @@ public partial class SingleMedication : ContentPage
                             item.Times = freq[0];
                         }
                     }
-                    lblvalue.Text = freq[1];
+                    lblvalue.Text = MedSelected.feedback.Count().ToString() + " Taken";
                 }
                 else
                 {
                         lblvalue.Text = MedSelected.schedule[0].Dosage;
                         freqSplit = MedSelected.frequency.Split('|');
+                        int Index = 0;
 
-                        foreach (var item in Schedule)
+                    foreach (var item in Schedule)
                         {
+                            
                             if (freqSplit[0] == "Weekly" || freqSplit[0] == "Weekly ")
                             {
                                 item.Times = "1 " + MedSelected.preparation;
-                                item.Type = item.Day;
+                                var day = MedSelected.TimeDosage[Index].Split('|');
+                                item.Type = day[2];
                             }
                             else
                             {
                                 item.Times = "1 " + MedSelected.preparation;
                                 item.Type = freqSplit[0];
                             }
+                        Index = Index + 1;
 
                         }
                     }
@@ -85,8 +89,22 @@ public partial class SingleMedication : ContentPage
                 }
                 lblvalue.Text = "N/A";
             }
-
-            lblunit.Text = MedSelected.unit;
+            //var freq = MedSelected.frequency.Split('|');
+            //if (freq[0] == "As Required")
+            //{
+            //    int Getlength = MedSelected.unit.Length;
+            //    string unitText = MedSelected.unit;
+            //    if (!unitText.EndsWith("s"))
+            //    {
+            //        unitText += "s"; 
+            //    }
+            //    lblunit.Text = unitText;
+            //}
+            //else
+            //{
+              lblunit.Text = MedSelected.unit;
+            //}
+            
             unitlbl.Text = MedSelected.unit;
                     
             lblStart.Text = MedSelected.startdate;

@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Core.Extensions;
 using System.Collections.ObjectModel;
 
 namespace PeopleWith;
@@ -6,6 +7,9 @@ public partial class ShowAllSupplement : ContentPage
 {
     usersupplement MedSelected = new usersupplement();
     ObservableCollection<usersupplement> MedicationList = new ObservableCollection<usersupplement>();
+    ObservableCollection<usersupplement> TakenMedicationList = new ObservableCollection<usersupplement>();
+    ObservableCollection<usersupplement> NotTakenMedicationList = new ObservableCollection<usersupplement>();
+    ObservableCollection<usersupplement> NotRecordedMedicationList = new ObservableCollection<usersupplement>();
     ObservableCollection<usersupplement> MedicationNotRecordedList = new ObservableCollection<usersupplement>();
     Color SetColour;
 
@@ -50,43 +54,40 @@ public partial class ShowAllSupplement : ContentPage
                     {
                         nodatastack.IsVisible = false;
                         datastack.IsVisible = true;
+                        NotTakenFrame.Background = Colors.White;
+                        NotTakenFrame.BorderColor = Colors.White;
+                        NotTakenFrame.Opacity = 1;
+                        NotTakenFrame.IsEnabled = false;
+                        NotRecordedFrame.Background = Colors.White;
+                        NotRecordedFrame.BorderColor = Colors.White;
+                        NotRecordedFrame.Opacity = 1;
+                        NotRecordedFrame.IsEnabled = false;
 
                         foreach (var item in MedSelected.feedback)
                         {
 
                             var RecordTime = DateTime.Parse(item.datetime).ToString("dd MMMM yy, HH:mm");
-                            if (item.Recorded == "Taken")
-                            {
-                                SetColour = Colors.LightGreen;
-                            }
-                            else
-                            {
-                                SetColour = Color.FromArgb("#ff6666");
-                            }
+
                             var NewMed = new usersupplement();
                             NewMed.MedDateTime = RecordTime;
-                            NewMed.Colour = SetColour;
-                            NewMed.Action = item.Recorded;
+                            NewMed.Colour = Colors.LightGreen;
+                            NewMed.Action = "Taken";
                             NewMed.id = item.id;
+                            NewMed.Dosage = item.Recorded;
                             MedicationList.Add(NewMed);
 
                         }
 
                         foreach (var item in MedicationList)
                         {
-                            foreach (var x in MedSelected.schedule)
-                            {
-                                if (item.id == x.id.ToString())
-                                {
-                                    item.Dosage = x.Dosage;
-                                    item.unit = x.dosageunit;
-                                }
-                            }
+                            item.unit = MedSelected.unit;
                         }
 
 
                         var sortedlist = MedicationList.OrderBy(t => t.MedDateTime);
                         UserMedicationSchedule.ItemsSource = sortedlist;
+                        //Filtered List 
+                        TakenMedicationList = MedicationList.Where(s => s.Action.Equals("Taken", StringComparison.OrdinalIgnoreCase)).ToObservableCollection();
 
                     }
                 }
@@ -95,6 +96,12 @@ public partial class ShowAllSupplement : ContentPage
                     //Populate with Schedule and Medications Not Taken 
                     nodatastack.IsVisible = false;
                     datastack.IsVisible = true;
+
+                    DateTime? enddate = null;
+                    if (!string.IsNullOrEmpty(MedSelected.enddate))
+                    {
+                        enddate = DateTime.Parse(MedSelected.enddate);
+                    }
 
                     if (MedSelected.feedback == null)
                     {
@@ -107,23 +114,26 @@ public partial class ShowAllSupplement : ContentPage
                         {
 
                             var RecordTime = DateTime.Parse(item.datetime).ToString("dd MMMM yy, HH:mm");
-                            if (item.Recorded == "Taken")
+                            var CurrentTime = DateTime.Parse(item.datetime);
+                            if (enddate == null || CurrentTime <= enddate.Value)
                             {
-                                SetColour = Colors.LightGreen;
-                            }
-                            else
-                            {
-                                SetColour = Color.FromArgb("#ff6666");
-                            }
-                            var NewMed = new usersupplement();
-                            NewMed.MedDateTime = RecordTime;
-                            NewMed.Colour = SetColour;
-                            NewMed.Action = item.Recorded;
-                            NewMed.id = item.id;
-                            MedicationList.Add(NewMed);
+                                if (item.Recorded == "Taken")
+                                {
+                                    SetColour = Colors.LightGreen;
+                                }
+                                else
+                                {
+                                    SetColour = Color.FromArgb("#ff6666");
+                                }
+                                var NewMed = new usersupplement();
+                                NewMed.MedDateTime = RecordTime;
+                                NewMed.Colour = SetColour;
+                                NewMed.Action = item.Recorded;
+                                NewMed.id = item.id;
+                                MedicationList.Add(NewMed);
 
+                            }
                         }
-
                     }
                     foreach (var item in MedicationList)
                     {
@@ -145,6 +155,11 @@ public partial class ShowAllSupplement : ContentPage
                         foreach (var item in MedSelected.schedule)
                         {
                             DateTime scheduleDateTime = DateTime.Parse(date.ToString("yyyy-MM-dd") + " " + item.time);
+
+                            if (enddate != null && scheduleDateTime > enddate.Value)
+                            {
+                                continue;
+                            }
 
                             if (date == currentDateTime.Date && scheduleDateTime.TimeOfDay > currentDateTime.TimeOfDay)
                             {
@@ -175,13 +190,19 @@ public partial class ShowAllSupplement : ContentPage
 
                     var sortedList = MedicationList.OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToList();
                     UserMedicationSchedule.ItemsSource = sortedList;
-                    UserMedicationSchedule.HeightRequest = sortedList.Count * 140;
+                    UserMedicationSchedule.HeightRequest = sortedList.Count * 120;
+
+                    //Filtered List 
+                    TakenMedicationList = MedicationList.Where(s => s.Action.Equals("Taken", StringComparison.OrdinalIgnoreCase)).ToObservableCollection();
+                    NotTakenMedicationList = MedicationList.Where(s => s.Action.Equals("Not Taken", StringComparison.OrdinalIgnoreCase)).ToObservableCollection();
+                    NotRecordedMedicationList = MedicationList.Where(s => s.Action.Equals("Not Recorded", StringComparison.OrdinalIgnoreCase)).ToObservableCollection();
 
 
 
                 }
                 else if (Freq[0] == "Weekly" || Freq[0] == "Weekly ")
                 {
+                    DateTime? enddate = null;
                     //Populate with Schedule and Medications Not Taken 
                     if (MedSelected.feedback == null)
                     {
@@ -189,23 +210,34 @@ public partial class ShowAllSupplement : ContentPage
                     }
                     else
                     {
+
                         foreach (var item in MedSelected.feedback)
                         {
                             var RecordTime = DateTime.Parse(item.datetime).ToString("dd MMMM yy, HH:mm");
-                            if (item.Recorded == "Taken")
+
+                            if (!string.IsNullOrEmpty(MedSelected.enddate))
                             {
-                                SetColour = Colors.LightGreen;
+                                enddate = DateTime.Parse(MedSelected.enddate);
                             }
-                            else
+
+                            var CurrentTime = DateTime.Parse(item.datetime);
+                            if (enddate == null || CurrentTime <= enddate.Value)
                             {
-                                SetColour = Color.FromArgb("#ff6666");
+                                if (item.Recorded == "Taken")
+                                {
+                                    SetColour = Colors.LightGreen;
+                                }
+                                else
+                                {
+                                    SetColour = Color.FromArgb("#ff6666");
+                                }
+                                var NewMed = new usersupplement();
+                                NewMed.MedDateTime = RecordTime;
+                                NewMed.Colour = SetColour;
+                                NewMed.Action = item.Recorded;
+                                NewMed.id = item.id;
+                                MedicationList.Add(NewMed);
                             }
-                            var NewMed = new usersupplement();
-                            NewMed.MedDateTime = RecordTime;
-                            NewMed.Colour = SetColour;
-                            NewMed.Action = item.Recorded;
-                            NewMed.id = item.id;
-                            MedicationList.Add(NewMed);
                         }
                         foreach (var item in MedicationList)
                         {
@@ -226,32 +258,12 @@ public partial class ShowAllSupplement : ContentPage
 
                     if (Freq[1].Contains(','))
                     {
-
-                        var splitdays = Freq[1].Split(',').ToList();
-
                         var i = 0;
-
-                        var ii = 0;
-
-                        var numoftimes = Convert.ToInt32(Freq[2]);
-
-                        var num = numoftimes - 1;
-
                         foreach (var item in MedSelected.schedule)
                         {
-
-                            if (ii == num)
-                            {
-                                item.Day = splitdays[i];
-                                i++;
-                                ii++;
-                            }
-                            else
-                            {
-                                item.Day = splitdays[i];
-                                ii++;
-                            }
-
+                            var GetDay = MedSelected.TimeDosage[i].Split('|'); 
+                            item.Day = GetDay[2];
+                            i++;
                         }
 
                     }
@@ -274,6 +286,10 @@ public partial class ShowAllSupplement : ContentPage
                                 continue;
                             }
                             DateTime scheduleDateTime = DateTime.Parse(date.ToString("yyyy-MM-dd") + " " + item.time);
+                            if (enddate != null && scheduleDateTime > enddate.Value)
+                            {
+                                continue;
+                            }
                             if (date == currentDateTime.Date && scheduleDateTime.TimeOfDay > currentDateTime.TimeOfDay)
                             {
                                 continue;
@@ -306,15 +322,26 @@ public partial class ShowAllSupplement : ContentPage
                     {
                         var sortedList = MedicationList.OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToList();
                         UserMedicationSchedule.ItemsSource = sortedList;
-                        UserMedicationSchedule.HeightRequest = sortedList.Count * 140;
+                        UserMedicationSchedule.HeightRequest = sortedList.Count * 120;
+
+                        //Filtered List 
+                        TakenMedicationList = MedicationList.Where(s => s.Action.Equals("Taken", StringComparison.OrdinalIgnoreCase)).ToObservableCollection();
+                        NotTakenMedicationList = MedicationList.Where(s => s.Action.Equals("Not Taken", StringComparison.OrdinalIgnoreCase)).ToObservableCollection();
+                        NotRecordedMedicationList = MedicationList.Where(s => s.Action.Equals("Not Recorded", StringComparison.OrdinalIgnoreCase)).ToObservableCollection();
                     }
                 }
                 else if (Freq[0] == "Days Interval")
                 {
                     //Populate with Schedule and Medications Not Taken 
-                    //Populate with Schedule and Medications Not Taken 
                     nodatastack.IsVisible = false;
                     datastack.IsVisible = true;
+
+                    DateTime? enddate = null;
+                    if (!string.IsNullOrEmpty(MedSelected.enddate))
+                    {
+                        enddate = DateTime.Parse(MedSelected.enddate);
+                    }
+
                     if (MedSelected.feedback == null)
                     {
                         //Do Nothing
@@ -324,20 +351,24 @@ public partial class ShowAllSupplement : ContentPage
                         foreach (var item in MedSelected.feedback)
                         {
                             var RecordTime = DateTime.Parse(item.datetime).ToString("dd MMMM yy, HH:mm");
-                            if (item.Recorded == "Taken")
+                            var CurrentTime = DateTime.Parse(item.datetime);
+                            if (enddate == null || CurrentTime <= enddate.Value)
                             {
-                                SetColour = Colors.LightGreen;
+                                if (item.Recorded == "Taken")
+                                {
+                                    SetColour = Colors.LightGreen;
+                                }
+                                else
+                                {
+                                    SetColour = Color.FromArgb("#ff6666");
+                                }
+                                var NewMed = new usersupplement();
+                                NewMed.MedDateTime = RecordTime;
+                                NewMed.Colour = SetColour;
+                                NewMed.Action = item.Recorded;
+                                NewMed.id = item.id;
+                                MedicationList.Add(NewMed);
                             }
-                            else
-                            {
-                                SetColour = Color.FromArgb("#ff6666");
-                            }
-                            var NewMed = new usersupplement();
-                            NewMed.MedDateTime = RecordTime;
-                            NewMed.Colour = SetColour;
-                            NewMed.Action = item.Recorded;
-                            NewMed.id = item.id;
-                            MedicationList.Add(NewMed);
                         }
                         foreach (var item in MedicationList)
                         {
@@ -359,6 +390,10 @@ public partial class ShowAllSupplement : ContentPage
                         foreach (var item in MedSelected.schedule)
                         {
                             DateTime scheduleDateTime = DateTime.Parse(date.ToString("yyyy-MM-dd") + " " + item.time);
+                            if (enddate != null && scheduleDateTime > enddate.Value)
+                            {
+                                continue;
+                            }
                             if (date == currentDateTime.Date && scheduleDateTime.TimeOfDay > currentDateTime.TimeOfDay)
                             {
                                 continue;
@@ -391,7 +426,12 @@ public partial class ShowAllSupplement : ContentPage
                     {
                         var sortedList = MedicationList.OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToList();
                         UserMedicationSchedule.ItemsSource = sortedList;
-                        UserMedicationSchedule.HeightRequest = sortedList.Count * 140;
+                        UserMedicationSchedule.HeightRequest = sortedList.Count * 120;
+
+                        //Filtered List 
+                        TakenMedicationList = MedicationList.Where(s => s.Action.Equals("Taken", StringComparison.OrdinalIgnoreCase)).ToObservableCollection();
+                        NotTakenMedicationList = MedicationList.Where(s => s.Action.Equals("Not Taken", StringComparison.OrdinalIgnoreCase)).ToObservableCollection();
+                        NotRecordedMedicationList = MedicationList.Where(s => s.Action.Equals("Not Recorded", StringComparison.OrdinalIgnoreCase)).ToObservableCollection();
                     }
                 }
             }
@@ -419,5 +459,115 @@ public partial class ShowAllSupplement : ContentPage
             "Sun" => DayOfWeek.Sunday,
             _ => throw new ArgumentException("Invalid day format")
         };
+    }
+
+    async private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        //var SelectedFrame = (sender) as Frame;
+        try
+        {
+            var SF = (TappedEventArgs)e;
+            string parameter = (string)SF.Parameter;
+            AllFrame.Opacity = 0;
+            TakenFrame.Opacity = 0;
+            if(NotTakenFrame.IsEnabled != false)
+            {
+                NotTakenFrame.Opacity = 0;
+            }
+            if(NotTakenFrame.IsEnabled != false)
+            {
+                NotRecordedFrame.Opacity = 0;
+            }
+
+            var Check = string.Empty;
+            if (parameter == "All")
+            {
+                AllFrame.Opacity = 0.2;
+
+                UserMedicationSchedule.IsVisible = true;
+                noFilterstack.IsVisible = false;
+
+                var sortedList = MedicationList.OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToList();
+                UserMedicationSchedule.ItemsSource = sortedList;
+                UserMedicationSchedule.HeightRequest = sortedList.Count * 120;
+
+            }
+            else if (parameter == "Taken")
+            {
+                TakenFrame.Opacity = 0.2;
+
+                //Only Show Taken Items 
+                NoDatalbl.Text = "No Records Contain Taken";
+
+                if (TakenMedicationList.Count > 0)
+                {
+                    UserMedicationSchedule.IsVisible = true;
+                    noFilterstack.IsVisible = false;
+
+                    var sortedList = TakenMedicationList.OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToList();
+                    UserMedicationSchedule.ItemsSource = sortedList;
+                    UserMedicationSchedule.HeightRequest = sortedList.Count * 120;
+                }
+                else
+                {
+                    UserMedicationSchedule.IsVisible = false;
+                    noFilterstack.IsVisible = true;
+                }
+            }
+            else if (parameter == "NotTaken")
+            {
+                if (NotTakenFrame.BackgroundColor != Colors.White)
+                {
+
+                    NotTakenFrame.Opacity = 0.2;
+
+                    //Only Show NotTaken Items 
+                    NoDatalbl.Text = "No Records Contain Not Taken";
+
+                    if (NotTakenMedicationList.Count > 0)
+                    {
+                        UserMedicationSchedule.IsVisible = true;
+                        noFilterstack.IsVisible = false;
+
+                        var sortedList = NotTakenMedicationList.OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToList();
+                        UserMedicationSchedule.ItemsSource = sortedList;
+                        UserMedicationSchedule.HeightRequest = sortedList.Count * 120;
+                    }
+                    else
+                    {
+                        UserMedicationSchedule.IsVisible = false;
+                        noFilterstack.IsVisible = true;
+                    }
+                }
+            }
+            else if (parameter == "NotRecorded")
+            {
+                if (NotRecordedFrame.BackgroundColor != Colors.White)
+                {
+                    NotRecordedFrame.Opacity = 0.2;
+                    //Only Show NotRecorded Items 
+                    NoDatalbl.Text = "No Records Contain Not Recorded";
+
+                    if (NotRecordedMedicationList.Count > 0)
+                    {
+                        UserMedicationSchedule.IsVisible = true;
+                        noFilterstack.IsVisible = false;
+
+                        var sortedList = NotRecordedMedicationList.OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToList();
+                        UserMedicationSchedule.ItemsSource = sortedList;
+                        UserMedicationSchedule.HeightRequest = sortedList.Count * 120;
+                    }
+                    else
+                    {
+                        UserMedicationSchedule.IsVisible = false;
+                        noFilterstack.IsVisible = true;
+                    }
+                }
+            }
+        }
+        catch (Exception Ex)
+        {
+
+        }
     }
 }

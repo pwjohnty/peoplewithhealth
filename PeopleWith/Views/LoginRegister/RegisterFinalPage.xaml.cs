@@ -1,3 +1,4 @@
+using Maui.FreakyControls;
 using PeopleWith;
 using PeopleWith.Helpers;
 using System;
@@ -5,7 +6,9 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
+using Azure.Storage.Blobs;
 using static System.Net.WebRequestMethods;
+using Syncfusion.Maui.Core.Internals;
 
 namespace PeopleWith;
 
@@ -20,57 +23,85 @@ public partial class RegisterFinalPage : ContentPage
     ObservableCollection<usersymptom> symptomstoadd = new ObservableCollection<usersymptom>();
     HttpClient client = new HttpClient();
     userdiagnosis userdiag;
+    bool SignPadhaddata = false; 
 
     public RegisterFinalPage()
 	{
-		InitializeComponent();
+        try
+        {
+            InitializeComponent();
 
-        //remove this
-        topgrid.IsVisible = false;
-        bottomstack.IsVisible = false;
-        notificationstack.IsVisible = false;
-       //tcstack.IsVisible = true;
-        nextbtn.Text = "Agree and Finish";
-        nextbtn.BackgroundColor = Colors.LightGray;
+            //remove this
+            topgrid.IsVisible = false;
+            bottomstack.IsVisible = false;
+            notificationstack.IsVisible = false;
+            //tcstack.IsVisible = true;
+            nextbtn.Text = "Agree and Finish";
+            nextbtn.BackgroundColor = Colors.LightGray;
+        }
+        catch (Exception Ex)
+        {
 
+        }
     }
 
     protected override async void OnAppearing()
     {
-        base.OnAppearing();
+        try
+        {
+            base.OnAppearing();
 
-        await Task.Delay(100);
-        imganimation.IsAnimationPlaying = false;
-        await Task.Delay(100);
-        imganimation.IsAnimationPlaying = true;
+            await Task.Delay(100);
+            imganimation.IsAnimationPlaying = false;
+            await Task.Delay(100);
+            imganimation.IsAnimationPlaying = true;
+        }
+        catch (Exception Ex)
+        {
+
+        }
     }
 
-    public RegisterFinalPage(user userpass, double progress)
+    public RegisterFinalPage(user userpass, double progress, consent additonalcon)
     {
-        InitializeComponent();
 
-        //userwithnosignupcode
+        try
+        {
+            InitializeComponent();
 
-        newuser = userpass;
+            //userwithnosignupcode
+
+            newuser = userpass;
+
+            if (additonalcon != null)
+            {
+                additonalconsent = additonalcon;
+            }
 
 
-        topprogress.SetProgress(progress, 0);
+            topprogress.SetProgress(progress, 0);
 
 
-        //find out the amount left - only 2 pages left after this amount
+            //find out the amount left - only 2 pages left after this amount
 
-        progressamount = (100 - progress) / 2;
+            progressamount = (100 - progress) / 2;
 
-        faceidstack.IsVisible = true;
+            faceidstack.IsVisible = true;
 
-        skipbtn.IsVisible = true;
+            skipbtn.IsVisible = true;
+        }
+        catch (Exception Ex)
+        {
 
+        }
 
     }
 
     public RegisterFinalPage(user userpass, double progress, ObservableCollection<userresponse> userresponsep, ObservableCollection<usermeasurement> usermeasurementp, consent additonalcon)
     {
-        InitializeComponent();
+        try
+        {
+            InitializeComponent();
 
         //user with NOVO code
 
@@ -98,45 +129,57 @@ public partial class RegisterFinalPage : ContentPage
         progressamount = (100 - progress) / 2;
 
         faceidstack.IsVisible = true;
+        }
+        catch (Exception Ex)
+        {
 
+        }
+        
 
     }
 
     public RegisterFinalPage(user userpass, double progress, ObservableCollection<userresponse> userresponsep, consent additonalcon, ObservableCollection<usersymptom> usersymptompassed, ObservableCollection<usermedication> usermedicationspassed, userdiagnosis userdiagpassed)
     {
-        InitializeComponent();
-
-        //user with SFEAT code
-
-        newuser = userpass;
-        userresponsepassed = userresponsep;
-
-        symptomstoadd = usersymptompassed;
-        medicationstoadd = usermedicationspassed;
-        userdiag = userdiagpassed;
-
-        if (additonalcon != null)
+        try
         {
-            Additonalconsentinfostack.IsVisible = true;
-            additonalconsent = additonalcon;
+            InitializeComponent();
 
-            actitle.Text = additonalconsent.title;
-            acsubtitle.Text = additonalconsent.subtitle;
-            accontent.Text = additonalconsent.content;
+            //user with SFEAT code
+
+            newuser = userpass;
+            userresponsepassed = userresponsep;
+
+            symptomstoadd = usersymptompassed;
+            medicationstoadd = usermedicationspassed;
+            userdiag = userdiagpassed;
+
+            if (additonalcon != null)
+            {
+                Additonalconsentinfostack.IsVisible = true;
+                additonalconsent = additonalcon;
+
+                actitle.Text = additonalconsent.title;
+                acsubtitle.Text = additonalconsent.subtitle;
+                accontent.Text = additonalconsent.content;
+            }
+
+
+
+            topprogress.SetProgress(progress, 0);
+
+
+            //find out the amount left - only 2 pages left after this amount
+
+            progressamount = (100 - progress) / 2;
+
+            faceidstack.IsVisible = true;
         }
+        catch (Exception Ex)
+        {
 
 
 
-        topprogress.SetProgress(progress, 0);
-
-
-        //find out the amount left - only 2 pages left after this amount
-
-        progressamount = (100 - progress) / 2;
-
-        faceidstack.IsVisible = true;
-
-        
+        }
     }
 
     async Task HandleNotificationframe()
@@ -232,7 +275,7 @@ public partial class RegisterFinalPage : ContentPage
         }
     }
 
-    private void nextbtn_Clicked(object sender, EventArgs e)
+   async private void nextbtn_Clicked(object sender, EventArgs e)
     {
         try
         {
@@ -251,8 +294,41 @@ public partial class RegisterFinalPage : ContentPage
             }
             else if(tcstack.IsVisible == true)
             {
-                HandleTCframe();
+                //Check if Signature pad is needed 
+                if (additonalconsent.signaturepad == false)
+                {
+
+                    HandleTCframe();
+                }
+                else
+                {
+                    if (nextbtn.BackgroundColor == Colors.LightGray)
+                    {
+                        if (tccheckbox.IsChecked == false)
+                        {
+                            Vibration.Vibrate();
+                            tcframe.BorderColor = Colors.Red;
+                            return;
+                        }
+                        else
+                        {
+                            if(SignPadhaddata == false)
+                            {
+                                await DisplayAlert("Signature Missing", "Please sign the signature pad", "OK");
+                                return;
+                            } 
+                         
+                        }
+
+                    }
+                    else
+                    {
+                        HandleTCframe();
+                    }
+                }
+                
             }
+
         }
         catch(Exception ex)
         {
@@ -466,6 +542,43 @@ public partial class RegisterFinalPage : ContentPage
                     ///continue to walk in video or dash
                 }
 
+                if(additonalconsent.signaturepad == true)
+                {
+                    string StorageConnectionString = "DefaultEndpointsProtocol=https;AccountName=peoplewithappiamges;AccountKey=9maBMGnjWp6KfOnOuXWHqveV4LPKyOnlCgtkiKQOeA+d+cr/trKApvPTdQ+piyQJlicOE6dpeAWA56uD39YJhg==;EndpointSuffix=core.windows.net";
+
+                    var backrandom = new Random();
+                    var backrandomnum = backrandom.Next(1000, 10000000);
+                    var backimagename = newuser.userid + "-" + DateTime.Now.ToString("HHmmssfff") + "-" + backrandomnum + ".Jpeg";
+
+                    // Parse the connection string and create a blob client
+                    BlobServiceClient blobServiceClient = new BlobServiceClient(StorageConnectionString);
+
+                    // Get a reference to the container
+                    BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient("consentsignatures");
+
+                    // Get a reference to the blob
+                    BlobClient blobClient = containerClient.GetBlobClient(backimagename);
+
+                    //Send Signature to Azure 
+                    Stream signatureStream = await signpad.GetStreamAsync(Syncfusion.Maui.Core.ImageFileFormat.Jpeg);
+
+                    // Upload the signature image stream to Azure Blob Storage
+                    if (signatureStream != null)
+                    {
+                        await blobClient.UploadAsync(signatureStream);
+                    }
+
+                    //User Consent 
+                    var UpdateUserConsent = new userconsent();
+                    UpdateUserConsent.userid = newuser.userid;
+                    UpdateUserConsent.consentid = additonalconsent.consentid;
+                    UpdateUserConsent.signaturefilename = backimagename;
+
+                    APICalls database = new APICalls();
+                    await database.PostUserConsentAsync(UpdateUserConsent); 
+
+                }
+
 
                 //add the user settings
                 Preferences.Default.Set("userid", newuser.userid);
@@ -542,7 +655,10 @@ public partial class RegisterFinalPage : ContentPage
     {
         try
         {
-            incorrectcodelbl.IsVisible = false;
+            if (e.PropertyName == nameof(codepin))
+            {
+                incorrectcodelbl.IsVisible = false;
+            }
         }
         catch(Exception ex)
         {
@@ -568,17 +684,29 @@ public partial class RegisterFinalPage : ContentPage
         {
            var check = e.Value;
 
-            if(check)
+           
+            if(additonalconsent.signaturepad == false)
             {
-                nextbtn.BackgroundColor = Color.FromArgb("#031926");
-            }
-            else
-            {
-                nextbtn.BackgroundColor = Colors.LightGray;
-            }
+                if (check)
+                {
+                    nextbtn.BackgroundColor = Color.FromArgb("#031926");
+                }
+                else
+                {
+                    nextbtn.BackgroundColor = Colors.LightGray;
+                    tcframe.BorderColor = Color.FromRgba("#BFDBF7");
+                }
 
-         //   tcerror.IsVisible = false;
-            tcframe.BorderColor = Color.FromRgba("#BFDBF7");
+                tcerror.IsVisible = false;
+                tcframe.BorderColor = Color.FromRgba("#BFDBF7");
+            }
+            else 
+            {
+                signaturePadStack.IsVisible = true;
+                ConsentBoxesStack.IsVisible = false;
+                tcerror.IsVisible = false;
+            }
+            
         }
         catch( Exception ex )
         {
@@ -659,6 +787,68 @@ public partial class RegisterFinalPage : ContentPage
         {
             string BackArrow = "PeopleWith";
             await Navigation.PushAsync(new PrivacyPolicy(BackArrow), false);
+        }
+        catch (Exception Ex)
+        {
+
+        }
+    }
+
+    //private void signpad_StrokeCompleted(object sender, EventArgs e)
+    //{
+    //    try
+    //    {
+    //        bool check = !signpad.IsBlank;
+    //        if (check)
+    //        {
+    //            nextbtn.BackgroundColor = Color.FromArgb("#031926");
+    //        }
+    //        else
+    //        {
+    //            nextbtn.BackgroundColor = Colors.LightGray;
+    //        }
+
+    //        tcerror.IsVisible = false;
+
+    //    }
+    //    catch (Exception Ex)
+    //    {
+
+    //    }
+    //}
+
+    async private void signpad_DrawCompleted(object sender, EventArgs e)
+    {
+        try
+        {
+            var signatureStream = await signpad.GetStreamAsync(Syncfusion.Maui.Core.ImageFileFormat.Jpeg);
+            bool isSignatureBlank = signatureStream.Length == 0;
+
+            if (!isSignatureBlank)
+            {
+                SignPadhaddata = true; 
+                nextbtn.BackgroundColor = Color.FromArgb("#031926");
+            }
+            else
+            {
+                SignPadhaddata = false;
+                nextbtn.BackgroundColor = Colors.LightGray;
+            }
+
+        }
+        catch (Exception Ex)
+        {
+
+        }
+    }
+
+    async private void Button_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            signpad.Clear();
+            nextbtn.BackgroundColor = Colors.LightGray;
+            SignPadhaddata = false; 
         }
         catch (Exception Ex)
         {

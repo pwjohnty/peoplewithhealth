@@ -198,6 +198,8 @@ HorizontalOptions="Start" />
   BoxBorderColor="LightGray"
    Color="#031926" />
 
+ 
+
                     <Label
 Text="Invalid Code"
 TextColor="Red"
@@ -206,6 +208,19 @@ FontAttributes="None"
 Margin="0,20,0,0" x:Name="incorrectcodelbl"
 FontSize="15" IsVisible="False"
 HorizontalOptions="Center" />
+
+                    <Label
+Text="Resend Code"
+TextColor="#0096FF"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,20,0,0" x:Name="ResendCode"
+FontSize="15" IsVisible="True"
+HorizontalOptions="Center" >
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="ResendCodeTapped" NumberOfTapsRequired="1"/>
+                        </Label.GestureRecognizers>
+                    </Label>
 
 
 

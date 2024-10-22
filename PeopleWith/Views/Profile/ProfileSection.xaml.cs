@@ -122,7 +122,15 @@ public partial class ProfileSection : ContentPage
             //Ethnicity
             var Ethnicity = new user();
             Ethnicity.SettingsTitle = "Ethnicity";
-            Ethnicity.SettingsItem = Helpers.Settings.Ethnicity;
+            if (string.IsNullOrEmpty(Helpers.Settings.Ethnicity))
+            {
+                Ethnicity.SettingsItem = "--";
+            }
+            else
+            {
+                Ethnicity.SettingsItem = Helpers.Settings.Ethnicity;
+            }
+           
 
             UserDetailsList.Add(Ethnicity);
 
@@ -312,7 +320,7 @@ public partial class ProfileSection : ContentPage
     {
         try
         {
-            bool Answer = await DisplayAlert("Logout", "Are you sure you would like to logout", "Accept", "Decline");
+            bool Answer = await DisplayAlert("Logout", "Are you sure you would like to logout", "Logout", "Cancel");
             if (Answer)
             {
                 Logout HandleLogout = new Logout();
@@ -334,7 +342,7 @@ public partial class ProfileSection : ContentPage
     {
         try
         {
-            bool Answer = await DisplayAlert("Delete Account", "Are you sure you would like to Delete this account, Once Deleted it cannot be retrieved", "Accept", "Decline");
+            bool Answer = await DisplayAlert("Delete Account", "Are you sure you would like to Delete this account, Once Deleted it cannot be retrieved", "Delete Account", "Cancel");
             if (Answer)
             {
                 //Delete Account

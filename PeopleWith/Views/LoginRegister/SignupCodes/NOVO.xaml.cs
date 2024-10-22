@@ -21,6 +21,7 @@ public partial class NOVO : ContentPage
     List<string> commprefaddedlist = new List<string>();
     ObservableCollection<usermeasurement> usermeasurementlist = new ObservableCollection<usermeasurement>();
     public consent additonalconsent = new consent();
+    string CommandPassed; 
     public NOVO()
 	{
 		InitializeComponent();
@@ -397,7 +398,8 @@ public partial class NOVO : ContentPage
     {
         try
         {
-
+            var Command = (sender) as Button;
+            CommandPassed = Command.CommandParameter.ToString(); 
 
             if(heightandweightframe.IsVisible == true)
             {
@@ -424,23 +426,23 @@ public partial class NOVO : ContentPage
         }
     }
 
-    private async void skipbtn_Clicked(object sender, EventArgs e)
-    {
-        if(useframe.IsVisible == true)
-        {
-            useframe.IsVisible = false;
-            comprefframe.IsVisible = true;
+    //private async void skipbtn_Clicked(object sender, EventArgs e)
+    //{
+    //    if(useframe.IsVisible == true)
+    //    {
+    //        useframe.IsVisible = false;
+    //        comprefframe.IsVisible = true;
 
-            UpdateProgress();
-        }
-        else if(comprefframe.IsVisible == true)
-        {
-            UpdateProgress();
+    //        UpdateProgress();
+    //    }
+    //    else if(comprefframe.IsVisible == true)
+    //    {
+    //        UpdateProgress();
 
-            await Navigation.PushAsync(new RegisterFinalPage(userpassed, topprogress.Progress, userresponselist, usermeasurementlist, additonalconsent), false);
+    //        await Navigation.PushAsync(new RegisterFinalPage(userpassed, topprogress.Progress, userresponselist, usermeasurementlist, additonalconsent), false);
 
-        }
-    }
+    //    }
+    //}
 
     async void Handleheightandweightframe()
     {
@@ -618,20 +620,27 @@ public partial class NOVO : ContentPage
     {
         try
         {
-            if (uselist.SelectedItem == null)
+            
+
+            if(CommandPassed == "Next")
             {
-                Vibration.Vibrate();
-                return;
+                if (uselist.SelectedItem == null)
+                {
+                    Vibration.Vibrate();
+                    return;
+                }
+
+                var item = uselist.SelectedItem as answer;
+
+                //add the question
+                var response = new userresponse();
+                response.questionid = "21B3A187-63CE-4E9C-BA38-B6391743B6D5";
+                response.answerid = item.answerid;
+                response.responsedate = DateTime.Now.ToString("dd/MM/yyyy");
+                userresponselist.Add(response);
             }
 
-            var item = uselist.SelectedItem as answer;
-
-            //add the question
-            var response = new userresponse();
-            response.questionid = "21B3A187-63CE-4E9C-BA38-B6391743B6D5";
-            response.answerid = item.answerid;
-            response.responsedate = DateTime.Now.ToString("dd/MM/yyyy");
-            userresponselist.Add(response);
+           
 
             //populate use list
             var getquestion = regquestionlist.Where(x => x.title.Contains("Communication Preferences")).SingleOrDefault();
@@ -665,19 +674,24 @@ public partial class NOVO : ContentPage
     {
         try
         {
-            if (compreflist.SelectedItem == null)
+           
+
+            if (CommandPassed == "Next")
             {
-                Vibration.Vibrate();
-                return;
+                if (compreflist.SelectedItem == null)
+                {
+                    Vibration.Vibrate();
+                    return;
+                }
+
+                //add the question
+                var response = new userresponse();
+                response.questionid = "3C8FF935-9294-4DE6-A4E6-127ECE5D1A36";
+                var getallanswers = string.Join(",", commprefaddedlist);
+                response.answerid = getallanswers;
+                response.responsedate = DateTime.Now.ToString("dd/MM/yyyy");
+                userresponselist.Add(response);
             }
-            
-            //add the question
-            var response = new userresponse();
-            response.questionid = "3C8FF935-9294-4DE6-A4E6-127ECE5D1A36";
-            var getallanswers = string.Join(",", commprefaddedlist);
-            response.answerid = getallanswers;
-            response.responsedate = DateTime.Now.ToString("dd/MM/yyyy");
-            userresponselist.Add(response);
 
 
             UpdateProgress();
@@ -793,6 +807,19 @@ public partial class NOVO : ContentPage
 
         }
         catch(Exception ex)
+        {
+
+        }
+    }
+
+    async private void TapGestureRecognizer_Tapped_1(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            string BackArrow = "PeopleWith";
+            await Navigation.PushAsync(new PrivacyPolicy(BackArrow), false);
+        }
+        catch (Exception Ex)
         {
 
         }

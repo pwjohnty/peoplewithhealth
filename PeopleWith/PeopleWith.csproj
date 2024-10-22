@@ -40,9 +40,9 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios'">
-	  <CodesignKey>Apple Development: Created via API (9AF7WV24ZX)</CodesignKey>
-	  <CodesignProvision>VS: com.peoplewith.peoplewith Development</CodesignProvision>
-	  <ProvisioningType>manual</ProvisioningType>
+	  <CodesignKey>Apple Development: Created via API (QB732BRMZC)</CodesignKey>
+	  <CodesignProvision>VS: WildCard Development</CodesignProvision>
+	  <ProvisioningType>automatic</ProvisioningType>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -154,9 +154,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Azure.Storage.Blobs" Version="12.22.0" />
 		<PackageReference Include="CommunityToolkit.Maui" Version="7.0.1" />
 		<PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="3.1.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.0" />
+		<PackageReference Include="FreakyControls" Version="0.5.0" />
 		<PackageReference Include="Microsoft.Azure.NotificationHubs" Version="4.2.0" />
 		<PackageReference Include="Microsoft.Datasync.Client" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
@@ -182,6 +184,7 @@
 		<PackageReference Include="Syncfusion.Maui.Popup" Version="25.2.5" />
 		<PackageReference Include="Syncfusion.Maui.ProgressBar" Version="25.2.5" />
 		<PackageReference Include="Syncfusion.Maui.Scheduler" Version="25.2.5" />
+		<PackageReference Include="Syncfusion.Maui.SignaturePad" Version="25.2.5" />
 		<PackageReference Include="Syncfusion.Maui.Sliders" Version="25.2.5" />
 		<PackageReference Include="System.Net.Http" Version="4.3.4" />
 	</ItemGroup>

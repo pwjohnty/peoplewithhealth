@@ -27,7 +27,7 @@ namespace PeopleWith
 
         public bool additionalconsent { get; set; }
 
-
+        public bool signaturepad { get; set; }
     }
 
     public class ApiResponseConsent

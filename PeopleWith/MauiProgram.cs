@@ -8,6 +8,7 @@ using Plugin.LocalNotification;
 using Plugin.Maui.Biometric;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 using CommunityToolkit.Maui;
+using Maui.FreakyControls.Extensions;
 
 namespace PeopleWith
 {
@@ -49,7 +50,8 @@ namespace PeopleWith
 #endif
             });
             //builder.Services.AddSingleton(typeof(IFingerprint), CrossFingerprint.Current);
-            builder.ConfigureSyncfusionCore();  
+            builder.ConfigureSyncfusionCore();
+            builder.InitializeFreakyControls();
 
             // Use with Dependency Injection
             builder.Services.AddSingleton<IBiometric>(BiometricAuthenticationService.Default);
