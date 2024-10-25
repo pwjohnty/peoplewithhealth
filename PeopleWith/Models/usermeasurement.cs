@@ -36,7 +36,7 @@ namespace PeopleWith
         public string datechanged { get; set; }
 
         [System.Text.Json.Serialization.JsonIgnore]
-        public double numconverted { get; set; }
+        public double? numconverted { get; set; }
 
         [System.Text.Json.Serialization.JsonIgnore]
         public double numconvertedtwo { get; set; }

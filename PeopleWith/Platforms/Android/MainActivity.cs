@@ -17,12 +17,13 @@ namespace PeopleWith
         private NotificationHubClient hub;
         private static string? GetDeviceId() => Secure.GetString(Android.App.Application.Context.ContentResolver, Secure.AndroidId);
 
+        public static MainActivity Instance { get; private set; }
         protected override async void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             // Window.SetStatusBarColor(Android.Graphics.Color.Transparent);
             // Window.SetNavigationBarColor(Android.Graphics.Color.Transparent);
-
+            Instance = this;
             //Initalize Fingerprint 
             //CrossFingerprint.SetCurrentActivityResolver(() => this);
 

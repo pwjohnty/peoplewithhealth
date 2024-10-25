@@ -588,7 +588,9 @@ public partial class RegisterFinalPage : ContentPage
                 {
                     Preferences.Default.Set("pincode", newuser.userpin);
                 }
-               
+
+                Preferences.Default.Set("validationcode", newuser.validationcode);
+
 
                 await Task.Delay(3000);
                 Application.Current.MainPage = new NavigationPage(new MainDashboard());

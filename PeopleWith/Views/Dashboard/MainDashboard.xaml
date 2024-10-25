@@ -29,7 +29,9 @@
 
         <Button Text="Videos" x:Name="VideoBtn" BackgroundColor="Orange" Margin="0,20,0,0" Clicked="VideoBtn_Clicked"/>
 
-    </VerticalStackLayout>
+        <Button Text="Health Report" x:Name="HealthReportBtn" TextColor="White" Margin="0,20,0,0" BackgroundColor="Goldenrod" Clicked="HealthReportBtn_Clicked"/>
+
+        </VerticalStackLayout>
 
 
        
