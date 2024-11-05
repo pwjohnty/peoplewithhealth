@@ -75,17 +75,29 @@
 	  <None Remove="Resources\Images\adddataicon.png" />
 	  <None Remove="Resources\Images\agreement.png" />
 	  <None Remove="Resources\Images\alarm.png" />
+	  <None Remove="Resources\Images\allergenhome.png" />
 	  <None Remove="Resources\Images\angry.png" />
 	  <None Remove="Resources\Images\appconstructionicon.png" />
+	  <None Remove="Resources\Images\appointhome.png" />
 	  <None Remove="Resources\Images\backbutton.png" />
 	  <None Remove="Resources\Images\background.png" />
 	  <None Remove="Resources\Images\charticon.png" />
 	  <None Remove="Resources\Images\compare.png" />
 	  <None Remove="Resources\Images\confused.png" />
 	  <None Remove="Resources\Images\crying.png" />
+	  <None Remove="Resources\Images\dashbrowseactive.png" />
+	  <None Remove="Resources\Images\dashbrowseinactive.png" />
+	  <None Remove="Resources\Images\dashexploreactive.png" />
+	  <None Remove="Resources\Images\dashexploreinactive.png" />
+	  <None Remove="Resources\Images\dashiconactive.png" />
+	  <None Remove="Resources\Images\dashiconinactive.png" />
+	  <None Remove="Resources\Images\dashsearch.png" />
 	  <None Remove="Resources\Images\delete.png" />
 	  <None Remove="Resources\Images\deleteicon.png" />
+	  <None Remove="Resources\Images\diagnosishome.png" />
+	  <None Remove="Resources\Images\diagnosisicon2022.png" />
 	  <None Remove="Resources\Images\doctor.png" />
+	  <None Remove="Resources\Images\downarrow.png" />
 	  <None Remove="Resources\Images\erroricon.png" />
 	  <None Remove="Resources\Images\faceid.png" />
 	  <None Remove="Resources\Images\filtergray.png" />
@@ -93,6 +105,7 @@
 	  <None Remove="Resources\Images\finger.png" />
 	  <None Remove="Resources\Images\fingerprint.png" />
 	  <None Remove="Resources\Images\happy.png" />
+	  <None Remove="Resources\Images\hcphome.png" />
 	  <None Remove="Resources\Images\icondate.png" />
 	  <None Remove="Resources\Images\icondatepicker.png" />
 	  <None Remove="Resources\Images\icontime.png" />
@@ -102,9 +115,12 @@
 	  <None Remove="Resources\Images\location.png" />
 	  <None Remove="Resources\Images\logo.png" />
 	  <None Remove="Resources\Images\loved.png" />
+	  <None Remove="Resources\Images\measurementhome.png" />
 	  <None Remove="Resources\Images\medcalendericon.png" />
+	  <None Remove="Resources\Images\medicinehome.png" />
 	  <None Remove="Resources\Images\medpillicon.png" />
 	  <None Remove="Resources\Images\medssuccess.png" />
+	  <None Remove="Resources\Images\moodhome.png" />
 	  <None Remove="Resources\Images\neutral.png" />
 	  <None Remove="Resources\Images\medtime.png" />
 	  <None Remove="Resources\Images\medtimelg.png" />
@@ -120,7 +136,10 @@
 	  <None Remove="Resources\Images\pincode.png" />
 	  <None Remove="Resources\Images\pinicon.png" />
 	  <None Remove="Resources\Images\playbutton.png" />
+	  <None Remove="Resources\Images\pwlogo.png" />
 	  <None Remove="Resources\Images\pwregbackgroundlight.png" />
+	  <None Remove="Resources\Images\questionnairehome.png" />
+	  <None Remove="Resources\Images\questionnaireicon.png" />
 	  <None Remove="Resources\Images\regcompletetick.png" />
 	  <None Remove="Resources\Images\regtick.png" />
 	  <None Remove="Resources\Images\sad.png" />
@@ -128,6 +147,7 @@
 	  <None Remove="Resources\Images\searchbaricon.png" />
 	  <None Remove="Resources\Images\searchbrown.png" />
 	  <None Remove="Resources\Images\searchgray.png" />
+	  <None Remove="Resources\Images\searchicon.png" />
 	  <None Remove="Resources\Images\searchorange.png" />
 	  <None Remove="Resources\Images\searchpurple.png" />
 	  <None Remove="Resources\Images\shit.png" />
@@ -139,11 +159,15 @@
 	  <None Remove="Resources\Images\searchteal.png" />
 	  <None Remove="Resources\Images\smartwatchicon.png" />
 	  <None Remove="Resources\Images\successtick.png" />
+	  <None Remove="Resources\Images\supphome.png" />
 	  <None Remove="Resources\Images\surprised.png" />
+	  <None Remove="Resources\Images\symptomshome.png" />
 	  <None Remove="Resources\Images\syncicon.png" />
 	  <None Remove="Resources\Images\tired.png" />
+	  <None Remove="Resources\Images\uparrow.png" />
 	  <None Remove="Resources\Images\update.png" />
 	  <None Remove="Resources\Images\updateicon.png" />
+	  <None Remove="Resources\Images\usericon.png" />
 	  <None Remove="Resources\Images\warningicon.png" />
 	  <None Remove="Resources\Raw\success.json" />
 	  <None Remove="Resources\Splash\splashpw.svg" />
@@ -157,6 +181,7 @@
 		<PackageReference Include="CommunityToolkit.Maui" Version="7.0.1" />
 		<PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="3.1.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.0" />
+		<PackageReference Include="FreakyControls" Version="0.5.0" />
 		<PackageReference Include="Microsoft.Azure.NotificationHubs" Version="4.2.0" />
 		<PackageReference Include="Microsoft.Datasync.Client" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
@@ -350,6 +375,12 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Medications\SingleMedication.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Questionnaires\AllQuestionnaires.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Questionnaires\QuestionnairePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Schedule\AddAsRequiredDosage.xaml">
