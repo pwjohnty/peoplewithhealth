@@ -1,4 +1,4 @@
-﻿//using Android.Net.Wifi.Aware;
+//using Android.Net.Wifi.Aware;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Syncfusion.Maui.Calendar;
@@ -81,6 +81,9 @@ namespace PeopleWith
         //User Consent 
         public const string UserConsent = "https://pwdevapi.peoplewith.com/api/userconsent";
 
+        public const string UserQuestionnaires = "https://pwdevapi.peoplewith.com/api/userquestionnaire";
+
+        public const string UserFeedback = "https://pwdevapi.peoplewith.com/api/userfeedback";
 
 
         //Get User Details 
@@ -2329,23 +2332,23 @@ namespace PeopleWith
         }
 
 
-        //User Consent Post Data 
+        //User Consent Post Data  
 
         public async Task<userconsent> PostUserConsentAsync(userconsent ConsentPassed)
         {
             try
             {
                 HttpClient client = new HttpClient();
-                var url = APICalls.UserConsent; 
+                var url = APICalls.UserConsent;
                 string jsonns = System.Text.Json.JsonSerializer.Serialize<userconsent>(ConsentPassed);
                 StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
                 var response = await client.PostAsync(url, contenttts);
                 var errorResponse = await response.Content.ReadAsStringAsync();
                 if (response.IsSuccessStatusCode)
                 {
-                    // Read the response content as a string
+                    // Read the response content as a string 
                     string responseContent = await response.Content.ReadAsStringAsync();
-                    return null; 
+                    return null;
 
 
                 }
@@ -2355,6 +2358,289 @@ namespace PeopleWith
                     var s = errorcontent;
                     return null;
                 }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        //questionnaire
+
+        public async Task<ObservableCollection<questionnaire>> GetQuestionnaires()
+        {
+            try
+            {
+                var url = "https://pwdevapi.peoplewith.com/api/questionnaire/";
+                HttpClient client = new HttpClient();
+                HttpResponseMessage responseconsent = await client.GetAsync(url);
+
+                if (responseconsent.IsSuccessStatusCode)
+                {
+                    string contentconsent = await responseconsent.Content.ReadAsStringAsync();
+                    var userResponseconsent = JsonConvert.DeserializeObject<ApiResponseQuestionnaire>(contentconsent);
+                    var consent = userResponseconsent.Value;
+
+                    // var questionAnswers = JsonConvert.DeserializeObject<ObservableCollection<questionanswerinfo>>();
+                    var newcollection = new ObservableCollection<questionnaire>();
+
+                    foreach (var item in consent)
+                    {
+                        if (item.deleted == true)
+                        {
+                            //Ignore
+                        }
+                        else
+                        {
+
+
+                            try
+                            {
+                                // Attempt to deserialize as an array
+                                item.questionanswerjsonlist = JsonConvert.DeserializeObject<ObservableCollection<questionanswerinfo>>(item.questionanswerjson);
+                            }
+                            catch (JsonSerializationException)
+                            {
+                                // If the JSON is a single object, deserialize it as such and wrap it in a collection
+                                var singleItem = JsonConvert.DeserializeObject<questionanswerinfo>(item.questionanswerjson);
+                                item.questionanswerjsonlist = new ObservableCollection<questionanswerinfo> { singleItem };
+                            }
+
+
+                            newcollection.Add(item);
+
+
+
+                        }
+                    }
+
+                    return new ObservableCollection<questionnaire>(newcollection);
+
+                }
+                else
+                {
+                    return null;
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
+        public async Task<userquestionnaire> PostUserQuestionnaire(userquestionnaire userquestionnairepassed)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                var url = "https://pwdevapi.peoplewith.com/api/userquestionnaire";
+                string jsonns = System.Text.Json.JsonSerializer.Serialize<userquestionnaire>(userquestionnairepassed);
+                StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync(url, contenttts);
+                var errorResponse = await response.Content.ReadAsStringAsync();
+                
+                if (response.IsSuccessStatusCode)
+                {
+                    // Read the response content as a string
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    var jsonResponse = JObject.Parse(responseContent);
+
+                    var id = jsonResponse["value"]?[0]?["userquestionnaireid"]?.ToString();
+
+                    userquestionnairepassed.userquestionnaireid = id;
+                    // Return the inserted item
+                    return userquestionnairepassed;
+
+                }
+                else
+                {
+                    string errorcontent = await response.Content.ReadAsStringAsync();
+                    var s = errorcontent;
+                    return null;
+                }
+                // return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public async Task<ObservableCollection<userquestionnaire>> GetUserQuestionnaires()
+        {
+            try
+            {
+                ObservableCollection<userquestionnaire> itemstoremove = new ObservableCollection<userquestionnaire>();
+                var userid = Helpers.Settings.UserKey;
+                string urlWithQuery = $"{UserQuestionnaires}?$filter=userid eq '{userid}'";
+                HttpClient client = new HttpClient();
+                HttpResponseMessage responseconsent = await client.GetAsync(urlWithQuery);
+
+                if (responseconsent.IsSuccessStatusCode)
+                {
+                    string contentconsent = await responseconsent.Content.ReadAsStringAsync();
+                    // Add Feedback Converter
+                  //  var settings = new JsonSerializerSettings();
+                  //  settings.Converters.Add(new AppointmentFeedbackConverter());
+                    var userResponseconsent = JsonConvert.DeserializeObject<ApiResponseUserQuestionnaire>(contentconsent);
+                    var consent = userResponseconsent.Value;
+
+                    var newcollection = new ObservableCollection<userquestionnaire>();
+
+                    //Remove All Deleted Items 
+                    foreach (var item in consent)
+                    {
+                        if (item.deleted == true)
+                        {
+                            
+                        }
+                        else
+                        {
+                            try
+                            {
+                                // Attempt to deserialize as an array
+                                item.questionanswerjsonlist = JsonConvert.DeserializeObject<ObservableCollection<userquestionnaireresponse>>(item.questionanswerjson);
+                            }
+                            catch (JsonSerializationException)
+                            {
+                                // If the JSON is a single object, deserialize it as such and wrap it in a collection
+                                var singleItem = JsonConvert.DeserializeObject<userquestionnaireresponse>(item.questionanswerjson);
+                                item.questionanswerjsonlist = new ObservableCollection<userquestionnaireresponse> { singleItem };
+                            }
+                        }
+
+                        newcollection.Add(item);
+                    }
+
+              
+
+                    return new ObservableCollection<userquestionnaire>(newcollection);
+
+                }
+                else
+                {
+                    return null;
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
+        public async Task<ObservableCollection<userfeedback>> GetUserFeedback()
+        {
+            try
+            {
+                ObservableCollection<userfeedback> itemstoremove = new ObservableCollection<userfeedback>();
+                var userid = Helpers.Settings.UserKey;
+                string urlWithQuery = $"{UserFeedback}?$filter=userid eq '{userid}'";
+                HttpClient client = new HttpClient();
+                HttpResponseMessage responseconsent = await client.GetAsync(urlWithQuery);
+
+                if (responseconsent.IsSuccessStatusCode)
+                {
+                    string contentconsent = await responseconsent.Content.ReadAsStringAsync();
+                    // Add Feedback Converter
+                    //  var settings = new JsonSerializerSettings();
+                    //  settings.Converters.Add(new AppointmentFeedbackConverter());
+                    var userResponseconsent = JsonConvert.DeserializeObject<ApiResponseUserFeedback>(contentconsent);
+                    var consent = userResponseconsent.Value;
+
+                    var newcollection = new ObservableCollection<userfeedback>();
+
+                    //Remove All Deleted Items 
+                    foreach (var item in consent)
+                    {
+                      
+                        //item.moodfeedbacklist = JsonConvert.DeserializeObject<ObservableCollection<feedbackdata>>(item.moodfeedback);
+
+                        try
+                            {
+                                // Attempt to deserialize as an array
+                                item.medicationfeedbacklist = JsonConvert.DeserializeObject<ObservableCollection<feedbackdata>>(item.medicationfeedback);
+                       
+                            }
+                            catch (JsonSerializationException)
+                            {
+                                // If the JSON is a single object, deserialize it as such and wrap it in a collection
+                                var singleItem = JsonConvert.DeserializeObject<feedbackdata>(item.medicationfeedback);
+                                item.medicationfeedbacklist = new ObservableCollection<feedbackdata> { singleItem };
+                            }
+
+                        try
+                        {
+                            // Attempt to deserialize as an array
+                            item.supplementfeedbacklist = JsonConvert.DeserializeObject<ObservableCollection<feedbackdata>>(item.supplementfeedback);
+                        }
+                        catch (JsonSerializationException)
+                        {
+                            // If the JSON is a single object, deserialize it as such and wrap it in a collection
+                            var singleItem = JsonConvert.DeserializeObject<feedbackdata>(item.supplementfeedback);
+                            item.supplementfeedbacklist = new ObservableCollection<feedbackdata> { singleItem };
+                        }
+
+                        try
+                        {
+                            // Attempt to deserialize as an array
+                            item.symptomfeedbacklist = JsonConvert.DeserializeObject<ObservableCollection<feedbackdata>>(item.symptomfeedback);
+                        }
+                        catch (JsonSerializationException)
+                        {
+                            // If the JSON is a single object, deserialize it as such and wrap it in a collection
+                            var singleItem = JsonConvert.DeserializeObject<feedbackdata>(item.symptomfeedback);
+                            item.symptomfeedbacklist = new ObservableCollection<feedbackdata> { singleItem };
+                        }
+
+
+
+                        try
+                        {
+                            // Attempt to deserialize as an array
+                            item.measurementfeedbacklist = JsonConvert.DeserializeObject<ObservableCollection<feedbackdata>>(item.measurementfeedback);
+                        }
+                        catch (JsonSerializationException)
+                        {
+                            // If the JSON is a single object, deserialize it as such and wrap it in a collection
+                            var singleItem = JsonConvert.DeserializeObject<feedbackdata>(item.measurementfeedback);
+                            item.measurementfeedbacklist = new ObservableCollection<feedbackdata> { singleItem };
+                        }
+
+
+                        try
+                        {
+                            // Attempt to deserialize as an array
+                            item.moodfeedbacklist = JsonConvert.DeserializeObject<ObservableCollection<feedbackdata>>(item.moodfeedback);
+                        }
+                        catch (JsonSerializationException)
+                        {
+                            // If the JSON is a single object, deserialize it as such and wrap it in a collection
+                            var singleItem = JsonConvert.DeserializeObject<feedbackdata>(item.moodfeedback);
+                            item.moodfeedbacklist = new ObservableCollection<feedbackdata> { singleItem };
+                        }
+
+                        newcollection.Add(item);
+                    }
+
+
+
+                    return new ObservableCollection<userfeedback>(newcollection);
+
+                }
+                else
+                {
+                    return null;
+                }
+
             }
             catch (Exception ex)
             {

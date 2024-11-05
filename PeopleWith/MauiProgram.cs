@@ -30,8 +30,8 @@ namespace PeopleWith
 #endif
                 .ConfigureFonts(fonts =>
                 {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                    fonts.AddFont("HankenGrotesk-Regular.ttf", "OpenSansRegular");
+                    fonts.AddFont("HankenGrotesk-Bold.ttf", "OpenSansSemibold");
                     fonts.AddFont("HankenGrotesk-Bold.ttf", "HankenGroteskBold");
                     fonts.AddFont("HankenGrotesk-Light.ttf", "HankenGroteskLight");
                     fonts.AddFont("HankenGrotesk-SemiBold.ttf", "HankenGroteskSemiBold");

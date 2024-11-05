@@ -32,5 +32,10 @@
 	<string>com.peoplewith.peoplewith</string>
   <key>NSHealthShareUsageDescription</key>
   <string>The apps need access to your Health Usage Share</string>
+
+  <!-- Add this for setting the UI style to Light -->
+  <key>UIUserInterfaceStyle</key>
+  <string>Light</string>
+
 </dict>
 </plist>

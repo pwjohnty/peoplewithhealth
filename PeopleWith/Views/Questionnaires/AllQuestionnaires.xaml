@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+         xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
+                 xmlns:sliders="clr-namespace:Syncfusion.Maui.Sliders;assembly=Syncfusion.Maui.Sliders"
+             x:Class="PeopleWith.AllQuestionnaires" BackgroundColor="White"
+             >
+    <ScrollView VerticalScrollBarVisibility="Never">
+
+
+        <StackLayout x:Name="maintack" VerticalOptions="FillAndExpand" BackgroundColor="Transparent">
+
+
+            <!--<StackLayout x:Name="nodatastack" IsVisible="False" VerticalOptions="CenterAndExpand">
+                <Image Source="adddataicon.png" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="50" WidthRequest="50"/>
+                <Label Text="Add Medication" FontSize="20" Margin="0,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Center" />
+                <Label Text="Tap here to add a medication" FontSize="14" TextColor="#031926" FontFamily="HankenGroteskRegular" Margin="0,0,0,0" HorizontalOptions="Center" VerticalOptions="Center" VerticalTextAlignment="Center" />
+
+            </StackLayout>-->
+
+            <StackLayout x:Name="datastack">
+
+
+                <Label Text="Questionnaires" FontSize="26" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
+
+                <buttons:SfSegmentedControl x:Name="segmentedControl" SelectionChanged="segmentedControl_SelectionChanged" SegmentBackground="#fff9ec" Stroke="LightGray"  SelectedIndex="0" DisabledSegmentTextColor="Gray" CornerRadius="5"
+                Margin="8,8,8,0">
+                    <buttons:SfSegmentedControl.TextStyle>
+                        <buttons:SegmentTextStyle TextColor="#766647" FontFamily="HankenGroteskBold" FontAttributes="None" FontSize="12"/>
+                    </buttons:SfSegmentedControl.TextStyle>
+                    <buttons:SfSegmentedControl.SelectionIndicatorSettings>
+                        <buttons:SelectionIndicatorSettings 
+                SelectionIndicatorPlacement="Fill"
+                Background="#766647"/>
+                    </buttons:SfSegmentedControl.SelectionIndicatorSettings>
+                    <buttons:SfSegmentedControl.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Current</x:String>
+                            <x:String>Completed</x:String>
+                        </x:Array>
+                    </buttons:SfSegmentedControl.ItemsSource>
+
+                </buttons:SfSegmentedControl>
+
+                <syncfusion:SfListView  x:Name="Allquestionnaires" Padding="0" Margin="10,10,10,50" ItemTapped="Allquestionnaires_ItemTapped" AutoFitMode="Height"  ItemSpacing="0"  HorizontalOptions="FillAndExpand" IsScrollingEnabled="False"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
+                    <syncfusion:SfListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout>
+                                    <Frame CornerRadius="10"  Margin="0,5,0,5"
+ BackgroundColor="#fff9ec" HasShadow="False" 
+                BorderColor="Transparent" InputTransparent="True"
+Padding="0">
+                                        <Grid Margin="0,10,0,0">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                       
+
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="15*"/>
+                                                <ColumnDefinition Width="75*"/>
+                                                <ColumnDefinition Width="10*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Label Text="{Binding title}" FontFamily="HankenGroteskBold"  FontSize="14" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,0,0" TextColor="#766647" />
+
+                                            <Label Text="{Binding description}" FontFamily="HankenGroteskRegular"  FontSize="10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,0,10" TextColor="Gray" />
+
+
+                                            <Image Source="nextdarker.png" HeightRequest="15" Margin="0,0,0,10"  Grid.Row="0" Grid.RowSpan="2" Grid.Column="4" VerticalOptions="Center" HorizontalOptions="Center" />
+
+                                        </Grid>
+                                    </Frame>
+                             
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.ItemTemplate>
+                </syncfusion:SfListView>
+
+
+
+                <syncfusion:SfListView  x:Name="Alluserquestionnaires" IsVisible="False" Padding="0" ItemTapped="Alluserquestionnaires_ItemTapped" Margin="10,10,10,50"  AutoFitMode="Height"  ItemSpacing="0"  HorizontalOptions="FillAndExpand" IsScrollingEnabled="False"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
+                    <syncfusion:SfListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout>
+                                    <Frame CornerRadius="10"  Margin="0,5,0,5"
+ BackgroundColor="#fff9ec" HasShadow="False" 
+                BorderColor="Transparent" InputTransparent="True"
+Padding="0">
+                                        <Grid Margin="0,10,0,0">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+
+
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="15*"/>
+                                                <ColumnDefinition Width="75*"/>
+                                                <ColumnDefinition Width="10*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Label Text="{Binding questionnairename}" FontFamily="HankenGroteskBold"  FontSize="14" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,0,0" TextColor="#766647" />
+
+                                            <Label Text="{Binding completedatetime}" FontFamily="HankenGroteskRegular"  FontSize="10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,0,10" TextColor="Gray" />
+
+
+                                            <Image Source="nextdarker.png" HeightRequest="15" Margin="0,0,0,10"  Grid.Row="0" Grid.RowSpan="2" Grid.Column="4" VerticalOptions="Center" HorizontalOptions="Center" />
+
+                                        </Grid>
+                                    </Frame>
+
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.ItemTemplate>
+                </syncfusion:SfListView>
+
+
+
+            </StackLayout>
+
+        </StackLayout>
+
+
+
+    </ScrollView>
+</ContentPage>

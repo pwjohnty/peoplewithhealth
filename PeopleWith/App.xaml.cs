@@ -13,7 +13,7 @@ namespace PeopleWith
             _connectivityService = new ConnectivityService();
             _connectivityService.ConnectivityChanged += OnConnectivityChanged;
 
-
+            Application.Current.UserAppTheme = AppTheme.Light;
 
             //Register Syncfusion license
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NBaF5cXmZCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdnWXpceHRQRmRcUER0W0A=");
