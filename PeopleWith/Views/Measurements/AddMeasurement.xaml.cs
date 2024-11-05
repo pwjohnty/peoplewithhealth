@@ -187,8 +187,8 @@ public partial class AddMeasurement : ContentPage
 
             if (string.IsNullOrEmpty(e.NewTextValue))
             {
-               validinput = false;
-               
+                validinput = false;
+
                 unitentry.Text = string.Empty;
             }
             else
@@ -1263,6 +1263,7 @@ public partial class AddMeasurement : ContentPage
                             }
 
                         }
+
                         else
                         {
                             var convertoint = Convert.ToInt32(e.NewTextValue);
@@ -1275,6 +1276,50 @@ public partial class AddMeasurement : ContentPage
 
                                 }
                                 else if (convertoint > 500)
+                                {
+                                    validinput = false;
+
+                                }
+                                else
+                                {
+                                    numvalueconverted = convertoint.ToString();
+                                    SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    validinput = true;
+                                }
+
+                            }
+                            else
+                            {
+                                validinput = false;
+
+                            }
+                        }
+                    }
+
+                    if (inputvalue == "ng/mL")
+                    {
+                        unitentry.Text = e.NewTextValue;
+                        if (e.NewTextValue.Contains("."))
+                        {
+                            var countdots = e.NewTextValue.ToCharArray().Count(x => x == '.');
+                            var convertodec = Convert.ToDouble(e.NewTextValue);
+                            if (countdots > 0)
+                            {
+                                validinput = false;
+
+                            }
+                        }
+                        else
+                        {
+                            var convertoint = Convert.ToInt32(e.NewTextValue);
+                            if (e.NewTextValue.Length >= 1 && e.NewTextValue.Length <= 80)
+                            {
+                                if (convertoint < 13)
+                                {
+                                    validinput = false;
+
+                                }
+                                else if (convertoint > 400)
                                 {
                                     validinput = false;
 
@@ -3220,6 +3265,292 @@ public partial class AddMeasurement : ContentPage
                         if (e.NewTextValue.Length >= 1 && e.NewTextValue.Length <= 2)
                         {
                             if (convertoint > 0 && convertoint < 37)
+                            {
+                                SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                validinput = true;
+                                numvalueconverted = convertoint.ToString();
+                            }
+                            else
+                            {
+                                validinput = false;
+
+                            }
+                        }
+                        else
+                        {
+                            validinput = false;
+
+                        }
+                    }
+                    else
+                    {
+
+                        if (e.NewTextValue.Length >= 1 && e.NewTextValue.Length <= 2)
+                        {
+                            if (convertoint > 0 && convertoint < 2161)
+                            {
+                                SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                validinput = true;
+                                numvalueconverted = convertoint.ToString();
+                            }
+                            else
+                            {
+                                validinput = false;
+
+                            }
+                        }
+                        else
+                        {
+                            validinput = false;
+
+                        }
+                    }
+
+                }
+                else if (measurementnamestring == "Glomerular Filtration Rate (GFR)")
+                {
+                    var ValueString = e.NewTextValue;
+                    if (e.NewTextValue.Contains("."))
+                    {
+                        ValueString = e.NewTextValue.Replace(".", "");
+                        unitentry.Text = ValueString;
+                    }
+                    var convertoint = Convert.ToInt32(ValueString);
+                    if (inputvalue == "mL/min/1.73 m2")
+                    {
+                        if (ValueString.Length >= 1 && ValueString.Length <= 3)
+                        {
+                            if (convertoint > 0 && convertoint < 150)
+                            {
+                                SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                validinput = true;
+                                numvalueconverted = convertoint.ToString();
+                            }
+                            else
+                            {
+                                validinput = false;
+
+                            }
+                        }
+                        else
+                        {
+                            validinput = false;
+
+                        }
+                    }
+
+                }
+                else if (measurementnamestring == "Gamma-glutamyltransferase (GGT)")
+                {
+                    var ValueString = e.NewTextValue;
+                    if (e.NewTextValue.Contains("."))
+                    {
+                        ValueString = e.NewTextValue.Replace(".", "");
+                        unitentry.Text = ValueString;
+                    }
+                    var convertoint = Convert.ToInt32(ValueString);
+                    if (inputvalue == "IU/L")
+                    {
+                        if (ValueString.Length >= 1 && ValueString.Length <= 3)
+                        {
+                            if (convertoint > 0 && convertoint < 111)
+                            {
+                                SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                validinput = true;
+                                numvalueconverted = convertoint.ToString();
+                            }
+                            else
+                            {
+                                validinput = false;
+
+                            }
+                        }
+                        else
+                        {
+                            validinput = false;
+
+                        }
+                    }
+
+                }
+                else if (measurementnamestring == "Very Low-Density Lipoprotein Cholesterol (VLDL)")
+                {
+                    var ValueString = e.NewTextValue;
+                    if (e.NewTextValue.Contains("."))
+                    {
+                        ValueString = e.NewTextValue.Replace(".", "");
+                        unitentry.Text = ValueString;
+                    }
+                    var convertoint = Convert.ToInt32(ValueString);
+                    if (inputvalue == "mg/dL")
+                    {
+                        if (ValueString.Length >= 1 && ValueString.Length <= 2)
+                        {
+                            if (convertoint > 0 && convertoint < 51)
+                            {
+                                SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                validinput = true;
+                                numvalueconverted = convertoint.ToString();
+                            }
+                            else
+                            {
+                                validinput = false;
+
+                            }
+                        }
+                        else
+                        {
+                            validinput = false;
+
+                        }
+                    }
+
+                }
+                else if (measurementnamestring == "Thyroid Peroxidase Antibody (TPOAb)")
+                {
+                    var ValueString = e.NewTextValue;
+                    if (e.NewTextValue.Contains("."))
+                    {
+                        ValueString = e.NewTextValue.Replace(".", "");
+                        unitentry.Text = ValueString;
+                    }
+                    var convertoint = Convert.ToInt32(ValueString);
+                    if (inputvalue == "IU/mL")
+                    {
+                        if (ValueString.Length >= 1 && ValueString.Length <= 4)
+                        {
+                            if (convertoint > 0 && convertoint < 3001)
+                            {
+                                SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                validinput = true;
+                                numvalueconverted = convertoint.ToString();
+                            }
+                            else
+                            {
+                                validinput = false;
+
+                            }
+                        }
+                        else
+                        {
+                            validinput = false;
+
+                        }
+                    }
+
+                }
+                else if (measurementnamestring == "Thyroglobulin Antibody (TgAb)")
+                {
+                    var ValueString = e.NewTextValue;
+                    if (e.NewTextValue.Contains("."))
+                    {
+                        ValueString = e.NewTextValue.Replace(".", "");
+                        unitentry.Text = ValueString;
+                    }
+                    var convertoint = Convert.ToInt32(ValueString);
+                    if (inputvalue == "IU/mL")
+                    {
+                        if (ValueString.Length >= 1 && ValueString.Length <= 4)
+                        {
+                            if (convertoint > 0 && convertoint < 5001)
+                            {
+                                SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                validinput = true;
+                                numvalueconverted = convertoint.ToString();
+                            }
+                            else
+                            {
+                                validinput = false;
+
+                            }
+                        }
+                        else
+                        {
+                            validinput = false;
+
+                        }
+                    }
+
+                }
+                else if (measurementnamestring == "Thyroid-Stimulating Immunoglobulin (TSI)")
+                {
+                    var ValueString = e.NewTextValue;
+                    if (e.NewTextValue.Contains("."))
+                    {
+                        ValueString = e.NewTextValue.Replace(".", "");
+                        unitentry.Text = ValueString;
+                    }
+                    var convertoint = Convert.ToInt32(ValueString);
+                    if (inputvalue == "IU/L")
+                    {
+                        if (ValueString.Length >= 1 && ValueString.Length <= 4)
+                        {
+                            if (convertoint > 0 && convertoint < 5001)
+                            {
+                                SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                validinput = true;
+                                numvalueconverted = convertoint.ToString();
+                            }
+                            else
+                            {
+                                validinput = false;
+
+                            }
+                        }
+                        else
+                        {
+                            validinput = false;
+
+                        }
+                    }
+
+                }
+                else if (measurementnamestring == "Calcitonin Level") 
+                {
+                    var ValueString = e.NewTextValue;
+                    if (e.NewTextValue.Contains("."))
+                    {
+                        ValueString = e.NewTextValue.Replace(".", "");
+                        unitentry.Text = ValueString;
+                    }
+                    var convertoint = Convert.ToInt32(ValueString);
+                    if (inputvalue == "pg/mL")
+                    {
+                        if (ValueString.Length >= 1 && ValueString.Length <= 3)
+                        {
+                            if (convertoint > 0 && convertoint < 121)
+                            {
+                                SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                validinput = true;
+                                numvalueconverted = convertoint.ToString();
+                            }
+                            else
+                            {
+                                validinput = false;
+
+                            }
+                        }
+                        else
+                        {
+                            validinput = false;
+
+                        }
+                    }
+                }
+                else if (measurementnamestring == "Endometrial Thickness")
+                {
+                    var ValueString = e.NewTextValue; 
+                    if (e.NewTextValue.Contains("."))
+                    {
+                        ValueString = e.NewTextValue.Replace(".", "");
+                        unitentry.Text = ValueString;
+                    }
+                    var convertoint = Convert.ToInt32(ValueString);
+                    if (inputvalue == "mm")
+                    {
+                        if (ValueString.Length >= 1 && ValueString.Length <= 2)
+                        {
+                            if (convertoint > 0 && convertoint < 21)
                             {
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
                                 validinput = true;

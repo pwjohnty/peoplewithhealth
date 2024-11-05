@@ -110,6 +110,29 @@ public partial class SingleMeasurement : ContentPage
         }
     }
 
+    //async public Task<List<string>> ConvertInchestoFeetInches(Double Min, Double Max)
+    //{
+    //    try
+    //    {
+    //        List<string> FeetInches = new List<string>(); 
+    //        for(Double i = Min; i <= Max; i++)
+    //        {
+    //            int total = Convert.ToInt32(i); 
+    //            int stones = total / 14;          
+    //            int pounds = total % 14;
+
+    //            FeetInches.Add($"{stones}st {pounds}lbs");
+    //        }
+
+    //        return FeetInches;
+    //    }
+    //    catch (Exception Ex)
+    //    {
+    //        await crashHandler.CrashDetectedSend(Ex);
+    //        return null;
+    //    }
+    //}
+
     async public Task<int> ConvertStonePoundsToPounds(string input)
     {
         try
@@ -131,6 +154,28 @@ public partial class SingleMeasurement : ContentPage
             return 0;
         }
     }
+
+    //async public Task<int> ConvertPoundsToStonePounds(Double Min, Double Max)
+    //{
+    //    try
+    //    {
+    //        string cleanInput = input.Replace("st", "").Replace("lbs", "").Trim();
+    //        string[] parts = cleanInput.Split(' ');
+
+    //        int stone = int.Parse(parts[0]);
+    //        int pounds = int.Parse(parts[1]);
+
+    //        // Convert stone to pounds (1 stone = 14 pounds)
+    //        int totalPounds = (stone * 14) + pounds;
+
+    //        return totalPounds;
+    //    }
+    //    catch (Exception Ex)
+    //    {
+    //        await crashHandler.CrashDetectedSend(Ex);
+    //        return 0;
+    //    }
+    //}
 
     async void populatechart()
     {
@@ -369,50 +414,119 @@ public partial class SingleMeasurement : ContentPage
                     primaryAxis.MajorTickStyle.Stroke = Colors.Transparent;
                     datachart.XAxes.Add(primaryAxis);
 
-                    NumericalAxis secondaryAxis = new NumericalAxis();
-                    secondaryAxis.LabelStyle.TextColor = Colors.LightGray;
-                    secondaryAxis.LabelStyle.FontFamily = "HankenGroteskRegular";
-                    secondaryAxis.AxisLineStyle.Stroke = Colors.LightGray;
-                    secondaryAxis.MajorTickStyle.Stroke = Colors.LightGray;
-                    secondaryAxis.AxisLineStyle.StrokeWidth = 1;//Hide Axis line 
-                    secondaryAxis.MajorTickStyle.StrokeWidth = 1;//Hide TickLines 
-                    secondaryAxis.IsVisible = true;
-                    secondaryAxis.Minimum = minvalue - 5;
-                    secondaryAxis.Maximum = maxvalue + 5;
-                    datachart.YAxes.Add(secondaryAxis);
-
+                  
+                    if (usermeasurementpassed.unit == "Feet/Inches")
+                    {
+                        NumericalAxis secondaryAxis = new NumericalAxis();
+                        secondaryAxis.LabelStyle.TextColor = Colors.LightGray;
+                        secondaryAxis.LabelStyle.FontFamily = "HankenGroteskRegular";
+                        secondaryAxis.LabelStyle.LabelFormat = "0' In";
+                        secondaryAxis.LabelStyle.FontSize = 8;
+                        secondaryAxis.AxisLineStyle.Stroke = Colors.LightGray;
+                        secondaryAxis.MajorTickStyle.Stroke = Colors.LightGray;
+                        secondaryAxis.AxisLineStyle.StrokeWidth = 1;//Hide Axis line 
+                        secondaryAxis.MajorTickStyle.StrokeWidth = 1;//Hide TickLines 
+                        secondaryAxis.IsVisible = true;
+                        secondaryAxis.Minimum = minvalue - 5;
+                        secondaryAxis.Maximum = maxvalue + 5;
+                        datachart.YAxes.Add(secondaryAxis);
+                    }
+                    else if (usermeasurementpassed.unit == "Stones/Pounds")
+                    {
+                        NumericalAxis secondaryAxis = new NumericalAxis();
+                        secondaryAxis.LabelStyle.TextColor = Colors.LightGray;
+                        secondaryAxis.LabelStyle.FontFamily = "HankenGroteskRegular";
+                        secondaryAxis.LabelStyle.LabelFormat = "0' lbs";
+                        secondaryAxis.LabelStyle.FontSize = 8;
+                        secondaryAxis.AxisLineStyle.Stroke = Colors.LightGray;
+                        secondaryAxis.MajorTickStyle.Stroke = Colors.LightGray;
+                        secondaryAxis.AxisLineStyle.StrokeWidth = 1;//Hide Axis line 
+                        secondaryAxis.MajorTickStyle.StrokeWidth = 1;//Hide TickLines 
+                        secondaryAxis.IsVisible = true;
+                        secondaryAxis.Minimum = minvalue - 5;
+                        secondaryAxis.Maximum = maxvalue + 5;
+                        datachart.YAxes.Add(secondaryAxis);
+                    }
+                    else
+                    {
+                        NumericalAxis secondaryAxis = new NumericalAxis();
+                        secondaryAxis.LabelStyle.TextColor = Colors.LightGray;
+                        secondaryAxis.LabelStyle.FontFamily = "HankenGroteskRegular";
+                        secondaryAxis.AxisLineStyle.Stroke = Colors.LightGray;
+                        secondaryAxis.MajorTickStyle.Stroke = Colors.LightGray;
+                        secondaryAxis.AxisLineStyle.StrokeWidth = 1;//Hide Axis line 
+                        secondaryAxis.MajorTickStyle.StrokeWidth = 1;//Hide TickLines 
+                        secondaryAxis.IsVisible = true;
+                        secondaryAxis.Minimum = minvalue - 5;
+                        secondaryAxis.Maximum = maxvalue + 5;
+                        datachart.YAxes.Add(secondaryAxis);
+                    }
 
 
                     DataPointSelectionBehavior selection = new DataPointSelectionBehavior();
                     //   selection.SelectionBrush = Colors.Red;
                     selection.SelectionChanged += OnSelectionChanged;
 
-                    LineSeries columnseries = new LineSeries
+                    if (usermeasurementpassed.unit == "Feet/Inches")
                     {
-                        ItemsSource = orderlistbydate,
-                        XBindingPath = "inputdatetime",
-                        YBindingPath = "numconverted",
-                        Fill = Color.FromHex("#BFDBF7"),
-                        // ShapeType = ChartScatterShapeType.Ellipse,
-                        // ScatterHeight = 15,
-                        // ScatterWidth = 15,
-                        StrokeWidth = 2,
-                        EnableTooltip = true,
-                        EnableAnimation = true,
-                        ShowMarkers = true,
-                        ShowTrackballLabel = false,
-                        SelectionBehavior = selection,
-                        MarkerSettings = chartMarker
-                    };
+                        LineSeries columnseries = new LineSeries
+                        {
+                            ItemsSource = orderlistbydate,
+                            XBindingPath = "inputdatetime",
+                            YBindingPath = "numconverted",
+                            Fill = Color.FromHex("#BFDBF7"),
+                            StrokeWidth = 2,
+                            EnableTooltip = true,
+                            EnableAnimation = true,
+                            ShowMarkers = true,
+                            ShowTrackballLabel = false,
+                            TooltipTemplate = datachart.Resources["tooltipTemplate"] as DataTemplate,
+                            SelectionBehavior = selection,
+                            MarkerSettings = chartMarker
+                        };
 
-                    columnseries.ShowDataLabels = false;
-
-                    //ChartTrackballBehavior trackball = new ChartTrackballBehavior();
-                    //trackball.ShowLine = true;
-                    //trackball.DisplayMode = LabelDisplayMode.FloatAllPoints;
-                    //datachart.TrackballBehavior = trackball;
-
-                    datachart.Series.Add(columnseries);
+                        columnseries.ShowDataLabels = false;
+                        datachart.Series.Add(columnseries);
+                    }
+                    else if (usermeasurementpassed.unit == "Stones/Pounds")
+                    {
+                        LineSeries columnseries = new LineSeries
+                        {
+                            ItemsSource = orderlistbydate,
+                            XBindingPath = "inputdatetime",
+                            YBindingPath = "numconverted",
+                            Fill = Color.FromHex("#BFDBF7"),
+                            StrokeWidth = 2,
+                            EnableTooltip = true,
+                            EnableAnimation = true,
+                            ShowMarkers = true,
+                            ShowTrackballLabel = false,
+                            TooltipTemplate = datachart.Resources["tooltipTemplate"] as DataTemplate,
+                            SelectionBehavior = selection,
+                            MarkerSettings = chartMarker
+                        };
+                        columnseries.ShowDataLabels = false;
+                        datachart.Series.Add(columnseries);
+                    }
+                    else
+                    {
+                        LineSeries columnseries = new LineSeries
+                        {
+                            ItemsSource = orderlistbydate,
+                            XBindingPath = "inputdatetime",
+                            YBindingPath = "numconverted",
+                            Fill = Color.FromHex("#BFDBF7"),
+                            StrokeWidth = 2,
+                            EnableTooltip = true,
+                            EnableAnimation = true,
+                            ShowMarkers = true,
+                            ShowTrackballLabel = false,
+                            SelectionBehavior = selection,
+                            MarkerSettings = chartMarker
+                        };
+                        columnseries.ShowDataLabels = false;
+                        datachart.Series.Add(columnseries);
+                    }
                 }
 
                 lblvalue.Text = orderlistbydate[orderlistbydate.Count - 2].value;
