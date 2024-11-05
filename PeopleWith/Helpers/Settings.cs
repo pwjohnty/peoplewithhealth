@@ -59,6 +59,14 @@ namespace PeopleWith.Helpers
         }
 
 
+        private const string UserVC = "validationcode";
+        private static readonly string UserVCDefault = string.Empty;
+        public static string ValidationCode
+        {
+            get => Preferences.Get(UserVC, UserVCDefault);
+            set => Preferences.Set(UserVC, value);
+        }
+
         private const string UserIDKey = "userid";
         private static readonly string UserKeyDefault = string.Empty;
         public static string UserKey

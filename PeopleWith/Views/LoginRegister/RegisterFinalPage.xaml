@@ -2,8 +2,10 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" BackgroundColor="White"
              xmlns:pinview="clr-namespace:PINView.Maui;assembly=PINView.Maui"
-             HideSoftInputOnTapped="True"
-                 xmlns:progressBar="clr-namespace:Syncfusion.Maui.ProgressBar;assembly=Syncfusion.Maui.ProgressBar"
+             HideSoftInputOnTapped="True" NavigationPage.HasNavigationBar="False"
+             xmlns:progressBar="clr-namespace:Syncfusion.Maui.ProgressBar;assembly=Syncfusion.Maui.ProgressBar"
+             xmlns:SignaturePad="clr-namespace:Maui.FreakyControls;assembly=Maui.FreakyControls"
+             xmlns:signPad="clr-namespace:Syncfusion.Maui.SignaturePad;assembly=Syncfusion.Maui.SignaturePad"
              x:Class="PeopleWith.RegisterFinalPage" Shell.NavBarHasShadow="False" Shell.NavBarIsVisible="False">
     <Grid>
         <Grid.RowDefinitions>
@@ -249,7 +251,7 @@ HorizontalOptions="Center" />
 
                     </StackLayout>
 
-
+                    <StackLayout x:Name="ConsentBoxesStack">
 
                     <Frame HasShadow="False" Padding="10" Margin="0,30,0,0" x:Name="tcframe" BackgroundColor="Transparent" BorderColor="#BFDBF7" CornerRadius="10">
                         <Grid Margin="0,0,0,0" >
@@ -318,7 +320,37 @@ HorizontalOptions="Center" />
                             </Label>
                         </Grid>
                     </Frame>
+                    </StackLayout>
 
+                    <StackLayout x:Name="signaturePadStack"  IsVisible="False">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="100"/>
+                            </Grid.RowDefinitions>
+
+                            <Label Text="Please sign your name in the box below" HorizontalOptions="Center" Grid.Row="0" Margin="0,20,0,0"  FontAttributes="Bold" TextColor="Black"/>
+
+                            <Frame Grid.Row="1" HeightRequest="200" Padding="2" CornerRadius="5" Margin="0,0,0,20" HasShadow="False">
+                            <!--<SignaturePad:FreakySignaturePadView
+                            x:Name="signpad" Grid.Row="1" 
+                            BackgroundColor="White" StrokeCompleted="signpad_StrokeCompleted"
+                            StrokeColor="Black"
+                            StrokeWidth="2" 
+                            HeightRequest="250" />-->
+                                <signPad:SfSignaturePad 
+                                x:Name="signpad" Grid.Row="1" VerticalOptions="FillAndExpand"
+                                BackgroundColor="White" 
+                                StrokeColor="Black" DrawCompleted="signpad_DrawCompleted"
+                                HeightRequest="200" />
+                            </Frame>
+
+                            <Button Text="X" Grid.Row="1" HorizontalOptions="End" VerticalOptions="Start" Clicked="Button_Clicked" FontAttributes="Bold" BackgroundColor="Transparent" BorderColor="Transparent" TextColor="#031926" FontSize="18"/>
+
+                        </Grid>
+
+                    </StackLayout>
 
 
 
@@ -338,8 +370,7 @@ FontAttributes="Bold"
 HorizontalOptions="Center" />-->
 
                     <Image Source="peoplewithlogoanimation.gif" IsVisible="False" x:Name="imganimation" BackgroundColor="Transparent" IsAnimationPlaying="True"/>
-                    <WebView x:Name="webLogo" IsVisible="False" BackgroundColor="Transparent" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HeightRequest="300"
-                >
+                    <WebView x:Name="webLogo" IsVisible="False" BackgroundColor="Transparent" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HeightRequest="300">
 
                         <WebView.Source>
                             <HtmlWebViewSource>

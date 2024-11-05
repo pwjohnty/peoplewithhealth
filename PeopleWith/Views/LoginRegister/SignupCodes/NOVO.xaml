@@ -9,7 +9,7 @@
              xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
              xmlns:gauge="clr-namespace:Syncfusion.Maui.Gauges;assembly=Syncfusion.Maui.Gauges"
              xmlns:controls="clr-namespace:Plugin.Maui.SegmentedControl;assembly=Plugin.Maui.SegmentedControl"
-             HideSoftInputOnTapped="True"
+             HideSoftInputOnTapped="True" NavigationPage.HasNavigationBar="False"
               Shell.NavBarHasShadow="False" Shell.NavBarIsVisible="False">
     <Grid>
         <Grid.RowDefinitions>
@@ -574,16 +574,16 @@ BorderColor="LightGray">
 BackgroundColor="White"
 HorizontalOptions="Start"
 TextColor="#031926" IsVisible="False"
-   x:Name="skipbtn" Clicked="skipbtn_Clicked"
+   x:Name="skipbtn" Clicked="nextbtn_Clicked"
 FontAttributes="None" Grid.Row="0" Grid.Column="0"
-     Margin="20,0,20,10"
+     Margin="20,0,20,10" CommandParameter="Skip"
 FontFamily="HankenGroteskBold"
 Text="Skip" />
 
                 <Button
    BackgroundColor="#031926"
    HorizontalOptions="EndAndExpand"
-   TextColor="White"
+   TextColor="White" CommandParameter="Next"
          x:Name="nextbtn" Clicked="nextbtn_Clicked"
    FontAttributes="None" Grid.Row="0" Grid.Column="1"
         Margin="20,0,20,10"
@@ -600,7 +600,11 @@ Text="Skip" />
    FontAttributes="Bold"
    Margin="0,0,0,10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
    FontSize="10"
-   HorizontalOptions="Center" />
+   HorizontalOptions="Center" >
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1" NumberOfTapsRequired="1"/>
+                    </Label.GestureRecognizers>
+                </Label>
 
                 <Label
 x:Name="extidlbl"

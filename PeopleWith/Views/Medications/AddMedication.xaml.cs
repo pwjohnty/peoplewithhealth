@@ -651,7 +651,7 @@ public partial class AddMedication : ContentPage
             {
                 topprogress.SegmentCount = 4;
                 topprogress.IsVisible = true;
-                topprogress.Progress = 25; 
+                topprogress.Progress = 16.67; 
                 firststack.IsVisible = false; 
                 thirdstack.IsVisible = true;
                 medname2lbl.Text = SelectedMed.medicationtitle; 
@@ -738,6 +738,7 @@ public partial class AddMedication : ContentPage
 
             if (IsEdit == true)
             {
+                topprogress.SegmentCount = 5; 
                 firststack.IsVisible = false;
                 PopulateEditMed();
             }
@@ -873,6 +874,7 @@ public partial class AddMedication : ContentPage
 
                     secondstack.IsVisible = false;
                     thirdstack.IsVisible = true;
+                    topprogress.Progress = 40;
                     medname2lbl.IsVisible = true;
                     medname2lbl.Text = SelectedMed.medicationtitle;
                     backbtn.Text = "Back";
@@ -894,7 +896,7 @@ public partial class AddMedication : ContentPage
                     backbtn.Text = "Back";
                     thirdstack.IsVisible = false;
                     fourthstack.IsVisible = true;
-                    topprogress.Progress = 50;
+                    topprogress.Progress = 60;
                     medfreqlistview.IsVisible = true;
 
 
@@ -1654,7 +1656,7 @@ public partial class AddMedication : ContentPage
                 }
                     else if(fourthstack.IsVisible == true)
                     {
-                        topprogress.Progress = 75;
+                        topprogress.Progress = 80;
                         fourthstack.IsVisible = false;
                         detailsstack.IsVisible = true;
                         medname4lbl.Text = SelectedMed.medicationtitle;
@@ -3565,19 +3567,19 @@ public partial class AddMedication : ContentPage
                     detailsstack.IsVisible = true;
                     backbtn.Text = "Back";
                     nextbtn.IsVisible = true;
-                    topprogress.Progress = 75;
+                    topprogress.Progress = 80;
                 }
                 else if (detailsstack.IsVisible == true)
                 {
                     detailsstack.IsVisible = false;
                     fourthstack.IsVisible = true;
-                    topprogress.Progress = 50;
+                    topprogress.Progress = 60;
                 }
                 else if (fourthstack.IsVisible == true)
                 {
                     fourthstack.IsVisible = false;
                     thirdstack.IsVisible = true;
-                    topprogress.Progress = 25;
+                    topprogress.Progress = 40;
                    // backbtn.Text = "Cancel";
                 }
                 else if (thirdstack.IsVisible == true)
@@ -3585,7 +3587,7 @@ public partial class AddMedication : ContentPage
                   
                     thirdstack.IsVisible = false;
                     secondstack.IsVisible = true;
-                    topprogress.Progress = 0;
+                    topprogress.Progress = 20;
                     backbtn.Text = "Cancel";
                 }
             }
@@ -3937,12 +3939,25 @@ public partial class AddMedication : ContentPage
         
             if (newusermedication.TimeDosage.Count == 0)
             {
+                int Index = 0; 
                 foreach (var feedback in newusermedication.schedule)
                 {
                     var dosage = feedback.Dosage;
                     var time = feedback.time;
+                    List<string> days = new List<string>();
                     //Daily
                     var getfreq = newusermedication.frequency.Split('|');
+
+                    //weekly Days
+                    if (getfreq[1].Contains(","))
+                    {
+                        days = getfreq[1].Split(',').ToList();
+                        int GetCount = newusermedication.schedule.Count() / days.Count;
+                        var duplicatedDays = Enumerable.Repeat(days, GetCount).SelectMany(x => x).ToList();
+                        var uniqueDays = duplicatedDays.Distinct().ToList();
+                        days = uniqueDays.SelectMany(day => duplicatedDays.Where(d => d == day)).ToList();
+                    }
+
                     if (getfreq[0] == "Daily" || getfreq[0] == "Days Interval")
                     {
                         var DosageTime = time + "|" + dosage;
@@ -3951,25 +3966,20 @@ public partial class AddMedication : ContentPage
                     //Weekly
                     else if (getfreq[0] == "Weekly" || getfreq[0] == "Weekly ")
                     {
-                        var freq = newusermedication.frequency.Split('|');
-                        if (freq[1].Contains(","))
+                        string DosageTime = String.Empty;
+                        if (getfreq[1].Contains(","))
                         {
-                            var days = freq[1].Split(',').ToList();
-                            for (int i = 0; i < days.Count; i++)
-                            {
-                                var day = days[i];
-                                var DosageTime = time + "|" + dosage + "|" + day;
-                                newusermedication.TimeDosage.Add(DosageTime);
-                            }
+                            DosageTime = time + "|" + dosage + "|" + days[Index];
+
                         }
                         else
                         {
-                            var day = freq[1];
-                            var DosageTime = time + "|" + dosage + "|" + day;
-                            newusermedication.TimeDosage.Add(DosageTime);
+                            var day = getfreq[1];
+                            DosageTime = time + "|" + dosage + "|" + day;
                         }
 
-
+                        newusermedication.TimeDosage.Add(DosageTime);
+                        Index = Index + 1;
                     }
                 }
             }

@@ -1,5 +1,6 @@
 //using Android.Graphics;
 //using CoreText;
+using Microsoft.Maui.Controls.Internals;
 using PeopleWith;
 using Syncfusion.Maui.Core;
 using Syncfusion.Maui.DataSource.Extensions;
@@ -34,6 +35,10 @@ public partial class SFENRAT : ContentPage
     ObservableCollection<userresponse> userresponselist = new ObservableCollection<userresponse>();
     question ctquestion;
     question commprefquestion;
+    string CommandPassed;
+    ObservableCollection<answer> GetAnswers = new ObservableCollection<answer>();
+    ObservableCollection<answer> GetCommPref = new ObservableCollection<answer>();
+
     List<string> commprefaddedlist = new List<string>();
 
     public consent additonalconsent = new consent();
@@ -56,7 +61,7 @@ public partial class SFENRAT : ContentPage
     {
         InitializeComponent();
 
-        topprogress.SetProgress(progressp + 5, 0);
+        topprogress.SetProgress(progressp + 6, 0);
 
         primaryconditionlist.Add("Adrenal Cortical Cancer (ACC)");
         primaryconditionlist.Add("Phaeo Para Syndromes (Paraganglioma or Phaeochromocytoma (PPGL))");
@@ -115,9 +120,9 @@ public partial class SFENRAT : ContentPage
             ctnamequestion.Text = ctquestion.title;
             ctquestiondes.Text = ctquestion.directions;
 
-            var getanswers = reganswers.Where(x => x.questionid == ctquestion.questionid).ToList();
+            GetAnswers = reganswers.Where(x => x.questionid == ctquestion.questionid).ToObservableCollection();
 
-            ctlist.ItemsSource = getanswers;
+            ctlist.ItemsSource = GetAnswers;
         }
 
         commprefquestion = requestions.Where(x => x.title.Contains("Communication Preferences")).SingleOrDefault();
@@ -129,9 +134,9 @@ public partial class SFENRAT : ContentPage
             commprefquestiondes.Text = commprefquestion.directions;
 
             var getanswers = reganswers.Where(x => x.questionid == commprefquestion.questionid).ToList();
-            getanswers = getanswers.OrderBy(x => Convert.ToInt32(x.order)).ToList();
+            GetCommPref = getanswers.OrderBy(x => Convert.ToInt32(x.order)).ToObservableCollection();
 
-            compreflist.ItemsSource = getanswers;
+            compreflist.ItemsSource = GetCommPref;
         }
 
     }
@@ -543,8 +548,12 @@ public partial class SFENRAT : ContentPage
     {
         try
         {
+
+            var GetCommand = (sender) as Button;
+            CommandPassed = GetCommand.CommandParameter.ToString();
+
             //next button
-            if(primaryconframe.IsVisible == true)
+            if (primaryconframe.IsVisible == true)
             {
                 Handleprimaryconframe();
             }
@@ -783,21 +792,39 @@ public partial class SFENRAT : ContentPage
     {
         try
         {
-            if(ctlist.SelectedItem == null)
+            userresponselist.Clear();
+            if (CommandPassed == "Next")
             {
-                Vibration.Vibrate();
-                return;
+                if (ctlist.SelectedItem == null)
+                {
+                    Vibration.Vibrate();
+                    return;
+                }
+
+                var item = ctlist.SelectedItem as answer;
+
+                //add the question
+                var response = new userresponse();
+                response.questionid = ctquestion.questionid;
+                response.answerid = item.answerid;
+                response.responsedate = DateTime.Now.ToString("dd/MM/yyyy");
+                response.userid = newuser.userid;
+                userresponselist.Add(response);
+            }
+            else
+            {
+                //Skip Clicked Set to 'No' 
+                var item = GetAnswers[1];
+
+                //add the question
+                var response = new userresponse();
+                response.questionid = ctquestion.questionid;
+                response.answerid = item.answerid;
+                response.responsedate = DateTime.Now.ToString("dd/MM/yyyy");
+                response.userid = newuser.userid;
+                userresponselist.Add(response);
             }
 
-            var item = ctlist.SelectedItem as answer;
-
-            //add the question
-            var response = new userresponse();
-            response.questionid = ctquestion.questionid;
-            response.answerid = item.answerid;
-            response.responsedate = DateTime.Now.ToString("dd/MM/yyyy");
-            response.userid = newuser.userid;
-            userresponselist.Add(response);
 
             ctframe.IsVisible = false;
             comprefframe.IsVisible = true;
@@ -814,20 +841,28 @@ public partial class SFENRAT : ContentPage
     {
         try
         {
-            if (compreflist.SelectedItem == null)
+            if(CommandPassed == "Next")
             {
-                Vibration.Vibrate();
-                return;
-            }
+                if (compreflist.SelectedItem == null)
+                {
+                    Vibration.Vibrate();
+                    return;
+                }
 
-            //add the question
-            var response = new userresponse();
-            response.questionid = commprefquestion.questionid;
-            var getallanswers = string.Join(",", commprefaddedlist);
-            response.answerid = getallanswers;
-            response.responsedate = DateTime.Now.ToString("dd/MM/yyyy");
-            response.userid = newuser.userid;
-            userresponselist.Add(response);
+                //add the question
+                var response = new userresponse();
+                response.questionid = commprefquestion.questionid;
+                var getallanswers = string.Join(",", commprefaddedlist);
+                response.answerid = getallanswers;
+                response.responsedate = DateTime.Now.ToString("dd/MM/yyyy");
+                response.userid = newuser.userid;
+                userresponselist.Add(response);
+            }
+            else
+            {
+                //Skip Clicked 
+            }
+           
 
 
             UpdateProgress();
@@ -870,7 +905,7 @@ public partial class SFENRAT : ContentPage
         try
         {
 
-            topprogress.Progress = topprogress.Progress += 5;
+            topprogress.Progress = topprogress.Progress += 6;
 
 
         }
@@ -1015,7 +1050,7 @@ public partial class SFENRAT : ContentPage
     {
         try
         {
-            topprogress.Progress = topprogress.Progress -= 5;
+            topprogress.Progress = topprogress.Progress -= 6;
         }
         catch(Exception ex)
         {
@@ -1085,5 +1120,10 @@ public partial class SFENRAT : ContentPage
         {
 
         }
+    }
+
+    async private void skipbtn_Clicked(object sender, EventArgs e)
+    {
+
     }
 }

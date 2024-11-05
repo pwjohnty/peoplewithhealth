@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.Azure;
 using Mopups.Services;
 using Syncfusion.Maui.Charts;
 using System.Collections.ObjectModel;
@@ -14,6 +15,7 @@ public partial class SingleMeasurement : ContentPage
     ObservableCollection<usermeasurement> orderlistbydate = new ObservableCollection<usermeasurement>();
     ObservableCollection<measurement> measurementlist = new ObservableCollection<measurement>();
     ObservableCollection<usermeasurement> deleeteusermeasurementlistpassed = new ObservableCollection<usermeasurement>();
+    //List<VerticalLinePoint> verticalLinePoints = new List<VerticalLinePoint>();
     bool newmeasurement;
     CrashDetected crashHandler = new CrashDetected();
 
@@ -28,6 +30,13 @@ public partial class SingleMeasurement : ContentPage
         {
             //Dunno 
         }
+    }
+
+    public class VerticalLinePoint
+    {
+        public string inputdatetime { get; set; }
+        public double BPone { get; set; }
+        public double BPtwo { get; set; } 
     }
     public SingleMeasurement()
 	{
@@ -80,6 +89,94 @@ public partial class SingleMeasurement : ContentPage
 
     }
 
+    async public Task<int> ConvertFeetInchesToInches(string input)
+    {
+        try
+        {
+            string cleanInput = input.Replace("'", "").Replace("\"", "").Trim();
+            string[] parts = cleanInput.Split(' ');
+            int feet = int.Parse(parts[0]);
+            int inches = int.Parse(parts[1]);
+
+            // Convert feet to inches (1 foot = 12 inches)
+            int totalInches = (feet * 12) + inches;
+
+            return totalInches;
+        }
+        catch (Exception Ex)
+        {      
+            await crashHandler.CrashDetectedSend(Ex);
+            return 0;
+        }
+    }
+
+    //async public Task<List<string>> ConvertInchestoFeetInches(Double Min, Double Max)
+    //{
+    //    try
+    //    {
+    //        List<string> FeetInches = new List<string>(); 
+    //        for(Double i = Min; i <= Max; i++)
+    //        {
+    //            int total = Convert.ToInt32(i); 
+    //            int stones = total / 14;          
+    //            int pounds = total % 14;
+
+    //            FeetInches.Add($"{stones}st {pounds}lbs");
+    //        }
+
+    //        return FeetInches;
+    //    }
+    //    catch (Exception Ex)
+    //    {
+    //        await crashHandler.CrashDetectedSend(Ex);
+    //        return null;
+    //    }
+    //}
+
+    async public Task<int> ConvertStonePoundsToPounds(string input)
+    {
+        try
+        {
+            string cleanInput = input.Replace("st", "").Replace("lbs", "").Trim();
+            string[] parts = cleanInput.Split(' ');
+
+            int stone = int.Parse(parts[0]);
+            int pounds = int.Parse(parts[1]);
+
+            // Convert stone to pounds (1 stone = 14 pounds)
+            int totalPounds = (stone * 14) + pounds;
+
+            return totalPounds;
+        }
+        catch (Exception Ex)
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+            return 0;
+        }
+    }
+
+    //async public Task<int> ConvertPoundsToStonePounds(Double Min, Double Max)
+    //{
+    //    try
+    //    {
+    //        string cleanInput = input.Replace("st", "").Replace("lbs", "").Trim();
+    //        string[] parts = cleanInput.Split(' ');
+
+    //        int stone = int.Parse(parts[0]);
+    //        int pounds = int.Parse(parts[1]);
+
+    //        // Convert stone to pounds (1 stone = 14 pounds)
+    //        int totalPounds = (stone * 14) + pounds;
+
+    //        return totalPounds;
+    //    }
+    //    catch (Exception Ex)
+    //    {
+    //        await crashHandler.CrashDetectedSend(Ex);
+    //        return 0;
+    //    }
+    //}
+
     async void populatechart()
     {
         try
@@ -122,9 +219,22 @@ public partial class SingleMeasurement : ContentPage
                 }
                 else
                 {
-
-                    var num = Convert.ToDouble(item.value);
-                    item.numconverted = num;
+                    if(usermeasurementpassed.unit == "Feet/Inches")
+                    {
+                        var num = await ConvertFeetInchesToInches(item.value);
+                        item.numconverted = num;
+                    }
+                    else if(usermeasurementpassed.unit == "Stones/Pounds")
+                    {
+                        var num = await ConvertStonePoundsToPounds(item.value);
+                        item.numconverted = num;
+                    }
+                    else
+                    {
+                        var num = Convert.ToDouble(item.value);
+                        item.numconverted = num;
+                    }
+                    
                 }
             }
             if (usermeasurementpassed != null)
@@ -136,15 +246,18 @@ public partial class SingleMeasurement : ContentPage
                     double minvalue = (double)usermeasurementchartlist.Min(x => x.numconverted);
                     double maxvaluetwo = (double)usermeasurementchartlist.Max(x => x.numconvertedtwo);
                     double minvaluetwo = (double)usermeasurementchartlist.Min(x => x.numconvertedtwo);
+
+                    // Add a min and max date so the chart looks better
                     var mindate = (DateTime)usermeasurementchartlist.Min(x => x.dateconverted);
                     var maxdate = (DateTime)usermeasurementchartlist.Max(x => x.dateconverted);
-                    //add a min and max date so the chart looks better
                     var minusermeasurement = new usermeasurement();
                     var maxusermeasurement = new usermeasurement();
                     minusermeasurement.inputdatetime = mindate.AddDays(-1).ToString("dd/MM/yyyy HH:mm");
                     usermeasurementchartlist.Add(minusermeasurement);
                     maxusermeasurement.inputdatetime = maxdate.AddDays(+1).ToString("dd/MM/yyyy HH:mm");
                     usermeasurementchartlist.Add(maxusermeasurement);
+
+                    // Sort the list by date
                     orderlistbydate = new ObservableCollection<usermeasurement>(usermeasurementchartlist.OrderBy(x => DateTime.Parse(x.inputdatetime)).ToList());
                     datachart.Series.Clear();
 
@@ -152,10 +265,9 @@ public partial class SingleMeasurement : ContentPage
                     {
                         EnablePinchZooming = true
                     };
-
                     datachart.ZoomPanBehavior = zooming;
 
-
+                    // Configure primary and secondary axes
                     CategoryAxis primaryAxis = new CategoryAxis();
                     primaryAxis.LabelStyle.TextColor = Colors.Transparent;
                     primaryAxis.ShowMajorGridLines = false;
@@ -168,73 +280,91 @@ public partial class SingleMeasurement : ContentPage
                     secondaryAxis.LabelStyle.FontFamily = "HankenGroteskRegular";
                     secondaryAxis.AxisLineStyle.Stroke = Colors.LightGray;
                     secondaryAxis.MajorTickStyle.Stroke = Colors.LightGray;
-                    secondaryAxis.AxisLineStyle.StrokeWidth = 1;//Hide Axis line 
-                    secondaryAxis.MajorTickStyle.StrokeWidth = 1;//Hide TickLines 
+                    secondaryAxis.AxisLineStyle.StrokeWidth = 1;
+                    secondaryAxis.MajorTickStyle.StrokeWidth = 1;
                     secondaryAxis.IsVisible = true;
                     secondaryAxis.Minimum = minvaluetwo - 5;
                     secondaryAxis.Maximum = maxvalue + 5;
                     datachart.YAxes.Add(secondaryAxis);
 
-                    ChartMarkerSettings chartMarker = new ChartMarkerSettings();
-                    chartMarker.Type = ShapeType.Circle;
-                    chartMarker.Fill = Colors.White;
-                    chartMarker.Stroke = Color.FromRgba("#031926");
-                    chartMarker.StrokeWidth = 2;
-                    chartMarker.Height = 8;
-                    chartMarker.Width = 8;
-
-                    LineSeries columnseries = new LineSeries
+ 
+                    ScatterSeries bpOneSeries = new ScatterSeries
                     {
                         ItemsSource = orderlistbydate,
                         XBindingPath = "inputdatetime",
                         YBindingPath = "BPone",
-                        Fill = Color.FromArgb("#031926"),
-                        //ShapeType = ChartScatterShapeType.Ellipse,
-                        // ScatterHeight = 15,
-                        // ScatterWidth = 15,
-                        ShowMarkers = true,
+                        PointHeight = 8,    
+                        PointWidth = 8,     
+                        Fill = Color.FromRgba("#031926"),  
+                        Stroke = Color.FromRgba("#031926"), 
                         StrokeWidth = 2,
-                        MarkerSettings = chartMarker,
                         EnableTooltip = true,
                         EnableAnimation = true
                     };
 
-                    ChartMarkerSettings chartMarkers = new ChartMarkerSettings();
-                    chartMarkers.Type = ShapeType.Circle;
-                    chartMarkers.Fill = Colors.White;
-                    chartMarkers.Stroke = Color.FromRgba("#BFDBF7");
-                    chartMarkers.StrokeWidth = 2;
-                    chartMarkers.Height = 8;
-                    chartMarkers.Width = 8;
-
-
-                    LineSeries columnseriestwo = new LineSeries
+                    ScatterSeries bpTwoSeries = new ScatterSeries
                     {
                         ItemsSource = orderlistbydate,
                         XBindingPath = "inputdatetime",
                         YBindingPath = "BPtwo",
-                        Fill = Color.FromArgb("#BFDBF7"),
-                        // ShapeType = ChartScatterShapeType.Ellipse,
-                        // ScatterHeight = 15,
-                        // ScatterWidth = 15,
-                        ShowMarkers = true,
-                        MarkerSettings = chartMarkers,
+                        PointHeight = 8,
+                        PointWidth = 8,
+                        Fill = Colors.ForestGreen,  
+                        Stroke = Colors.ForestGreen, 
                         StrokeWidth = 2,
                         EnableTooltip = true,
                         EnableAnimation = true
                     };
 
-                  
-                    /* columnseries.DataMarker = new ChartDataMarker();
-                     columnseries.DataMarker.ShowLabel = false;
-                     columnseries.DataMarker.ShowMarker = true;
-                     columnseries.DataMarker.MarkerType = DataMarkerType.Ellipse;
-                     columnseries.DataMarker.MarkerWidth = 20;
-                     columnseries.DataMarker.MarkerHeight = 20;
-                     columnseries.DataMarker.MarkerColor = Color.FromHex("#0F9FE2");
-                    */
-                    datachart.Series.Add(columnseries);
-                    datachart.Series.Add(columnseriestwo);
+
+                    List<VerticalLinePoint> rangeColumnPoints = new List<VerticalLinePoint>();
+
+                    var firstDate = orderlistbydate.First().inputdatetime;
+                    var lastDate = orderlistbydate.Last().inputdatetime;
+
+                    // Add an invisible point before the first valid data point, set BPone and BPtwo to 0 if null
+                    rangeColumnPoints.Add(new VerticalLinePoint
+                    {
+                        inputdatetime = firstDate, 
+                        BPone = orderlistbydate.First().BPone != null ? Double.Parse(orderlistbydate.First().BPone) : 0,  
+                        BPtwo = orderlistbydate.First().BPtwo != null ? Double.Parse(orderlistbydate.First().BPtwo) : 0  
+                    });
+
+                    foreach (var item in orderlistbydate.Where(x => x.BPone != null && x.BPtwo != null))
+                    {
+                        rangeColumnPoints.Add(new VerticalLinePoint
+                        {
+                            inputdatetime = item.inputdatetime,
+                            BPone = Double.Parse(item.BPone),  // Minimum Y-value
+                            BPtwo = Double.Parse(item.BPtwo)   // Maximum Y-value
+                        });
+                    }
+
+                    // Add an invisible point after the last valid data point
+                    rangeColumnPoints.Add(new VerticalLinePoint
+                    {
+                        inputdatetime = lastDate,  // Padding after the last data point
+                        BPone = orderlistbydate.Last().BPone != null ? Double.Parse(orderlistbydate.First().BPone) : 0,
+                        BPtwo = orderlistbydate.Last().BPtwo != null ? Double.Parse(orderlistbydate.First().BPtwo) : 0
+                    });
+
+
+                    RangeColumnSeries rangeColumnSeries = new RangeColumnSeries
+                    {
+                        ItemsSource = rangeColumnPoints,
+                        XBindingPath = "inputdatetime",
+                        High = "BPtwo",  
+                        Low = "BPone",   
+                        Fill = Colors.Gray, 
+                        Width = 0.02, 
+                        EnableAnimation = true
+                    };
+
+                    // Add the range column series to the chart
+                    datachart.Series.Add(rangeColumnSeries);
+                    datachart.Series.Add(bpOneSeries);
+                    datachart.Series.Add(bpTwoSeries);
+
                 }
                 else
                 {
@@ -251,9 +381,11 @@ public partial class SingleMeasurement : ContentPage
                     var maxusermeasurement = new usermeasurement();
 
                     minusermeasurement.inputdatetime = mindate.AddDays(-1).ToString("dd/MM/yyyy HH:mm");
+                    minusermeasurement.numconverted = null; 
                     usermeasurementchartlist.Add(minusermeasurement);
 
                     maxusermeasurement.inputdatetime = maxdate.AddDays(+1).ToString("dd/MM/yyyy HH:mm");
+                    maxusermeasurement.numconverted = null;
                     usermeasurementchartlist.Add(maxusermeasurement);
 
                     orderlistbydate = new ObservableCollection<usermeasurement>(usermeasurementchartlist.OrderBy(x => DateTime.Parse(x.inputdatetime)).ToList());
@@ -282,50 +414,119 @@ public partial class SingleMeasurement : ContentPage
                     primaryAxis.MajorTickStyle.Stroke = Colors.Transparent;
                     datachart.XAxes.Add(primaryAxis);
 
-                    NumericalAxis secondaryAxis = new NumericalAxis();
-                    secondaryAxis.LabelStyle.TextColor = Colors.LightGray;
-                    secondaryAxis.LabelStyle.FontFamily = "HankenGroteskRegular";
-                    secondaryAxis.AxisLineStyle.Stroke = Colors.LightGray;
-                    secondaryAxis.MajorTickStyle.Stroke = Colors.LightGray;
-                    secondaryAxis.AxisLineStyle.StrokeWidth = 1;//Hide Axis line 
-                    secondaryAxis.MajorTickStyle.StrokeWidth = 1;//Hide TickLines 
-                    secondaryAxis.IsVisible = true;
-                    secondaryAxis.Minimum = minvalue - 5;
-                    secondaryAxis.Maximum = maxvalue + 5;
-                    datachart.YAxes.Add(secondaryAxis);
-
+                  
+                    if (usermeasurementpassed.unit == "Feet/Inches")
+                    {
+                        NumericalAxis secondaryAxis = new NumericalAxis();
+                        secondaryAxis.LabelStyle.TextColor = Colors.LightGray;
+                        secondaryAxis.LabelStyle.FontFamily = "HankenGroteskRegular";
+                        secondaryAxis.LabelStyle.LabelFormat = "0' In";
+                        secondaryAxis.LabelStyle.FontSize = 8;
+                        secondaryAxis.AxisLineStyle.Stroke = Colors.LightGray;
+                        secondaryAxis.MajorTickStyle.Stroke = Colors.LightGray;
+                        secondaryAxis.AxisLineStyle.StrokeWidth = 1;//Hide Axis line 
+                        secondaryAxis.MajorTickStyle.StrokeWidth = 1;//Hide TickLines 
+                        secondaryAxis.IsVisible = true;
+                        secondaryAxis.Minimum = minvalue - 5;
+                        secondaryAxis.Maximum = maxvalue + 5;
+                        datachart.YAxes.Add(secondaryAxis);
+                    }
+                    else if (usermeasurementpassed.unit == "Stones/Pounds")
+                    {
+                        NumericalAxis secondaryAxis = new NumericalAxis();
+                        secondaryAxis.LabelStyle.TextColor = Colors.LightGray;
+                        secondaryAxis.LabelStyle.FontFamily = "HankenGroteskRegular";
+                        secondaryAxis.LabelStyle.LabelFormat = "0' lbs";
+                        secondaryAxis.LabelStyle.FontSize = 8;
+                        secondaryAxis.AxisLineStyle.Stroke = Colors.LightGray;
+                        secondaryAxis.MajorTickStyle.Stroke = Colors.LightGray;
+                        secondaryAxis.AxisLineStyle.StrokeWidth = 1;//Hide Axis line 
+                        secondaryAxis.MajorTickStyle.StrokeWidth = 1;//Hide TickLines 
+                        secondaryAxis.IsVisible = true;
+                        secondaryAxis.Minimum = minvalue - 5;
+                        secondaryAxis.Maximum = maxvalue + 5;
+                        datachart.YAxes.Add(secondaryAxis);
+                    }
+                    else
+                    {
+                        NumericalAxis secondaryAxis = new NumericalAxis();
+                        secondaryAxis.LabelStyle.TextColor = Colors.LightGray;
+                        secondaryAxis.LabelStyle.FontFamily = "HankenGroteskRegular";
+                        secondaryAxis.AxisLineStyle.Stroke = Colors.LightGray;
+                        secondaryAxis.MajorTickStyle.Stroke = Colors.LightGray;
+                        secondaryAxis.AxisLineStyle.StrokeWidth = 1;//Hide Axis line 
+                        secondaryAxis.MajorTickStyle.StrokeWidth = 1;//Hide TickLines 
+                        secondaryAxis.IsVisible = true;
+                        secondaryAxis.Minimum = minvalue - 5;
+                        secondaryAxis.Maximum = maxvalue + 5;
+                        datachart.YAxes.Add(secondaryAxis);
+                    }
 
 
                     DataPointSelectionBehavior selection = new DataPointSelectionBehavior();
                     //   selection.SelectionBrush = Colors.Red;
                     selection.SelectionChanged += OnSelectionChanged;
 
-                    LineSeries columnseries = new LineSeries
+                    if (usermeasurementpassed.unit == "Feet/Inches")
                     {
-                        ItemsSource = orderlistbydate,
-                        XBindingPath = "inputdatetime",
-                        YBindingPath = "value",
-                        Fill = Color.FromHex("#BFDBF7"),
-                        // ShapeType = ChartScatterShapeType.Ellipse,
-                        // ScatterHeight = 15,
-                        // ScatterWidth = 15,
-                        StrokeWidth = 2,
-                        EnableTooltip = true,
-                        EnableAnimation = true,
-                        ShowMarkers = true,
-                        ShowTrackballLabel = false,
-                        SelectionBehavior = selection,
-                        MarkerSettings = chartMarker
-                    };
+                        LineSeries columnseries = new LineSeries
+                        {
+                            ItemsSource = orderlistbydate,
+                            XBindingPath = "inputdatetime",
+                            YBindingPath = "numconverted",
+                            Fill = Color.FromHex("#BFDBF7"),
+                            StrokeWidth = 2,
+                            EnableTooltip = true,
+                            EnableAnimation = true,
+                            ShowMarkers = true,
+                            ShowTrackballLabel = false,
+                            TooltipTemplate = datachart.Resources["tooltipTemplate"] as DataTemplate,
+                            SelectionBehavior = selection,
+                            MarkerSettings = chartMarker
+                        };
 
-                    columnseries.ShowDataLabels = false;
-
-                    //ChartTrackballBehavior trackball = new ChartTrackballBehavior();
-                    //trackball.ShowLine = true;
-                    //trackball.DisplayMode = LabelDisplayMode.FloatAllPoints;
-                    //datachart.TrackballBehavior = trackball;
-
-                    datachart.Series.Add(columnseries);
+                        columnseries.ShowDataLabels = false;
+                        datachart.Series.Add(columnseries);
+                    }
+                    else if (usermeasurementpassed.unit == "Stones/Pounds")
+                    {
+                        LineSeries columnseries = new LineSeries
+                        {
+                            ItemsSource = orderlistbydate,
+                            XBindingPath = "inputdatetime",
+                            YBindingPath = "numconverted",
+                            Fill = Color.FromHex("#BFDBF7"),
+                            StrokeWidth = 2,
+                            EnableTooltip = true,
+                            EnableAnimation = true,
+                            ShowMarkers = true,
+                            ShowTrackballLabel = false,
+                            TooltipTemplate = datachart.Resources["tooltipTemplate"] as DataTemplate,
+                            SelectionBehavior = selection,
+                            MarkerSettings = chartMarker
+                        };
+                        columnseries.ShowDataLabels = false;
+                        datachart.Series.Add(columnseries);
+                    }
+                    else
+                    {
+                        LineSeries columnseries = new LineSeries
+                        {
+                            ItemsSource = orderlistbydate,
+                            XBindingPath = "inputdatetime",
+                            YBindingPath = "numconverted",
+                            Fill = Color.FromHex("#BFDBF7"),
+                            StrokeWidth = 2,
+                            EnableTooltip = true,
+                            EnableAnimation = true,
+                            ShowMarkers = true,
+                            ShowTrackballLabel = false,
+                            SelectionBehavior = selection,
+                            MarkerSettings = chartMarker
+                        };
+                        columnseries.ShowDataLabels = false;
+                        datachart.Series.Add(columnseries);
+                    }
                 }
 
                 lblvalue.Text = orderlistbydate[orderlistbydate.Count - 2].value;

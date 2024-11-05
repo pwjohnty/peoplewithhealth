@@ -43,7 +43,7 @@
 
             <Label x:Name="incorrectcodelbl" Grid.Row="4" Text="Invalid Code" TextColor="Red" FontFamily="HankenGroteskRegular" FontAttributes="None" Margin="0,20,0,0" FontSize="15" IsVisible="False" HorizontalOptions="Center" />
 
-            <Label x:Name="ForgotPassword" Grid.Row="5" Text="Forgotten your Pin Code?" TextColor="#7393B3" FontFamily="HankenGroteskRegular" FontAttributes="None" Margin="0,20,0,0" FontSize="15" HorizontalOptions="Center" >
+            <Label x:Name="ForgotPassword" Grid.Row="5" Text="Forgotten your Pin? Login instead" TextColor="#7393B3" FontFamily="HankenGroteskRegular" FontAttributes="None" Margin="0,20,0,0" FontSize="15" HorizontalOptions="Center" >
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
                 </Label.GestureRecognizers>

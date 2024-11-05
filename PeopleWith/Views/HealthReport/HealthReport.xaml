@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PeopleWith.HealthReport" BackgroundColor="White">
+    <StackLayout>
+    <Grid  x:Name="HealthReportStack" IsVisible="False">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Button BackgroundColor="ForestGreen" CornerRadius="5" FontFamily="HankenGroteskBold" TextColor="White" Margin="20,0,20,0" Grid.Row="0" HeightRequest="40" Text="Print Health Report" Clicked="Button_Clicked" />
+
+        <WebView x:Name="HealthReportViewer" Grid.Row="1" Navigated="HealthReportViewer_Navigated" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"  />
+    </Grid>
+
+    <Grid VerticalOptions="CenterAndExpand" x:Name="LoadingStack">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+            <ActivityIndicator Color="LightBlue" VerticalOptions="Center" HeightRequest="40" Grid.Row="0" IsRunning="True" />
+            <Label Text="Loading Health Report" Grid.Row="1" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskBold" HorizontalTextAlignment="Center" />
+        </Grid>
+    </StackLayout>
+</ContentPage>

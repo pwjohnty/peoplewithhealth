@@ -262,6 +262,7 @@ public partial class LoginPage : ContentPage
                 Preferences.Set("clinicaltrial", "Yes");
                 //Change based on User Having Notifcations Enabled/Disabled
                 Preferences.Set("NotificationsEnabled", true);
+                Preferences.Set("validationcode", users[0].validationcode);
 
                 //Add Push Notification Tags
                 AddBackTags();

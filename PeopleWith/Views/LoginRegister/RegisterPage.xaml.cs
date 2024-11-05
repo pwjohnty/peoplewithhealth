@@ -36,6 +36,7 @@ public partial class RegisterPage : ContentPage
     consent additionalconsent = new consent();
     ObservableCollection<symptom> allsymptomlist = new ObservableCollection<symptom>();
     ObservableCollection<medication> allmedicationlist = new ObservableCollection<medication>();
+    int progresstoupdate = 11; 
     public RegisterPage()
 	{
 		InitializeComponent();
@@ -137,8 +138,7 @@ public partial class RegisterPage : ContentPage
 
             if(emailframe.IsVisible == true)
             {
-                Handleemailframe();
-                
+                Handleemailframe();               
             }
             else if(confirmemailframe.IsVisible == true)
             {
@@ -273,13 +273,34 @@ public partial class RegisterPage : ContentPage
 
                 if(users.Count > 0)
                 {
-                    emailhelper.ErrorText = "Email address already in use";
-                    emailhelper.HasError = true;
-                    Vibration.Vibrate();
-                    emailentry.Focus();
-                    nextbtn.IsVisible = true;
-                    nextbtnloader.IsVisible = false;
-                    return;
+                    //user Still Trying to register
+                    if (users[0].registrationstatus == "Onboarding")
+                    {
+                        //update the ui and progress bar
+                        emailframe.IsVisible = false;
+                        confirmemailframe.IsVisible = true;
+                        nextbtn.IsVisible = true;
+                        nextbtnloader.IsVisible = false;
+                        UpdateProgress();
+
+                        //add the user into the db with onboarding as the status
+                        newuser.email = emailentry.Text;
+                        //Spelling Mistake (Change)
+                        newuser.registrationstatus = "Onboarding";
+                        return;
+
+                    }
+                    else
+                    {
+                        emailhelper.ErrorText = "Email address already in use";
+                        emailhelper.HasError = true;
+                        Vibration.Vibrate();
+                        emailentry.Focus();
+                        nextbtn.IsVisible = true;
+                        nextbtnloader.IsVisible = false;
+                        return;
+                    }
+                    
                 }
                 
             }
@@ -328,8 +349,10 @@ public partial class RegisterPage : ContentPage
             var emailresponse = await client.PostAsync("https://peoplewithwebapp.azurewebsites.net/hub/email-validation.php?uid=" + newuser.email, mail_content);
 
            // check if the response is successful
-                if (emailresponse.IsSuccessStatusCode)
+           if (emailresponse.IsSuccessStatusCode)
             {
+                await DisplayAlert("Email Sent", "Email Containing Confirmation Code Sent, If the email is not in your inbox. Check your Junk Mail", "Close"); 
+
                 //string content = await emailresponse.content.readasstringasync();
                 // debug.writeline(content); // uncomment this line if you want to debug the content
             }
@@ -395,6 +418,8 @@ public partial class RegisterPage : ContentPage
             {
                 incorrectcodelbl.IsVisible = true;
                 Vibration.Vibrate();
+                await Task.Delay(3000);
+                incorrectcodelbl.IsVisible = false;
                 return;
             }
 
@@ -543,6 +568,7 @@ public partial class RegisterPage : ContentPage
                             signupcodeframe.IsVisible = false;
                             nextbtnloader.IsVisible = false;
                             nextbtn.IsVisible = true;
+                            progresstoupdate = 6;
                             UpdateProgress();
                         });
 
@@ -690,7 +716,7 @@ public partial class RegisterPage : ContentPage
                     //pass user and page progress
 
                     UpdateProgress();
-                    await Navigation.PushAsync(new RegisterFinalPage(newuser, topprogress.Progress), false);
+                    await Navigation.PushAsync(new RegisterFinalPage(newuser, topprogress.Progress, additionalconsent), false);
                 }
             }
         }
@@ -736,7 +762,7 @@ public partial class RegisterPage : ContentPage
         try
         {
 
-            topprogress.Progress = topprogress.Progress += 11;
+            topprogress.Progress = topprogress.Progress += progresstoupdate;
 
 
         }
@@ -806,7 +832,7 @@ public partial class RegisterPage : ContentPage
         }
     }
 
-    private void emailconfigpin_PINEntryCompleted(object sender, PINView.Maui.Helpers.PINCompletedEventArgs e)
+    async private void emailconfigpin_PINEntryCompleted(object sender, PINView.Maui.Helpers.PINCompletedEventArgs e)
     {
         try
         {
@@ -822,6 +848,9 @@ public partial class RegisterPage : ContentPage
             else
             {
                 incorrectcodelbl.IsVisible = true;
+                Vibration.Vibrate();
+                await Task.Delay(3000);
+                incorrectcodelbl.IsVisible = false;
                 return;
             }
         }
@@ -1706,10 +1735,9 @@ public partial class RegisterPage : ContentPage
                 reganswerlist.Clear();
                 newuser.signupcodeid = null;
                 newuser.referral = null;
-              //  additionalconsent;
+                additionalconsent = new consent();
                 allsymptomlist.Clear();
                 allmedicationlist.Clear();
-
                 BackProgress();
             }
             else if(signupcodeframe.IsVisible == true)
@@ -1747,6 +1775,53 @@ public partial class RegisterPage : ContentPage
         catch (Exception Ex)
         {
 
+        }
+    }
+
+    async private void ResendCodeTapped(object sender, TappedEventArgs e)
+    {
+
+        var randomnum = new Random();
+        var num = randomnum.Next(10000, 99999);
+
+        newuser.validationcode = num.ToString();
+
+        var serializerOptions = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            WriteIndented = true
+        };
+
+        var url = $"https://pwdevapi.peoplewith.com/api/user/userid/{newuser.userid}";
+        string json = System.Text.Json.JsonSerializer.Serialize(new { validationcode = num});
+
+        StringContent contentt = new StringContent(json, Encoding.UTF8, "application/json");
+        HttpResponseMessage responsee = null;
+
+        responsee = await client.PatchAsync(url, contentt);
+
+
+        if (responsee.IsSuccessStatusCode)
+        {
+            string responseBody = await responsee.Content.ReadAsStringAsync();
+            var userResponseconsent = JsonConvert.DeserializeObject<APIUserResponse>(responseBody);
+            var consent = userResponseconsent.Value[0];
+
+            newuser = consent;
+        }
+
+        //email generate
+        StringContent mail_content = new StringContent(newuser.email, System.Text.Encoding.UTF8, "application/json");
+
+        var emailresponse = await client.PostAsync("https://peoplewithwebapp.azurewebsites.net/hub/email-validation.php?uid=" + newuser.email, mail_content);
+
+        // check if the response is successful
+        if (emailresponse.IsSuccessStatusCode)
+        {
+            await DisplayAlert("Email Sent", "Email Containing Confirmation Code Sent, If the email is not in your inbox. Check your Junk Mail", "Close");
+        }
+        else
+        {
         }
     }
 }

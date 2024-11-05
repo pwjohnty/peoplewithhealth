@@ -4,6 +4,7 @@ using Syncfusion.Maui.DataSource.Extensions;
 using Syncfusion.Maui.ListView;
 using System.Collections.ObjectModel;
 using Mopups.Services;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace PeopleWith;
 
@@ -223,14 +224,25 @@ public partial class MainSchedule : ContentPage
                             //check if today is within the days list
                             if (splitstring[1].Contains(dayname))
                             {
+                                int Index = 0;
+                                foreach (var x in item.schedule)
+                                {
+                                    var GetDay = item.TimeDosage[Index].Split('|');
+                                    x.Day = GetDay[2];
+                                    Index = Index + 1;
+                                }
+
                                 //add all the items 
                                 foreach (var medtimes in item.schedule)
                                 {
-                                    medtimes.Type = "Medication";
-                                    medtimes.Usermedid = item.id;
-                                    medtimes.Feedbackid = medtimes.id.ToString();
-                                    medtimes.Name = item.medicationtitle;
-                                    ScheduleList.Add(medtimes);
+                                    if(medtimes.Day == dayname)
+                                    {
+                                        medtimes.Type = "Medication";
+                                        medtimes.Usermedid = item.id;
+                                        medtimes.Feedbackid = medtimes.id.ToString();
+                                        medtimes.Name = item.medicationtitle;
+                                        ScheduleList.Add(medtimes);
+                                    }
                                 }
                             }            
                         }
@@ -244,14 +256,24 @@ public partial class MainSchedule : ContentPage
                             //check if today is within the days list
                             if (splitstring[1].Contains(dayname))
                             {
+                                int Index = 0;
+                                foreach (var x in item.schedule)
+                                {
+                                    var GetDay = item.TimeDosage[Index].Split('|');
+                                    x.Day = GetDay[2];
+                                    Index = Index + 1;
+                                }
                                 //add all the items 
                                 foreach (var medtimes in item.schedule)
                                 {
-                                    medtimes.Type = "Medication";
-                                    medtimes.Usermedid = item.id;
-                                    medtimes.Feedbackid = medtimes.id.ToString();
-                                    medtimes.Name = item.medicationtitle;
-                                    ScheduleList.Add(medtimes);
+                                    if (medtimes.Day == dayname)
+                                    {
+                                        medtimes.Type = "Medication";
+                                        medtimes.Usermedid = item.id;
+                                        medtimes.Feedbackid = medtimes.id.ToString();
+                                        medtimes.Name = item.medicationtitle;
+                                        ScheduleList.Add(medtimes);
+                                    }
                                 }
                             }
                         }
@@ -421,14 +443,24 @@ public partial class MainSchedule : ContentPage
                             //check if today is within the days list
                             if (splitstring[1].Contains(dayname))
                             {
+                                int Index = 0;
+                                foreach (var x in item.schedule)
+                                {
+                                    var GetDay = item.TimeDosage[Index].Split('|');
+                                    x.Day = GetDay[2];
+                                    Index = Index + 1;
+                                }
                                 //add all the items 
                                 foreach (var medtimes in item.schedule)
                                 {
-                                    medtimes.Type = "Supplement";
-                                    medtimes.Usermedid = item.id;
-                                    medtimes.Feedbackid = medtimes.id.ToString();
-                                    medtimes.Name = item.supplementtitle;
-                                    ScheduleList.Add(medtimes);
+                                    if (medtimes.Day == dayname)
+                                    {
+                                        medtimes.Type = "Supplement";
+                                        medtimes.Usermedid = item.id;
+                                        medtimes.Feedbackid = medtimes.id.ToString();
+                                        medtimes.Name = item.supplementtitle;
+                                        ScheduleList.Add(medtimes);
+                                    }
                                 }
                             }
                         }
@@ -442,18 +474,28 @@ public partial class MainSchedule : ContentPage
                             //check if today is within the days list
                             if (splitstring[1].Contains(dayname))
                             {
+                                int Index = 0;
+                                foreach (var x in item.schedule)
+                                {
+                                    var GetDay = item.TimeDosage[Index].Split('|');
+                                    x.Day = GetDay[2];
+                                    Index = Index + 1;
+                                }
                                 //add all the items 
                                 foreach (var medtimes in item.schedule)
                                 {
-                                    medtimes.Type = "Supplement";
-                                    medtimes.Usermedid = item.id;
-                                    medtimes.Feedbackid = medtimes.id.ToString();
-                                    medtimes.Name = item.supplementtitle;
-                                    ScheduleList.Add(medtimes);
+                                    if (medtimes.Day == dayname)
+                                    {
+                                        medtimes.Type = "Supplement";
+                                        medtimes.Usermedid = item.id;
+                                        medtimes.Feedbackid = medtimes.id.ToString();
+                                        medtimes.Name = item.supplementtitle;
+                                        ScheduleList.Add(medtimes);
+
+                                    }
                                 }
                             }
                         }
-
                     }
                 }
                 else if (splitstring[0] == "Days Interval")
@@ -849,7 +891,28 @@ public partial class MainSchedule : ContentPage
                     getusermeditem.feedback.Add(newfeedback);
                     await aPICalls.UpdateMedicationFeedbackAsync(getusermeditem);
 
-                }
+
+                    foreach (var item in AllUserSupplements)
+                    {
+                        if (item.id == getusermeditem.id)
+                        {
+                            foreach (var feedback in getusermeditem.feedback)
+                            {
+                                // Ensure no duplicate feedback entries
+                                if (!item.feedback.Any(f => f.datetime == feedback.datetime))
+                                {
+                                    item.feedback.Add(feedback);
+                                }
+                            }
+                        }
+                    }
+
+                        //Update Feedback on AllSupplements Page
+                      //WeakReferenceMessenger.Default.Send(new UpdateAllMeds(AllUserSupplements));
+
+                        //Update Feedback on SingleSupplements Page
+
+                    }
                 else
                 {
                     //update supplement feedback
@@ -873,7 +936,25 @@ public partial class MainSchedule : ContentPage
 
                         getusermeditem.feedback.Add(newfeedback);
                         await aPICalls.UpdateSupplementFeedbackAsync(getusermeditem);
-                    
+
+                    //foreach(var item in AllUserSupplements)
+                    //{
+                    //    if(item.id == label.UsermedID)
+                    //    {
+                    //        foreach(var x in item.feedback)
+                    //        {
+                    //            AllUserSupplement
+                    //        }
+                    //    }
+                      
+                    //}
+                   
+
+                    //Update Feedback on AllSupplements Page
+                    //WeakReferenceMessenger.Default.Send(new UpdateAllSupp(AllUserSupplements));
+
+                    //Update Feedback on SingleSupplements Page
+
                 }
             }
         }

@@ -5,14 +5,14 @@
              xmlns:progressBar="clr-namespace:Syncfusion.Maui.ProgressBar;assembly=Syncfusion.Maui.ProgressBar"
              xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
              xmlns:pinview="clr-namespace:PINView.Maui;assembly=PINView.Maui"
-              xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
              xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
              xmlns:gauge="clr-namespace:Syncfusion.Maui.Gauges;assembly=Syncfusion.Maui.Gauges"
              xmlns:controls="clr-namespace:Plugin.Maui.SegmentedControl;assembly=Plugin.Maui.SegmentedControl"
              xmlns:chip="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
              xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
-             HideSoftInputOnTapped="True"
-              Shell.NavBarHasShadow="False" Shell.NavBarIsVisible="False">
+             xmlns:SignaturePad="clr-namespace:Maui.FreakyControls;assembly=Maui.FreakyControls" NavigationPage.HasNavigationBar="False"
+             HideSoftInputOnTapped="True" Shell.NavBarHasShadow="False" Shell.NavBarIsVisible="False">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -972,6 +972,9 @@ BorderColor="LightGray">
                 </StackLayout>
 
             </Grid>
+
+
+
         </ScrollView>
 
 
@@ -992,7 +995,7 @@ BorderColor="LightGray">
 
                 <Button
 BackgroundColor="White"
-HorizontalOptions="Start"
+HorizontalOptions="Start" Clicked="nextbtn_Clicked" CommandParameter="Skip"
 TextColor="#031926" IsVisible="False"
    x:Name="skipbtn" 
 FontAttributes="None" Grid.Row="0" Grid.Column="0"
@@ -1004,7 +1007,7 @@ Text="Skip" />
    BackgroundColor="#031926"
    HorizontalOptions="EndAndExpand"
    TextColor="White"
-         x:Name="nextbtn" Clicked="nextbtn_Clicked"
+         x:Name="nextbtn" Clicked="nextbtn_Clicked" CommandParameter="Next"
    FontAttributes="None" Grid.Row="0" Grid.Column="1"
         Margin="20,0,20,10"
    FontFamily="HankenGroteskBold"

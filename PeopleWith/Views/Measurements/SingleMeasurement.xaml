@@ -47,6 +47,18 @@ Padding="0">
                 </Frame>
 
                 <chart:SfCartesianChart x:Name="datachart" BackgroundColor="Transparent" Margin="-5,10,0,0">
+                    <chart:SfCartesianChart.Resources>
+                        <DataTemplate x:Key="tooltipTemplate">
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="{Binding Item.value}" 
+                       TextColor="White" Padding="2.5"
+                       FontAttributes="Bold"
+                       FontSize="12"
+                       HorizontalOptions="Center" HorizontalTextAlignment="Center"
+                       VerticalOptions="Center" VerticalTextAlignment="Center"/>
+                            </StackLayout>
+                        </DataTemplate>
+                    </chart:SfCartesianChart.Resources>
                     <chart:SfCartesianChart.HeightRequest>
                         <OnPlatform x:TypeArguments="x:Double">
                             <On Platform="iOS" Value="350" />

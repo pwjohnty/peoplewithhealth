@@ -230,4 +230,16 @@ public partial class MainDashboard : ContentPage
 
         }
     }
+
+    async private void HealthReportBtn_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            await Navigation.PushAsync(new HealthReport(), false);
+        }
+        catch (Exception Ex)
+        {
+
+        }
+    }
 }

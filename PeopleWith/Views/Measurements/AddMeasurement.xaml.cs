@@ -12,6 +12,8 @@ public partial class AddMeasurement : ContentPage
     string numvalueconverted;
     string measurementnamestring;
     string measurementid;
+    string Stonesinput;
+    string Poundsinput; 
     APICalls aPICalls = new APICalls();
     bool validinput;
 
@@ -94,6 +96,15 @@ public partial class AddMeasurement : ContentPage
             bpdiaframe.IsVisible = true;
         }
         
+        if(measurementnamestring == "Weight" && usermeasurementpassed.unit == "Stones/Pounds")
+        {
+            unitentryframe.IsVisible = false;
+            StonesPoundsframe.IsVisible = true;
+            stlbl.Text = "St";
+            lbslbl.Text = "lbs";
+        }
+
+
 
         var unitstringlist = new List<string>();
 
@@ -120,17 +131,27 @@ public partial class AddMeasurement : ContentPage
         try
         {
             var item = e.DataItem as string;
-
-            lblentryunit.Text = item;
-
             inputvalue = item;
 
-         
+            if(inputvalue == "Stones/Pounds")
+            {
+                unitentryframe.IsVisible = false;
+                StonesPoundsframe.IsVisible = true;
+                unitentry.IsEnabled = false; 
+                stlbl.Text = "St";
+                lbslbl.Text = "lbs"; 
+            }
+            else
+            {
+                StonesPoundsframe.IsVisible = false;
+                unitentryframe.IsVisible = true;
+                unitentry.IsEnabled = true;
+                lblentryunit.Text = item;
+            }
 
-            unitentry.IsEnabled = true;
-
+            Stonesentry.Text = string.Empty;
+            Poundsentry.Text = string.Empty; 
             unitentry.Text = string.Empty;
-
 
         }
         catch(Exception ex)
@@ -166,8 +187,8 @@ public partial class AddMeasurement : ContentPage
 
             if (string.IsNullOrEmpty(e.NewTextValue))
             {
-               validinput = false;
-               
+                validinput = false;
+
                 unitentry.Text = string.Empty;
             }
             else
@@ -188,13 +209,13 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else if (convertodec <= 2.9 && convertodec >= 361.9)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
 
                             else
@@ -215,8 +236,8 @@ public partial class AddMeasurement : ContentPage
                             {
                                 if (convertoint <= 2 && convertoint >= 362)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else
                                 {
@@ -228,8 +249,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
 
@@ -247,13 +268,13 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else if (convertodec <= 4.9 && convertodec >= 799.1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -272,8 +293,8 @@ public partial class AddMeasurement : ContentPage
                             {
                                 if (convertoint <= 4 && convertoint >= 799)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else
                                 {
@@ -285,8 +306,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
 
@@ -301,13 +322,13 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else if (convertodec <= 4.9 && convertodec >= 799.1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -326,8 +347,8 @@ public partial class AddMeasurement : ContentPage
                             {
                                 if (convertoint <= 4 && convertoint >= 799)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else
                                 {
@@ -339,8 +360,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
 
@@ -355,13 +376,13 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else if (convertodec <= 0.4 && convertodec >= 56.9)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -381,8 +402,8 @@ public partial class AddMeasurement : ContentPage
                             {
                                 if (convertoint < 1 && convertoint >= 57)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else
                                 {
@@ -394,105 +415,19 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
-                            }
-                        }
-                    }
-                    else if (inputvalue == "Stones/Pounds")
-                    {
-                        unitentry.Text = e.NewTextValue;
+                                validinput = false;
 
-                        if (e.NewTextValue.Contains("."))
-                        {
-                            var countdots = e.NewTextValue.ToCharArray().Count(x => x == '.');
-                            var convertodec = Convert.ToDouble(e.NewTextValue);
-                            var splitnums = e.NewTextValue.Split('.');
-
-                            if (countdots > 1)
-                            {
-                               validinput = false;
-                               
-                            }
-                            else if (convertodec <= 0.0 && convertodec >= 100.13)
-                            {
-                               validinput = false;
-                               
-                            }
-                            //check if it contains more than 13 pounds
-
-                            else if (splitnums.Length > 1)
-                            {
-                                if (string.IsNullOrEmpty(splitnums[1]))
-                                {
-                                   validinput = false;
-                                   
-                                }
-                                else
-                                {
-                                    var convertsecondnum = Convert.ToInt32(splitnums[1]);
-
-                                    if (convertsecondnum > 13)
-                                    {
-                                       validinput = false;
-                                       
-                                    }
-                                    else
-                                    {
-                                        Double dc = Math.Round((Double)convertodec, 2);
-                                        numvalueconverted = dc.ToString();
-
-                                        SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
-                                        validinput = true;
-                                    }
-                                }
-                            }
-
-                            else
-                            {
-
-
-                                Double dc = Math.Round((Double)convertodec, 2);
-                                numvalueconverted = dc.ToString();
-
-                                SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
-                                validinput = true;
-                            }
-                        }
-                        else
-                        {
-                            var convertoint = Convert.ToInt32(e.NewTextValue);
-
-                            if (e.NewTextValue.Length >= 1 && e.NewTextValue.Length <= 2)
-                            {
-                                if (convertoint < 1 && convertoint >= 100)
-                                {
-                                   validinput = false;
-                                   
-                                }
-                                else
-                                {
-                                    numvalueconverted = convertoint.ToString();
-                                    SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
-                                    validinput = true;
-                                }
-
-                            }
-                            else
-                            {
-                               validinput = false;
-                               
                             }
                         }
                     }
                 }
+
                 else if (measurementnamestring == "Height")
                 {
-                    //weight
+
+                    var Value = e.NewTextValue;
                     if (inputvalue == "cm")
                     {
-
-
                         unitentry.Text = e.NewTextValue;
 
                         if (e.NewTextValue.Contains("."))
@@ -501,13 +436,13 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else if (convertodec <= 29.9 && convertodec >= 299.1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -527,13 +462,13 @@ public partial class AddMeasurement : ContentPage
                             {
                                 if (convertoint <= 29)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else if (convertoint > 300)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else
                                 {
@@ -545,8 +480,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
 
@@ -558,19 +493,17 @@ public partial class AddMeasurement : ContentPage
                     }
                     else if (inputvalue == "Feet")
                     {
-                        var valuestring = e.NewTextValue;
-                        var firstnum = valuestring[0].ToString();
-                        var removefirstone = valuestring.Substring(1);
-                        unitentry.Text = firstnum + "' " + removefirstone + "\" ";
 
+                        var valuestring = e.NewTextValue;
+                        unitentry.Text = valuestring;
                         if (e.NewTextValue.Contains("."))
                         {
                             var countdots = e.NewTextValue.ToCharArray().Count(x => x == '.');
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 0)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             //  else if (convertodec <= 4.9)
                             //  {
@@ -588,35 +521,38 @@ public partial class AddMeasurement : ContentPage
                         }
                         else
                         {
-                            var convertoint = Convert.ToInt32(e.NewTextValue);
+                            //if (e.NewTextValue.Contains("'"))
+                            //{
+                            //    Value = e.NewTextValue.Replace("'", string.Empty); 
+                            //}
+
+                            var convertoint = Convert.ToInt32(Value);
 
 
-                            if (e.NewTextValue.Length > 1 && e.NewTextValue.Length <= 3)
+                            if (e.NewTextValue.Length < 2)
                             {
-
-                                var convertfirstnum = Convert.ToInt32(firstnum);
-                                var secondnum = Convert.ToInt32(removefirstone);
-
-                                if (convertfirstnum <= 9 && secondnum <= 11)
+                                if (convertoint >= 3 && convertoint <= 11)
                                 {
-                                    numvalueconverted = convertfirstnum.ToString() + "'" + secondnum;
+                                    numvalueconverted = convertoint.ToString();
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
                                     validinput = true;
 
                                 }
                                 else
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
 
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
+
+
 
                     }
                     else if (inputvalue == "Inches")
@@ -631,13 +567,13 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else if (convertodec <= 5.9 && convertodec >= 89.9)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -657,13 +593,13 @@ public partial class AddMeasurement : ContentPage
                             {
                                 if (convertoint <= 6)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else if (convertoint > 90)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else
                                 {
@@ -675,8 +611,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
 
@@ -689,67 +625,117 @@ public partial class AddMeasurement : ContentPage
                     else if (inputvalue == "Feet/Inches")
                     {
                         var valuestring = e.NewTextValue;
-                        var firstnum = valuestring[0].ToString();
-                        var removefirstone = valuestring.Substring(1);
-                        unitentry.Text = firstnum + "' " + removefirstone + "\" ";
-
-                        if (e.NewTextValue.Contains("."))
+                        if (valuestring == "' ")
                         {
-                            var countdots = e.NewTextValue.ToCharArray().Count(x => x == '.');
-                            var convertodec = Convert.ToDouble(e.NewTextValue);
-                            if (countdots > 0)
-                            {
-                               validinput = false;
-                               
-                            }
-                            //  else if (convertodec <= 4.9)
-                            //  {
-                            //     validinput = false;
-                            //     
-                            //  }
-                            //  else
-                            //  {
-                            //      SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
-                            //      validinput = true;
+                            unitentry.Text = "";
+                            return;
+                        }
+                        else if (valuestring == "'")
+                        {
+                            unitentry.Text = "";
+                            return;
+                        }
 
-                            //      Double dc = Math.Round((Double)convertodec, 2);
-                            //      numvalueconverted = dc.ToString();
-                            //  }
+                        if (e.NewTextValue.Length == 2 && e.OldTextValue.Length == 3)
+                        {
+                            unitentry.CursorPosition = 1;
+                            return;
+                        }
+
+
+                        if (valuestring.Contains("'"))
+                        {
+                            valuestring = valuestring.Replace("'", "");
+                        }
+
+                        // Replace space
+                        if (valuestring.Contains(" "))
+                        {
+                            valuestring = valuestring.Replace(" ", "");
+                        }
+
+                        // Replace double quote
+                        if (valuestring.Contains("\""))
+                        {
+                            valuestring = valuestring.Replace("\"", "");
+                        }
+
+                        // Ensure Not Empty
+                        if (string.IsNullOrEmpty(valuestring))
+                        {
+                            return;
                         }
                         else
                         {
-                            var convertoint = Convert.ToInt32(e.NewTextValue);
-
-
-                            if (e.NewTextValue.Length > 1 && e.NewTextValue.Length <= 3)
+                            if (valuestring.Length == 1)
                             {
+                                var firstnum = valuestring[0].ToString(); // Feet
+                                var feet = Convert.ToInt32(firstnum);
+                                unitentry.Text = $"{feet}' ";
+                                unitentry.CursorPosition = unitentry.Text.Length;
+                            }
+                            else if (valuestring.Length == 2)
+                            {
+                                var firstnum = valuestring[0].ToString(); // Feet
+                                var secondnum = valuestring[1].ToString(); // Inches
 
-                                var convertfirstnum = Convert.ToInt32(firstnum);
-                                var secondnum = Convert.ToInt32(removefirstone);
+                                var feet = Convert.ToInt32(firstnum);
+                                var inches = Convert.ToInt32(secondnum);
 
-                                if (convertfirstnum <= 9 && secondnum <= 11)
+                                //var formattedInches = inches < 10 ? "0" + inches : inches.ToString();
+
+                                unitentry.Text = $"{feet}' {inches}\"";
+                            }
+                            else if (valuestring.Length == 3)
+                            {
+                                var firstnum = valuestring[0].ToString(); // Feet
+                                var inchString = valuestring.Substring(1, 2); //Inches
+
+                                var feet = Convert.ToInt32(firstnum);
+                                var inches = Convert.ToInt32(inchString);
+
+                                // Ensure inches are valid (between 0-11)
+
+                                //var formattedInches = inches < 10 ? "0" + inches : inches.ToString();
+
+                                unitentry.Text = $"{feet}' {inches}\"";
+                            }
+
+                            if (valuestring.Length == 1)
+                            {
+                                validinput = false;
+                            }
+                            else if (valuestring.Length == 2)
+                            {
+                                var firstnum = valuestring[0].ToString(); // Feet
+                                var secondnum = valuestring[1].ToString(); // Inches
+                                validinput = true;
+                                SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                            }
+                            else if (valuestring.Length == 3)
+                            {
+                                var firstnum = valuestring[0].ToString(); // Feet
+                                var inchString = valuestring.Substring(1, 2); //Inches
+                                var inches = Convert.ToInt32(inchString);
+
+                                if (inches < 12)
                                 {
-                                    numvalueconverted = convertfirstnum.ToString() + "'" + secondnum;
-                                    SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
                                     validinput = true;
-
+                                    SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
                                 }
                                 else
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
                                 }
-
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
                             }
                         }
-
                     }
                 }
+
                 else if (measurementnamestring == "Waist")
                 {
 
@@ -765,13 +751,13 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else if (convertodec <= 9.9 && convertodec >= 299.9)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -791,13 +777,13 @@ public partial class AddMeasurement : ContentPage
                             {
                                 if (convertoint <= 9)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else if (convertoint > 299)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else
                                 {
@@ -809,8 +795,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
 
@@ -832,13 +818,13 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else if (convertodec <= 4 && convertodec >= 116.9)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -858,13 +844,13 @@ public partial class AddMeasurement : ContentPage
                             {
                                 if (convertoint <= 4)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else if (convertoint > 117)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else
                                 {
@@ -876,8 +862,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
 
@@ -900,13 +886,13 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else if (convertodec >= 100.1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -926,13 +912,13 @@ public partial class AddMeasurement : ContentPage
                             {
                                 if (convertoint < 0)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else if (convertoint > 100)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else
                                 {
@@ -944,8 +930,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -962,13 +948,13 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else if (convertodec >= 100.1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -988,13 +974,13 @@ public partial class AddMeasurement : ContentPage
                             {
                                 if (convertoint < 0)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else if (convertoint > 100)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else
                                 {
@@ -1006,8 +992,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -1024,8 +1010,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 0)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
 
                         }
@@ -1037,13 +1023,13 @@ public partial class AddMeasurement : ContentPage
                             {
                                 if (convertoint < 30)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else if (convertoint > 350)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else
                                 {
@@ -1055,8 +1041,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -1073,8 +1059,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 0)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
 
                         }
@@ -1086,13 +1072,13 @@ public partial class AddMeasurement : ContentPage
                             {
                                 if (convertoint < 60)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else if (convertoint > 170)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else
                                 {
@@ -1104,8 +1090,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -1122,8 +1108,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 0)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
 
                         }
@@ -1135,13 +1121,13 @@ public partial class AddMeasurement : ContentPage
                             {
                                 if (convertoint < 200)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else if (convertoint > 240)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else
                                 {
@@ -1153,8 +1139,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -1171,8 +1157,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 0)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
 
                         }
@@ -1184,13 +1170,13 @@ public partial class AddMeasurement : ContentPage
                             {
                                 if (convertoint < 130)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else if (convertoint > 160)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else
                                 {
@@ -1202,8 +1188,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -1217,8 +1203,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -1245,8 +1231,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -1263,8 +1249,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -1277,6 +1263,7 @@ public partial class AddMeasurement : ContentPage
                             }
 
                         }
+
                         else
                         {
                             var convertoint = Convert.ToInt32(e.NewTextValue);
@@ -1285,13 +1272,13 @@ public partial class AddMeasurement : ContentPage
                             {
                                 if (convertoint < 0)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else if (convertoint > 500)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else
                                 {
@@ -1303,8 +1290,52 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
+                            }
+                        }
+                    }
+
+                    if (inputvalue == "ng/mL")
+                    {
+                        unitentry.Text = e.NewTextValue;
+                        if (e.NewTextValue.Contains("."))
+                        {
+                            var countdots = e.NewTextValue.ToCharArray().Count(x => x == '.');
+                            var convertodec = Convert.ToDouble(e.NewTextValue);
+                            if (countdots > 0)
+                            {
+                                validinput = false;
+
+                            }
+                        }
+                        else
+                        {
+                            var convertoint = Convert.ToInt32(e.NewTextValue);
+                            if (e.NewTextValue.Length >= 1 && e.NewTextValue.Length <= 80)
+                            {
+                                if (convertoint < 13)
+                                {
+                                    validinput = false;
+
+                                }
+                                else if (convertoint > 400)
+                                {
+                                    validinput = false;
+
+                                }
+                                else
+                                {
+                                    numvalueconverted = convertoint.ToString();
+                                    SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    validinput = true;
+                                }
+
+                            }
+                            else
+                            {
+                                validinput = false;
+
                             }
                         }
                     }
@@ -1322,8 +1353,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 0)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
 
                         }
@@ -1335,13 +1366,13 @@ public partial class AddMeasurement : ContentPage
                             {
                                 if (convertoint < 50)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else if (convertoint > 60)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else
                                 {
@@ -1353,8 +1384,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -1368,8 +1399,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -1396,8 +1427,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -1415,8 +1446,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 0)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
 
                         }
@@ -1428,13 +1459,13 @@ public partial class AddMeasurement : ContentPage
                             {
                                 if (convertoint < 150)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else if (convertoint > 200)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else
                                 {
@@ -1446,8 +1477,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -1464,8 +1495,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 0)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
 
                         }
@@ -1495,8 +1526,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -1510,8 +1541,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 0)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
 
                         }
@@ -1541,8 +1572,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -1559,8 +1590,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -1587,8 +1618,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -1602,8 +1633,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -1630,8 +1661,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -1648,8 +1679,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -1676,8 +1707,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -1691,8 +1722,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -1719,8 +1750,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -1737,8 +1768,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 0)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -1765,8 +1796,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -1783,8 +1814,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 0)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -1811,8 +1842,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -1828,13 +1859,13 @@ public partial class AddMeasurement : ContentPage
 
                         if (convertoint < 5.0)
                         {
-                           validinput = false;
-                           
+                            validinput = false;
+
                         }
                         else if (convertoint > 14.1)
                         {
-                           validinput = false;
-                           
+                            validinput = false;
+
                         }
                         else
                         {
@@ -1851,20 +1882,20 @@ public partial class AddMeasurement : ContentPage
 
                         if (e.NewTextValue.Contains("."))
                         {
-                           validinput = false;
-                           
+                            validinput = false;
+
                         }
                         else
                         {
                             if (convertoint < 31)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else if (convertoint > 131)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -1890,8 +1921,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -1918,8 +1949,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -1936,8 +1967,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -1964,8 +1995,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -1982,8 +2013,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -2010,8 +2041,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -2025,8 +2056,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -2053,8 +2084,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -2071,8 +2102,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -2099,8 +2130,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -2117,13 +2148,13 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else if (convertodec >= 100.1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -2143,13 +2174,13 @@ public partial class AddMeasurement : ContentPage
                             {
                                 if (convertoint < 0)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else if (convertoint > 100)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else
                                 {
@@ -2161,8 +2192,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -2179,8 +2210,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -2207,8 +2238,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -2225,8 +2256,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -2253,8 +2284,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -2268,8 +2299,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -2304,8 +2335,8 @@ public partial class AddMeasurement : ContentPage
                                 }
                                 else
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
 
                             }
@@ -2325,8 +2356,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -2353,8 +2384,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -2371,8 +2402,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -2399,8 +2430,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -2417,8 +2448,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -2445,8 +2476,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -2460,8 +2491,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -2488,8 +2519,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -2506,8 +2537,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -2534,8 +2565,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -2552,8 +2583,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -2580,8 +2611,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -2595,8 +2626,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -2623,8 +2654,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -2641,8 +2672,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -2669,8 +2700,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -2687,8 +2718,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -2715,8 +2746,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -2733,8 +2764,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -2761,8 +2792,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -2779,8 +2810,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -2807,8 +2838,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -2828,13 +2859,13 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else if (convertodec <= 29.9 && convertodec >= 42.1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -2854,13 +2885,13 @@ public partial class AddMeasurement : ContentPage
                             {
                                 if (convertoint <= 32)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else if (convertoint > 43)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else
                                 {
@@ -2872,8 +2903,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
 
@@ -2895,13 +2926,13 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else if (convertodec <= 91.9 && convertodec >= 107.1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -2921,13 +2952,13 @@ public partial class AddMeasurement : ContentPage
                             {
                                 if (convertoint <= 91)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else if (convertoint > 108)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else
                                 {
@@ -2939,8 +2970,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
 
@@ -2963,8 +2994,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -2985,13 +3016,13 @@ public partial class AddMeasurement : ContentPage
 
                                 if (convertoint < 7)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else if (convertoint > 75)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else
                                 {
@@ -3004,8 +3035,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -3021,8 +3052,8 @@ public partial class AddMeasurement : ContentPage
                         var convertodec = Convert.ToDouble(e.NewTextValue);
                         if (countdots > 1)
                         {
-                           validinput = false;
-                           
+                            validinput = false;
+
                         }
                         else
                         {
@@ -3043,13 +3074,13 @@ public partial class AddMeasurement : ContentPage
 
                             if (convertoint < 110)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else if (convertoint > 1200)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -3061,8 +3092,8 @@ public partial class AddMeasurement : ContentPage
                         }
                         else
                         {
-                           validinput = false;
-                           
+                            validinput = false;
+
                         }
                     }
                 }
@@ -3077,8 +3108,8 @@ public partial class AddMeasurement : ContentPage
                         var convertodec = Convert.ToDouble(e.NewTextValue);
                         if (countdots > 1)
                         {
-                           validinput = false;
-                           
+                            validinput = false;
+
                         }
                         else
                         {
@@ -3099,13 +3130,13 @@ public partial class AddMeasurement : ContentPage
 
                             if (convertoint < 1)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else if (convertoint > 100)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                             else
                             {
@@ -3117,8 +3148,8 @@ public partial class AddMeasurement : ContentPage
                         }
                         else
                         {
-                           validinput = false;
-                           
+                            validinput = false;
+
                         }
                     }
                 }
@@ -3134,8 +3165,8 @@ public partial class AddMeasurement : ContentPage
                             var convertodec = Convert.ToDouble(e.NewTextValue);
                             if (countdots > 0)
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                         else
@@ -3145,13 +3176,13 @@ public partial class AddMeasurement : ContentPage
                             {
                                 if (convertoint < 1)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else if (convertoint > 80)
                                 {
-                                   validinput = false;
-                                   
+                                    validinput = false;
+
                                 }
                                 else
                                 {
@@ -3163,8 +3194,8 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                     }
@@ -3187,8 +3218,8 @@ public partial class AddMeasurement : ContentPage
                         var convertodec = Convert.ToDouble(e.NewTextValue);
                         if (countdots > 1)
                         {
-                           validinput = false;
-                           
+                            validinput = false;
+
                         }
                         else
                         {
@@ -3214,14 +3245,14 @@ public partial class AddMeasurement : ContentPage
                             }
                             else
                             {
-                               validinput = false;
-                               
+                                validinput = false;
+
                             }
                         }
                         else
                         {
-                           validinput = false;
-                           
+                            validinput = false;
+
                         }
                     }
 
@@ -3234,6 +3265,292 @@ public partial class AddMeasurement : ContentPage
                         if (e.NewTextValue.Length >= 1 && e.NewTextValue.Length <= 2)
                         {
                             if (convertoint > 0 && convertoint < 37)
+                            {
+                                SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                validinput = true;
+                                numvalueconverted = convertoint.ToString();
+                            }
+                            else
+                            {
+                                validinput = false;
+
+                            }
+                        }
+                        else
+                        {
+                            validinput = false;
+
+                        }
+                    }
+                    else
+                    {
+
+                        if (e.NewTextValue.Length >= 1 && e.NewTextValue.Length <= 2)
+                        {
+                            if (convertoint > 0 && convertoint < 2161)
+                            {
+                                SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                validinput = true;
+                                numvalueconverted = convertoint.ToString();
+                            }
+                            else
+                            {
+                                validinput = false;
+
+                            }
+                        }
+                        else
+                        {
+                            validinput = false;
+
+                        }
+                    }
+
+                }
+                else if (measurementnamestring == "Glomerular Filtration Rate (GFR)")
+                {
+                    var ValueString = e.NewTextValue;
+                    if (e.NewTextValue.Contains("."))
+                    {
+                        ValueString = e.NewTextValue.Replace(".", "");
+                        unitentry.Text = ValueString;
+                    }
+                    var convertoint = Convert.ToInt32(ValueString);
+                    if (inputvalue == "mL/min/1.73 m2")
+                    {
+                        if (ValueString.Length >= 1 && ValueString.Length <= 3)
+                        {
+                            if (convertoint > 0 && convertoint < 150)
+                            {
+                                SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                validinput = true;
+                                numvalueconverted = convertoint.ToString();
+                            }
+                            else
+                            {
+                                validinput = false;
+
+                            }
+                        }
+                        else
+                        {
+                            validinput = false;
+
+                        }
+                    }
+
+                }
+                else if (measurementnamestring == "Gamma-glutamyltransferase (GGT)")
+                {
+                    var ValueString = e.NewTextValue;
+                    if (e.NewTextValue.Contains("."))
+                    {
+                        ValueString = e.NewTextValue.Replace(".", "");
+                        unitentry.Text = ValueString;
+                    }
+                    var convertoint = Convert.ToInt32(ValueString);
+                    if (inputvalue == "IU/L")
+                    {
+                        if (ValueString.Length >= 1 && ValueString.Length <= 3)
+                        {
+                            if (convertoint > 0 && convertoint < 111)
+                            {
+                                SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                validinput = true;
+                                numvalueconverted = convertoint.ToString();
+                            }
+                            else
+                            {
+                                validinput = false;
+
+                            }
+                        }
+                        else
+                        {
+                            validinput = false;
+
+                        }
+                    }
+
+                }
+                else if (measurementnamestring == "Very Low-Density Lipoprotein Cholesterol (VLDL)")
+                {
+                    var ValueString = e.NewTextValue;
+                    if (e.NewTextValue.Contains("."))
+                    {
+                        ValueString = e.NewTextValue.Replace(".", "");
+                        unitentry.Text = ValueString;
+                    }
+                    var convertoint = Convert.ToInt32(ValueString);
+                    if (inputvalue == "mg/dL")
+                    {
+                        if (ValueString.Length >= 1 && ValueString.Length <= 2)
+                        {
+                            if (convertoint > 0 && convertoint < 51)
+                            {
+                                SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                validinput = true;
+                                numvalueconverted = convertoint.ToString();
+                            }
+                            else
+                            {
+                                validinput = false;
+
+                            }
+                        }
+                        else
+                        {
+                            validinput = false;
+
+                        }
+                    }
+
+                }
+                else if (measurementnamestring == "Thyroid Peroxidase Antibody (TPOAb)")
+                {
+                    var ValueString = e.NewTextValue;
+                    if (e.NewTextValue.Contains("."))
+                    {
+                        ValueString = e.NewTextValue.Replace(".", "");
+                        unitentry.Text = ValueString;
+                    }
+                    var convertoint = Convert.ToInt32(ValueString);
+                    if (inputvalue == "IU/mL")
+                    {
+                        if (ValueString.Length >= 1 && ValueString.Length <= 4)
+                        {
+                            if (convertoint > 0 && convertoint < 3001)
+                            {
+                                SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                validinput = true;
+                                numvalueconverted = convertoint.ToString();
+                            }
+                            else
+                            {
+                                validinput = false;
+
+                            }
+                        }
+                        else
+                        {
+                            validinput = false;
+
+                        }
+                    }
+
+                }
+                else if (measurementnamestring == "Thyroglobulin Antibody (TgAb)")
+                {
+                    var ValueString = e.NewTextValue;
+                    if (e.NewTextValue.Contains("."))
+                    {
+                        ValueString = e.NewTextValue.Replace(".", "");
+                        unitentry.Text = ValueString;
+                    }
+                    var convertoint = Convert.ToInt32(ValueString);
+                    if (inputvalue == "IU/mL")
+                    {
+                        if (ValueString.Length >= 1 && ValueString.Length <= 4)
+                        {
+                            if (convertoint > 0 && convertoint < 5001)
+                            {
+                                SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                validinput = true;
+                                numvalueconverted = convertoint.ToString();
+                            }
+                            else
+                            {
+                                validinput = false;
+
+                            }
+                        }
+                        else
+                        {
+                            validinput = false;
+
+                        }
+                    }
+
+                }
+                else if (measurementnamestring == "Thyroid-Stimulating Immunoglobulin (TSI)")
+                {
+                    var ValueString = e.NewTextValue;
+                    if (e.NewTextValue.Contains("."))
+                    {
+                        ValueString = e.NewTextValue.Replace(".", "");
+                        unitentry.Text = ValueString;
+                    }
+                    var convertoint = Convert.ToInt32(ValueString);
+                    if (inputvalue == "IU/L")
+                    {
+                        if (ValueString.Length >= 1 && ValueString.Length <= 4)
+                        {
+                            if (convertoint > 0 && convertoint < 5001)
+                            {
+                                SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                validinput = true;
+                                numvalueconverted = convertoint.ToString();
+                            }
+                            else
+                            {
+                                validinput = false;
+
+                            }
+                        }
+                        else
+                        {
+                            validinput = false;
+
+                        }
+                    }
+
+                }
+                else if (measurementnamestring == "Calcitonin Level") 
+                {
+                    var ValueString = e.NewTextValue;
+                    if (e.NewTextValue.Contains("."))
+                    {
+                        ValueString = e.NewTextValue.Replace(".", "");
+                        unitentry.Text = ValueString;
+                    }
+                    var convertoint = Convert.ToInt32(ValueString);
+                    if (inputvalue == "pg/mL")
+                    {
+                        if (ValueString.Length >= 1 && ValueString.Length <= 3)
+                        {
+                            if (convertoint > 0 && convertoint < 121)
+                            {
+                                SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                validinput = true;
+                                numvalueconverted = convertoint.ToString();
+                            }
+                            else
+                            {
+                                validinput = false;
+
+                            }
+                        }
+                        else
+                        {
+                            validinput = false;
+
+                        }
+                    }
+                }
+                else if (measurementnamestring == "Endometrial Thickness")
+                {
+                    var ValueString = e.NewTextValue; 
+                    if (e.NewTextValue.Contains("."))
+                    {
+                        ValueString = e.NewTextValue.Replace(".", "");
+                        unitentry.Text = ValueString;
+                    }
+                    var convertoint = Convert.ToInt32(ValueString);
+                    if (inputvalue == "mm")
+                    {
+                        if (ValueString.Length >= 1 && ValueString.Length <= 2)
+                        {
+                            if (convertoint > 0 && convertoint < 21)
                             {
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
                                 validinput = true;
@@ -3308,6 +3625,30 @@ public partial class AddMeasurement : ContentPage
                 if (measurementnamestring == "Blood Pressure")
                 {
                     newmeasurment.value = sysentry.Text + "/" + diaentry.Text;
+                }
+                else if (measurementnamestring == "Weight" && inputvalue == "Stones/Pounds")
+                {
+                    if(string.IsNullOrEmpty(Stonesinput) || string.IsNullOrEmpty(Poundsinput))
+                    {
+                        Vibration.Vibrate();
+                        return;
+                    }
+
+                    if(Int32.Parse(Stonesinput) > 100)
+                    {
+                        Vibration.Vibrate();
+                        return;
+                    }
+                    if(Int32.Parse(Poundsinput) > 13)
+                    {
+                        Vibration.Vibrate();
+                        return;
+                    }
+                    else
+                    {
+                        newmeasurment.value = Stonesinput + "st " + Poundsinput + "lbs";
+                    }
+
                 }
                 else
                 {
@@ -3540,6 +3881,34 @@ public partial class AddMeasurement : ContentPage
             //hideallstack.IsVisible = false;
             //errorstack.IsVisible = true;
          
+        }
+    }
+
+    async private void Stonesentry_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        try
+        {
+            Stonesinput = e.NewTextValue;
+            SubmitBtn.BackgroundColor = Color.FromHex("#0F9FE2");
+            validinput = true; 
+        }
+        catch (Exception Ex)
+        {
+
+        }
+    }
+
+    async private void Poundsentry_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        try
+        {
+            Poundsinput = e.NewTextValue;
+            SubmitBtn.BackgroundColor = Color.FromHex("#0F9FE2");
+            validinput = true;
+        }
+        catch (Exception Ex)
+        {
+
         }
     }
 }

@@ -45,10 +45,11 @@ public partial class SingleSupplement : ContentPage
                             item.Times = freq[0];
                         }
                     }
-                    lblvalue.Text = freq[1];
+                    lblvalue.Text = MedSelected.feedback.Count().ToString() + " Taken";
                 }
                 else
                 {
+                    int Index = 0;
                     lblvalue.Text = MedSelected.schedule[0].Dosage;
                     freqSplit = MedSelected.frequency.Split('|');
 
@@ -57,13 +58,15 @@ public partial class SingleSupplement : ContentPage
                         if (freqSplit[0] == "Weekly" || freqSplit[0] == "Weekly ")
                         {
                             item.Times = "1 " + MedSelected.preparation;
-                            item.Type = item.Day;
+                            var day = MedSelected.TimeDosage[Index].Split('|');
+                            item.Type = day[2];
                         }
                         else
                         {
                             item.Times = "1 " + MedSelected.preparation;
                             item.Type = freqSplit[0];
                         }
+                        Index = Index + 1;
 
                     }
                 }

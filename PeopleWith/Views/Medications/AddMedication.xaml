@@ -76,7 +76,7 @@
                 <StackLayout x:Name="firststack" IsVisible="False">
                     <Label Text="Add Medication" FontFamily="HankenGroteskBold" FontSize="26"  Margin="20,20,0,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" />
 
-                    <Label Text="To add a Medication type into the searchbar below , then Select Zed Medication from the list below."  Margin="20,5,20,0" FontFamily="HankenGroteskRegular" FontSize="12"  HorizontalOptions="Center" VerticalOptions="Center" TextColor="Gray" />
+                    <Label Text="To add a Medication type into the searchbar below, then Select the Medication from the list below."  Margin="20,5,20,0" FontFamily="HankenGroteskRegular" FontSize="12"  HorizontalOptions="Center" VerticalOptions="Center" TextColor="Gray" />
 
 
                     <Grid Margin="20,10,20,0" x:Name="MainGrid">

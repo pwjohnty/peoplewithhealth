@@ -78,6 +78,8 @@ namespace PeopleWith
         public const string Videos = "https://pwdevapi.peoplewith.com/api/video";
         //Videos engagement
         public const string VideosEngage = "https://pwdevapi.peoplewith.com/api/videoengagementdata";
+        //User Consent 
+        public const string UserConsent = "https://pwdevapi.peoplewith.com/api/userconsent";
 
 
 
@@ -167,14 +169,14 @@ namespace PeopleWith
                     var userResponseconsent = JsonConvert.DeserializeObject<ApiResponseUserMeasurement>(contentconsent);
                     var consent = userResponseconsent.Value;
 
-                    foreach(var item in consent)
+                    foreach (var item in consent)
                     {
-                        if(item.deleted == true)
+                        if (item.deleted == true)
                         {
                             itemstoremove.Add(item);
                         }
                     }
-                    foreach(var i in itemstoremove)
+                    foreach (var i in itemstoremove)
                     {
                         consent.Remove(i);
                     }
@@ -236,7 +238,7 @@ namespace PeopleWith
         }
 
         //Delete User Measurement 
-     
+
         public async Task DeleteUserMeasurements(ObservableCollection<usermeasurement> deletelistpassed)
         {
             try
@@ -681,7 +683,7 @@ namespace PeopleWith
         {
             try
             {
-               // HttpClient client = new HttpClient();
+                // HttpClient client = new HttpClient();
                 var id = usermedpassed.id;
                 var url = $"https://pwdevapi.peoplewith.com/api/usermedication/{id}";
                 string jsonns = System.Text.Json.JsonSerializer.Serialize<usermedication>(usermedpassed);
@@ -708,12 +710,12 @@ namespace PeopleWith
                     }
                 }
 
-           
-              
+
+
             }
             catch (Exception ex)
             {
-                
+
             }
         }
 
@@ -765,65 +767,8 @@ namespace PeopleWith
                             schedule = new ObservableCollection<MedtimesDosages>(),
                             medicationquestions = rawSymptom.medicationquestions
                         };
-                        // Deserialize the feedback string into the FeedbackList
                         if (rawSymptom.schedule == null)
                         {
-                        var feedbackSymptoms = JsonConvert.DeserializeObject<List<MedtimesDosages>>(rawSymptom.schedule);
-                            // Add only the relevant feedback to this usersymptom
-                            if (newUserSymptom.deleted == true)
-                            {
-                                //Do Nothing
-                            }
-                            else
-                            {
-                                int index = 0;
-                                foreach (var feedback in feedbackSymptoms)
-                                {
-                                    newUserSymptom.schedule.Add(feedback);
-                                    var dosage = feedback.Dosage;
-                                    var time = feedback.time;
-                                    //Daily
-                                    var getfreq = newUserSymptom.frequency.Split('|');
-                                    if (getfreq[0] == "Daily" || getfreq[0] == "Days Interval")
-                                    {
-                                        var DosageTime = time + "|" + dosage;
-                                        newUserSymptom.TimeDosage.Add(DosageTime);
-                                    }
-                                    //Weekly
-                                    else if (getfreq[0] == "Weekly" || getfreq[0] == "Weekly ")
-                                    {
-                                        var freq = newUserSymptom.frequency.Split('|');
-                                        if (freq[1].Contains(","))
-                                        {
-                                            var days = freq[1].Split(',').ToList();
-                                            int GetCount = feedbackSymptoms.Count / days.Count;
-                                            var duplicatedDays = Enumerable.Repeat(days, GetCount).SelectMany(x => x).ToList();
-                                            feedback.Day = duplicatedDays[index];
-                                            if (newUserSymptom.TimeDosage.Count == feedbackSymptoms.Count)
-                                            {
-                                                //Do nothing 
-                                            }
-                                            else
-                                            {
-                                                for (int i = 0; i < feedbackSymptoms.Count; i++)
-                                                {
-                                                    var getday = duplicatedDays[i];
-                                                    var DosageTimes = time + "|" + dosage + "|" + getday;
-                                                    newUserSymptom.TimeDosage.Add(DosageTimes);
-                                                }
-                                            }
-
-                                        }
-                                        else
-                                        {
-                                            var getday = freq[1];
-                                            var DosageTimes = time + "|" + dosage + "|" + getday;
-                                            newUserSymptom.TimeDosage.Add(DosageTimes);
-                                        }
-                                    }
-                                    index = index + 1;
-                                }
-                            }
 
                         }
                         else
@@ -831,13 +776,28 @@ namespace PeopleWith
                             var feedbackSymptoms = JsonConvert.DeserializeObject<List<MedtimesDosages>>(rawSymptom.schedule);
                             // Add only the relevant feedback to this usersymptom
 
+                            int Index = 0;
+
                             foreach (var feedback in feedbackSymptoms)
                             {
                                 newUserSymptom.schedule.Add(feedback);
                                 var dosage = feedback.Dosage;
                                 var time = feedback.time;
-                                //Daily
+                                List<string> days = new List<string>();
+
                                 var getfreq = newUserSymptom.frequency.Split('|');
+
+                                //weekly Days
+                                if (getfreq[1].Contains(","))
+                                {
+                                    days = getfreq[1].Split(',').ToList();
+                                    int GetCount = feedbackSymptoms.Count() / days.Count;
+                                    var duplicatedDays = Enumerable.Repeat(days, GetCount).SelectMany(x => x).ToList();
+                                    var uniqueDays = duplicatedDays.Distinct().ToList();
+                                    days = uniqueDays.SelectMany(day => duplicatedDays.Where(d => d == day)).ToList();
+                                }
+
+                                //Daily
                                 if (getfreq[0] == "Daily" || getfreq[0] == "Days Interval")
                                 {
                                     var DosageTime = time + "|" + dosage;
@@ -846,9 +806,20 @@ namespace PeopleWith
                                 //Weekly
                                 else if (getfreq[0] == "Weekly" || getfreq[0] == "Weekly ")
                                 {
-                                    var day = feedback.Day;
-                                    var DosageTime = time + "|" + dosage + "|" + day;
+                                    string DosageTime = String.Empty;
+                                    if (getfreq[1].Contains(","))
+                                    {
+                                        DosageTime = time + "|" + dosage + "|" + days[Index];
+
+                                    }
+                                    else
+                                    {
+                                        var day = getfreq[1];
+                                        DosageTime = time + "|" + dosage + "|" + day;
+                                    }
+
                                     newUserSymptom.TimeDosage.Add(DosageTime);
+                                    Index = Index + 1;
                                 }
 
                             }
@@ -1106,7 +1077,7 @@ namespace PeopleWith
                 var payload = new
                 {
                     status = updatedmed.status
-                    
+
                 };
 
                 // Serialize the object into JSON
@@ -1291,13 +1262,28 @@ namespace PeopleWith
                             var feedbackSymptoms = JsonConvert.DeserializeObject<List<MedtimesDosages>>(rawSymptom.schedule);
                             // Add only the relevant feedback to this usersymptom
 
+                            int Index = 0;
+
                             foreach (var feedback in feedbackSymptoms)
                             {
                                 newUserSymptom.schedule.Add(feedback);
                                 var dosage = feedback.Dosage;
                                 var time = feedback.time;
-                                //Daily
+                                List<string> days = new List<string>();
+
                                 var getfreq = newUserSymptom.frequency.Split('|');
+
+                                //weekly Days
+                                if (getfreq[1].Contains(","))
+                                {
+                                    days = getfreq[1].Split(',').ToList();
+                                    int GetCount = feedbackSymptoms.Count() / days.Count;
+                                    var duplicatedDays = Enumerable.Repeat(days, GetCount).SelectMany(x => x).ToList();
+                                    var uniqueDays = duplicatedDays.Distinct().ToList();
+                                    days = uniqueDays.SelectMany(day => duplicatedDays.Where(d => d == day)).ToList();
+                                }
+
+                                //Daily
                                 if (getfreq[0] == "Daily" || getfreq[0] == "Days Interval")
                                 {
                                     var DosageTime = time + "|" + dosage;
@@ -1306,9 +1292,20 @@ namespace PeopleWith
                                 //Weekly
                                 else if (getfreq[0] == "Weekly" || getfreq[0] == "Weekly ")
                                 {
-                                    var day = feedback.Day;
-                                    var DosageTime = time + "|" + dosage + "|" + day;
+                                    string DosageTime = String.Empty;
+                                    if (getfreq[1].Contains(","))
+                                    {
+                                        DosageTime = time + "|" + dosage + "|" + days[Index];
+
+                                    }
+                                    else
+                                    {
+                                        var day = getfreq[1];
+                                        DosageTime = time + "|" + dosage + "|" + day;
+                                    }
+
                                     newUserSymptom.TimeDosage.Add(DosageTime);
+                                    Index = Index + 1;
                                 }
 
                             }
@@ -1705,7 +1702,7 @@ namespace PeopleWith
         //Supplements 
 
         //Update UserSupplements in DB 
-    
+
 
         public class SingleUserSupplement
         {
@@ -2271,7 +2268,7 @@ namespace PeopleWith
                         item.thumbnail = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/" + item.thumbnail;
                         item.filename = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/" + item.filename;
 
-                        if(item.subtitle.Length > 122)
+                        if (item.subtitle.Length > 122)
                         {
                             var SubString = item.subtitle.Substring(0, 122) + "...";
                             item.subtitleshort = SubString;
@@ -2315,7 +2312,7 @@ namespace PeopleWith
                 if (response.IsSuccessStatusCode)
                 {
                     //Do Nothing 
-                    return null; 
+                    return null;
                 }
                 else
                 {
@@ -2331,6 +2328,40 @@ namespace PeopleWith
             }
         }
 
+
+        //User Consent Post Data 
+
+        public async Task<userconsent> PostUserConsentAsync(userconsent ConsentPassed)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                var url = APICalls.UserConsent; 
+                string jsonns = System.Text.Json.JsonSerializer.Serialize<userconsent>(ConsentPassed);
+                StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync(url, contenttts);
+                var errorResponse = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    // Read the response content as a string
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    return null; 
+
+
+                }
+                else
+                {
+                    string errorcontent = await response.Content.ReadAsStringAsync();
+                    var s = errorcontent;
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
     }
-    
+
 }

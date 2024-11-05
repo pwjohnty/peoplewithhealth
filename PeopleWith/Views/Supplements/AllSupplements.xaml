@@ -73,7 +73,7 @@ Padding="0">
 
                                             <Label Text="{Binding ChangedMedName}" FontFamily="HankenGroteskBold"  FontSize="14" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Margin="10,0,0,0" TextColor="#031926" />
 
-                                            <Label Text="{Binding medicationtitle}" IsVisible="{Binding ChangedMed}" FontFamily="HankenGroteskBold"  FontSize="12" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Margin="10,-5,0,5" TextColor="Gray" />
+                                            <Label Text="{Binding supplementtitle}" IsVisible="{Binding ChangedMed}" FontFamily="HankenGroteskBold"  FontSize="12" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Margin="10,-5,0,5" TextColor="Gray" />
 
 
                                             <Image Opacity="1" Source="medcalendericon.png" Margin="0,0,0,5" Grid.Row="2" Grid.Column="0" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="20" WidthRequest="20"/>

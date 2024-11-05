@@ -49,6 +49,7 @@ namespace PeopleWith
                 Preferences.Set("clinicaltrial", string.Empty);
                 Preferences.Set("biometrics", false);
                 Preferences.Set("NotificationsEnabled", false);
+                Preferences.Set("validationcode", string.Empty);
 
                 Application.Current.MainPage = new NavigationPage(new MainPage());
             }

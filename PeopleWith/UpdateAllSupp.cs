@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace PeopleWith
 {
-    public class UpdateAllMeds : ValueChangedMessage<object>
+    public class UpdateAllSupp : ValueChangedMessage<object>
     {
-        public UpdateAllMeds(object value) : base(value)
+        public UpdateAllSupp(object value) : base(value)
         {
         }
     }
