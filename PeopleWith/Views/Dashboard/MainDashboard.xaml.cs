@@ -242,4 +242,16 @@ public partial class MainDashboard : ContentPage
 
         }
     }
+
+   async  private void QuestionBtn_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            await Navigation.PushAsync(new AllQuestionnaires(), false);
+        }
+        catch (Exception Ex)
+        {
+
+        }
+    }
 }

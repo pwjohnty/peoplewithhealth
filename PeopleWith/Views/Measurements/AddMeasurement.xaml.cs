@@ -3307,7 +3307,7 @@ public partial class AddMeasurement : ContentPage
                     }
 
                 }
-                else if (measurementnamestring == "Glomerular Filtration Rate (GFR)")
+                else if (measurementnamestring == "Estimated Glomerular Filtration Rate (eGFR)")
                 {
                     var ValueString = e.NewTextValue;
                     if (e.NewTextValue.Contains("."))
@@ -3505,7 +3505,7 @@ public partial class AddMeasurement : ContentPage
                     }
 
                 }
-                else if (measurementnamestring == "Calcitonin Level") 
+                else if (measurementnamestring == "Calcitonin Level")
                 {
                     var ValueString = e.NewTextValue;
                     if (e.NewTextValue.Contains("."))
@@ -3537,9 +3537,260 @@ public partial class AddMeasurement : ContentPage
                         }
                     }
                 }
+                else if (measurementnamestring == "Lactate dehydrogenase (LDH)")
+                {
+                    var ValueString = e.NewTextValue;
+                    if (e.NewTextValue.Contains("."))
+                    {
+                        ValueString = e.NewTextValue.Replace(".", "");
+                        unitentry.Text = ValueString;
+                    }
+                    var convertoint = Convert.ToInt32(ValueString);
+                    if (inputvalue == "IU/L")
+                    {
+                        if (ValueString.Length == 3)
+                        {
+                            if (convertoint > 99 && convertoint < 251)
+                            {
+                                SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                validinput = true;
+                                numvalueconverted = convertoint.ToString();
+                            }
+                            else
+                            {
+                                validinput = false;
+
+                            }
+                        }
+                        else
+                        {
+                            validinput = false;
+
+                        }
+                    }
+                }
+                else if (measurementnamestring == "Prothrombin time (PT)") //Can have Decimal point
+                {
+                    var ValueString = e.NewTextValue;
+                    var convertoint = Convert.ToDouble(ValueString);
+                    if (inputvalue == "Seconds")
+                    {
+                        var CheckDouble = convertoint.ToString();
+                        if (CheckDouble.Contains("."))
+                        {
+                            if (ValueString.Length >= 1 && ValueString.Length <= 5)
+                            {
+                                if (convertoint > 0 && convertoint < 21.1)
+                                {
+                                    SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    validinput = true;
+                                    numvalueconverted = convertoint.ToString();
+                                }
+                                else
+                                {
+                                    validinput = false;
+
+                                }
+                            }
+                            else
+                            {
+                                validinput = false;
+
+                            }
+                        }
+                        else
+                        {
+                            if (ValueString.Length >= 1 && ValueString.Length <= 2)
+                            {
+                                if (convertoint > 0 && convertoint < 21.1)
+                                {
+                                    SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    validinput = true;
+                                    numvalueconverted = convertoint.ToString();
+                                }
+                                else
+                                {
+                                    validinput = false;
+
+                                }
+                            }
+                            else
+                            {
+                                validinput = false;
+
+                            }
+                        }
+                    }
+                }
+
+                else if (measurementnamestring == "Total Liver Proteins") //Can have Decimal point
+                {
+                    var ValueString = e.NewTextValue;
+
+                    var convertoint = Convert.ToDouble(ValueString);
+                    if (inputvalue == "g/dL")
+                    {
+                        var CheckDouble = convertoint.ToString(); 
+                        if (CheckDouble.Contains("."))
+                        {
+                            if (ValueString.Length >= 1 && ValueString.Length <= 5)
+                            {
+                                if (convertoint > 0 && convertoint < 10.1)
+                                {
+                                    SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    validinput = true;
+                                    numvalueconverted = convertoint.ToString();
+                                }
+                                else
+                                {
+                                    validinput = false;
+
+                                }
+                            }
+                            else
+                            {
+                                validinput = false;
+
+                            }
+                        }
+                        else
+                        {
+                            if (ValueString.Length >= 1 && ValueString.Length <= 2)
+                            {
+                                if (convertoint > 0 && convertoint < 10.1)
+                                {
+                                    SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    validinput = true;
+                                    numvalueconverted = convertoint.ToString();
+                                }
+                                else
+                                {
+                                    validinput = false;
+
+                                }
+                            }
+                            else
+                            {
+                                validinput = false;
+
+                            }
+                        }
+
+                    }
+                }
+                else if (measurementnamestring == "Fibrosis-4 (FIB-4)") //Can have Decimal point
+                {
+                    var ValueString = e.NewTextValue;
+
+                    var convertoint = Convert.ToDouble(ValueString);
+                    if (inputvalue == "score")
+                    {
+                        var CheckDouble = convertoint.ToString();
+                        if (CheckDouble.Contains("."))
+                        {
+                            if (ValueString.Length >= 1 && ValueString.Length <= 4)
+                            {
+                                if (convertoint > 0 && convertoint < 5.1)
+                                {
+                                    SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    validinput = true;
+                                    numvalueconverted = convertoint.ToString();
+                                }
+                                else
+                                {
+                                    validinput = false;
+
+                                }
+                            }
+                            else
+                            {
+                                validinput = false;
+
+                            }
+                        }
+                        else
+                        {
+                            if (ValueString.Length >= 1 && ValueString.Length <= 1)
+                            {
+                                if (convertoint > 0 && convertoint < 6)
+                                {
+                                    SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    validinput = true;
+                                    numvalueconverted = convertoint.ToString();
+                                }
+                                else
+                                {
+                                    validinput = false;
+
+                                }
+                            }
+                            else
+                            {
+                                validinput = false;
+
+                            }
+                        }
+
+                    }
+                }
+                else if (measurementnamestring == "Enhanced Liver Fibrosis (ELF)") //Can have Decimal point
+                {
+                    var ValueString = e.NewTextValue;
+
+                    var convertoint = Convert.ToDouble(ValueString);
+                    if (inputvalue == "score")
+                    {
+                        var CheckDouble = convertoint.ToString();
+                        if (CheckDouble.Contains("."))
+                        {
+                            if (ValueString.Length >= 1 && ValueString.Length <= 5)
+                            {
+                                if (convertoint > 0 && convertoint < 15.1)
+                                {
+                                    SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    validinput = true;
+                                    numvalueconverted = convertoint.ToString();
+                                }
+                                else
+                                {
+                                    validinput = false;
+
+                                }
+                            }
+                            else
+                            {
+                                validinput = false;
+
+                            }
+                        }
+                        else
+                        {
+                            if (ValueString.Length >= 1 && ValueString.Length <= 2)
+                            {
+                                if (convertoint > 0 && convertoint < 15.1)
+                                {
+                                    SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    validinput = true;
+                                    numvalueconverted = convertoint.ToString();
+                                }
+                                else
+                                {
+                                    validinput = false;
+
+                                }
+                            }
+                            else
+                            {
+                                validinput = false;
+
+                            }
+                        }
+
+                    }
+                }
                 else if (measurementnamestring == "Endometrial Thickness")
                 {
-                    var ValueString = e.NewTextValue; 
+                    var ValueString = e.NewTextValue;
                     if (e.NewTextValue.Contains("."))
                     {
                         ValueString = e.NewTextValue.Replace(".", "");
