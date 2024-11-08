@@ -8,11 +8,36 @@ public partial class AllDiagnosis : ContentPage
     public ObservableCollection<userdiagnosis> DiagnosisPassed = new ObservableCollection<userdiagnosis>();
     public ObservableCollection<userdiagnosis> itemstoremove = new ObservableCollection<userdiagnosis>();
     bool initalload;
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
     public AllDiagnosis()
     {
-        InitializeComponent();
-        initalload = true; 
-        GetAllUserDiagnosis(); 
+        try
+        {
+            InitializeComponent();
+            initalload = true;
+            GetAllUserDiagnosis();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+
+
     }
 
     public AllDiagnosis(ObservableCollection<userdiagnosis> AllDiagnosis)
@@ -25,9 +50,9 @@ public partial class AllDiagnosis : ContentPage
             GetAllUserDiagnosis();
       
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-            //Add Crash log
+            NotasyncMethod(Ex);
         }
     }
 
@@ -93,22 +118,34 @@ public partial class AllDiagnosis : ContentPage
             }
 
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-            //Add Crash logs 
+            NotasyncMethod(Ex);
         }
-
     }
 
     async private void ToolbarItem_Clicked(object sender, EventArgs e)
     {
         try
         {
-            await Navigation.PushAsync(new AddDiagnosis(DiagnosisList));
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Limit No. of Taps 
+                AddBtn.IsEnabled = false;
+                await Navigation.PushAsync(new AddDiagnosis(DiagnosisList));
+                AddBtn.IsEnabled = true;
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
         }
         catch (Exception Ex)
         {
-            //Add Crash log
+            NotasyncMethod(Ex);
         }
 
     }
@@ -133,7 +170,7 @@ public partial class AllDiagnosis : ContentPage
         }
         catch (Exception Ex)
         {
-            //Add Crash log
+            NotasyncMethod(Ex);
         }
     }
 
@@ -145,7 +182,7 @@ public partial class AllDiagnosis : ContentPage
         }
         catch (Exception Ex)
         {
-            //await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
         }
     }
 }

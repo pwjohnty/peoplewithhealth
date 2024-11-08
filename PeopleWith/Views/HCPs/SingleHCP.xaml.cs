@@ -266,4 +266,16 @@ public partial class SingleHCP : ContentPage
 
         }
     }
+
+    async private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            await Navigation.PushAsync(new AddAppointment(HCPSelected, AllUserHCPs), false);
+        }
+        catch (Exception Ex)
+        {
+
+        }
+    }
 }

@@ -22,27 +22,11 @@
             </Grid>
 
             <Grid x:Name="ListViewGrid" Margin="10,0,10,0" RowSpacing="10">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-        <!-- Title -->
-        <Label Text="Terms and Conditions of Use, Privacy and Data Policy v1.6 – September 2023" Grid.Row="0" TextColor="#BFDBF7" FontFamily="HankenGroteskBold" FontSize="20" />
-        <Label Text="INTRODUCTION:" Grid.Row="1" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="16" />
-        <Label Text="Website and Application is owned and operated by PeopleWith. PeopleWith is a brand name of People With Limited, a company registered in Northern Ireland with company number NI648791 with registered offices at Unit D10 Omagh Enterprise Centre, Gortrush Industrial Estate, Omagh, Co. Tyrone, BT78 5LU." Grid.Row="2" TextColor="#031926" FontFamily="HankenGroteskRegular" FontSize="14" />
-        <Label Text="People With Limited (We or PeopleWith) are committed to protecting and respecting your privacy." Grid.Row="3" TextColor="#031926" FontFamily="HankenGroteskRegular" FontSize="14" />
-        <Label Text="POLICY SUMMARY:" Grid.Row="4" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="16" />
-        <Label Text="Patient anonymity is absolute." Grid.Row="5" TextColor="#031926" FontFamily="HankenGroteskRegular" FontSize="14" />
-        <Label Text="The personal information you supply within the PeopleWith App remains within the PeopleWith App and is utilised for the purpose of personalisation within the App. Personal information is securely stored and will not be sold or distributed." Grid.Row="6" TextColor="#031926" FontFamily="HankenGroteskRegular" FontSize="14" />
-
-        <!-- Rest of Privacy Policy-->
-                <Grid Grid.Row="7" RowSpacing="10" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <!-- Privacy Policy-->
+                <Grid Grid.Row="1" RowSpacing="10" >
                     <syncfusion:SfListView x:Name="PrivPolicy" AutoFitMode="Height"
                          BackgroundColor="Transparent" Orientation="Vertical" IsScrollingEnabled="False" 
                          SelectionMode="None" ScrollBarVisibility="Never" SelectionBackground="Transparent">
@@ -54,9 +38,9 @@
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
-       
-                                        <Label Text="{Binding Title}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  Grid.Row="0"  TextColor="#031926"  FontSize="16"/>
-                                        <Label Text="{Binding Body}" FontFamily="HankenGroteskRegular" Margin="0,0,0,0"  Grid.Row="1" TextColor="#031926" FontSize="14" />
+
+                                        <Label Text="{Binding title}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  Grid.Row="0" HorizontalTextAlignment="Start"  HorizontalOptions="Start" TextColor="#4682B4"  FontSize="24"/>
+                                        <Label Text="{Binding content}" FontFamily="HankenGroteskRegular" Margin="0,0,0,8"  Grid.Row="1" HorizontalTextAlignment="Center"  HorizontalOptions="Center" TextColor="#031926" FontSize="14" />
 
 
                                     </Grid>

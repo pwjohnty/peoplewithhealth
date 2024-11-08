@@ -18,6 +18,22 @@ public partial class AddDiagnosis : ContentPage
     string diagnosistitle;
     bool isEditing;
     bool validdob;
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
 
 
     protected override bool OnBackButtonPressed()
@@ -40,7 +56,7 @@ public partial class AddDiagnosis : ContentPage
         }
         catch (Exception Ex)
         {
-            //Add Crash log
+            NotasyncMethod(Ex);
             return false;
         }
 
@@ -49,7 +65,15 @@ public partial class AddDiagnosis : ContentPage
 
     public AddDiagnosis()
     {
-        InitializeComponent();
+        try
+        {
+            InitializeComponent();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+
     }
 
     public AddDiagnosis(ObservableCollection<userdiagnosis> PassedDiagnosis)
@@ -63,7 +87,7 @@ public partial class AddDiagnosis : ContentPage
         }
         catch (Exception Ex)
         {
-            //Add Crash log 
+            NotasyncMethod(Ex);
         }
     }
 
@@ -115,9 +139,9 @@ public partial class AddDiagnosis : ContentPage
 
             Diagnosisloading.IsVisible = false;
         }
-        catch
+        catch (Exception Ex)
         {
-            //Add Crash log 
+            NotasyncMethod(Ex);
         }
 
     }
@@ -137,7 +161,7 @@ public partial class AddDiagnosis : ContentPage
         }
         catch (Exception Ex)
         {
-            //Add Crash log 
+            NotasyncMethod(Ex);
         }
 
     }
@@ -146,40 +170,50 @@ public partial class AddDiagnosis : ContentPage
     {
         try
         {
-            if (searchbar.IsSoftInputShowing())
-            await searchbar.HideSoftInputAsync(System.Threading.CancellationToken.None);
-            var Diagnos = e.DataItem as diagnosis;
-            var Diagtitle = Diagnos.Title.ToString();
-            //popup.HeaderTitle = Diagnos.Title.ToString();
-            //popup.IsOpen = true;
-            //bool result = await viewModel.ShowPopupAsync();
-            bool result = await DisplayAlert(Diagtitle, "Would you like to add this Diagnosis?", "Accept", "Decline");
-
-            if (result)
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                InitalDiagnosisAdd.IsVisible = false;
-                dateofBirth.IsVisible = true;
-                Diagnosislbl.Text = Diagnos.Title;
-                diagnosistitle = Diagnos.Title;
-                foreach (var item in DiagnosisList)
+                //Limit No. of Taps 
+                if (searchbar.IsSoftInputShowing())
+                    await searchbar.HideSoftInputAsync(System.Threading.CancellationToken.None);
+                var Diagnos = e.DataItem as diagnosis;
+                var Diagtitle = Diagnos.Title.ToString();
+                //popup.HeaderTitle = Diagnos.Title.ToString();
+                //popup.IsOpen = true;
+                //bool result = await viewModel.ShowPopupAsync();
+                bool result = await DisplayAlert(Diagtitle, "Would you like to add this Diagnosis?", "Accept", "Decline");
+
+                if (result)
                 {
-                    if (item.Title == diagnosistitle)
+                    InitalDiagnosisAdd.IsVisible = false;
+                    dateofBirth.IsVisible = true;
+                    Diagnosislbl.Text = Diagnos.Title;
+                    diagnosistitle = Diagnos.Title;
+                    foreach (var item in DiagnosisList)
                     {
-                        diagnosisid = item.Diagnosisid;
+                        if (item.Title == diagnosistitle)
+                        {
+                            diagnosisid = item.Diagnosisid;
+                        }
                     }
                 }
-
+                else
+                {
+                    // Declined
+                    DiagnosisListview.SelectedItems.Clear();
+                }
 
             }
             else
             {
-                // Declined
-                DiagnosisListview.SelectedItems.Clear();
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
             }
         }
         catch (Exception Ex)
         {
-            //Add Crash log 
+            NotasyncMethod(Ex);
         }
 
     }
@@ -191,7 +225,17 @@ public partial class AddDiagnosis : ContentPage
             DateTime DOB;
             if (DateTime.TryParse(DateofDiagnosis, out DOB))
             {
+                if (validdob == false)
+                {
+                    DateEntry.Focus();
+                    EntryError.IsVisible = true;
+                    EntryError.Text = "Diagnosis Date is Not a Valid Date, Enter a Valid Date";
+                    await Task.Delay(5000);
+                    EntryError.Text = null;
+                    EntryError.IsVisible = false;
+                    return; 
 
+                }
                 if (DOB.Date <= DateTime.Now.Date)
                 {
                     DateEntry.Unfocus();
@@ -250,7 +294,7 @@ public partial class AddDiagnosis : ContentPage
         }
         catch (Exception Ex)
         {
-            //Add Crash log 
+            NotasyncMethod(Ex);
         }
     }
 
@@ -284,7 +328,7 @@ public partial class AddDiagnosis : ContentPage
         }
         catch (Exception Ex)
         {
-            //Add Crash log
+            NotasyncMethod(Ex);
         }
 
     }
@@ -360,7 +404,7 @@ public partial class AddDiagnosis : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 }

@@ -105,25 +105,30 @@ public partial class ForgottenPassword : ContentPage
                 //Temporary Check
                 await MopupService.Instance.PushAsync(new PopupPageHelper("Email Verification Sent") { });
                 await Task.Delay(1500);
-           
-                if (Email.Default.IsComposeSupported)
-                {
 
-                    string subject = "";
-                    string body = "Userid: " + Helpers.Settings.UserKey;
-                    string[] recipients = new[] { "chris.johnston@peoplewith.com" };
+                //email generate Update URL
+                //StringContent mail_content = new StringContent(newuser.email, System.Text.Encoding.UTF8, "application/json");
 
-                    var message = new EmailMessage
-                    {
-                        Subject = subject,
-                        Body = body,
-                        BodyFormat = EmailBodyFormat.PlainText,
-                        To = new List<string>(recipients)
-                    };
-                    await MopupService.Instance.PopAllAsync(false);
-                    await Email.Default.ComposeAsync(message);
-                
-                }
+                //var emailresponse = await client.PostAsync("https://peoplewithwebapp.azurewebsites.net/hub/email-validation.php?uid=" + newuser.email, mail_content);
+
+                //if (Email.Default.IsComposeSupported)
+                //{
+
+                //    string subject = "";
+                //    string body = "Userid: " + Helpers.Settings.UserKey;
+                //    string[] recipients = new[] { "chris.johnston@peoplewith.com" };
+
+                //    var message = new EmailMessage
+                //    {
+                //        Subject = subject,
+                //        Body = body,
+                //        BodyFormat = EmailBodyFormat.PlainText,
+                //        To = new List<string>(recipients)
+                //    };
+                //    await MopupService.Instance.PopAllAsync(false);
+                //    await Email.Default.ComposeAsync(message);
+
+                //}
             }
         }
     }

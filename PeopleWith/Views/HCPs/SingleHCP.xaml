@@ -58,7 +58,7 @@
 
                         </Grid>
                         <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="ToolbarItem_Clicked"/>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
                         </Frame.GestureRecognizers>
                     </Frame>
 

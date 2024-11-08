@@ -5,6 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Maui.Networking;
+//using Android.App;
+//using Android.Content;
+using Microsoft.Maui.Networking;
+using System;
 
 namespace PeopleWith
 {
@@ -14,13 +18,29 @@ namespace PeopleWith
 
         public ConnectivityService()
         {
-            Connectivity.ConnectivityChanged += OnConnectivityChanged;
+            try
+            {
+                    Connectivity.ConnectivityChanged += OnConnectivityChanged;
+            }
+            catch (Exception Ex)
+            {
+
+            }
+        
         }
 
         private void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
         {
+            try
+            {
                 var isConnected = e.NetworkAccess == NetworkAccess.Internet;
                 ConnectivityChanged?.Invoke(this, isConnected);
+            }
+            catch (Exception Ex)
+            {
+
+            }
+          
         }
     }
 }

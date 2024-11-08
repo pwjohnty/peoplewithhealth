@@ -1,6 +1,7 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.Content.PM;
+using Android.Net;
 using Android.OS;
 using Android.Views;
 using Android.Views.InputMethods;
@@ -19,8 +20,8 @@ namespace PeopleWith
     {
         private NotificationHubClient hub;
         private static string? GetDeviceId() => Secure.GetString(Android.App.Application.Context.ContentResolver, Secure.AndroidId);
-
         public static MainActivity Instance { get; private set; }
+
         protected override async void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -34,6 +35,12 @@ namespace PeopleWith
             RequestedOrientation = ScreenOrientation.Portrait;
 
             AppCompatDelegate.DefaultNightMode = AppCompatDelegate.ModeNightNo;
+
+            // Register the custom connectivity receiver
+            CustomConnectivityReceiver customReceiver = new CustomConnectivityReceiver();
+            IntentFilter intentFilter = new IntentFilter(ConnectivityManager.ConnectivityAction);
+            RegisterReceiver(customReceiver, intentFilter);
+
 
             try
             {

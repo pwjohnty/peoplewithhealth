@@ -34,7 +34,7 @@ public partial class AllSymptoms : ContentPage
         {
             InitializeComponent();
             GetUserSymptoms();
-            //CrashTest();
+
         }
         catch (Exception Ex)
         {
@@ -62,19 +62,6 @@ public partial class AllSymptoms : ContentPage
 
     }
 
-    //async private void CrashTest()
-    //{
-    //    try
-    //    {
-    //        int number = 10;
-    //        int result = number / 0;
-    //    }
-    //    catch(Exception Ex)
-    //    {    
-    //        await crashHandler.CrashDetectedSend(Ex);
-    //    }
-       
-    //}
     async private void GetUserSymptoms()
     {
         try

@@ -7,6 +7,21 @@ public partial class SingleMood : ContentPage
 {
     public ObservableCollection<usermood> AlluserMoods = new ObservableCollection<usermood>();
     public ObservableCollection<usermood> MoodPassed = new ObservableCollection<usermood>();
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
 
     public SingleMood()
     {
@@ -35,20 +50,32 @@ public partial class SingleMood : ContentPage
         }
         catch (Exception Ex)
         {
-            //Add Crash log 
+            NotasyncMethod(Ex);
         }
-
     }
 
     async private void EditBtn_Clicked(object sender, EventArgs e)
     {
         try
         {
-            await Navigation.PushAsync(new AddMood(AlluserMoods, MoodPassed[0].id));
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Limit No. of Taps 
+                EditBtn.IsEnabled = false;
+                await Navigation.PushAsync(new AddMood(AlluserMoods, MoodPassed[0].id));
+                EditBtn.IsEnabled = true;
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
         }
         catch (Exception Ex)
         {
-            //Add Crash log 
+            NotasyncMethod(Ex);
         }
     }
 
@@ -60,7 +87,7 @@ public partial class SingleMood : ContentPage
         }
         catch (Exception Ex)
         {
-            //Add Crash log
+            NotasyncMethod(Ex);
         }
 
     }
@@ -69,49 +96,63 @@ public partial class SingleMood : ContentPage
     {
         try
         {
-            bool Delete = await DisplayAlert("Delete Mood", "Are you sure you would like the delete this Mood? Once deleted it cannot be retrieved", "Delete", "Cancel");
-            if (Delete == true)
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-
-                foreach (var item in MoodPassed)
+                Deletebtn.IsEnabled = false; 
+                bool Delete = await DisplayAlert("Delete Mood", "Are you sure you would like the delete this Mood? Once deleted it cannot be retrieved", "Delete", "Cancel");
+                if (Delete == true)
                 {
-                    item.deleted = true;
-                }
 
-                APICalls database = new APICalls();
-                await database.DeleteUserMood(MoodPassed);
-                await MopupService.Instance.PushAsync(new PopupPageHelper("Mood Deleted") { });
-                await Task.Delay(1500);
-
-                foreach (var item in AlluserMoods)
-                {
-                    if (item.id == MoodPassed[0].id)
+                    foreach (var item in MoodPassed)
                     {
                         item.deleted = true;
                     }
+
+                    APICalls database = new APICalls();
+                    await database.DeleteUserMood(MoodPassed);
+                    await MopupService.Instance.PushAsync(new PopupPageHelper("Mood Deleted") { });
+                    await Task.Delay(1500);
+
+                    foreach (var item in AlluserMoods)
+                    {
+                        if (item.id == MoodPassed[0].id)
+                        {
+                            item.deleted = true;
+                        }
+                    }
+
+                    await MopupService.Instance.PopAllAsync(false);
+                    await Navigation.PushAsync(new AllMood(AlluserMoods));
+
+                    var pageToRemove = Navigation.NavigationStack.FirstOrDefault(x => x is AllMood);
+
+                    if (pageToRemove != null)
+                    {
+                        Navigation.RemovePage(pageToRemove);
+                    }
+                    Navigation.RemovePage(this);
+
+                    Deletebtn.IsEnabled = true; 
+                    return;
                 }
-
-                await MopupService.Instance.PopAllAsync(false);
-                await Navigation.PushAsync(new AllMood(AlluserMoods));
-
-                var pageToRemove = Navigation.NavigationStack.FirstOrDefault(x => x is AllMood);
-
-                if (pageToRemove != null)
+                else
                 {
-                    Navigation.RemovePage(pageToRemove);
+                    Deletebtn.IsEnabled = true; 
+                    return;
                 }
-                Navigation.RemovePage(this);
 
-                return;
             }
             else
             {
-                return;
-            }
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }          
         }
         catch (Exception Ex)
         {
-            //Add Crash log
+            NotasyncMethod(Ex);
         }
 
     }

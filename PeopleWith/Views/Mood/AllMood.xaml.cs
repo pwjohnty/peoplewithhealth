@@ -9,30 +9,50 @@ public partial class AllMood : ContentPage
     public ObservableCollection<usermood> AllMoods = new ObservableCollection<usermood>();
     public ObservableCollection<usermood> itemstoRemove = new ObservableCollection<usermood>();
     public ObservableCollection<usermood> SingleMood = new ObservableCollection<usermood>();
-    bool initialload; 
+    bool initialload;
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
 
     public AllMood()
     {
-        InitializeComponent();
-        initialload = true;
-        GetAllUserMoods(); 
-
+        try
+        {
+            InitializeComponent();
+            initialload = true;
+            GetAllUserMoods();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 
     public AllMood(ObservableCollection<usermood> AllUserMoods)
     {
         try
         {
-
             InitializeComponent();
             AllMoods = AllUserMoods;
             initialload = false;
             GetAllUserMoods(); 
-           
         }
         catch (Exception Ex)
         {
-            //Add Crash log 
+            NotasyncMethod(Ex);
         }
 
     }
@@ -94,12 +114,10 @@ public partial class AllMood : ContentPage
                 EmptyStack.IsVisible = true;
                 MoodOverview.IsVisible = false;
             }
-
-
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-            //Add Crash logs 
+            NotasyncMethod(Ex);
         }
 
     }
@@ -108,16 +126,26 @@ public partial class AllMood : ContentPage
     {
         try
         {
-            await Navigation.PushAsync(new AddMood(AllMoods, "Add"));
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Limit No. of Taps 
+                AddBtn.IsEnabled = false;
+                await Navigation.PushAsync(new AddMood(AllMoods, "Add"));
+                AddBtn.IsEnabled = true;
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
         }
         catch (Exception Ex)
         {
-            //Add Crash log 
+            NotasyncMethod(Ex);
         }
-
     }
-
-
 
     async private void AllMoodView_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
     {
@@ -131,15 +159,14 @@ public partial class AllMood : ContentPage
                 if (Mood.id == item.id)
                 {
                     SingleMood.Add(item);
-
                 }
             }
             await Navigation.PushAsync(new SingleMood(SingleMood, AllMoods));
         }
 
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-            //Add Crash log
+            NotasyncMethod(Ex);
         }
     }
 
@@ -151,7 +178,7 @@ public partial class AllMood : ContentPage
         }
         catch (Exception Ex)
         {
-            //await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
         }
     }
 }

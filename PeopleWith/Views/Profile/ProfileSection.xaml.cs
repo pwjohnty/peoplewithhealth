@@ -10,7 +10,24 @@ public partial class ProfileSection : ContentPage
     public List<user> PrivacyDetailsList = new List<user>();
     user AllUserData = new user(); 
     string one;
-    string two; 
+    string two;
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
+
 
     //public ProfileSection()
     //{
@@ -50,20 +67,22 @@ public partial class ProfileSection : ContentPage
             //    Namelbl.Text = "Health Details"; 
             //}
             Useridlbl.Text = Helpers.Settings.UserKey;
-            //Needs Changed Placeholder for now 
-            ReleaseVersion.Text = "ReleaseVersion " + "80" + " | " + "Build Version " + "80.1";  
+
+            string version = AppInfo.Current.VersionString;
+            string build = AppInfo.Current.BuildString;
+            ReleaseVersion.Text = "ReleaseVersion " + version + " | " + "Build Version " + build;  
 
             GetHealthDetails();
             GetSettings();
             GetPrivacyDetails();
 
-
         }
         catch (Exception Ex)
         {
-            //Add Crash log
+            NotasyncMethod(Ex);
         }
     }
+
     private void GetHealthDetails()
     {
         try
@@ -138,10 +157,9 @@ public partial class ProfileSection : ContentPage
         }
         catch (Exception Ex)
         {
-            //Add Crash log 
+            NotasyncMethod(Ex);
         }
     }
-
 
     private void GetSettings()
     {
@@ -184,7 +202,7 @@ public partial class ProfileSection : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -220,7 +238,7 @@ public partial class ProfileSection : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -228,13 +246,24 @@ public partial class ProfileSection : ContentPage
     {
         try
         {
-            var ItemTapped = e.DataItem as user;
-            var SelectedItem = ItemTapped.SettingsTitle;
-            string Selected = "Health Details"; 
-            await Navigation.PushAsync(new ProfileEdit(SelectedItem, Selected, AllUserData), false); 
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                var ItemTapped = e.DataItem as user;
+                var SelectedItem = ItemTapped.SettingsTitle;
+                string Selected = "Health Details";
+                await Navigation.PushAsync(new ProfileEdit(SelectedItem, Selected, AllUserData), false);
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
         }
         catch (Exception Ex) 
         {
+            NotasyncMethod(Ex);
         }
     }
 
@@ -242,13 +271,24 @@ public partial class ProfileSection : ContentPage
     {
         try
         {
-            var ItemTapped = e.DataItem as user;
-            var SelectedItem = ItemTapped.SettingsTitle;
-            string Selected = "Settings";
-            await Navigation.PushAsync(new ProfileEdit(SelectedItem, Selected, AllUserData), false);
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                var ItemTapped = e.DataItem as user;
+                var SelectedItem = ItemTapped.SettingsTitle;
+                string Selected = "Settings";
+                await Navigation.PushAsync(new ProfileEdit(SelectedItem, Selected, AllUserData), false);
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
         }
         catch (Exception Ex)
         {
+            NotasyncMethod(Ex);
         }
     }
 
@@ -256,26 +296,35 @@ public partial class ProfileSection : ContentPage
     {
         try
         {
-          
-            var ItemTapped = e.DataItem as user;
-            var SelectedItem = ItemTapped.SettingsTitle;
-            if(SelectedItem == "Terms of Use")
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                await Navigation.PushAsync(new PrivacyPolicy(), false); 
-            }
-            else if(SelectedItem == "About")
-            {
-                //await Naivigaiton.PushAsync(new AboutPage(), flase);
+                var ItemTapped = e.DataItem as user;
+                var SelectedItem = ItemTapped.SettingsTitle;
+                if (SelectedItem == "Terms of Use")
+                {
+                    await Navigation.PushAsync(new PrivacyPolicy(), false);
+                }
+                else if (SelectedItem == "About")
+                {
+                    //await Naivigaiton.PushAsync(new AboutPage(), flase);
+                }
+                else
+                {
+                    string Selected = "Privacy";
+                    await Navigation.PushAsync(new ProfileEdit(SelectedItem, Selected, AllUserData), false);
+                }
             }
             else
             {
-                string Selected = "Privacy";
-                await Navigation.PushAsync(new ProfileEdit(SelectedItem, Selected, AllUserData), false);
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
             }
-
         }
         catch (Exception Ex)
         {
+            NotasyncMethod(Ex);
         }
     }
 
@@ -283,95 +332,122 @@ public partial class ProfileSection : ContentPage
     {
         try
         {
-            if(ImproveSection.IsVisible == true)
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                if (Email.Default.IsComposeSupported)
+                if (ImproveSection.IsVisible == true)
+                {
+                    if (Email.Default.IsComposeSupported)
+                    {
+
+                        string subject = "";
+                        string body = "Userid: " + Helpers.Settings.UserKey;
+                        string[] recipients = new[] { "chris.johnston@peoplewith.com" };
+
+                        var message = new EmailMessage
+                        {
+                            Subject = subject,
+                            Body = body,
+                            BodyFormat = EmailBodyFormat.PlainText,
+                            To = new List<string>(recipients)
+                        };
+
+                        await Email.Default.ComposeAsync(message);
+                    }
+                }
+
+                //Add if CBD Signup Code Being Used 
+                if (CBDOrderSection.IsVisible == true)
                 {
 
-                    string subject = "";
-                    string body = "Userid: " + Helpers.Settings.UserKey ;
-                    string[] recipients = new[] { "chris.johnston@peoplewith.com" };
-
-                    var message = new EmailMessage
-                    {
-                        Subject = subject,
-                        Body = body,
-                        BodyFormat = EmailBodyFormat.PlainText,
-                        To = new List<string>(recipients)
-                    };
-
-                    await Email.Default.ComposeAsync(message);
                 }
             }
-            if(CBDOrderSection.IsVisible == true)
+            else
             {
-
-            }
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            } 
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
-
- 
 
     async private void Logout_Clicked(object sender, EventArgs e)
     {
         try
         {
-            bool Answer = await DisplayAlert("Logout", "Are you sure you would like to logout", "Logout", "Cancel");
-            if (Answer)
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                Logout HandleLogout = new Logout();
+                Logout.IsEnabled = false; 
+                //Limit No. of Taps 
+                bool Answer = await DisplayAlert("Logout", "Are you sure you would like to logout", "Logout", "Cancel");
+                if (Answer)
+                {
+                    Logout HandleLogout = new Logout();
+                }
+                else
+                {
+                    Logout.IsEnabled = true; 
+                    //Do Nothing
+                }
             }
             else
             {
-                //Do Nothing
-            }
-               
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }               
         }
         catch (Exception Ex) 
         {
+            NotasyncMethod(Ex);
         }
-
     }
-
  
     async private void DeleteAccount_Clicked(object sender, EventArgs e)
     {
         try
         {
-            bool Answer = await DisplayAlert("Delete Account", "Are you sure you would like to Delete this account, Once Deleted it cannot be retrieved", "Delete Account", "Cancel");
-            if (Answer)
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                //Delete Account
-                bool delete = true;
-                bool Success = false; 
-                string id = Helpers.Settings.UserKey;
-                var url = $"https://pwdevapi.peoplewith.com/api/user/userid/{id}";
-
-                string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = delete });
-                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                using (var client = new HttpClient())
+                //Limit No. of Taps 
+                DeleteAccount.IsEnabled = false; 
+                bool Answer = await DisplayAlert("Delete Account", "Are you sure you would like to Delete this account, Once Deleted it cannot be retrieved", "Delete Account", "Cancel");
+                if (Answer)
                 {
-                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
-                    {
-                        Content = content
-                    };
+                    //Delete Account
+                    bool delete = true;
+                    bool Success = false;
+                    string id = Helpers.Settings.UserKey;
+                    var url = $"https://pwdevapi.peoplewith.com/api/user/userid/{id}";
 
-                    var response = await client.SendAsync(request);
+                    string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = delete });
+                    StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                    if (!response.IsSuccessStatusCode)
+                    using (var client = new HttpClient())
                     {
-                        var errorResponse = await response.Content.ReadAsStringAsync();
+                        var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                        {
+                            Content = content
+                        };
+
+                        var response = await client.SendAsync(request);
+
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            var errorResponse = await response.Content.ReadAsStringAsync();
+                        }
+                        else
+                        {
+                            Success = true;
+                        }
                     }
-                    else
-                    {
-                        Success = true;
-                    }
-                }
 
 
                     if (Success == true)
@@ -383,14 +459,21 @@ public partial class ProfileSection : ContentPage
                         await MopupService.Instance.PopAllAsync(false);
                     }
                 }
+                else
+                {
+                    DeleteAccount.IsEnabled = true; 
+                    //Do Nothing
+                }
+            }
             else
             {
-                //Do Nothing
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
             }
-
         }
         catch (Exception Ex)
         {
+            NotasyncMethod(Ex);
         }
     }
 }

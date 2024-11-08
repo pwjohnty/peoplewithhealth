@@ -12,10 +12,33 @@ public partial class AddAllergies : ContentPage
     public ObservableCollection<userallergies> AddedAllergy = new ObservableCollection<userallergies>();
     public ObservableCollection<allergies> itemstoremove = new ObservableCollection<allergies>();
     //private PopupViewModel viewModel;
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
 
     public AddAllergies()
     {
-        InitializeComponent();
+        try
+        {
+            InitializeComponent();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 
     public AddAllergies(ObservableCollection<allergies> allergieslist, ObservableCollection<userallergies> AllAllergiesPassed)
@@ -61,10 +84,8 @@ public partial class AddAllergies : ContentPage
         }
         catch (Exception Ex)
         {
-            //Add Crash log
+            NotasyncMethod(Ex);
         }
-
-
     }
 
     private void searchbar_TextChanged(object sender, TextChangedEventArgs e)
@@ -82,7 +103,7 @@ public partial class AddAllergies : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
 
     }
@@ -91,67 +112,78 @@ public partial class AddAllergies : ContentPage
     {
         try
         {
-            if (searchbar.IsSoftInputShowing())
-            await searchbar.HideSoftInputAsync(System.Threading.CancellationToken.None);
-            var Allergy = e.DataItem as allergies;
-            var Allergytitle = Allergy.Title.ToString();
-            //popup.HeaderTitle = Allergy.Title.ToString();
-            //popup.IsOpen = true;
-            //bool result = await viewModel.ShowPopupAsync();
-            bool result = await DisplayAlert(Allergytitle, "Would you like to add this Allergy?", "Accept", "Decline");
-
-            if (result)
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
+                //Limit No. of Taps 
+                if (searchbar.IsSoftInputShowing())
+                    await searchbar.HideSoftInputAsync(System.Threading.CancellationToken.None);
+                var Allergy = e.DataItem as allergies;
+                var Allergytitle = Allergy.Title.ToString();
+                //popup.HeaderTitle = Allergy.Title.ToString();
+                //popup.IsOpen = true;
+                //bool result = await viewModel.ShowPopupAsync();
+                bool result = await DisplayAlert(Allergytitle, "Would you like to add this Allergy?", "Accept", "Decline");
 
-                NavigationPage.SetHasNavigationBar(this, false);
-                var Userid = Helpers.Settings.UserKey;
-
-                var NewAllergy = new userallergies();
-                NewAllergy.userid = Userid;
-                NewAllergy.allergyid = Allergy.Allergyid;
-
-                AllergytoAdd.Add(NewAllergy);
-
-                APICalls database = new APICalls();
-                AddedAllergy = await database.PostUserAllergiesAsync(AllergytoAdd);
-                await MopupService.Instance.PushAsync(new PopupPageHelper("Allery Added") { });
-                await Task.Delay(1500);
-
-                foreach (var item in AddedAllergy)
+                if (result)
                 {
-                    AlluserAllergies.Add(item);
-                }
-                foreach (var item in AlluserAllergies)
-                {
-                    for (int i = 0; i < allergies.Count; i++)
+
+                    NavigationPage.SetHasNavigationBar(this, false);
+                    var Userid = Helpers.Settings.UserKey;
+
+                    var NewAllergy = new userallergies();
+                    NewAllergy.userid = Userid;
+                    NewAllergy.allergyid = Allergy.Allergyid;
+
+                    AllergytoAdd.Add(NewAllergy);
+
+                    APICalls database = new APICalls();
+                    AddedAllergy = await database.PostUserAllergiesAsync(AllergytoAdd);
+                    await MopupService.Instance.PushAsync(new PopupPageHelper("Allery Added") { });
+                    await Task.Delay(1500);
+
+                    foreach (var item in AddedAllergy)
                     {
-                        if (allergies[i].Allergyid == item.allergyid)
-                        {
-                            item.title = allergies[i].Title;
-                        }
-
+                        AlluserAllergies.Add(item);
                     }
+                    foreach (var item in AlluserAllergies)
+                    {
+                        for (int i = 0; i < allergies.Count; i++)
+                        {
+                            if (allergies[i].Allergyid == item.allergyid)
+                            {
+                                item.title = allergies[i].Title;
+                            }
+
+                        }
+                    }
+                    await MopupService.Instance.PopAllAsync(false);
+                    await Navigation.PushAsync(new AllAllergies(AlluserAllergies, allergies));
+                    var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is AllAllergies);
+                    if (pageToRemoves != null)
+                    {
+
+                        Navigation.RemovePage(pageToRemoves);
+                    }
+                    Navigation.RemovePage(this);
+
                 }
-                await MopupService.Instance.PopAllAsync(false);
-                await Navigation.PushAsync(new AllAllergies(AlluserAllergies, allergies));
-                var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is AllAllergies);
-                if (pageToRemoves != null)
+                else
                 {
-
-                    Navigation.RemovePage(pageToRemoves);
+                    // Declined
+                    AllergyListview.SelectedItems.Clear();
                 }
-                Navigation.RemovePage(this);
-
             }
             else
             {
-                // Declined
-                AllergyListview.SelectedItems.Clear(); 
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
             }
         }
         catch (Exception Ex)
         {
-            //Add Crash log
+            NotasyncMethod(Ex);
         }
 
     }
