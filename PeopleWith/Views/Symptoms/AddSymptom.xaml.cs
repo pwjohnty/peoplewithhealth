@@ -21,8 +21,10 @@ public partial class AddSymptom : ContentPage
     public ObservableCollection<symptom> AlreadyAdded = new ObservableCollection<symptom>();
   // private PopupViewModel viewModel;
     string previous;
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
-
     async public void NotasyncMethod(Exception Ex)
     {
         try
@@ -34,6 +36,7 @@ public partial class AddSymptom : ContentPage
             //Dunno 
         }
     }
+
     public AddSymptom(ObservableCollection<usersymptom> ItemsPassed)
     {
         try
@@ -47,8 +50,6 @@ public partial class AddSymptom : ContentPage
         {
             NotasyncMethod(Ex);
         }
-
-
     }
     async public void GetBCCall()
     {
@@ -104,80 +105,88 @@ public partial class AddSymptom : ContentPage
         }
         catch(Exception Ex)
         {
-            await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
         }
     }
     private async void SymptomsListview_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
     {
         try
         {
-            var symptom = e.DataItem as symptom;
-
-            var result = await DisplayAlert("Confirm Symptom", "Are you sure you want to add " + symptom.title + "?", "Cancel", "OK");
-            if (result)
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                
-                SymptomsListview.SelectedItems.Clear(); 
-                return;
+                //Limit No. of Taps 
+                var symptom = e.DataItem as symptom;
+
+                var result = await DisplayAlert("Confirm Symptom", "Are you sure you want to add " + symptom.title + "?", "Cancel", "OK");
+                if (result)
+                {
+
+                    SymptomsListview.SelectedItems.Clear();
+                    return;
+                }
+                else
+                {
+                    // popup.HeaderTitle = symptom.title.ToString();
+                    //  popup.IsOpen = true;
+                    var usersymptom = new symptomfeedback();
+                    Guid newUUID = Guid.NewGuid();
+                    usersymptom.symptomfeedbackid = newUUID.ToString().ToUpper();
+                    usersymptom.timestamp = DateTime.Now.ToString();
+                    usersymptom.intensity = "50";
+                    usersymptom.notes = null;
+                    usersymptom.triggers = null;
+                    usersymptom.interventions = null;
+                    usersymptom.duration = null;
+                    AddNewFeedback.Add(usersymptom);
+                    var NewSymptom = new usersymptom();
+                    NewSymptom.userid = Helpers.Settings.UserKey;
+                    NewSymptom.symptomtitle = symptom.title;
+                    NewSymptom.symptomid = symptom.symptomid;
+                    NewSymptom.feedback = AddNewFeedback;
+
+
+                    APICalls database = new APICalls();
+                    //insert to db
+                    var returnedsymptom = await database.PostSymptomAsync(NewSymptom);
+
+                    SymptomsPassed.Add(returnedsymptom);
+
+                    await MopupService.Instance.PushAsync(new PopupPageHelper("Symptom Added") { });
+                    await Task.Delay(1500);
+
+                    await Navigation.PushAsync(new AllSymptoms(SymptomsPassed));
+
+                    await MopupService.Instance.PopAllAsync(false);
+
+                    var pageToRemoves = Navigation.NavigationStack.ToList();
+
+                    int i = 0;
+
+                    foreach (var page in pageToRemoves)
+                    {
+                        if (i == 0)
+                        {
+                        }
+                        else if (i == 1 || i == 2 || i == 3)
+                        {
+                            Navigation.RemovePage(page);
+                        }
+                        else
+                        {
+                            //Navigation.RemovePage(page);
+                        }
+                        i++;
+                    }
+
+                }
             }
             else
             {
-               // popup.HeaderTitle = symptom.title.ToString();
-              //  popup.IsOpen = true;
-                var usersymptom = new symptomfeedback();
-                Guid newUUID = Guid.NewGuid();
-                usersymptom.symptomfeedbackid = newUUID.ToString().ToUpper();
-                usersymptom.timestamp = DateTime.Now.ToString();
-                usersymptom.intensity = "50";
-                usersymptom.notes = null;
-                usersymptom.triggers = null;
-                usersymptom.interventions = null;
-                usersymptom.duration = null;
-                AddNewFeedback.Add(usersymptom);
-                var NewSymptom = new usersymptom();
-                NewSymptom.userid = Helpers.Settings.UserKey;
-                NewSymptom.symptomtitle = symptom.title;
-                NewSymptom.symptomid = symptom.symptomid;
-                NewSymptom.feedback = AddNewFeedback;
-                
-
-                APICalls database = new APICalls();
-                //insert to db
-                var returnedsymptom = await database.PostSymptomAsync(NewSymptom);
-
-                SymptomsPassed.Add(returnedsymptom);
-
-                await MopupService.Instance.PushAsync(new PopupPageHelper("Symptom Added") { });
-                await Task.Delay(1500);
-
-                await Navigation.PushAsync(new AllSymptoms(SymptomsPassed));
-
-                await MopupService.Instance.PopAllAsync(false);
-
-                var pageToRemoves = Navigation.NavigationStack.ToList();
-
-                int i = 0;
-
-                foreach(var page in pageToRemoves)
-                {
-                    if (i == 0)
-                    {
-                    }
-                    else if (i == 1 || i == 2 || i == 3)
-                    {
-                        Navigation.RemovePage(page);
-                    }
-                    else
-                    {
-                        //Navigation.RemovePage(page);
-                    }
-                    i++;
-                }
-
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
             }
-
-
-
 
             //bool result = await viewModel.ShowPopupAsync();
             //if (result)
@@ -218,7 +227,7 @@ public partial class AddSymptom : ContentPage
         }
         catch (Exception Ex)
         {
-            await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
         }
     }
     private void SearchBar_TextChanged(object sender, TextChangedEventArgs e)
@@ -288,10 +297,10 @@ public partial class AddSymptom : ContentPage
         }
         catch (Exception Ex)
         {
-            await crashHandler.CrashDetectedSend(Ex); 
+            NotasyncMethod(Ex);
         }    
     }
-    private void TapGestureRecognizer_Tapped_2(object sender, TappedEventArgs e)
-    {
-    }
+    //private void TapGestureRecognizer_Tapped_2(object sender, TappedEventArgs e)
+    //{
+    //}
 }

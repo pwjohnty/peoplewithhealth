@@ -12,6 +12,23 @@ public partial class ShowAllSupplement : ContentPage
     ObservableCollection<usersupplement> NotRecordedMedicationList = new ObservableCollection<usersupplement>();
     ObservableCollection<usersupplement> MedicationNotRecordedList = new ObservableCollection<usersupplement>();
     Color SetColour;
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
+
 
     public ShowAllSupplement(usersupplement SelectedMed)
     {
@@ -26,9 +43,8 @@ public partial class ShowAllSupplement : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
-
     }
 
     async private void PopulateListView()
@@ -442,6 +458,7 @@ public partial class ShowAllSupplement : ContentPage
         }
         catch (Exception Ex)
         {
+            NotasyncMethod(Ex);
         }
     }
 
@@ -567,7 +584,7 @@ public partial class ShowAllSupplement : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 }

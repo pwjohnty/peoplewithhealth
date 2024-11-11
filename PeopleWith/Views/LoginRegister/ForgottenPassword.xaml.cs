@@ -11,10 +11,34 @@ namespace PeopleWith;
 public partial class ForgottenPassword : ContentPage
 {
     HttpClient client = new HttpClient();
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
+
     public ForgottenPassword()
 	{
-		InitializeComponent();
-	}
+        try
+        {
+            InitializeComponent();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
 
     static Regex ValidEmailRegex = CreateValidEmailRegex();
 
@@ -33,23 +57,46 @@ public partial class ForgottenPassword : ContentPage
 
     private void emailentry_TextChanged(object sender, TextChangedEventArgs e)
     {
-
+        try
+        {
+            
+        }
+        catch (Exception Ex)
+        {
+            //Leave Empty
+        }
     }
 
     private void EmailVerification_Clicked(object sender, EventArgs e)
     {
         try
         {
-            handleemailframe();
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Limit No. of Taps 
+                EmailVerification.IsEnabled = false;
+                handleemailframe();
+                EmailVerification.IsEnabled = true;
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }      
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
     async private void handleemailframe()
     {
+        try
+        {
+
         bool ValidEmail = false;
         //check email validation
         if (string.IsNullOrEmpty(emailentry.Text))
@@ -130,6 +177,11 @@ public partial class ForgottenPassword : ContentPage
 
                 //}
             }
+          }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
         }
     }
 
@@ -141,7 +193,7 @@ public partial class ForgottenPassword : ContentPage
         }
         catch (Exception Ex)
         {
-           
+            NotasyncMethod(Ex);
         }
     }
 }

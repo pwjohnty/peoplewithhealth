@@ -7,7 +7,7 @@
              xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
              x:Class="PeopleWith.AllMedications" Shell.NavBarIsVisible="False" BackgroundColor="White" >
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add New" Clicked="ToolbarItem_Clicked" />
+        <ToolbarItem Text="Add New" x:Name="AddBtn" Clicked="ToolbarItem_Clicked" />
     </ContentPage.ToolbarItems>
     <ScrollView VerticalScrollBarVisibility="Never">
 

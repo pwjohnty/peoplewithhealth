@@ -135,7 +135,7 @@ Padding="0">
                 <Button
 BackgroundColor="#031926"
 HorizontalOptions="FillAndExpand"
-TextColor="White"
+TextColor="White" x:Name="ScheduleBtn"
     Clicked="Button_Clicked"
 FontAttributes="None"
      Margin="0,10,0,10"

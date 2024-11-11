@@ -5,7 +5,7 @@
              NavigationPage.HasNavigationBar="True"
              x:Class="PeopleWith.HCPs" BackgroundColor="White">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Clicked="ToolbarItem_Clicked" Text="Add HCP" />
+        <ToolbarItem Clicked="ToolbarItem_Clicked" x:Name="AddBtn" Text="Add HCP" />
     </ContentPage.ToolbarItems>
     <ScrollView Orientation="Vertical" >
         <VerticalStackLayout>

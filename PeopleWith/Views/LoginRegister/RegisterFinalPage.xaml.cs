@@ -23,7 +23,24 @@ public partial class RegisterFinalPage : ContentPage
     ObservableCollection<usersymptom> symptomstoadd = new ObservableCollection<usersymptom>();
     HttpClient client = new HttpClient();
     userdiagnosis userdiag;
-    bool SignPadhaddata = false; 
+    bool SignPadhaddata = false;
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
+
 
     public RegisterFinalPage()
 	{
@@ -41,7 +58,7 @@ public partial class RegisterFinalPage : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -58,7 +75,7 @@ public partial class RegisterFinalPage : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -92,7 +109,7 @@ public partial class RegisterFinalPage : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
 
     }
@@ -132,10 +149,8 @@ public partial class RegisterFinalPage : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
-        
-
     }
 
     public RegisterFinalPage(user userpass, double progress, ObservableCollection<userresponse> userresponsep, consent additonalcon, ObservableCollection<usersymptom> usersymptompassed, ObservableCollection<usermedication> usermedicationspassed, userdiagnosis userdiagpassed)
@@ -176,9 +191,7 @@ public partial class RegisterFinalPage : ContentPage
         }
         catch (Exception Ex)
         {
-
-
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -219,13 +232,10 @@ public partial class RegisterFinalPage : ContentPage
            // await Task.Delay(3000);
 
            // finishstack.IsVisible = false;
-
-
-
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -265,74 +275,89 @@ public partial class RegisterFinalPage : ContentPage
                     }
                 });
             }
-
-
-
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
-   async private void nextbtn_Clicked(object sender, EventArgs e)
+    async private void nextbtn_Clicked(object sender, EventArgs e)
     {
         try
         {
-            if(faceidstack.IsVisible == true)
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                Handlepinstack();
-            }
-
-            else if(notificationstack.IsVisible == true)
-            {
-                HandleNotificationframe();
-            }
-            else if(healthdatastack.IsVisible == true)
-            {
-                HandleHealthdataframe();
-            }
-            else if(tcstack.IsVisible == true)
-            {
-                //Check if Signature pad is needed 
-                if (additonalconsent.signaturepad == false)
+                //Limit No. of Taps 
+                nextbtn.IsEnabled = false;
+                if (faceidstack.IsVisible == true)
                 {
-
-                    HandleTCframe();
+                    Handlepinstack();
+                    nextbtn.IsEnabled = true;
                 }
-                else
-                {
-                    if (nextbtn.BackgroundColor == Colors.LightGray)
-                    {
-                        if (tccheckbox.IsChecked == false)
-                        {
-                            Vibration.Vibrate();
-                            tcframe.BorderColor = Colors.Red;
-                            return;
-                        }
-                        else
-                        {
-                            if(SignPadhaddata == false)
-                            {
-                                await DisplayAlert("Signature Missing", "Please sign the signature pad", "OK");
-                                return;
-                            } 
-                         
-                        }
 
+                else if (notificationstack.IsVisible == true)
+                {
+                    HandleNotificationframe();
+                    nextbtn.IsEnabled = true;
+                }
+                else if (healthdatastack.IsVisible == true)
+                {
+                    HandleHealthdataframe();
+                }
+                else if (tcstack.IsVisible == true)
+                {
+                    //Check if Signature pad is needed 
+                    if (additonalconsent.signaturepad == false)
+                    {
+
+                        HandleTCframe();
+                        nextbtn.IsEnabled = true;
                     }
                     else
                     {
-                        HandleTCframe();
+                        if (nextbtn.BackgroundColor == Colors.LightGray)
+                        {
+                            if (tccheckbox.IsChecked == false)
+                            {
+                                Vibration.Vibrate();
+                                tcframe.BorderColor = Colors.Red;
+                                nextbtn.IsEnabled = true;
+                                return;
+                            }
+                            else
+                            {
+                                if (SignPadhaddata == false)
+                                {
+                                    await DisplayAlert("Signature Missing", "Please sign the signature pad", "OK");
+                                    nextbtn.IsEnabled = true;
+                                    return;
+                                }
+
+                            }
+
+                        }
+                        else
+                        {
+                            HandleTCframe();
+                            nextbtn.IsEnabled = true;
+                        }
                     }
+
                 }
                 
             }
-
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -366,14 +391,13 @@ public partial class RegisterFinalPage : ContentPage
                 Vibration.Vibrate();
                 return;
             }
-
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
-    
+
     async void HandleTCframe()
     {
         try
@@ -605,9 +629,9 @@ public partial class RegisterFinalPage : ContentPage
                 return;
             }
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -615,16 +639,12 @@ public partial class RegisterFinalPage : ContentPage
     {
         try
         {
-
             topprogress.Progress = topprogress.Progress += progressamount;
-
-
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
-
     }
 
     private void codepin_PINEntryCompleted(object sender, PINView.Maui.Helpers.PINCompletedEventArgs e)
@@ -636,7 +656,7 @@ public partial class RegisterFinalPage : ContentPage
         }
         catch(Exception ex )
         {
-
+            //Leave Empty
         }
     }
 
@@ -649,7 +669,7 @@ public partial class RegisterFinalPage : ContentPage
         }
         catch(Exception ex)
         {
-
+            //Leave Empty
         }
     }
 
@@ -664,7 +684,7 @@ public partial class RegisterFinalPage : ContentPage
         }
         catch(Exception ex)
         {
-
+            //Leave Empty
         }
     }
 
@@ -676,7 +696,7 @@ public partial class RegisterFinalPage : ContentPage
         }
         catch (Exception ex)
         {
-
+            //Leave Empty
         }
     }
 
@@ -712,7 +732,7 @@ public partial class RegisterFinalPage : ContentPage
         }
         catch( Exception ex )
         {
-
+            //Leave Empty
         }
     }
 
@@ -720,27 +740,38 @@ public partial class RegisterFinalPage : ContentPage
     {
         try
         {
-            if(faceidstack.IsVisible == true)
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                faceidstack.IsVisible = false;
-                notificationstack.IsVisible = true;
-                UpdateProgress();
+                skipbtn.IsEnabled = false; 
+                if (faceidstack.IsVisible == true)
+                {
+                    faceidstack.IsVisible = false;
+                    notificationstack.IsVisible = true;
+                    UpdateProgress();
+                }
+                else if (notificationstack.IsVisible == true)
+                {
+                    notificationstack.IsVisible = false;
+                    tcstack.IsVisible = true;
+                    nextbtn.Text = "Agree and Finish";
+                    nextbtn.BackgroundColor = Colors.LightGray;
+                    backbtn.IsVisible = false;
+                    topprogress.Progress = 100;
+                    skipbtn.IsVisible = false;
+                }
+                skipbtn.IsEnabled = true;
             }
-            else if(notificationstack.IsVisible == true)
+            else
             {
-                notificationstack.IsVisible = false;
-                tcstack.IsVisible = true;
-                nextbtn.Text = "Agree and Finish";
-                nextbtn.BackgroundColor = Colors.LightGray;
-                backbtn.IsVisible = false;
-                topprogress.Progress = 100;
-                skipbtn.IsVisible = false;
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
             }
-
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -748,16 +779,12 @@ public partial class RegisterFinalPage : ContentPage
     {
         try
         {
-
             topprogress.Progress = topprogress.Progress -= progressamount;
-
-
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
-
     }
 
     private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
@@ -765,21 +792,30 @@ public partial class RegisterFinalPage : ContentPage
         try
         {
             //back button
-            
-            if(notificationstack.IsVisible == true)
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                notificationstack.IsVisible = false;
-                faceidstack.IsVisible = true;
-                BackProgress();
-            }
-            else if(faceidstack.IsVisible == true)
-            {
+                if (notificationstack.IsVisible == true)
+                {
+                    notificationstack.IsVisible = false;
+                    faceidstack.IsVisible = true;
+                    BackProgress();
+                }
+                else if (faceidstack.IsVisible == true)
+                {
 
+                }
             }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }        
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -787,12 +823,22 @@ public partial class RegisterFinalPage : ContentPage
     {
         try
         {
-            string BackArrow = "PeopleWith";
-            await Navigation.PushAsync(new PrivacyPolicy(BackArrow), false);
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                string BackArrow = "PeopleWith";
+                await Navigation.PushAsync(new PrivacyPolicy(BackArrow), false);
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -840,7 +886,7 @@ public partial class RegisterFinalPage : ContentPage
         }
         catch (Exception Ex)
         {
-
+            //Leave Empty
         }
     }
 
@@ -848,13 +894,23 @@ public partial class RegisterFinalPage : ContentPage
     {
         try
         {
-            signpad.Clear();
-            nextbtn.BackgroundColor = Colors.LightGray;
-            SignPadhaddata = false; 
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                signpad.Clear();
+                nextbtn.BackgroundColor = Colors.LightGray;
+                SignPadhaddata = false;
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }          
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 }

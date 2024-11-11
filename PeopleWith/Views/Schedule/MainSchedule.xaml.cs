@@ -20,74 +20,91 @@ public partial class MainSchedule : ContentPage
     public ObservableCollection<MedtimesDosages> AsRequiredList = new ObservableCollection<MedtimesDosages>();
     public DateTime dateforschedule = new DateTime();
     public ObservableCollection<IGrouping<string, MedtimesDosages>> GroupedScheduleList { get; set; }
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
+
 
     public MainSchedule()
 	{
-		InitializeComponent();
-
-
-        getusermedsandsupps();
-
-        //get 7 days before and 7 days after todays date
-
-        // Get today's date
-        DateTime today = DateTime.Today;
-
-        // Initialize a list to hold the dates
-   
-
-        // Add 7 days before today's date
-        for (int i = -30; i <= 7; i++)
+        try
         {
-            dateList.Add(today.AddDays(i));
-        }
+            InitializeComponent();
+            getusermedsandsupps();
 
+            //get 7 days before and 7 days after todays date
 
-        foreach(var item in dateList)
-        {
-            var newitem = new Schedule();
+            // Get today's date
+            DateTime today = DateTime.Today;
 
-            newitem.Day = item.Day.ToString();
-            newitem.Date = item.Date.ToString("ddd");
-
-            if(item.Date > DateTime.Now.Date)
+            // Initialize a list to hold the dates
+            // Add 7 days before today's date
+            for (int i = -30; i <= 7; i++)
             {
-                newitem.Bgcolour = Colors.Transparent;
-                newitem.Bordercolour = Color.FromArgb("#e5f0fb");
-                newitem.Op = 0.5;
-            }
-            else
-            {
-                newitem.Bgcolour = Color.FromArgb("#e5f0fb");
-                newitem.Bordercolour = Colors.Transparent;
-                newitem.Op = 1;
+                dateList.Add(today.AddDays(i));
             }
 
-            changeddatesforlistview.Add(newitem);
+            foreach (var item in dateList)
+            {
+                var newitem = new Schedule();
 
+                newitem.Day = item.Day.ToString();
+                newitem.Date = item.Date.ToString("ddd");
+
+                if (item.Date > DateTime.Now.Date)
+                {
+                    newitem.Bgcolour = Colors.Transparent;
+                    newitem.Bordercolour = Color.FromArgb("#e5f0fb");
+                    newitem.Op = 0.5;
+                }
+                else
+                {
+                    newitem.Bgcolour = Color.FromArgb("#e5f0fb");
+                    newitem.Bordercolour = Colors.Transparent;
+                    newitem.Op = 1;
+                }
+
+                changeddatesforlistview.Add(newitem);
+            }
+
+            scheduledatelist.ItemsSource = changeddatesforlistview;
+
+            // Find today's date in the list
+
+            var indexForToday = dateList.IndexOf(today);
+
+            // Check if today's date is in the list
+            if (indexForToday >= 0)
+            {
+                // Set the selected item to today's date
+                scheduledatelist.SelectedItem = changeddatesforlistview[indexForToday];
+
+                var dateforlabel = dateList[indexForToday];
+
+                datelbl.Text = dateforlabel.ToString("dddd, dd MMMM");
+                dateforschedule = dateList[indexForToday];
+
+                // Scroll to today's date and try to center it
+                scheduledatelist.ScrollTo(changeddatesforlistview[indexForToday], ScrollToPosition.Center, true);
+            }
         }
-
-        scheduledatelist.ItemsSource = changeddatesforlistview;
-
-        // Find today's date in the list
-   
-        var indexForToday = dateList.IndexOf(today);
-
-        // Check if today's date is in the list
-        if (indexForToday >= 0)
+        catch (Exception Ex)
         {
-            // Set the selected item to today's date
-            scheduledatelist.SelectedItem = changeddatesforlistview[indexForToday];
-
-            var dateforlabel = dateList[indexForToday];
-
-            datelbl.Text = dateforlabel.ToString("dddd, dd MMMM");
-            dateforschedule = dateList[indexForToday];
-
-            // Scroll to today's date and try to center it
-            scheduledatelist.ScrollTo(changeddatesforlistview[indexForToday], ScrollToPosition.Center, true);
+            NotasyncMethod(Ex);
         }
-
     }
 
     private void scheduledatelist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
@@ -111,9 +128,9 @@ public partial class MainSchedule : ContentPage
 
             populateschedule();
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -127,16 +144,12 @@ public partial class MainSchedule : ContentPage
             AllUserSupplements = await aPICalls.GetUserSupplementsAsync();
 
             populateschedule();
-
-           
-
-
-
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
+
     }
 
     async void populateschedule()
@@ -759,9 +772,9 @@ public partial class MainSchedule : ContentPage
                 mainschedulelistview.HeightRequest = ScheduleList.Count * 110;
             }
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -844,9 +857,9 @@ public partial class MainSchedule : ContentPage
 
             }
         }
-        catch(Exception Ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -854,69 +867,73 @@ public partial class MainSchedule : ContentPage
     {
         try
         {
-            //taken (tick) tapped on schedule
-
-            // Get the tapped Image
-            ExtendedImage label = (ExtendedImage)sender;
-
-            var getitem = ScheduleList.Where(x => x.Feedbackid == label.FeedbackID).FirstOrDefault();
-
-            if (getitem != null)
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
+                //taken (tick) tapped on schedule
 
+                // Get the tapped Image
+                ExtendedImage label = (ExtendedImage)sender;
 
-                if (getitem.Type == "Medication")
+                var getitem = ScheduleList.Where(x => x.Feedbackid == label.FeedbackID).FirstOrDefault();
+
+                if (getitem != null)
                 {
 
-                    var getusermeditem = AllUserMedications.Where(x => x.id == label.UsermedID).FirstOrDefault();
 
-
-
-
-                    getitem.Buttonop = 1;
-
-                    var newfeedback = new MedSuppFeedback();
-                    newfeedback.id = label.FeedbackID;
-                    newfeedback.Recorded = "Taken";
-                    TimeSpan timeSpan = TimeSpan.Parse(getitem.time);
-                    var dt = dateforschedule.Date + timeSpan;
-                    newfeedback.datetime = dt.ToString("HH:mm, dd/MM/yyyy");
-
-                    if (getusermeditem.feedback == null || !getusermeditem.feedback.Any())
+                    if (getitem.Type == "Medication")
                     {
-                        //feedback is null initalize before hand 
-                        getusermeditem.feedback = new ObservableCollection<MedSuppFeedback>();
-                    }
 
-                    getusermeditem.feedback.Add(newfeedback);
-                    await aPICalls.UpdateMedicationFeedbackAsync(getusermeditem);
+                        var getusermeditem = AllUserMedications.Where(x => x.id == label.UsermedID).FirstOrDefault();
 
 
-                    foreach (var item in AllUserSupplements)
-                    {
-                        if (item.id == getusermeditem.id)
+
+
+                        getitem.Buttonop = 1;
+
+                        var newfeedback = new MedSuppFeedback();
+                        newfeedback.id = label.FeedbackID;
+                        newfeedback.Recorded = "Taken";
+                        TimeSpan timeSpan = TimeSpan.Parse(getitem.time);
+                        var dt = dateforschedule.Date + timeSpan;
+                        newfeedback.datetime = dt.ToString("HH:mm, dd/MM/yyyy");
+
+                        if (getusermeditem.feedback == null || !getusermeditem.feedback.Any())
                         {
-                            foreach (var feedback in getusermeditem.feedback)
+                            //feedback is null initalize before hand 
+                            getusermeditem.feedback = new ObservableCollection<MedSuppFeedback>();
+                        }
+
+                        getusermeditem.feedback.Add(newfeedback);
+                        await aPICalls.UpdateMedicationFeedbackAsync(getusermeditem);
+
+
+                        foreach (var item in AllUserSupplements)
+                        {
+                            if (item.id == getusermeditem.id)
                             {
-                                // Ensure no duplicate feedback entries
-                                if (!item.feedback.Any(f => f.datetime == feedback.datetime))
+                                foreach (var feedback in getusermeditem.feedback)
                                 {
-                                    item.feedback.Add(feedback);
+                                    // Ensure no duplicate feedback entries
+                                    if (!item.feedback.Any(f => f.datetime == feedback.datetime))
+                                    {
+                                        item.feedback.Add(feedback);
+                                    }
                                 }
                             }
                         }
-                    }
 
                         //Update Feedback on AllSupplements Page
-                      //WeakReferenceMessenger.Default.Send(new UpdateAllMeds(AllUserSupplements));
+                        //WeakReferenceMessenger.Default.Send(new UpdateAllMeds(AllUserSupplements));
 
                         //Update Feedback on SingleSupplements Page
 
                     }
-                else
-                {
-                    //update supplement feedback
-                    var getusermeditem = AllUserSupplements.Where(x => x.id == label.UsermedID).FirstOrDefault();
+                    else
+                    {
+                        //update supplement feedback
+                        var getusermeditem = AllUserSupplements.Where(x => x.id == label.UsermedID).FirstOrDefault();
 
 
                         getitem.Buttonop = 1;
@@ -937,30 +954,36 @@ public partial class MainSchedule : ContentPage
                         getusermeditem.feedback.Add(newfeedback);
                         await aPICalls.UpdateSupplementFeedbackAsync(getusermeditem);
 
-                    //foreach(var item in AllUserSupplements)
-                    //{
-                    //    if(item.id == label.UsermedID)
-                    //    {
-                    //        foreach(var x in item.feedback)
-                    //        {
-                    //            AllUserSupplement
-                    //        }
-                    //    }
-                      
-                    //}
-                   
+                        //foreach(var item in AllUserSupplements)
+                        //{
+                        //    if(item.id == label.UsermedID)
+                        //    {
+                        //        foreach(var x in item.feedback)
+                        //        {
+                        //            AllUserSupplement
+                        //        }
+                        //    }
 
-                    //Update Feedback on AllSupplements Page
-                    //WeakReferenceMessenger.Default.Send(new UpdateAllSupp(AllUserSupplements));
+                        //}
 
-                    //Update Feedback on SingleSupplements Page
 
+                        //Update Feedback on AllSupplements Page
+                        //WeakReferenceMessenger.Default.Send(new UpdateAllSupp(AllUserSupplements));
+
+                        //Update Feedback on SingleSupplements Page
+
+                    }
                 }
             }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
         }
-        catch(Exception ex )
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -968,75 +991,79 @@ public partial class MainSchedule : ContentPage
     {
         try
         {
-            //not taken (x) tapped on schedule
-
-            // Get the tapped Image
-            ExtendedImage label = (ExtendedImage)sender;
-
-            var getitem = ScheduleList.Where(x => x.Feedbackid == label.FeedbackID).FirstOrDefault();
-            if (getitem != null)
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
+                //not taken (x) tapped on schedule
 
+                // Get the tapped Image
+                ExtendedImage label = (ExtendedImage)sender;
 
-                if (getitem.Type == "Medication")
+                var getitem = ScheduleList.Where(x => x.Feedbackid == label.FeedbackID).FirstOrDefault();
+                if (getitem != null)
                 {
 
-                    var getusermeditem = AllUserMedications.Where(x => x.id == label.UsermedID).FirstOrDefault();
 
-
-
-
-                    getitem.Buttonntop = 1;
-
-                    var newfeedback = new MedSuppFeedback();
-                    newfeedback.id = label.FeedbackID;
-                    newfeedback.Recorded = "Not Taken";
-                    TimeSpan timeSpan = TimeSpan.Parse(getitem.time);
-                    var dt = dateforschedule.Date + timeSpan;
-                    newfeedback.datetime = dt.ToString("HH:mm, dd/MM/yyyy");
-
-                    if (getusermeditem.feedback == null || !getusermeditem.feedback.Any())
+                    if (getitem.Type == "Medication")
                     {
-                        //feedback is null initalize before hand 
-                        getusermeditem.feedback = new ObservableCollection<MedSuppFeedback>();
+
+                        var getusermeditem = AllUserMedications.Where(x => x.id == label.UsermedID).FirstOrDefault();
+
+                        getitem.Buttonntop = 1;
+
+                        var newfeedback = new MedSuppFeedback();
+                        newfeedback.id = label.FeedbackID;
+                        newfeedback.Recorded = "Not Taken";
+                        TimeSpan timeSpan = TimeSpan.Parse(getitem.time);
+                        var dt = dateforschedule.Date + timeSpan;
+                        newfeedback.datetime = dt.ToString("HH:mm, dd/MM/yyyy");
+
+                        if (getusermeditem.feedback == null || !getusermeditem.feedback.Any())
+                        {
+                            //feedback is null initalize before hand 
+                            getusermeditem.feedback = new ObservableCollection<MedSuppFeedback>();
+                        }
+
+                        getusermeditem.feedback.Add(newfeedback);
+                        await aPICalls.UpdateMedicationFeedbackAsync(getusermeditem);
+
                     }
-
-                    getusermeditem.feedback.Add(newfeedback);
-                    await aPICalls.UpdateMedicationFeedbackAsync(getusermeditem);
-
-                }
-                else
-                {
-                    //update supplement feedback
-                    var getusermeditem = AllUserSupplements.Where(x => x.id == label.UsermedID).FirstOrDefault();
-
-
-                    getitem.Buttonntop = 1;
-
-                    var newfeedback = new MedSuppFeedback();
-                    newfeedback.id = label.FeedbackID;
-                    newfeedback.Recorded = "Not Taken";
-                    TimeSpan timeSpan = TimeSpan.Parse(getitem.time);
-                    var dt = dateforschedule.Date + timeSpan;
-                    newfeedback.datetime = dt.ToString("HH:mm, dd/MM/yyyy");
-
-                    if (getusermeditem.feedback == null || !getusermeditem.feedback.Any())
+                    else
                     {
-                        //feedback is null initalize before hand 
-                        getusermeditem.feedback = new ObservableCollection<MedSuppFeedback>();
+                        //update supplement feedback
+                        var getusermeditem = AllUserSupplements.Where(x => x.id == label.UsermedID).FirstOrDefault();
+
+                        getitem.Buttonntop = 1;
+
+                        var newfeedback = new MedSuppFeedback();
+                        newfeedback.id = label.FeedbackID;
+                        newfeedback.Recorded = "Not Taken";
+                        TimeSpan timeSpan = TimeSpan.Parse(getitem.time);
+                        var dt = dateforschedule.Date + timeSpan;
+                        newfeedback.datetime = dt.ToString("HH:mm, dd/MM/yyyy");
+
+                        if (getusermeditem.feedback == null || !getusermeditem.feedback.Any())
+                        {
+                            //feedback is null initalize before hand 
+                            getusermeditem.feedback = new ObservableCollection<MedSuppFeedback>();
+                        }
+
+                        getusermeditem.feedback.Add(newfeedback);
+                        await aPICalls.UpdateSupplementFeedbackAsync(getusermeditem);
+
                     }
-
-                    getusermeditem.feedback.Add(newfeedback);
-                    await aPICalls.UpdateSupplementFeedbackAsync(getusermeditem);
-
                 }
             }
-
-
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }          
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -1044,78 +1071,94 @@ public partial class MainSchedule : ContentPage
     {
         try
         {
-            populateAsRequired();
-            if (asrequiredbtn.Text == "As Required Medications/Supplements")
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-               // asrequiredbtn.Text = "Medication/Supplement Schedule";
-                // Group by time and create the grouped collection
-                //group the listview so all days are the same
-                if (AsRequiredList.Count == 0)
+                //Limit No. of Taps 
+                asrequiredbtn.IsEnabled = false;
+                populateAsRequired();
+                if (asrequiredbtn.Text == "As Required Medications/Supplements")
                 {
+                    // asrequiredbtn.Text = "Medication/Supplement Schedule";
+                    // Group by time and create the grouped collection
+                    //group the listview so all days are the same
+                    if (AsRequiredList.Count == 0)
+                    {
 
-                    await DisplayAlert("As Required", "No As Required Medications or Supplements are added, Try Adding Some to Access this Feature", "Close"); 
-                    ////No items Due for today 
-                    //mainschedulelistview.IsVisible = false;
-                    //AsRequiredlistview.IsVisible = false; 
-                    //nodatastack.IsVisible = true;
+                        await DisplayAlert("As Required", "No As Required Medications or Supplements are added, Try Adding Some to Access this Feature", "Close");
+                        ////No items Due for today 
+                        //mainschedulelistview.IsVisible = false;
+                        //AsRequiredlistview.IsVisible = false; 
+                        //nodatastack.IsVisible = true;
+                    }
+                    else
+                    {
+
+                        //populate mainschedulelistview 
+                        asrequiredbtn.Text = "Medication/Supplement Schedule";
+                        mainschedulelistview.IsVisible = false;
+                        AsRequiredlistview.IsVisible = true;
+                        nodatastack.IsVisible = false;
+                        AsRequiredlistview.ItemsSource = AsRequiredList;
+                        AsRequiredlistview.HeightRequest = AsRequiredList.Count * 100;
+                    }
                 }
                 else
                 {
+                    asrequiredbtn.Text = "As Required Medications/Supplements";
 
-                    //populate mainschedulelistview 
-                    asrequiredbtn.Text = "Medication/Supplement Schedule";
-                    mainschedulelistview.IsVisible = false;
-                    AsRequiredlistview.IsVisible = true;
-                    nodatastack.IsVisible = false;
-                    AsRequiredlistview.ItemsSource = AsRequiredList;
-                    AsRequiredlistview.HeightRequest = AsRequiredList.Count * 100;
+                    mainschedulelistview.IsVisible = true;
+                    AsRequiredlistview.IsVisible = false;
                 }
+                asrequiredbtn.IsEnabled = true;
             }
             else
             {
-                asrequiredbtn.Text = "As Required Medications/Supplements";
-
-              
-                mainschedulelistview.IsVisible = true;
-                AsRequiredlistview.IsVisible = false;
-               
-
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
             }
-
-           
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
-        
     }
 
     private async void AsRequiredlistview_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
     {
         try
         {
-            var item = e.DataItem as MedtimesDosages;
-
-
-            if(item.Type == "Medication")
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                var findmed = AllUserMedications.Where(x => x.id == item.Usermedid).FirstOrDefault();
-                await Navigation.PushAsync(new AddAsRequiredDosage(item, findmed), false);
+                var item = e.DataItem as MedtimesDosages;
+
+                if (item.Type == "Medication")
+                {
+                    var findmed = AllUserMedications.Where(x => x.id == item.Usermedid).FirstOrDefault();
+                    await Navigation.PushAsync(new AddAsRequiredDosage(item, findmed), false);
+                }
+                else
+                {
+                    var findsupp = AllUserSupplements.Where(x => x.id == item.Usermedid).FirstOrDefault();
+                    await Navigation.PushAsync(new AddAsRequiredDosage(item, findsupp), false);
+                }
+
+
+                // await MopupService.Instance.PushAsync(new AddAsRequiredDosage(item) { });
+                // await Task.Delay(1000);
             }
             else
             {
-                var findsupp = AllUserSupplements.Where(x => x.id == item.Usermedid).FirstOrDefault();
-                await Navigation.PushAsync(new AddAsRequiredDosage(item, findsupp), false);
-            }
-
-            
-           // await MopupService.Instance.PushAsync(new AddAsRequiredDosage(item) { });
-           // await Task.Delay(1000);
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }          
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 }

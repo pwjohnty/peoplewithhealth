@@ -10,7 +10,23 @@ public partial class SingleSupplement : ContentPage
     ObservableCollection<MedtimesDosages> Schedule = new ObservableCollection<MedtimesDosages>();
     usersupplement MedSelected = new usersupplement();
     string[] freqSplit;
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
+
 
     //public SingleMedication()
     //{
@@ -109,19 +125,32 @@ public partial class SingleSupplement : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
-
     }
 
     async private void Button_Clicked(object sender, EventArgs e)
     {
         try
         {
-            await Navigation.PushAsync(new MainSchedule(), false);
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Limit No. of Taps 
+                ScheduleBtn.IsEnabled = false;
+                await Navigation.PushAsync(new MainSchedule(), false);
+                ScheduleBtn.IsEnabled = true;
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }            
         }
-        catch
+        catch (Exception Ex)
         {
+            NotasyncMethod(Ex);
         }
     }
 
@@ -129,10 +158,24 @@ public partial class SingleSupplement : ContentPage
     {
         try
         {
-            await Navigation.PushAsync(new ShowAllSupplement(MedSelected), false);
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Limit No. of Taps 
+                showallbtn.IsEnabled = false;
+                await Navigation.PushAsync(new ShowAllSupplement(MedSelected), false);
+                showallbtn.IsEnabled = true;
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
         }
-        catch
+        catch (Exception Ex)
         {
+            NotasyncMethod(Ex);
         }
     }
 
@@ -141,45 +184,55 @@ public partial class SingleSupplement : ContentPage
         //Delete Medication 
         try
         {
-            bool Result = await DisplayAlert("Delete Supplement", "Are you sure you would like to Delete this Supplement, it cannot be retrieved once Deleted", "Delete", "Cancel");
-            if (Result)
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                //Delete
-                MedSelected.deleted = true;
-
-                APICalls database = new APICalls();
-                await database.DeleteSupplement(MedSelected);
-
-                //Symptom Deleted Message
-                await MopupService.Instance.PushAsync(new PopupPageHelper("Supplement Deleted") { });
-                await Task.Delay(1500);
-
-
-                await MopupService.Instance.PopAllAsync(false);
-
-
-                UserMedications.Remove(MedSelected);
-
-                await Navigation.PushAsync(new AllSupplements(UserMedications));
-                var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(p => p is AllSupplements);
-                if (pageToRemoves != null)
+                //Limit No. of Taps 
+                DeleteBtn.IsEnabled = false;
+                bool Result = await DisplayAlert("Delete Supplement", "Are you sure you would like to Delete this Supplement, it cannot be retrieved once Deleted", "Delete", "Cancel");
+                if (Result)
                 {
-                    Navigation.RemovePage(pageToRemoves);
+                    //Delete
+                    MedSelected.deleted = true;
+
+                    APICalls database = new APICalls();
+                    await database.DeleteSupplement(MedSelected);
+
+                    //Symptom Deleted Message
+                    await MopupService.Instance.PushAsync(new PopupPageHelper("Supplement Deleted") { });
+                    await Task.Delay(1500);
+
+
+                    await MopupService.Instance.PopAllAsync(false);
+
+                    DeleteBtn.IsEnabled = true;
+                    UserMedications.Remove(MedSelected);
+
+                    await Navigation.PushAsync(new AllSupplements(UserMedications));
+                    var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(p => p is AllSupplements);
+                    if (pageToRemoves != null)
+                    {
+                        Navigation.RemovePage(pageToRemoves);
+                    }
+                    Navigation.RemovePage(this);
                 }
-                Navigation.RemovePage(this);
+                else
+                {
+                    //Cancel
+                    DeleteBtn.IsEnabled = true;
+                    return;
+                }            
             }
             else
             {
-                //Cancel
-                return;
-            }
-
-
-
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }           
         }
         catch (Exception Ex)
         {
-            //await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
         }
     }
 
@@ -187,8 +240,21 @@ public partial class SingleSupplement : ContentPage
     {
         try
         {
-            MedSelected.EditMedSection = "Details";
-            await Navigation.PushAsync(new AddSupplement(UserMedications, MedSelected), false);
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Limit No. of Taps 
+                EditMed.IsEnabled = false;
+                MedSelected.EditMedSection = "Details";
+                await Navigation.PushAsync(new AddSupplement(UserMedications, MedSelected), false);
+                EditMed.IsEnabled = true;
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
 
             //string action = await DisplayActionSheet("Edit Medication", "Cancel", null, "Details", "Schedule");
 
@@ -205,7 +271,7 @@ public partial class SingleSupplement : ContentPage
         }
         catch (Exception Ex)
         {
+            NotasyncMethod(Ex);
         }
-
     }
 }

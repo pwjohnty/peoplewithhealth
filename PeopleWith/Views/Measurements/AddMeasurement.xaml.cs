@@ -16,114 +16,132 @@ public partial class AddMeasurement : ContentPage
     string Poundsinput; 
     APICalls aPICalls = new APICalls();
     bool validinput;
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
 
     public AddMeasurement()
 	{
-		InitializeComponent();
-	}
+        try
+        {
+            InitializeComponent();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
 
     public AddMeasurement(measurement measurementp, ObservableCollection<usermeasurement> usermeasurementsp, ObservableCollection<measurement> measurementlistpassed)
     {
-        InitializeComponent();
-
-        measurementpassed = measurementp;
-        usermeasurementlistpassed = usermeasurementsp;
-        measurementlist = measurementlistpassed;
-
-        measurementname.Text = "Add " + measurementpassed.measurementname;
-        measurementnamestring = measurementpassed.measurementname;
-        measurementid = measurementpassed.measurementid;
-
-        var unitstringlist = new List<string>();
-
-        if (measurementnamestring == "Blood Pressure")
+        try
         {
-            unitentryframe.IsVisible = false;
-            bpsysframe.IsVisible = true;
-            bpdiaframe.IsVisible = true;
+            InitializeComponent();
 
-            var joinstring = measurementpassed.units.Replace(',', '/');
+            measurementpassed = measurementp;
+            usermeasurementlistpassed = usermeasurementsp;
+            measurementlist = measurementlistpassed;
 
-            unitstringlist.Add(joinstring);
+            measurementname.Text = "Add " + measurementpassed.measurementname;
+            measurementnamestring = measurementpassed.measurementname;
+            measurementid = measurementpassed.measurementid;
 
-            unitlist.ItemsSource = unitstringlist;
+            var unitstringlist = new List<string>();
 
-            unitlist.SelectedItem = joinstring;
+            if (measurementnamestring == "Blood Pressure")
+            {
+                unitentryframe.IsVisible = false;
+                bpsysframe.IsVisible = true;
+                bpdiaframe.IsVisible = true;
 
-            inputvalue = joinstring;
+                var joinstring = measurementpassed.units.Replace(',', '/');
 
+                unitstringlist.Add(joinstring);
+
+                unitlist.ItemsSource = unitstringlist;
+
+                unitlist.SelectedItem = joinstring;
+
+                inputvalue = joinstring;
+
+            }
+            else
+            {
+                unitstringlist = measurementpassed.units.Split(',').ToList();
+                unitlist.ItemsSource = unitstringlist;
+            }
+
+            adddatepicker.Date = DateTime.Now;
+            adddatepicker.MaximumDate = DateTime.Now;
+            addtimepicker.Time = DateTime.Now.TimeOfDay;
         }
-        else
+        catch (Exception Ex)
         {
-           
-
-
-            unitstringlist = measurementpassed.units.Split(',').ToList();
-
-            unitlist.ItemsSource = unitstringlist;
-
-           
+            NotasyncMethod(Ex);
         }
-
-  
-
-        adddatepicker.Date = DateTime.Now;
-        adddatepicker.MaximumDate = DateTime.Now;
-        addtimepicker.Time = DateTime.Now.TimeOfDay;
-
-
-
     }
-
-
-
     public AddMeasurement(usermeasurement usermeasurementp, ObservableCollection<usermeasurement> usermeasurementsp, ObservableCollection<measurement> measurementlistpassed)
     {
-        InitializeComponent();
-
-        usermeasurementpassed = usermeasurementp;
-        usermeasurementlistpassed = usermeasurementsp;
-        measurementlist = measurementlistpassed;
-
-        measurementname.Text = "Add " + usermeasurementpassed.measurementname;
-        measurementnamestring = usermeasurementpassed.measurementname;
-        measurementid = usermeasurementpassed.measurementid;
-
-        if(measurementnamestring == "Blood Pressure")
+        try
         {
-            unitentryframe.IsVisible = false;
-            bpsysframe.IsVisible = true;
-            bpdiaframe.IsVisible = true;
+            InitializeComponent();
+
+            usermeasurementpassed = usermeasurementp;
+            usermeasurementlistpassed = usermeasurementsp;
+            measurementlist = measurementlistpassed;
+
+            measurementname.Text = "Add " + usermeasurementpassed.measurementname;
+            measurementnamestring = usermeasurementpassed.measurementname;
+            measurementid = usermeasurementpassed.measurementid;
+
+            if (measurementnamestring == "Blood Pressure")
+            {
+                unitentryframe.IsVisible = false;
+                bpsysframe.IsVisible = true;
+                bpdiaframe.IsVisible = true;
+            }
+
+            if (measurementnamestring == "Weight" && usermeasurementpassed.unit == "Stones/Pounds")
+            {
+                unitentryframe.IsVisible = false;
+                StonesPoundsframe.IsVisible = true;
+                stlbl.Text = "St";
+                lbslbl.Text = "lbs";
+            }
+
+            var unitstringlist = new List<string>();
+
+            unitstringlist.Add(usermeasurementpassed.unit);
+
+            unitlist.ItemsSource = unitstringlist;
+            unitlist.SelectedItem = unitstringlist[0];
+
+            inputvalue = unitstringlist[0];
+            lblentryunit.Text = unitstringlist[0];
+
+            unitentry.IsEnabled = true;
+
+            adddatepicker.Date = DateTime.Now;
+            adddatepicker.MaximumDate = DateTime.Now;
+            addtimepicker.Time = DateTime.Now.TimeOfDay;
         }
-        
-        if(measurementnamestring == "Weight" && usermeasurementpassed.unit == "Stones/Pounds")
+        catch (Exception Ex)
         {
-            unitentryframe.IsVisible = false;
-            StonesPoundsframe.IsVisible = true;
-            stlbl.Text = "St";
-            lbslbl.Text = "lbs";
+            NotasyncMethod(Ex);
         }
-
-
-
-        var unitstringlist = new List<string>();
-
-
-        unitstringlist.Add(usermeasurementpassed.unit);
-
-        unitlist.ItemsSource = unitstringlist;
-        unitlist.SelectedItem = unitstringlist[0];
-
-        inputvalue = unitstringlist[0];
-        lblentryunit.Text = unitstringlist[0];
-
-        unitentry.IsEnabled = true;
-
-
-        adddatepicker.Date = DateTime.Now;
-        adddatepicker.MaximumDate = DateTime.Now;
-        addtimepicker.Time = DateTime.Now.TimeOfDay;
-
     }
 
     private void unitlist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
@@ -154,9 +172,9 @@ public partial class AddMeasurement : ContentPage
             unitentry.Text = string.Empty;
 
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -168,9 +186,9 @@ public partial class AddMeasurement : ContentPage
         {
             dtPicker.IsOpen = true;
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -3847,9 +3865,9 @@ public partial class AddMeasurement : ContentPage
 
             }
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -3857,112 +3875,118 @@ public partial class AddMeasurement : ContentPage
     {
         try
         {
-            if(validinput == false)
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                Vibration.Vibrate();
-                return;
-            }
-            else
-            {
-
-
-                //add new usermeasurement 
-                var newmeasurment = new usermeasurement();
-                string userid = Preferences.Default.Get("userid", "Unknown");
-                newmeasurment.userid = userid;
-                newmeasurment.measurementid = measurementid;
-                newmeasurment.measurementname = measurementnamestring;
-
-                if (measurementnamestring == "Blood Pressure")
+                //Limit No. of Taps 
+                SubmitBtn.IsEnabled = false;
+                if (validinput == false)
                 {
-                    newmeasurment.value = sysentry.Text + "/" + diaentry.Text;
-                }
-                else if (measurementnamestring == "Weight" && inputvalue == "Stones/Pounds")
-                {
-                    if(string.IsNullOrEmpty(Stonesinput) || string.IsNullOrEmpty(Poundsinput))
-                    {
-                        Vibration.Vibrate();
-                        return;
-                    }
-
-                    if(Int32.Parse(Stonesinput) > 100)
-                    {
-                        Vibration.Vibrate();
-                        return;
-                    }
-                    if(Int32.Parse(Poundsinput) > 13)
-                    {
-                        Vibration.Vibrate();
-                        return;
-                    }
-                    else
-                    {
-                        newmeasurment.value = Stonesinput + "st " + Poundsinput + "lbs";
-                    }
-
+                    Vibration.Vibrate();
+                    return;
                 }
                 else
                 {
+                    //add new usermeasurement 
+                    var newmeasurment = new usermeasurement();
+                    string userid = Preferences.Default.Get("userid", "Unknown");
+                    newmeasurment.userid = userid;
+                    newmeasurment.measurementid = measurementid;
+                    newmeasurment.measurementname = measurementnamestring;
 
-                    newmeasurment.value = unitentry.Text.ToString();
-                }
-                newmeasurment.unit = inputvalue;
-                newmeasurment.status = "Active";
-                var dt = adddatepicker.Date + addtimepicker.Time;
-                newmeasurment.inputdatetime = dt.ToString();
-
-                //insert to db
-                var returnedmeasurement = await aPICalls.InsertUsermeasurement(newmeasurment);
-
-                //insert to local collection
-                newmeasurment.id = returnedmeasurement.id;
-                usermeasurementlistpassed.Add(newmeasurment);
-
-                // Find the item in the measurementlist based on a condition
-                var checkitem = measurementlist.FirstOrDefault(x => x.measurementid == newmeasurment.measurementid);
-
-                // Check if the item exists before attempting to remove it
-                if (checkitem != null)
-                {
-                    // Remove the item directly from the measurementlist
-                    measurementlist.Remove(checkitem);
-                }
-
-
-                await MopupService.Instance.PushAsync(new PopupPageHelper("Measurement Added") { });
-                await Task.Delay(1500);
-                await Navigation.PushAsync(new MeasurementsPage(usermeasurementlistpassed, measurementlist), false);
-
-                await MopupService.Instance.PopAllAsync(false);
-
-                var pages = Navigation.NavigationStack.ToList();
-                int i = 0;
-                foreach (var page in pages)
-                {
-                    if (i == 0)
+                    if (measurementnamestring == "Blood Pressure")
                     {
+                        newmeasurment.value = sysentry.Text + "/" + diaentry.Text;
                     }
-                    else if (i == 1 || i == 2 || i == 3)
+                    else if (measurementnamestring == "Weight" && inputvalue == "Stones/Pounds")
                     {
-                        Navigation.RemovePage(page);
+                        if (string.IsNullOrEmpty(Stonesinput) || string.IsNullOrEmpty(Poundsinput))
+                        {
+                            Vibration.Vibrate();
+                            return;
+                        }
+
+                        if (Int32.Parse(Stonesinput) > 100)
+                        {
+                            Vibration.Vibrate();
+                            return;
+                        }
+                        if (Int32.Parse(Poundsinput) > 13)
+                        {
+                            Vibration.Vibrate();
+                            return;
+                        }
+                        else
+                        {
+                            newmeasurment.value = Stonesinput + "st " + Poundsinput + "lbs";
+                        }
+
                     }
                     else
                     {
-                        //Navigation.RemovePage(page);
+
+                        newmeasurment.value = unitentry.Text.ToString();
                     }
-                    i++;
+                    newmeasurment.unit = inputvalue;
+                    newmeasurment.status = "Active";
+                    var dt = adddatepicker.Date + addtimepicker.Time;
+                    newmeasurment.inputdatetime = dt.ToString();
+
+                    //insert to db
+                    var returnedmeasurement = await aPICalls.InsertUsermeasurement(newmeasurment);
+
+                    //insert to local collection
+                    newmeasurment.id = returnedmeasurement.id;
+                    usermeasurementlistpassed.Add(newmeasurment);
+
+                    // Find the item in the measurementlist based on a condition
+                    var checkitem = measurementlist.FirstOrDefault(x => x.measurementid == newmeasurment.measurementid);
+
+                    // Check if the item exists before attempting to remove it
+                    if (checkitem != null)
+                    {
+                        // Remove the item directly from the measurementlist
+                        measurementlist.Remove(checkitem);
+                    }
+
+
+                    await MopupService.Instance.PushAsync(new PopupPageHelper("Measurement Added") { });
+                    await Task.Delay(1500);
+                    await Navigation.PushAsync(new MeasurementsPage(usermeasurementlistpassed, measurementlist), false);
+
+                    await MopupService.Instance.PopAllAsync(false);
+
+                    var pages = Navigation.NavigationStack.ToList();
+                    int i = 0;
+                    foreach (var page in pages)
+                    {
+                        if (i == 0)
+                        {
+                        }
+                        else if (i == 1 || i == 2 || i == 3)
+                        {
+                            Navigation.RemovePage(page);
+                        }
+                        else
+                        {
+                            //Navigation.RemovePage(page);
+                        }
+                        i++;
+                    }
                 }
 
-
-
-
+                SubmitBtn.IsEnabled = true;
             }
-
-
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
         }
-        catch(Exception ex )
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -4036,11 +4060,12 @@ public partial class AddMeasurement : ContentPage
                 }
             }
         }
-        catch
+        catch (Exception Ex)
         {
             validinput = false;
             SubmitBtn.BackgroundColor = Colors.Gray;
             SubmitBtn.TextColor = Colors.LightGray;
+            NotasyncMethod(Ex);
         }
     }
 
@@ -4124,14 +4149,13 @@ public partial class AddMeasurement : ContentPage
                 }
             }
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-          
             SubmitBtn.BackgroundColor = Colors.Gray;
             SubmitBtn.TextColor = Colors.LightGray;
             //hideallstack.IsVisible = false;
             //errorstack.IsVisible = true;
-         
+            NotasyncMethod(Ex);
         }
     }
 
@@ -4145,7 +4169,7 @@ public partial class AddMeasurement : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -4159,7 +4183,7 @@ public partial class AddMeasurement : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 }

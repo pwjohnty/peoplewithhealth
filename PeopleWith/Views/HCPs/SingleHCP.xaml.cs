@@ -12,20 +12,43 @@ public partial class SingleHCP : ContentPage
     public ObservableCollection<appointment> HCPAppointments = new ObservableCollection<appointment>();
     hcp HCPSelected = new hcp();
     public List<hcp> ContactDetailsList = new List<hcp>();
-    APICalls database = new APICalls(); 
+    APICalls database = new APICalls();
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
+
     public SingleHCP(hcp SelectedHCP, ObservableCollection<hcp> AllHCPsPassed)
 	{
-		InitializeComponent();
-        HCPSelected = SelectedHCP;
-        AllUserHCPs = AllHCPsPassed;
+        try
+        {
+            InitializeComponent();
+            HCPSelected = SelectedHCP;
+            AllUserHCPs = AllHCPsPassed;
 
-        Namelbl.Text = HCPSelected.fullname;
-        Rolelbl.Text = HCPSelected.role;
-        locationlbl.Text = HCPSelected.locationname;
+            Namelbl.Text = HCPSelected.fullname;
+            Rolelbl.Text = HCPSelected.role;
+            locationlbl.Text = HCPSelected.locationname;
 
-        PopulateContactDetails();
-        GetAppointments();
-
+            PopulateContactDetails();
+            GetAppointments();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 
     public void PopulateContactDetails()
@@ -127,7 +150,7 @@ public partial class SingleHCP : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -183,7 +206,7 @@ public partial class SingleHCP : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -192,52 +215,77 @@ public partial class SingleHCP : ContentPage
         //Edit HCP
         try
         {
-            bool IsEdit = true;
-            await Navigation.PushAsync(new AddHCPs(AllUserHCPs, IsEdit, HCPSelected), false); 
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Limit No. of Taps 
+                Editbtn.IsEnabled = false;
+                bool IsEdit = true;
+                await Navigation.PushAsync(new AddHCPs(AllUserHCPs, IsEdit, HCPSelected), false);
+                Editbtn.IsEnabled = true;
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            } 
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
-
     }
 
     async private void Button_Clicked(object sender, EventArgs e)
     {
         try
         {
-            var Result = await DisplayAlert("Delete HCP", "Are you sure you would like to delete this HCP? Once Deleted it cannot be retrieved.", "Accept", "Decline");
-            if (Result)
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                //Accept
-                HCPSelected.deleted = true; 
-                await database.DeleteUserHCP(HCPSelected);
-                AllUserHCPs.Remove(HCPSelected);
-
-                await MopupService.Instance.PushAsync(new PopupPageHelper("HCP Deleted") { });
-                await Task.Delay(1500);
-
-                await Navigation.PushAsync(new HCPs(AllUserHCPs), false);
-
-                var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is HCPs);
-                if (pageToRemoves != null)
+                //Limit No. of Taps 
+                Deletebtn.IsEnabled = false;
+                var Result = await DisplayAlert("Delete HCP", "Are you sure you would like to delete this HCP? Once Deleted it cannot be retrieved.", "Accept", "Decline");
+                if (Result)
                 {
+                    //Accept
+                    HCPSelected.deleted = true;
+                    await database.DeleteUserHCP(HCPSelected);
+                    AllUserHCPs.Remove(HCPSelected);
 
-                    Navigation.RemovePage(pageToRemoves);
+                    await MopupService.Instance.PushAsync(new PopupPageHelper("HCP Deleted") { });
+                    await Task.Delay(1500);
+
+                    await Navigation.PushAsync(new HCPs(AllUserHCPs), false);
+
+                    var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is HCPs);
+                    if (pageToRemoves != null)
+                    {
+
+                        Navigation.RemovePage(pageToRemoves);
+                    }
+                    Navigation.RemovePage(this);
+
+                    await MopupService.Instance.PopAllAsync(false);
                 }
-                Navigation.RemovePage(this);
-
-                await MopupService.Instance.PopAllAsync(false);
+                else
+                {
+                    //Decline 
+                    Deletebtn.IsEnabled = true;
+                    return;
+                }
             }
             else
             {
-                //Decline 
-                return; 
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
             }
-
         }
         catch (Exception Ex)
-        { 
+        {
+            NotasyncMethod(Ex);
         }
     }
 
@@ -245,25 +293,46 @@ public partial class SingleHCP : ContentPage
     {
         try
         {
-            var SelectedAppoint = e.DataItem as appointment;
-            await Navigation.PushAsync(new AppointmentFeedback(SelectedAppoint), false);
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                var SelectedAppoint = e.DataItem as appointment;
+                await Navigation.PushAsync(new AppointmentFeedback(SelectedAppoint), false);
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
-   async private void HistoricalListview_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
+    async private void HistoricalListview_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
     {
         try
         {
-            var SelectedAppoint = e.DataItem as appointment;
-            await Navigation.PushAsync(new AppointmentFeedback(SelectedAppoint), false);
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Limit No. of Taps 
+                var SelectedAppoint = e.DataItem as appointment;
+                await Navigation.PushAsync(new AppointmentFeedback(SelectedAppoint), false);
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -271,11 +340,24 @@ public partial class SingleHCP : ContentPage
     {
         try
         {
-            await Navigation.PushAsync(new AddAppointment(HCPSelected, AllUserHCPs), false);
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Limit No. of Taps 
+                NoAppointFrame.IsEnabled = false;
+                await Navigation.PushAsync(new AddAppointment(HCPSelected, AllUserHCPs), false);
+                NoAppointFrame.IsEnabled = true;
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 }

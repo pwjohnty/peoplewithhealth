@@ -9,19 +9,47 @@ public partial class SearchAddMeasurement : ContentPage
     public ObservableCollection<measurement> Measurements = new ObservableCollection<measurement>();
     public ObservableCollection<usermeasurement> UserMeasurements = new ObservableCollection<usermeasurement>();
     public ObservableCollection<measurement> SortedMeasurements = new ObservableCollection<measurement>();
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
+
     public SearchAddMeasurement()
 	{
-		InitializeComponent();
+        try
+        {
+            InitializeComponent();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
 	}
 
     public SearchAddMeasurement(ObservableCollection<usermeasurement> usermeasurementlist)
     {
-        InitializeComponent();
-
-        UserMeasurements = usermeasurementlist;
-
-        getmeasurementlist();
-
+        try
+        {
+            InitializeComponent();
+            UserMeasurements = usermeasurementlist;
+            getmeasurementlist();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 
     async void getmeasurementlist()
@@ -56,9 +84,9 @@ public partial class SearchAddMeasurement : ContentPage
             datastack.IsVisible = true;
 
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
 
     }
@@ -68,12 +96,11 @@ public partial class SearchAddMeasurement : ContentPage
         try
         {
             var item = e.DataItem as measurement;
-
             await Navigation.PushAsync(new AddMeasurement(item, UserMeasurements, Measurements), false);
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 }

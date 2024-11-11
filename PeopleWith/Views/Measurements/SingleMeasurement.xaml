@@ -68,7 +68,7 @@ Padding="0">
       
                 </chart:SfCartesianChart>
 
-                <Button
+                <Button x:Name="AddBtn"
 BackgroundColor="#031926"
 HorizontalOptions="FillAndExpand"
 TextColor="White"

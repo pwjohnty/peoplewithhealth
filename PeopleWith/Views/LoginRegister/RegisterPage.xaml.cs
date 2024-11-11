@@ -36,11 +36,30 @@ public partial class RegisterPage : ContentPage
     consent additionalconsent = new consent();
     ObservableCollection<symptom> allsymptomlist = new ObservableCollection<symptom>();
     ObservableCollection<medication> allmedicationlist = new ObservableCollection<medication>();
-    int progresstoupdate = 11; 
+    int progresstoupdate = 11;
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
+
     public RegisterPage()
 	{
-		InitializeComponent();
+        try
+        {
 
+        InitializeComponent();
 
         genlist.Add("Male");
         genlist.Add("Female");
@@ -88,7 +107,11 @@ public partial class RegisterPage : ContentPage
             BackProgress();
         });
 
-
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 
     private void firstpasswordentry_TextChanged(object sender, TextChangedEventArgs e)
@@ -97,8 +120,6 @@ public partial class RegisterPage : ContentPage
         {
 
             string password = e.NewTextValue;
-
-    
 
             // Check each requirement and update the UI
             bool hasMinChars = password.Length >= 8;
@@ -120,7 +141,7 @@ public partial class RegisterPage : ContentPage
         }
         catch (Exception ex)
         {
-
+          //Leave Empty
         }
     }
 
@@ -135,43 +156,58 @@ public partial class RegisterPage : ContentPage
     {
         try
         {
-
-            if(emailframe.IsVisible == true)
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                Handleemailframe();               
+                //Limit No. of Taps 
+                nextbtn.IsEnabled = false;
+                if (emailframe.IsVisible == true)
+                {
+                    Handleemailframe();
+                    nextbtn.IsEnabled = true;
+                }
+                else if (confirmemailframe.IsVisible == true)
+                {
+                    Handleconfirmemailframe();
+                    nextbtn.IsEnabled = true;
+                }
+                else if (signupcodeframe.IsVisible == true)
+                {
+                    Handlesignupcodeframe();
+                    nextbtn.IsEnabled = true;
+                }
+                else if (signupinfostack.IsVisible == true)
+                {
+                    Handlesignupinfoframe();
+                    nextbtn.IsEnabled = true;
+                }
+                else if (genderframe.IsVisible == true)
+                {
+                    Handlegenderframe();
+                    nextbtn.IsEnabled = true;
+                }
+                else if (dobstack.IsVisible == true)
+                {
+                    Handledobframe();
+                    nextbtn.IsEnabled = true;
+                }
+                else if (ethstack.IsVisible == true)
+                {
+                    Handleethnicityframe();
+                    nextbtn.IsEnabled = true;
+                }
             }
-            else if(confirmemailframe.IsVisible == true)
+            else
             {
-                Handleconfirmemailframe();
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
             }
-            else if(signupcodeframe.IsVisible == true)
-            {
-                Handlesignupcodeframe();
-            }
-            else if(signupinfostack.IsVisible == true)
-            {
-                Handlesignupinfoframe();
-            }
-            else if(genderframe.IsVisible == true)
-            {
-                Handlegenderframe();
-            }
-            else if(dobstack.IsVisible == true)
-            {
-                Handledobframe();
-            }
-            else if(ethstack.IsVisible == true)
-            {
-                Handleethnicityframe();
-            }
-         
-
-
-
+        
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 

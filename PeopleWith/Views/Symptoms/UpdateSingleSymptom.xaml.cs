@@ -25,13 +25,15 @@ public partial class UpdateSingleSymptom : ContentPage
     string triggORInter;
     string EditAdd;
     string feedbackid;
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
 
     async public void NotasyncMethod(Exception Ex)
     {
         try
         {
-            NotasyncMethod(Ex);
             await crashHandler.CrashDetectedSend(Ex);
         }
         catch (Exception ex)
@@ -40,9 +42,17 @@ public partial class UpdateSingleSymptom : ContentPage
         }
     }
 
+
     public UpdateSingleSymptom()
     {
-        InitializeComponent();
+        try
+        {
+            InitializeComponent();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
     public UpdateSingleSymptom(ObservableCollection<usersymptom> SymptomPassed, String AddEdit, ObservableCollection<usersymptom> AllSymptomData)
     {
@@ -372,152 +382,163 @@ public partial class UpdateSingleSymptom : ContentPage
     {
         try
         {
-            SelectedDate = adddatepicker.Date.ToString("dd/MM/yyyy");
-            SelectedTime = addtimepicker.Time.ToString();
-            if (TriggersStack.IsVisible == true)
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                triggORInter = "Trigger";
-            }
-            else if (InterventionsStack.IsVisible == true)
-            {
-                triggORInter = "Intervention";
-            }
-            if (String.IsNullOrEmpty(Notes.Text) || Notes.Text == null)
-            {
-                NotesEntry = null;
-            }
-            else
-            {
-                NotesEntry = Notes.Text.ToString();
-            }
-
-            //Update Feedback
-            var items = new symptomfeedback();
-            if (string.IsNullOrEmpty(SelectedDate) || SelectedDate == null)
-            {
-                var Date = DateTime.Now;
-                SelectedDate = Date.ToString("dd/MM/yyyy");
-            }
-            if (string.IsNullOrEmpty(SelectedTime) || SelectedTime == null)
-            {
-                var time = DateTime.Now;
-                SelectedTime = time.ToString("HH:mm:ss");
-            }
-            items.timestamp = SelectedDate + " " + SelectedTime;
-            Guid newUUID = Guid.NewGuid();
-            if (EditAdd == "Add")
-            {
-                items.symptomfeedbackid = newUUID.ToString().ToUpper();
-            }
-            else
-            {
-                items.symptomfeedbackid = EditAdd;
-            }
-               
-            items.intensity = SliderValue;
-            items.notes = NotesEntry;
-            if (triggORInter == "Trigger")
-            {
-                Triggerss.Clear(); 
-                foreach (var itemx in TriggerChips)
+                //Limit No. of Taps 
+                UpdateBtn.IsEnabled = false;
+                SelectedDate = adddatepicker.Date.ToString("dd/MM/yyyy");
+                SelectedTime = addtimepicker.Time.ToString();
+                if (TriggersStack.IsVisible == true)
                 {
-                    var itemtoadd = itemx.title.ToString();
-                    Triggerss.Add(itemtoadd);
+                    triggORInter = "Trigger";
                 }
-                if (Triggerss.Count == 0)
+                else if (InterventionsStack.IsVisible == true)
                 {
-                    items.triggers = null;
+                    triggORInter = "Intervention";
+                }
+                if (String.IsNullOrEmpty(Notes.Text) || Notes.Text == null)
+                {
+                    NotesEntry = null;
                 }
                 else
                 {
-                    List<string> NoDuplicates = Triggerss.Distinct().ToList();
-                    string trig = string.Join(",", NoDuplicates);
-                    items.triggers = trig;
+                    NotesEntry = Notes.Text.ToString();
                 }
-            }
-            else if (triggORInter == "Intervention")
-            {
-                Intervention.Clear();
-                foreach (var item in InterventionChips)
+
+                //Update Feedback
+                var items = new symptomfeedback();
+                if (string.IsNullOrEmpty(SelectedDate) || SelectedDate == null)
                 {
-                    var itemtoadd = item.title.ToString();
-                    Intervention.Add(itemtoadd);
+                    var Date = DateTime.Now;
+                    SelectedDate = Date.ToString("dd/MM/yyyy");
                 }
-                if (Intervention.Count == 0)
+                if (string.IsNullOrEmpty(SelectedTime) || SelectedTime == null)
                 {
-                    items.interventions = null;
+                    var time = DateTime.Now;
+                    SelectedTime = time.ToString("HH:mm:ss");
+                }
+                items.timestamp = SelectedDate + " " + SelectedTime;
+                Guid newUUID = Guid.NewGuid();
+                if (EditAdd == "Add")
+                {
+                    items.symptomfeedbackid = newUUID.ToString().ToUpper();
                 }
                 else
                 {
-                    List<string> NoDuplicates = Intervention.Distinct().ToList();
-                    string Inter = string.Join(",", NoDuplicates);
-                    items.interventions = Inter;
+                    items.symptomfeedbackid = EditAdd;
                 }
-            }
 
-
-
-            items.duration = Duration;
-            if (EditAdd == "Add")
-            {
-                foreach (var item in PassedSymptom)
+                items.intensity = SliderValue;
+                items.notes = NotesEntry;
+                if (triggORInter == "Trigger")
                 {
-
-                    item.feedback.Add(items);
-                }
-            }
-            else
-            {
-                foreach (var item in PassedSymptom)
-                {
-                    foreach (var i in item.feedback)
+                    Triggerss.Clear();
+                    foreach (var itemx in TriggerChips)
                     {
-                        if (i.symptomfeedbackid == feedbackid)
+                        var itemtoadd = itemx.title.ToString();
+                        Triggerss.Add(itemtoadd);
+                    }
+                    if (Triggerss.Count == 0)
+                    {
+                        items.triggers = null;
+                    }
+                    else
+                    {
+                        List<string> NoDuplicates = Triggerss.Distinct().ToList();
+                        string trig = string.Join(",", NoDuplicates);
+                        items.triggers = trig;
+                    }
+                }
+                else if (triggORInter == "Intervention")
+                {
+                    Intervention.Clear();
+                    foreach (var item in InterventionChips)
+                    {
+                        var itemtoadd = item.title.ToString();
+                        Intervention.Add(itemtoadd);
+                    }
+                    if (Intervention.Count == 0)
+                    {
+                        items.interventions = null;
+                    }
+                    else
+                    {
+                        List<string> NoDuplicates = Intervention.Distinct().ToList();
+                        string Inter = string.Join(",", NoDuplicates);
+                        items.interventions = Inter;
+                    }
+                }
+
+
+
+                items.duration = Duration;
+                if (EditAdd == "Add")
+                {
+                    foreach (var item in PassedSymptom)
+                    {
+
+                        item.feedback.Add(items);
+                    }
+                }
+                else
+                {
+                    foreach (var item in PassedSymptom)
+                    {
+                        foreach (var i in item.feedback)
                         {
-                            i.intensity = items.intensity;
-                            i.notes = items.notes;
-                            i.timestamp = items.timestamp;
-                            i.interventions = items.interventions;
-                            i.triggers = items.triggers;
-                            i.duration = items.duration;
+                            if (i.symptomfeedbackid == feedbackid)
+                            {
+                                i.intensity = items.intensity;
+                                i.notes = items.notes;
+                                i.timestamp = items.timestamp;
+                                i.interventions = items.interventions;
+                                i.triggers = items.triggers;
+                                i.duration = items.duration;
+                            }
                         }
                     }
                 }
-            }
 
-            APICalls database = new APICalls();
-            await database.PutSymptomAsync(PassedSymptom);
-            //   await Navigation.PushAsync(new SingleSymptom(PassedSymptom, AllSymptomDataPassed));
-            await MopupService.Instance.PushAsync(new PopupPageHelper("Symptom Data Added") { });
-            await Task.Delay(1500);
-            await Navigation.PushAsync(new AllSymptoms(AllSymptomDataPassed));
-            await MopupService.Instance.PopAllAsync(false);
-            var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is SingleSymptom);
-            var pageToRemove = Navigation.NavigationStack.FirstOrDefault(x => x is AllSymptoms);
-         
-            if (pageToRemoves != null)
-            {
-                Navigation.RemovePage(pageToRemoves);
-            }
-            if (pageToRemove != null)
-            {
-                Navigation.RemovePage(pageToRemove);
-            }
+                APICalls database = new APICalls();
+                await database.PutSymptomAsync(PassedSymptom);
+                //   await Navigation.PushAsync(new SingleSymptom(PassedSymptom, AllSymptomDataPassed));
+                await MopupService.Instance.PushAsync(new PopupPageHelper("Symptom Data Added") { });
+                await Task.Delay(1500);
+                await Navigation.PushAsync(new AllSymptoms(AllSymptomDataPassed));
+                await MopupService.Instance.PopAllAsync(false);
+                var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is SingleSymptom);
+                var pageToRemove = Navigation.NavigationStack.FirstOrDefault(x => x is AllSymptoms);
 
-            if (EditAdd != "Add")
-            {
-                var RemovedPage = Navigation.NavigationStack.FirstOrDefault(x => x is ShowAllSymptomData);
-                if (RemovedPage != null)
+                if (pageToRemoves != null)
                 {
-                    Navigation.RemovePage(RemovedPage);
-                } 
-            }
-            Navigation.RemovePage(this);
+                    Navigation.RemovePage(pageToRemoves);
+                }
+                if (pageToRemove != null)
+                {
+                    Navigation.RemovePage(pageToRemove);
+                }
 
+                if (EditAdd != "Add")
+                {
+                    var RemovedPage = Navigation.NavigationStack.FirstOrDefault(x => x is ShowAllSymptomData);
+                    if (RemovedPage != null)
+                    {
+                        Navigation.RemovePage(RemovedPage);
+                    }
+                }
+                Navigation.RemovePage(this);
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
         }
         catch (Exception Ex)
         {
-            await crashHandler.CrashDetectedSend(Ex); 
+            NotasyncMethod(Ex);
         }
     }
     private void DurationPicker_SelectionChanged(object sender, Syncfusion.Maui.Picker.TimePickerSelectionChangedEventArgs e)

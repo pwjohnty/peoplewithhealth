@@ -13,6 +13,9 @@ public partial class CompareSymptoms : ContentPage
     public ObservableCollection<ChipItem> ChipItems { get; set; }
     string CurrentChip;
     string DateRangetxt;
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
 
     async public void NotasyncMethod(Exception Ex)
@@ -26,6 +29,7 @@ public partial class CompareSymptoms : ContentPage
             //Dunno 
         }
     }
+
     protected override void OnDisappearing()
     {
         try

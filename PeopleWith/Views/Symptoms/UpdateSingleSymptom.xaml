@@ -306,7 +306,7 @@ HorizontalOptions="FillAndExpand">
             </Frame>
 
 
-            <Button  Text="Update" TextColor="White" Clicked="Button_Clicked" FontSize="16" Margin="20,5,20,35" FontFamily="HankenGroteskBold" BackgroundColor="Orange" CornerRadius="10" />
+            <Button  Text="Update" x:Name="UpdateBtn" TextColor="White" Clicked="Button_Clicked" FontSize="16" Margin="20,5,20,35" FontFamily="HankenGroteskBold" BackgroundColor="Orange" CornerRadius="10" />
 
             <popup:SfPopup x:Name="Schedulepopup" IsOpen="False" Closed="Schedulepopup_Closed"  AnimationMode="Fade"   AutoSizeMode="Height"
                VerticalOptions="CenterAndExpand" 

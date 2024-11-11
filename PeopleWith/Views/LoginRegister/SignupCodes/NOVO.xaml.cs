@@ -21,34 +21,63 @@ public partial class NOVO : ContentPage
     List<string> commprefaddedlist = new List<string>();
     ObservableCollection<usermeasurement> usermeasurementlist = new ObservableCollection<usermeasurement>();
     public consent additonalconsent = new consent();
-    string CommandPassed; 
+    string CommandPassed;
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
+
     public NOVO()
 	{
-		InitializeComponent();
-
-        heightinput = "Ft";
+        try
+        {
+            InitializeComponent();
+            heightinput = "Ft";
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        } 
     }
 
     public NOVO(user userp, double progressp, signupcode signupcodep, ObservableCollection<question> requestions, ObservableCollection<answer> reganswers, consent addtionalcon)
     {
-        InitializeComponent();
+        try
+        {
+            InitializeComponent();
 
-        heightinput = "Ft";
+            heightinput = "Ft";
 
-        userpassed = userp;
-        progresspassed = progressp;
+            userpassed = userp;
+            progresspassed = progressp;
 
-        topprogress.SetProgress(progresspassed, 0);
-        signupcodepassed = signupcodep;
+            topprogress.SetProgress(progresspassed, 0);
+            signupcodepassed = signupcodep;
 
-        regquestionlist = requestions;
-        reganswerlist = reganswers;
+            regquestionlist = requestions;
+            reganswerlist = reganswers;
 
-        additonalconsent = addtionalcon;
+            additonalconsent = addtionalcon;
 
 
-        extidlbl.Text = signupcodepassed.externalidentifier;
-
+            extidlbl.Text = signupcodepassed.externalidentifier;
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 
     private void SfLinearGauge_LabelCreated(object sender, Syncfusion.Maui.Gauges.LabelCreatedEventArgs e)
@@ -84,7 +113,7 @@ public partial class NOVO : ContentPage
         }
         catch (Exception ex)
         {
-
+            //Leave Empty
         }
     }
 
@@ -114,8 +143,8 @@ public partial class NOVO : ContentPage
         }
         catch (Exception ex)
         {
+            //Leave Empty
         }
-
     }
 
     private void weightgauge_LabelCreated(object sender, Syncfusion.Maui.Gauges.LabelCreatedEventArgs e)
@@ -180,7 +209,7 @@ public partial class NOVO : ContentPage
         }
         catch (Exception ex)
         {
-
+           //Leave Empty
         }
     }
 
@@ -211,7 +240,7 @@ public partial class NOVO : ContentPage
         }
         catch (Exception ex)
         {
-
+            //Leave Empty
         }
     }
 
@@ -304,7 +333,7 @@ public partial class NOVO : ContentPage
         }
         catch (Exception ex)
         {
-
+            //Leave Empty
         }
     }
 
@@ -390,7 +419,7 @@ public partial class NOVO : ContentPage
         }
         catch (Exception ex)
         {
-
+            //Leave Empty
         }
     }
 
@@ -398,31 +427,50 @@ public partial class NOVO : ContentPage
     {
         try
         {
-            var Command = (sender) as Button;
-            CommandPassed = Command.CommandParameter.ToString(); 
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Limit No. of Taps 
+                nextbtn.IsEnabled = false;
+                skipbtn.IsEnabled = false;
+                var Command = (sender) as Button;
+                CommandPassed = Command.CommandParameter.ToString();
 
-            if(heightandweightframe.IsVisible == true)
-            {
-                Handleheightandweightframe();
+                if (heightandweightframe.IsVisible == true)
+                {
+                    Handleheightandweightframe();
+                    nextbtn.IsEnabled = true;
+                    skipbtn.IsEnabled = true;
+                }
+                else if (countyframe.IsVisible == true)
+                {
+                    Handlecountyframe();
+                    nextbtn.IsEnabled = true;
+                    skipbtn.IsEnabled = true;
+                }
+                else if (useframe.IsVisible == true)
+                {
+                    Handleuseframe();
+                    nextbtn.IsEnabled = true;
+                    skipbtn.IsEnabled = true;
+                }
+                else if (comprefframe.IsVisible == true)
+                {
+                    Handlecommprefframe();
+                    nextbtn.IsEnabled = true;
+                    skipbtn.IsEnabled = true;
+                }
             }
-            else if (countyframe.IsVisible == true)
+            else
             {
-                Handlecountyframe();
-            }
-            else if(useframe.IsVisible == true)
-            {
-                Handleuseframe();
-            }
-            else if(comprefframe.IsVisible == true)
-            {
-                Handlecommprefframe();
-            }
-           
-
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }        
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -564,9 +612,9 @@ public partial class NOVO : ContentPage
 
 
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -611,16 +659,15 @@ public partial class NOVO : ContentPage
             }
 
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
     async void Handleuseframe()
     {
         try
-        {
-            
+        {           
 
             if(CommandPassed == "Next")
             {
@@ -662,11 +709,10 @@ public partial class NOVO : ContentPage
                 UpdateProgress();
             }
 
-
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -700,41 +746,33 @@ public partial class NOVO : ContentPage
 
 
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
     async void UpdateProgress()
     {
         try
         {
-
             topprogress.Progress = topprogress.Progress += 5;
-
-
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
-
     }
 
     async void BackProgress()
     {
         try
         {
-
             topprogress.Progress = topprogress.Progress -= 5;
-
-
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
-
     }
 
     private void compreflist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
@@ -752,9 +790,9 @@ public partial class NOVO : ContentPage
                 commprefaddedlist.Add(item.answerid);
             }
         }
-        catch(Exception ex )
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -803,13 +841,12 @@ public partial class NOVO : ContentPage
                 Navigation.RemovePage(this);
             }
 
-
-
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
+
     }
 
     async private void TapGestureRecognizer_Tapped_1(object sender, TappedEventArgs e)
@@ -821,7 +858,7 @@ public partial class NOVO : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 }

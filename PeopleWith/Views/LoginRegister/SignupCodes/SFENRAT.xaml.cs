@@ -45,20 +45,47 @@ public partial class SFENRAT : ContentPage
 
     user newuser;
     signupcode signupcodeinfo;
+
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
+
     public SFENRAT()
 	{
-		InitializeComponent();
+        try
+        {
+            InitializeComponent();
 
 
-		primaryconditionlist.Add("ACC");
-		primaryconditionlist.Add("PPGL");
+            primaryconditionlist.Add("ACC");
+            primaryconditionlist.Add("PPGL");
 
-		pclist.ItemsSource = primaryconditionlist;
-
+            pclist.ItemsSource = primaryconditionlist;
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
 	}
 
     public SFENRAT(user userp, ObservableCollection<symptom> symtpomsp, ObservableCollection<medication> medicationsp, signupcode signupcodeinfop, double progressp, ObservableCollection<question> requestions, ObservableCollection<answer> reganswers, consent addtionalcon)
     {
+        try
+        {
+
         InitializeComponent();
 
         topprogress.SetProgress(progressp + 6, 0);
@@ -138,7 +165,11 @@ public partial class SFENRAT : ContentPage
 
             compreflist.ItemsSource = GetCommPref;
         }
-
+       }
+       catch (Exception Ex)
+       {
+            NotasyncMethod(Ex);
+       }
     }
 
 
@@ -166,10 +197,10 @@ public partial class SFENRAT : ContentPage
 			notbtn.FontFamily = "HankenGroteskRegular";
 
         }
-		catch(Exception ex)
-		{
-
-		}
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 
     private void notbtn_Clicked(object sender, EventArgs e)
@@ -194,10 +225,10 @@ public partial class SFENRAT : ContentPage
             yesbtn.TextColor = Colors.Gray;
             yesbtn.FontFamily = "HankenGroteskRegular";
         }
-		catch(Exception ex)
-		{
-
-		}
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 
     private void dateEntry_TextChanged(object sender, TextChangedEventArgs e)
@@ -310,7 +341,7 @@ public partial class SFENRAT : ContentPage
         }
         catch (Exception ex)
         {
-
+            //Leave Empty
         }
     }
 
@@ -331,7 +362,7 @@ public partial class SFENRAT : ContentPage
         }
         catch(Exception ex)
         {
-
+            //Leave Empty
         }
     }
 
@@ -373,7 +404,7 @@ public partial class SFENRAT : ContentPage
         }
         catch(Exception ex)
         {
-
+            //Leave Empty
         }
     }
 
@@ -410,16 +441,11 @@ public partial class SFENRAT : ContentPage
             {
                 addlbl1.IsVisible = true;
                 additionalsymptomchiplistnrat.IsVisible = true;
-            }
-
-           
-
-
-
+            }           
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -444,7 +470,7 @@ public partial class SFENRAT : ContentPage
         }
         catch(Exception ex)
         {
-
+            //Leave Empty
         }
     }
 
@@ -519,7 +545,7 @@ public partial class SFENRAT : ContentPage
         }
         catch (Exception ex)
         {
-
+            //Leave Empty
         }
     }
 
@@ -540,7 +566,7 @@ public partial class SFENRAT : ContentPage
         }
         catch (Exception ex)
         {
-
+            //Leave Empty
         }
     }
 
@@ -548,40 +574,66 @@ public partial class SFENRAT : ContentPage
     {
         try
         {
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Limit No. of Taps 
+                nextbtn.IsEnabled = false;
+                skipbtn.IsEnabled = false; 
+                var GetCommand = (sender) as Button;
+                CommandPassed = GetCommand.CommandParameter.ToString();
 
-            var GetCommand = (sender) as Button;
-            CommandPassed = GetCommand.CommandParameter.ToString();
+                //next button
+                if (primaryconframe.IsVisible == true)
+                {
+                    Handleprimaryconframe();
+                    nextbtn.IsEnabled = true;
+                    skipbtn.IsEnabled = true; 
+                }
+                else if (dateofdiagframe.IsVisible == true)
+                {
+                    Handledateofdiagframe();
+                    nextbtn.IsEnabled = true;
+                    skipbtn.IsEnabled = true;
+                }
+                else if (symptomsframe.IsVisible == true)
+                {
+                    Handlesymptomsframe();
+                    nextbtn.IsEnabled = true;
+                    skipbtn.IsEnabled = true;
+                }
+                else if (medicationsframe.IsVisible == true)
+                {
+                    Handlemedsframe();
+                    nextbtn.IsEnabled = true;
+                    skipbtn.IsEnabled = true;
+                }
+                else if (ctframe.IsVisible == true)
+                {
+                    Handlectframe();
+                    nextbtn.IsEnabled = true;
+                    skipbtn.IsEnabled = true;
+                }
+                else if (comprefframe.IsVisible == true)
+                {
+                    Handlecomprefframe();
+                    nextbtn.IsEnabled = true;
+                    skipbtn.IsEnabled = true;
+                }               
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
 
-            //next button
-            if (primaryconframe.IsVisible == true)
-            {
-                Handleprimaryconframe();
-            }
-            else if(dateofdiagframe.IsVisible == true)
-            {
-                Handledateofdiagframe();
-            }
-            else if(symptomsframe.IsVisible == true)
-            {
-                Handlesymptomsframe();
-            }
-            else if(medicationsframe.IsVisible == true)
-            {
-                Handlemedsframe();
-            }
-            else if(ctframe.IsVisible == true)
-            {
-                Handlectframe();
-            }
-            else if(comprefframe.IsVisible == true)
-            {
-                Handlecomprefframe();
-            }
+            
 
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -599,9 +651,9 @@ public partial class SFENRAT : ContentPage
             dateofdiagframe.IsVisible = true;
             UpdateProgress();
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -698,13 +750,10 @@ public partial class SFENRAT : ContentPage
 
 
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
-
-
-
     }
 
     async void Handlesymptomsframe()
@@ -751,9 +800,9 @@ public partial class SFENRAT : ContentPage
             UpdateProgress();
 
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -782,9 +831,9 @@ public partial class SFENRAT : ContentPage
 
 
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -831,9 +880,9 @@ public partial class SFENRAT : ContentPage
             UpdateProgress();
 
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -870,9 +919,9 @@ public partial class SFENRAT : ContentPage
             await Navigation.PushAsync(new RegisterFinalPage(newuser, topprogress.Progress, userresponselist, additonalconsent, symptomstoadd, medicationstoadd, userdiag), false);
 
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
     private void pclist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
@@ -894,9 +943,9 @@ public partial class SFENRAT : ContentPage
                 userdiag.diagnosisid = "4561A0CB-7536-4712-9DF9-CE0E4FA5BEC9";
             }
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -904,16 +953,12 @@ public partial class SFENRAT : ContentPage
     {
         try
         {
-
             topprogress.Progress = topprogress.Progress += 6;
-
-
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
-
     }
 
     private void searchmedentry_TextChanged(object sender, TextChangedEventArgs e)
@@ -952,9 +997,9 @@ public partial class SFENRAT : ContentPage
             }
 
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            //Leave Empty
         }
     }
 
@@ -992,15 +1037,10 @@ public partial class SFENRAT : ContentPage
                 addmedlbl1.IsVisible = true;
                 additionalmedicationchiplistnrat.IsVisible = true;
             }
-
-
-
-
-
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -1019,9 +1059,9 @@ public partial class SFENRAT : ContentPage
                 medicationchipselectedlist.Add(item);
             }
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            //Leave Empty
         }
     }
 
@@ -1040,9 +1080,9 @@ public partial class SFENRAT : ContentPage
                 commprefaddedlist.Add(item.answerid);
             }
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -1052,9 +1092,9 @@ public partial class SFENRAT : ContentPage
         {
             topprogress.Progress = topprogress.Progress -= 6;
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -1062,50 +1102,59 @@ public partial class SFENRAT : ContentPage
     {
         try
         {
-            //back button clicked
-            if(comprefframe.IsVisible == true)
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                comprefframe.IsVisible = false;
-                ctframe.IsVisible = true;
-               
-            }
-            else if(ctframe.IsVisible == true)
-            {
-                ctframe.IsVisible = false;
-                medicationsframe.IsVisible = true;
-               
-            }
-            else if(medicationsframe.IsVisible == true)
-            {
-                medicationsframe.IsVisible = false;
-                symptomsframe.IsVisible = true;
-              
-            }
-            else if(symptomsframe.IsVisible == true)
-            {
-                symptomsframe.IsVisible = false;
-                dateofdiagframe.IsVisible = true;
-               
-            }
-            else if(dateofdiagframe.IsVisible == true)
-            {
-                dateofdiagframe.IsVisible = false;
-                primaryconframe.IsVisible = true;
+                //back button clicked
+                if (comprefframe.IsVisible == true)
+                {
+                    comprefframe.IsVisible = false;
+                    ctframe.IsVisible = true;
 
+                }
+                else if (ctframe.IsVisible == true)
+                {
+                    ctframe.IsVisible = false;
+                    medicationsframe.IsVisible = true;
+
+                }
+                else if (medicationsframe.IsVisible == true)
+                {
+                    medicationsframe.IsVisible = false;
+                    symptomsframe.IsVisible = true;
+
+                }
+                else if (symptomsframe.IsVisible == true)
+                {
+                    symptomsframe.IsVisible = false;
+                    dateofdiagframe.IsVisible = true;
+
+                }
+                else if (dateofdiagframe.IsVisible == true)
+                {
+                    dateofdiagframe.IsVisible = false;
+                    primaryconframe.IsVisible = true;
+
+                }
+                else if (primaryconframe.IsVisible == true)
+                {
+                    MessagingCenter.Send<object>(this, "RemoveProgress");
+                    Navigation.RemovePage(this);
+                    return;
+                }
+
+                BackProgress();
             }
-            else if(primaryconframe.IsVisible == true)
+            else
             {
-                MessagingCenter.Send<object>(this, "RemoveProgress");
-                Navigation.RemovePage(this);
-                return;
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
             }
-
-            BackProgress();
-
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -1113,17 +1162,36 @@ public partial class SFENRAT : ContentPage
     {
         try
         {
-            string BackArrow = "PeopleWith";
-            await Navigation.PushAsync(new PrivacyPolicy(BackArrow), false);
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                string BackArrow = "PeopleWith";
+                await Navigation.PushAsync(new PrivacyPolicy(BackArrow), false);
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
+
+
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
     async private void skipbtn_Clicked(object sender, EventArgs e)
     {
-
+        try
+        {
+            InitializeComponent();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 }

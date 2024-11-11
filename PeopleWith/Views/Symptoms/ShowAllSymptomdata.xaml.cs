@@ -9,6 +9,9 @@ public partial class ShowAllSymptomData : ContentPage
     ObservableCollection<symptomfeedback> SymptomFeedback = new ObservableCollection<symptomfeedback>();
     ObservableCollection<symptomfeedback> Feedbacksymptom = new ObservableCollection<symptomfeedback>();
     ObservableCollection<symptomfeedback> itemstoremove = new ObservableCollection<symptomfeedback>();
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
 
     async public void NotasyncMethod(Exception Ex)
@@ -22,9 +25,17 @@ public partial class ShowAllSymptomData : ContentPage
             //Dunno 
         }
     }
+
     public ShowAllSymptomData()
     {
-        InitializeComponent();
+        try
+        {
+            InitializeComponent();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
     public ShowAllSymptomData(ObservableCollection<usersymptom> PassedSymptom, ObservableCollection<symptomfeedback> PassedSymptomFeedback, ObservableCollection<usersymptom> AllSymptoms)
     {
@@ -79,118 +90,134 @@ public partial class ShowAllSymptomData : ContentPage
     {
         try
         {
-           
-            bool hasDateSelected = SymptomFeedback.Any(item => item.DeleteSelected);
-            if (!hasDateSelected)
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                bool DeleteVisible = SymptomFeedback.Any(item => item.DeleteCheck);
+                //Limit No. of Taps 
+                EditBtn.IsEnabled = false;
+                bool hasDateSelected = SymptomFeedback.Any(item => item.DeleteSelected);
+                if (!hasDateSelected)
+                {
+                    bool DeleteVisible = SymptomFeedback.Any(item => item.DeleteCheck);
 
-                if (DeleteVisible)
-                {
-                    deletelbl.IsVisible = false; 
-                    // Set DeleteCheck and DeleteSelected to false for all items in SymptomFeedback
-                    foreach (var item in SymptomFeedback)
+                    if (DeleteVisible)
                     {
-                        item.DeleteCheck = false;
-                        item.DeleteSelected = false;
-                    }
-                    AllDataLV.ItemsSource = SymptomFeedback;
-                    return;
-                }
-                else
-                {
-                    deletelbl.IsVisible = true;
-                    foreach (var item in SymptomFeedback)
-                    {
-                        if (item.symptomfeedbackid == SymptomFeedback[0].symptomfeedbackid)
+                        deletelbl.IsVisible = false;
+                        // Set DeleteCheck and DeleteSelected to false for all items in SymptomFeedback
+                        foreach (var item in SymptomFeedback)
                         {
                             item.DeleteCheck = false;
                             item.DeleteSelected = false;
                         }
-                        else
-                        {
-                            //Set All others to true 
-                            item.DeleteCheck = true;
-                            item.DeleteSelected = false;
-                        }
+                        AllDataLV.ItemsSource = SymptomFeedback;
+                        EditBtn.IsEnabled = true;
+                        return;
                     }
-                    AllDataLV.ItemsSource = SymptomFeedback;
+                    else
+                    {
+                        deletelbl.IsVisible = true;
+                        foreach (var item in SymptomFeedback)
+                        {
+                            if (item.symptomfeedbackid == SymptomFeedback[0].symptomfeedbackid)
+                            {
+                                item.DeleteCheck = false;
+                                item.DeleteSelected = false;
+                            }
+                            else
+                            {
+                                //Set All others to true 
+                                item.DeleteCheck = true;
+                                item.DeleteSelected = false;
+                            }
+                        }
+                        AllDataLV.ItemsSource = SymptomFeedback;
+                        EditBtn.IsEnabled = true;
+                    }
+
+                }
+                else
+                {
+                    bool DeleteMsg = await DisplayAlert("Delete Selected Records", "Are you Sure you Would like to Delete the following Records?, Once Deleted they cannot be retrieved", "Accept", "Decline");
+                    if (DeleteMsg)
+                    {
+                        //Accept
+                        foreach (var item in SymptomPassed)
+                        {
+                            foreach (var x in item.feedback)
+                            {
+                                for (int i = 0; i < SymptomFeedback.Count; i++)
+                                {
+                                    if (SymptomFeedback[i].symptomfeedbackid == x.symptomfeedbackid)
+                                    {
+                                        if (SymptomFeedback[i].DeleteSelected == true)
+                                        {
+                                            itemstoremove.Add(x);
+                                        }
+                                    }
+                                }
+                            }
+                            foreach (var p in itemstoremove)
+                            {
+                                item.feedback.Remove(p);
+                            }
+                        }
+                        foreach (var item in AllSymptomsData)
+                        {
+                            if (item.id == SymptomPassed[0].id)
+                            {
+                                var feedbackToRemove = new List<symptomfeedback>();
+                                foreach (var x in item.feedback)
+                                {
+                                    if (itemstoremove.Contains(x))
+                                    {
+                                        feedbackToRemove.Add(x);
+                                    }
+                                }
+                                foreach (var feedback in feedbackToRemove)
+                                {
+                                    item.feedback.Remove(feedback);
+                                }
+                            }
+                        }
+                        //API CALL
+                        APICalls database = new APICalls();
+                        var userid = Helpers.Settings.UserKey;
+                        await database.PutSymptomAsync(SymptomPassed);
+                        EditBtn.IsEnabled = true;
+                        //Navigate Back to AllSymptoms
+                        await Navigation.PushAsync(new AllSymptoms(AllSymptomsData));
+                        var pageToRemove = Navigation.NavigationStack.FirstOrDefault(x => x is AllSymptoms);
+                        var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is SingleSymptom);
+
+                        if (pageToRemove != null)
+                        {
+                            Navigation.RemovePage(pageToRemove);
+                        }
+                        if (pageToRemoves != null)
+                        {
+                            Navigation.RemovePage(pageToRemoves);
+                        }
+                        Navigation.RemovePage(this);
+                    }
+                    else
+                    {
+                        //Decline 
+                        EditBtn.IsEnabled = true;
+                        return;
+                    }
                 }
 
             }
             else
             {
-                bool DeleteMsg = await DisplayAlert("Delete Selected Records", "Are you Sure you Would like to Delete the following Records?, Once Deleted they cannot be retrieved", "Accept", "Decline");
-                if (DeleteMsg)
-                {
-                    //Accept
-                    foreach (var item in SymptomPassed)
-                    {
-                        foreach (var x in item.feedback)
-                        {
-                            for (int i = 0; i < SymptomFeedback.Count; i++)
-                            {
-                                if (SymptomFeedback[i].symptomfeedbackid == x.symptomfeedbackid)
-                                {
-                                    if (SymptomFeedback[i].DeleteSelected == true)
-                                    {
-                                        itemstoremove.Add(x);
-                                    }
-                                }
-                            }
-                        }
-                        foreach (var p in itemstoremove)
-                        {
-                            item.feedback.Remove(p);
-                        }
-                    }
-                    foreach (var item in AllSymptomsData)
-                    {
-                        if (item.id == SymptomPassed[0].id)
-                        {
-                            var feedbackToRemove = new List<symptomfeedback>();
-                            foreach (var x in item.feedback)
-                            {
-                                if (itemstoremove.Contains(x))
-                                {
-                                    feedbackToRemove.Add(x);
-                                }
-                            }
-                            foreach (var feedback in feedbackToRemove)
-                            {
-                                item.feedback.Remove(feedback);
-                            }
-                        }
-                    }
-                    //API CALL
-                    APICalls database = new APICalls();
-                    var userid = Helpers.Settings.UserKey;
-                    await database.PutSymptomAsync(SymptomPassed);
-                    //Navigate Back to AllSymptoms
-                    await Navigation.PushAsync(new AllSymptoms(AllSymptomsData));
-                    var pageToRemove = Navigation.NavigationStack.FirstOrDefault(x => x is AllSymptoms);
-                    var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is SingleSymptom);
-
-                    if (pageToRemove != null)
-                    {
-                        Navigation.RemovePage(pageToRemove);
-                    }
-                    if (pageToRemoves != null)
-                    {
-                        Navigation.RemovePage(pageToRemoves);
-                    }
-                    Navigation.RemovePage(this);
-                }
-                else
-                {
-                    //Decline 
-                    return;
-                }
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
             }
         }
         catch (Exception Ex)
         {
-            await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
         }
     }
     async private void AllDataLV_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
@@ -245,12 +272,10 @@ public partial class ShowAllSymptomData : ContentPage
                     }
                 }
             }
-
-
         }
         catch (Exception Ex)
         {
-            await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
         }
     }
 }

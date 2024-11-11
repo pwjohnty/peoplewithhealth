@@ -17,13 +17,15 @@ public partial class SingleMeasurement : ContentPage
     ObservableCollection<usermeasurement> deleeteusermeasurementlistpassed = new ObservableCollection<usermeasurement>();
     //List<VerticalLinePoint> verticalLinePoints = new List<VerticalLinePoint>();
     bool newmeasurement;
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
 
     async public void NotasyncMethod(Exception Ex)
     {
         try
         {
-            NotasyncMethod(Ex);
             await crashHandler.CrashDetectedSend(Ex);
         }
         catch (Exception ex)
@@ -46,47 +48,58 @@ public partial class SingleMeasurement : ContentPage
     public SingleMeasurement(measurement measurementp, ObservableCollection<usermeasurement> usermeasurementsp, ObservableCollection<measurement> measurementlistpassed)
     {
         //measurement
+        try
+        {
+            InitializeComponent();
+            measurementpassed = measurementp;
+            usermeasurementlistpassed = usermeasurementsp;
+            measurementlist = measurementlistpassed;
 
-        InitializeComponent();
-        measurementpassed = measurementp;
-        usermeasurementlistpassed = usermeasurementsp;
-        measurementlist = measurementlistpassed;
+            measurementname.Text = measurementpassed.measurementname;
+            newmeasurement = true;
 
-        measurementname.Text = measurementpassed.measurementname;
-        newmeasurement = true;
+            lblvalue.Text = "No Data";
 
-        lblvalue.Text = "No Data";
+            datelbl.Text = "Today";
 
-        datelbl.Text = "Today";
-
-        charticon.IsVisible = false;
+            charticon.IsVisible = false;
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 
     public SingleMeasurement(usermeasurement usermeasurementp, ObservableCollection<usermeasurement> usermeasurementsp, ObservableCollection<measurement> measurementlistpassed)
     {
         //usermeasurement
-
-        InitializeComponent();
-        usermeasurementpassed = usermeasurementp;
-        usermeasurementlistpassed = usermeasurementsp;
-        measurementlist = measurementlistpassed;
-
-        measurementname.Text = usermeasurementpassed.measurementname;
-
-
-        unitlbl.Text = usermeasurementpassed.unit;
-        detailslbl.IsVisible = true;
-        detailsframe.IsVisible = true;
-        showallbtn.IsVisible = true;
-
-        populatechart();
-
-        WeakReferenceMessenger.Default.Register<SendItemMessage>(this, (r, m) =>
+        try
         {
-            usermeasurementlistpassed = (ObservableCollection<usermeasurement>)m.Value;
-            populatechart();
-        });
+            InitializeComponent();
+            usermeasurementpassed = usermeasurementp;
+            usermeasurementlistpassed = usermeasurementsp;
+            measurementlist = measurementlistpassed;
 
+            measurementname.Text = usermeasurementpassed.measurementname;
+
+
+            unitlbl.Text = usermeasurementpassed.unit;
+            detailslbl.IsVisible = true;
+            detailsframe.IsVisible = true;
+            showallbtn.IsVisible = true;
+
+            populatechart();
+
+            WeakReferenceMessenger.Default.Register<SendItemMessage>(this, (r, m) =>
+            {
+                usermeasurementlistpassed = (ObservableCollection<usermeasurement>)m.Value;
+                populatechart();
+            });
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 
     async public Task<int> ConvertFeetInchesToInches(string input)
@@ -104,8 +117,9 @@ public partial class SingleMeasurement : ContentPage
             return totalInches;
         }
         catch (Exception Ex)
-        {      
-            await crashHandler.CrashDetectedSend(Ex);
+        {
+            NotasyncMethod(Ex);
+            //await crashHandler.CrashDetectedSend(Ex);
             return 0;
         }
     }
@@ -150,7 +164,8 @@ public partial class SingleMeasurement : ContentPage
         }
         catch (Exception Ex)
         {
-            await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
+            //await crashHandler.CrashDetectedSend(Ex);
             return 0;
         }
     }
@@ -540,7 +555,8 @@ public partial class SingleMeasurement : ContentPage
         }
         catch(Exception Ex)
         {
-            await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
+            //await crashHandler.CrashDetectedSend(Ex);
         }
     }
 
@@ -561,7 +577,8 @@ public partial class SingleMeasurement : ContentPage
         }
         catch (Exception Ex)
         {
-            await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
+            //await crashHandler.CrashDetectedSend(Ex);
         }
     }
 
@@ -569,18 +586,32 @@ public partial class SingleMeasurement : ContentPage
     {
         try
         {
-            if (newmeasurement)
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                await Navigation.PushAsync(new AddMeasurement(measurementpassed, usermeasurementlistpassed, measurementlist), false);
+                //Limit No. of Taps 
+                AddBtn.IsEnabled = false;
+                if (newmeasurement)
+                {
+                    await Navigation.PushAsync(new AddMeasurement(measurementpassed, usermeasurementlistpassed, measurementlist), false);
+                }
+                else
+                {
+                    await Navigation.PushAsync(new AddMeasurement(usermeasurementpassed, usermeasurementlistpassed, measurementlist), false);
+                }
+                AddBtn.IsEnabled = true;
             }
             else
             {
-                await Navigation.PushAsync(new AddMeasurement(usermeasurementpassed, usermeasurementlistpassed, measurementlist), false);
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
             }
         }
         catch(Exception Ex )
         {
-            await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
+            //await crashHandler.CrashDetectedSend(Ex);
         }
     }
 
@@ -588,13 +619,29 @@ public partial class SingleMeasurement : ContentPage
     {
         try
         {
-            //show all button clicked
-            var usermeasurementalldatalist = new ObservableCollection<usermeasurement>(usermeasurementlistpassed.Where(x => x.measurementid == usermeasurementpassed.measurementid));
-            await Navigation.PushAsync(new ShowAllData(usermeasurementalldatalist, usermeasurementlistpassed, measurementlist), false);
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Limit No. of Taps 
+                showallbtn.IsEnabled = false;
+                //show all button clicked
+                var usermeasurementalldatalist = new ObservableCollection<usermeasurement>(usermeasurementlistpassed.Where(x => x.measurementid == usermeasurementpassed.measurementid));
+                await Navigation.PushAsync(new ShowAllData(usermeasurementalldatalist, usermeasurementlistpassed, measurementlist), false);
+                showallbtn.IsEnabled = true;
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
+
+
         }
         catch(Exception Ex)
         {
-            await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
+            //await crashHandler.CrashDetectedSend(Ex);
         }
     }
 
@@ -603,60 +650,74 @@ public partial class SingleMeasurement : ContentPage
         //Delete Symptom 
         try
         {
-            bool Delete = await DisplayAlert("Delete Measurement", "Are you sure you would like the delete this Measurement? Once deleted it cannot be retrieved", "Delete", "Cancel");
-            if (Delete == true)
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                foreach(var item in usermeasurementlistpassed)
+                //Limit No. of Taps 
+                Deltebtn.IsEnabled = false;
+                bool Delete = await DisplayAlert("Delete Measurement", "Are you sure you would like the delete this Measurement? Once deleted it cannot be retrieved", "Delete", "Cancel");
+                if (Delete == true)
                 {
-                    if(usermeasurementpassed.measurementid == item.measurementid)
+                    foreach (var item in usermeasurementlistpassed)
                     {
-                        item.deleted = true; 
-                        deleeteusermeasurementlistpassed.Add(item); 
+                        if (usermeasurementpassed.measurementid == item.measurementid)
+                        {
+                            item.deleted = true;
+                            deleeteusermeasurementlistpassed.Add(item);
+                        }
                     }
-                }
 
-                foreach(var item in deleeteusermeasurementlistpassed)
+                    foreach (var item in deleeteusermeasurementlistpassed)
+                    {
+                        usermeasurementlistpassed.Remove(item);
+                    }
+                    APICalls database = new APICalls();
+
+                    //    var filteredMeasurements = usermeasurementlistpassed
+                    //.GroupBy(m => m.measurementid)
+                    //.Select(g => g.OrderByDescending(m => DateTime.Parse(m.inputdatetime))
+                    //.First())
+                    //.OrderByDescending(x => DateTime.Parse(x.inputdatetime))
+                    //.ToList();
+
+                    // Convert the filtered and sorted list to an ObservableCollection
+                    ObservableCollection<usermeasurement> observableFilteredMeasurements = new ObservableCollection<usermeasurement>(usermeasurementlistpassed);
+                    await MopupService.Instance.PushAsync(new PopupPageHelper("Measurement Deleted") { });
+
+                    //update main page
+                    //WeakReferenceMessenger.Default.Send(new UpdateListMainPage(observableFilteredMeasurements));
+
+                    await database.DeleteUserMeasurements(deleeteusermeasurementlistpassed);
+
+                    Deltebtn.IsEnabled = true;
+
+                    await Navigation.PushAsync(new MeasurementsPage());
+                    var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(p => p is MeasurementsPage);
+                    if (pageToRemoves != null)
+                    {
+                        Navigation.RemovePage(pageToRemoves);
+                    }
+                    Navigation.RemovePage(this);
+                    await Task.Delay(1500);
+                    await MopupService.Instance.PopAllAsync(false);
+                }
+                else
                 {
-                    usermeasurementlistpassed.Remove(item); 
+                    return;
                 }
-                APICalls database = new APICalls();
-
-            //    var filteredMeasurements = usermeasurementlistpassed
-            //.GroupBy(m => m.measurementid)
-            //.Select(g => g.OrderByDescending(m => DateTime.Parse(m.inputdatetime))
-            //.First())
-            //.OrderByDescending(x => DateTime.Parse(x.inputdatetime))
-            //.ToList();
-
-                // Convert the filtered and sorted list to an ObservableCollection
-                ObservableCollection<usermeasurement> observableFilteredMeasurements = new ObservableCollection<usermeasurement>(usermeasurementlistpassed);
-                await MopupService.Instance.PushAsync(new PopupPageHelper("Measurement Deleted") { });
-
-                //update main page
-                //WeakReferenceMessenger.Default.Send(new UpdateListMainPage(observableFilteredMeasurements));
-
-                await database.DeleteUserMeasurements(deleeteusermeasurementlistpassed);
                
-
-               
-                await Navigation.PushAsync(new MeasurementsPage());
-                var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(p => p is MeasurementsPage);
-                if (pageToRemoves != null)
-                {
-                    Navigation.RemovePage(pageToRemoves);
-                }
-                Navigation.RemovePage(this);
-                await Task.Delay(1500);
-                await MopupService.Instance.PopAllAsync(false);
             }
             else
             {
-                return;
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
             }
         }
         catch (Exception Ex)
         {
-            await crashHandler.CrashDetectedSend(Ex);
-        }   
+            NotasyncMethod(Ex);
+            //await crashHandler.CrashDetectedSend(Ex);
+        }
     }
 }
