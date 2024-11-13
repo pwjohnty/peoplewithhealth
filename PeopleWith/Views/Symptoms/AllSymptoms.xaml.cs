@@ -444,7 +444,7 @@ public partial class AllSymptoms : ContentPage
                 }
                 else
                 {
-                    await Navigation.PushAsync(new UpdateAllSymptoms(AllUserSymptoms));
+                    await Navigation.PushAsync(new UpdateAllSymptoms(AllUserSymptoms, userfeedbacklistpassed));
                 }
                 UpdateFrame.InputTransparent = false; 
             }
@@ -452,7 +452,6 @@ public partial class AllSymptoms : ContentPage
             {
                 var isConnected = accessType == NetworkAccess.Internet;
                 ConnectivityChanged?.Invoke(this, isConnected);
-                await Navigation.PushAsync(new UpdateAllSymptoms(AllUserSymptoms, userfeedbacklistpassed));
             }
 
         }
