@@ -15,6 +15,7 @@ public partial class AllSymptoms : ContentPage
     APICalls aPICalls = new APICalls();
     bool addsymptom;
     CrashDetected crashHandler = new CrashDetected();
+    userfeedback userfeedbacklistpassed = new userfeedback();
 
     async public void NotasyncMethod(Exception Ex)
     {
@@ -41,6 +42,24 @@ public partial class AllSymptoms : ContentPage
             NotasyncMethod(Ex);
         }
       
+    }
+
+    public AllSymptoms(userfeedback userfeedbacklist)
+    {
+        try
+        {
+            InitializeComponent();
+
+            userfeedbacklistpassed = userfeedbacklist;
+
+            GetUserSymptoms();
+            //CrashTest();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+
     }
 
     public AllSymptoms(ObservableCollection<usersymptom> AllSymptoms)
@@ -396,7 +415,7 @@ public partial class AllSymptoms : ContentPage
 
             UserSymptomPassed.Add(item);
 
-            await Navigation.PushAsync(new SingleSymptom(UserSymptomPassed, AllUserSymptoms), false);
+            await Navigation.PushAsync(new SingleSymptom(UserSymptomPassed, AllUserSymptoms, userfeedbacklistpassed), false);
         }
         catch(Exception Ex)
         {
@@ -425,7 +444,7 @@ public partial class AllSymptoms : ContentPage
             }
             else
             {
-                await Navigation.PushAsync(new UpdateAllSymptoms(AllUserSymptoms));
+                await Navigation.PushAsync(new UpdateAllSymptoms(AllUserSymptoms, userfeedbacklistpassed));
             }
 
         }

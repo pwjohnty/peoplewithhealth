@@ -14,6 +14,7 @@ public partial class SingleSymptom : ContentPage
     public ObservableCollection<usersymptom> PassedSymptom = new ObservableCollection<usersymptom>();
     public ObservableCollection<usersymptom> AllSymptomData = new ObservableCollection<usersymptom>();
     CrashDetected crashHandler = new CrashDetected();
+    userfeedback userfeedbacklistpassed = new userfeedback();
 
     async public void NotasyncMethod(Exception Ex)
     {
@@ -34,6 +35,141 @@ public partial class SingleSymptom : ContentPage
         {
             InitializeComponent();
             AllSymptomData = AllSymptoms;
+
+            PassedSymptom = SymptomPassed;
+            lblvalue.Text = PassedSymptom[0].CurrentIntensity;
+            lblunit.Text = PassedSymptom[0].Score;
+            datelbl.Text = PassedSymptom[0].LastUpdated;
+
+            foreach (var item in PassedSymptom)
+            {
+                //if (item.Shorttitle.Contains("..."))
+                //{
+                //    //SymptomTitle.FontSize = 10; 
+                //}
+                //else
+                //{
+                //    //SymptomTitle.FontSize = 20;
+                //}
+                //SymptomTitle.Text = item.symptomtitle;
+                symptomlbl.Text = item.symptomtitle;
+                for (int i = 0; i < item.feedback.Count; i++)
+                {
+                    var AddFB = new symptomfeedback();
+                    DateTime DateTimes = DateTime.Parse(item.feedback[i].timestamp);
+                    string Convert = DateTimes.ToString("dd/MM/yy HH:mm");
+                    AddFB.timestamp = Convert;
+                    AddFB.symptomfeedbackid = item.feedback[i].symptomfeedbackid;
+                    AddFB.intensity = item.feedback[i].intensity;
+
+                    if (String.IsNullOrEmpty(item.feedback[i].interventions))
+                    {
+                        AddFB.interventions = "--";
+                    }
+                    else
+                    {
+                        string input = item.feedback[i].interventions;
+                        string[] items = input.Split(',');
+                        string formattedString = string.Join("\n", items);
+                        AddFB.interventions = formattedString;
+                        AddFB.InterventionBool = true;
+                        AddFB.TriggerBool = false;
+                    }
+                    if (String.IsNullOrEmpty(item.feedback[i].triggers))
+                    {
+                        AddFB.triggers = "--";
+                    }
+                    else
+                    {
+                        string input = item.feedback[i].triggers;
+                        string[] items = input.Split(',');
+                        string formattedString = string.Join("\n", items);
+                        AddFB.triggers = formattedString;
+                        AddFB.InterventionBool = false;
+                        AddFB.TriggerBool = true;
+                    }
+                    if (String.IsNullOrEmpty(item.feedback[i].notes) || item.feedback[i].notes == "null")
+                    {
+                        AddFB.notes = "--";
+                    }
+                    else
+                    {
+                        AddFB.notes = item.feedback[i].notes;
+                    }
+                    if (String.IsNullOrEmpty(item.feedback[i].duration) || item.feedback[i].duration == "null" || item.feedback[i].duration == "00 Hours 00 Minutes" || item.feedback[i].duration == "No Duration")
+                    {
+                        AddFB.duration = "--";
+                    }
+                    else
+                    {
+                        var split = item.feedback[i].duration;
+                        var splits = split.Split(' ');
+                        AddFB.duration = splits[0] + "H " + splits[2] + "m";
+                    }
+                    SymptomFeedback.Add(AddFB);
+                }
+            }
+
+            var firstSymptomFeedback = SymptomFeedback
+        .OrderBy(f => DateTime.Parse(f.timestamp))
+        .FirstOrDefault();
+            SingleSymptomFeedback.Add(firstSymptomFeedback);
+
+            if (SymptomFeedback.Count > 1)
+            {
+                var allIntensities = new List<int>();
+                foreach (var item in SymptomFeedback)
+                {
+                    allIntensities.Add(Int32.Parse(item.intensity));
+                }
+                int largest = allIntensities.Max();
+                int smallest = allIntensities.Min();
+                double average = allIntensities.Average();
+                Lowestlbl.Text = smallest.ToString();
+                Highestlbl.Text = largest.ToString();
+                Averagelbl.Text = average.ToString("F0");
+                int num = SymptomFeedback.Count - 2;
+                Percentagelbl.Text = SymptomFeedback[num].intensity;
+            }
+            else
+            {
+                Highestlbl.Text = "N/A";
+                Lowestlbl.Text = "N/A";
+                Averagelbl.Text = "N/A";
+                Percentagelbl.Text = "N/A";
+            }
+            foreach (var item in SymptomFeedback)
+            {
+                if (String.IsNullOrEmpty(item.triggers) || item.triggers != "--")
+                {
+
+                    TriggersFeedback.Add(item);
+
+                }
+                if (String.IsNullOrEmpty(item.interventions) || item.interventions != "--")
+                {
+
+                    InterventionsFeedback.Add(item);
+
+                }
+            }
+
+
+            ConfigureChart();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    public SingleSymptom(ObservableCollection<usersymptom> SymptomPassed, ObservableCollection<usersymptom> AllSymptoms, userfeedback userfeedbacklist)
+    {
+        try
+        {
+            InitializeComponent();
+            AllSymptomData = AllSymptoms;
+            userfeedbacklistpassed = userfeedbacklist;
 
             PassedSymptom = SymptomPassed;
             lblvalue.Text = PassedSymptom[0].CurrentIntensity;
@@ -235,7 +371,7 @@ public partial class SingleSymptom : ContentPage
         try
         {
             var AddData = "Add";
-            await Navigation.PushAsync(new UpdateSingleSymptom(PassedSymptom, AddData, AllSymptomData));
+            await Navigation.PushAsync(new UpdateSingleSymptom(PassedSymptom, AddData, AllSymptomData, userfeedbacklistpassed));
         }
         catch (Exception Ex)
         {

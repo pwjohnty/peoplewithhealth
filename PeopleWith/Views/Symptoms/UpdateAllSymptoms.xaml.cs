@@ -12,6 +12,7 @@ public partial class UpdateAllSymptoms : ContentPage
     string SelectedDate;
     string previous;
     CrashDetected crashHandler = new CrashDetected();
+    userfeedback userfeedbacklistpassed = new userfeedback();
 
     async public void NotasyncMethod(Exception Ex)
     {
@@ -67,6 +68,45 @@ public partial class UpdateAllSymptoms : ContentPage
             NotasyncMethod(Ex); 
         }
     }
+
+    public UpdateAllSymptoms(ObservableCollection<usersymptom> AllUserSymptoms, userfeedback userfeedbacklist)
+    {
+        try
+        {
+            InitializeComponent();
+            UserSymptomsPassed = AllUserSymptoms;
+            userfeedbacklistpassed = userfeedbacklist;
+
+            foreach (var item in UserSymptomsPassed)
+            {
+                item.Enabled = false;
+                item.Opacity = 0.5;
+                item.Slidervalue = Convert.ToDouble(item.CurrentIntensity);
+                item.SlidervalueUA = Convert.ToDouble(item.CurrentIntensity);
+                item.CurrentIntensityUA = item.CurrentIntensity;
+                var dt = DateTime.Parse(item.feedback[item.feedback.Count - 1].timestamp).ToString("dd MMM, HH:mm");
+                item.DateUpdatedAll = "Last updated: " + dt;
+            }
+            Datelbl.Text = DateTime.Now.ToString("dd MMM");
+            Timelbl.Text = DateTime.Now.ToString("HH:mm");
+            addtimepicker.Time = DateTime.Now.TimeOfDay;
+
+            if (DeviceInfo.Platform == DevicePlatform.iOS)
+            {
+                SymptomUpdateLV.HeightRequest = UserSymptomsPassed.Count * 100;
+            }
+            var sortedSymptoms = UserSymptomsPassed.OrderByDescending(f => DateTime.Parse(f.LastUpdated)).ToList();
+            SymptomUpdateLV.ItemsSource = UserSymptomsPassed;
+            //change visual state on page load, as button is not updating;
+            UpdateBtn.IsEnabled = true;
+            UpdateBtn.IsEnabled = false;
+
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
     private void SfSlider_ValueChanged(object sender, Syncfusion.Maui.Sliders.SliderValueChangedEventArgs e)
     {
         try
@@ -98,7 +138,9 @@ public partial class UpdateAllSymptoms : ContentPage
     {
         try
         {
-            UpdateBtn.IsEnabled = false; 
+            UpdateBtn.IsEnabled = false;
+            var allfeedback = new ObservableCollection<userfeedback>();
+
                     foreach (var symptom in UserSymptomsPassed)
                     {
 
@@ -117,12 +159,29 @@ public partial class UpdateAllSymptoms : ContentPage
                             items.interventions = null;
                             items.duration = null;
                             symptom.feedback.Add(items);
-                            SymptomUpdateNewlist.Add(symptom);                          
+                            SymptomUpdateNewlist.Add(symptom);
+
+
+                    var newsym = new feedbackdata();
+                    newsym.value = symptom.Slidervalue.ToString(); ;
+                    newsym.datetime = items.timestamp;
+                    newsym.action = "update";
+                    newsym.label = symptom.symptomtitle;
+
+                    userfeedbacklistpassed.symptomfeedbacklist.Add(newsym);
+
+
                         }               
-            }
+                    }
             //Need Loading Screen
             APICalls database = new APICalls();
             await database.UpdateAll(SymptomUpdateNewlist);
+
+            string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.symptomfeedbacklist);
+            userfeedbacklistpassed.symptomfeedback = newsymJson;
+
+
+            await database.UserfeedbackUpdateSymptomData(userfeedbacklistpassed);
 
             await MopupService.Instance.PushAsync(new PopupPageHelper("Symptoms Updated") { });
             await Task.Delay(1500);
