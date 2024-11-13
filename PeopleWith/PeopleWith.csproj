@@ -98,6 +98,7 @@
 	  <None Remove="Resources\Images\diagnosisicon2022.png" />
 	  <None Remove="Resources\Images\doctor.png" />
 	  <None Remove="Resources\Images\downarrow.png" />
+	  <None Remove="Resources\Images\equal.png" />
 	  <None Remove="Resources\Images\erroricon.png" />
 	  <None Remove="Resources\Images\faceid.png" />
 	  <None Remove="Resources\Images\filtergray.png" />
@@ -106,10 +107,12 @@
 	  <None Remove="Resources\Images\fingerprint.png" />
 	  <None Remove="Resources\Images\happy.png" />
 	  <None Remove="Resources\Images\hcphome.png" />
+	  <None Remove="Resources\Images\healthreporticon.png" />
 	  <None Remove="Resources\Images\icondate.png" />
 	  <None Remove="Resources\Images\icondatepicker.png" />
 	  <None Remove="Resources\Images\icontime.png" />
 	  <None Remove="Resources\Images\icontimepicker.png" />
+	  <None Remove="Resources\Images\imageicon.png" />
 	  <None Remove="Resources\Images\laughing.png" />
 	  <None Remove="Resources\Images\link.png" />
 	  <None Remove="Resources\Images\location.png" />
@@ -131,11 +134,13 @@
 	  <None Remove="Resources\Images\notes.png" />
 	  <None Remove="Resources\Images\notificationicon.png" />
 	  <None Remove="Resources\Images\pdf.png" />
+	  <None Remove="Resources\Images\pdficon.png" />
 	  <None Remove="Resources\Images\peoplewithlogoanimation.gif" />
 	  <None Remove="Resources\Images\pillicon.png" />
 	  <None Remove="Resources\Images\pincode.png" />
 	  <None Remove="Resources\Images\pinicon.png" />
 	  <None Remove="Resources\Images\playbutton.png" />
+	  <None Remove="Resources\Images\profileicon.png" />
 	  <None Remove="Resources\Images\pwlogo.png" />
 	  <None Remove="Resources\Images\pwregbackgroundlight.png" />
 	  <None Remove="Resources\Images\questionnairehome.png" />
@@ -168,7 +173,9 @@
 	  <None Remove="Resources\Images\update.png" />
 	  <None Remove="Resources\Images\updateicon.png" />
 	  <None Remove="Resources\Images\usericon.png" />
+	  <None Remove="Resources\Images\videoicon.png" />
 	  <None Remove="Resources\Images\warningicon.png" />
+	  <None Remove="Resources\Images\webicon.png" />
 	  <None Remove="Resources\Raw\success.json" />
 	  <None Remove="Resources\Splash\splashpw.svg" />
 	</ItemGroup>

@@ -35,6 +35,23 @@ namespace PeopleWith
 
         public string externalidentifier { get; set; }
 
+        public string dashboardimage { get; set; }
+
+        public string sitetitle { get; set; }
+
+        public bool studyopen { get; set; }
+
+        public string conditiondetails { get; set; }
+
+        public string signupcodeinformation { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public ObservableCollection<signupcodeinformation> signupcodeinfolist { get; set; }
+
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string shortdescription { get; set; }
+
     }
 
     public class ApiResponseSignUpCode

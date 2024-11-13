@@ -1,3 +1,4 @@
+//using Java.Time.Temporal;
 using Mopups.Services;
 using Syncfusion.Maui.Picker;
 using System.Collections.ObjectModel;
@@ -29,6 +30,7 @@ public partial class UpdateSingleSymptom : ContentPage
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
+    userfeedback userfeedbacklistpassed = new userfeedback();
 
     async public void NotasyncMethod(Exception Ex)
     {
@@ -132,6 +134,87 @@ public partial class UpdateSingleSymptom : ContentPage
             NotasyncMethod(Ex);
         }
     }
+
+    public UpdateSingleSymptom(ObservableCollection<usersymptom> SymptomPassed, String AddEdit, ObservableCollection<usersymptom> AllSymptomData, userfeedback userfeedbacklist)
+    {
+        try
+        {
+            InitializeComponent();
+            addtimepicker.Time = DateTime.Now.TimeOfDay;
+            addtimepicker.Time = DateTime.Now.TimeOfDay;
+            userfeedbacklistpassed = userfeedbacklist;
+            gettriggersandinterventions();
+            PassedSymptom = SymptomPassed;
+            EditAdd = AddEdit;
+            AllSymptomDataPassed = AllSymptomData;
+            TItlelbl.Text = PassedSymptom[0].symptomtitle;
+            foreach (var item in SymptomPassed)
+            {
+                // SymptomTitle.Text = item.symptomtitle;
+            }
+            if (EditAdd == "Add")
+            {
+                foreach (var item in SymptomPassed)
+                {
+
+                    currentint = Int32.Parse(item.CurrentIntensity);
+                    SymptomSlider.Value = Int32.Parse(item.CurrentIntensity);
+                }
+                Datelbl.Text = DateTime.Now.ToString("dd MMM");
+                Timelbl.Text = DateTime.Now.ToString("HH:mm");
+                DurationPicker.SelectedTime = new TimeSpan(0, 0, 0);
+            }
+            else
+            {
+                foreach (var item in PassedSymptom)
+                {
+                    foreach (var x in item.feedback)
+                    {
+                        if (x.symptomfeedbackid == EditAdd)
+                        {
+                            feedbackid = x.symptomfeedbackid;
+                            currentint = Int32.Parse(x.intensity);
+                            SymptomSlider.Value = Int32.Parse(x.intensity);
+                            DateTime DateAndTime = DateTime.Parse(x.timestamp);
+                            addtimepicker.Time = DateAndTime.TimeOfDay;
+                            adddatepicker.Date = DateAndTime.Date;
+
+                            SelectedDate = DateAndTime.ToString("dd/MM/yyyy");
+                            SelectedTime = DateAndTime.ToString("HH:mm:ss");
+
+                            if (string.IsNullOrEmpty(x.duration) || x.duration == "No Duration")
+                            {
+                                DurationPicker.SelectedTime = new TimeSpan(0, 0, 0);
+                            }
+                            else
+                            {
+                                var Duration = x.duration.Split(' ');
+                                var hours = Duration[0];
+                                var Seconds = Duration[2];
+                                string GetDuration = hours + ":" + Seconds + ":00";
+                                TimeSpan DurationPick = TimeSpan.Parse(GetDuration);
+                                DurationPicker.SelectedTime = DurationPick;
+                            }
+                            if (string.IsNullOrEmpty(x.notes) || x.notes == null)
+                            {
+                                //No Notes
+                            }
+                            else
+                            {
+                                Notes.Text = x.notes;
+                            }
+                        }
+                    }
+                }
+            }
+            updateResultCount();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
     private void updateResultCount()
     {
         try
@@ -501,16 +584,33 @@ public partial class UpdateSingleSymptom : ContentPage
                     }
                 }
 
-                APICalls database = new APICalls();
-                await database.PutSymptomAsync(PassedSymptom);
-                //   await Navigation.PushAsync(new SingleSymptom(PassedSymptom, AllSymptomDataPassed));
-                await MopupService.Instance.PushAsync(new PopupPageHelper("Symptom Data Added") { });
-                await Task.Delay(1500);
-                await Navigation.PushAsync(new AllSymptoms(AllSymptomDataPassed));
-                await MopupService.Instance.PopAllAsync(false);
-                var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is SingleSymptom);
-                var pageToRemove = Navigation.NavigationStack.FirstOrDefault(x => x is AllSymptoms);
 
+            APICalls database = new APICalls();
+            await database.PutSymptomAsync(PassedSymptom);
+
+            var newsym = new feedbackdata();
+            newsym.value = SliderValue;
+            newsym.datetime = items.timestamp;
+            newsym.action = "update";
+            newsym.label = PassedSymptom[0].symptomtitle;
+
+            userfeedbacklistpassed.symptomfeedbacklist.Add(newsym);
+
+            string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.symptomfeedbacklist);
+            userfeedbacklistpassed.symptomfeedback = newsymJson;
+
+
+            await database.UserfeedbackUpdateSymptomData(userfeedbacklistpassed);
+
+
+            //   await Navigation.PushAsync(new SingleSymptom(PassedSymptom, AllSymptomDataPassed));
+            await MopupService.Instance.PushAsync(new PopupPageHelper("Symptom Data Added") { });
+            await Task.Delay(1500);
+            await Navigation.PushAsync(new AllSymptoms(AllSymptomDataPassed));
+            await MopupService.Instance.PopAllAsync(false);
+            var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is SingleSymptom);
+            var pageToRemove = Navigation.NavigationStack.FirstOrDefault(x => x is AllSymptoms);
+         
                 if (pageToRemoves != null)
                 {
                     Navigation.RemovePage(pageToRemoves);

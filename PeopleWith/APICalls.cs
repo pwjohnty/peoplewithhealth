@@ -85,8 +85,9 @@ namespace PeopleWith
 
         public const string UserFeedback = "https://pwdevapi.peoplewith.com/api/userfeedback";
 
-        //Privacy Policy 
         public const string PrivPolicy = "https://pwdevapi.peoplewith.com/api/privacypolicy";
+
+        public const string signupcode = "https://pwdevapi.peoplewith.com/api/signupcode";
 
         //Get User Details 
         public async Task<ObservableCollection<user>> GetuserDetails()
@@ -2294,6 +2295,67 @@ namespace PeopleWith
             }
         }
 
+
+        public async Task<ObservableCollection<videos>> GetAllVideoswithsignupcode()
+        {
+            try
+            {
+                ObservableCollection<videos> itemstoremove = new ObservableCollection<videos>();
+                //var urls = APICalls.Videos;
+               // var signupcode = Helpers.Settings.SignUp;
+                var signupcode = "SFEAT14";
+                string urlWithQuery = $"{Videos}?$filter=referral eq '{signupcode}'";
+                HttpClient client = new HttpClient();
+                HttpResponseMessage responseconsent = await client.GetAsync(urlWithQuery);
+
+                if (responseconsent.IsSuccessStatusCode)
+                {
+                    string contentconsent = await responseconsent.Content.ReadAsStringAsync();
+                    var userResponseconsent = JsonConvert.DeserializeObject<ApiResponseVideos>(contentconsent);
+                    var consent = userResponseconsent.Value;
+
+                    //Remove All Deleted Items 
+                    foreach (var item in consent)
+                    {
+                        if (item.deleted == true)
+                        {
+                            itemstoremove.Add(item);
+                        }
+
+                        item.dateandlength = item.dateadded + " " + "Length: " + item.lenght;
+                        item.thumbnail = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/" + item.thumbnail;
+                        item.filename = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/" + item.filename;
+
+                        if (item.subtitle.Length > 122)
+                        {
+                            var SubString = item.subtitle.Substring(0, 122) + "...";
+                            item.subtitleshort = SubString;
+                        }
+                        else
+                        {
+                            item.subtitleshort = item.subtitle;
+                        }
+                    }
+
+                    foreach (var item in itemstoremove)
+                    {
+                        consent.Remove(item);
+                    }
+
+                    return new ObservableCollection<videos>(consent);
+
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         //Update Video Engagement 
         public async Task<videoengage> PostEngagementAsync(videoengage PassedEngagement)
         {
@@ -2673,6 +2735,105 @@ namespace PeopleWith
                 return new ObservableCollection<privacypolicy>();
             }
         }
+
+        public async Task<ObservableCollection<signupcode>> GetUserSignUpCodeInfo(string signupcodepassed)
+        {
+            try
+            {
+                ObservableCollection<signupcode> itemstoremove = new ObservableCollection<signupcode>();
+                var userid = Helpers.Settings.SignUp;
+                string urlWithQuery = $"{signupcode}?$filter=signupcodeid eq '{signupcodepassed}'";
+                HttpClient client = new HttpClient();
+                HttpResponseMessage responseconsent = await client.GetAsync(urlWithQuery);
+
+                if (responseconsent.IsSuccessStatusCode)
+                {
+                    string contentconsent = await responseconsent.Content.ReadAsStringAsync();
+                    // Add Feedback Converter
+                    //  var settings = new JsonSerializerSettings();
+                    //  settings.Converters.Add(new AppointmentFeedbackConverter());
+                    var userResponseconsent = JsonConvert.DeserializeObject<ApiResponseSignUpCode>(contentconsent);
+                    var consent = userResponseconsent.Value;
+
+                    var newcollection = new ObservableCollection<signupcode>();
+
+                    //Remove All Deleted Items 
+                    foreach (var item in consent)
+                    {
+
+                        //item.moodfeedbacklist = JsonConvert.DeserializeObject<ObservableCollection<feedbackdata>>(item.moodfeedback);
+
+                        try
+                        {
+                            // Attempt to deserialize as an array
+                            item.signupcodeinfolist = JsonConvert.DeserializeObject<ObservableCollection<signupcodeinformation>>(item.signupcodeinformation);
+
+                        }
+                        catch (JsonSerializationException)
+                        {
+                            // If the JSON is a single object, deserialize it as such and wrap it in a collection
+                            var singleItem = JsonConvert.DeserializeObject<signupcodeinformation>(item.signupcodeinformation);
+                            item.signupcodeinfolist = new ObservableCollection<signupcodeinformation> { singleItem };
+                        }
+
+                     
+
+                        newcollection.Add(item);
+                    }
+
+
+
+                    return new ObservableCollection<signupcode>(newcollection);
+
+                }
+                else
+                {
+                    return null;
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public async Task UserfeedbackUpdateSymptomData(userfeedback Updatefeedback)
+        {
+            try
+            {
+                var id = Updatefeedback.id;
+                var url = $"https://pwdevapi.peoplewith.com/api/userfeedback/id/{id}";
+                var feedbacks = Updatefeedback.symptomfeedback;
+                string json = System.Text.Json.JsonSerializer.Serialize(new { symptomfeedback = feedbacks });
+                //string json = System.Text.Json.JsonSerializer.Serialize(new { feedback = feedbacks }, serializerOptions);
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                using (var client = new HttpClient())
+                {
+                    //works with patch
+                    //var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+                    var response = await client.SendAsync(request);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Successfully updated feedback");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
     }
 
 }

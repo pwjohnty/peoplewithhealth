@@ -18,6 +18,7 @@ public partial class AllSymptoms : ContentPage
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
+    userfeedback userfeedbacklistpassed = new userfeedback();
 
     async public void NotasyncMethod(Exception Ex)
     {
@@ -44,6 +45,24 @@ public partial class AllSymptoms : ContentPage
             NotasyncMethod(Ex);
         }
       
+    }
+
+    public AllSymptoms(userfeedback userfeedbacklist)
+    {
+        try
+        {
+            InitializeComponent();
+
+            userfeedbacklistpassed = userfeedbacklist;
+
+            GetUserSymptoms();
+            //CrashTest();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+
     }
 
     public AllSymptoms(ObservableCollection<usersymptom> AllSymptoms)
@@ -390,7 +409,7 @@ public partial class AllSymptoms : ContentPage
 
             UserSymptomPassed.Add(item);
 
-            await Navigation.PushAsync(new SingleSymptom(UserSymptomPassed, AllUserSymptoms), false);
+            await Navigation.PushAsync(new SingleSymptom(UserSymptomPassed, AllUserSymptoms, userfeedbacklistpassed), false);
         }
         catch(Exception Ex)
         {
@@ -433,6 +452,7 @@ public partial class AllSymptoms : ContentPage
             {
                 var isConnected = accessType == NetworkAccess.Internet;
                 ConnectivityChanged?.Invoke(this, isConnected);
+                await Navigation.PushAsync(new UpdateAllSymptoms(AllUserSymptoms, userfeedbacklistpassed));
             }
 
         }

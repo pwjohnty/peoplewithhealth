@@ -17,9 +17,47 @@ namespace PeopleWith
         public string value { get; set; }
         public string label { get; set; }
 
+        public string unit { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string labelandunit { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
         public string medicationfeedbackid { get; set; }
 
-        public ObservableCollection<userfeedback> symptomlist { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore]
+        public List<feedbackdata> symptomlist { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string symptominfo { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public ImageSource img { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string improvelbl { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string datetimestring { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public int Count { get; set; }
+
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public DateTime dt { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool showchart { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string avgstring { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string highstring { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string nooftimesstring { get; set; }
 
     }
 

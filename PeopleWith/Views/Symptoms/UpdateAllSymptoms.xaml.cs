@@ -15,6 +15,7 @@ public partial class UpdateAllSymptoms : ContentPage
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
+    userfeedback userfeedbacklistpassed = new userfeedback();
 
     async public void NotasyncMethod(Exception Ex)
     {
@@ -77,6 +78,45 @@ public partial class UpdateAllSymptoms : ContentPage
             NotasyncMethod(Ex); 
         }
     }
+
+    public UpdateAllSymptoms(ObservableCollection<usersymptom> AllUserSymptoms, userfeedback userfeedbacklist)
+    {
+        try
+        {
+            InitializeComponent();
+            UserSymptomsPassed = AllUserSymptoms;
+            userfeedbacklistpassed = userfeedbacklist;
+
+            foreach (var item in UserSymptomsPassed)
+            {
+                item.Enabled = false;
+                item.Opacity = 0.5;
+                item.Slidervalue = Convert.ToDouble(item.CurrentIntensity);
+                item.SlidervalueUA = Convert.ToDouble(item.CurrentIntensity);
+                item.CurrentIntensityUA = item.CurrentIntensity;
+                var dt = DateTime.Parse(item.feedback[item.feedback.Count - 1].timestamp).ToString("dd MMM, HH:mm");
+                item.DateUpdatedAll = "Last updated: " + dt;
+            }
+            Datelbl.Text = DateTime.Now.ToString("dd MMM");
+            Timelbl.Text = DateTime.Now.ToString("HH:mm");
+            addtimepicker.Time = DateTime.Now.TimeOfDay;
+
+            if (DeviceInfo.Platform == DevicePlatform.iOS)
+            {
+                SymptomUpdateLV.HeightRequest = UserSymptomsPassed.Count * 100;
+            }
+            var sortedSymptoms = UserSymptomsPassed.OrderByDescending(f => DateTime.Parse(f.LastUpdated)).ToList();
+            SymptomUpdateLV.ItemsSource = UserSymptomsPassed;
+            //change visual state on page load, as button is not updating;
+            UpdateBtn.IsEnabled = true;
+            UpdateBtn.IsEnabled = false;
+
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
     private void SfSlider_ValueChanged(object sender, Syncfusion.Maui.Sliders.SliderValueChangedEventArgs e)
     {
         try
@@ -111,44 +151,62 @@ public partial class UpdateAllSymptoms : ContentPage
             //Connectivity Changed 
             NetworkAccess accessType = Connectivity.Current.NetworkAccess;
             if (accessType == NetworkAccess.Internet)
-            {
-                //Limit No. of Taps 
-                UpdateBtn.IsEnabled = false;
+            { 
 
-                foreach (var symptom in UserSymptomsPassed)
-                {
+            UpdateBtn.IsEnabled = false;
+            var allfeedback = new ObservableCollection<userfeedback>();
 
-                    if (symptom.Enabled == true)
+                    foreach (var symptom in UserSymptomsPassed)
                     {
-                        var items = new symptomfeedback();
-                        SelectedDate = adddatepicker.Date.ToString("dd/MM/yyyy");
-                        SelectedTime = addtimepicker.Time.ToString(@"hh\:mm");
 
-                        items.timestamp = SelectedDate + " " + SelectedTime;
-                        Guid newUUID = Guid.NewGuid();
-                        items.symptomfeedbackid = newUUID.ToString().ToUpper();
-                        items.intensity = symptom.Slidervalue.ToString();
-                        items.notes = null;
-                        items.triggers = null;
-                        items.interventions = null;
-                        items.duration = null;
-                        symptom.feedback.Add(items);
-                        SymptomUpdateNewlist.Add(symptom);
+                        if (symptom.Enabled == true)
+                        {
+                            var items = new symptomfeedback();
+                            SelectedDate = adddatepicker.Date.ToString("dd/MM/yyyy");
+                            SelectedTime = addtimepicker.Time.ToString(@"hh\:mm");
+
+                            items.timestamp = SelectedDate + " " + SelectedTime;
+                            Guid newUUID = Guid.NewGuid();
+                            items.symptomfeedbackid = newUUID.ToString().ToUpper();
+                            items.intensity = symptom.Slidervalue.ToString();
+                            items.notes = null;
+                            items.triggers = null;
+                            items.interventions = null;
+                            items.duration = null;
+                            symptom.feedback.Add(items);
+                            SymptomUpdateNewlist.Add(symptom);
+
+
+                    var newsym = new feedbackdata();
+                    newsym.value = symptom.Slidervalue.ToString(); ;
+                    newsym.datetime = items.timestamp;
+                    newsym.action = "update";
+                    newsym.label = symptom.symptomtitle;
+
+                    userfeedbacklistpassed.symptomfeedbacklist.Add(newsym);
+
+
+                        }               
                     }
-                }
-                //Need Loading Screen
-                APICalls database = new APICalls();
-                await database.UpdateAll(SymptomUpdateNewlist);
+            //Need Loading Screen
+            APICalls database = new APICalls();
+            await database.UpdateAll(SymptomUpdateNewlist);
 
-                await MopupService.Instance.PushAsync(new PopupPageHelper("Symptoms Updated") { });
-                await Task.Delay(1500);
+            string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.symptomfeedbacklist);
+            userfeedbacklistpassed.symptomfeedback = newsymJson;
 
-                await Navigation.PushAsync(new AllSymptoms(UserSymptomsPassed));
 
-                await MopupService.Instance.PopAllAsync(false);
+            await database.UserfeedbackUpdateSymptomData(userfeedbacklistpassed);
 
-                var pageToRemoveAllSymptoms = Navigation.NavigationStack.FirstOrDefault(x => x is AllSymptoms);
-                if (pageToRemoveAllSymptoms != null)
+            await MopupService.Instance.PushAsync(new PopupPageHelper("Symptoms Updated") { });
+            await Task.Delay(1500);
+
+            await Navigation.PushAsync(new AllSymptoms(UserSymptomsPassed));
+
+            await MopupService.Instance.PopAllAsync(false);
+
+            var pageToRemoveAllSymptoms = Navigation.NavigationStack.FirstOrDefault(x => x is AllSymptoms);
+            if (pageToRemoveAllSymptoms != null)
                 {
                     Navigation.RemovePage(pageToRemoveAllSymptoms);
                 }
