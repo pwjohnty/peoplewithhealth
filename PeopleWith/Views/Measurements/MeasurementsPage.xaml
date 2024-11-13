@@ -4,10 +4,9 @@
              xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
              ios:Page.UseSafeArea="True"
               xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
-             x:Class="PeopleWith.MeasurementsPage" Shell.NavBarIsVisible="False" BackgroundColor="White"
-            >
+             x:Class="PeopleWith.MeasurementsPage" Shell.NavBarIsVisible="False" BackgroundColor="White" >
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add New" Clicked="ToolbarItem_Clicked" />
+        <ToolbarItem Text="Add New" x:Name="AddBtn" Clicked="ToolbarItem_Clicked" />
     </ContentPage.ToolbarItems>
     <ScrollView VerticalScrollBarVisibility="Never">
   

@@ -8,6 +8,22 @@ public partial class SingleAllergies : ContentPage
     public ObservableCollection<userallergies> AllUserAllergies = new ObservableCollection<userallergies>();
     public ObservableCollection<userallergies> AllergyPassed = new ObservableCollection<userallergies>();
     public ObservableCollection<allergies> Allergies = new ObservableCollection<allergies>();
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
 
     public SingleAllergies()
     {
@@ -26,9 +42,9 @@ public partial class SingleAllergies : ContentPage
             AlergyTitle.Text = AllergyPassed[0].title;
             AllergyDate.Text = AllergyPassed[0].createdAt;
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-            //Add Crash log 
+            NotasyncMethod(Ex);
         }
 
     }
@@ -39,9 +55,9 @@ public partial class SingleAllergies : ContentPage
         {
             await DisplayAlert("Allergy Information", "There is no Information against this Allergy", "Close");
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-            //Add Crash log 
+            NotasyncMethod(Ex);
         }
     }
 
@@ -49,40 +65,54 @@ public partial class SingleAllergies : ContentPage
     {
         try
         {
-            bool Delete = await DisplayAlert("Delete Allergy", "Are you sure you would like the delete this Allergy? Once deleted it cannot be retrieved", "Delete", "Cancel");
-            if (Delete == true)
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-
-                foreach (var item in AllergyPassed)
+                
+                //Limit No. of Taps 
+                Deletebtn.IsEnabled = false;
+                bool Delete = await DisplayAlert("Delete Allergy", "Are you sure you would like the delete this Allergy? Once deleted it cannot be retrieved", "Delete", "Cancel");
+                if (Delete == true)
                 {
-                    item.deleted = true;
-                }
 
-                APICalls database = new APICalls();
-                await database.DeleteUserAllergy(AllergyPassed);
-
-                await MopupService.Instance.PushAsync(new PopupPageHelper("Allery Deleted") { });
-                await Task.Delay(1500);
-
-                foreach (var item in AllUserAllergies)
-                {
-                    if (item.id == AllergyPassed[0].id)
+                    foreach (var item in AllergyPassed)
                     {
                         item.deleted = true;
                     }
+
+                    APICalls database = new APICalls();
+                    await database.DeleteUserAllergy(AllergyPassed);
+
+                    await MopupService.Instance.PushAsync(new PopupPageHelper("Allery Deleted") { });
+                    await Task.Delay(1500);
+
+                    foreach (var item in AllUserAllergies)
+                    {
+                        if (item.id == AllergyPassed[0].id)
+                        {
+                            item.deleted = true;
+                        }
+                    }
+                    await MopupService.Instance.PopAllAsync(false);
+                    await Navigation.PushAsync(new AllAllergies(AllUserAllergies, Allergies));
+
+                    var pageToRemove = Navigation.NavigationStack.FirstOrDefault(x => x is AllAllergies);
+
+                    if (pageToRemove != null)
+                    {
+                        Navigation.RemovePage(pageToRemove);
+                    }
+                    Navigation.RemovePage(this);
+                    Deletebtn.IsEnabled = true;
+                    return;
                 }
-                await MopupService.Instance.PopAllAsync(false);
-                await Navigation.PushAsync(new AllAllergies(AllUserAllergies, Allergies));
-
-                var pageToRemove = Navigation.NavigationStack.FirstOrDefault(x => x is AllAllergies);
-
-                if (pageToRemove != null)
-                {
-                    Navigation.RemovePage(pageToRemove);
-                }
-                Navigation.RemovePage(this);
-
-                return;
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
+           
             }
             else
             {
@@ -90,11 +120,9 @@ public partial class SingleAllergies : ContentPage
             }
 
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-            //Add Crash log 
+            NotasyncMethod(Ex);
         }
-
-
     }
 }

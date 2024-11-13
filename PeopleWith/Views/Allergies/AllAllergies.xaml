@@ -4,7 +4,7 @@
              x:Class="PeopleWith.AllAllergies" xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView" 
              xmlns:local="clr-namespace:PeopleWith" NavigationPage.IconColor="#031926"  BackgroundColor="White">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Clicked="ToolbarItem_Clicked" Text="Add New" />
+        <ToolbarItem Clicked="ToolbarItem_Clicked" x:Name="Addbtn" Text="Add New" />
     </ContentPage.ToolbarItems>
     <VerticalStackLayout>
 
@@ -36,7 +36,7 @@
 
         <!-- All Allergies Listview -->
         <Grid x:Name="DiagnosisOverview" IsVisible="True" >
-            <syncfusion:SfListView  x:Name="AllAllergiesView" Padding="0" Margin="0,5,0,0" AutoFitMode="Height" ItemSpacing="0" BackgroundColor="Transparent" HorizontalOptions="FillAndExpand" ItemTapped="AllAllergiesView_ItemTapped" IsScrollingEnabled="True"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
+            <syncfusion:SfListView  x:Name="AllAllergiesView" Padding="0" Margin="0,10,0,0" AutoFitMode="Height" ItemSpacing="0" BackgroundColor="Transparent" HorizontalOptions="FillAndExpand" ItemTapped="AllAllergiesView_ItemTapped" IsScrollingEnabled="True"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
                 <syncfusion:SfListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>

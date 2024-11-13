@@ -6,8 +6,6 @@ using Syncfusion.Maui.ListView;
 using System.Collections.ObjectModel;
 
 namespace PeopleWith;
-
-
 public partial class AddMood : ContentPage
 {
     string SelectedTime;
@@ -23,11 +21,33 @@ public partial class AddMood : ContentPage
     string EditAdd;
     //DatePickerViewModel ViewModel = new DatePickerViewModel();
     int Selectedindex;
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
 
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
 
     public AddMood()
     {
-        InitializeComponent();
+        try
+        {
+            InitializeComponent();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }  
     }
 
     public AddMood(ObservableCollection<usermood> MoodsPassed, string AddEdit)
@@ -105,14 +125,11 @@ public partial class AddMood : ContentPage
                     }
                 }
             }
-
-
         }
         catch (Exception Ex)
         {
-            //Add Crash log 
+            NotasyncMethod(Ex);
         }
-
     }
 
 
@@ -125,9 +142,8 @@ public partial class AddMood : ContentPage
         }
         catch (Exception Ex)
         {
-            //add Crash log
+            NotasyncMethod(Ex);
         }
-
     }
 
     private void TapGestureRecognizer_Tapped_1(object sender, TappedEventArgs e)
@@ -139,132 +155,141 @@ public partial class AddMood : ContentPage
         }
         catch (Exception Ex)
         {
-            //add Crash log
+            NotasyncMethod(Ex);
         }
-
     }
 
     async private void AddMoodBtn_Clicked(object sender, EventArgs e)
     {
         try
         {
-            //SuccessScreen.IsVisible = true;
-            //Success.IsAnimationEnabled = true;
-            var Userid = Helpers.Settings.UserKey;
-            SelectedDate = adddatepicker.Date.ToString("dd/MM/yyyy");
-            SelectedTime = addtimepicker.Time.ToString(@"hh\:mm");
-            //Update DB Call 
-            APICalls database = new APICalls();
-            if (EditAdd == "Add")
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                //Add New Mood
-                var NewMood = new usermood();
-                if (string.IsNullOrEmpty(SelectedDate) || SelectedDate == null)
+                //Limit No. of Taps 
+                AddMoodBtn.IsEnabled = false;
+                //SuccessScreen.IsVisible = true;
+                //Success.IsAnimationEnabled = true;
+                var Userid = Helpers.Settings.UserKey;
+                SelectedDate = adddatepicker.Date.ToString("dd/MM/yyyy");
+                SelectedTime = addtimepicker.Time.ToString(@"hh\:mm");
+                //Update DB Call 
+                APICalls database = new APICalls();
+                if (EditAdd == "Add")
                 {
-                    var Date = DateTime.Now;
-                    SelectedDate = Date.ToString("dd/MM/yyyy");
+                    //Add New Mood
+                    var NewMood = new usermood();
+                    if (string.IsNullOrEmpty(SelectedDate) || SelectedDate == null)
+                    {
+                        var Date = DateTime.Now;
+                        SelectedDate = Date.ToString("dd/MM/yyyy");
 
+                    }
+                    if (string.IsNullOrEmpty(SelectedTime) || SelectedTime == null)
+                    {
+                        var time = DateTime.Now;
+                        SelectedTime = time.ToString("HH:mm:ss");
+                    }
+
+                    if (string.IsNullOrEmpty(SelectedMood) || SelectedMood == null)
+                    {
+                        SelectedMood = AlluserMoods[0].title;
+                    }
+
+                    NewMood.userid = Userid;
+
+                    NewMood.title = SelectedMood;
+
+                    NewMood.datetime = SelectedDate + " " + SelectedTime;
+
+                    NewMood.notes = Notes.Text;
+
+                    MoodtoAdd.Add(NewMood);
+                    AddedMood = await database.PostUserMoodAsync(MoodtoAdd);
+
+                    await MopupService.Instance.PushAsync(new PopupPageHelper("Mood Added") { });
+                    await Task.Delay(1500);
+
+                    foreach (var item in AddedMood)
+                    {
+                        AlluserMoods.Add(item);
+                    }
                 }
-                if (string.IsNullOrEmpty(SelectedTime) || SelectedTime == null)
+                else
                 {
-                    var time = DateTime.Now;
-                    SelectedTime = time.ToString("HH:mm:ss");
-                }
+                    foreach (var item in AlluserMoods)
+                    {
+                        if (item.id == EditAdd)
+                        {
+                            if (string.IsNullOrEmpty(SelectedDate) || SelectedDate == null)
+                            {
+                                var GetDate = DateTime.Parse(item.datetime);
+                                SelectedDate = GetDate.ToString("dd/MM/yyyy");
+                            }
 
-                if (string.IsNullOrEmpty(SelectedMood) || SelectedMood == null)
+                            if (string.IsNullOrEmpty(SelectedTime) || SelectedTime == null)
+                            {
+                                var GetTime = DateTime.Parse(item.datetime);
+                                SelectedTime = GetTime.ToString("HH:mm:ss");
+                            }
+
+                            if (string.IsNullOrEmpty(SelectedMood) || SelectedMood == null)
+                            {
+                                SelectedMood = item.title;
+                            }
+
+
+                            item.datetime = SelectedDate + " " + SelectedTime;
+                            item.title = SelectedMood;
+                            if (Notes.Text == null)
+                            {
+                                item.notes = null;
+                            }
+                            else
+                            {
+                                item.notes = Notes.Text;
+                            }
+                            item.source = SelectedMood.ToLower() + ".png";
+                            MoodtoUpdate.Add(item);
+                            await database.PutMoodAsync(MoodtoUpdate);
+
+                            await MopupService.Instance.PushAsync(new PopupPageHelper("Mood Updated") { });
+                            await Task.Delay(1500);
+
+
+                        }
+                    }
+                }
+                await MopupService.Instance.PopAllAsync(false);
+                AddMoodBtn.IsEnabled = true;
+
+                //Push Through new Added Data
+                await Navigation.PushAsync(new AllMood(AlluserMoods));
+
+                var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is AllMood);
+                var pageToRemove = Navigation.NavigationStack.FirstOrDefault(x => x is SingleMood);
+                if (pageToRemoves != null)
                 {
-                    SelectedMood = AlluserMoods[0].title;
+                    Navigation.RemovePage(pageToRemoves);
                 }
-
-                NewMood.userid = Userid;
-
-                NewMood.title = SelectedMood;
-
-                NewMood.datetime = SelectedDate + " " + SelectedTime;
-
-                NewMood.notes = Notes.Text;
-
-                MoodtoAdd.Add(NewMood);
-                AddedMood = await database.PostUserMoodAsync(MoodtoAdd);
-
-                await MopupService.Instance.PushAsync(new PopupPageHelper("Mood Added") { });
-                await Task.Delay(1500);
-
-                foreach (var item in AddedMood)
+                if (pageToRemove != null)
                 {
-                    AlluserMoods.Add(item);
+                    Navigation.RemovePage(pageToRemove);
                 }
+                Navigation.RemovePage(this);
+
             }
             else
             {
-                foreach (var item in AlluserMoods)
-                {
-                    if (item.id == EditAdd)
-                    {
-                        if (string.IsNullOrEmpty(SelectedDate) || SelectedDate == null)
-                        {
-                            var GetDate = DateTime.Parse(item.datetime);
-                            SelectedDate = GetDate.ToString("dd/MM/yyyy");
-                        }
-
-                        if (string.IsNullOrEmpty(SelectedTime) || SelectedTime == null)
-                        {
-                            var GetTime = DateTime.Parse(item.datetime);
-                            SelectedTime = GetTime.ToString("HH:mm:ss");
-                        }
-
-                        if (string.IsNullOrEmpty(SelectedMood) || SelectedMood == null)
-                        {
-                            SelectedMood = item.title;
-                        }
-
-
-                        item.datetime = SelectedDate + " " + SelectedTime;
-                        item.title = SelectedMood;
-                        if (Notes.Text == null)
-                        {
-                            item.notes = null;
-                        }
-                        else
-                        {
-                            item.notes = Notes.Text;
-                        }
-                        item.source = SelectedMood.ToLower() + ".png";
-                        MoodtoUpdate.Add(item);
-                        await database.PutMoodAsync(MoodtoUpdate);
-
-                        await MopupService.Instance.PushAsync(new PopupPageHelper("Mood Updated") { });
-                        await Task.Delay(1500);
-
-
-                    }
-                }
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
             }
-            await MopupService.Instance.PopAllAsync(false);
-
-            //Push Through new Added Data
-            await Navigation.PushAsync(new AllMood(AlluserMoods));
-
-            var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is AllMood);
-            var pageToRemove = Navigation.NavigationStack.FirstOrDefault(x => x is SingleMood);
-            if (pageToRemoves != null)
-            {
-                Navigation.RemovePage(pageToRemoves);
-            }
-            if (pageToRemove != null)
-            {
-                Navigation.RemovePage(pageToRemove);
-            }
-            Navigation.RemovePage(this);
-
-            //SuccessScreen.IsVisible = false;
-            //Success.IsAnimationEnabled = false;
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-            //Add Crash Log
+            NotasyncMethod(Ex);
         }
-
     }
 
     private void Schedulepopup_Closed(object sender, EventArgs e)
@@ -274,8 +299,8 @@ public partial class AddMood : ContentPage
             Mainstack.Opacity = 1;
         }
         catch (Exception Ex)
-        {   //Add Crash Log
-
+        {
+            NotasyncMethod(Ex);
         }
     }
 
@@ -290,7 +315,7 @@ public partial class AddMood : ContentPage
         }
         catch (Exception Ex)
         {
-            //Add Crash Log
+            NotasyncMethod(Ex);
         }
     }
 
@@ -301,8 +326,8 @@ public partial class AddMood : ContentPage
             Mainstack.Opacity = 1;
         }
         catch (Exception Ex)
-        {   //Add Crash Log
-
+        {   
+            NotasyncMethod(Ex);
         }
     }
 
@@ -332,7 +357,7 @@ public partial class AddMood : ContentPage
         }
         catch (Exception Ex)
         {
-            //Add Crash log
+            NotasyncMethod(Ex);
         }
 
     }
@@ -346,8 +371,7 @@ public partial class AddMood : ContentPage
         }
         catch (Exception Ex)
         {
-            //Add Crash Log
+            NotasyncMethod(Ex);
         }
-
     }
 }

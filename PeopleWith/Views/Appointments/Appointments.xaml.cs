@@ -11,7 +11,24 @@ public partial class Appointments : ContentPage
     public ObservableCollection<appointmentcalendar> CalendarData = new ObservableCollection<appointmentcalendar>();
     public appointment AppointmenttoPass = new appointment(); 
     APICalls database = new APICalls();
-    bool AddedAppointment; 
+    bool AddedAppointment;
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
+
     protected override bool OnBackButtonPressed()
     {
         try
@@ -40,7 +57,7 @@ public partial class Appointments : ContentPage
         }
         catch (Exception Ex)
         {
-            //Add Crash log
+            NotasyncMethod(Ex);
             return false;
         }
 
@@ -55,7 +72,7 @@ public partial class Appointments : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -71,7 +88,7 @@ public partial class Appointments : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
       
     }
@@ -94,7 +111,7 @@ public partial class Appointments : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
     async public void PopulateCalendar()
@@ -157,7 +174,7 @@ public partial class Appointments : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -298,18 +315,31 @@ public partial class Appointments : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
     async private void ToolbarItem_Clicked(object sender, EventArgs e)
     {
         try
         {
-            await Navigation.PushAsync(new AddAppointment(AllHCPs, AllAppointments), false);
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Limit No. of Taps 
+                AddAppoint.IsEnabled = false;
+                await Navigation.PushAsync(new AddAppointment(AllHCPs, AllAppointments), false);
+                AddAppoint.IsEnabled = true;
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }          
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -317,11 +347,24 @@ public partial class Appointments : ContentPage
     {
         try 
         {
-            await Navigation.PushAsync(new AppointmentFeedback(AppointmenttoPass, AllAppointments), false);
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Limit No. of Taps 
+                Feedbackbtn.IsEnabled = false;
+                await Navigation.PushAsync(new AppointmentFeedback(AppointmenttoPass, AllAppointments), false);
+                Feedbackbtn.IsEnabled = true;
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 }

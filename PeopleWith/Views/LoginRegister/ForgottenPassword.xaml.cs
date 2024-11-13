@@ -11,10 +11,34 @@ namespace PeopleWith;
 public partial class ForgottenPassword : ContentPage
 {
     HttpClient client = new HttpClient();
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
+
     public ForgottenPassword()
 	{
-		InitializeComponent();
-	}
+        try
+        {
+            InitializeComponent();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
 
     static Regex ValidEmailRegex = CreateValidEmailRegex();
 
@@ -33,23 +57,46 @@ public partial class ForgottenPassword : ContentPage
 
     private void emailentry_TextChanged(object sender, TextChangedEventArgs e)
     {
-
+        try
+        {
+            
+        }
+        catch (Exception Ex)
+        {
+            //Leave Empty
+        }
     }
 
     private void EmailVerification_Clicked(object sender, EventArgs e)
     {
         try
         {
-            handleemailframe();
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Limit No. of Taps 
+                EmailVerification.IsEnabled = false;
+                handleemailframe();
+                EmailVerification.IsEnabled = true;
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }      
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
     async private void handleemailframe()
     {
+        try
+        {
+
         bool ValidEmail = false;
         //check email validation
         if (string.IsNullOrEmpty(emailentry.Text))
@@ -105,26 +152,36 @@ public partial class ForgottenPassword : ContentPage
                 //Temporary Check
                 await MopupService.Instance.PushAsync(new PopupPageHelper("Email Verification Sent") { });
                 await Task.Delay(1500);
-           
-                if (Email.Default.IsComposeSupported)
-                {
 
-                    string subject = "";
-                    string body = "Userid: " + Helpers.Settings.UserKey;
-                    string[] recipients = new[] { "chris.johnston@peoplewith.com" };
+                //email generate Update URL
+                //StringContent mail_content = new StringContent(newuser.email, System.Text.Encoding.UTF8, "application/json");
 
-                    var message = new EmailMessage
-                    {
-                        Subject = subject,
-                        Body = body,
-                        BodyFormat = EmailBodyFormat.PlainText,
-                        To = new List<string>(recipients)
-                    };
-                    await MopupService.Instance.PopAllAsync(false);
-                    await Email.Default.ComposeAsync(message);
-                
-                }
+                //var emailresponse = await client.PostAsync("https://peoplewithwebapp.azurewebsites.net/hub/email-validation.php?uid=" + newuser.email, mail_content);
+
+                //if (Email.Default.IsComposeSupported)
+                //{
+
+                //    string subject = "";
+                //    string body = "Userid: " + Helpers.Settings.UserKey;
+                //    string[] recipients = new[] { "chris.johnston@peoplewith.com" };
+
+                //    var message = new EmailMessage
+                //    {
+                //        Subject = subject,
+                //        Body = body,
+                //        BodyFormat = EmailBodyFormat.PlainText,
+                //        To = new List<string>(recipients)
+                //    };
+                //    await MopupService.Instance.PopAllAsync(false);
+                //    await Email.Default.ComposeAsync(message);
+
+                //}
             }
+          }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
         }
     }
 
@@ -136,7 +193,7 @@ public partial class ForgottenPassword : ContentPage
         }
         catch (Exception Ex)
         {
-           
+            NotasyncMethod(Ex);
         }
     }
 }

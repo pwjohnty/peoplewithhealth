@@ -14,6 +14,9 @@ public partial class AllSymptoms : ContentPage
     string previous;
     APICalls aPICalls = new APICalls();
     bool addsymptom;
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
 
     async public void NotasyncMethod(Exception Ex)
@@ -34,7 +37,7 @@ public partial class AllSymptoms : ContentPage
         {
             InitializeComponent();
             GetUserSymptoms();
-            //CrashTest();
+
         }
         catch (Exception Ex)
         {
@@ -62,19 +65,6 @@ public partial class AllSymptoms : ContentPage
 
     }
 
-    //async private void CrashTest()
-    //{
-    //    try
-    //    {
-    //        int number = 10;
-    //        int result = number / 0;
-    //    }
-    //    catch(Exception Ex)
-    //    {    
-    //        await crashHandler.CrashDetectedSend(Ex);
-    //    }
-       
-    //}
     async private void GetUserSymptoms()
     {
         try
@@ -210,112 +200,116 @@ public partial class AllSymptoms : ContentPage
         }
         catch (Exception Ex)
         {
-            await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
         }
-
-
     }
     async public void populatelsitview()
     {
-      //  ListviewData.Clear();
-
-        foreach (var item in AllUserSymptoms)
+        try
         {
-            var allIntensities = new List<int>();
-            var allTimestamps = new List<DateTime>();
-            foreach (var x in item.feedback)
+            //  ListviewData.Clear();
+
+            foreach (var item in AllUserSymptoms)
             {
-                if (int.TryParse(x.intensity, out int intensity))
+                var allIntensities = new List<int>();
+                var allTimestamps = new List<DateTime>();
+                foreach (var x in item.feedback)
                 {
-                    allIntensities.Add(intensity);
+                    if (int.TryParse(x.intensity, out int intensity))
+                    {
+                        allIntensities.Add(intensity);
+                    }
+                    if (DateTime.TryParse(x.timestamp, out DateTime timestamp))
+                    {
+                        allTimestamps.Add(timestamp);
+                    }
                 }
-                if (DateTime.TryParse(x.timestamp, out DateTime timestamp))
+                if (allIntensities.Count > 0 && allTimestamps.Count > 0)
                 {
-                    allTimestamps.Add(timestamp);
+                    int largest = allIntensities.Max();
+                    int smallest = allIntensities.Min();
+                    double average = allIntensities.Average();
+                    DateTime lastUpdate = allTimestamps.Max();
+                    var current = item.feedback.OrderByDescending(f => DateTime.Parse(f.timestamp)).FirstOrDefault()?.intensity;
+                    int Score = Int32.Parse(current);
+                    var Scorelabel = "";
+                    if (Score == 0)
+                    {
+                        Scorelabel = "Absent";
+                    }
+                    else if (Score > 0 && Score <= 25)
+                    {
+                        Scorelabel = "Mild";
+                    }
+                    else if (Score > 25 && Score <= 50)
+                    {
+                        Scorelabel = "Moderate";
+                    }
+                    else if (Score > 50 && Score <= 75)
+                    {
+                        Scorelabel = "High";
+                    }
+                    else if (Score > 75 && Score <= 100)
+                    {
+                        Scorelabel = "Severe";
+                    }
+                    if (item.feedback.Count > 1)
+                    {
+                        var count = allIntensities.Count - 2;
+                        allIntensities[count].ToString();
+                        previous = allIntensities[count].ToString();
+                    }
+                    else
+                    {
+                        previous = "N/A";
+                    }
+
+                    //Add items to AlluserSymptoms
+                    item.LastUpdated = lastUpdate.ToString("dd/MM/yyyy HH:mm");
+                    item.CurrentIntensity = current;
+                    item.Score = Scorelabel;
+                    item.LowIntensity = smallest.ToString();
+                    item.HighIntensity = largest.ToString();
+                    item.IntensityAverage = average.ToString("F0");
+                    item.PreviousIntensity = previous;
+                    //title too long, trim 
+                    var title = item.symptomtitle;
+                    if (title.Length > 20)
+                    {
+
+                        var trimtitle = item.symptomtitle;
+                        string cut = trimtitle.Substring(0, 20);
+                        item.Shorttitle = cut + "...";
+                    }
+                    else
+                    {
+                        item.Shorttitle = item.symptomtitle;
+                    }
+
                 }
+
             }
-            if (allIntensities.Count > 0 && allTimestamps.Count > 0)
+            if (DeviceInfo.Platform == DevicePlatform.iOS)
             {
-                int largest = allIntensities.Max();
-                int smallest = allIntensities.Min();
-                double average = allIntensities.Average();
-                DateTime lastUpdate = allTimestamps.Max();
-                var current = item.feedback.OrderByDescending(f => DateTime.Parse(f.timestamp)).FirstOrDefault()?.intensity;
-                int Score = Int32.Parse(current);
-                var Scorelabel = "";
-                if (Score == 0)
-                {
-                    Scorelabel = "Absent";
-                }
-                else if (Score > 0 && Score <= 25)
-                {
-                    Scorelabel = "Mild";
-                }
-                else if (Score > 25 && Score <= 50)
-                {
-                    Scorelabel = "Moderate";
-                }
-                else if (Score > 50 && Score <= 75)
-                {
-                    Scorelabel = "High";
-                }
-                else if (Score > 75 && Score <= 100)
-                {
-                    Scorelabel = "Severe";
-                }
-                if (item.feedback.Count > 1)
-                {
-                    var count = allIntensities.Count - 2;
-                    allIntensities[count].ToString();
-                    previous = allIntensities[count].ToString();
-                }
-                else
-                {
-                    previous = "N/A";
-                }
-
-                //Add items to AlluserSymptoms
-                item.LastUpdated = lastUpdate.ToString("dd/MM/yyyy HH:mm");
-                item.CurrentIntensity = current;
-                item.Score = Scorelabel;
-                item.LowIntensity = smallest.ToString();
-                item.HighIntensity = largest.ToString();
-                item.IntensityAverage = average.ToString("F0");
-                item.PreviousIntensity = previous;
-                //title too long, trim 
-                var title = item.symptomtitle;
-                if (title.Length > 20)
-                {
-
-                    var trimtitle = item.symptomtitle;
-                    string cut = trimtitle.Substring(0, 20);
-                    item.Shorttitle = cut + "...";
-                }
-                else
-                {
-                    item.Shorttitle = item.symptomtitle;
-                }
-
-            
+                //AllSymptomView.HeightRequest = ListviewData.Count * 100;
             }
 
-        }
-        if (DeviceInfo.Platform == DevicePlatform.iOS)
-        {
-            //AllSymptomView.HeightRequest = ListviewData.Count * 100;
-        }
+            var sortedSymptoms = AllUserSymptoms.OrderByDescending(f => DateTime.Parse(f.LastUpdated)).ToList();
+            AllUserSymptoms.Clear();
+            foreach (var symptom in sortedSymptoms)
+            {
+                AllUserSymptoms.Add(symptom);
+            }
 
-        var sortedSymptoms = AllUserSymptoms.OrderByDescending(f => DateTime.Parse(f.LastUpdated)).ToList();
-        AllUserSymptoms.Clear();
-        foreach (var symptom in sortedSymptoms)
-        {
-            AllUserSymptoms.Add(symptom);
+            GetAllSymptoms.AllSymptoms = AllUserSymptoms;
+            AllSymptomView.ItemsSource = GetAllSymptoms.AllSymptoms;
         }
-
-        GetAllSymptoms.AllSymptoms = AllUserSymptoms;
-        AllSymptomView.ItemsSource = GetAllSymptoms.AllSymptoms;
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
-    public static int FindLargest(List<int> list)
+    public int FindLargest(List<int> list)
     {
         try
         {
@@ -329,13 +323,13 @@ public partial class AllSymptoms : ContentPage
             }
             return max;
         }
-        catch(Exception Ex)
+        catch (Exception Ex)
         {
-            //Fix Crash Log 
+            NotasyncMethod(Ex);
             return 0;
         }      
     }
-    public static int FindSmallest(List<int> list)
+    public int FindSmallest(List<int> list)
     {
         try
         {
@@ -349,14 +343,14 @@ public partial class AllSymptoms : ContentPage
             }
             return min;
         }
-        catch
+        catch (Exception Ex)
         {
-            //Add Crash log
+            NotasyncMethod(Ex);
             return 0;
         }
      
     }
-    public static double CalculateAverage(List<int> list)
+     public  double CalculateAverage(List<int> list)
     {
         try
         {
@@ -367,9 +361,9 @@ public partial class AllSymptoms : ContentPage
             }
             return (double)sum / list.Count;
         }
-        catch
+        catch (Exception Ex)
         {
-            //Add Crash log
+            NotasyncMethod(Ex);
             return 0;
         }
         
@@ -382,7 +376,7 @@ public partial class AllSymptoms : ContentPage
         }
         catch (Exception Ex)
         {
-            await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
         }
     }
     async private void AllSymptomView_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
@@ -400,7 +394,7 @@ public partial class AllSymptoms : ContentPage
         }
         catch(Exception Ex)
         {
-            await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
         }
     }
     async private void TapGestureRecognizer_Tapped_1(object sender, TappedEventArgs e)
@@ -411,7 +405,7 @@ public partial class AllSymptoms : ContentPage
         }
         catch(Exception Ex)
         {
-            await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
         }
        
     }
@@ -419,37 +413,63 @@ public partial class AllSymptoms : ContentPage
     {
         try
         {
-            if (AllUserSymptoms.Count == 0)
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                await DisplayAlert("No Symptoms Added", "Try adding a symptom to access this feature", "Close");
+                //Limit No. of Taps 
+                UpdateFrame.InputTransparent = true; 
+                if (AllUserSymptoms.Count == 0)
+                {
+                    await DisplayAlert("No Symptoms Added", "Try adding a symptom to access this feature", "Close");
+                }
+                else
+                {
+                    await Navigation.PushAsync(new UpdateAllSymptoms(AllUserSymptoms));
+                }
+                UpdateFrame.InputTransparent = false; 
             }
             else
             {
-                await Navigation.PushAsync(new UpdateAllSymptoms(AllUserSymptoms));
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
             }
 
         }
         catch (Exception Ex)
         {
-            await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
         }
     }
     async private void TapGestureRecognizer_Tapped_3(object sender, TappedEventArgs e)
     {
         try
         {
-            if (AllUserSymptoms.Count == 0)
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                await DisplayAlert("No Symptoms Added", "Try adding a symptom to access this feature", "Close");
+                //Limit No. of Taps 
+                CompareFrame.InputTransparent = true; 
+                if (AllUserSymptoms.Count == 0)
+                {
+                    await DisplayAlert("No Symptoms Added", "Try adding a symptom to access this feature", "Close");
+                }
+                else
+                {
+                    await Navigation.PushAsync(new CompareSymptoms(AllUserSymptoms));
+                }
+                CompareFrame.InputTransparent = false;
             }
             else
             {
-                await Navigation.PushAsync(new CompareSymptoms(AllUserSymptoms));
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
             }
         }
         catch (Exception Ex)
         {
-            await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
         }
 
     }
@@ -461,18 +481,33 @@ public partial class AllSymptoms : ContentPage
         }
         catch (Exception Ex)
         {
-            await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
         }
     }
     async private void addNewToolbar_Clicked(object sender, EventArgs e)
     {
         try
         {
-            await Navigation.PushAsync(new AddSymptom(AllUserSymptoms));
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Limit No. of Taps 
+                AddBtn.IsEnabled = false;
+                await Navigation.PushAsync(new AddSymptom(AllUserSymptoms));
+                AddBtn.IsEnabled = true;
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
+
+
         }
         catch (Exception Ex)
         {
-            await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
         }
     }
 
@@ -484,7 +519,7 @@ public partial class AllSymptoms : ContentPage
         }
         catch (Exception Ex)
         {
-            await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
         }
     }
 }

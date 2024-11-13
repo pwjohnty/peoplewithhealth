@@ -11,6 +11,9 @@ public partial class AllVideos : ContentPage
     //public ObservableCollection<videoengage> VideoEngagement = new ObservableCollection<videoengage>();
     videoengage SelectedVideoEngage = new videoengage(); 
     APICalls aPICalls = new APICalls();
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
 
 
@@ -35,7 +38,6 @@ public partial class AllVideos : ContentPage
         catch(Exception Ex)
         {
             NotasyncMethod(Ex);
-
         }
     }
 
@@ -96,16 +98,26 @@ public partial class AllVideos : ContentPage
     {
         try
         {
-            var selectedvideo = e.DataItem as videos;
-            //foreach(var item in VideoEngagement)
-            //{
-            //   if(item.videoid == selectedvideo.videoid)
-            //    {
-            //        SelectedVideoEngage = item;
-            //    }
-            //}
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                var selectedvideo = e.DataItem as videos;
+                //foreach(var item in VideoEngagement)
+                //{
+                //   if(item.videoid == selectedvideo.videoid)
+                //    {
+                //        SelectedVideoEngage = item;
+                //    }
+                //}
 
-            await Navigation.PushAsync(new VideoPlayer(selectedvideo), false); 
+                await Navigation.PushAsync(new VideoPlayer(selectedvideo), false);
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
         }
         catch (Exception Ex)
         {

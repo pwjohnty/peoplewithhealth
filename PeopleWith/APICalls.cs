@@ -85,6 +85,8 @@ namespace PeopleWith
 
         public const string UserFeedback = "https://pwdevapi.peoplewith.com/api/userfeedback";
 
+        //Privacy Policy 
+        public const string PrivPolicy = "https://pwdevapi.peoplewith.com/api/privacypolicy";
 
         //Get User Details 
         public async Task<ObservableCollection<user>> GetuserDetails()
@@ -110,9 +112,6 @@ namespace PeopleWith
 
                     return null;
                 }
-
-
-
             }
             catch (Exception ex)
             {
@@ -144,9 +143,6 @@ namespace PeopleWith
                 {
                     return null;
                 }
-
-
-
             }
             catch (Exception ex)
             {
@@ -191,9 +187,6 @@ namespace PeopleWith
                 {
                     return null;
                 }
-
-
-
             }
             catch (Exception ex)
             {
@@ -2648,6 +2641,38 @@ namespace PeopleWith
             }
         }
 
+        public async Task<ObservableCollection<privacypolicy>> GetAsyncPrivacyPolicy()
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                var URl = APICalls.PrivPolicy;
+                HttpResponseMessage response = await client.GetAsync(URl);
+                string data = await response.Content.ReadAsStringAsync();
+                var userResponse = JsonConvert.DeserializeObject<ApiPrivPolicy>(data);
+                ObservableCollection<privacypolicy> users = userResponse.Value;
+
+                ObservableCollection<privacypolicy> itemstoremove = new ObservableCollection<privacypolicy>();
+
+                foreach (var item in users)
+                {
+                    if(item.deleted == true)
+                    {
+                        itemstoremove.Add(item); 
+                    }
+                }
+                foreach(var item in itemstoremove)
+                {
+                    users.Remove(item);
+                }
+
+                return new ObservableCollection<privacypolicy>(users.Take(Range.All));
+            }
+            catch (Exception ex)
+            {
+                return new ObservableCollection<privacypolicy>();
+            }
+        }
     }
 
 }

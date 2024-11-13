@@ -11,7 +11,24 @@ public partial class ShowAllMedication : ContentPage
     ObservableCollection<usermedication> NotTakenMedicationList = new ObservableCollection<usermedication>();
     ObservableCollection<usermedication> NotRecordedMedicationList = new ObservableCollection<usermedication>();
     ObservableCollection<usermedication> MedicationNotRecordedList = new ObservableCollection<usermedication>();
-    Color SetColour; 
+    Color SetColour;
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
+
 
     public ShowAllMedication(usermedication SelectedMed)
 	{
@@ -24,18 +41,16 @@ public partial class ShowAllMedication : ContentPage
             PopulateListView(); 
 			
 		}
-		catch (Exception Ex)
-		{
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
 
-		}
-
-	}
-
-	async private void PopulateListView()
+    async private void PopulateListView()
 	{
 		try
 		{
-
 			if (MedSelected.frequency.Contains("|"))
 			{
 				var Freq = MedSelected.frequency.Split('|');
@@ -433,9 +448,7 @@ public partial class ShowAllMedication : ContentPage
                         NotRecordedMedicationList = MedicationList.Where(s => s.Action.Equals("Not Recorded", StringComparison.OrdinalIgnoreCase)).ToObservableCollection();
 
                     }
-                }
-
-               
+                }  
             }
             else
             {
@@ -444,6 +457,7 @@ public partial class ShowAllMedication : ContentPage
         }
         catch (Exception Ex)
         {
+            NotasyncMethod(Ex);
         }
     }
 
@@ -565,9 +579,9 @@ public partial class ShowAllMedication : ContentPage
                 }
             }
         }
-        catch(Exception Ex)
+        catch (Exception Ex)
         {
-
-        }        
+            NotasyncMethod(Ex);
+        }
     }
 }

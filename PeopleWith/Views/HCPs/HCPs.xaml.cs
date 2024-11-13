@@ -8,18 +8,49 @@ public partial class HCPs : ContentPage
     public ObservableCollection<hcp> AllUserHCPs = new ObservableCollection<hcp>();
     APICalls aPICalls = new APICalls();
     bool HCPAdded;
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
+
     public HCPs()
 	{
-		InitializeComponent();
-        GetAllHCPS(); 
+        try
+        {
+            InitializeComponent();
+            GetAllHCPS();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
 	}
 
     public HCPs(ObservableCollection<hcp> AllHCPs)
     {
-        InitializeComponent();
-        AllUserHCPs = AllHCPs;
-        HCPAdded = true; 
-        GetAllHCPS();
+        try
+        {
+            InitializeComponent();
+            AllUserHCPs = AllHCPs;
+            HCPAdded = true;
+            GetAllHCPS();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 
     async private void GetAllHCPS()
@@ -61,7 +92,7 @@ public partial class HCPs : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -69,11 +100,24 @@ public partial class HCPs : ContentPage
     {
         try
         {
-            await Navigation.PushAsync(new AddHCPs(AllUserHCPs), false);
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Limit No. of Taps 
+                AddBtn.IsEnabled = false;
+                await Navigation.PushAsync(new AddHCPs(AllUserHCPs), false);
+                AddBtn.IsEnabled = true;
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -81,16 +125,26 @@ public partial class HCPs : ContentPage
     {
         try
         {
-            var SelectedHCP = e.DataItem as hcp;
-            await Navigation.PushAsync(new SingleHCP(SelectedHCP, AllUserHCPs), false) ;
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                var SelectedHCP = e.DataItem as hcp;
+                await Navigation.PushAsync(new SingleHCP(SelectedHCP, AllUserHCPs), false);
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
-   async private void HCPInfoTapped(object sender, TappedEventArgs e)
+    async private void HCPInfoTapped(object sender, TappedEventArgs e)
     {
         try
         {
@@ -98,7 +152,7 @@ public partial class HCPs : ContentPage
         }
         catch (Exception Ex)
         {
-            //await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
         }
     }
 }

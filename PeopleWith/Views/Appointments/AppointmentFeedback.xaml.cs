@@ -9,20 +9,51 @@ public partial class AppointmentFeedback : ContentPage
     public ObservableCollection<appointment> AllAppointments = new ObservableCollection<appointment>();
     public ObservableCollection<appointment> Appointtoremove = new ObservableCollection<appointment>();
     public ObservableCollection<string> ChipItems { get; set; }
-    public string Attended; 
+    public string Attended;
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
+
     public AppointmentFeedback(appointment PassedAppoint, ObservableCollection<appointment> GetAllAppointments)
 	{
-		InitializeComponent();
-        AppointmentPassed = PassedAppoint;
-        AllAppointments = GetAllAppointments; 
-        PopulatePage(); 
+        try
+        {
+            InitializeComponent();
+            AppointmentPassed = PassedAppoint;
+            AllAppointments = GetAllAppointments;
+            PopulatePage();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
 	}
 
     public AppointmentFeedback(appointment PassedAppoint)
     {
-        InitializeComponent();
-        AppointmentPassed = PassedAppoint;
-        PopulatePage();
+        try
+        {
+            InitializeComponent();
+            AppointmentPassed = PassedAppoint;
+            PopulatePage();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 
     public async void PopulatePage()
@@ -118,7 +149,7 @@ public partial class AppointmentFeedback : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -144,7 +175,7 @@ public partial class AppointmentFeedback : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -169,101 +200,111 @@ public partial class AppointmentFeedback : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
     private async void FeedbackAdd_Clicked(object sender, EventArgs e)
     {
         try
         {
-            //Validation 
-            if(btnno.BackgroundColor == Color.FromRgba("#ffcccb") || btnyes.BackgroundColor == Color.FromRgba("#ffcccb"))
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                await DisplayAlert("Did you Attend", "select if you Attend the Appointment", "Close");
-                return; 
-            }
-            else if(Attended == "No")
-            {
-                //No Selected only update Attended
-                AppointmentPassed.attended = "No";
-            }
-            else if (Attended == "Yes")
-            {
-                //Yes Selected 
-                if (string.IsNullOrEmpty(Durationlbl.Text))
+                //Limit No. of Taps 
+                FeedbackAdd.IsEnabled = false;
+                //Validation 
+                if (btnno.BackgroundColor == Color.FromRgba("#ffcccb") || btnyes.BackgroundColor == Color.FromRgba("#ffcccb"))
                 {
-                    await DisplayAlert("Actual Duration", "select either Days, Hours or Minutes", "Close");
-                    return; 
+                    await DisplayAlert("Did you Attend", "select if you Attend the Appointment", "Close");
+                    return;
                 }
-                else if (string.IsNullOrEmpty(DurationEntry.Text))
+                else if (Attended == "No")
                 {
-                    await DisplayAlert("Actual Duration", "Duration cannot be Empty, Please enter a Duration", "Close");
-                    return; 
+                    //No Selected only update Attended
+                    AppointmentPassed.attended = "No";
                 }
-                else
+                else if (Attended == "Yes")
                 {
-                    //update Appointment Attended
-                    AppointmentPassed.attended = "Yes"; 
-
-                    if(AppointmentPassed.feedback == null || AppointmentPassed.feedback.Count == 0)
+                    //Yes Selected 
+                    if (string.IsNullOrEmpty(Durationlbl.Text))
                     {
-                        AppointmentPassed.feedback = new ObservableCollection<appointmentfeedback>();
+                        await DisplayAlert("Actual Duration", "select either Days, Hours or Minutes", "Close");
+                        return;
                     }
-
-
-                    //Update Feedback 
-                    AppointmentPassed.feedback.Add(new appointmentfeedback
+                    else if (string.IsNullOrEmpty(DurationEntry.Text))
                     {
-                        ActualDuration = DurationEntry.Text + " " + Durationlbl.Text,
-                        DoctorsNotes = DoctorNotes.Text,
-                        AdditionalNotes = AddNotes.Text
-                    });
+                        await DisplayAlert("Actual Duration", "Duration cannot be Empty, Please enter a Duration", "Close");
+                        return;
+                    }
+                    else
+                    {
+                        //update Appointment Attended
+                        AppointmentPassed.attended = "Yes";
+
+                        if (AppointmentPassed.feedback == null || AppointmentPassed.feedback.Count == 0)
+                        {
+                            AppointmentPassed.feedback = new ObservableCollection<appointmentfeedback>();
+                        }
+
+
+                        //Update Feedback 
+                        AppointmentPassed.feedback.Add(new appointmentfeedback
+                        {
+                            ActualDuration = DurationEntry.Text + " " + Durationlbl.Text,
+                            DoctorsNotes = DoctorNotes.Text,
+                            AdditionalNotes = AddNotes.Text
+                        });
+                    }
                 }
-            }
 
-            //Update Appointment Feedback
-            APICalls database = new APICalls();
-            await database.UpdateAppointmentItem(AppointmentPassed);
+                //Update Appointment Feedback
+                APICalls database = new APICalls();
+                await database.UpdateAppointmentItem(AppointmentPassed);
 
 
-            foreach (var item in AllAppointments)
-            {
-                if(item.id == AppointmentPassed.id)
+                foreach (var item in AllAppointments)
                 {
-                    Appointtoremove.Add(item); 
+                    if (item.id == AppointmentPassed.id)
+                    {
+                        Appointtoremove.Add(item);
+                    }
                 }
-            }
 
-            foreach(var items in Appointtoremove)
+                foreach (var items in Appointtoremove)
+                {
+                    AllAppointments.Remove(items);
+                }
+                AllAppointments.Add(AppointmentPassed);
+
+                //Change View to Feedback View 
+
+                AddFeedbackStack.IsVisible = false;
+                FinalFeedbackStack.IsVisible = true;
+                PopulatePage();
+
+                await MopupService.Instance.PushAsync(new PopupPageHelper("Appointment Feedback Added") { });
+                await Task.Delay(1500);
+                FeedbackAdd.IsEnabled = true;
+                await MopupService.Instance.PopAllAsync(false);
+                //await Navigation.PushAsync(new Appointments(AllAppointments, AllHCPs));
+                //var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is Appointments);
+                //if (pageToRemoves != null)
+                //{
+
+                //    Navigation.RemovePage(pageToRemoves);
+                //}
+                //Navigation.RemovePage(this);
+            }
+            else
             {
-                AllAppointments.Remove(items);
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
             }
-            AllAppointments.Add(AppointmentPassed);
-
-            //Change View to Feedback View 
-
-            AddFeedbackStack.IsVisible = false;
-            FinalFeedbackStack.IsVisible = true;
-            PopulatePage();
-
-            await MopupService.Instance.PushAsync(new PopupPageHelper("Appointment Feedback Added") { });
-            await Task.Delay(1500);
-
-            await MopupService.Instance.PopAllAsync(false);
-            //await Navigation.PushAsync(new Appointments(AllAppointments, AllHCPs));
-            //var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is Appointments);
-            //if (pageToRemoves != null)
-            //{
-
-            //    Navigation.RemovePage(pageToRemoves);
-            //}
-            //Navigation.RemovePage(this);
-
-
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -276,8 +317,7 @@ public partial class AppointmentFeedback : ContentPage
         }
         catch (Exception Ex)
         {
-
+            //Leave Empty
         }
-       
     }
 }

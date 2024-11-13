@@ -23,24 +23,41 @@ namespace PeopleWith
                 if (frame != null)
                 {
                     var method = frame.GetMethod();
-                    var GetPage = method?.DeclaringType?.FullName ?? "Unknown";
-                    string[] result = GetPage.Split(new char[] { '.', '>' }, StringSplitOptions.RemoveEmptyEntries);
-                    var Split = result[1].Split('+');
-                    string FoundPage = Split[0] + Split[1] + ">"; 
+
+                    var Page = method?.DeclaringType?.FullName ?? "Unknown";
+                    var Split = Page.Split('.');
+                    var GetPage = Split[1];
+                    var GetMethod = method?.Name ?? "Unknown";
+                    var FoundPage = GetPage + " (" + GetMethod + ")";
+                    if (FoundPage.Contains(">"))
+                    {
+                        string[] result = GetPage.Split(new char[] { '.', '>', '<', '+' }, StringSplitOptions.RemoveEmptyEntries);
+                        FoundPage = result[0] + " (" + result[1] + ")";
+                    }
+                   
                     //Line not Working
-                    var GetLine = frame.GetFileLineNumber();
+                    //int linenumber = (Ex.StackTrace).frame.GetFileLineNumber();
+                    //var GetLine = frame.GetFileLineNumber();
+
+                    // Get the top stack frame
+                    //var GetLine = stackTrace.GetFrame(stackTrace.FrameCount - 1);
+                    //var line = GetLine.GetFileLineNumber();
+
+                    int Line = await GetLinNo(Ex);
+                    //var LineNumber = "Line: " + Line.ToString(); 
+
                     var errorDetails = new crashlog
                     {
                         page = FoundPage,
-                        line = GetLine.ToString(),
+                        line = Line.ToString(),
                         exception = Ex.Message,
                         deleted = false,
                         userid = Helpers.Settings.UserKey,
                         stacktrace = Ex.StackTrace,
-                        deviceos = DeviceInfo.Current.VersionString,  // Uncomment if needed
-                        devicemodel = GetModel.ToString()  // Uncomment if needed
+                        deviceos = DeviceInfo.Current.VersionString,  
+                        devicemodel = GetModel.ToString()  
                     };
-                    await DBCall(errorDetails); // Make sure to await DBCall
+                    await DBCall(errorDetails); 
 
                 }                      
             }
@@ -51,7 +68,22 @@ namespace PeopleWith
            
         }
 
-        public async Task DBCall(crashlog Item) // Changed from void to Task
+        async public Task<int> GetLinNo(Exception Ex)
+        {
+                var lineNumber = 0;
+                const string lineSearch = ":line ";
+                var index = Ex.StackTrace.LastIndexOf(lineSearch);
+                if (index != -1)
+                {
+                    var lineNumberText = Ex.StackTrace.Substring(index + lineSearch.Length);
+                    if (int.TryParse(lineNumberText, out lineNumber))
+                    {
+                    }
+                }
+                return lineNumber;
+        }
+
+        public async Task DBCall(crashlog Item) 
         {
             APICalls database = new APICalls();
             await database.InsertCrashLog(Item);

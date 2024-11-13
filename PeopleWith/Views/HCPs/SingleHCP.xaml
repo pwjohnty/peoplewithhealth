@@ -5,7 +5,7 @@
              x:Class="PeopleWith.SingleHCP" BackgroundColor="White"
              NavigationPage.HasNavigationBar="True">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Clicked="ToolbarItem_Clicked" Text="Edit HCP" />
+        <ToolbarItem Clicked="ToolbarItem_Clicked" x:Name="Editbtn" Text="Edit HCP" />
     </ContentPage.ToolbarItems>
     <ScrollView>
     <VerticalStackLayout >
@@ -46,7 +46,7 @@
                 <!-- Appointments Empty Stack -->
                 <StackLayout x:Name="NoAppointmentsStack" IsVisible="False" Margin="10,0,10,0">
 
-                    <Frame  Margin="10,10,10,0" BorderColor="Transparent" CornerRadius="10" BackgroundColor="#CBC3E3" HasShadow="false" Padding="10" >
+                    <Frame  Margin="10,10,10,0" x:Name="NoAppointFrame" BorderColor="Transparent" CornerRadius="10" BackgroundColor="#CBC3E3" HasShadow="false" Padding="10" >
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
@@ -58,7 +58,7 @@
 
                         </Grid>
                         <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="ToolbarItem_Clicked"/>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
                         </Frame.GestureRecognizers>
                     </Frame>
 
@@ -221,7 +221,7 @@
 
 
                 <!-- Delete HCP Button -->
-            <Button  Text="Delete HCP" Clicked="Button_Clicked" FontSize="Small" Margin="20,40,20,5" FontFamily="HankenGroteskBold" BackgroundColor="#ffe5e5" TextColor="Red" CornerRadius="10" />
+            <Button  Text="Delete HCP" x:Name="Deletebtn" Clicked="Button_Clicked" FontSize="Small" Margin="20,40,20,5" FontFamily="HankenGroteskBold" BackgroundColor="#ffe5e5" TextColor="Red" CornerRadius="10" />
             <Label HorizontalTextAlignment="Center" Text="If your HCP is deleted you will lose all relevant information." Margin="20,0,20,20"  FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="DarkGray"  />
 
 

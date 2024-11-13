@@ -13,20 +13,22 @@ public partial class SingleSymptom : ContentPage
   //  public ObservableCollection<symptomprogression> SymptomData = new ObservableCollection<symptomprogression>();
     public ObservableCollection<usersymptom> PassedSymptom = new ObservableCollection<usersymptom>();
     public ObservableCollection<usersymptom> AllSymptomData = new ObservableCollection<usersymptom>();
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
-
     async public void NotasyncMethod(Exception Ex)
     {
         try
         {
-            NotasyncMethod(Ex); 
-            await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
         }
         catch (Exception ex)
         {
             //Dunno 
         }
     }
+
 
     public SingleSymptom(ObservableCollection<usersymptom> SymptomPassed, ObservableCollection<usersymptom> AllSymptoms)
     {
@@ -226,7 +228,7 @@ public partial class SingleSymptom : ContentPage
         }
         catch(Exception Ex)
         {
-            await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
         }
 
     }
@@ -234,12 +236,25 @@ public partial class SingleSymptom : ContentPage
     {
         try
         {
-            var AddData = "Add";
-            await Navigation.PushAsync(new UpdateSingleSymptom(PassedSymptom, AddData, AllSymptomData));
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Limit No. of Taps 
+                AddDataBtn.IsEnabled = false;
+                var AddData = "Add";
+                await Navigation.PushAsync(new UpdateSingleSymptom(PassedSymptom, AddData, AllSymptomData));
+                AddDataBtn.IsEnabled = true;
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
         }
         catch (Exception Ex)
         {
-            await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
         }
   
     }
@@ -249,46 +264,60 @@ public partial class SingleSymptom : ContentPage
         //Delete Symptom 
         try
         {
-            bool Delete = await DisplayAlert("Delete Symptom", "Are you sure you would like the delete this Symptom? Once deleted it cannot be retrieved", "Delete", "Cancel");
-            if (Delete == true)
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                foreach (var item in PassedSymptom)
+                //Limit No. of Taps 
+                DeleteBtn.IsEnabled = false;
+                bool Delete = await DisplayAlert("Delete Symptom", "Are you sure you would like the delete this Symptom? Once deleted it cannot be retrieved", "Delete", "Cancel");
+                if (Delete == true)
                 {
-                    item.deleted = true;
-                }
-                APICalls database = new APICalls();
-                await database.DeleteSymptom(PassedSymptom);
-
-                //Symptom Deleted Message
-                await MopupService.Instance.PushAsync(new PopupPageHelper("Symptom Deleted") { });
-                await Task.Delay(1500);
-
-
-                await MopupService.Instance.PopAllAsync(false);
-
-                foreach (var item in AllSymptomData)
-                {
-                    if (item.id == PassedSymptom[0].id)
+                    foreach (var item in PassedSymptom)
                     {
-                        item.deleted = PassedSymptom[0].deleted;
+                        item.deleted = true;
                     }
+                    APICalls database = new APICalls();
+                    await database.DeleteSymptom(PassedSymptom);
+                    DeleteBtn.IsEnabled = true;
+                    //Symptom Deleted Message
+                    await MopupService.Instance.PushAsync(new PopupPageHelper("Symptom Deleted") { });
+                    await Task.Delay(1500);
+
+
+                    await MopupService.Instance.PopAllAsync(false);
+
+                    foreach (var item in AllSymptomData)
+                    {
+                        if (item.id == PassedSymptom[0].id)
+                        {
+                            item.deleted = PassedSymptom[0].deleted;
+                        }
+                    }
+                    await Navigation.PushAsync(new AllSymptoms(AllSymptomData));
+                    var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(p => p is AllSymptoms);
+                    if (pageToRemoves != null)
+                    {
+                        Navigation.RemovePage(pageToRemoves);
+                    }
+                    Navigation.RemovePage(this);
                 }
-                await Navigation.PushAsync(new AllSymptoms(AllSymptomData));
-                var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(p => p is AllSymptoms);
-                if (pageToRemoves != null)
+                else
                 {
-                    Navigation.RemovePage(pageToRemoves);
+                    DeleteBtn.IsEnabled = true;
+                    return;
                 }
-                Navigation.RemovePage(this);
+               
             }
             else
             {
-                return;
-            }        
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }           
         }
         catch (Exception Ex)
         {
-            await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
         }
 
     }
@@ -301,7 +330,7 @@ public partial class SingleSymptom : ContentPage
         }
         catch (Exception Ex)
         {
-            await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
         }
     }
     private void Switch_Toggled(object sender, ToggledEventArgs e)
@@ -324,7 +353,7 @@ public partial class SingleSymptom : ContentPage
         }
         catch(Exception Ex)
         {
-           await crashHandler.CrashDetectedSend(Ex);
+           NotasyncMethod(Ex);
         }
     }
 }

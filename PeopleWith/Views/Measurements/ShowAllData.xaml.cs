@@ -13,34 +13,63 @@ public partial class ShowAllData : ContentPage
 
     ObservableCollection<usermeasurement> allusermeasurements = new ObservableCollection<usermeasurement>();
     ObservableCollection<measurement> allmeasurementlist = new ObservableCollection<measurement>();
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
+
     public ShowAllData()
 	{
-		InitializeComponent();
-	}
+        try
+        {
+            InitializeComponent();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
 
     public ShowAllData(ObservableCollection<usermeasurement> usermeasurementlistp, ObservableCollection<usermeasurement> allusermeasurementsp, ObservableCollection<measurement> allmeasurementlistpassed)
     {
-        InitializeComponent();
-
-        usermeasurementlistpassed = usermeasurementlistp;
-
-        measurementname.Text = usermeasurementlistpassed[0].measurementname;
-
-        allusermeasurements = allusermeasurementsp;
-        allmeasurementlist = allmeasurementlistpassed;
-
-        foreach (var item in usermeasurementlistpassed)
+        try
         {
-            var dt = DateTime.Parse(item.inputdatetime);
-            item.datechanged = dt.ToString("HH:mm, dd/MM/yyyy");
+            InitializeComponent();
+
+            usermeasurementlistpassed = usermeasurementlistp;
+
+            measurementname.Text = usermeasurementlistpassed[0].measurementname;
+
+            allusermeasurements = allusermeasurementsp;
+            allmeasurementlist = allmeasurementlistpassed;
+
+            foreach (var item in usermeasurementlistpassed)
+            {
+                var dt = DateTime.Parse(item.inputdatetime);
+                item.datechanged = dt.ToString("HH:mm, dd/MM/yyyy");
+            }
+
+            usermeasurementlistpassed = new ObservableCollection<usermeasurement>(usermeasurementlistpassed.OrderByDescending(x => DateTime.Parse(x.inputdatetime)));
+
+            usermeasurementlist.ItemsSource = usermeasurementlistpassed;
+            usermeasurementlist.HeightRequest = usermeasurementlistpassed.Count * 100;
         }
-
-        usermeasurementlistpassed = new ObservableCollection<usermeasurement>(usermeasurementlistpassed.OrderByDescending(x => DateTime.Parse(x.inputdatetime)));
-
-        usermeasurementlist.ItemsSource = usermeasurementlistpassed;
-        usermeasurementlist.HeightRequest = usermeasurementlistpassed.Count * 100;
-
-       
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }  
     }
 
 
@@ -48,34 +77,49 @@ public partial class ShowAllData : ContentPage
     {
         try
         {
-            //edit button clicked
-            usermeasurementlist.IsEnabled = true;
-            deletelbl.IsVisible = true;
-            // Iterate over the source collection and add each item to SelectedItems
-            foreach (var item in usermeasurementlistpassed)
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                item.Deleteisvis = true;
+                //Limit No. of Taps 
+                toolbaritem.IsEnabled = false;
+                //edit button clicked
+                usermeasurementlist.IsEnabled = true;
+                deletelbl.IsVisible = true;
+                // Iterate over the source collection and add each item to SelectedItems
+                foreach (var item in usermeasurementlistpassed)
+                {
+                    item.Deleteisvis = true;
+                }
+
+                this.ToolbarItems.Clear();
+
+
+                ToolbarItem itemm = new ToolbarItem
+                {
+                    Text = "Done"
+
+                };
+
+                itemm.Clicked += OnItemClicked;
+
+                // "this" refers to a Page object
+                this.ToolbarItems.Add(itemm);
+
+                //  usermeasurementlist.SelectionMode = Syncfusion.Maui.ListView.SelectionMode.None;
+                toolbaritem.IsEnabled = true;
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
             }
 
-            this.ToolbarItems.Clear();
-
-
-            ToolbarItem itemm = new ToolbarItem
-            {
-                Text = "Done"
-                
-            };
-
-            itemm.Clicked += OnItemClicked;
-
-            // "this" refers to a Page object
-            this.ToolbarItems.Add(itemm);
-
-            //  usermeasurementlist.SelectionMode = Syncfusion.Maui.ListView.SelectionMode.None;
+         
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -193,9 +237,9 @@ public partial class ShowAllData : ContentPage
             await MopupService.Instance.PopAllAsync(false);
 
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -226,9 +270,9 @@ public partial class ShowAllData : ContentPage
             this.ToolbarItems.Add(itemm);
 
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -253,17 +297,10 @@ public partial class ShowAllData : ContentPage
             //{
             //    usermeasurementlistpassed.Remove(item);
             //}
-
-
-         
-
-
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
-
- 
 }

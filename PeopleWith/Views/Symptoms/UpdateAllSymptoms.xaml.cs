@@ -11,13 +11,15 @@ public partial class UpdateAllSymptoms : ContentPage
     string SelectedTime;
     string SelectedDate;
     string previous;
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
 
     async public void NotasyncMethod(Exception Ex)
     {
         try
         {
-            NotasyncMethod(Ex);
             await crashHandler.CrashDetectedSend(Ex);
         }
         catch (Exception ex)
@@ -26,11 +28,19 @@ public partial class UpdateAllSymptoms : ContentPage
         }
     }
 
+
     public UpdateAllSymptoms()
     {
-        InitializeComponent();
+        try
+        {
+            InitializeComponent();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
-        public UpdateAllSymptoms(ObservableCollection<usersymptom> AllUserSymptoms)
+    public UpdateAllSymptoms(ObservableCollection<usersymptom> AllUserSymptoms)
     {
         try
         {
@@ -98,49 +108,61 @@ public partial class UpdateAllSymptoms : ContentPage
     {
         try
         {
-            UpdateBtn.IsEnabled = false; 
-                    foreach (var symptom in UserSymptomsPassed)
-                    {
-
-                        if (symptom.Enabled == true)
-                        {
-                            var items = new symptomfeedback();
-                            SelectedDate = adddatepicker.Date.ToString("dd/MM/yyyy");
-                            SelectedTime = addtimepicker.Time.ToString(@"hh\:mm");
-
-                            items.timestamp = SelectedDate + " " + SelectedTime;
-                            Guid newUUID = Guid.NewGuid();
-                            items.symptomfeedbackid = newUUID.ToString().ToUpper();
-                            items.intensity = symptom.Slidervalue.ToString();
-                            items.notes = null;
-                            items.triggers = null;
-                            items.interventions = null;
-                            items.duration = null;
-                            symptom.feedback.Add(items);
-                            SymptomUpdateNewlist.Add(symptom);                          
-                        }               
-            }
-            //Need Loading Screen
-            APICalls database = new APICalls();
-            await database.UpdateAll(SymptomUpdateNewlist);
-
-            await MopupService.Instance.PushAsync(new PopupPageHelper("Symptoms Updated") { });
-            await Task.Delay(1500);
-
-            await Navigation.PushAsync(new AllSymptoms(UserSymptomsPassed));
-
-            await MopupService.Instance.PopAllAsync(false);
-
-            var pageToRemoveAllSymptoms = Navigation.NavigationStack.FirstOrDefault(x => x is AllSymptoms);
-            if (pageToRemoveAllSymptoms != null)
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                Navigation.RemovePage(pageToRemoveAllSymptoms);
+                //Limit No. of Taps 
+                UpdateBtn.IsEnabled = false;
+
+                foreach (var symptom in UserSymptomsPassed)
+                {
+
+                    if (symptom.Enabled == true)
+                    {
+                        var items = new symptomfeedback();
+                        SelectedDate = adddatepicker.Date.ToString("dd/MM/yyyy");
+                        SelectedTime = addtimepicker.Time.ToString(@"hh\:mm");
+
+                        items.timestamp = SelectedDate + " " + SelectedTime;
+                        Guid newUUID = Guid.NewGuid();
+                        items.symptomfeedbackid = newUUID.ToString().ToUpper();
+                        items.intensity = symptom.Slidervalue.ToString();
+                        items.notes = null;
+                        items.triggers = null;
+                        items.interventions = null;
+                        items.duration = null;
+                        symptom.feedback.Add(items);
+                        SymptomUpdateNewlist.Add(symptom);
+                    }
+                }
+                //Need Loading Screen
+                APICalls database = new APICalls();
+                await database.UpdateAll(SymptomUpdateNewlist);
+
+                await MopupService.Instance.PushAsync(new PopupPageHelper("Symptoms Updated") { });
+                await Task.Delay(1500);
+
+                await Navigation.PushAsync(new AllSymptoms(UserSymptomsPassed));
+
+                await MopupService.Instance.PopAllAsync(false);
+
+                var pageToRemoveAllSymptoms = Navigation.NavigationStack.FirstOrDefault(x => x is AllSymptoms);
+                if (pageToRemoveAllSymptoms != null)
+                {
+                    Navigation.RemovePage(pageToRemoveAllSymptoms);
+                }
+                Navigation.RemovePage(this);
             }
-            Navigation.RemovePage(this);
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }  
         }
         catch(Exception Ex)
         {
-            await crashHandler.CrashDetectedSend(Ex); 
+            NotasyncMethod(Ex);
         }
     }
     private void SelectDatePicker_SelectionChanged(object sender, Syncfusion.Maui.Picker.DatePickerSelectionChangedEventArgs e)
@@ -294,6 +316,13 @@ public partial class UpdateAllSymptoms : ContentPage
     {
         try
         {
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Limit No. of Taps 
+                SelectAll.IsEnabled = false;
+
                 this.ToolbarItems.Clear();
 
                 ToolbarItem itemm = new ToolbarItem
@@ -310,6 +339,14 @@ public partial class UpdateAllSymptoms : ContentPage
                     item.Enabled = true;
                 }
                 UpdateBtn.IsEnabled = true;
+                SelectAll.IsEnabled = true;
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
+
         }
         catch(Exception Ex)
         {
@@ -340,6 +377,7 @@ public partial class UpdateAllSymptoms : ContentPage
         }
         catch (Exception Ex)
         {
+            NotasyncMethod(Ex);
         }
     }
 

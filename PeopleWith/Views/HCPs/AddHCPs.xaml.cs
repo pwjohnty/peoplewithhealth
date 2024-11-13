@@ -11,73 +11,111 @@ public partial class AddHCPs : ContentPage
     hcp SelectedHCP = new hcp();
     static Regex ValidEmailRegex = CreateValidEmailRegex();
     APICalls database = new APICalls();
-    bool IsEdit; 
+    bool IsEdit;
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
+
     public AddHCPs(ObservableCollection<hcp> AllHCPsPassed)
 	{
-		InitializeComponent();
-        AllUserHCPs = AllHCPsPassed; 
+        try
+        {
+            InitializeComponent();
+            AllUserHCPs = AllHCPsPassed;
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
     public AddHCPs(ObservableCollection<hcp> AllHCPsPassed, bool Editis, hcp HCPSelected)
     {
-        InitializeComponent();
-        IsEdit = Editis; 
-        AllUserHCPs = AllHCPsPassed;
-        SelectedHCP = HCPSelected;
-        PopulateEdit(); 
+        try
+        {
+            InitializeComponent();
+            IsEdit = Editis;
+            AllUserHCPs = AllHCPsPassed;
+            SelectedHCP = HCPSelected;
+            PopulateEdit();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 
     public void PopulateEdit()
     {
-        HCPAdd.Text = "Update HCP";
-        //Should always contain value 
-        FirstNameEntry.Text = SelectedHCP.firstname;
-        SurNameEntry.Text = SelectedHCP.surname;
-        RoleEntry.Text = SelectedHCP.role;
-        LocationEntry.Text = SelectedHCP.locationname;
+        try
+        {
+            HCPAdd.Text = "Update HCP";
+            //Should always contain value 
+            FirstNameEntry.Text = SelectedHCP.firstname;
+            SurNameEntry.Text = SelectedHCP.surname;
+            RoleEntry.Text = SelectedHCP.role;
+            LocationEntry.Text = SelectedHCP.locationname;
 
-        int i = 0; 
-        if (!string.IsNullOrEmpty(SelectedHCP.addresslineone))
-        {
-            addresslineoneEntry.Text = SelectedHCP.addresslineone;
-            i = i + 1; 
+            int i = 0;
+            if (!string.IsNullOrEmpty(SelectedHCP.addresslineone))
+            {
+                addresslineoneEntry.Text = SelectedHCP.addresslineone;
+                i = i + 1;
+            }
+            if (!string.IsNullOrEmpty(SelectedHCP.towncity))
+            {
+                towncityEntry.Text = SelectedHCP.towncity;
+                i = i + 1;
+            }
+            if (!string.IsNullOrEmpty(SelectedHCP.country))
+            {
+                countryEntry.Text = SelectedHCP.country;
+                i = i + 1;
+            }
+            if (!string.IsNullOrEmpty(SelectedHCP.county))
+            {
+                countyEntry.Text = SelectedHCP.county;
+                i = i + 1;
+            }
+            if (!string.IsNullOrEmpty(SelectedHCP.postcode))
+            {
+                postcodeEntry.Text = SelectedHCP.postcode;
+                i = i + 1;
+            }
+            if (!string.IsNullOrEmpty(SelectedHCP.telephone))
+            {
+                telephoneEntry.Text = SelectedHCP.telephone;
+                i = i + 1;
+            }
+            if (!string.IsNullOrEmpty(SelectedHCP.email))
+            {
+                EmailEntry.Text = SelectedHCP.email;
+                i = i + 1;
+            }
+            if (i == 0)
+            {
+                CheckBox.IsChecked = false;
+            }
+            else
+            {
+                CheckBox.IsChecked = true;
+            }
         }
-        if (!string.IsNullOrEmpty(SelectedHCP.towncity))
+        catch (Exception Ex)
         {
-            towncityEntry.Text = SelectedHCP.towncity;
-            i = i + 1;
-        }
-        if (!string.IsNullOrEmpty(SelectedHCP.country))
-        {
-            countryEntry.Text = SelectedHCP.country;
-            i = i + 1;
-        }
-        if (!string.IsNullOrEmpty(SelectedHCP.county))
-        {
-            countyEntry.Text = SelectedHCP.county;
-            i = i + 1;
-        }
-        if (!string.IsNullOrEmpty(SelectedHCP.postcode))
-        {
-            postcodeEntry.Text = SelectedHCP.postcode;
-            i = i + 1;
-        }
-        if (!string.IsNullOrEmpty(SelectedHCP.telephone))
-        {
-            telephoneEntry.Text = SelectedHCP.telephone;
-            i = i + 1;
-        }
-        if (!string.IsNullOrEmpty(SelectedHCP.email))
-        {
-            EmailEntry.Text = SelectedHCP.email;
-            i = i + 1;
-        }
-        if(i == 0)
-        {
-            CheckBox.IsChecked = false;
-        }
-        else
-        {
-            CheckBox.IsChecked = true;
+            NotasyncMethod(Ex);
         }
     }
 
@@ -109,7 +147,7 @@ public partial class AddHCPs : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -128,7 +166,7 @@ public partial class AddHCPs : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -147,9 +185,8 @@ public partial class AddHCPs : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
-       
     }
 
     private void SurNameEntry_TextChanged(object sender, TextChangedEventArgs e)
@@ -167,7 +204,7 @@ public partial class AddHCPs : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -186,7 +223,7 @@ public partial class AddHCPs : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -205,7 +242,7 @@ public partial class AddHCPs : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -224,7 +261,7 @@ public partial class AddHCPs : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -242,10 +279,10 @@ public partial class AddHCPs : ContentPage
             towncityTIL.ShowHint = false;
           }
       }
-      catch (Exception Ex)
-      {
-
-      }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 
     private void countryEntry_TextChanged(object sender, TextChangedEventArgs e)
@@ -263,7 +300,7 @@ public partial class AddHCPs : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -282,7 +319,7 @@ public partial class AddHCPs : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -302,7 +339,7 @@ public partial class AddHCPs : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -310,175 +347,190 @@ public partial class AddHCPs : ContentPage
     {
         try
         {
-            //Only Check FirstName, Surname, Role, location
-            if (string.IsNullOrEmpty(FirstNameEntry.Text))
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                FirstNameTIL.ErrorText = "Please enter a Firstname";
-                FirstNameTIL.HasError = true;
-                Vibration.Vibrate();
-                FirstNameEntry.Focus();
-                await Task.Delay(2000);
-                FirstNameTIL.HasError = false;
-                return;
-            }
-            else if (string.IsNullOrEmpty(SurNameEntry.Text))
-            {
-                SurNameTIL.ErrorText = "Please enter a Surname";
-                SurNameTIL.HasError = true;
-                Vibration.Vibrate();
-                SurNameEntry.Focus();
-                await Task.Delay(2000);
-                SurNameTIL.HasError = false;
-                return;
-            }
-            else if (string.IsNullOrEmpty(RoleEntry.Text))
-            {
-                RoleTIL.ErrorText = "Please enter a Role";
-                RoleTIL.HasError = true;
-                Vibration.Vibrate();
-                RoleEntry.Focus();
-                await Task.Delay(2000);
-                RoleTIL.HasError = false;
-                return;
-            }
-            else if (string.IsNullOrEmpty(LocationEntry.Text))
-            {
-                LocationTIL.ErrorText = "Please enter a Location";
-                LocationTIL.HasError = true;
-                Vibration.Vibrate();
-                LocationEntry.Focus();
-                await Task.Delay(2000);
-                LocationTIL.HasError = false;
-                return;
-            }
+                //Limit No. of Taps 
+                HCPAdd.IsEnabled = false;
+                //Only Check FirstName, Surname, Role, location
+                if (string.IsNullOrEmpty(FirstNameEntry.Text))
+                {
+                    FirstNameTIL.ErrorText = "Please enter a Firstname";
+                    FirstNameTIL.HasError = true;
+                    Vibration.Vibrate();
+                    FirstNameEntry.Focus();
+                    await Task.Delay(2000);
+                    FirstNameTIL.HasError = false;
+                    HCPAdd.IsEnabled = true;
+                    return;
+                }
+                else if (string.IsNullOrEmpty(SurNameEntry.Text))
+                {
+                    SurNameTIL.ErrorText = "Please enter a Surname";
+                    SurNameTIL.HasError = true;
+                    Vibration.Vibrate();
+                    SurNameEntry.Focus();
+                    await Task.Delay(2000);
+                    SurNameTIL.HasError = false;
+                    HCPAdd.IsEnabled = true;
+                    return;
+                }
+                else if (string.IsNullOrEmpty(RoleEntry.Text))
+                {
+                    RoleTIL.ErrorText = "Please enter a Role";
+                    RoleTIL.HasError = true;
+                    Vibration.Vibrate();
+                    RoleEntry.Focus();
+                    await Task.Delay(2000);
+                    RoleTIL.HasError = false;
+                    HCPAdd.IsEnabled = true;
+                    return;
+                }
+                else if (string.IsNullOrEmpty(LocationEntry.Text))
+                {
+                    LocationTIL.ErrorText = "Please enter a Location";
+                    LocationTIL.HasError = true;
+                    Vibration.Vibrate();
+                    LocationEntry.Focus();
+                    await Task.Delay(2000);
+                    LocationTIL.HasError = false;
+                    HCPAdd.IsEnabled = true;
+                    return;
+                }
 
-            var NEWHCP = new hcp(); 
-            NEWHCP.firstname = FirstNameEntry.Text;
-            NEWHCP.surname = SurNameEntry.Text;
-            NEWHCP.role = RoleEntry.Text;
-            NEWHCP.locationname = LocationEntry.Text;
+                var NEWHCP = new hcp();
+                NEWHCP.firstname = FirstNameEntry.Text;
+                NEWHCP.surname = SurNameEntry.Text;
+                NEWHCP.role = RoleEntry.Text;
+                NEWHCP.locationname = LocationEntry.Text;
 
-            //If optional Stack is Visible - Check Valid Email && Telephone 
-            if (CheckBox.IsChecked == true)
-            {
-                if (!string.IsNullOrEmpty(addresslineoneEntry.Text))
+                //If optional Stack is Visible - Check Valid Email && Telephone 
+                if (CheckBox.IsChecked == true)
                 {
-                    NEWHCP.addresslineone = addresslineoneEntry.Text; 
-                }
-                if (!string.IsNullOrEmpty(towncityEntry.Text))
-                {
-                    NEWHCP.towncity = towncityEntry.Text;
-                }
-                if (!string.IsNullOrEmpty(countryEntry.Text))
-                {
-                    NEWHCP.country = countryEntry.Text;
-                }
-                if (!string.IsNullOrEmpty(countyEntry.Text))
-                {
-                    NEWHCP.county = countyEntry.Text;
-                }
-                if (!string.IsNullOrEmpty(postcodeEntry.Text))
-                {
-                    NEWHCP.postcode = postcodeEntry.Text;
-                }
-                if (!string.IsNullOrEmpty(telephoneEntry.Text))
-                {
-                    NEWHCP.telephone = telephoneEntry.Text;
-                }
-                if (!string.IsNullOrEmpty(EmailEntry.Text))
-                {
-                    NEWHCP.email = EmailEntry.Text;
-                }
-            }
-            //Update HCP in the DB 
-            if(IsEdit == true)
-            {
-                SelectedHCP.firstname = NEWHCP.firstname;
-                SelectedHCP.surname = NEWHCP.surname;
-                SelectedHCP.role = NEWHCP.role;
-                SelectedHCP.locationname = NEWHCP.locationname;
-
-                if (!string.IsNullOrEmpty(NEWHCP.addresslineone))
-                {
-                    SelectedHCP.addresslineone = NEWHCP.addresslineone;
-                }
-                if (!string.IsNullOrEmpty(NEWHCP.towncity))
-                {
-                    SelectedHCP.towncity = NEWHCP.towncity;
-                }
-                if (!string.IsNullOrEmpty(NEWHCP.country))
-                {
-                    SelectedHCP.country = NEWHCP.country;
-                }
-                if (!string.IsNullOrEmpty(NEWHCP.county))
-                {
-                    SelectedHCP.county = NEWHCP.county;
-                }
-                if (!string.IsNullOrEmpty(NEWHCP.postcode))
-                {
-                    SelectedHCP.postcode = NEWHCP.postcode;
-                }
-                if (!string.IsNullOrEmpty(NEWHCP.telephone))
-                {
-                    SelectedHCP.telephone = NEWHCP.telephone;
-                }
-                if (!string.IsNullOrEmpty(NEWHCP.email))
-                {
-                    SelectedHCP.email = NEWHCP.email;
-                }
-                await database.UpdateHCPItem(SelectedHCP);
-
-                foreach(var item in AllUserHCPs)
-                {
-                    if(SelectedHCP.hcpid == item.hcpid)
+                    if (!string.IsNullOrEmpty(addresslineoneEntry.Text))
                     {
-                       item.firstname = SelectedHCP.firstname;
-                       item.surname = SelectedHCP.surname;
-                       item.role = SelectedHCP.role;
-                       item.locationname = SelectedHCP.locationname;
-                       item.addresslineone = SelectedHCP.addresslineone;
-                       item.towncity = SelectedHCP.towncity;
-                       item.country = SelectedHCP.country;
-                       item.county = SelectedHCP.county;
-                       item.postcode = SelectedHCP.postcode;
-                       item.telephone = SelectedHCP.telephone;
-                       item.email = SelectedHCP.email;
+                        NEWHCP.addresslineone = addresslineoneEntry.Text;
+                    }
+                    if (!string.IsNullOrEmpty(towncityEntry.Text))
+                    {
+                        NEWHCP.towncity = towncityEntry.Text;
+                    }
+                    if (!string.IsNullOrEmpty(countryEntry.Text))
+                    {
+                        NEWHCP.country = countryEntry.Text;
+                    }
+                    if (!string.IsNullOrEmpty(countyEntry.Text))
+                    {
+                        NEWHCP.county = countyEntry.Text;
+                    }
+                    if (!string.IsNullOrEmpty(postcodeEntry.Text))
+                    {
+                        NEWHCP.postcode = postcodeEntry.Text;
+                    }
+                    if (!string.IsNullOrEmpty(telephoneEntry.Text))
+                    {
+                        NEWHCP.telephone = telephoneEntry.Text;
+                    }
+                    if (!string.IsNullOrEmpty(EmailEntry.Text))
+                    {
+                        NEWHCP.email = EmailEntry.Text;
                     }
                 }
-                await MopupService.Instance.PushAsync(new PopupPageHelper("HCP Updated") { });
+                //Update HCP in the DB 
+                if (IsEdit == true)
+                {
+                    SelectedHCP.firstname = NEWHCP.firstname;
+                    SelectedHCP.surname = NEWHCP.surname;
+                    SelectedHCP.role = NEWHCP.role;
+                    SelectedHCP.locationname = NEWHCP.locationname;
+
+                    if (!string.IsNullOrEmpty(NEWHCP.addresslineone))
+                    {
+                        SelectedHCP.addresslineone = NEWHCP.addresslineone;
+                    }
+                    if (!string.IsNullOrEmpty(NEWHCP.towncity))
+                    {
+                        SelectedHCP.towncity = NEWHCP.towncity;
+                    }
+                    if (!string.IsNullOrEmpty(NEWHCP.country))
+                    {
+                        SelectedHCP.country = NEWHCP.country;
+                    }
+                    if (!string.IsNullOrEmpty(NEWHCP.county))
+                    {
+                        SelectedHCP.county = NEWHCP.county;
+                    }
+                    if (!string.IsNullOrEmpty(NEWHCP.postcode))
+                    {
+                        SelectedHCP.postcode = NEWHCP.postcode;
+                    }
+                    if (!string.IsNullOrEmpty(NEWHCP.telephone))
+                    {
+                        SelectedHCP.telephone = NEWHCP.telephone;
+                    }
+                    if (!string.IsNullOrEmpty(NEWHCP.email))
+                    {
+                        SelectedHCP.email = NEWHCP.email;
+                    }
+                    await database.UpdateHCPItem(SelectedHCP);
+
+                    foreach (var item in AllUserHCPs)
+                    {
+                        if (SelectedHCP.hcpid == item.hcpid)
+                        {
+                            item.firstname = SelectedHCP.firstname;
+                            item.surname = SelectedHCP.surname;
+                            item.role = SelectedHCP.role;
+                            item.locationname = SelectedHCP.locationname;
+                            item.addresslineone = SelectedHCP.addresslineone;
+                            item.towncity = SelectedHCP.towncity;
+                            item.country = SelectedHCP.country;
+                            item.county = SelectedHCP.county;
+                            item.postcode = SelectedHCP.postcode;
+                            item.telephone = SelectedHCP.telephone;
+                            item.email = SelectedHCP.email;
+                        }
+                    }
+                    await MopupService.Instance.PushAsync(new PopupPageHelper("HCP Updated") { });
+                }
+                else
+                {
+                    NEWHCP.userid = Helpers.Settings.UserKey;
+                    NEWHCPtoAdd.Add(NEWHCP);
+                    var AddedHCP = await database.PostUserHCPAsync(NEWHCPtoAdd);
+                    foreach (var item in AddedHCP)
+                    {
+                        AllUserHCPs.Add(item);
+                    }
+                    await MopupService.Instance.PushAsync(new PopupPageHelper("HCP Added") { });
+                }
+
+
+                HCPAdd.IsEnabled = true;
+                await Task.Delay(1500);
+
+                await Navigation.PushAsync(new HCPs(AllUserHCPs), false);
+
+                var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is HCPs);
+                if (pageToRemoves != null)
+                {
+
+                    Navigation.RemovePage(pageToRemoves);
+                }
+                Navigation.RemovePage(this);
+
+                await MopupService.Instance.PopAllAsync(false);
             }
             else
             {
-                NEWHCP.userid = Helpers.Settings.UserKey; 
-                NEWHCPtoAdd.Add(NEWHCP);
-                var AddedHCP = await database.PostUserHCPAsync(NEWHCPtoAdd);
-                foreach (var item in AddedHCP)
-                {
-                    AllUserHCPs.Add(item);
-                }
-                await MopupService.Instance.PushAsync(new PopupPageHelper("HCP Added") { });
-            }
-          
-           
-           
-            await Task.Delay(1500);
-
-            await Navigation.PushAsync(new HCPs(AllUserHCPs), false);
-
-            var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is HCPs);
-            if (pageToRemoves != null)
-            {
-
-                Navigation.RemovePage(pageToRemoves);
-            }
-            Navigation.RemovePage(this);
-
-            await MopupService.Instance.PopAllAsync(false);
-            
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }           
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -509,7 +561,7 @@ public partial class AddHCPs : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 }

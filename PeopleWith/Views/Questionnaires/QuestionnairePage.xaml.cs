@@ -16,55 +16,93 @@ public partial class QuestionnairePage : ContentPage
     bool completeduserquestionnaire;
     public userquestionnaire completeuserquestionnaire = new userquestionnaire();
     public ObservableCollection<userquestionnaire> alluserquestionnaires = new ObservableCollection<userquestionnaire>();
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
+
     public QuestionnairePage()
 	{
-		InitializeComponent();
-	}
+        try
+        {
+            InitializeComponent();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
 
     public QuestionnairePage(questionnaire questionnairepassed)
     {
-        InitializeComponent();
+        try
+        {
+            InitializeComponent();
 
-        questionnairefromlist = questionnairepassed;
+            questionnairefromlist = questionnairepassed;
 
-        loadingstack.IsVisible = true;
+            loadingstack.IsVisible = true;
 
-        questionnairetitlelbl.Text = questionnairefromlist.title;
+            questionnairetitlelbl.Text = questionnairefromlist.title;
 
-        questionnairedeslbl.Text = questionnairefromlist.description;
+            questionnairedeslbl.Text = questionnairefromlist.description;
 
-        //alluserquestionnaires = alluserquestionnairespassed;
+            //alluserquestionnaires = alluserquestionnairespassed;
 
-        populatequestionnaire();
+            populatequestionnaire();
 
-      //  mainquestionnaire.ItemsSource = questionnairepassed;
+            //  mainquestionnaire.ItemsSource = questionnairepassed;
 
-       // mainquestionnaire.HeightRequest = 1000;
+            // mainquestionnaire.HeightRequest = 1000;
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 
 
     public QuestionnairePage(userquestionnaire userquestionnairepassed, questionnaire questionnairepassed)
     {
-        InitializeComponent();
+        try
+        {
+            InitializeComponent();
 
-        questionnairefromlist = questionnairepassed;
+            questionnairefromlist = questionnairepassed;
 
-        loadingstack.IsVisible = true;
+            loadingstack.IsVisible = true;
 
-        completedquestionnairetitlelbl.Text = questionnairefromlist.title;
+            completedquestionnairetitlelbl.Text = questionnairefromlist.title;
 
-        completedquestionnairedeslbl.Text = questionnairefromlist.description;
+            completedquestionnairedeslbl.Text = questionnairefromlist.description;
 
-        completeuserquestionnaire = userquestionnairepassed;
+            completeuserquestionnaire = userquestionnairepassed;
 
-        completeduserquestionnaire = true;
+            completeduserquestionnaire = true;
 
 
-        populatecompletedquestionnaire();
+            populatecompletedquestionnaire();
 
-        //  mainquestionnaire.ItemsSource = questionnairepassed;
+            //  mainquestionnaire.ItemsSource = questionnairepassed;
 
-        // mainquestionnaire.HeightRequest = 1000;
+            // mainquestionnaire.HeightRequest = 1000;
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 
     async void populatecompletedquestionnaire()
@@ -259,9 +297,9 @@ public partial class QuestionnairePage : ContentPage
             loadingstack.IsVisible = false;
             datastack.IsVisible = true;
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -369,9 +407,6 @@ public partial class QuestionnairePage : ContentPage
 
                     item.answertitle = item.questionanswers[0].answertitle;
                 }
-
-
-
             }
 
             if (completeduserquestionnaire)
@@ -391,9 +426,9 @@ public partial class QuestionnairePage : ContentPage
             loadingstack.IsVisible = false;
             datastack.IsVisible = true;
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -423,12 +458,10 @@ public partial class QuestionnairePage : ContentPage
 
                 }
             }
-
-
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -490,12 +523,10 @@ public partial class QuestionnairePage : ContentPage
 
                 }
             }
-
-
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -540,15 +571,14 @@ public partial class QuestionnairePage : ContentPage
                         getitem.Hasanswered = true;
                     }
 
-              
-
                 }
             }
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
+
     }
 
     private void ViewCell_Appearing(object sender, EventArgs e)
@@ -559,9 +589,9 @@ public partial class QuestionnairePage : ContentPage
             viewcell.View.BackgroundColor = (rownumber % 2 == 0) ? Colors.White : Colors.White;
             rownumber++;
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -569,94 +599,123 @@ public partial class QuestionnairePage : ContentPage
     {
         try
         {
-            submitbtn.IsEnabled = false;
-            //update the slider questions and answers
-            foreach(var item in questionnairefromlist.questionanswerjsonlist)
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                if (item.questiontype == "scale110singleselection")
+                //Limit No. of Taps 
+                submitbtn.IsEnabled = false;
+                //update the slider questions and answers
+                foreach (var item in questionnairefromlist.questionanswerjsonlist)
                 {
-                    //do nothing as 1 is already set
-                    item.Hasanswered = true;
-                    //check if they have moved it, if its null or empty add the 1 as default
-                    if (string.IsNullOrEmpty(item.selectedtextvalue))
+                    if (item.questiontype == "scale110singleselection")
                     {
-                        item.selectedtextvalue = "1";
+                        //do nothing as 1 is already set
+                        item.Hasanswered = true;
+                        //check if they have moved it, if its null or empty add the 1 as default
+                        if (string.IsNullOrEmpty(item.selectedtextvalue))
+                        {
+                            item.selectedtextvalue = "1";
+
+                        }
 
                     }
-
                 }
-            }
 
-            //check if all questions are answered
-            var countofmissedquestions = 0;
+                //check if all questions are answered
+                var countofmissedquestions = 0;
 
-            foreach(var item in questionnairefromlist.questionanswerjsonlist)
-            {
-
-                if(item.questionrequired)
+                foreach (var item in questionnairefromlist.questionanswerjsonlist)
                 {
-           
-                   
+
+                    if (item.questionrequired)
+                    {
+
+
                         if (item.Hasanswered == false)
                         {
                             item.Bordercolor = Colors.Red;
                             item.Isrequired = true;
                             countofmissedquestions++;
                         }
-                    
-                }
-            }
 
-            if(countofmissedquestions > 0)
-            {
-                Vibration.Vibrate();
-                submitbtn.IsEnabled = true;
-                return;
-            }
-
-
-            //add the questions
-            var collection = new ObservableCollection<userquestionnaire>();
-
-            var newitem = new userquestionnaire();
-
-            newitem.questionnaireid = questionnairefromlist.questionnaireid;
-
-            newitem.userid = Helpers.Settings.UserKey;
-
-            newitem.completedatetime = DateTime.Now.ToString("HH:mm dd/MM/yyyy");
-
-            var newuserresponse = new ObservableCollection<userquestionnaireresponse>();
-
-       
-
-            foreach (var item in questionnairefromlist.questionanswerjsonlist)
-            {
-
-               if(item.Hasanswered)
-                {
-                    var userresponse = new userquestionnaireresponse();
-
-                    userresponse.questionid = item.questionid;
-
-                    //add answers
-                    var useranswers = new ObservableCollection<answers>();
-
-                    if(item.Selectedansweridlist.Count == 0)
-                    {
-                        item.Selectedansweridlist.Add(item.questionanswers[0].answerid);
                     }
+                }
 
-                    for (int i = 0; i < item.Selectedansweridlist.Count; i++)
+                if (countofmissedquestions > 0)
+                {
+                    Vibration.Vibrate();
+                    submitbtn.IsEnabled = true;
+                    return;
+                }
+
+
+                //add the questions
+                var collection = new ObservableCollection<userquestionnaire>();
+
+                var newitem = new userquestionnaire();
+
+                newitem.questionnaireid = questionnairefromlist.questionnaireid;
+
+                newitem.userid = Helpers.Settings.UserKey;
+
+                newitem.completedatetime = DateTime.Now.ToString("HH:mm dd/MM/yyyy");
+
+                var newuserresponse = new ObservableCollection<userquestionnaireresponse>();
+
+
+
+                foreach (var item in questionnairefromlist.questionanswerjsonlist)
+                {
+
+                    if (item.Hasanswered)
                     {
-                        var newanswer = new answers();
-                        newanswer.answerid = item.Selectedansweridlist[i];
+                        var userresponse = new userquestionnaireresponse();
 
-                        if (item.questiontype == "multipleselection")
+                        userresponse.questionid = item.questionid;
+
+                        //add answers
+                        var useranswers = new ObservableCollection<answers>();
+
+                        if (item.Selectedansweridlist.Count == 0)
                         {
-                            var getansweroptions = item.questionanswers.Where(x => x.answerid == item.Selectedansweridlist[i]).FirstOrDefault();
-                            
-                            if(getansweroptions.answeroptions == "specifyfreetext")
+                            item.Selectedansweridlist.Add(item.questionanswers[0].answerid);
+                        }
+
+                        for (int i = 0; i < item.Selectedansweridlist.Count; i++)
+                        {
+                            var newanswer = new answers();
+                            newanswer.answerid = item.Selectedansweridlist[i];
+
+                            if (item.questiontype == "multipleselection")
+                            {
+                                var getansweroptions = item.questionanswers.Where(x => x.answerid == item.Selectedansweridlist[i]).FirstOrDefault();
+
+                                if (getansweroptions.answeroptions == "specifyfreetext")
+                                {
+                                    if (!string.IsNullOrEmpty(item.selectedtextvalue))
+                                    {
+                                        if (item.Addfreetextenabled)
+                                        {
+                                            newanswer.answervalue = item.selectedtextvalue.TrimEnd();
+                                        }
+                                    }
+                                }
+
+
+                            }
+                            else if (item.questiontype == "freetext" || item.questiontype == "numeric")
+                            {
+                                if (!string.IsNullOrEmpty(item.selectedtextvalue))
+                                {
+                                    newanswer.answervalue = item.selectedtextvalue.TrimEnd();
+                                }
+                            }
+                            else if (item.questiontype == "doublenumeric")
+                            {
+                                newanswer.answervalue = item.doubleentryone.TrimEnd() + "|" + item.doubleentrytwo.TrimEnd();
+                            }
+                            else if (item.questiontype == "singleselection")
                             {
                                 if (!string.IsNullOrEmpty(item.selectedtextvalue))
                                 {
@@ -666,90 +725,72 @@ public partial class QuestionnairePage : ContentPage
                                     }
                                 }
                             }
-
-                        
-                        }
-                        else if (item.questiontype == "freetext" || item.questiontype == "numeric")
-                        {
-                            if (!string.IsNullOrEmpty(item.selectedtextvalue))
+                            else if (item.questiontype == "scale110singleselection")
                             {
-                                newanswer.answervalue = item.selectedtextvalue.TrimEnd();
+                                newanswer.answervalue = item.selectedtextvalue;
                             }
-                        }
-                        else if(item.questiontype == "doublenumeric")
-                        {
-                            newanswer.answervalue = item.doubleentryone.TrimEnd() + "|" + item.doubleentrytwo.TrimEnd();
-                        }
-                        else if(item.questiontype == "singleselection")
-                        {
-                            if (!string.IsNullOrEmpty(item.selectedtextvalue))
-                            {
-                                if (item.Addfreetextenabled)
-                                {
-                                    newanswer.answervalue = item.selectedtextvalue.TrimEnd();
-                                }
-                            }
-                        }
-                        else if(item.questiontype == "scale110singleselection")
-                        {
-                            newanswer.answervalue = item.selectedtextvalue;
-                        }
-                        
 
-                        useranswers.Add(newanswer);
+
+                            useranswers.Add(newanswer);
+                        }
+
+                        userresponse.answer = useranswers;
+
+                        newuserresponse.Add(userresponse);
+
                     }
 
-                    userresponse.answer = useranswers;
-
-                    newuserresponse.Add(userresponse);
 
                 }
 
-     
+
+                string jsonString = JsonConvert.SerializeObject(newuserresponse);
+
+                newitem.questionanswerjson = jsonString;
+
+                var uq = await aPICalls.PostUserQuestionnaire(newitem);
+
+                await MopupService.Instance.PushAsync(new PopupPageHelper("Questionnaire Submitted") { });
+                await Task.Delay(1500);
+
+                submitbtn.IsEnabled = true;
+
+                //   alluserquestionnaires.Add(newitem);
+
+                await Navigation.PushAsync(new AllQuestionnaires(), false);
+
+                await MopupService.Instance.PopAllAsync(false);
+
+                var pageToRemoves = Navigation.NavigationStack.ToList();
+
+                int ii = 0;
+
+                foreach (var page in pageToRemoves)
+                {
+                    if (ii == 0)
+                    {
+                    }
+                    else if (ii == 1 || ii == 2 || ii == 3)
+                    {
+                        Navigation.RemovePage(page);
+                    }
+                    else
+                    {
+                        //Navigation.RemovePage(page);
+                    }
+                    ii++;
+                }
+
             }
-
-
-            string jsonString = JsonConvert.SerializeObject(newuserresponse);
-
-            newitem.questionanswerjson = jsonString;
-
-            var uq = await aPICalls.PostUserQuestionnaire(newitem);
-
-            await MopupService.Instance.PushAsync(new PopupPageHelper("Questionnaire Submitted") { });
-            await Task.Delay(1500);
-
-            submitbtn.IsEnabled = true;
-
-         //   alluserquestionnaires.Add(newitem);
-
-            await Navigation.PushAsync(new AllQuestionnaires(), false);
-
-            await MopupService.Instance.PopAllAsync(false);
-
-            var pageToRemoves = Navigation.NavigationStack.ToList();
-
-            int ii = 0;
-
-            foreach (var page in pageToRemoves)
+            else
             {
-                if (ii == 0)
-                {
-                }
-                else if (ii == 1 || ii == 2 || ii == 3)
-                {
-                    Navigation.RemovePage(page);
-                }
-                else
-                {
-                    //Navigation.RemovePage(page);
-                }
-                ii++;
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
             }
-
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -780,9 +821,9 @@ public partial class QuestionnairePage : ContentPage
             }
 
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -820,9 +861,9 @@ public partial class QuestionnairePage : ContentPage
                 getitem.doubleentryone = string.Empty;
             }
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -859,9 +900,9 @@ public partial class QuestionnairePage : ContentPage
                 getitem.doubleentrytwo = string.Empty;
             }
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -892,9 +933,9 @@ public partial class QuestionnairePage : ContentPage
             }
 
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -904,7 +945,6 @@ public partial class QuestionnairePage : ContentPage
         {
             //slider changed 
             var item = (ExtendedSlider)sender;
-
 
             var getitem = questionnairefromlist.questionanswerjsonlist.Where(x => x.questionid == item.questionid).FirstOrDefault();
 
@@ -924,9 +964,9 @@ public partial class QuestionnairePage : ContentPage
             //getitem.Hasanswered = false;
             // }
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 }

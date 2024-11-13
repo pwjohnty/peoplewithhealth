@@ -14,7 +14,24 @@ public partial class LoginPage : ContentPage
     HttpClient client = new HttpClient();
     string userid;
     bool IsResetPin; 
-    ObservableCollection<user> users = new ObservableCollection<user>(); 
+    ObservableCollection<user> users = new ObservableCollection<user>();
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
+
     public LoginPage()
 	{
         try
@@ -24,9 +41,9 @@ public partial class LoginPage : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
-	}
+    }
 
 
     public LoginPage(string Pin)
@@ -38,7 +55,7 @@ public partial class LoginPage : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -87,18 +104,25 @@ public partial class LoginPage : ContentPage
             capitallbl.TextColor = Color.FromArgb("#031926");
             numlbl.TextColor = Color.FromArgb("#031926");
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
     private void emailentry_TextChanged(object sender, TextChangedEventArgs e)
     {
+        try
+        {
 
+        }
+        catch (Exception Ex)
+        {
+            //Leave Empty
+        }
     }
 
-   async private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    async private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
         try
         {
@@ -106,7 +130,7 @@ public partial class LoginPage : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -114,11 +138,24 @@ public partial class LoginPage : ContentPage
     {
         try
         {
-            Handleemailframe(); 
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Limit No. of Taps 
+                Signin.IsEnabled = false;
+                Handleemailframe();
+                Signin.IsEnabled = true;
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }  
         }
-        catch(Exception Ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -273,11 +310,10 @@ public partial class LoginPage : ContentPage
             {
                 return; 
             }
-
-
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
+            NotasyncMethod(Ex);
         }
     }
     private async void AddBackTags()
@@ -299,9 +335,9 @@ public partial class LoginPage : ContentPage
                 await notificationService.AddTag(tags);
             }
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -362,7 +398,7 @@ public partial class LoginPage : ContentPage
         }
         catch (Exception Ex)
         {
-           
+            NotasyncMethod(Ex);
         }
     }
 }

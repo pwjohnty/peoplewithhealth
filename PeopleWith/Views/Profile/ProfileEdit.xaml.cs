@@ -1,5 +1,6 @@
 ﻿using Mopups.Services;
 using Newtonsoft.Json;
+using PINView.Maui;
 using System.Collections.ObjectModel;
 using System.Security.Cryptography;
 using System.Text;
@@ -23,6 +24,24 @@ public partial class ProfileEdit : ContentPage
     string ValidationCode; 
     static Regex ValidEmailRegex = CreateValidEmailRegex();
     PasswordEncryption Encryption = new PasswordEncryption();
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
+
+
     public ProfileEdit(string SelectedItem, string Selected, user AllUserDetails)
     {
         try
@@ -46,7 +65,7 @@ public partial class ProfileEdit : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
     //Health Details Populate 
@@ -168,7 +187,7 @@ public partial class ProfileEdit : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -177,34 +196,47 @@ public partial class ProfileEdit : ContentPage
     {
         try
         {
-            //Set Title Text
-            SettingsStack.IsVisible = true;
-            SettingsStacklbl.Text = ItemTitle;
-
-            if (ItemTitle == "Reset Password")
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                //CreateNewPin();
-                EmailConfirmStack.IsVisible = true;
-                SettingsUpdate.Text = "Check Password"; 
+                //Limit No. of Taps 
+                SettingsUpdate.IsEnabled = false;
+                //Set Title Text
+                SettingsStack.IsVisible = true;
+                SettingsStacklbl.Text = ItemTitle;
+
+                if (ItemTitle == "Reset Password")
+                {
+                    //CreateNewPin();
+                    EmailConfirmStack.IsVisible = true;
+                    SettingsUpdate.Text = "Check Password";
 
 
+                }
+                else if (ItemTitle == "Notifications")
+                {
+                    //Needs Added
+                    NotificationsStack.IsVisible = true;
+                    SettingsUpdate.Text = "Update " + ItemTitle;
+                }
+                else if (ItemTitle == "Signup Code")
+                {
+                    //Create Password Reset Code
+                    SignupcodeStack.IsVisible = true;
+                    SettingsUpdate.Text = "Update " + ItemTitle;
+                }
+                SettingsUpdate.IsEnabled = true;
             }
-            else if (ItemTitle == "Notifications")
+            else
             {
-                //Needs Added
-                NotificationsStack.IsVisible = true;
-                SettingsUpdate.Text = "Update " + ItemTitle;
-            }
-            else if (ItemTitle == "Signup Code")
-            {
-                //Create Password Reset Code
-                SignupcodeStack.IsVisible = true; 
-                SettingsUpdate.Text = "Update " + ItemTitle;
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
             }
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -222,7 +254,12 @@ public partial class ProfileEdit : ContentPage
                 PrivacyStacklbl.Text = "Enter Current Pin";
                 PrivacyUpdate.IsVisible = false;
                 PrivacyUpdate.Text = "Update Pin";
-                CurrentPin.Focus(); 
+                CurrentPin.Focus();
+
+#if ANDROID
+        var handler = CurrentPin.Handler as IView;
+        handler.Focus();
+#endif
             }
             else if (ItemTitle == "Permissions")
             {
@@ -273,7 +310,7 @@ public partial class ProfileEdit : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -285,7 +322,7 @@ public partial class ProfileEdit : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -297,7 +334,7 @@ public partial class ProfileEdit : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -356,7 +393,7 @@ public partial class ProfileEdit : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -454,7 +491,7 @@ public partial class ProfileEdit : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -562,10 +599,10 @@ public partial class ProfileEdit : ContentPage
             }
 
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
+            NotasyncMethod(Ex);
         }
-
     }
 
     async void handleDateofBirth()
@@ -626,6 +663,7 @@ public partial class ProfileEdit : ContentPage
         }
         catch (Exception Ex)
         {
+            NotasyncMethod(Ex);
         }
     }
 
@@ -681,9 +719,9 @@ public partial class ProfileEdit : ContentPage
                 await MopupService.Instance.PopAllAsync(false);
             }
         }
-        catch(Exception Ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -742,7 +780,7 @@ public partial class ProfileEdit : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -754,7 +792,7 @@ public partial class ProfileEdit : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -827,9 +865,9 @@ public partial class ProfileEdit : ContentPage
 
             isEditing = false;
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -841,7 +879,7 @@ public partial class ProfileEdit : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -853,40 +891,51 @@ public partial class ProfileEdit : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
     async private void HealthDetailsUpdate_Clicked(object sender, EventArgs e)
     {
         try
-        {            
-            if (NameStack.IsVisible == true)
+        {
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                handleNameframe(); 
+                //Limit No. of Taps 
+                HealthDetailsUpdate.IsEnabled = false;
+                if (NameStack.IsVisible == true)
+                {
+                    handleNameframe();
+                }
+                else if (EmailStack.IsVisible == true)
+                {
+                    Handleemailframe();
+                }
+                else if (DateofBirthStack.IsVisible == true)
+                {
+                    handleDateofBirth();
+                }
+                else if (GenderStack.IsVisible == true)
+                {
+                    handleGender();
+                }
+                else if (EthnicityStack.IsVisible == true)
+                {
+                    handleEthnicity();
+                }
+                HealthDetailsUpdate.IsEnabled = true;
             }
-            else if (EmailStack.IsVisible == true) 
+            else
             {
-                Handleemailframe();
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
             }
-            else if (DateofBirthStack.IsVisible == true)
-            {
-                handleDateofBirth();
-            }
-            else if (GenderStack.IsVisible == true)
-            {
-                handleGender(); 
-            }
-            else if (EthnicityStack.IsVisible == true)
-            {
-                handleEthnicity(); 
-            }
-
-
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -897,9 +946,9 @@ public partial class ProfileEdit : ContentPage
         {
            
         }
-        catch(Exception Ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -928,6 +977,7 @@ public partial class ProfileEdit : ContentPage
         }
         catch (Exception Ex)
         {
+            NotasyncMethod(Ex);
         }
     }
 
@@ -939,6 +989,7 @@ public partial class ProfileEdit : ContentPage
         }
         catch (Exception Ex)
         {
+            NotasyncMethod(Ex);
         }
     }
 
@@ -982,6 +1033,7 @@ public partial class ProfileEdit : ContentPage
         }
         catch (Exception Ex)
         {
+            NotasyncMethod(Ex);
         }
     }
 
@@ -1028,7 +1080,7 @@ public partial class ProfileEdit : ContentPage
         }
         catch (Exception Ex)
         {
-           
+            NotasyncMethod(Ex);
         }
     }
 
@@ -1156,7 +1208,7 @@ public partial class ProfileEdit : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -1258,7 +1310,7 @@ public partial class ProfileEdit : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -1270,7 +1322,7 @@ public partial class ProfileEdit : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -1294,8 +1346,8 @@ public partial class ProfileEdit : ContentPage
         }
         catch (Exception Ex)
         {
-
-        }     
+            NotasyncMethod(Ex);
+        }
     }
 
    async private void PrivacyUpdate_Clicked(object sender, EventArgs e)
@@ -1310,7 +1362,7 @@ public partial class ProfileEdit : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -1392,7 +1444,7 @@ public partial class ProfileEdit : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -1423,44 +1475,86 @@ public partial class ProfileEdit : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
     private void CurrentPin_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
+        try
+        {
 
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 
     private void codepin_PINEntryCompleted(object sender, PINView.Maui.Helpers.PINCompletedEventArgs e)
     {
+        try
+        {
 
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 
     private void codepin_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
+        try
+        {
 
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 
     private void confirmcodepin_PINEntryCompleted(object sender, PINView.Maui.Helpers.PINCompletedEventArgs e)
     {
+        try
+        {
 
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 
     private void confirmcodepin_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
+        try
+        {
 
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 
     async private void emailconfigpin_Focused(object sender, FocusEventArgs e)
     {
-   
+        try
+        {
+
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 
     async private void PinSwitch_Toggled(object sender, ToggledEventArgs e)
     {
-            try
-            {
+        try
+          {
             string UserPinjoin = String.Empty;
             string PinOnOff = String.Empty; 
             if (e.Value == false)
@@ -1505,13 +1599,11 @@ public partial class ProfileEdit : ContentPage
                         Preferences.Set("pincode", UserPinjoin);
                     }
                 }
-
             }
-            catch (Exception Ex)
-            {
-
-            }
-
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 
     async private void FingerSwitch_Toggled(object sender, ToggledEventArgs e)
@@ -1549,7 +1641,7 @@ public partial class ProfileEdit : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 }

@@ -15,45 +15,71 @@ public partial class AllMedications : ContentPage
     public ObservableCollection<usermedication> CurrentMedications = new ObservableCollection<usermedication>();
     public ObservableCollection<usermedication> AsRequiredMedications = new ObservableCollection<usermedication>();
     public ObservableCollection<usermedication> AddinAsRequired = new ObservableCollection<usermedication>();
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
     public AllMedications()
 	{
-		InitializeComponent();
-		getusermedications();
-
-        WeakReferenceMessenger.Default.Register<UpdateAllMeds>(this, (r, m) =>
+        try
         {
+            InitializeComponent();
+            getusermedications();
 
-            AllUserMedications = (ObservableCollection<usermedication>)m.Value;
+            WeakReferenceMessenger.Default.Register<UpdateAllMeds>(this, (r, m) =>
+            {
 
-        });
+                AllUserMedications = (ObservableCollection<usermedication>)m.Value;
 
+            });
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 
     public AllMedications(ObservableCollection<usermedication> AllUsermeds)
     {
-        InitializeComponent();
-
-		AllUserMedications.Clear();
-
-        AllUserMedications = AllUsermeds;
-
-        if(AllUserMedications.Count == 0)
+        try
         {
-            nodatastack.IsVisible = true;
-            datastack.IsVisible = false; 
+            InitializeComponent();
+
+            AllUserMedications.Clear();
+
+            AllUserMedications = AllUsermeds;
+
+            if (AllUserMedications.Count == 0)
+            {
+                nodatastack.IsVisible = true;
+                datastack.IsVisible = false;
+            }
+            else
+            {
+                nodatastack.IsVisible = false;
+                datastack.IsVisible = true;
+
+                AllUserMedsList.ItemsSource = AllUserMedications;
+
+                WorkOutNextDue();
+            }
         }
-        else
+        catch (Exception Ex)
         {
-            nodatastack.IsVisible = false;
-            datastack.IsVisible = true;
-
-            AllUserMedsList.ItemsSource = AllUserMedications;
-
-            WorkOutNextDue();
+            NotasyncMethod(Ex);
         }
-
-      
-
     }
 
 
@@ -88,11 +114,11 @@ public partial class AllMedications : ContentPage
                 WorkOutNextDue();
             }
         }
-		catch(Exception ex)
-		{
-
-		}
-	}
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
 
     async void WorkOutNextDue()
     {
@@ -623,9 +649,6 @@ public partial class AllMedications : ContentPage
                 }
 
             }
-
-
-
             //check if any medications have been completed
 
             foreach (var item in AllUserMedications)
@@ -674,9 +697,6 @@ public partial class AllMedications : ContentPage
 
             }
 
-
-
-
             var sortedbyname = CurrentMedications
     .OrderBy(x => x.status == "Pending" ? 0 : 1)  // Pending first
     .ThenBy(x => x.ChangedMedName)                 // Then by medication name
@@ -693,13 +713,13 @@ public partial class AllMedications : ContentPage
             CheckCompletedMedications();
 
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
-    
+
     DayOfWeek ParseDay(string day)
     {
         return day switch
@@ -731,13 +751,10 @@ public partial class AllMedications : ContentPage
                     aPICalls.UpdateCompletedMedication(item);
                 }
             }
-
-
-
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -746,45 +763,65 @@ public partial class AllMedications : ContentPage
     {
 		try
 		{
-            usermedication NullInstance = new usermedication(); 
-			await Navigation.PushAsync(new AddMedication(AllUserMedications, NullInstance), false);
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Limit No. of Taps 
+                AddBtn.IsEnabled = false;
+                usermedication NullInstance = new usermedication();
+                await Navigation.PushAsync(new AddMedication(AllUserMedications, NullInstance), false);
+                AddBtn.IsEnabled = true;
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
 		}
-		catch(Exception ex)
-		{
-
-		}
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 
     async private void AllUserMedsList_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
     {
         try
         {
-            usermedication SelectedMed = e.DataItem as usermedication; 
-
-            if(SelectedMed.status == "Pending")
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                SelectedMed.EditMedSection = "Details";
-                await Navigation.PushAsync(new AddMedication(AllUserMedications, SelectedMed), false);
+                usermedication SelectedMed = e.DataItem as usermedication;
+
+                if (SelectedMed.status == "Pending")
+                {
+                    SelectedMed.EditMedSection = "Details";
+                    await Navigation.PushAsync(new AddMedication(AllUserMedications, SelectedMed), false);
+                }
+                else
+                {
+                    await Navigation.PushAsync(new SingleMedication(AllUserMedications, SelectedMed), false);
+                }
             }
             else
             {
-                await Navigation.PushAsync(new SingleMedication(AllUserMedications, SelectedMed), false);
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
             }
-
-
-           
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
+
     }
 
     private void segmentedControl_SelectionChanged(object sender, Syncfusion.Maui.Buttons.SelectionChangedEventArgs e)
     {
         try
         {
-
             var index = e.NewIndex;
 
             if(index == 0)
@@ -832,7 +869,7 @@ public partial class AllMedications : ContentPage
         }
         catch(Exception ex)
         {
-
+            //Leave Empty
         }
     }
 
@@ -851,13 +888,10 @@ public partial class AllMedications : ContentPage
             {
                 await Navigation.PushAsync(new SingleMedication(AllUserMedications, SelectedMed), false);
             }
-
-
-
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 }

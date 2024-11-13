@@ -1,14 +1,14 @@
 using PeopleWith;
 
 namespace PeopleWith;
-
-
-
 public partial class HealthReport : ContentPage
 {
     public const string HealthReportStart = "https://portal.peoplewith.com/migration/health-report.php?";
     public string HealthReportEnd = "id=" + Helpers.Settings.UserKey + "&pid=" + Helpers.Settings.ValidationCode;
     public string HealthReportUrl;
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
 
     async public void NotasyncMethod(Exception Ex)
@@ -27,32 +27,46 @@ public partial class HealthReport : ContentPage
 	{
         try
         {
-            InitializeComponent();
-            HealthReportUrl = HealthReportStart + HealthReportEnd;
-            //HealthReportViewer.Source = test;
-            //string test = "https://portal.peoplewith.com/migration/health-report.php?id=0cd8854d-5073-4725-989b-c190e5a8cb15&pid=12312";
-            HealthReportViewer.Source = HealthReportUrl;
-
-
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                InitializeComponent();
+                HealthReportUrl = HealthReportStart + HealthReportEnd;
+                HealthReportViewer.Source = HealthReportUrl;
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }         
         }
         catch (Exception Ex)
         {
             NotasyncMethod(Ex);
         }   
-
     }
 
     private void Button_Clicked(object sender, EventArgs e)
     {
         try
         {
-
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
 #if ANDROID
             PrintHelperAndroid.Print(HealthReportViewer);
 #endif
 #if IOS
            PrintHelperIOS.Print(HealthReportViewer);
 #endif
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
         }
         catch (Exception Ex)
         {

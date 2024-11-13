@@ -12,7 +12,24 @@ public partial class SingleDiagnosis : ContentPage
     bool isEditing;
     bool validdob;
     string WebpageLink;
-    public string WeborPdf; 
+    public string WeborPdf;
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
+
     protected override bool OnBackButtonPressed()
     {
         try
@@ -38,14 +55,22 @@ public partial class SingleDiagnosis : ContentPage
         }
         catch (Exception Ex)
         {
-            //Add Crash log
+            NotasyncMethod(Ex);
             return false;
         }
 
     }
     public SingleDiagnosis()
     {
-        InitializeComponent();
+        try
+        {
+            InitializeComponent();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+
     }
 
     public SingleDiagnosis(ObservableCollection<userdiagnosis> DiagPassed, ObservableCollection<userdiagnosis> AllDiagnosis)
@@ -66,7 +91,7 @@ public partial class SingleDiagnosis : ContentPage
         }
         catch (Exception Ex)
         {
-            //Add Crash log
+            NotasyncMethod(Ex);
         }
     }
     async void loadMedInformation()
@@ -109,7 +134,7 @@ public partial class SingleDiagnosis : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -120,6 +145,17 @@ public partial class SingleDiagnosis : ContentPage
             DateTime DOB;
             if (DateTime.TryParse(DateofDiagnosis, out DOB))
             {
+                if (validdob == false)
+                {
+                    DateEntry.Focus();
+                    EntryError.IsVisible = true;
+                    EntryError.Text = "Diagnosis Date is Not a Valid Date, Enter a Valid Date";
+                    await Task.Delay(5000);
+                    EntryError.Text = null;
+                    EntryError.IsVisible = false;
+                    return;
+
+                }
 
                 if (DOB.Date <= DateTime.Now.Date)
                 {
@@ -180,7 +216,7 @@ public partial class SingleDiagnosis : ContentPage
         }
         catch (Exception Ex)
         {
-            //Add Crash log
+            NotasyncMethod(Ex);
         }
     }
 
@@ -188,49 +224,65 @@ public partial class SingleDiagnosis : ContentPage
     {
         try
         {
-            bool Delete = await DisplayAlert("Delete Diagnosis", "Are you sure you would like the delete this Diagnosis? Once deleted it cannot be retrieved", "Delete", "Cancel");
-            if (Delete == true)
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-
-                foreach (var item in DiagnosisPassed)
+                //Limit No. of Taps 
+                Deletebtn.IsEnabled = false;
+                bool Delete = await DisplayAlert("Delete Diagnosis", "Are you sure you would like the delete this Diagnosis? Once deleted it cannot be retrieved", "Delete", "Cancel");
+                if (Delete == true)
                 {
-                    item.deleted = true;
-                }
 
-                APICalls database = new APICalls();
-                await database.DeleteDiagnosis(DiagnosisPassed);
-
-                await MopupService.Instance.PushAsync(new PopupPageHelper("Diagnosis Deleted") { });
-                await Task.Delay(1500);
-
-                foreach (var item in AllUserDiagnosis)
-                {
-                    if (item.id == DiagnosisPassed[0].id)
+                    foreach (var item in DiagnosisPassed)
                     {
                         item.deleted = true;
                     }
+
+                    APICalls database = new APICalls();
+                    await database.DeleteDiagnosis(DiagnosisPassed);
+
+                    await MopupService.Instance.PushAsync(new PopupPageHelper("Diagnosis Deleted") { });
+                    await Task.Delay(1500);
+
+                    foreach (var item in AllUserDiagnosis)
+                    {
+                        if (item.id == DiagnosisPassed[0].id)
+                        {
+                            item.deleted = true;
+                        }
+                    }
+                    await MopupService.Instance.PopAllAsync(false);
+                    await Navigation.PushAsync(new AllDiagnosis(AllUserDiagnosis));
+
+                    var pageToRemove = Navigation.NavigationStack.FirstOrDefault(x => x is AllDiagnosis);
+
+                    if (pageToRemove != null)
+                    {
+                        Navigation.RemovePage(pageToRemove);
+                    }
+                    Navigation.RemovePage(this);
+
+                    Deletebtn.IsEnabled = true;
+                    return;
+                    
                 }
-                await MopupService.Instance.PopAllAsync(false);
-                await Navigation.PushAsync(new AllDiagnosis(AllUserDiagnosis));
-
-                var pageToRemove = Navigation.NavigationStack.FirstOrDefault(x => x is AllDiagnosis);
-
-                if (pageToRemove != null)
+                else
                 {
-                    Navigation.RemovePage(pageToRemove);
+                    Deletebtn.IsEnabled = true;
+                    return;
+                    
                 }
-                Navigation.RemovePage(this);
-
-                return;
             }
             else
             {
-                return;
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
             }
         }
         catch (Exception Ex)
         {
-            //Add Crash log
+            NotasyncMethod(Ex);
         }
     }
 
@@ -265,7 +317,7 @@ public partial class SingleDiagnosis : ContentPage
         }
         catch (Exception Ex)
         {
-            //Add Crash log
+            NotasyncMethod(Ex);
         }
     }
 
@@ -273,13 +325,26 @@ public partial class SingleDiagnosis : ContentPage
     {
         try
         {
-            DiagnosisSingle.IsVisible = false;
-            dateofBirth.IsVisible = true;
-            Diagnosislbl.Text = DiagnosisPassed[0].diagnosistitle;
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Limit No. of Taps 
+                EditBtn.IsEnabled = false;
+                DiagnosisSingle.IsVisible = false;
+                dateofBirth.IsVisible = true;
+                Diagnosislbl.Text = DiagnosisPassed[0].diagnosistitle;
+                EditBtn.IsEnabled = true;
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
         }
         catch (Exception Ex)
         {
-            //Add Crash log
+            NotasyncMethod(Ex);
         }
     }
 
@@ -292,7 +357,7 @@ public partial class SingleDiagnosis : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -337,7 +402,8 @@ public partial class SingleDiagnosis : ContentPage
                     if (date.Year >= 1900 && date.Year <= currentYear)
                     {
                         DateEntry.TextColor = Color.FromArgb("#031926"); // Valid date
-                        AddBtn.IsEnabled = true; 
+                        AddBtn.IsEnabled = true;
+                        validdob = true;
                     }
                     else
                     {
@@ -367,7 +433,7 @@ public partial class SingleDiagnosis : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -393,7 +459,7 @@ public partial class SingleDiagnosis : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 }

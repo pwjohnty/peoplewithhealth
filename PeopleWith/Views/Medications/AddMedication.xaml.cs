@@ -58,11 +58,29 @@ public partial class AddMedication : ContentPage
 
     ObservableCollection<MedtimesDosages> medtimesanddosages = new ObservableCollection<MedtimesDosages>();
     ObservableCollection<usermedication> UserMedications = new ObservableCollection<usermedication>();
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
+
     public AddMedication()
 	{
-		InitializeComponent();
+        try
+        {
 
-
+        InitializeComponent();
 		Getmedications();
 
         var new1 = new preparation();
@@ -301,13 +319,20 @@ public partial class AddMedication : ContentPage
     { "Fri", 6 },
     { "Sat", 7 }
 };
-
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
 
     }
 
 
     public AddMedication(ObservableCollection<usermedication> AllUsermedications, usermedication MedSelected)
     {
+        try
+        {
+           
         InitializeComponent();
 
 
@@ -570,7 +595,11 @@ public partial class AddMedication : ContentPage
     { "Fri", 6 },
     { "Sat", 7 }
 };
-       
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
 
     }
 
@@ -668,7 +697,7 @@ public partial class AddMedication : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -679,11 +708,11 @@ public partial class AddMedication : ContentPage
             await RetrieveallMedications(); 
 
         }
-		catch(Exception ex)
-		{
-
-		}
-	}
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
 
     async Task RetrieveallMedications()
     {
@@ -749,9 +778,9 @@ public partial class AddMedication : ContentPage
             }
 
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -784,7 +813,7 @@ public partial class AddMedication : ContentPage
         }
         catch(Exception ex)
         {
-
+            //Leave Empty
         }
     }
 
@@ -820,22 +849,30 @@ public partial class AddMedication : ContentPage
 
 
         }
-        catch(Exception ex)
-        { 
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
         }
     }
 
-  
+
     private async void nextbtn_Clicked(object sender, EventArgs e)
     {
         try
         {
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Limit No. of Taps 
+                //nextbtn.IsEnabled = false;
+
             if (IsEdit == true)
             {
-
+                
                 if (secondstack.IsVisible == true)
                 {
-
+                    //nextbtn.IsEnabled = true;
                     //Preperation 
                     if (medpreparationslistview.SelectedItem == null)
                     {
@@ -2117,12 +2154,18 @@ public partial class AddMedication : ContentPage
 
                 }
 
-
+            }
+               
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
             }
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -2171,9 +2214,9 @@ public partial class AddMedication : ContentPage
             }
             
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -2202,7 +2245,7 @@ public partial class AddMedication : ContentPage
         }
         catch(Exception ex)
         {
-
+            //Leave Empty
         }
     }
 
@@ -2362,13 +2405,10 @@ public partial class AddMedication : ContentPage
                 weeklydayslist.SelectedItems.Clear();
                 weekfreqlistview.SelectedItems.Clear();
             }
-
-
-
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -2453,13 +2493,12 @@ public partial class AddMedication : ContentPage
                     timesanddosageslistview.HeightRequest = selectedDosages.Count * 100;
                 }
             }
-
-
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
+
     }
 
     private void weeklydayslist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
@@ -2527,9 +2566,9 @@ public partial class AddMedication : ContentPage
             }
 
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -2568,9 +2607,9 @@ public partial class AddMedication : ContentPage
             }
 
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -2610,7 +2649,7 @@ public partial class AddMedication : ContentPage
         }
         catch(Exception ex)
         {
-
+          //Leave Empty
         }
     }
 
@@ -2638,7 +2677,7 @@ public partial class AddMedication : ContentPage
         }
         catch(Exception ex)
         {
-
+            //Leave Empty
         }
     }
 
@@ -2785,16 +2824,8 @@ public partial class AddMedication : ContentPage
                     timesanddosageslistview.IsVisible = false;
                     timeanddosagelbl.IsVisible = false;
                     timeanddosagelbl2.IsVisible = false;
-                }
-
-              
-
-           
-                
+                }                
             }
-
-
-
            // weeklynumperday = item;
 
           //  timesanddosageslistview.IsVisible = false;
@@ -2803,20 +2834,36 @@ public partial class AddMedication : ContentPage
 
 
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
     private void btnyes_Clicked(object sender, EventArgs e)
     {
-       
+        try
+        {
+            InitializeComponent();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+
     }
 
     private void btnno_Clicked(object sender, EventArgs e)
     {
-  
+        try
+        {
+            InitializeComponent();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+
     }
 
     private void samedosageweeklylist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
@@ -3053,12 +3100,10 @@ public partial class AddMedication : ContentPage
                 timeanddosagelbl2.IsVisible = true;
 
             }
-
-
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -3092,7 +3137,7 @@ public partial class AddMedication : ContentPage
         }
         catch(Exception ex)
         {
-
+            //Leave Empty
         }
     }
 
@@ -3241,15 +3286,11 @@ public partial class AddMedication : ContentPage
                     timeanddosagelbl.IsVisible = true;
                     timeanddosagelbl2.IsVisible = true;
                 }
-            }
-
-
-
-            
+            }            
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -3262,7 +3303,7 @@ public partial class AddMedication : ContentPage
         }
         catch(Exception ex)
         {
-
+            //Leave Empty
         }
     }
 
@@ -3270,8 +3311,6 @@ public partial class AddMedication : ContentPage
     {
         try
         {
-
-
             var item = e.DataItem as string;
 
             TimeOfDaySelected = true; 
@@ -3330,9 +3369,9 @@ public partial class AddMedication : ContentPage
             }
 
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -3359,9 +3398,9 @@ public partial class AddMedication : ContentPage
             timeanddosagelbl2.IsVisible = false;
 
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -3451,13 +3490,11 @@ public partial class AddMedication : ContentPage
                 timesanddosageslistview.IsVisible = false;
                 timeanddosagelbl.IsVisible = false;
                 timeanddosagelbl2.IsVisible = false;
-            }
-
-            
+            }         
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -3509,12 +3546,10 @@ public partial class AddMedication : ContentPage
             timeanddosagelbl.IsVisible = true;
             timeanddosagelbl2.IsVisible = true;
 
-
-
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -3532,9 +3567,9 @@ public partial class AddMedication : ContentPage
                 SelectedMed.formulation = item;
             }
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -3546,7 +3581,7 @@ public partial class AddMedication : ContentPage
         }
         catch(Exception ex)
         {
-
+            //Leave Empty
         }
     }
 
@@ -3639,9 +3674,9 @@ public partial class AddMedication : ContentPage
             }
           
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -3649,8 +3684,15 @@ public partial class AddMedication : ContentPage
     {
         try
         {
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Limit No. of Taps 
+                ConfirmBtn.IsEnabled = false;
+   
             //delete any notifications
-            if(IsEdit)
+            if (IsEdit)
             {
                 newusermedication = SelectedMed;
                   
@@ -4039,8 +4081,8 @@ public partial class AddMedication : ContentPage
                 await Task.Delay(1500);
             }
 
-      
 
+                ConfirmBtn.IsEnabled = true; 
                 //await Navigation.PushAsync(new AllSymptoms(SymptomsPassed));
                 await Navigation.PushAsync(new AllMedications(UserMedications));
 
@@ -4066,12 +4108,17 @@ public partial class AddMedication : ContentPage
                 }
                 ii++;
             }
-
-
+                ConfirmBtn.IsEnabled = true;
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -4079,21 +4126,16 @@ public partial class AddMedication : ContentPage
     {
         try
         {
-
             if(IsEdit)
             {
                 var item = e.DataItem as MedtimesDosages;
 
-                //var finditem = selectedDosages.Where(x => x.time == item.time).Where(x => x.Dosage == item.Dosage).FirstOrDefault();
-
-     
-
+                //var finditem = selectedDosages.Where(x => x.time == item.time).Where(x => x.Dosage == item.Dosage).FirstOrDefault();   
             }
-
         }
-        catch(Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -4119,7 +4161,7 @@ public partial class AddMedication : ContentPage
         }
         catch(Exception ex)
         {
-
+            //Leave Empty
         }
     }
 
@@ -4140,7 +4182,6 @@ public partial class AddMedication : ContentPage
                 }
             }
 
-
             //if (!string.IsNullOrEmpty(e.NewTextValue))
             //{
             //    // Get the current text without the unit
@@ -4149,12 +4190,10 @@ public partial class AddMedication : ContentPage
             //    // Set the new text with the unit appended only once
             //    samedosageentry.Text = e.NewTextValue + " " + newusermedication.unit;
             //}
-
-
         }
         catch (Exception ex)
         {
-
+            //Leave Empty
         }
     }
 }

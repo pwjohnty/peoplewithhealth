@@ -7,31 +7,57 @@ public partial class RegisterWithSignUpCodePage : ContentPage
 {
     signupcode signupcodepassed;
     user userpassed;
-	public RegisterWithSignUpCodePage()
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
+
+    public RegisterWithSignUpCodePage()
 	{
-		InitializeComponent();
-	}
+        try
+        {
+            InitializeComponent();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
 
     public RegisterWithSignUpCodePage(signupcode usersignupcode, user userpass, double progresspassed)
     {
-        InitializeComponent();
-
-
-        signupcodepassed = usersignupcode;
-        userpassed = userpass;
-
-        progresspassed = progresspassed + 10;
-
-        topprogress.SetProgress(progresspassed, 0);
-
-
-        if (signupcodepassed.referral == "NOVO")
+        try
         {
-            heightandweightstack.IsVisible = true;
+            InitializeComponent();
+
+            signupcodepassed = usersignupcode;
+            userpassed = userpass;
+
+            progresspassed = progresspassed + 10;
+
+            topprogress.SetProgress(progresspassed, 0);
+
+
+            if (signupcodepassed.referral == "NOVO")
+            {
+                heightandweightstack.IsVisible = true;
+            }
         }
-
-       
-
-
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }      
     }
 }

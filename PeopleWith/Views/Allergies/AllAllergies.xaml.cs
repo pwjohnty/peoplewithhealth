@@ -1,6 +1,7 @@
 using Mopups.Services;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using Microsoft.Maui.Networking;
 
 namespace PeopleWith;
 
@@ -12,6 +13,22 @@ public partial class AllAllergies : ContentPage
     public ObservableCollection<allergies> AllergiesList = new ObservableCollection<allergies>();
     bool InitalLoad;
     public Stopwatch stopWatch = new Stopwatch();
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
 
     public AllAllergies()
     {
@@ -21,9 +38,9 @@ public partial class AllAllergies : ContentPage
             InitalLoad = true;
             GetAllUserAllergies(); 
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-            //Add Crash log
+            NotasyncMethod(Ex);
         }
     }
     public AllAllergies(ObservableCollection<userallergies> AllAllergiesPassed, ObservableCollection<allergies> allergies)
@@ -38,7 +55,7 @@ public partial class AllAllergies : ContentPage
         }
         catch (Exception Ex)
         {
-            //Add Crash log
+            NotasyncMethod(Ex);
         }
     }
 
@@ -121,9 +138,9 @@ public partial class AllAllergies : ContentPage
                 DiagnosisOverview.IsVisible = false;
             }
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-            //Add Crash logs 
+            NotasyncMethod(Ex);
         }
 
     }
@@ -133,11 +150,24 @@ public partial class AllAllergies : ContentPage
     {
         try
         {
-            await Navigation.PushAsync(new AddAllergies(AllergiesList, AllUserAllergies));
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Limit No. of Taps 
+                Addbtn.IsEnabled = false;
+                await Navigation.PushAsync(new AddAllergies(AllergiesList, AllUserAllergies));
+                Addbtn.IsEnabled = true;
+            }
+            else 
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
         }
         catch (Exception Ex)
         {
-            //Add Crash Log
+            NotasyncMethod(Ex);
         }
     }
 
@@ -161,7 +191,7 @@ public partial class AllAllergies : ContentPage
         }
         catch (Exception Ex)
         {
-            //Add Crash Log
+            NotasyncMethod(Ex);
         }
 
     }
@@ -174,7 +204,7 @@ public partial class AllAllergies : ContentPage
         }
         catch (Exception Ex)
         {
-            //await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
         }
     }
 }

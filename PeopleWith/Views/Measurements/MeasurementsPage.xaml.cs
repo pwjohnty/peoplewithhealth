@@ -18,26 +18,50 @@ public partial class MeasurementsPage : ContentPage
     APICalls aPICalls = new APICalls();
     bool hasusermeasurements;
     bool editusermeasurements;
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
+
     public MeasurementsPage()
 	{
-		InitializeComponent();
-
-      //  getmeasurementlist();
-
-        getusermeasurements();
-
-
-        WeakReferenceMessenger.Default.Register<UpdateListMainPage>(this, (r, m) =>
+        try
         {
+            InitializeComponent();
 
-            newUserMeasurements = (ObservableCollection<usermeasurement>)m.Value;
-            // Measurements = message.Value.SecondCollection;
-
-            editusermeasurements = true;
+            //  getmeasurementlist();
 
             getusermeasurements();
-        });
 
+            WeakReferenceMessenger.Default.Register<UpdateListMainPage>(this, (r, m) =>
+            {
+
+                newUserMeasurements = (ObservableCollection<usermeasurement>)m.Value;
+                // Measurements = message.Value.SecondCollection;
+
+                editusermeasurements = true;
+
+                getusermeasurements();
+            });
+
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    
         //// Register to receive the ValueChangedMessage with the custom wrapper type
         //WeakReferenceMessenger.Default.Register<ValueChangedMessage<CollectionsMessage<usermeasurement, measurement>>>(this, (recipient, message) =>
         //{
@@ -50,23 +74,26 @@ public partial class MeasurementsPage : ContentPage
         //    getusermeasurements();
         //    // Do something with the received collections
         //});
-
-
     }
 
     public MeasurementsPage(ObservableCollection<usermeasurement> updatedusermeasurements, ObservableCollection<measurement> updatedmeasurements)
     {
-        InitializeComponent();
+        try
+        {
+            InitializeComponent();
 
-        //   getmeasurementlist();
+            //   getmeasurementlist();
 
-        UserMeasurements = updatedusermeasurements;
-        Measurements = updatedmeasurements;
-        hasusermeasurements = true;
+            UserMeasurements = updatedusermeasurements;
+            Measurements = updatedmeasurements;
+            hasusermeasurements = true;
 
-        getusermeasurements();
-
-
+            getusermeasurements();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 
 
@@ -202,10 +229,10 @@ public partial class MeasurementsPage : ContentPage
             }
 
         }
-		catch(Exception ex)
+		catch(Exception Ex)
 		{
-
-		}
+            NotasyncMethod(Ex);
+        }
 
 	}
 
@@ -224,10 +251,10 @@ public partial class MeasurementsPage : ContentPage
            // measurementlist.HeightRequest = Measurements.Count * 57;
 
         }
-		catch(Exception ex)
+		catch(Exception Ex)
 		{
-
-		}
+            NotasyncMethod(Ex);
+        }
 
 	}
 
@@ -240,10 +267,10 @@ public partial class MeasurementsPage : ContentPage
 			await Navigation.PushAsync(new SingleMeasurement(item, UserMeasurements, SortedMeasurements), false);
 
 		}
-		catch(Exception ex)
+		catch(Exception Ex)
 		{
-
-		}
+            NotasyncMethod(Ex);
+        }
     }
 
     private async void usermeasurementlist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
@@ -255,9 +282,9 @@ public partial class MeasurementsPage : ContentPage
             await Navigation.PushAsync(new SingleMeasurement(item, UserMeasurements, SortedMeasurements), false);
 
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -265,13 +292,24 @@ public partial class MeasurementsPage : ContentPage
     {
         try
         {
-           
-     
-            await Navigation.PushAsync(new SearchAddMeasurement(UserMeasurements), false);
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Limit No. of Taps 
+                AddBtn.IsEnabled = false;
+                await Navigation.PushAsync(new SearchAddMeasurement(UserMeasurements), false);
+                AddBtn.IsEnabled = true;
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -282,9 +320,9 @@ public partial class MeasurementsPage : ContentPage
         {
             await Navigation.PushAsync(new SearchAddMeasurement(UserMeasurements), false);
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -296,7 +334,7 @@ public partial class MeasurementsPage : ContentPage
         }
         catch (Exception Ex)
         {
-            //await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
         }
 
     }

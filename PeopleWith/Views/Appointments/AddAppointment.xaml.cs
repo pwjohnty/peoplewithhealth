@@ -1,12 +1,12 @@
 using System.Collections.ObjectModel;
 using Mopups.Services;
+using Syncfusion.Maui.DataSource.Extensions;
 using Syncfusion.Maui.Picker;
 
 namespace PeopleWith;
 
 public partial class AddAppointment : ContentPage
 {
-    CrashDetected crashHandler = new CrashDetected();
     string SelectedDate;
     string SelectedTime;
     string SelectedLocation;
@@ -21,15 +21,21 @@ public partial class AddAppointment : ContentPage
     public ObservableCollection<appointment> AddedAppointment = new ObservableCollection<appointment>();
     public ObservableCollection<appointment> AllAppointments = new ObservableCollection<appointment>();
     public ObservableCollection<hcp> AllHCPs = new ObservableCollection<hcp>();
+    public ObservableCollection<hcp> itemstoremove = new ObservableCollection<hcp>();
+    public hcp SelectHCP = new hcp();
     public TimeSpan ReminderTimepsan = new TimeSpan();
+    string NavFrom; 
     AppointmentNotifications AppointmentNotif = new AppointmentNotifications(); 
     public ObservableCollection<string> ReminderList { get; set; } = new ObservableCollection<string>();
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
 
     async public void NotasyncMethod(Exception Ex)
     {
         try
         {
-            NotasyncMethod(Ex);
             await crashHandler.CrashDetectedSend(Ex);
         }
         catch (Exception ex)
@@ -37,29 +43,99 @@ public partial class AddAppointment : ContentPage
             //Dunno 
         }
     }
+
+
+    protected override bool OnBackButtonPressed()
+    {
+        try
+        {
+            //AllHCPs Remove (No HCP) 
+            foreach (var item in AllHCPs)
+            {
+                if (item.fullname == "No HCP")
+                {
+                    itemstoremove.Add(item);
+                }
+            }
+            foreach (var items in itemstoremove)
+            {
+                AllHCPs.Remove(items);
+            }
+
+            return false;
+            
+        }
+        catch (Exception Ex)
+        {
+            //Add Crash log
+            NotasyncMethod(Ex);
+            return false;
+        }
+    }
+
+    public AddAppointment(hcp HCPSelected, ObservableCollection<hcp> GetAllHCPs)
+    {
+        try
+        {
+            InitializeComponent();
+            AllHCPs = GetAllHCPs;
+            SelectHCP = HCPSelected;
+            //Add No HCP item 
+            var item = "No HCP";
+            bool Check = AllHCPs.Any(s => s.fullname.Contains(item, StringComparison.OrdinalIgnoreCase));
+            if (Check)
+            {
+                //Do Nothing 
+            }
+            else
+            {
+                var EMPTYHCP = new hcp();
+                EMPTYHCP.fullname = "No HCP";
+                EMPTYHCP.hcpid = "1";
+                AllHCPs.Add(EMPTYHCP);
+            }
+
+            NavFrom = "HCPs";
+
+            PopulateAllItems();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+
     public AddAppointment(ObservableCollection<hcp> GetAllHCPs, ObservableCollection<appointment> GetAllAppointments)
 	{
-		InitializeComponent();
-        AllHCPs = GetAllHCPs;
-        AllAppointments = GetAllAppointments;
-        //Add No HCP item 
-        var item = "No HCP";
-        bool Check = AllHCPs.Any(s => s.fullname.Contains(item, StringComparison.OrdinalIgnoreCase));
-        if (Check)
+        try
         {
-            //Do Nothing 
+            InitializeComponent();
+            AllHCPs = GetAllHCPs;
+            AllAppointments = GetAllAppointments;
+            //Add No HCP item 
+            var item = "No HCP";
+            bool Check = AllHCPs.Any(s => s.fullname.Contains(item, StringComparison.OrdinalIgnoreCase));
+            if (Check)
+            {
+                //Do Nothing 
+            }
+            else
+            {
+                var EMPTYHCP = new hcp();
+                EMPTYHCP.fullname = "No HCP";
+                EMPTYHCP.hcpid = "1";
+                AllHCPs.Add(EMPTYHCP);
+            }
+
+            NavFrom = "Appointments";
+
+            PopulateAllItems();
         }
-        else
+        catch (Exception Ex)
         {
-            var EMPTYHCP = new hcp();
-            EMPTYHCP.fullname = "No HCP";
-            EMPTYHCP.hcpid = "1";
-            AllHCPs.Add(EMPTYHCP);
+            NotasyncMethod(Ex);
         }
-
-        
-
-        PopulateAllItems(); 
     }
 
     public void PopulateAllItems()
@@ -71,7 +147,7 @@ public partial class AddAppointment : ContentPage
             //Location Chips Populate
             var locationone = new appointment();
             locationone.location = "GP Surgery";
-            locaitonlist.Add(locationone); 
+            locaitonlist.Add(locationone);
 
             var locationtwo = new appointment();
             locationtwo.location = "Hospital";
@@ -85,7 +161,7 @@ public partial class AddAppointment : ContentPage
             locationfour.location = "Private Consultation";
             locaitonlist.Add(locationfour);
 
-            locationChips.ItemsSource = locaitonlist; 
+            locationChips.ItemsSource = locaitonlist;
 
             //Type Chips Populate
             var typeone = new appointment();
@@ -107,15 +183,28 @@ public partial class AddAppointment : ContentPage
                 ItemsSource = AllHCPs,
                 DisplayMemberPath = "fullname"
             };
-           
+
             hcpPicker.Columns.Add(pickerColumn);
 
             addtimepicker.Time = DateTime.Now.TimeOfDay;
 
+
+            //Navigation From SelectedHCP 
+
+            if(NavFrom == "HCPs")
+            {
+                var hcpname = SelectHCP.fullname; 
+                hcpPicker.Columns[0].SelectedItem = hcpname;
+            }
+            else
+            {
+                hcpPicker.Columns[0].SelectedItem = "No HCP";
+            }
+
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -184,7 +273,7 @@ public partial class AddAppointment : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -199,7 +288,7 @@ public partial class AddAppointment : ContentPage
         }
         catch (Exception Ex)
         {
-            NotasyncMethod(Ex);
+            //Leave Empty
         }
     }
 
@@ -218,7 +307,7 @@ public partial class AddAppointment : ContentPage
         }
         catch (Exception Ex)
         {
-            NotasyncMethod(Ex);
+           //Leave Empty
         }
     }
 
@@ -235,7 +324,7 @@ public partial class AddAppointment : ContentPage
         }
         catch (Exception Ex)
         {
-            NotasyncMethod(Ex);
+            //Leave Empty
         }
     }
     private void HCPPicker_SelectionChanged(object sender, PickerSelectionChangedEventArgs e)
@@ -257,7 +346,7 @@ public partial class AddAppointment : ContentPage
         }
         catch (Exception Ex)
         {
-            NotasyncMethod(Ex);
+            //Leave Empty
         }
     }
 
@@ -265,12 +354,11 @@ public partial class AddAppointment : ContentPage
     {
         try
         {
-
             PopulateAppointmentReminder(); 
         }
         catch (Exception Ex)
         {
-            NotasyncMethod(Ex);
+            //Leave Empty
         }
 
     }
@@ -283,7 +371,7 @@ public partial class AddAppointment : ContentPage
         }
         catch (Exception Ex)
         {
-            NotasyncMethod(Ex);
+            //Leave Empty
         }
     }
 
@@ -300,7 +388,7 @@ public partial class AddAppointment : ContentPage
         }
         catch (Exception Ex)
         {
-            NotasyncMethod(Ex);
+            //Leave Empty
         }
     }
 
@@ -308,146 +396,190 @@ public partial class AddAppointment : ContentPage
     {
         try
         {
-            if (string.IsNullOrEmpty(SelectedLocation))
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
             {
-                Vibration.Vibrate();
-                await DisplayAlert("Select Location", "Please select a location from this list", "Ok");
-                return;
-            }
-            else if (string.IsNullOrEmpty(SelectedType))
-            {
-                Vibration.Vibrate();
-                await DisplayAlert("Select Type", "Please select a type from this list", "Ok");
-                return;
-            }
-            else
-            {
-                var NewAppointment = new appointment();
-                //Get Selected DateTime
-                string dateandtime = SelectedDate + " " + SelectedTime;
-                //var datetime = DateTime.Parse(SelectedDate + " " + SelectedTime);
-                NewAppointment.datetime = dateandtime;
+                //Limit No. of Taps 
+                AppointmentAdd.IsEnabled = false;
 
-                //Get Location 
-                NewAppointment.location = SelectedLocation;
-
-                //GetType
-                NewAppointment.type = SelectedType;
-
-                //Get HCP (As HCP ID) if 1 Then it's NoHCP
-                if (String.IsNullOrEmpty(SelectedHCP) || String.IsNullOrEmpty(SelectedHCPName))
+                if (string.IsNullOrEmpty(SelectedLocation))
                 {
+                    Vibration.Vibrate();
+                    await DisplayAlert("Select Location", "Please select a location from this list", "Ok");
+                    return;
+                }
+                else if (string.IsNullOrEmpty(SelectedType))
+                {
+                    Vibration.Vibrate();
+                    await DisplayAlert("Select Type", "Please select a type from this list", "Ok");
+                    return;
+                }
+                else
+                {
+                    var NewAppointment = new appointment();
+                    //Get Selected DateTime
+                    string dateandtime = SelectedDate + " " + SelectedTime;
+                    //var datetime = DateTime.Parse(SelectedDate + " " + SelectedTime);
+                    NewAppointment.datetime = dateandtime;
+
+                    //Get Location 
+                    NewAppointment.location = SelectedLocation;
+
+                    //GetType
+                    NewAppointment.type = SelectedType;
+
+                    //Get HCP (As HCP ID) if 1 Then it's NoHCP
+                    if (String.IsNullOrEmpty(SelectedHCP) || String.IsNullOrEmpty(SelectedHCPName))
+                    {
 
                         //Selected index of Sfpicker 0 
                         NewAppointment.hcpname = AllHCPs[0].fullname;
                         NewAppointment.hcpid = AllHCPs[0].hcpid;
-                }
-                else
-                {
-                    if (SelectedHCP == "No HCP")
+                    }
+                    else
+                    {
+                        if (SelectedHCP == "No HCP")
+                        {
+                            //Dont Add
+                        }
+                        else
+                        {
+                            NewAppointment.hcpid = SelectedHCP;
+                            NewAppointment.hcpname = SelectedHCPName;
+                        }
+                    }
+
+
+                    //Get Duration (Convert for Notifiction)
+                    if (Duration == "00 Hours 00 Minutes")
                     {
                         //Dont Add
                     }
                     else
                     {
-                        NewAppointment.hcpid = SelectedHCP;
-                        NewAppointment.hcpname = SelectedHCPName;
+                        NewAppointment.expectedduration = Duration;
+
                     }
-                }
-                
-               
 
+                    //Get Notes (Can Be Empty) 
+                    NewAppointment.reason = notesentry.Text;
 
-                //Get Duration (Convert for Notifiction)
-                if (Duration == "00 Hours 00 Minutes")
-                {
-                    //Dont Add
-                }
-                else
-                {
-                    NewAppointment.expectedduration = Duration;
+                    NewAppointment.userid = Helpers.Settings.UserKey;
 
-                }
-
-                //Get Notes (Can Be Empty) 
-                NewAppointment.reason = notesentry.Text;
-
-                NewAppointment.userid = Helpers.Settings.UserKey;
-
-                //Get Appointment Reminder (Can Be Empty) 
-                if (string.IsNullOrEmpty(AppointmentReminderSelected))
-                {
-
-                }
-                else
-                {
-                    if (AppointmentReminderSelected == "No Reminder")
+                    //Get Appointment Reminder (Can Be Empty) 
+                    if (string.IsNullOrEmpty(AppointmentReminderSelected))
                     {
-                        NewAppointment.reminderinterval = AppointmentReminderSelected;
+
                     }
                     else
                     {
-                        if(AppointmentReminderSelected == "15 Minutes Before")
+                        if (AppointmentReminderSelected == "No Reminder")
                         {
-                            NewAppointment.Reminder = new TimeSpan(0, 15, 0); 
+                            NewAppointment.reminderinterval = AppointmentReminderSelected;
                         }
-                        else if(AppointmentReminderSelected == "30 Minutes Before")
+                        else
                         {
-                            NewAppointment.Reminder = new TimeSpan(0, 30, 0);
-                        }
-                        else if (AppointmentReminderSelected == "45 Minutes Before")
-                        {
-                            NewAppointment.Reminder = new TimeSpan(0, 45, 0);
-                        }
-                        else if (AppointmentReminderSelected == "1 Hour Before")
-                        {
-                            NewAppointment.Reminder = new TimeSpan(1, 0, 0);
-                        }
-                        else if (AppointmentReminderSelected == "1 Day Before")
-                        {
-                            NewAppointment.Reminder = new TimeSpan(1,0,0,0);
-                        }
+                            if (AppointmentReminderSelected == "15 Minutes Before")
+                            {
+                                NewAppointment.Reminder = new TimeSpan(0, 15, 0);
+                            }
+                            else if (AppointmentReminderSelected == "30 Minutes Before")
+                            {
+                                NewAppointment.Reminder = new TimeSpan(0, 30, 0);
+                            }
+                            else if (AppointmentReminderSelected == "45 Minutes Before")
+                            {
+                                NewAppointment.Reminder = new TimeSpan(0, 45, 0);
+                            }
+                            else if (AppointmentReminderSelected == "1 Hour Before")
+                            {
+                                NewAppointment.Reminder = new TimeSpan(1, 0, 0);
+                            }
+                            else if (AppointmentReminderSelected == "1 Day Before")
+                            {
+                                NewAppointment.Reminder = new TimeSpan(1, 0, 0, 0);
+                            }
 
-                        //Add Appontment Notification (Id saved in Reminder Interval)
-                        Random random = new Random();
-                        int notid = random.Next(100000, 100000001);
+                            //Add Appontment Notification (Id saved in Reminder Interval)
+                            Random random = new Random();
+                            int notid = random.Next(100000, 100000001);
 
-                        await AppointmentNotif.AddAppointment(NewAppointment);
+                            await AppointmentNotif.AddAppointment(NewAppointment);
 
-                        NewAppointment.reminderinterval = AppointmentReminderSelected; 
+                            NewAppointment.reminderinterval = AppointmentReminderSelected;
+                        }
+                    }
+
+                    AppointmenttoAdd.Add(NewAppointment);
+
+                    APICalls database = new APICalls();
+                    AddedAppointment = await database.PostUserAppointmentAsync(AppointmenttoAdd);
+
+                    AppointmentAdd.IsEnabled = true;
+                    //AllHCPs Remove (No HCP) 
+                    foreach (var item in AllHCPs)
+                    {
+                        if (item.fullname == "No HCP")
+                        {
+                            itemstoremove.Add(item);
+                        }
+                    }
+                    foreach (var items in itemstoremove)
+                    {
+                        AllHCPs.Remove(items);
+                    }
+
+
+                    //Navigation From Appointments 
+
+                    if (NavFrom == "Appointments")
+                    {
+
+                        foreach (var item in AddedAppointment)
+                        {
+                            AllAppointments.Add(item);
+                        }
+                        await MopupService.Instance.PushAsync(new PopupPageHelper("Appointment Added") { });
+                        await Task.Delay(1500);
+
+                        await MopupService.Instance.PopAllAsync(false);
+                        await Navigation.PushAsync(new Appointments(AllAppointments, AllHCPs));
+                        var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is Appointments);
+                        if (pageToRemoves != null)
+                        {
+
+                            Navigation.RemovePage(pageToRemoves);
+                        }
+                        Navigation.RemovePage(this);
+
+                    }
+                    else
+                    {
+                        //Navigation From HCP's
+
+                        await MopupService.Instance.PushAsync(new PopupPageHelper("Appointment Added") { });
+                        await Task.Delay(1500);
+
+                        await MopupService.Instance.PopAllAsync(false);
+
+                        await Navigation.PushAsync(new SingleHCP(SelectHCP, AllHCPs));
+                        var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is SingleHCP);
+                        if (pageToRemoves != null)
+                        {
+
+                            Navigation.RemovePage(pageToRemoves);
+                        }
+                        Navigation.RemovePage(this);
                     }
                 }
-               
-                AppointmenttoAdd.Add(NewAppointment);
-
-
-
-                APICalls database = new APICalls();
-                AddedAppointment = await database.PostUserAppointmentAsync(AppointmenttoAdd);
-
-
-                foreach(var item in AddedAppointment)
-                {
-                    AllAppointments.Add(item);
-                }
-                await MopupService.Instance.PushAsync(new PopupPageHelper("Appointment Added") { });
-                await Task.Delay(1500);
-
-                await MopupService.Instance.PopAllAsync(false);
-                await Navigation.PushAsync(new Appointments(AllAppointments, AllHCPs));
-                var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is Appointments);
-                if (pageToRemoves != null)
-                {
-
-                    Navigation.RemovePage(pageToRemoves);
-                }
-                Navigation.RemovePage(this);
-
-
-
-
-
             }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
+
         }
         catch (Exception Ex)
         {

@@ -14,38 +14,65 @@ public partial class AllSupplements : ContentPage
     public ObservableCollection<usersupplement> CurrentMedications = new ObservableCollection<usersupplement>();
     public ObservableCollection<usersupplement> AsRequiredMedications = new ObservableCollection<usersupplement>();
     public ObservableCollection<usersupplement> AddinAsRequired = new ObservableCollection<usersupplement>();
+    //Connectivity Changed 
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
+
     public AllSupplements()
     {
-        InitializeComponent();
-        getusermedications();
-
+        try
+        {
+            InitializeComponent();
+            getusermedications();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 
     public AllSupplements(ObservableCollection<usersupplement> AllUsermeds)
     {
-        InitializeComponent();
-
-        AllUserMedications.Clear();
-
-        AllUserMedications = AllUsermeds;
-
-        if (AllUserMedications.Count == 0)
+        try
         {
-            nodatastack.IsVisible = true;
-            datastack.IsVisible = false;
+            InitializeComponent();
+
+            AllUserMedications.Clear();
+
+            AllUserMedications = AllUsermeds;
+
+            if (AllUserMedications.Count == 0)
+            {
+                nodatastack.IsVisible = true;
+                datastack.IsVisible = false;
+            }
+            else
+            {
+                nodatastack.IsVisible = false;
+                datastack.IsVisible = true;
+
+                AllUserMedsList.ItemsSource = AllUserMedications;
+
+                WorkOutNextDue();
+            }
         }
-        else
+        catch (Exception Ex)
         {
-            nodatastack.IsVisible = false;
-            datastack.IsVisible = true;
-
-            AllUserMedsList.ItemsSource = AllUserMedications;
-
-            WorkOutNextDue();
+            NotasyncMethod(Ex);
         }
-
-
-
     }
 
 
@@ -80,9 +107,9 @@ public partial class AllSupplements : ContentPage
                 WorkOutNextDue();
             }
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -685,9 +712,9 @@ public partial class AllSupplements : ContentPage
             CheckCompletedMedications();
 
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -712,8 +739,6 @@ public partial class AllSupplements : ContentPage
     {
         try
         {
-
-
             foreach (var item in CompletedMedications)
             {
                 if (item.status != "Completed")
@@ -723,13 +748,10 @@ public partial class AllSupplements : ContentPage
                     aPICalls.UpdateCompletedSupplement(item);
                 }
             }
-
-
-
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -738,12 +760,25 @@ public partial class AllSupplements : ContentPage
     {
         try
         {
-            usersupplement NullInstance = new usersupplement();
-            await Navigation.PushAsync(new AddSupplement(AllUserMedications, NullInstance), false);
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Limit No. of Taps 
+                AddBtn.IsEnabled = false;
+                usersupplement NullInstance = new usersupplement();
+                await Navigation.PushAsync(new AddSupplement(AllUserMedications, NullInstance), false);
+                AddBtn.IsEnabled = true;
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }        
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -762,13 +797,10 @@ public partial class AllSupplements : ContentPage
             {
                 await Navigation.PushAsync(new SingleSupplement(AllUserMedications, SelectedMed), false);
             }
-
-
-
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -820,11 +852,10 @@ public partial class AllSupplements : ContentPage
                     CompletedMedsList.IsVisible = true;
                 }
             }
-
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            //Leave Empty
         }
     }
 
@@ -843,13 +874,10 @@ public partial class AllSupplements : ContentPage
             {
                 await Navigation.PushAsync(new SingleSupplement(AllUserMedications, SelectedMed), false);
             }
-
-
-
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 }
