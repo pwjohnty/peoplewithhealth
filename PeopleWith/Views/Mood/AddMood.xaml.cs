@@ -65,6 +65,7 @@ public partial class AddMood : ContentPage
             if (EditAdd == "Add")
             {
                 adddatepicker.Date = DateTime.Now;
+                adddatepicker.MaximumDate = DateTime.Now;
                 addtimepicker.Time = DateTime.Now.TimeOfDay; 
             }
             else
@@ -77,6 +78,7 @@ public partial class AddMood : ContentPage
                         var GetDateTime = DateTime.Parse(item.datetime);
                         adddatepicker.Date = GetDateTime;
                         addtimepicker.Time = GetDateTime.TimeOfDay;
+                        adddatepicker.MaximumDate = DateTime.Now;
                         //Datelbl.Text = GetDateTime.ToString("dd MMM");
                         //Timelbl.Text = GetDateTime.ToString("HH:mm");
 

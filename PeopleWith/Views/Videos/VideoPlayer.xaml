@@ -2,8 +2,22 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             x:Class="PeopleWith.VideoPlayer" NavigationPage.HasNavigationBar="True" BackgroundColor="White">
+             x:Class="PeopleWith.VideoPlayer" NavigationPage.HasNavigationBar="False" BackgroundColor="White">
     <StackLayout>
+
+        <Grid x:Name="NavStack" HorizontalOptions="FillAndExpand">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <ImageButton x:Name="AndroidBtn" Clicked="BacKArrow_Clicked" IsVisible="False" Grid.Row="0" Grid.Column="0" Source="androidarrow.png" HeightRequest="25" WidthRequest="25" HorizontalOptions="Start" VerticalOptions="Center" Margin="15,15,0,0"/>
+            <ImageButton x:Name="IOSBtn" Clicked="BacKArrow_Clicked" IsVisible="False" Grid.Row="0" Grid.Column="0" Source="iosback.png" HeightRequest="50" WidthRequest="60" HorizontalOptions="Start" VerticalOptions="Center" Margin="15,5,0,0"/>
+
+
+        </Grid>
         <Grid x:Name="VideoDetails" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -23,7 +37,7 @@
                     </Image.GestureRecognizers>
                 </Image>
 
-                <Image HeightRequest="60" WidthRequest="60" Source="playbutton.png" HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Image HeightRequest="60" WidthRequest="60" InputTransparent="True" Source="playbutton.png" HorizontalOptions="Center" VerticalOptions="Center"/>
 
                 <Frame HasShadow="False" BackgroundColor="Black" Padding="5" CornerRadius="5" HorizontalOptions="End" VerticalOptions="End" Margin="10" Opacity="0.8">
                     <Label x:Name="lengthlbl" Text="12:45" TextColor="White" FontSize="14" FontAttributes="Bold"/>

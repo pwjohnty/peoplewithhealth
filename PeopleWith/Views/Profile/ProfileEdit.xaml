@@ -14,7 +14,7 @@
       <!-- Health Details -->
         <StackLayout x:Name="HealthDetailsStack" IsVisible="False">
 
-            <Label x:Name="HealthDetailslbl" HorizontalOptions="StartAndExpand" Margin="20,0,0,0" FontFamily="HankenGroteskBold" FontSize="25" TextColor="#031926"/>
+            <Label x:Name="HealthDetailslbl" HorizontalOptions="StartAndExpand" Margin="20,20,0,0" FontFamily="HankenGroteskBold" FontSize="25" TextColor="#031926"/>
             
             <!-- Name-->
             <Grid x:Name="NameStack" Margin="10,0,10,0" ColumnSpacing="10" IsVisible="False">
@@ -26,7 +26,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                         
-                <inputLayout:SfTextInputLayout Grid.Row="0" Grid.Column="0" InputViewPadding="10" ShowHint="True" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,20,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
+                <inputLayout:SfTextInputLayout Grid.Row="0" Grid.Column="0" InputViewPadding="10" ShowHint="True" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,10,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
                     <Entry FontSize="Small" Grid.Row="0" Grid.Column="0" PlaceholderColor="Gray" x:Name="FirstNameEntry" TextChanged="FirstNameENtry_TextChanged"  FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Firstname" TextColor="#031926"/>
                 </inputLayout:SfTextInputLayout>
 
@@ -416,7 +416,7 @@
                             <Image Source="pincode.png" Grid.Row="0" Grid.Column="0" HeightRequest="40" WidthRequest="40" HorizontalOptions="Start" VerticalOptions="Center" />
                             <Label TextColor="#031926" Grid.Row="0" Grid.Column="1" FontFamily="HankenGroteskRegular" FontSize="16" Text="Use Pin Code to Unlock"  VerticalOptions="Center" HorizontalOptions="Start" />
                             <Switch x:Name="PinSwitch" Toggled="PinSwitch_Toggled"  Grid.Row="0" Grid.Column="2"  OnColor="Green"  ThumbColor="#E5E5E5" HeightRequest="40" WidthRequest="40"  />
-                            <BoxView HeightRequest="1" Color="#E8E8E8" Margin="0,5,0,5" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"  HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+                            <BoxView HeightRequest="1" Color="#E8E8E8" BackgroundColor="#E8E8E8" Margin="0,5,0,5" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"  HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
                             <Image Source="finger.png" Grid.Row="2" Grid.Column="0" HeightRequest="40" WidthRequest="40" HorizontalOptions="Start" VerticalOptions="Center"/>
                             <Label  TextColor="#031926" Grid.Row="2" Grid.Column="1" FontFamily="HankenGroteskRegular" FontSize="16" Text="Use Fingerprint to Unlock" VerticalOptions="Center" HorizontalOptions="Start" />
                             <Switch x:Name="FingerSwitch" Toggled="FingerSwitch_Toggled" Grid.Row="2" Grid.Column="2"  OnColor="Green" ThumbColor="#E5E5E5" HeightRequest="40" WidthRequest="40" />

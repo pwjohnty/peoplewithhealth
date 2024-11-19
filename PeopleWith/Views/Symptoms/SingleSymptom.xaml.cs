@@ -40,7 +40,11 @@ public partial class SingleSymptom : ContentPage
             PassedSymptom = SymptomPassed;
             lblvalue.Text = PassedSymptom[0].CurrentIntensity;
             lblunit.Text = PassedSymptom[0].Score;
-            datelbl.Text = PassedSymptom[0].LastUpdated;
+            var GetGet = DateTime.Parse(PassedSymptom[0].LastUpdatedTime); 
+            datelbl.Text = GetGet.ToString("HH:mm, dd MMMM yyyy");
+
+            NotifSwitch.ThumbColor = Color.FromHex("#E5E5E5");
+            NotifSwitch.OnColor = Colors.ForestGreen;
 
             foreach (var item in PassedSymptom)
             {
@@ -170,6 +174,24 @@ public partial class SingleSymptom : ContentPage
         {
             foreach (var item in PassedSymptom)
             {
+                ChartMarkerSettings chartMarker = new ChartMarkerSettings();
+                chartMarker.Type = ShapeType.Circle;
+                chartMarker.Fill = Colors.White;
+                chartMarker.Stroke = Color.FromRgba("#031926");
+                chartMarker.StrokeWidth = 2;
+                chartMarker.Height = 8;
+                chartMarker.Width = 8;
+
+                ChartZoomPanBehavior zooming = new ChartZoomPanBehavior()
+                {
+                    EnablePinchZooming = true
+                };
+
+                SymptomProgChart.ZoomPanBehavior = zooming;
+
+                DataPointSelectionBehavior selection = new DataPointSelectionBehavior();
+                selection.SelectionChanged += OnSelectionChanged;
+
                 LineSeries series = new LineSeries
                 {
                     ItemsSource = item.feedback.OrderBy(f => DateTime.Parse(f.timestamp)),
@@ -178,21 +200,25 @@ public partial class SingleSymptom : ContentPage
                     EnableTooltip = true,
                     ShowTrackballLabel = true,
                     EnableAnimation = true,
-                    ShowMarkers = false,
+                    ShowMarkers = true,
+                    MarkerSettings = chartMarker,
                     StrokeWidth = 2,
-                    Fill = Colors.Orange
+                    Fill = Colors.Orange,
+                    SelectionBehavior = selection,
                 };
-                series.MarkerSettings = new ChartMarkerSettings
-                {
-                    Type = Syncfusion.Maui.Charts.ShapeType.Circle,
-                    StrokeWidth = 2,
-                    Height = 8,
-                    Stroke = Colors.Orange,
-                    Width = 8,
-                    Fill = Colors.White
-                };
+                //series.MarkerSettings = new ChartMarkerSettings
+                //{
+                //    Type = Syncfusion.Maui.Charts.ShapeType.Circle,
+                //    StrokeWidth = 2,
+                //    Height = 8,
+                //    Stroke = Colors.Orange,
+                //    Width = 8,
+                //    Fill = Colors.White
+                //};
                 SymptomProgChart.Series.Add(series);
             }
+
+          
 
             if (SymptomFeedback.Count > 1)
             {
@@ -223,6 +249,7 @@ public partial class SingleSymptom : ContentPage
             else
             {
                 DateTime GetDate = DateTime.Parse(SymptomFeedback[0].timestamp);
+                datestartedlbl.Text = GetDate.ToString("dd MMM");
                 symptomProgression.Text = "DateRange: " + GetDate.ToString("dd MMM");
             }
         }
@@ -231,6 +258,49 @@ public partial class SingleSymptom : ContentPage
             NotasyncMethod(Ex);
         }
 
+    }
+
+    async private void OnSelectionChanged(object sender, ChartSelectionChangedEventArgs e)
+    {
+        try
+        {
+
+            var es = e.NewIndexes[0];
+            var GetFeedbackSelected = PassedSymptom[0].feedback;
+            lblvalue.Text = GetFeedbackSelected[es].intensity;
+            int Score = Int32.Parse(GetFeedbackSelected[es].intensity);
+            var Scorelbl = String.Empty; 
+            if (Score == 0)
+            {
+                Scorelbl = "Absent";
+            }
+            else if (Score > 0 && Score <= 25)
+            {
+                Scorelbl = "Mild";
+            }
+            else if (Score > 25 && Score <= 50)
+            {
+                Scorelbl = "Moderate";
+            }
+            else if (Score > 50 && Score <= 75)
+            {
+                Scorelbl = "High";
+            }
+            else if (Score > 75 && Score <= 100)
+            {
+                Scorelbl = "Severe";
+            }
+            lblunit.Text = Scorelbl; 
+            var convertdate = DateTime.Parse(GetFeedbackSelected[es].timestamp);
+            datelbl.Text = convertdate.ToString("HH:mm, dd MMMM yyyy");
+
+
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+            //await crashHandler.CrashDetectedSend(Ex);
+        }
     }
     async private void Button_Clicked(object sender, EventArgs e)
     {
@@ -355,5 +425,23 @@ public partial class SingleSymptom : ContentPage
         {
            NotasyncMethod(Ex);
         }
+    }
+
+    async private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            //Add Symptom Info Here
+            await DisplayAlert("Symptom Information", "No Information is saved against this Symptom", "Close");
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    private void Switch_Toggled_1(object sender, ToggledEventArgs e)
+    {
+
     }
 }

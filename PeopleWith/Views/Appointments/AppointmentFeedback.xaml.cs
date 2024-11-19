@@ -27,6 +27,30 @@ public partial class AppointmentFeedback : ContentPage
         }
     }
 
+    protected override bool OnBackButtonPressed()
+    {
+        try
+        {
+            if (AddFeedbackStack.IsVisible == true)
+            {
+                //FeedBack Not yet Addded
+                return false;
+            }
+            else
+            {
+                //Feedback Addeded
+                
+                return false;
+            }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+            return false;
+        }
+
+    }
+
     public AppointmentFeedback(appointment PassedAppoint, ObservableCollection<appointment> GetAllAppointments)
 	{
         try

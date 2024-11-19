@@ -1,5 +1,6 @@
 //using Android.Views;
 using Mopups.Services;
+using Syncfusion.Maui.Scheduler;
 using System.Collections.ObjectModel;
 
 namespace PeopleWith;
@@ -40,7 +41,8 @@ public partial class SingleMedication : ContentPage
             InitializeComponent();
             UserMedications = AllUserMedications;
             MedSelected = Selectedmed;
-            Schedule = MedSelected.schedule; 
+            Schedule = MedSelected.schedule;
+            string FreqCheck = String.Empty;
 
             Medicationname.Text = MedSelected.medicationtitle;
             if (MedSelected.frequency.Contains("|"))
@@ -48,6 +50,7 @@ public partial class SingleMedication : ContentPage
                 var freq = MedSelected.frequency.Split('|');
                 if (freq[0] == "As Required")
                 {
+                    FreqCheck = "As Required";
                     if (Schedule.Count == 0)
                     {
                         MedtimesDosages NewSchedule = new MedtimesDosages();
@@ -61,7 +64,16 @@ public partial class SingleMedication : ContentPage
                             item.Times = freq[0];
                         }
                     }
-                    lblvalue.Text = MedSelected.feedback.Count().ToString() + " Taken";
+                    if (MedSelected.feedback == null)
+                    {
+                        lblvalue.Text = "0 Recorded";
+                        lblvalue.FontSize = 18;
+                    }
+                    else
+                    {
+                        lblvalue.Text = MedSelected.feedback.Count().ToString() + " Recorded";
+                        lblvalue.FontSize = 18;
+                    }
                 }
                 else
                 {
@@ -74,13 +86,26 @@ public partial class SingleMedication : ContentPage
                             
                             if (freqSplit[0] == "Weekly" || freqSplit[0] == "Weekly ")
                             {
-                                item.Times = "1 " + MedSelected.preparation;
+                                item.Times = MedSelected.preparation;
                                 var day = MedSelected.TimeDosage[Index].Split('|');
                                 item.Type = day[2];
                             }
+                        else if (freqSplit[0] == "Days Interval")
+                        {
+                            item.Times = MedSelected.preparation;
+                            //var day = MedSelected.TimeDosage[Index].Split('|');
+                            if (freqSplit[1] == "2")
+                            {
+                                item.Type = "Every other day";
+                            }
                             else
                             {
-                                item.Times = "1 " + MedSelected.preparation;
+                                item.Type = "Every " + freqSplit[1] + " days";
+                            }
+                        }
+                        else
+                            {
+                                item.Times =  MedSelected.preparation;
                                 item.Type = freqSplit[0];
                             }
                         Index = Index + 1;
@@ -118,11 +143,16 @@ public partial class SingleMedication : ContentPage
             //}
             //else
             //{
-              lblunit.Text = MedSelected.unit;
+            //lblunit.Text = MedSelected.unit;
             //}
-            
+
+            if (string.IsNullOrEmpty(FreqCheck))
+            {
+                lblunit.Text = MedSelected.unit;
+            }
+
             unitlbl.Text = MedSelected.unit;
-                    
+
             lblStart.Text = MedSelected.startdate;
             if (string.IsNullOrEmpty(MedSelected.enddate))
             {
@@ -283,6 +313,19 @@ public partial class SingleMedication : ContentPage
             //    MedSelected.EditMedSection = "Schedule"; 
             //    await Navigation.PushAsync(new AddMedication(UserMedications, MedSelected));
             //}
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    async private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            //Add Symptom Info Here
+            await DisplayAlert("Medication Information", "No Information is saved against this Medication", "Close");
         }
         catch (Exception Ex)
         {

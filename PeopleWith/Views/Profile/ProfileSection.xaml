@@ -41,7 +41,7 @@
                                         <Label HorizontalOptions="StartAndExpand" Text="{Binding SettingsItem}" FontFamily="HankenGroteskBold" HeightRequest="25" VerticalOptions="Center" FontSize="Small" Grid.Row="1" Grid.Column="0" Margin="10,0,0,0" FontAttributes="Bold" TextColor="#031926" />
                                         <Image Source="backbutton.png" Rotation="180" Grid.Row="0" HeightRequest="10" WidthRequest="10" Grid.RowSpan="2" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="End" Margin="0,10,10,0" />
 
-                                        <BoxView HeightRequest="1" Color="#E8E8E8"  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="1" Margin="10,0,10,0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+                                        <BoxView HeightRequest="1" Color="#E8E8E8" BackgroundColor="#E8E8E8"  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="1" Margin="10,0,10,0" HorizontalOptions="FillAndExpand" />
 
                                     </Grid>
                                 </ViewCell.View>
@@ -74,7 +74,7 @@
                                         <Label HorizontalOptions="StartAndExpand" Text="{Binding SettingsItem}" FontFamily="HankenGroteskBold" HeightRequest="25" VerticalOptions="Center" FontSize="Small" Grid.Row="1" Grid.Column="0" Margin="10,0,0,0" FontAttributes="Bold" TextColor="#031926" />
                                         <Image Source="backbutton.png" Rotation="180" Grid.Row="0" HeightRequest="10" WidthRequest="10" Grid.RowSpan="2" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="End" Margin="0,10,10,0" />
 
-                                        <BoxView HeightRequest="1" Color="#E8E8E8"  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="1" Margin="10,0,10,0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+                                        <BoxView HeightRequest="1" Color="#E8E8E8" BackgroundColor="#E8E8E8"  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="1" Margin="10,0,10,0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
 
                                     </Grid>
                                 </ViewCell.View>
@@ -126,7 +126,7 @@
 
                                         <Label HorizontalOptions="StartAndExpand" Text="{Binding SettingsTitle}" FontFamily="HankenGroteskBold" HeightRequest="45" FontSize="16" VerticalOptions="Center" VerticalTextAlignment="Center" Grid.Row="0" Margin="10,10,0,0" TextColor="#031926" />
                                         <Image Source="backbutton.png" Rotation="180" Grid.Row="0" HeightRequest="10" WidthRequest="10" VerticalOptions="Center" HorizontalOptions="End" Margin="0,10,10,0" />
-                                        <BoxView HeightRequest="1" Color="#E8E8E8"  Grid.Row="1" Margin="10,0,10,0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+                                        <BoxView HeightRequest="1" Color="#E8E8E8" BackgroundColor="#E8E8E8"  Grid.Row="1" Margin="10,0,10,0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
 
                                     </Grid>
                                 </ViewCell.View>

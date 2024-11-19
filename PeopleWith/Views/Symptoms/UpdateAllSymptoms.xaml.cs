@@ -60,13 +60,15 @@ public partial class UpdateAllSymptoms : ContentPage
             Datelbl.Text = DateTime.Now.ToString("dd MMM");
             Timelbl.Text = DateTime.Now.ToString("HH:mm");
             addtimepicker.Time = DateTime.Now.TimeOfDay;
+            adddatepicker.Date = DateTime.Now;
+            adddatepicker.MaximumDate = DateTime.Now;
 
             if (DeviceInfo.Platform == DevicePlatform.iOS)
             {
-                SymptomUpdateLV.HeightRequest = UserSymptomsPassed.Count * 100;
+                SymptomUpdateLV.HeightRequest = UserSymptomsPassed.Count * 90;
             }
-            var sortedSymptoms = UserSymptomsPassed.OrderByDescending(f => DateTime.Parse(f.LastUpdated)).ToList();
-            SymptomUpdateLV.ItemsSource = UserSymptomsPassed;
+            var sortedSymptoms = UserSymptomsPassed.OrderByDescending(f => DateTime.Parse(f.LastUpdatedTime)).ToList();
+            SymptomUpdateLV.ItemsSource = sortedSymptoms;
             //change visual state on page load, as button is not updating;
             UpdateBtn.IsEnabled = true;
             UpdateBtn.IsEnabled = false;
@@ -127,7 +129,7 @@ public partial class UpdateAllSymptoms : ContentPage
                         items.timestamp = SelectedDate + " " + SelectedTime;
                         Guid newUUID = Guid.NewGuid();
                         items.symptomfeedbackid = newUUID.ToString().ToUpper();
-                        items.intensity = symptom.Slidervalue.ToString();
+                        items.intensity = symptom.SlidervalueUA.ToString();
                         items.notes = null;
                         items.triggers = null;
                         items.interventions = null;

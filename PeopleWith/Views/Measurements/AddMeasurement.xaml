@@ -20,7 +20,7 @@
 
 
 
-        <syncfusion:SfListView x:Name="unitlist" ItemTapped="unitlist_ItemTapped"  IsVisible="True" SelectionMode="Single" Orientation="Horizontal" HorizontalOptions="StartAndExpand" AutoFitMode="Height" HeightRequest="80" BackgroundColor="Transparent" VerticalOptions="Start"   Margin="0,0,0,0"  >
+        <syncfusion:SfListView x:Name="unitlist" ItemTapped="unitlist_ItemTapped" ScrollBarVisibility="Never" IsVisible="True" SelectionMode="Single" Orientation="Horizontal" HorizontalOptions="StartAndExpand" AutoFitMode="Height" HeightRequest="80" BackgroundColor="Transparent" VerticalOptions="Start"   Margin="0,0,0,0"  >
             <syncfusion:SfListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>

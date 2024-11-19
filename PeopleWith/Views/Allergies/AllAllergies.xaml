@@ -13,7 +13,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Text="Allergies" FontFamily="HankenGroteskBold" FontSize="25"  Margin="20,0,0,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" />
+            <Label Text="Allergies" FontFamily="HankenGroteskBold" FontSize="26"  Margin="20,20,0,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" />
             <Frame x:Name="AllInfo" HasShadow="False" Padding="0" CornerRadius="5" Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,0,20,0" BorderColor="#BC8F8F" BackgroundColor="#FFF5EE">
                 <Label Text="i" FontFamily="HankenGroteskBold" HorizontalOptions="Center" TextColor="#BC8F8F" FontSize="12"  Grid.Column="1" VerticalOptions="Center" />
                 <Frame.GestureRecognizers>

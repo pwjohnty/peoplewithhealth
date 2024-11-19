@@ -13,6 +13,7 @@ public partial class ShowAllData : ContentPage
 
     ObservableCollection<usermeasurement> allusermeasurements = new ObservableCollection<usermeasurement>();
     ObservableCollection<measurement> allmeasurementlist = new ObservableCollection<measurement>();
+    bool Result; 
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
@@ -27,6 +28,34 @@ public partial class ShowAllData : ContentPage
         catch (Exception ex)
         {
             //Dunno 
+        }
+    }
+
+    protected override void OnDisappearing()
+    {
+        try
+        {
+            //Clear the Toolbar item on Back Pressed and reset to Original
+            this.ToolbarItems.Clear();
+            ToolbarItem item = new ToolbarItem
+            {
+                Text = "Edit"
+
+            };
+
+            item.Clicked += ToolbarItem_Clicked;
+            this.ToolbarItems.Add(item);
+            //edit button clicked
+            usermeasurementlist.IsEnabled = false;
+            deletelbl.IsVisible = false;
+            foreach (var items in usermeasurementlistpassed)
+            {
+                items.Deleteisvis = false;
+            }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
         }
     }
 
@@ -130,13 +159,35 @@ public partial class ShowAllData : ContentPage
             //done toolbar item clicked
             if(deleeteusermeasurementlistpassed.Count == 0)
             {
+                this.ToolbarItems.Clear();
+                ToolbarItem item = new ToolbarItem
+                {
+                    Text = "Edit"
+
+                };
+
+                item.Clicked += ToolbarItem_Clicked;
+                this.ToolbarItems.Add(item);
+                //edit button clicked
+                usermeasurementlist.IsEnabled = false;
+                deletelbl.IsVisible = false;
+                foreach (var items in usermeasurementlistpassed)
+                {
+                    items.Deleteisvis = false;
+                }
                 return;
             }
 
+            if(deleeteusermeasurementlistpassed.Count == usermeasurementlistpassed.Count)
+            {
+                Result = await DisplayAlert("Delete Feedback", "Deleting this feedback will delete this measurement, are you sure you want to delete?", "Cancel", "Delete");
+            }
+            else 
+            {
+                Result = await DisplayAlert("Delete Feedback", "This permanetly deletes this feedback, are you sure you want to delete?", "Cancel", "Delete");
+            }
 
-            var result = await DisplayAlert("Delete Feedback", "This permanetly deletes this feedback, are you sure you want to delete?", "Cancel", "Delete");
-
-            if (result)
+            if (Result)
             {
                 return;
             }
@@ -192,7 +243,7 @@ public partial class ShowAllData : ContentPage
             if (deleeteusermeasurementlistpassed.Count > 0)
             {
                 await aPICalls.DeleteUserMeasurements(deleeteusermeasurementlistpassed);
-                await Task.Delay(1500);
+                
                 //update the single view
                
 
@@ -213,27 +264,33 @@ public partial class ShowAllData : ContentPage
                 nodatastack.IsVisible = true;
                 this.ToolbarItems.Clear();
 
+              
+
             }
             else
             {
                 //add the edit button back 
                 this.ToolbarItems.Clear();
-
-
-                ToolbarItem itemm = new ToolbarItem
+                ToolbarItem item = new ToolbarItem
                 {
                     Text = "Edit"
 
                 };
 
-                itemm.Clicked += OnItemEdittwoClicked;
+                item.Clicked += ToolbarItem_Clicked;
+                this.ToolbarItems.Add(item);
+                //edit button clicked
+                usermeasurementlist.IsEnabled = false;
+                deletelbl.IsVisible = false;
+                foreach (var items in usermeasurementlistpassed)
+                {
+                    items.Deleteisvis = false;
+                }
 
-                // "this" refers to a Page object
-                this.ToolbarItems.Add(itemm);
             }
 
+            await Task.Delay(3000);
 
-            
             await MopupService.Instance.PopAllAsync(false);
 
         }
@@ -243,38 +300,38 @@ public partial class ShowAllData : ContentPage
         }
     }
 
-    private void OnItemEdittwoClicked(object sender, EventArgs e)
-    {
-        try
-        {
-            usermeasurementlist.IsEnabled = true;
-            deletelbl.IsVisible = true;
-            // Iterate over the source collection and add each item to SelectedItems
-            foreach (var item in usermeasurementlistpassed)
-            {
-                item.Deleteisvis = true;
-            }
+    //private void OnItemEdittwoClicked(object sender, EventArgs e)
+    //{
+    //    try
+    //    {
+    //        usermeasurementlist.IsEnabled = true;
+    //        deletelbl.IsVisible = true;
+    //        // Iterate over the source collection and add each item to SelectedItems
+    //        foreach (var item in usermeasurementlistpassed)
+    //        {
+    //            item.Deleteisvis = true;
+    //        }
 
-            this.ToolbarItems.Clear();
+    //        this.ToolbarItems.Clear();
 
 
-            ToolbarItem itemm = new ToolbarItem
-            {
-                Text = "Done"
+    //        ToolbarItem itemm = new ToolbarItem
+    //        {
+    //            Text = "Done"
 
-            };
+    //        };
 
-            itemm.Clicked += OnItemClicked;
+    //        itemm.Clicked += OnItemClicked;
 
-            // "this" refers to a Page object
-            this.ToolbarItems.Add(itemm);
+    //        // "this" refers to a Page object
+    //        this.ToolbarItems.Add(itemm);
 
-        }
-        catch (Exception Ex)
-        {
-            NotasyncMethod(Ex);
-        }
-    }
+    //    }
+    //    catch (Exception Ex)
+    //    {
+    //        NotasyncMethod(Ex);
+    //    }
+    //}
 
     private async void usermeasurementlist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
     {

@@ -159,6 +159,10 @@ public partial class AddMeasurement : ContentPage
                 stlbl.Text = "St";
                 lbslbl.Text = "lbs"; 
             }
+            else if (inputvalue == "Systolic/Diastolic")
+            {
+                //Do Nothing 
+            }
             else
             {
                 StonesPoundsframe.IsVisible = false;
@@ -170,6 +174,9 @@ public partial class AddMeasurement : ContentPage
             Stonesentry.Text = string.Empty;
             Poundsentry.Text = string.Empty; 
             unitentry.Text = string.Empty;
+
+            SubmitBtn.BackgroundColor = Colors.Gray;
+            SubmitBtn.TextColor = Colors.LightGray;
 
         }
         catch (Exception Ex)
@@ -228,11 +235,15 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else if (convertodec <= 2.9 && convertodec >= 361.9)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
 
@@ -243,6 +254,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
                         }
@@ -255,12 +267,15 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint <= 2 && convertoint >= 362)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else
                                 {
                                     numvalueconverted = convertoint.ToString();
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                 }
 
@@ -268,6 +283,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -287,16 +304,21 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else if (convertodec <= 4.9 && convertodec >= 799.1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
                             {
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
 
                                 Double dc = Math.Round((Double)convertodec, 2);
@@ -312,12 +334,15 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint <= 4 && convertoint >= 799)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else
                                 {
                                     numvalueconverted = convertoint.ToString();
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                 }
 
@@ -325,6 +350,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -341,16 +368,21 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else if (convertodec <= 4.9 && convertodec >= 799.1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
                             {
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
 
                                 Double dc = Math.Round((Double)convertodec, 2);
@@ -366,12 +398,15 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint <= 4 && convertoint >= 799)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else
                                 {
                                     numvalueconverted = convertoint.ToString();
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                 }
 
@@ -379,6 +414,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -395,11 +432,15 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else if (convertodec <= 0.4 && convertodec >= 56.9)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -409,6 +450,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
                         }
@@ -421,12 +463,15 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint < 1 && convertoint >= 57)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else
                                 {
                                     numvalueconverted = convertoint.ToString();
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                 }
 
@@ -434,6 +479,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -455,11 +502,15 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else if (convertodec <= 29.9 && convertodec >= 299.1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -469,6 +520,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
                         }
@@ -481,17 +533,22 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint <= 29)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else if (convertoint > 300)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else
                                 {
                                     numvalueconverted = convertoint.ToString();
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                 }
 
@@ -499,6 +556,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -521,6 +580,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 0)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             //  else if (convertodec <= 4.9)
@@ -553,12 +614,15 @@ public partial class AddMeasurement : ContentPage
                                 {
                                     numvalueconverted = convertoint.ToString();
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
 
                                 }
                                 else
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
 
@@ -566,6 +630,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -586,11 +652,15 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else if (convertodec <= 5.9 && convertodec >= 89.9)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -600,6 +670,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
                         }
@@ -612,17 +683,22 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint <= 6)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else if (convertoint > 90)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else
                                 {
                                     numvalueconverted = convertoint.ToString();
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                 }
 
@@ -630,6 +706,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -722,6 +800,8 @@ public partial class AddMeasurement : ContentPage
                             if (valuestring.Length == 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
                             }
                             else if (valuestring.Length == 2)
                             {
@@ -729,6 +809,7 @@ public partial class AddMeasurement : ContentPage
                                 var secondnum = valuestring[1].ToString(); // Inches
                                 validinput = true;
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                             }
                             else if (valuestring.Length == 3)
                             {
@@ -740,15 +821,20 @@ public partial class AddMeasurement : ContentPage
                                 {
                                     validinput = true;
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                 }
                                 else
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
                                 }
                             }
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
                             }
                         }
                     }
@@ -770,11 +856,15 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else if (convertodec <= 9.9 && convertodec >= 299.9)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -784,6 +874,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
                         }
@@ -796,17 +887,22 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint <= 9)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else if (convertoint > 299)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else
                                 {
                                     numvalueconverted = convertoint.ToString();
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                 }
 
@@ -814,6 +910,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -837,11 +935,15 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else if (convertodec <= 4 && convertodec >= 116.9)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -851,6 +953,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
                         }
@@ -863,17 +966,22 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint <= 4)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else if (convertoint > 117)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else
                                 {
                                     numvalueconverted = convertoint.ToString();
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                 }
 
@@ -881,6 +989,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -905,11 +1015,15 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else if (convertodec >= 100.1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -919,6 +1033,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
                         }
@@ -931,17 +1046,22 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint < 0)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else if (convertoint > 100)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else
                                 {
                                     numvalueconverted = convertoint.ToString();
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                 }
 
@@ -949,6 +1069,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -967,11 +1089,15 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else if (convertodec >= 100.1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -981,6 +1107,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
                         }
@@ -993,17 +1120,22 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint < 0)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else if (convertoint > 100)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else
                                 {
                                     numvalueconverted = convertoint.ToString();
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                 }
 
@@ -1011,6 +1143,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -1029,6 +1163,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 0)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
 
@@ -1042,17 +1178,22 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint < 30)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else if (convertoint > 350)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else
                                 {
                                     numvalueconverted = convertoint.ToString();
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                 }
 
@@ -1060,6 +1201,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -1078,6 +1221,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 0)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
 
@@ -1091,17 +1236,22 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint < 60)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else if (convertoint > 170)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else
                                 {
                                     numvalueconverted = convertoint.ToString();
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                 }
 
@@ -1109,6 +1259,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -1127,6 +1279,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 0)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
 
@@ -1140,17 +1294,22 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint < 200)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else if (convertoint > 240)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else
                                 {
                                     numvalueconverted = convertoint.ToString();
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                 }
 
@@ -1158,6 +1317,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -1176,6 +1337,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 0)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
 
@@ -1189,17 +1352,22 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint < 130)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else if (convertoint > 160)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else
                                 {
                                     numvalueconverted = convertoint.ToString();
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                 }
 
@@ -1207,6 +1375,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -1222,6 +1392,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -1230,6 +1402,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
 
@@ -1243,6 +1416,7 @@ public partial class AddMeasurement : ContentPage
 
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
 
 
@@ -1250,6 +1424,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -1268,6 +1444,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -1277,6 +1455,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
 
@@ -1291,17 +1470,22 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint < 0)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else if (convertoint > 500)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else
                                 {
                                     numvalueconverted = convertoint.ToString();
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                 }
 
@@ -1309,6 +1493,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -1324,6 +1510,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 0)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -1335,17 +1523,22 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint < 13)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else if (convertoint > 400)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else
                                 {
                                     numvalueconverted = convertoint.ToString();
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                 }
 
@@ -1353,6 +1546,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -1372,6 +1567,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 0)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
 
@@ -1385,17 +1582,22 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint < 50)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else if (convertoint > 60)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else
                                 {
                                     numvalueconverted = convertoint.ToString();
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                 }
 
@@ -1403,6 +1605,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -1418,6 +1622,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -1426,6 +1632,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
 
@@ -1439,6 +1646,7 @@ public partial class AddMeasurement : ContentPage
 
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
 
 
@@ -1446,6 +1654,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -1465,6 +1675,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 0)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
 
@@ -1478,17 +1690,22 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint < 150)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else if (convertoint > 200)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else
                                 {
                                     numvalueconverted = convertoint.ToString();
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                 }
 
@@ -1496,6 +1713,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -1514,6 +1733,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 0)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
 
@@ -1538,6 +1759,7 @@ public partial class AddMeasurement : ContentPage
                                */ // {
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                                 // }
 
@@ -1545,6 +1767,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -1560,6 +1784,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 0)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
 
@@ -1584,6 +1810,7 @@ public partial class AddMeasurement : ContentPage
                                */ // {
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                                 // }
 
@@ -1591,6 +1818,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -1609,6 +1838,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -1617,6 +1848,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
 
@@ -1630,6 +1862,7 @@ public partial class AddMeasurement : ContentPage
 
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
 
 
@@ -1637,6 +1870,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -1652,6 +1887,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -1660,6 +1897,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
 
@@ -1673,6 +1911,7 @@ public partial class AddMeasurement : ContentPage
 
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
 
 
@@ -1680,6 +1919,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -1698,6 +1939,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -1706,6 +1949,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
 
@@ -1719,6 +1963,7 @@ public partial class AddMeasurement : ContentPage
 
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
 
 
@@ -1726,6 +1971,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -1741,6 +1988,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -1749,6 +1998,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
 
@@ -1762,6 +2012,7 @@ public partial class AddMeasurement : ContentPage
 
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
 
 
@@ -1769,6 +2020,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -1787,6 +2040,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 0)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -1808,6 +2063,7 @@ public partial class AddMeasurement : ContentPage
 
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
 
 
@@ -1815,6 +2071,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -1833,6 +2091,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 0)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -1854,6 +2114,7 @@ public partial class AddMeasurement : ContentPage
 
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
 
 
@@ -1861,6 +2122,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -1878,17 +2141,22 @@ public partial class AddMeasurement : ContentPage
                         if (convertoint < 5.0)
                         {
                             validinput = false;
+                            SubmitBtn.BackgroundColor = Colors.Gray;
+                            SubmitBtn.TextColor = Colors.LightGray;
 
                         }
                         else if (convertoint > 14.1)
                         {
                             validinput = false;
+                            SubmitBtn.BackgroundColor = Colors.Gray;
+                            SubmitBtn.TextColor = Colors.LightGray;
 
                         }
                         else
                         {
                             numvalueconverted = convertoint.ToString();
                             SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                            SubmitBtn.TextColor = Colors.White;
                             validinput = true;
                         }
 
@@ -1901,6 +2169,8 @@ public partial class AddMeasurement : ContentPage
                         if (e.NewTextValue.Contains("."))
                         {
                             validinput = false;
+                            SubmitBtn.BackgroundColor = Colors.Gray;
+                            SubmitBtn.TextColor = Colors.LightGray;
 
                         }
                         else
@@ -1908,17 +2178,22 @@ public partial class AddMeasurement : ContentPage
                             if (convertoint < 31)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else if (convertoint > 131)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
                             {
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
 
@@ -1940,6 +2215,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -1948,6 +2225,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
 
@@ -1961,6 +2239,7 @@ public partial class AddMeasurement : ContentPage
 
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
 
 
@@ -1968,6 +2247,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -1986,6 +2267,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -2007,6 +2290,7 @@ public partial class AddMeasurement : ContentPage
 
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
 
 
@@ -2014,6 +2298,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -2032,6 +2318,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -2040,6 +2328,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
 
@@ -2053,6 +2342,7 @@ public partial class AddMeasurement : ContentPage
 
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
 
 
@@ -2060,6 +2350,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -2075,6 +2367,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -2083,6 +2377,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
 
@@ -2096,6 +2391,7 @@ public partial class AddMeasurement : ContentPage
 
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
 
 
@@ -2103,6 +2399,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -2121,6 +2419,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -2129,6 +2429,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
 
@@ -2149,6 +2450,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -2167,11 +2470,15 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else if (convertodec >= 100.1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -2181,6 +2488,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
                         }
@@ -2193,17 +2501,22 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint < 0)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else if (convertoint > 100)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else
                                 {
                                     numvalueconverted = convertoint.ToString();
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                 }
 
@@ -2211,6 +2524,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -2229,6 +2544,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -2237,6 +2554,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
 
@@ -2250,6 +2568,7 @@ public partial class AddMeasurement : ContentPage
 
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
 
 
@@ -2257,6 +2576,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -2275,6 +2596,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -2283,6 +2606,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
 
@@ -2296,6 +2620,7 @@ public partial class AddMeasurement : ContentPage
 
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
 
 
@@ -2303,6 +2628,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -2318,6 +2645,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -2326,6 +2655,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
 
@@ -2347,6 +2677,7 @@ public partial class AddMeasurement : ContentPage
 
                                     numvalueconverted = convertoint.ToString();
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
 
 
@@ -2354,6 +2685,8 @@ public partial class AddMeasurement : ContentPage
                                 else
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
 
@@ -2375,6 +2708,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -2383,6 +2718,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
 
@@ -2396,6 +2732,7 @@ public partial class AddMeasurement : ContentPage
 
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
 
 
@@ -2403,6 +2740,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -2421,6 +2760,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -2429,6 +2770,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
 
@@ -2442,6 +2784,7 @@ public partial class AddMeasurement : ContentPage
 
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
 
 
@@ -2449,6 +2792,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -2467,6 +2812,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -2475,6 +2822,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
 
@@ -2488,6 +2836,7 @@ public partial class AddMeasurement : ContentPage
 
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
 
 
@@ -2495,6 +2844,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -2510,6 +2861,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -2518,6 +2871,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
 
@@ -2531,6 +2885,7 @@ public partial class AddMeasurement : ContentPage
 
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
 
 
@@ -2538,6 +2893,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -2556,6 +2913,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -2564,6 +2923,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
 
@@ -2577,6 +2937,7 @@ public partial class AddMeasurement : ContentPage
 
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
 
 
@@ -2584,6 +2945,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -2602,6 +2965,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -2610,6 +2975,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
 
@@ -2623,6 +2989,7 @@ public partial class AddMeasurement : ContentPage
 
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
 
 
@@ -2630,6 +2997,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -2645,6 +3014,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -2653,6 +3024,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
 
@@ -2666,6 +3038,7 @@ public partial class AddMeasurement : ContentPage
 
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
 
 
@@ -2673,6 +3046,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -2691,6 +3066,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -2699,6 +3076,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
 
@@ -2712,6 +3090,7 @@ public partial class AddMeasurement : ContentPage
 
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
 
 
@@ -2719,6 +3098,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -2737,6 +3118,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -2745,6 +3128,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
 
@@ -2758,6 +3142,7 @@ public partial class AddMeasurement : ContentPage
 
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
 
 
@@ -2765,6 +3150,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -2783,6 +3170,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -2791,6 +3180,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
 
@@ -2804,6 +3194,7 @@ public partial class AddMeasurement : ContentPage
 
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
 
 
@@ -2811,6 +3202,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -2829,6 +3222,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -2837,6 +3232,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
 
@@ -2850,6 +3246,7 @@ public partial class AddMeasurement : ContentPage
 
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
 
 
@@ -2857,6 +3254,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -2865,7 +3264,7 @@ public partial class AddMeasurement : ContentPage
                 else if (measurementnamestring == "Fever/Temperature ")
                 {
 
-                    if (inputvalue.Contains("C"))
+                    if (inputvalue.Contains("°C"))
                     {
 
 
@@ -2878,11 +3277,15 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else if (convertodec <= 29.9 && convertodec >= 42.1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -2892,6 +3295,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
                         }
@@ -2904,17 +3308,22 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint <= 32)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else if (convertoint > 43)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else
                                 {
                                     numvalueconverted = convertoint.ToString();
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                 }
 
@@ -2922,6 +3331,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -2932,7 +3343,7 @@ public partial class AddMeasurement : ContentPage
 
 
                     }
-                    else if (inputvalue.Contains("F"))
+                    else if (inputvalue.Contains("°F"))
                     {
 
 
@@ -2945,11 +3356,15 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else if (convertodec <= 91.9 && convertodec >= 107.1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -2959,6 +3374,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
                         }
@@ -2971,17 +3387,22 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint <= 91)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else if (convertoint > 108)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else
                                 {
                                     numvalueconverted = convertoint.ToString();
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                 }
 
@@ -2989,6 +3410,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -3013,6 +3436,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
@@ -3021,6 +3446,7 @@ public partial class AddMeasurement : ContentPage
                                 numvalueconverted = dc.ToString();
 
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
 
@@ -3035,17 +3461,22 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint < 7)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else if (convertoint > 75)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else
                                 {
                                     numvalueconverted = convertoint.ToString();
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                 }
 
@@ -3054,6 +3485,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -3071,6 +3504,8 @@ public partial class AddMeasurement : ContentPage
                         if (countdots > 1)
                         {
                             validinput = false;
+                            SubmitBtn.BackgroundColor = Colors.Gray;
+                            SubmitBtn.TextColor = Colors.LightGray;
 
                         }
                         else
@@ -3080,6 +3515,7 @@ public partial class AddMeasurement : ContentPage
                             numvalueconverted = dc.ToString();
 
                             SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                            SubmitBtn.TextColor = Colors.White;
                             validinput = true;
                         }
                     }
@@ -3093,17 +3529,22 @@ public partial class AddMeasurement : ContentPage
                             if (convertoint < 110)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else if (convertoint > 1200)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
                             {
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
 
@@ -3111,6 +3552,8 @@ public partial class AddMeasurement : ContentPage
                         else
                         {
                             validinput = false;
+                            SubmitBtn.BackgroundColor = Colors.Gray;
+                            SubmitBtn.TextColor = Colors.LightGray;
 
                         }
                     }
@@ -3127,6 +3570,8 @@ public partial class AddMeasurement : ContentPage
                         if (countdots > 1)
                         {
                             validinput = false;
+                            SubmitBtn.BackgroundColor = Colors.Gray;
+                            SubmitBtn.TextColor = Colors.LightGray;
 
                         }
                         else
@@ -3136,6 +3581,7 @@ public partial class AddMeasurement : ContentPage
                             numvalueconverted = dc.ToString();
 
                             SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                            SubmitBtn.TextColor = Colors.White;
                             validinput = true;
                         }
                     }
@@ -3149,17 +3595,22 @@ public partial class AddMeasurement : ContentPage
                             if (convertoint < 1)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else if (convertoint > 100)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                             else
                             {
                                 numvalueconverted = convertoint.ToString();
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                             }
 
@@ -3167,6 +3618,8 @@ public partial class AddMeasurement : ContentPage
                         else
                         {
                             validinput = false;
+                            SubmitBtn.BackgroundColor = Colors.Gray;
+                            SubmitBtn.TextColor = Colors.LightGray;
 
                         }
                     }
@@ -3184,6 +3637,8 @@ public partial class AddMeasurement : ContentPage
                             if (countdots > 0)
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -3195,17 +3650,22 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint < 1)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else if (convertoint > 80)
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                                 else
                                 {
                                     numvalueconverted = convertoint.ToString();
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                 }
 
@@ -3213,6 +3673,8 @@ public partial class AddMeasurement : ContentPage
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -3237,6 +3699,8 @@ public partial class AddMeasurement : ContentPage
                         if (countdots > 1)
                         {
                             validinput = false;
+                            SubmitBtn.BackgroundColor = Colors.Gray;
+                            SubmitBtn.TextColor = Colors.LightGray;
 
                         }
                         else
@@ -3246,6 +3710,7 @@ public partial class AddMeasurement : ContentPage
                             numvalueconverted = dc.ToString();
 
                             SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                            SubmitBtn.TextColor = Colors.White;
                             validinput = true;
                         }
                     }
@@ -3258,18 +3723,137 @@ public partial class AddMeasurement : ContentPage
                             if (convertoint > 0)
                             {
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                                 numvalueconverted = convertoint.ToString();
                             }
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
                         else
                         {
                             validinput = false;
+                            SubmitBtn.BackgroundColor = Colors.Gray;
+                            SubmitBtn.TextColor = Colors.LightGray;
+
+                        }
+                    }
+
+                }
+                else if (measurementnamestring == "Fluid Input")
+                {
+                    unitentry.Text = e.NewTextValue;
+
+                    if (e.NewTextValue.Contains("."))
+                    {
+                        var countdots = e.NewTextValue.ToCharArray().Count(x => x == '.');
+                        var convertodec = Convert.ToDouble(e.NewTextValue);
+                        if (countdots > 1)
+                        {
+                            validinput = false;
+                            SubmitBtn.BackgroundColor = Colors.Gray;
+                            SubmitBtn.TextColor = Colors.LightGray;
+
+                        }
+                        else
+                        {
+
+                            Double dc = Math.Round((Double)convertodec, 1);
+                            numvalueconverted = dc.ToString();
+
+                            SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                            SubmitBtn.TextColor = Colors.White;
+                            validinput = true;
+                        }
+                    }
+                    else
+                    {
+                        var convertoint = Convert.ToInt32(e.NewTextValue);
+
+                        if (e.NewTextValue.Length >= 1 && e.NewTextValue.Length <= 6)
+                        {
+                            if (convertoint > 0)
+                            {
+                                SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
+                                validinput = true;
+                                numvalueconverted = convertoint.ToString();
+                            }
+                            else
+                            {
+                                validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
+
+                            }
+                        }
+                        else
+                        {
+                            validinput = false;
+                            SubmitBtn.BackgroundColor = Colors.Gray;
+                            SubmitBtn.TextColor = Colors.LightGray;
+
+                        }
+                    }
+
+                }
+                else if (measurementnamestring == "Fluid Output")
+                {
+                    unitentry.Text = e.NewTextValue;
+
+                    if (e.NewTextValue.Contains("."))
+                    {
+                        var countdots = e.NewTextValue.ToCharArray().Count(x => x == '.');
+                        var convertodec = Convert.ToDouble(e.NewTextValue);
+                        if (countdots > 1)
+                        {
+                            validinput = false;
+                            SubmitBtn.BackgroundColor = Colors.Gray;
+                            SubmitBtn.TextColor = Colors.LightGray;
+
+                        }
+                        else
+                        {
+
+                            Double dc = Math.Round((Double)convertodec, 1);
+                            numvalueconverted = dc.ToString();
+
+                            SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                            SubmitBtn.TextColor = Colors.White;
+                            validinput = true;
+                        }
+                    }
+                    else
+                    {
+                        var convertoint = Convert.ToInt32(e.NewTextValue);
+
+                        if (e.NewTextValue.Length >= 1 && e.NewTextValue.Length <= 6)
+                        {
+                            if (convertoint > 0)
+                            {
+                                SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
+                                validinput = true;
+                                numvalueconverted = convertoint.ToString();
+                            }
+                            else
+                            {
+                                validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
+
+                            }
+                        }
+                        else
+                        {
+                            validinput = false;
+                            SubmitBtn.BackgroundColor = Colors.Gray;
+                            SubmitBtn.TextColor = Colors.LightGray;
 
                         }
                     }
@@ -3285,18 +3869,23 @@ public partial class AddMeasurement : ContentPage
                             if (convertoint > 0 && convertoint < 37)
                             {
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                                 numvalueconverted = convertoint.ToString();
                             }
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
                         else
                         {
                             validinput = false;
+                            SubmitBtn.BackgroundColor = Colors.Gray;
+                            SubmitBtn.TextColor = Colors.LightGray;
 
                         }
                     }
@@ -3308,18 +3897,23 @@ public partial class AddMeasurement : ContentPage
                             if (convertoint > 0 && convertoint < 2161)
                             {
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                                 numvalueconverted = convertoint.ToString();
                             }
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
                         else
                         {
                             validinput = false;
+                            SubmitBtn.BackgroundColor = Colors.Gray;
+                            SubmitBtn.TextColor = Colors.LightGray;
 
                         }
                     }
@@ -3341,18 +3935,23 @@ public partial class AddMeasurement : ContentPage
                             if (convertoint > 0 && convertoint < 150)
                             {
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                                 numvalueconverted = convertoint.ToString();
                             }
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
                         else
                         {
                             validinput = false;
+                            SubmitBtn.BackgroundColor = Colors.Gray;
+                            SubmitBtn.TextColor = Colors.LightGray;
 
                         }
                     }
@@ -3374,18 +3973,23 @@ public partial class AddMeasurement : ContentPage
                             if (convertoint > 0 && convertoint < 111)
                             {
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                                 numvalueconverted = convertoint.ToString();
                             }
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
                         else
                         {
                             validinput = false;
+                            SubmitBtn.BackgroundColor = Colors.Gray;
+                            SubmitBtn.TextColor = Colors.LightGray;
 
                         }
                     }
@@ -3407,18 +4011,23 @@ public partial class AddMeasurement : ContentPage
                             if (convertoint > 0 && convertoint < 51)
                             {
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                                 numvalueconverted = convertoint.ToString();
                             }
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
                         else
                         {
                             validinput = false;
+                            SubmitBtn.BackgroundColor = Colors.Gray;
+                            SubmitBtn.TextColor = Colors.LightGray;
 
                         }
                     }
@@ -3440,18 +4049,23 @@ public partial class AddMeasurement : ContentPage
                             if (convertoint > 0 && convertoint < 3001)
                             {
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                                 numvalueconverted = convertoint.ToString();
                             }
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
                         else
                         {
                             validinput = false;
+                            SubmitBtn.BackgroundColor = Colors.Gray;
+                            SubmitBtn.TextColor = Colors.LightGray;
 
                         }
                     }
@@ -3473,18 +4087,23 @@ public partial class AddMeasurement : ContentPage
                             if (convertoint > 0 && convertoint < 5001)
                             {
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                                 numvalueconverted = convertoint.ToString();
                             }
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
                         else
                         {
                             validinput = false;
+                            SubmitBtn.BackgroundColor = Colors.Gray;
+                            SubmitBtn.TextColor = Colors.LightGray;
 
                         }
                     }
@@ -3506,18 +4125,23 @@ public partial class AddMeasurement : ContentPage
                             if (convertoint > 0 && convertoint < 5001)
                             {
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                                 numvalueconverted = convertoint.ToString();
                             }
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
                         else
                         {
                             validinput = false;
+                            SubmitBtn.BackgroundColor = Colors.Gray;
+                            SubmitBtn.TextColor = Colors.LightGray;
 
                         }
                     }
@@ -3539,18 +4163,23 @@ public partial class AddMeasurement : ContentPage
                             if (convertoint > 0 && convertoint < 121)
                             {
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                                 numvalueconverted = convertoint.ToString();
                             }
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
                         else
                         {
                             validinput = false;
+                            SubmitBtn.BackgroundColor = Colors.Gray;
+                            SubmitBtn.TextColor = Colors.LightGray;
 
                         }
                     }
@@ -3571,18 +4200,23 @@ public partial class AddMeasurement : ContentPage
                             if (convertoint > 99 && convertoint < 251)
                             {
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                                 numvalueconverted = convertoint.ToString();
                             }
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
                         else
                         {
                             validinput = false;
+                            SubmitBtn.BackgroundColor = Colors.Gray;
+                            SubmitBtn.TextColor = Colors.LightGray;
 
                         }
                     }
@@ -3601,18 +4235,23 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint > 0 && convertoint < 21.1)
                                 {
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                     numvalueconverted = convertoint.ToString();
                                 }
                                 else
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                             }
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -3623,18 +4262,23 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint > 0 && convertoint < 21.1)
                                 {
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                     numvalueconverted = convertoint.ToString();
                                 }
                                 else
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                             }
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -3648,7 +4292,7 @@ public partial class AddMeasurement : ContentPage
                     var convertoint = Convert.ToDouble(ValueString);
                     if (inputvalue == "g/dL")
                     {
-                        var CheckDouble = convertoint.ToString(); 
+                        var CheckDouble = convertoint.ToString();
                         if (CheckDouble.Contains("."))
                         {
                             if (ValueString.Length >= 1 && ValueString.Length <= 5)
@@ -3656,18 +4300,23 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint > 0 && convertoint < 10.1)
                                 {
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                     numvalueconverted = convertoint.ToString();
                                 }
                                 else
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                             }
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -3678,18 +4327,23 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint > 0 && convertoint < 10.1)
                                 {
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                     numvalueconverted = convertoint.ToString();
                                 }
                                 else
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                             }
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -3711,18 +4365,23 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint > 0 && convertoint < 5.1)
                                 {
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                     numvalueconverted = convertoint.ToString();
                                 }
                                 else
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                             }
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -3733,18 +4392,23 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint > 0 && convertoint < 6)
                                 {
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                     numvalueconverted = convertoint.ToString();
                                 }
                                 else
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                             }
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -3766,18 +4430,23 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint > 0 && convertoint < 15.1)
                                 {
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                     numvalueconverted = convertoint.ToString();
                                 }
                                 else
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                             }
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
@@ -3788,24 +4457,156 @@ public partial class AddMeasurement : ContentPage
                                 if (convertoint > 0 && convertoint < 15.1)
                                 {
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     validinput = true;
                                     numvalueconverted = convertoint.ToString();
                                 }
                                 else
                                 {
                                     validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
 
                                 }
                             }
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
 
                     }
                 }
+
+                else if (measurementnamestring == "Proteinuria Level")
+                {
+                    if (inputvalue == "milligrams of protein per day")
+                    {
+                        unitentry.Text = e.NewTextValue;
+
+                        if (e.NewTextValue.Contains("."))
+                        {
+                            var countdots = e.NewTextValue.ToCharArray().Count(x => x == '.');
+                            var convertodec = Convert.ToDouble(e.NewTextValue);
+                            if (countdots > 1)
+                            {
+                                validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
+
+                            }
+                            else
+                            {
+                                Double dc = Math.Round((Double)convertodec, 2);
+                                numvalueconverted = dc.ToString();
+
+                                SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
+                                validinput = true;
+                            }
+
+                        }
+                        else
+                        {
+                            var convertoint = Convert.ToInt32(e.NewTextValue);
+
+                            if (e.NewTextValue.Length >= 1 && e.NewTextValue.Length <= 4)
+                            {
+
+                                numvalueconverted = convertoint.ToString();
+                                SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
+                                validinput = true;
+
+
+                            }
+                            else
+                            {
+                                validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
+
+                            }
+                        }
+                    }
+                }
+
+                else if (measurementnamestring == "Oral Glucose Tolerance Test (OGTT)")
+                {
+                    if (inputvalue == "mg/dL")
+                    {
+                        unitentry.Text = e.NewTextValue;
+
+                        if (e.NewTextValue.Contains("."))
+                        {
+                            var countdots = e.NewTextValue.ToCharArray().Count(x => x == '.');
+                            var convertodec = Convert.ToDouble(e.NewTextValue);
+                            if (convertodec < 100)
+                            {
+                                validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
+
+                            }
+                            else if (convertodec > 240)
+                            {
+                                validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
+
+                            }
+                            else
+                            {
+                                numvalueconverted = convertodec.ToString();
+                                SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
+                                validinput = true;
+                            }
+
+                        }
+                        else
+                        {
+                            var convertoint = Convert.ToInt32(e.NewTextValue);
+
+                            if (e.NewTextValue.Length >= 1 && e.NewTextValue.Length <= 3)
+                            {
+                                if (convertoint < 100)
+                                {
+                                    validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
+
+                                }
+                                else if (convertoint > 240)
+                                {
+                                    validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
+
+                                }
+                                else
+                                {
+                                    numvalueconverted = convertoint.ToString();
+                                    SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
+                                    validinput = true;
+                                }
+
+                            }
+                            else
+                            {
+                                validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
+
+                            }
+                        }
+                    }
+                }
+
                 else if (measurementnamestring == "Endometrial Thickness")
                 {
                     var ValueString = e.NewTextValue;
@@ -3822,18 +4623,23 @@ public partial class AddMeasurement : ContentPage
                             if (convertoint > 0 && convertoint < 21)
                             {
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                                 numvalueconverted = convertoint.ToString();
                             }
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
                         else
                         {
                             validinput = false;
+                            SubmitBtn.BackgroundColor = Colors.Gray;
+                            SubmitBtn.TextColor = Colors.LightGray;
 
                         }
                     }
@@ -3845,18 +4651,23 @@ public partial class AddMeasurement : ContentPage
                             if (convertoint > 0 && convertoint < 2161)
                             {
                                 SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                SubmitBtn.TextColor = Colors.White;
                                 validinput = true;
                                 numvalueconverted = convertoint.ToString();
                             }
                             else
                             {
                                 validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
 
                             }
                         }
                         else
                         {
                             validinput = false;
+                            SubmitBtn.BackgroundColor = Colors.Gray;
+                            SubmitBtn.TextColor = Colors.LightGray;
 
                         }
                     }
@@ -3884,6 +4695,7 @@ public partial class AddMeasurement : ContentPage
                 if (validinput == false)
                 {
                     Vibration.Vibrate();
+                    SubmitBtn.IsEnabled = true;
                     return;
                 }
                 else
@@ -3904,17 +4716,20 @@ public partial class AddMeasurement : ContentPage
                         if (string.IsNullOrEmpty(Stonesinput) || string.IsNullOrEmpty(Poundsinput))
                         {
                             Vibration.Vibrate();
+                            SubmitBtn.IsEnabled = true;
                             return;
                         }
 
                         if (Int32.Parse(Stonesinput) > 100)
                         {
                             Vibration.Vibrate();
+                            SubmitBtn.IsEnabled = true;
                             return;
                         }
                         if (Int32.Parse(Poundsinput) > 13)
                         {
                             Vibration.Vibrate();
+                            SubmitBtn.IsEnabled = true;
                             return;
                         }
                         else
@@ -4045,7 +4860,8 @@ public partial class AddMeasurement : ContentPage
                                 if (convertdia >= 40 && convertdia <= 140)
                                 {
                                     validinput = true;
-                                    SubmitBtn.BackgroundColor = Color.FromHex("#0F9FE2");
+                                    SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                     SubmitBtn.TextColor = Colors.White;
                                 }
                             }
@@ -4133,7 +4949,7 @@ public partial class AddMeasurement : ContentPage
                                     if (convertdia >= 40 && convertdia <= 240)
                                     {
                                         validinput = true;
-                                        SubmitBtn.BackgroundColor = Color.FromHex("#0F9FE2");
+                                        SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
                                         SubmitBtn.TextColor = Colors.White;
                                     }
                                 }
@@ -4164,8 +4980,81 @@ public partial class AddMeasurement : ContentPage
         try
         {
             Stonesinput = e.NewTextValue;
-            SubmitBtn.BackgroundColor = Color.FromHex("#0F9FE2");
-            validinput = true; 
+            if (e.NewTextValue.Length > 3)
+            {
+                return;
+            }
+            if (string.IsNullOrEmpty(e.NewTextValue))
+            {
+                validinput = false;
+                SubmitBtn.BackgroundColor = Colors.Gray;
+                SubmitBtn.TextColor = Colors.LightGray;
+
+            }
+            else
+            {
+                if (measurementnamestring == "Weight")
+                {
+                    inputvalue = "Stones/Pounds";
+
+                    if (e.NewTextValue.Contains("."))
+                    {
+                        var countdots = e.NewTextValue.ToCharArray().Count(x => x == '.');
+                        var convertodec = Convert.ToDouble(e.NewTextValue);
+                        if (countdots > 0)
+                        {
+                            validinput = false;
+                            SubmitBtn.BackgroundColor = Colors.Gray;
+                            SubmitBtn.TextColor = Colors.LightGray;
+                        }
+                    }
+                    else
+                    {
+                        var convertoint = Convert.ToInt32(e.NewTextValue);
+                        if (e.NewTextValue.Length >= 1 && e.NewTextValue.Length <= 3)
+                        {
+                            if (convertoint < 0)
+                            {
+                                validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
+                            }
+                            else if (convertoint > 100)
+                            {
+                                validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
+                            }
+                            else
+                            {
+                                // bloodpresuredianum = convertoint.ToString();
+                                if (string.IsNullOrEmpty(Poundsentry.Text))
+                                {
+                                    validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
+                                }
+                                else
+                                {
+                                    var convertdia = Convert.ToInt32(Poundsentry.Text);
+                                    if (convertdia >= 0 && convertdia <= 13)
+                                    {
+                                        validinput = true;
+                                        SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                        SubmitBtn.TextColor = Colors.White;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            validinput = false;
+                            SubmitBtn.BackgroundColor = Colors.Gray;
+                            SubmitBtn.TextColor = Colors.LightGray;
+                        }
+                    }
+                }
+            }
         }
         catch (Exception Ex)
         {
@@ -4178,8 +5067,81 @@ public partial class AddMeasurement : ContentPage
         try
         {
             Poundsinput = e.NewTextValue;
-            SubmitBtn.BackgroundColor = Color.FromHex("#0F9FE2");
-            validinput = true;
+            if (e.NewTextValue.Length > 3)
+            {
+                return;
+            }
+            if (string.IsNullOrEmpty(e.NewTextValue))
+            {
+                validinput = false;
+                SubmitBtn.BackgroundColor = Colors.Gray;
+                SubmitBtn.TextColor = Colors.LightGray;
+
+            }
+            else
+            {
+                if (measurementnamestring == "Weight")
+                {
+                    inputvalue = "Stones/Pounds";
+
+                    if (e.NewTextValue.Contains("."))
+                    {
+                        var countdots = e.NewTextValue.ToCharArray().Count(x => x == '.');
+                        var convertodec = Convert.ToDouble(e.NewTextValue);
+                        if (countdots > 0)
+                        {
+                            validinput = false;
+                            SubmitBtn.BackgroundColor = Colors.Gray;
+                            SubmitBtn.TextColor = Colors.LightGray;
+                        }
+                    }
+                    else
+                    {
+                        var convertoint = Convert.ToInt32(e.NewTextValue);
+                        if (e.NewTextValue.Length >= 1 && e.NewTextValue.Length <= 2)
+                        {
+                            if (convertoint < 0)
+                            {
+                                validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
+                            }
+                            else if (convertoint > 13)
+                            {
+                                validinput = false;
+                                SubmitBtn.BackgroundColor = Colors.Gray;
+                                SubmitBtn.TextColor = Colors.LightGray;
+                            }
+                            else
+                            {
+                                // bloodpresuredianum = convertoint.ToString();
+                                if (string.IsNullOrEmpty(Stonesentry.Text))
+                                {
+                                    validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
+                                }
+                                else
+                                {
+                                    var convertdia = Convert.ToInt32(Stonesentry.Text);
+                                    if (convertdia >= 0 && convertdia <= 100)
+                                    {
+                                        validinput = true;
+                                        SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                        SubmitBtn.TextColor = Colors.White;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            validinput = false;
+                            SubmitBtn.BackgroundColor = Colors.Gray;
+                            SubmitBtn.TextColor = Colors.LightGray;
+                        }
+                    }
+                }
+            }
         }
         catch (Exception Ex)
         {

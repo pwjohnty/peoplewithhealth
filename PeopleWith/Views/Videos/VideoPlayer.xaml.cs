@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Core.Primitives;
+using System.ComponentModel;
 using System.Diagnostics;
 
 namespace PeopleWith;
@@ -12,31 +13,8 @@ public partial class VideoPlayer : ContentPage
     public Stopwatch PauseDuration = new Stopwatch();
     private bool isPlaying = false;
     private bool isPaused = false;
-    APICalls database = new APICalls(); 
+    APICalls database = new APICalls();
 
-    protected override bool OnBackButtonPressed()
-    {
-        try
-        {
-            if (Video.IsVisible == true)
-            {
-                VideoDetails.IsVisible = true;
-                Video.IsVisible = false;
-                VideoEngagement.closeaction = "UserClosed";
-                UpdateVideoEngagement();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        catch (Exception Ex)
-        {
-            return false;
-        }
-
-    }
     async public void NotasyncMethod(Exception Ex)
     {
         try
@@ -63,6 +41,15 @@ public partial class VideoPlayer : ContentPage
 
             VideoEngagement.userid = Helpers.Settings.UserKey;
             VideoEngagement.videoid = VideoSelected.videoid;
+
+            if (DeviceInfo.Current.Platform == DevicePlatform.Android)
+            {
+                AndroidBtn.IsVisible = true; 
+            }
+            else if (DeviceInfo.Current.Platform == DevicePlatform.iOS)
+            {
+                IOSBtn.IsVisible = true;
+            }
 
 }
 		catch (Exception Ex)
@@ -165,7 +152,16 @@ public partial class VideoPlayer : ContentPage
             isPlaying = true;
             PlayDuration.Start();
             VideoEngagement.datetimeaccessed = DateTime.Now.ToString("dd/MM/yy HH:mm"); 
-            MediaElement.ShouldMute = false; 
+            MediaElement.ShouldMute = false;
+            NavigationPage.SetHasNavigationBar(this, false);
+            if(DeviceInfo.Current.Platform == DevicePlatform.Android)
+            {
+                AndroidBtn.IsVisible = true; 
+            }
+            else if (DeviceInfo.Current.Platform == DevicePlatform.iOS)
+            {
+                IOSBtn.IsVisible = true; 
+            }
         }
         catch (Exception Ex)
         {
@@ -203,7 +199,7 @@ public partial class VideoPlayer : ContentPage
             }
             await database.PostEngagementAsync(VideoEngagement);
 
-            MediaElement.SeekTo(TimeSpan.Zero);
+            await MediaElement.SeekTo(TimeSpan.Zero);
             MediaElement.Stop();
         }
         catch (Exception Ex)
@@ -212,5 +208,25 @@ public partial class VideoPlayer : ContentPage
         }
     }
 
+    private async void BacKArrow_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            if (Video.IsVisible == true)
+            {
+                Video.IsVisible = false;
+                VideoDetails.IsVisible = true;
+                VideoEngagement.closeaction = "UserClosed";
+                IOSBtn.IsVisible = false;
+                AndroidBtn.IsVisible = false; 
+                NavigationPage.SetHasNavigationBar(this, true); 
+                UpdateVideoEngagement();
+            }
 
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex); 
+        }
+    }
 }

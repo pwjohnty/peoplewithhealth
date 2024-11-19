@@ -60,7 +60,7 @@
 
 
     <VerticalStackLayout>
-        <StackLayout Margin="10,0,10,0">
+        <StackLayout Margin="10,20,10,0">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -68,7 +68,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Label Text="Help Videos" FontAttributes="Bold" FontSize="20" TextColor="#031926" Grid.Row="0"  />
+                <Label Text="Help Videos" FontAttributes="Bold" FontSize="26" FontFamily="HankenGroteskBold" TextColor="#031926" Grid.Row="0"  />
                 <Frame Padding="0" HasShadow="False" Grid.Row="1" Grid.Column="0" Margin="0,0,0,0" InputTransparent="False" BorderColor="Transparent" BackgroundColor="#FAFAFA" CornerRadius="{OnPlatform Android='5', iOS='5'}" >
                     <Grid >
                         <Grid.ColumnDefinitions>
@@ -77,7 +77,7 @@
                             <ColumnDefinition Width="15*"/>
                         </Grid.ColumnDefinitions>
                         <Image Source="searchgray.png" HorizontalOptions="Center" HeightRequest="15" BackgroundColor="Transparent" WidthRequest="15"  Grid.Row="0" Grid.Column="0"  />
-                        <Entry Grid.Row="0" Grid.Column="1" FontFamily="HankenGroteskRegular" IsTextPredictionEnabled="False" IsSpellCheckEnabled="False"  x:Name="searchbar"  ClearButtonVisibility="Never" InputTransparent="False"  TextChanged="searchbar_TextChanged" Placeholder="Search Videos"  BackgroundColor="Transparent" Background="Transparent" HeightRequest="60"  TextColor="#031926"/>
+                        <Entry Grid.Row="0" Grid.Column="1" FontFamily="HankenGroteskRegular" IsTextPredictionEnabled="False" IsSpellCheckEnabled="False"  x:Name="searchbar"  ClearButtonVisibility="Never" InputTransparent="False"  TextChanged="searchbar_TextChanged" Placeholder="Search Videos"   BackgroundColor="Transparent" Background="Transparent" HeightRequest="60"  TextColor="#031926"/>
                         <Image Source="filtergray.png" HeightRequest="15" BackgroundColor="Transparent" WidthRequest="15"  Grid.Row="0" Grid.Column="2"  >
                             <Image.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>

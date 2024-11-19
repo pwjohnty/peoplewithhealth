@@ -65,7 +65,7 @@ Padding="0">
                             <On Platform="Android" Value="300" />
                         </OnPlatform>
                     </chart:SfCartesianChart.HeightRequest>
-      
+
                 </chart:SfCartesianChart>
 
                 <Button x:Name="AddBtn"
@@ -79,7 +79,7 @@ FontFamily="HankenGroteskBold"
 Text="Add Data" />
 
 
-              
+
 
 
                 <Label Text="Details" x:Name="detailslbl" IsVisible="False" FontSize="20" Margin="0,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
@@ -93,19 +93,25 @@ Padding="10">
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Label Text="Unit" FontSize="14" Margin="0,0,0,0" Grid.Row="0" TextColor="#031926" FontFamily="HankenGroteskRegular" VerticalOptions="Center" FontAttributes="None" HorizontalOptions="Start" />
                         <Label x:Name="unitlbl" FontSize="20" Margin="0,0,5,0" Grid.Row="0" TextColor="#031926" FontFamily="HankenGroteskBold" VerticalOptions="Center" FontAttributes="None" HorizontalOptions="End" />
 
 
-                        <BoxView HorizontalOptions="FillAndExpand" Margin="0,20,0,20" Color="#e5f0fb" HeightRequest="1" Grid.Row="1" />
-
-                        <Label Text="Measurement Information" FontSize="14" Margin="0,0,0,0" Grid.Row="2" TextColor="#031926" FontFamily="HankenGroteskBold" VerticalOptions="Center" FontAttributes="None" HorizontalOptions="Start" />
-                        <Image Source="nextdarker.png" HeightRequest="15" Margin="0,0,5,0"  Grid.Row="2" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="End" />
-
+                        <BoxView HorizontalOptions="FillAndExpand" Margin="0,20,0,20" Color="#e5f0fb" BackgroundColor="#e5f0fb" HeightRequest="1" Grid.Row="1" />
+                        <Frame Padding="0" Grid.Row="2" HasShadow="False" BorderColor="Transparent" BackgroundColor="Transparent" >
+                            <Grid >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="90*"/>
+                                    <ColumnDefinition Width="10*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Text="Measurement Information" FontSize="14" Margin="0,0,0,0" Grid.Column="0" TextColor="#031926" FontFamily="HankenGroteskBold" VerticalOptions="Center" FontAttributes="None" HorizontalOptions="Start" />
+                                <Image Source="nextdarker.png" HeightRequest="15" Margin="0,0,5,0"  Grid.Column="1" VerticalOptions="Center" HorizontalOptions="End" />
+                            </Grid>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
+                            </Frame.GestureRecognizers>
+                        </Frame>
 
                     </Grid>
                 </Frame>
@@ -123,17 +129,10 @@ Text="Show all data" />
 
 
                 <Button  Text="Delete Measurement" x:Name="Deltebtn" Clicked="Deltebtn_Clicked" FontSize="Small" Margin="0,40,0,5" FontFamily="HankenGroteskBold" BackgroundColor="#ffe5e5" TextColor="Red" CornerRadius="10" />
-                <Label HorizontalTextAlignment="Start" Text="If your Measurement is deleted you will lose all your Measurement feedback" Margin="10,0,10,20" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Start" FontSize="10" TextColor="DarkGray"  />
-
-
-
+                <Label HorizontalTextAlignment="Center" Text="If your Measurement is deleted you will lose all your Measurement feedback" Margin="5,0,5,20" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="DarkGray"  />
 
             </StackLayout>
-            
-            
-            
-            
-            
+
         </StackLayout>
         
         

@@ -93,6 +93,7 @@ public partial class SingleMeasurement : ContentPage
             WeakReferenceMessenger.Default.Register<SendItemMessage>(this, (r, m) =>
             {
                 usermeasurementlistpassed = (ObservableCollection<usermeasurement>)m.Value;
+                Task.Delay(100);
                 populatechart();
             });
         }
@@ -196,7 +197,6 @@ public partial class SingleMeasurement : ContentPage
     {
         try
         {
-
             if (usermeasurementlistpassed.Count == 0)
             {
                 Navigation.RemovePage(this);
@@ -718,6 +718,19 @@ public partial class SingleMeasurement : ContentPage
         {
             NotasyncMethod(Ex);
             //await crashHandler.CrashDetectedSend(Ex);
+        }
+    }
+
+    async private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            //Add Symptom Info Here
+            await DisplayAlert("Measurement Information", "No Information is saved against this Measurement", "Close");
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
         }
     }
 }
