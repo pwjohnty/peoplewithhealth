@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Core.Extensions;
+using CommunityToolkit.Mvvm.Messaging;
 using System.Collections.ObjectModel;
 
 namespace PeopleWith;
@@ -38,9 +39,30 @@ public partial class ShowAllMedication : ContentPage
 			MedSelected = SelectedMed;
 			MedicationName.Text = MedSelected.medicationtitle;
 
-            PopulateListView(); 
-			
-		}
+            PopulateListView();
+
+            //Update Page From Schedule 
+            WeakReferenceMessenger.Default.Register<UpdateShowAllMeds>(this, (r, m) =>
+            {
+                var CheckCurrent = (usermedication)m.Value;
+                var Feedback = new ObservableCollection<MedSuppFeedback>();
+                Feedback = CheckCurrent.feedback; 
+
+                //Checks the page Navigated From is the same thats being updated (Otherwise not needed)
+                if (MedSelected.id == CheckCurrent.id)
+                {
+                    //Check if Schedule for DateTime Exists
+                    MedSelected.feedback.Clear(); 
+                    foreach(var item in Feedback)
+                    {
+                        MedSelected.feedback.Add(item);
+                    }
+                    PopulateListView();
+                }
+
+            });
+
+        }
         catch (Exception Ex)
         {
             NotasyncMethod(Ex);

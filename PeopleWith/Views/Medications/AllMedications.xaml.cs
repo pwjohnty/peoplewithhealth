@@ -15,6 +15,7 @@ public partial class AllMedications : ContentPage
     public ObservableCollection<usermedication> CurrentMedications = new ObservableCollection<usermedication>();
     public ObservableCollection<usermedication> AsRequiredMedications = new ObservableCollection<usermedication>();
     public ObservableCollection<usermedication> AddinAsRequired = new ObservableCollection<usermedication>();
+    private bool IsLoading = true; 
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
@@ -888,20 +889,28 @@ public partial class AllMedications : ContentPage
 
             if(index == 0)
             {
-             
-                AsRequiredList.IsVisible = false;
-                CompletedMedsList.IsVisible = false;
-                noARmedlbl.IsVisible = false;
-                noCompletedmedlbl.IsVisible = false;
-                if(CurrentMedications.Count == 0)
-                {
-                    AllUserMedsList.IsVisible = false;
-                    noActivemedlbl.IsVisible = true; 
-                }
-                else
+             if(IsLoading == true)
                 {
                     AllUserMedsList.IsVisible = true;
                     noActivemedlbl.IsVisible = false;
+                    IsLoading = false; 
+                }
+                else
+                {
+                    AsRequiredList.IsVisible = false;
+                    CompletedMedsList.IsVisible = false;
+                    noARmedlbl.IsVisible = false;
+                    noCompletedmedlbl.IsVisible = false;
+                    if (CurrentMedications.Count == 0)
+                    {
+                        AllUserMedsList.IsVisible = false;
+                        noActivemedlbl.IsVisible = true;
+                    }
+                    else
+                    {
+                        AllUserMedsList.IsVisible = true;
+                        noActivemedlbl.IsVisible = false;
+                    }
                 }
             }
             else if(index == 1)

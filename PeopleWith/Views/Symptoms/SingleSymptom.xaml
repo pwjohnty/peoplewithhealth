@@ -89,7 +89,7 @@ Padding="0">
                         </OnPlatform>
                     </chart:SfCartesianChart.HeightRequest>
                     <chart:SfCartesianChart.XAxes>
-                        <chart:NumericalAxis IsVisible="False" Minimum="{Binding XAxisMinimum}" Maximum="{Binding XAxisMaximum}" ShowMajorGridLines="False" RangePadding="Additional"  ShowMinorGridLines="False" />
+                        <chart:NumericalAxis IsVisible="False" Minimum="{Binding XAxisMinimum}" Maximum="{Binding XAxisMaximum}" ShowMajorGridLines="False" RangePadding="None"  ShowMinorGridLines="False" />
                             </chart:SfCartesianChart.XAxes>
                             <chart:SfCartesianChart.YAxes>
                                 <chart:NumericalAxis Minimum="0" Maximum="100" EdgeLabelsDrawingMode="Center" ShowMajorGridLines="True" ShowMinorGridLines="False">
@@ -148,7 +148,7 @@ Padding="0">
 
 
                 <Frame CornerRadius="5"  Margin="0,20,0,5"
- BackgroundColor="#fff7ea" HasShadow="False"
+ BackgroundColor="#fff7ea" HasShadow="False" IsVisible="False"
                 BorderColor="Transparent"
 Padding="10">
                     <Grid HorizontalOptions="FillAndExpand" Margin="0,10,0,10">

@@ -49,7 +49,7 @@
    
                 </buttons:SfSegmentedControl>
 
-                <syncfusion:SfListView  x:Name="AllUserMedsList" Padding="0" Margin="10,10,10,50" ItemTapped="AllUserMedsList_ItemTapped" AutoFitMode="Height"  ItemSpacing="0"  HorizontalOptions="FillAndExpand" IsScrollingEnabled="False"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
+                <syncfusion:SfListView  x:Name="AllUserMedsList" IsVisible="False" Padding="0" Margin="10,10,10,50" ItemTapped="AllUserMedsList_ItemTapped" AutoFitMode="Height"  ItemSpacing="0"  HorizontalOptions="FillAndExpand" IsScrollingEnabled="False"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>

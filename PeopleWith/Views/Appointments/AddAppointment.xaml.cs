@@ -270,7 +270,7 @@ public partial class AddAppointment : ContentPage
         }
         catch (Exception Ex)
         {
-            NotasyncMethod(Ex);
+            
         }
     }
 

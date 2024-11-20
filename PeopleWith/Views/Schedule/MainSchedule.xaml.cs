@@ -672,8 +672,8 @@ public partial class MainSchedule : ContentPage
                                 }
                                 else
                                 {
-                                    med.Buttonop = 1;
-                                    med.Buttonntop = 0;
+                                    med.Buttonop = 0.2;
+                                    med.Buttonntop = 0.2;
                                 }
                             }
                             else
@@ -718,18 +718,18 @@ public partial class MainSchedule : ContentPage
                                 {
                                     //Medication Taken 
                                     med.Buttonop = 1;
-                                    med.Buttonntop = 0;
+                                    med.Buttonntop = 0.2;
                                 }
-                                else if(getfeedbackitemsupp.Recorded == "Not Recorded")
+                                else if(getfeedbackitemsupp.Recorded == "Not Taken")
                                 {
                                     //Not Taken
-                                    med.Buttonop = 0;
+                                    med.Buttonop = 0.2;
                                     med.Buttonntop = 1;
                                 }
                                 else
                                 {
-                                    med.Buttonop = 1;
-                                    med.Buttonntop = 0;
+                                    med.Buttonop = 0.2;
+                                    med.Buttonntop = 0.2;
                                 }
                             }
                             else
@@ -928,26 +928,9 @@ public partial class MainSchedule : ContentPage
                         getusermeditem.feedback.Add(newfeedback);
                         await aPICalls.UpdateMedicationFeedbackAsync(getusermeditem);
 
-                        //foreach (var item in AllUserSupplements)
-                        //{
-                        //    if (item.id == getusermeditem.id)
-                        //    {
-                        //        foreach (var feedback in getusermeditem.feedback)
-                        //        {
-                        //            // Ensure no duplicate feedback entries
-                        //            if (!item.feedback.Any(f => f.datetime == feedback.datetime))
-                        //            {
-                        //                item.feedback.Add(feedback);
-                        //            }
-                        //        }
-                        //    }
-                        //}
 
-                        //Update Feedback on AllSupplements Page
-                        //WeakReferenceMessenger.Default.Send(new UpdateAllMeds(AllUserSupplements));
-
-                        //Update Feedback on SingleSupplements Page
-
+                        //Update Feedback on SingleMedications Page
+                        WeakReferenceMessenger.Default.Send(new UpdateShowAllMeds(getusermeditem));
                     }
                     else
                     {
@@ -988,6 +971,9 @@ public partial class MainSchedule : ContentPage
 
                         getusermeditem.feedback.Add(newfeedback);
                         await aPICalls.UpdateSupplementFeedbackAsync(getusermeditem);
+
+                        //Update Feedback on SingleSupplements Page (selectedSupp) 
+                        WeakReferenceMessenger.Default.Send(new UpdateShowAllSupps(getusermeditem));
 
                     }
 
@@ -1067,6 +1053,9 @@ public partial class MainSchedule : ContentPage
                         getusermeditem.feedback.Add(newfeedback);
                         await aPICalls.UpdateMedicationFeedbackAsync(getusermeditem);
 
+                        //Update Feedback on SingleMedications Page
+                        WeakReferenceMessenger.Default.Send(new UpdateShowAllMeds(getusermeditem));
+
                     }
                     else
                     {
@@ -1106,6 +1095,9 @@ public partial class MainSchedule : ContentPage
 
                         getusermeditem.feedback.Add(newfeedback);
                         await aPICalls.UpdateSupplementFeedbackAsync(getusermeditem);
+
+                        //Update Feedback on SingleSupplements Page (selectedSupp) 
+                        WeakReferenceMessenger.Default.Send(new UpdateShowAllSupps(getusermeditem));
 
                     }
 

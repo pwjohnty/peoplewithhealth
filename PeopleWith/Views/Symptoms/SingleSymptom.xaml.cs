@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Core.Extensions;
 using Mopups.Services;
 using Syncfusion.Maui.Charts;
 using System.Collections.ObjectModel;
@@ -9,8 +10,10 @@ public partial class SingleSymptom : ContentPage
     public ObservableCollection<symptomfeedback> InterventionsFeedback = new ObservableCollection<symptomfeedback>();
     public ObservableCollection<symptomfeedback> SymptomFeedback = new ObservableCollection<symptomfeedback>();
     public ObservableCollection<symptomfeedback> Feedbacktodelete = new ObservableCollection<symptomfeedback>();
-  //  public ObservableCollection<symptomprogression> SymptomChart = new ObservableCollection<symptomprogression>();
-  //  public ObservableCollection<symptomprogression> SymptomData = new ObservableCollection<symptomprogression>();
+    public ObservableCollection<symptomfeedback> FeedbackList = new ObservableCollection<symptomfeedback>();
+    public ObservableCollection<symptomfeedback> orderlistbydate = new ObservableCollection<symptomfeedback>();
+    //  public ObservableCollection<symptomprogression> SymptomChart = new ObservableCollection<symptomprogression>();
+    //  public ObservableCollection<symptomprogression> SymptomData = new ObservableCollection<symptomprogression>();
     public ObservableCollection<usersymptom> PassedSymptom = new ObservableCollection<usersymptom>();
     public ObservableCollection<usersymptom> AllSymptomData = new ObservableCollection<usersymptom>();
     //Connectivity Changed 
@@ -172,8 +175,24 @@ public partial class SingleSymptom : ContentPage
     {
         try
         {
-            foreach (var item in PassedSymptom)
+            foreach(var item in PassedSymptom)
             {
+                foreach(var x in item.feedback)
+                {
+                    FeedbackList.Add(x);
+                }
+            }
+
+            // Add a min and max date so the chart looks better
+            var mindate = DateTime.Parse(FeedbackList.Min(x => x.timestamp));
+            var maxdate = DateTime.Parse(FeedbackList.Max(x => x.timestamp));
+            var minuserSymptom = new symptomfeedback();
+            var maxuserSymptom = new symptomfeedback();
+            minuserSymptom.timestamp = mindate.AddDays(-1).ToString("dd/MM/yyyy HH:mm");
+            FeedbackList.Add(minuserSymptom);
+            maxuserSymptom.timestamp = maxdate.AddDays(+1).ToString("dd/MM/yyyy HH:mm");
+            FeedbackList.Add(maxuserSymptom);
+
                 ChartMarkerSettings chartMarker = new ChartMarkerSettings();
                 chartMarker.Type = ShapeType.Circle;
                 chartMarker.Fill = Colors.White;
@@ -192,9 +211,12 @@ public partial class SingleSymptom : ContentPage
                 DataPointSelectionBehavior selection = new DataPointSelectionBehavior();
                 selection.SelectionChanged += OnSelectionChanged;
 
+                orderlistbydate = FeedbackList.OrderBy(f => DateTime.Parse(f.timestamp)).ToObservableCollection();
+
+
                 LineSeries series = new LineSeries
                 {
-                    ItemsSource = item.feedback.OrderBy(f => DateTime.Parse(f.timestamp)),
+                    ItemsSource = orderlistbydate,
                     XBindingPath = "timestamp",
                     YBindingPath = "intensity",
                     EnableTooltip = true,
@@ -206,19 +228,11 @@ public partial class SingleSymptom : ContentPage
                     Fill = Colors.Orange,
                     SelectionBehavior = selection,
                 };
-                //series.MarkerSettings = new ChartMarkerSettings
-                //{
-                //    Type = Syncfusion.Maui.Charts.ShapeType.Circle,
-                //    StrokeWidth = 2,
-                //    Height = 8,
-                //    Stroke = Colors.Orange,
-                //    Width = 8,
-                //    Fill = Colors.White
-                //};
-                SymptomProgChart.Series.Add(series);
-            }
 
-          
+                SymptomProgChart.Series.Add(series);
+         
+
+            
 
             if (SymptomFeedback.Count > 1)
             {
@@ -266,7 +280,7 @@ public partial class SingleSymptom : ContentPage
         {
 
             var es = e.NewIndexes[0];
-            var GetFeedbackSelected = PassedSymptom[0].feedback;
+            var GetFeedbackSelected = orderlistbydate;
             lblvalue.Text = GetFeedbackSelected[es].intensity;
             int Score = Int32.Parse(GetFeedbackSelected[es].intensity);
             var Scorelbl = String.Empty; 
