@@ -2928,6 +2928,40 @@ namespace PeopleWith
             }
         }
 
+        public async Task UserfeedbackUpdateMeasurementData(userfeedback Updatefeedback)
+        {
+            try
+            {
+                var id = Updatefeedback.id;
+                var url = $"https://pwdevapi.peoplewith.com/api/userfeedback/id/{id}";
+                var feedbacks = Updatefeedback.measurementfeedback;
+                string json = System.Text.Json.JsonSerializer.Serialize(new { measurementfeedback = feedbacks });
+                //string json = System.Text.Json.JsonSerializer.Serialize(new { feedback = feedbacks }, serializerOptions);
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                using (var client = new HttpClient())
+                {
+                    //works with patch
+                    //var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+                    var response = await client.SendAsync(request);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Successfully updated feedback");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
         public async Task UserfeedbackUpdateMoodData(userfeedback Updatefeedback)
         {
             try

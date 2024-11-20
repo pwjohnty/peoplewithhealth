@@ -47,7 +47,7 @@ public partial class SearchPage : ContentPage
 
                     allvideolist.ItemsSource = filteredmeds;
                     allvideolist.IsVisible = true;
-                    allvideolist.HeightRequest = 50 * filteredmeds.Count();
+                    allvideolist.HeightRequest = 70 * filteredmeds.Count();
                 }
 
             }
@@ -104,7 +104,7 @@ public partial class SearchPage : ContentPage
            // MediaElement.ShouldAutoPlay = true;
 
 
-          await Navigation.PushAsync(new VideoPlayer(selectedvideo), false);
+          await Navigation.PushModalAsync(new VideoPlayer(selectedvideo), false);
         }
         catch(Exception ex)
         {

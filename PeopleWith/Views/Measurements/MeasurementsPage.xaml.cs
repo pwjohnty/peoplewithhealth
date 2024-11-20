@@ -20,6 +20,7 @@ public partial class MeasurementsPage : ContentPage
     bool editusermeasurements;
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
+    userfeedback userfeedbacklistpassed = new userfeedback();
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
 
@@ -62,6 +63,49 @@ public partial class MeasurementsPage : ContentPage
             NotasyncMethod(Ex);
         }
     
+        //// Register to receive the ValueChangedMessage with the custom wrapper type
+        //WeakReferenceMessenger.Default.Register<ValueChangedMessage<CollectionsMessage<usermeasurement, measurement>>>(this, (recipient, message) =>
+        //{
+        //    // Handle the received message
+        //    UserMeasurements = message.Value.FirstCollection;
+        //   // Measurements = message.Value.SecondCollection;
+
+        //    hasusermeasurements = true;
+
+        //    getusermeasurements();
+        //    // Do something with the received collections
+        //});
+    }
+
+    public MeasurementsPage(userfeedback userfeedbacklist)
+    {
+        try
+        {
+            InitializeComponent();
+
+            //  getmeasurementlist();
+
+            userfeedbacklistpassed = userfeedbacklist;
+
+            getusermeasurements();
+
+            WeakReferenceMessenger.Default.Register<UpdateListMainPage>(this, (r, m) =>
+            {
+
+                newUserMeasurements = (ObservableCollection<usermeasurement>)m.Value;
+                // Measurements = message.Value.SecondCollection;
+
+                editusermeasurements = true;
+
+                getusermeasurements();
+            });
+
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+
         //// Register to receive the ValueChangedMessage with the custom wrapper type
         //WeakReferenceMessenger.Default.Register<ValueChangedMessage<CollectionsMessage<usermeasurement, measurement>>>(this, (recipient, message) =>
         //{
@@ -264,7 +308,7 @@ public partial class MeasurementsPage : ContentPage
 		{
 			var item = e.DataItem as measurement;
 
-			await Navigation.PushAsync(new SingleMeasurement(item, UserMeasurements, SortedMeasurements), false);
+			await Navigation.PushAsync(new SingleMeasurement(item, UserMeasurements, SortedMeasurements, userfeedbacklistpassed), false);
 
 		}
 		catch(Exception Ex)
@@ -279,7 +323,7 @@ public partial class MeasurementsPage : ContentPage
         {
             var item = e.DataItem as usermeasurement;
 
-            await Navigation.PushAsync(new SingleMeasurement(item, UserMeasurements, SortedMeasurements), false);
+            await Navigation.PushAsync(new SingleMeasurement(item, UserMeasurements, SortedMeasurements, userfeedbacklistpassed), false);
 
         }
         catch (Exception Ex)
@@ -298,7 +342,7 @@ public partial class MeasurementsPage : ContentPage
             {
                 //Limit No. of Taps 
                 AddBtn.IsEnabled = false;
-                await Navigation.PushAsync(new SearchAddMeasurement(UserMeasurements), false);
+                await Navigation.PushAsync(new SearchAddMeasurement(UserMeasurements, userfeedbacklistpassed), false);
                 AddBtn.IsEnabled = true;
             }
             else
@@ -318,7 +362,7 @@ public partial class MeasurementsPage : ContentPage
         //no data , add stack clicked
         try
         {
-            await Navigation.PushAsync(new SearchAddMeasurement(UserMeasurements), false);
+            await Navigation.PushAsync(new SearchAddMeasurement(UserMeasurements, userfeedbacklistpassed), false);
         }
         catch (Exception Ex)
         {

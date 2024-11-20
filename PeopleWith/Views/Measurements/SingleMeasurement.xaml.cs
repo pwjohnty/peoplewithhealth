@@ -21,6 +21,7 @@ public partial class SingleMeasurement : ContentPage
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
+    userfeedback userfeedbacklistpassed = new userfeedback();
 
     async public void NotasyncMethod(Exception Ex)
     {
@@ -45,7 +46,7 @@ public partial class SingleMeasurement : ContentPage
 		InitializeComponent();
 	}
 
-    public SingleMeasurement(measurement measurementp, ObservableCollection<usermeasurement> usermeasurementsp, ObservableCollection<measurement> measurementlistpassed)
+    public SingleMeasurement(measurement measurementp, ObservableCollection<usermeasurement> usermeasurementsp, ObservableCollection<measurement> measurementlistpassed, userfeedback userfeedbacklist)
     {
         //measurement
         try
@@ -54,6 +55,7 @@ public partial class SingleMeasurement : ContentPage
             measurementpassed = measurementp;
             usermeasurementlistpassed = usermeasurementsp;
             measurementlist = measurementlistpassed;
+            userfeedbacklistpassed = userfeedbacklist;
 
             measurementname.Text = measurementpassed.measurementname;
             newmeasurement = true;
@@ -70,7 +72,7 @@ public partial class SingleMeasurement : ContentPage
         }
     }
 
-    public SingleMeasurement(usermeasurement usermeasurementp, ObservableCollection<usermeasurement> usermeasurementsp, ObservableCollection<measurement> measurementlistpassed)
+    public SingleMeasurement(usermeasurement usermeasurementp, ObservableCollection<usermeasurement> usermeasurementsp, ObservableCollection<measurement> measurementlistpassed, userfeedback userfeedbacklist)
     {
         //usermeasurement
         try
@@ -79,6 +81,7 @@ public partial class SingleMeasurement : ContentPage
             usermeasurementpassed = usermeasurementp;
             usermeasurementlistpassed = usermeasurementsp;
             measurementlist = measurementlistpassed;
+            userfeedbacklistpassed = userfeedbacklist;
 
             measurementname.Text = usermeasurementpassed.measurementname;
 
@@ -594,11 +597,11 @@ public partial class SingleMeasurement : ContentPage
                 AddBtn.IsEnabled = false;
                 if (newmeasurement)
                 {
-                    await Navigation.PushAsync(new AddMeasurement(measurementpassed, usermeasurementlistpassed, measurementlist), false);
+                    await Navigation.PushAsync(new AddMeasurement(measurementpassed, usermeasurementlistpassed, measurementlist, userfeedbacklistpassed), false);
                 }
                 else
                 {
-                    await Navigation.PushAsync(new AddMeasurement(usermeasurementpassed, usermeasurementlistpassed, measurementlist), false);
+                    await Navigation.PushAsync(new AddMeasurement(usermeasurementpassed, usermeasurementlistpassed, measurementlist, userfeedbacklistpassed), false);
                 }
                 AddBtn.IsEnabled = true;
             }

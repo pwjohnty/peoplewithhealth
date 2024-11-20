@@ -583,6 +583,35 @@ public partial class MainDashboard : ContentPage
                 measurementnochartdetaillist.IsVisible = true;
                 nomeasurementdataframe.IsVisible = false;
 
+                var random = new Random();
+                var selectedMeasurement = userfeedbacklist[0].measurementfeedbacklist[random.Next(userfeedbacklist[0].measurementfeedbacklist.Count)];
+
+                if(selectedMeasurement != null)
+                {
+                   // var mostCommonMood = moodsForDay.MoodLabel;
+
+                    var newItem2 = new
+                    {
+                        ContactImage = "measurementhome.png",
+                        Title = "Update your " + selectedMeasurement.label,
+                        BackgroundColor = "#e5f0fb" // Example color
+                    };
+
+                    foryouuserlist.Add(newItem2);
+                }
+
+                var newItem = new
+                {
+                    ContactImage = "measurementhome.png",
+                    Title = "Start recording your measurements",
+                    BackgroundColor = "#e5f0fb" // Example color
+                };
+
+                if (foryouuserlist.Contains(newItem))
+                {
+                    foryouuserlist.Remove(newItem);
+                }
+
             }
             else
             {
@@ -1476,7 +1505,6 @@ public partial class MainDashboard : ContentPage
 {
     new { Title = "Account Settings" },
     new { Title = "Developer Feedback & Support" },
-    new { Title = "Communication Preferences" },
     new { Title = "Terms Of Use" }
 };
 
@@ -1642,7 +1670,7 @@ public partial class MainDashboard : ContentPage
             }
             else if (item != null && item.Title == "Measurements")
             {
-                await Navigation.PushAsync(new MeasurementsPage(), false);
+                await Navigation.PushAsync(new MeasurementsPage(userfeedbacklist[0]), false);
             }
             else if (item != null && item.Title == "Diagnosis")
             {
@@ -1798,7 +1826,7 @@ public partial class MainDashboard : ContentPage
             }
             else if (item != null && item.Title == "Measurements")
             {
-                await Navigation.PushAsync(new MeasurementsPage(), false);
+                await Navigation.PushAsync(new MeasurementsPage(userfeedbacklist[0]), false);
             }
             else if (item != null && item.Title == "Diagnosis")
             {
@@ -1879,7 +1907,7 @@ public partial class MainDashboard : ContentPage
             {
                 await Navigation.PushAsync(new ProfileSection(), false);
             }
-            else if(item == "Developer Feedback & Support")
+            else if(item.Contains("Developer Feedback"))
             {
                 if (Email.Default.IsComposeSupported)
                 {
@@ -1928,6 +1956,18 @@ public partial class MainDashboard : ContentPage
         try
         {
             await Navigation.PushAsync(new SearchPage(), false);
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
+    private async void Button_Clicked_4(object sender, EventArgs e)
+    {
+        try
+        {
+            await Navigation.PushAsync(new MeasurementsPage(userfeedbacklist[0]), false);
         }
         catch(Exception ex)
         {

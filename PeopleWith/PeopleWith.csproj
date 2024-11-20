@@ -76,12 +76,14 @@
 	  <None Remove="Resources\Images\agreement.png" />
 	  <None Remove="Resources\Images\alarm.png" />
 	  <None Remove="Resources\Images\allergenhome.png" />
+	  <None Remove="Resources\Images\androidarrow.png" />
 	  <None Remove="Resources\Images\angry.png" />
 	  <None Remove="Resources\Images\appconstructionicon.png" />
 	  <None Remove="Resources\Images\appointhome.png" />
 	  <None Remove="Resources\Images\backbutton.png" />
 	  <None Remove="Resources\Images\background.png" />
 	  <None Remove="Resources\Images\charticon.png" />
+	  <None Remove="Resources\Images\close.png" />
 	  <None Remove="Resources\Images\compare.png" />
 	  <None Remove="Resources\Images\confused.png" />
 	  <None Remove="Resources\Images\crying.png" />
@@ -114,6 +116,7 @@
 	  <None Remove="Resources\Images\icontimepicker.png" />
 	  <None Remove="Resources\Images\imageicon.png" />
 	  <None Remove="Resources\Images\insight.png" />
+	  <None Remove="Resources\Images\iosback.png" />
 	  <None Remove="Resources\Images\laughing.png" />
 	  <None Remove="Resources\Images\link.png" />
 	  <None Remove="Resources\Images\location.png" />
