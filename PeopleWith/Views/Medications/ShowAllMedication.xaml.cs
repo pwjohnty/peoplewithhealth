@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Core.Extensions;
+using CommunityToolkit.Mvvm.Messaging;
 using System.Collections.ObjectModel;
 
 namespace PeopleWith;
@@ -38,9 +39,30 @@ public partial class ShowAllMedication : ContentPage
 			MedSelected = SelectedMed;
 			MedicationName.Text = MedSelected.medicationtitle;
 
-            PopulateListView(); 
-			
-		}
+            PopulateListView();
+
+            //Update Page From Schedule 
+            WeakReferenceMessenger.Default.Register<UpdateShowAllMeds>(this, (r, m) =>
+            {
+                var CheckCurrent = (usermedication)m.Value;
+                var Feedback = new ObservableCollection<MedSuppFeedback>();
+                Feedback = CheckCurrent.feedback; 
+
+                //Checks the page Navigated From is the same thats being updated (Otherwise not needed)
+                if (MedSelected.id == CheckCurrent.id)
+                {
+                    //Check if Schedule for DateTime Exists
+                    MedSelected.feedback.Clear(); 
+                    foreach(var item in Feedback)
+                    {
+                        MedSelected.feedback.Add(item);
+                    }
+                    PopulateListView();
+                }
+
+            });
+
+        }
         catch (Exception Ex)
         {
             NotasyncMethod(Ex);
@@ -103,7 +125,7 @@ public partial class ShowAllMedication : ContentPage
 				    var sortedlist = MedicationList.OrderBy(t => t.MedDateTime);
 					UserMedicationSchedule.ItemsSource = sortedlist;
                         //Filtered List 
-                        TakenMedicationList = MedicationList.Where(s => s.Action.Equals("Taken", StringComparison.OrdinalIgnoreCase)).ToObservableCollection();
+                        TakenMedicationList = MedicationList.Where(s => s.Action.Equals("Taken", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservableCollection();
 
                     }
 				}
@@ -209,9 +231,9 @@ public partial class ShowAllMedication : ContentPage
                     UserMedicationSchedule.HeightRequest = sortedList.Count * 120;
 
                     //Filtered List 
-                    TakenMedicationList = MedicationList.Where(s => s.Action.Equals("Taken", StringComparison.OrdinalIgnoreCase)).ToObservableCollection();
-                    NotTakenMedicationList = MedicationList.Where(s => s.Action.Equals("Not Taken", StringComparison.OrdinalIgnoreCase)).ToObservableCollection();
-                    NotRecordedMedicationList = MedicationList.Where(s => s.Action.Equals("Not Recorded", StringComparison.OrdinalIgnoreCase)).ToObservableCollection();
+                    TakenMedicationList = MedicationList.Where(s => s.Action.Equals("Taken", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservableCollection();
+                    NotTakenMedicationList = MedicationList.Where(s => s.Action.Equals("Not Taken", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservableCollection();
+                    NotRecordedMedicationList = MedicationList.Where(s => s.Action.Equals("Not Recorded", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservableCollection();
 
                 }
                 else if (Freq[0] == "Weekly" || Freq[0] == "Weekly ")
@@ -339,9 +361,9 @@ public partial class ShowAllMedication : ContentPage
                         UserMedicationSchedule.HeightRequest = sortedList.Count * 120;
 
                         //Filtered List 
-                        TakenMedicationList = MedicationList.Where(s => s.Action.Equals("Taken", StringComparison.OrdinalIgnoreCase)).ToObservableCollection();
-                        NotTakenMedicationList = MedicationList.Where(s => s.Action.Equals("Not Taken", StringComparison.OrdinalIgnoreCase)).ToObservableCollection();
-                        NotRecordedMedicationList = MedicationList.Where(s => s.Action.Equals("Not Recorded", StringComparison.OrdinalIgnoreCase)).ToObservableCollection();
+                        TakenMedicationList = MedicationList.Where(s => s.Action.Equals("Taken", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservableCollection();
+                        NotTakenMedicationList = MedicationList.Where(s => s.Action.Equals("Not Taken", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservableCollection();
+                        NotRecordedMedicationList = MedicationList.Where(s => s.Action.Equals("Not Recorded", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservableCollection();
                     }
                 }
                 else if (Freq[0] == "Days Interval")
@@ -443,9 +465,9 @@ public partial class ShowAllMedication : ContentPage
                         UserMedicationSchedule.HeightRequest = sortedList.Count * 120;
 
                         //Filtered List 
-                        TakenMedicationList = MedicationList.Where(s => s.Action.Equals("Taken", StringComparison.OrdinalIgnoreCase)).ToObservableCollection();
-                        NotTakenMedicationList = MedicationList.Where(s => s.Action.Equals("Not Taken", StringComparison.OrdinalIgnoreCase)).ToObservableCollection();
-                        NotRecordedMedicationList = MedicationList.Where(s => s.Action.Equals("Not Recorded", StringComparison.OrdinalIgnoreCase)).ToObservableCollection();
+                        TakenMedicationList = MedicationList.Where(s => s.Action.Equals("Taken", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservableCollection();
+                        NotTakenMedicationList = MedicationList.Where(s => s.Action.Equals("Not Taken", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservableCollection();
+                        NotRecordedMedicationList = MedicationList.Where(s => s.Action.Equals("Not Recorded", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservableCollection();
 
                     }
                 }  

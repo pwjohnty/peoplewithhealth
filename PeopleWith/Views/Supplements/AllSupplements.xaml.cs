@@ -14,6 +14,7 @@ public partial class AllSupplements : ContentPage
     public ObservableCollection<usersupplement> CurrentMedications = new ObservableCollection<usersupplement>();
     public ObservableCollection<usersupplement> AsRequiredMedications = new ObservableCollection<usersupplement>();
     public ObservableCollection<usersupplement> AddinAsRequired = new ObservableCollection<usersupplement>();
+    private bool IsLoading = true;
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
@@ -37,6 +38,28 @@ public partial class AllSupplements : ContentPage
         {
             InitializeComponent();
             getusermedications();
+
+
+            //if (AllUserMedications.Count == 0 && CompletedMedications.Count == 0 && AsRequiredMedications.Count == 0)
+            //{
+            //    nodatastack.IsVisible = true;
+            //    datastack.IsVisible = false;
+            //}
+            //else if (AllUserMedications.Count == 0)
+            //{
+            //    noActivemedlbl.IsVisible = true;
+            //    AllUserMedsList.IsVisible = false;
+            //}
+            //else
+            //{
+            //    nodatastack.IsVisible = false;
+            //    datastack.IsVisible = true;
+
+            //    AllUserMedsList.ItemsSource = AllUserMedications;
+
+            //    WorkOutNextDue();
+            //}
+
         }
         catch (Exception Ex)
         {
@@ -54,10 +77,15 @@ public partial class AllSupplements : ContentPage
 
             AllUserMedications = AllUsermeds;
 
-            if (AllUserMedications.Count == 0)
+            if (AllUserMedications.Count == 0 && CompletedMedications.Count == 0 && AsRequiredMedications.Count == 0)
             {
                 nodatastack.IsVisible = true;
                 datastack.IsVisible = false;
+            }
+            else if (AllUserMedications.Count == 0)
+            {
+                noActivemedlbl.IsVisible = true;
+                AllUserMedsList.IsVisible = false;
             }
             else
             {
@@ -68,6 +96,21 @@ public partial class AllSupplements : ContentPage
 
                 WorkOutNextDue();
             }
+
+            //if (AllUserMedications.Count == 0)
+            //{
+            //    nodatastack.IsVisible = true;
+            //    datastack.IsVisible = false;
+            //}
+            //else
+            //{
+            //    nodatastack.IsVisible = false;
+            //    datastack.IsVisible = true;
+
+            //    AllUserMedsList.ItemsSource = AllUserMedications;
+
+            //    WorkOutNextDue();
+            //}
         }
         catch (Exception Ex)
         {
@@ -91,16 +134,25 @@ public partial class AllSupplements : ContentPage
 
             AllUserMedications = await getMedicationsTask;
 
-            if (AllUserMedications.Count == 0)
+            if (AllUserMedications.Count == 0 && CompletedMedications.Count == 0 && AsRequiredMedications.Count == 0)
             {
                 nodatastack.IsVisible = true;
                 datastack.IsVisible = false;
                 await MopupService.Instance.PopAllAsync(false);
             }
+            else if (AllUserMedications.Count == 0)
+            {
+                noActivemedlbl.IsVisible = true;
+                AllUserMedsList.IsVisible = false;
+                await MopupService.Instance.PopAllAsync(false);
+            }
             else
             {
-
-                //AllUserMedsList.ItemsSource = AllUserMedications;
+                noActivemedlbl.IsVisible = false;
+                nodatastack.IsVisible = false;
+                datastack.IsVisible = true;
+                AllUserMedsList.IsVisible = true;
+                AllUserMedsList.ItemsSource = AllUserMedications;
 
                 await MopupService.Instance.PopAllAsync(false);
 
@@ -703,6 +755,19 @@ public partial class AllSupplements : ContentPage
             var sortedbyname2 = CompletedMedications.OrderBy(x => x.ChangedMedName).ToList();
             var sortedbyname3 = AsRequiredMedications.OrderBy(x => x.ChangedMedName).ToList();
 
+
+            //Active Medications List 
+            if (sortedbyname.Count == 0)
+            {
+                AllUserMedsList.IsVisible = false;
+                noActivemedlbl.IsVisible = true;
+            }
+            else
+            {
+                AllUserMedsList.IsVisible = true;
+                noActivemedlbl.IsVisible = false;
+            }
+
             AllUserMedsList.ItemsSource = sortedbyname;
             CompletedMedsList.ItemsSource = sortedbyname2;
             AsRequiredList.ItemsSource = sortedbyname3;
@@ -813,14 +878,33 @@ public partial class AllSupplements : ContentPage
 
             if (index == 0)
             {
-                AllUserMedsList.IsVisible = true;
-                AsRequiredList.IsVisible = false;
-                CompletedMedsList.IsVisible = false;
-                noARmedlbl.IsVisible = false;
-                noCompletedmedlbl.IsVisible = false;
+                if (IsLoading == true)
+                {
+                    AllUserMedsList.IsVisible = true;
+                    noActivemedlbl.IsVisible = false;
+                    IsLoading = false;
+                }
+                else
+                {
+                    AsRequiredList.IsVisible = false;
+                    CompletedMedsList.IsVisible = false;
+                    noARmedlbl.IsVisible = false;
+                    noCompletedmedlbl.IsVisible = false;
+                    if (CurrentMedications.Count == 0)
+                    {
+                        AllUserMedsList.IsVisible = false;
+                        noActivemedlbl.IsVisible = true;
+                    }
+                    else
+                    {
+                        AllUserMedsList.IsVisible = true;
+                        noActivemedlbl.IsVisible = false;
+                    }
+                }
             }
             else if (index == 1)
             {
+                noActivemedlbl.IsVisible = false;
                 AllUserMedsList.IsVisible = false;
                 if (AsRequiredMedications.Count == 0)
                 {
@@ -838,6 +922,7 @@ public partial class AllSupplements : ContentPage
             }
             else if (index == 2)
             {
+                noActivemedlbl.IsVisible = false;
                 AllUserMedsList.IsVisible = false;
                 AsRequiredList.IsVisible = false;
                 noARmedlbl.IsVisible = false;

@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             x:Class="PeopleWith.VideoPlayer" NavigationPage.HasNavigationBar="True" BackgroundColor="White">
+             x:Class="PeopleWith.VideoPlayer" NavigationPage.HasNavigationBar="False" BackgroundColor="White">
     <StackLayout>
 
         <Grid x:Name="NavStack" HorizontalOptions="FillAndExpand">
@@ -19,6 +19,7 @@
             <Button Text="Close Video" TextColor="White" IsVisible="False" x:Name="closevideobtn" Clicked="closevideobtn_Clicked" BackgroundColor="#031926" FontFamily="HankenGroteskBold" Grid.Row="0" Grid.Column="0" Margin="10"/>
 
         </Grid>
+
         <Image HeightRequest="40" WidthRequest="40" Source="close.png" Margin="0,0,20,0" HorizontalOptions="End" Grid.Row="0" Grid.Column="0" VerticalOptions="Start">
             <Image.GestureRecognizers>
                 <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1"/>
@@ -43,9 +44,6 @@
                         <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
                     </Image.GestureRecognizers>
                 </Image>
-
-        
-
 
                 <Image HeightRequest="60" WidthRequest="60" InputTransparent="True" Source="playbutton.png" HorizontalOptions="Center" VerticalOptions="Center">
                  

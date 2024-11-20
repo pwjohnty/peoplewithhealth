@@ -74,6 +74,8 @@ namespace PeopleWith
         [System.Text.Json.Serialization.JsonIgnore]
         public string LastUpdated { get; set; }
         [System.Text.Json.Serialization.JsonIgnore]
+        public string LastUpdatedTime { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore]
         public string HighIntensity { get; set; }
         [System.Text.Json.Serialization.JsonIgnore]
         public string LowIntensity { get; set; }

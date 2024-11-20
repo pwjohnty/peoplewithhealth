@@ -30,7 +30,7 @@
                 <Label  Text="Symptoms" IsVisible="False" Grid.Row="0" Grid.Column="0" FontFamily="HankenGroteskBold" VerticalOptions="Center" HorizontalOptions="Start"    Padding="0" FontSize="20" TextColor="#031926" />
                 <Label  Text="Select Any Symptom you would like to compare" Grid.Row="1" Grid.Column="0" FontFamily="HankenGroteskBold" VerticalOptions="Center" HorizontalOptions="Start"   Padding="0" FontSize="14" TextColor="#031926" />
 
-                <syncfusion:SfListView IsVisible="true"  x:Name="SymptomName" Grid.Row="2" ItemTapped="SymptomName_ItemTapped"  Padding="0" Margin="0" HeightRequest="35" AutoFitMode="DynamicHeight" ItemSpacing="2"  BackgroundColor="Transparent" HorizontalOptions="FillAndExpand" SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Horizontal" >
+                <syncfusion:SfListView IsVisible="true" x:Name="SymptomName" Grid.Row="2" ItemTapped="SymptomName_ItemTapped"  Padding="0" Margin="0" HeightRequest="35" AutoFitMode="DynamicHeight" ItemSpacing="2"  BackgroundColor="Transparent" HorizontalOptions="FillAndExpand" SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Horizontal" >
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>

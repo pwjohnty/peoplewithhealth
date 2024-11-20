@@ -45,7 +45,7 @@ public partial class AddAppointment : ContentPage
     }
 
 
-    protected override bool OnBackButtonPressed()
+    protected override void OnDisappearing()
     {
         try
         {
@@ -61,15 +61,12 @@ public partial class AddAppointment : ContentPage
             {
                 AllHCPs.Remove(items);
             }
-
-            return false;
             
         }
         catch (Exception Ex)
         {
             //Add Crash log
             NotasyncMethod(Ex);
-            return false;
         }
     }
 
@@ -273,7 +270,7 @@ public partial class AddAppointment : ContentPage
         }
         catch (Exception Ex)
         {
-            NotasyncMethod(Ex);
+            
         }
     }
 

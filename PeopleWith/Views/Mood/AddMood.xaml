@@ -122,7 +122,7 @@
                                 <Frame HasShadow="False" CornerRadius="10" Padding="10" Margin="5"  InputTransparent="True" WidthRequest="100" BorderColor="Transparent" BackgroundColor="#E5E5E5" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
                                     <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Spacing="5">
                                         <Image Source="{Binding ImageSource}" WidthRequest="50" HeightRequest="50" />
-                                        <Label Text="{Binding Text}" FontAttributes="Bold" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#031926" HorizontalTextAlignment="Center" />
+                                        <Label Text="{Binding Text}" FontAttributes="Bold" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#031926" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" />
                                     </StackLayout>
                                 </Frame>
                             </ViewCell>
@@ -134,7 +134,7 @@
                                 <Frame HasShadow="False" CornerRadius="10" Padding="10" Margin="5" InputTransparent="True" WidthRequest="100"  BorderColor="Transparent" BackgroundColor="#FFF8DC" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
                                     <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Spacing="5">
                                         <Image Source="{Binding ImageSource}" WidthRequest="50" HeightRequest="50" />
-                                        <Label Text="{Binding Text}" FontAttributes="Bold" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#031926" HorizontalTextAlignment="Center" />
+                                        <Label Text="{Binding Text}" FontAttributes="Bold" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#031926" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" />
                                     </StackLayout>
                                 </Frame>
                             </ViewCell>
@@ -145,7 +145,7 @@
 
 
                 <Label Text="Add Notes" FontFamily="HankenGroteskBold" Margin="20,10,0,0"  VerticalOptions="Center" HorizontalOptions="Start"   FontSize="16" TextColor="#031926" />
-                <Frame  BorderColor="#E6E6E6" BackgroundColor="Transparent" HasShadow="False" CornerRadius="10" Padding="-10" Margin="5,5,5,0">
+                <Frame  BorderColor="#E6E6E6" BackgroundColor="Transparent" HasShadow="False" CornerRadius="10" Padding="-11" Margin="10,5,10,0">
                     <ScrollView Orientation="Vertical" HorizontalScrollBarVisibility="Never">
                         <Editor x:Name="Notes" HeightRequest="80" TextColor="#031926" FontFamily="HankenGroteskRegular" BackgroundColor="Transparent"  HorizontalTextAlignment="Start"  Margin="20,5,5,0"  />
                     </ScrollView>

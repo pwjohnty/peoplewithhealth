@@ -256,10 +256,6 @@ public partial class ProfileEdit : ContentPage
                 PrivacyUpdate.Text = "Update Pin";
                 CurrentPin.Focus();
 
-#if ANDROID
-        var handler = CurrentPin.Handler as IView;
-        handler.Focus();
-#endif
             }
             else if (ItemTitle == "Permissions")
             {
@@ -302,9 +298,9 @@ public partial class ProfileEdit : ContentPage
                 }
 
                 PinSwitch.ThumbColor = Color.FromHex("#E5E5E5");
-                PinSwitch.OnColor = Colors.Green;
+                PinSwitch.OnColor = Colors.ForestGreen;
                 FingerSwitch.ThumbColor = Color.FromHex("#E5E5E5");
-                FingerSwitch.OnColor = Colors.Green;
+                FingerSwitch.OnColor = Colors.ForestGreen;
 
             }
         }

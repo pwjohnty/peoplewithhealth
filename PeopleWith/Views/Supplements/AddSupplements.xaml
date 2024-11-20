@@ -134,7 +134,7 @@
                                                 <Label Text="Supplement Already Added" IsVisible="{Binding AlreadySelected}"  FontFamily="HankenGroteskBold" Margin="5,5,0,5" Grid.Row="1" Grid.Column="0" Padding="0" HorizontalOptions="Start"  VerticalOptions="Start" TextColor="#ac5735" FontSize="12" FontAttributes="None" />
 
 
-                                                <BoxView Grid.Column="0" Grid.Row="2" HeightRequest="1" HorizontalOptions="FillAndExpand" Margin="0,5,0,5" Color="#f9f4e5"/>
+                                                <BoxView Grid.Column="0" Grid.Row="2" HeightRequest="1" HorizontalOptions="FillAndExpand" Margin="0,5,0,5" Color="#f9f4e5" BackgroundColor="#f9f4e5"/>
 
                                             </Grid>
 
@@ -162,7 +162,7 @@
                                                 <Label Text="Medication Already Added" IsVisible="{Binding AlreadySelected}"  FontFamily="HankenGroteskBold" Margin="5,5,0,5" Grid.Row="1" Grid.Column="0" Padding="0" HorizontalOptions="Start"  VerticalOptions="Start" TextColor="#ac5735" FontSize="12" FontAttributes="None" />
 
 
-                                                <BoxView Grid.Column="0" Grid.Row="2" HeightRequest="1" HorizontalOptions="FillAndExpand" Margin="0,5,0,5" Color="#f9f4e5"/>
+                                                <BoxView Grid.Column="0" Grid.Row="2" HeightRequest="1" HorizontalOptions="FillAndExpand" Margin="0,5,0,5" Color="#f9f4e5" BackgroundColor="#f9f4e5"/>
 
                                             </Grid>
                                         </Frame>

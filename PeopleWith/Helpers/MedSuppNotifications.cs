@@ -36,7 +36,7 @@ namespace PeopleWith
                 else
                 {
 
-                    notdescription = dosage + dosageunit + " " + name + " due";
+                    notdescription = dosage + " " + dosageunit + " " + name + " due";
                 }
 
                 var notification = new NotificationRequest
@@ -88,7 +88,7 @@ namespace PeopleWith
                 else
                 {
 
-                    notdescription = dosage + dosageunit + " " + name + " due";
+                    notdescription = dosage + " " + dosageunit + " " + name + " due";
                 }
 
                 var notification = new NotificationRequest
@@ -164,7 +164,7 @@ namespace PeopleWith
                 else
                 {
 
-                    notdescription = dosage + dosageunit + " " + name + " due";
+                    notdescription = dosage + " " + dosageunit + " " + name + " due";
                 }
 
                 var notification = new NotificationRequest
@@ -243,7 +243,7 @@ namespace PeopleWith
                 else
                 {
 
-                    notdescription = dosage + dosageunit + " " + name + " due";
+                    notdescription = dosage + " " + dosageunit + " " + name + " due";
                 }
 
                 var notification = new NotificationRequest
@@ -315,7 +315,7 @@ namespace PeopleWith
                 else
                 {
 
-                    notdescription = dosage + dosageunit + " " + name + " due";
+                    notdescription = dosage + " " + dosageunit + " " + name + " due";
                 }
 
                 var notification = new NotificationRequest
@@ -371,7 +371,7 @@ namespace PeopleWith
                 else
                 {
 
-                    notdescription = dosage + dosageunit + " " + name + " due";
+                    notdescription = dosage + " " + dosageunit + " " + name + " due";
                 }
 
                 var notification = new NotificationRequest

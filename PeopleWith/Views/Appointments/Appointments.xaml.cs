@@ -1,3 +1,4 @@
+using CommunityToolkit.Mvvm.Messaging;
 using Syncfusion.Maui.DataSource.Extensions;
 using Syncfusion.Maui.Scheduler;
 using System.Collections.ObjectModel;
@@ -28,41 +29,6 @@ public partial class Appointments : ContentPage
             //Dunno 
         }
     }
-
-    protected override bool OnBackButtonPressed()
-    {
-        try
-        {
-            if (AppointmentDetails.IsVisible == true)
-            {
-                AppointmentDetails.IsVisible = false;
-                AppointmentCalendar.IsVisible = true;
-                AddAppoint.IsEnabled = true;
-                FeedbackRecorded.IsVisible = false;
-                FeedbackNotRecorded.IsVisible = false;
-                Feedbacktitle.IsVisible = false;
-                Feedbackbtn.IsVisible = false;
-
-                return true;
-            }
-            else if (Calendar.View == Syncfusion.Maui.Scheduler.SchedulerView.Day)
-            {
-                Calendar.View = Syncfusion.Maui.Scheduler.SchedulerView.Month; 
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        catch (Exception Ex)
-        {
-            NotasyncMethod(Ex);
-            return false;
-        }
-
-    }
-
     public Appointments()
     {
         try
@@ -85,6 +51,13 @@ public partial class Appointments : ContentPage
             AllAppointments = GetAllAppointments;
             AllHCPs = GetAllHCPS;
             GetAllHCPData();
+
+            //WeakReferenceMessenger.Default.Register<UpdateAppFeedback>(this, (r, m) =>
+            //{
+
+            //    AllUserMedications = (ObservableCollection<UpdateAppointFeedback>)m.Value;
+
+            //});
         }
         catch (Exception Ex)
         {
@@ -299,6 +272,15 @@ public partial class Appointments : ContentPage
             }
             else
             {
+                NavigationPage.SetHasNavigationBar(this, false);
+                if (DeviceInfo.Current.Platform == DevicePlatform.Android)
+                {
+                    AndroidBtn.IsVisible = true;
+                }
+                else if (DeviceInfo.Current.Platform == DevicePlatform.iOS)
+                {
+                    IOSBtn.IsVisible = true;
+                }
                 AddAppoint.IsEnabled = true;
                 var tappedDate = e.Date;
                 if (tappedDate != null)
@@ -360,6 +342,39 @@ public partial class Appointments : ContentPage
             {
                 var isConnected = accessType == NetworkAccess.Internet;
                 ConnectivityChanged?.Invoke(this, isConnected);
+            }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    async private void BackButton_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            if (AppointmentDetails.IsVisible == true)
+            {
+                AppointmentDetails.IsVisible = false;
+                AppointmentCalendar.IsVisible = true;
+                AddAppoint.IsEnabled = true;
+                FeedbackRecorded.IsVisible = false;
+                FeedbackNotRecorded.IsVisible = false;
+                Feedbacktitle.IsVisible = false;
+                Feedbackbtn.IsVisible = false;
+            }
+            else if (Calendar.View == Syncfusion.Maui.Scheduler.SchedulerView.Day)
+            {
+                Calendar.View = Syncfusion.Maui.Scheduler.SchedulerView.Month;
+                AddAppoint.IsEnabled = true;
+                NavigationPage.SetHasNavigationBar(this, true);
+                AndroidBtn.IsVisible = false;
+                IOSBtn.IsVisible = false;
+            }
+            else
+            {
+                AddAppoint.IsEnabled = true;
             }
         }
         catch (Exception Ex)

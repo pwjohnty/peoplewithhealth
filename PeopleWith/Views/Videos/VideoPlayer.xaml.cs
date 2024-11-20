@@ -13,6 +13,7 @@ public partial class VideoPlayer : ContentPage
     private bool isPlaying = false;
     private bool isPaused = false;
     APICalls database = new APICalls();
+
     async public void NotasyncMethod(Exception Ex)
     {
         try
@@ -42,6 +43,7 @@ public partial class VideoPlayer : ContentPage
         }
         catch (Exception Ex)
         {
+
             NotasyncMethod(Ex);
         }
     }
@@ -289,7 +291,6 @@ public partial class VideoPlayer : ContentPage
         }
         catch(Exception ex)
         {
-
         }
     }
 }

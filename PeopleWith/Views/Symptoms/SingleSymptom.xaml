@@ -89,7 +89,7 @@ Padding="0">
                         </OnPlatform>
                     </chart:SfCartesianChart.HeightRequest>
                     <chart:SfCartesianChart.XAxes>
-                                <chart:NumericalAxis IsVisible="False" ShowMajorGridLines="False"  RangePadding="None" ShowMinorGridLines="False" />
+                        <chart:NumericalAxis IsVisible="False" Minimum="{Binding XAxisMinimum}" Maximum="{Binding XAxisMaximum}" ShowMajorGridLines="False" RangePadding="None"  ShowMinorGridLines="False" />
                             </chart:SfCartesianChart.XAxes>
                             <chart:SfCartesianChart.YAxes>
                                 <chart:NumericalAxis Minimum="0" Maximum="100" EdgeLabelsDrawingMode="Center" ShowMajorGridLines="True" ShowMinorGridLines="False">
@@ -148,25 +148,17 @@ Padding="0">
 
 
                 <Frame CornerRadius="5"  Margin="0,20,0,5"
- BackgroundColor="#fff7ea" HasShadow="False"
+ BackgroundColor="#fff7ea" HasShadow="False" IsVisible="False"
                 BorderColor="Transparent"
 Padding="10">
                     <Grid HorizontalOptions="FillAndExpand" Margin="0,10,0,10">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
 
-                        <Label Text="Notifications" FontSize="14" Margin="0,0,0,0" Grid.Row="4" TextColor="Orange" FontFamily="HankenGroteskBold" VerticalOptions="Center" FontAttributes="None" HorizontalOptions="Start" />
-                        <Switch Margin="0,0,5,0" HeightRequest="20" Grid.Row="4" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="End" />
-
-
-
+                        <Label Text="Notifications" FontSize="14" Margin="0,0,0,0" Grid.Row="0" TextColor="Orange" FontFamily="HankenGroteskBold" VerticalOptions="Center" FontAttributes="None" HorizontalOptions="Start" />
+                        <Switch Margin="0,0,5,0" x:Name="NotifSwitch" HeightRequest="20" Grid.Row="0" Grid.Column="0" BackgroundColor="Transparent" IsEnabled="False" OnColor="ForestGreen" IsToggled="True" ThumbColor="LightGray" Toggled="Switch_Toggled" VerticalOptions="Center" HorizontalOptions="End" />
 
                     </Grid>
                 </Frame>
@@ -183,22 +175,25 @@ Padding="10">
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Label Text="Date Started" FontSize="14" Margin="0,0,0,0" Grid.Row="0" TextColor="#031926" FontFamily="HankenGroteskRegular" VerticalOptions="Center" FontAttributes="None" HorizontalOptions="Start" />
                         <Label x:Name="datestartedlbl" FontSize="20" Margin="0,0,5,0" Grid.Row="0" TextColor="#031926" FontFamily="HankenGroteskBold" VerticalOptions="Center" FontAttributes="None" HorizontalOptions="End" />
 
 
-                        <BoxView HorizontalOptions="FillAndExpand" Margin="0,20,0,20" Color="#fff7ea" HeightRequest="1" Grid.Row="1" />
-
-                        <Label Text="Symptom Information" FontSize="14" Margin="0,0,0,0" Grid.Row="2" TextColor="#031926" FontFamily="HankenGroteskBold" VerticalOptions="Center" FontAttributes="None" HorizontalOptions="Start" />
-                        <Image Source="nextdarker.png" HeightRequest="15" Margin="0,0,5,0"  Grid.Row="2" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="End" />
-
-                   
-
-
+                        <BoxView HorizontalOptions="FillAndExpand" Margin="0,20,0,20" Color="#fff7ea" BackgroundColor="#fff7ea" HeightRequest="1" Grid.Row="1" />
+                        <Frame Padding="0" Grid.Row="2" HasShadow="False" BorderColor="Transparent" BackgroundColor="Transparent" >
+                            <Grid >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="90*"/>
+                                    <ColumnDefinition Width="10*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Text="Symptom Information" FontSize="14" Margin="0,0,0,0"  Grid.Column="0" TextColor="#031926" FontFamily="HankenGroteskBold" VerticalOptions="Center" FontAttributes="None" HorizontalOptions="Start" />
+                                <Image Source="nextdarker.png" HeightRequest="15" Margin="0,0,5,0"  Grid.Column="1" VerticalOptions="Center" HorizontalOptions="End" />
+                            </Grid>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
+                            </Frame.GestureRecognizers>
+                        </Frame>
 
                     </Grid>
                 </Frame>
@@ -326,8 +321,8 @@ Padding="10">
                         </Grid.ColumnDefinitions>
 
                         <Label Text="Notifications" FontFamily="HankenGroteskBold" VerticalOptions="Center" HorizontalOptions="Start" FontSize="16" TextColor="#031926" Grid.Row="0" Grid.Column="0" />
-                        <Switch  VerticalOptions="Center" HorizontalOptions="End" IsToggled="True" Toggled="Switch_Toggled"   HeightRequest="10" WidthRequest="10" Grid.Row="0" Grid.Column="1" />
-                        <BoxView HeightRequest="1" HorizontalOptions="FillAndExpand" Color="#031926" VerticalOptions="Center" Grid.Row="1"  Margin="0,0,0,0" Grid.Column="0" Grid.ColumnSpan="2" />
+                        <Switch  VerticalOptions="Center" HorizontalOptions="End" IsToggled="True"    HeightRequest="10" WidthRequest="10" Grid.Row="0" Grid.Column="1" />
+                        <BoxView HeightRequest="1" HorizontalOptions="FillAndExpand" Color="#031926" BackgroundColor="#031926" VerticalOptions="Center" Grid.Row="1"  Margin="0,0,0,0" Grid.Column="0" Grid.ColumnSpan="2" />
                         <Label  FontFamily="HankenGroteskBold" Text="Symptom Information" FontSize="16" VerticalOptions="Center" HorizontalOptions="Start"  TextColor="#031926" Grid.Row="2" Grid.Column="0" />
                         <Image Source="rightarrow.png" VerticalOptions="Center" HorizontalOptions="End"  HeightRequest="10" WidthRequest="10" Grid.Row="2" Grid.Column="1" />
 

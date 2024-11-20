@@ -15,7 +15,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Text="Diagnosis" FontFamily="HankenGroteskBold" FontSize="25"  Margin="20,0,0,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" />
+            <Label Text="Diagnosis" FontFamily="HankenGroteskBold" FontSize="26"  Margin="20,20,0,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" />
             <Frame x:Name="DiagInfo" HasShadow="False" Padding="0" CornerRadius="5" Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,0,20,0" BorderColor="#702963" BackgroundColor="#E6E6FA">
                 <Label Text="i" FontFamily="HankenGroteskBold" HorizontalOptions="Center" TextColor="#702963" FontSize="12"  Grid.Column="1" VerticalOptions="Center" />
                 <Frame.GestureRecognizers>

@@ -35,34 +35,6 @@ public partial class AddDiagnosis : ContentPage
         }
     }
 
-
-    protected override bool OnBackButtonPressed()
-    {
-        try
-        {
-            if (dateofBirth.IsVisible == true)
-            {
-                InitalDiagnosisAdd.IsVisible = true;
-                dateofBirth.IsVisible = false;
-                Title = null;
-                DiagnosisListview.SelectedItem = null;
-                searchbar.Focus();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        catch (Exception Ex)
-        {
-            NotasyncMethod(Ex);
-            return false;
-        }
-
-    }
-
-
     public AddDiagnosis()
     {
         try
@@ -197,6 +169,16 @@ public partial class AddDiagnosis : ContentPage
                             diagnosisid = item.Diagnosisid;
                         }
                     }
+                    NavigationPage.SetHasNavigationBar(this, false);
+                    if (DeviceInfo.Current.Platform == DevicePlatform.Android)
+                    {
+                        AndroidBtn.IsVisible = true;
+                    }
+                    else if (DeviceInfo.Current.Platform == DevicePlatform.iOS)
+                    {
+                        IOSBtn.IsVisible = true;
+                    }
+
                 }
                 else
                 {
@@ -240,6 +222,8 @@ public partial class AddDiagnosis : ContentPage
                 {
                     DateEntry.Unfocus();
                     dateofBirth.IsVisible = false;
+                    AndroidBtn.IsVisible = false;
+                    IOSBtn.IsVisible = false;
                     NavigationPage.SetHasNavigationBar(this, false);
                     DateofDiagnosis = DOB.ToString("dd/MM/yyyy");
                     var Userid = Helpers.Settings.UserKey;
@@ -330,7 +314,6 @@ public partial class AddDiagnosis : ContentPage
         {
             NotasyncMethod(Ex);
         }
-
     }
 
     async private void DateEntry_TextChanged(object sender, TextChangedEventArgs e)
@@ -401,6 +384,28 @@ public partial class AddDiagnosis : ContentPage
             AddBtn.IsEnabled = true;
             isEditing = false;
             DateofDiagnosis = DateEntry.Text; 
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    async private void BackButton_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            if (dateofBirth.IsVisible == true)
+            {
+                AndroidBtn.IsVisible = false;
+                IOSBtn.IsVisible = false;
+                NavigationPage.SetHasNavigationBar(this, true);
+                InitalDiagnosisAdd.IsVisible = true;
+                dateofBirth.IsVisible = false;
+                Title = null;
+                DiagnosisListview.SelectedItem = null;
+                searchbar.Focus();
+            }
         }
         catch (Exception Ex)
         {

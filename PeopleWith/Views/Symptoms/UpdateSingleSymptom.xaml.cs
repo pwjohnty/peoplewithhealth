@@ -341,6 +341,17 @@ public partial class UpdateSingleSymptom : ContentPage
             TriggersLV.ItemsSource = filteredTriggers;
             var count = filteredTriggers.Count().ToString();
             ResultsTrig.Text = "Results" + " (" + count + ")";
+
+            if(filteredTriggers.Count() == 0)
+            {
+                trigList.IsVisible = false;
+                NoResults.IsVisible = true; 
+            }
+            else
+            {
+                trigList.IsVisible = true;
+                NoResults.IsVisible = false;
+            }
         }
         catch(Exception Ex)
         {
@@ -356,6 +367,17 @@ public partial class UpdateSingleSymptom : ContentPage
             InterventionLV.ItemsSource = filteredInterventions;
             var count = filteredInterventions.Count().ToString();
             ResultsInt.Text = "Results" + " (" + count + ")";
+
+            if (filteredInterventions.Count() == 0)
+            {
+                IntList.IsVisible = false;
+                NoResults.IsVisible = true;
+            }
+            else
+            {
+                IntList.IsVisible = true;
+                NoResults.IsVisible = false;
+            }
         }
         catch(Exception Ex)
         {

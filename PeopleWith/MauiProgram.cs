@@ -9,6 +9,7 @@ using Plugin.Maui.Biometric;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 using CommunityToolkit.Maui;
 using Maui.FreakyControls.Extensions;
+using Microsoft.Maui.Handlers;
 
 namespace PeopleWith
 {
@@ -49,6 +50,37 @@ namespace PeopleWith
                handlers.AddHandler(typeof(Shell), typeof(CustomShellRenderer));  
 #endif
             });
+
+            //Remove Border on Entry (IOS)
+            Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("Borderless", (handler, view) =>
+            {
+#if IOS
+            handler.PlatformView.BackgroundColor = UIKit.UIColor.Clear;
+            handler.PlatformView.Layer.BorderWidth = 0;
+            handler.PlatformView.BorderStyle = UIKit.UITextBorderStyle.None;
+#endif
+            });
+
+            //Remove Border on DatePicker (IOS)
+            Microsoft.Maui.Handlers.DatePickerHandler.Mapper.AppendToMapping("MyCustomization", (handler, view) =>
+            {
+#if IOS
+            handler.PlatformView.BackgroundColor = UIKit.UIColor.Clear;
+            handler.PlatformView.Layer.BorderWidth = 0;
+            handler.PlatformView.BorderStyle = UIKit.UITextBorderStyle.None;
+#endif
+            });
+
+            //Remove Border on TimePicker (IOS)
+            Microsoft.Maui.Handlers.TimePickerHandler.Mapper.AppendToMapping("MyCustomization", (handler, view) =>
+            {
+#if IOS
+            handler.PlatformView.BackgroundColor = UIKit.UIColor.Clear;
+            handler.PlatformView.Layer.BorderWidth = 0;
+            handler.PlatformView.BorderStyle = UIKit.UITextBorderStyle.None;
+#endif
+            });
+
             //builder.Services.AddSingleton(typeof(IFingerprint), CrossFingerprint.Current);
             builder.ConfigureSyncfusionCore();
             builder.InitializeFreakyControls();

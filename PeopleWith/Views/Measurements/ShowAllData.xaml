@@ -31,7 +31,7 @@
 
 
 
-            <syncfusion:SfListView x:Name="usermeasurementlist" ItemTapped="usermeasurementlist_ItemTapped" ScrollBarVisibility="Never"  AllowSwiping="False" Margin="0,10,0,0" SelectionBackground="Transparent" SelectionMode="Multiple" IsEnabled="False" AutoFitMode="Height" >
+            <syncfusion:SfListView x:Name="usermeasurementlist" ItemTapped="usermeasurementlist_ItemTapped" ScrollBarVisibility="Never"  AllowSwiping="False" Margin="0,10,1,0" SelectionBackground="Transparent" SelectionMode="Multiple" IsEnabled="False" AutoFitMode="Height" >
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
@@ -51,7 +51,7 @@
                                                 <RowDefinition Height="Auto"/>
                                             </Grid.RowDefinitions>
 
-                                        <Label  FontFamily="HankenGroteskBold"  Margin="10,5,0,0" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="1">
+                                        <Label  FontFamily="HankenGroteskBold"  Margin="10,5,0,0" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
                                             <Label.FormattedText>
                                                 <FormattedString>
                                                     <Span Text="{Binding value}" TextColor="#031926" FontSize="35" FontFamily="HankenGroteskBold" FontAttributes="Bold"/>
@@ -90,7 +90,7 @@ Padding="0">
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
 
-                                        <Label  FontFamily="HankenGroteskBold"  Margin="10,5,0,0" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="1">
+                                        <Label  FontFamily="HankenGroteskBold"  Margin="10,5,0,0" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
                                             <Label.FormattedText>
                                                 <FormattedString>
                                                     <Span Text="{Binding value}" TextColor="#031926" FontSize="35" FontFamily="HankenGroteskBold" FontAttributes="Bold"/>

@@ -29,37 +29,6 @@ public partial class SingleDiagnosis : ContentPage
             //Dunno 
         }
     }
-
-    protected override bool OnBackButtonPressed()
-    {
-        try
-        {
-            if (dateofBirth.IsVisible == true)
-            {
-                DiagnosisSingle.IsVisible = true;
-                dateofBirth.IsVisible = false;
-                Title = null;
-                return true;
-            }
-            else if(WebViewerStack.IsVisible == true)
-            {
-                WebViewerStack.IsVisible = false;
-                DiagnosisSingle.IsVisible = true;
-                EditBtn.IsEnabled = true;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        catch (Exception Ex)
-        {
-            NotasyncMethod(Ex);
-            return false;
-        }
-
-    }
     public SingleDiagnosis()
     {
         try
@@ -120,14 +89,14 @@ public partial class SingleDiagnosis : ContentPage
                         DiagDetailsIMG.Source = "link.png";
                         WebView.Source = WebpageLink;
                         WeborPdf = "Web";
+
                     }
                     else 
                     {
                         DiagDetailsIMG.Source = "pdf.png";
-                        WebView.Source = WebpageLink;
-                        WeborPdf = "Pdf"; 
-                    }
-                   
+
+                        WeborPdf = "Pdf";                      
+                   }                   
                 }
                 // Do something with selectedDiagnosis
             }
@@ -162,7 +131,8 @@ public partial class SingleDiagnosis : ContentPage
                     DateEntry.Unfocus();
                     dateofBirth.IsVisible = false;
 
-                    NavigationPage.SetHasNavigationBar(this, false);
+                    AndroidBtn.IsVisible = false;
+                    IOSBtn.IsVisible = false; 
 
                     foreach (var item in DiagnosisPassed)
                     {
@@ -330,11 +300,20 @@ public partial class SingleDiagnosis : ContentPage
             if (accessType == NetworkAccess.Internet)
             {
                 //Limit No. of Taps 
+                NavigationPage.SetHasNavigationBar(this, false);
                 EditBtn.IsEnabled = false;
                 DiagnosisSingle.IsVisible = false;
                 dateofBirth.IsVisible = true;
                 Diagnosislbl.Text = DiagnosisPassed[0].diagnosistitle;
                 EditBtn.IsEnabled = true;
+                if(DeviceInfo.Current.Platform == DevicePlatform.Android)
+                {
+                    AndroidBtn.IsVisible = true; 
+                }
+                else if (DeviceInfo.Current.Platform == DevicePlatform.iOS)
+                {
+                    IOSBtn.IsVisible = true; 
+                }
             }
             else
             {
@@ -350,10 +329,9 @@ public partial class SingleDiagnosis : ContentPage
 
     private async void TapGestureRecognizer_Tapped_1(object sender, TappedEventArgs e)
     {
-
         try
         {
-            await DisplayAlert("Diagnosis Information", "No Information saved agasint this Diagnosis", "Close");
+            await DisplayAlert("Diagnosis Information", "No Information is saved against this Diagnosis", "Close");
         }
         catch (Exception Ex)
         {
@@ -441,20 +419,64 @@ public partial class SingleDiagnosis : ContentPage
     {
         try
         {
-            DiagnosisSingle.IsVisible = false;          
+                     
             if(WeborPdf == "Web") 
             {
+                DiagnosisSingle.IsVisible = false;
                 WebViewerStack.IsVisible = true;
+                NavigationPage.SetHasNavigationBar(this, false);
+                if (DeviceInfo.Current.Platform == DevicePlatform.Android)
+                {
+                    AndroidBtn.IsVisible = true;
+                }
+                else if (DeviceInfo.Current.Platform == DevicePlatform.iOS)
+                {
+                    IOSBtn.IsVisible = true;
+                }
             }
             else
             {
-                PDfStack.IsVisible = true;
+                var pdflink = WebpageLink;
+                await Browser.OpenAsync(pdflink, new BrowserLaunchOptions
+                {
+                    LaunchMode = BrowserLaunchMode.SystemPreferred,
+                    TitleMode = BrowserTitleMode.Hide
+                });
             }
       
             EditBtn.IsEnabled = false;
             if (DeviceInfo.Current.Platform == DevicePlatform.Android)
             {
                 WebView.HeightRequest = 700;
+            }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    async private void BackButton_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            if (dateofBirth.IsVisible == true)
+            {
+                DiagnosisSingle.IsVisible = true;
+                dateofBirth.IsVisible = false;
+                AndroidBtn.IsVisible = false;
+                IOSBtn.IsVisible = false; 
+                Title = null;
+                NavigationPage.SetHasNavigationBar(this, true); 
+            }
+            else if (WebViewerStack.IsVisible == true)
+            {
+                WebViewerStack.IsVisible = false;
+                DiagnosisSingle.IsVisible = true;
+                EditBtn.IsEnabled = true;
+                AndroidBtn.IsVisible = false;
+                IOSBtn.IsVisible = false;
+                NavigationPage.SetHasNavigationBar(this, true);
             }
         }
         catch (Exception Ex)

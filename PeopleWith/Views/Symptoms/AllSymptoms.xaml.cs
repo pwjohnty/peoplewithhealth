@@ -162,7 +162,9 @@ public partial class AllSymptoms : ContentPage
                         previous = "N/A";
                     }
 
+                    //old
                     item.LastUpdated = lastUpdate.ToString("dd MMM");
+                    item.LastUpdatedTime = lastUpdate.ToString("HH:mm, dd MMMM yyyy");
                     item.CurrentIntensity = current;
                     item.Score = Scorelabel;
                     item.LowIntensity = smallest.ToString();
@@ -187,12 +189,9 @@ public partial class AllSymptoms : ContentPage
                 }
             }
 
-            AllSymptomView.ItemsSource = AllUserSymptoms;
-
             SymptomOverview.IsVisible = true;
 
-          
-
+         
             foreach (var item in AllUserSymptoms)
             {
                 if (item.deleted == true)
@@ -213,6 +212,9 @@ public partial class AllSymptoms : ContentPage
             {
                 EmptyStack.IsVisible = false;
                 SymptomOverview.IsVisible = true;
+
+                var orderlist = AllUserSymptoms.OrderByDescending(x => DateTime.Parse(x.LastUpdatedTime)).ToList();
+                AllSymptomView.ItemsSource = orderlist;
                 //populatelsitview();
             }
 
@@ -284,7 +286,9 @@ public partial class AllSymptoms : ContentPage
                     }
 
                     //Add items to AlluserSymptoms
+                   
                     item.LastUpdated = lastUpdate.ToString("dd/MM/yyyy HH:mm");
+                    item.LastUpdatedTime = lastUpdate.ToString("HH:mm, dd MMMM yyyy");
                     item.CurrentIntensity = current;
                     item.Score = Scorelabel;
                     item.LowIntensity = smallest.ToString();
@@ -320,8 +324,12 @@ public partial class AllSymptoms : ContentPage
                 AllUserSymptoms.Add(symptom);
             }
 
-            GetAllSymptoms.AllSymptoms = AllUserSymptoms;
-            AllSymptomView.ItemsSource = GetAllSymptoms.AllSymptoms;
+            var orderlist = AllUserSymptoms.OrderByDescending(x => DateTime.Parse(x.LastUpdatedTime)).ToList();
+
+            AllSymptomView.ItemsSource = orderlist;
+            //GetAllSymptoms.AllSymptoms = AllUserSymptoms;
+            //AllSymptomView.ItemsSource = GetAllSymptoms.AllSymptoms;
+            //AllSymptomView.ItemsSource = sortedSymptoms; 
         }
         catch (Exception Ex)
         {

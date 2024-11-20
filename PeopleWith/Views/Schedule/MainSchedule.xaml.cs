@@ -15,6 +15,7 @@ public partial class MainSchedule : ContentPage
 
     APICalls aPICalls = new APICalls();
     public ObservableCollection<usermedication> AllUserMedications = new ObservableCollection<usermedication>();
+    public ObservableCollection<MedSuppFeedback> MedsFeedbackRemove = new ObservableCollection<MedSuppFeedback>();
     public ObservableCollection<usersupplement> AllUserSupplements = new ObservableCollection<usersupplement>();
     public ObservableCollection<MedtimesDosages> ScheduleList = new ObservableCollection<MedtimesDosages>();
     public ObservableCollection<MedtimesDosages> AsRequiredList = new ObservableCollection<MedtimesDosages>();
@@ -111,7 +112,12 @@ public partial class MainSchedule : ContentPage
     {
         try
         {
+            //hide As Required list and Change Button back to Inital 
 
+            asrequiredbtn.Text = "As Required Medications/Supplements";
+            mainschedulelistview.IsVisible = true;
+            AsRequiredlistview.IsVisible = false;
+           
             var item = e.DataItem as Schedule;
 
             // Get the index of the tapped item from the ItemsSource
@@ -234,6 +240,8 @@ public partial class MainSchedule : ContentPage
                         {
 
                             var dayname = dateforschedule.ToString("ddd");
+                            var daynames = dateforschedule.ToString("dddd");
+                            var dayfour = daynames.Substring(0, 4); 
                             //check if today is within the days list
                             if (splitstring[1].Contains(dayname))
                             {
@@ -248,7 +256,7 @@ public partial class MainSchedule : ContentPage
                                 //add all the items 
                                 foreach (var medtimes in item.schedule)
                                 {
-                                    if(medtimes.Day == dayname)
+                                    if(medtimes.Day == dayname || medtimes.Day == dayfour)
                                     {
                                         medtimes.Type = "Medication";
                                         medtimes.Usermedid = item.id;
@@ -305,7 +313,7 @@ public partial class MainSchedule : ContentPage
                         {
 
                             // Calculate the difference in days from the start date
-                            var daysDifference = (DateTime.Now - sd).Days;
+                            var daysDifference = (dateforschedule - sd).Days;
 
                             // Check if today's date is a multiple of the daycount (e.g., every 3rd day)
                             if (daysDifference % daycount == 0)
@@ -653,19 +661,19 @@ public partial class MainSchedule : ContentPage
                                 {
                                     //Medication Taken 
                                     med.Buttonop = 1;
-                                    med.Buttonntop = 0;
+                                    med.Buttonntop = 0.2;
                                 }
                                 else if(getfeedbackitem.Recorded == "Not Taken")
                                 {
                                     //Not Taken
                                  
-                                    med.Buttonop = 0;
+                                    med.Buttonop = 0.2;
                                     med.Buttonntop = 1;
                                 }
                                 else
                                 {
-                                    med.Buttonop = 1;
-                                    med.Buttonntop = 0;
+                                    med.Buttonop = 0.2;
+                                    med.Buttonntop = 0.2;
                                 }
                             }
                             else
@@ -710,18 +718,18 @@ public partial class MainSchedule : ContentPage
                                 {
                                     //Medication Taken 
                                     med.Buttonop = 1;
-                                    med.Buttonntop = 0;
+                                    med.Buttonntop = 0.2;
                                 }
-                                else if(getfeedbackitemsupp.Recorded == "Not Recorded")
+                                else if(getfeedbackitemsupp.Recorded == "Not Taken")
                                 {
                                     //Not Taken
-                                    med.Buttonop = 0;
+                                    med.Buttonop = 0.2;
                                     med.Buttonntop = 1;
                                 }
                                 else
                                 {
-                                    med.Buttonop = 1;
-                                    med.Buttonntop = 0;
+                                    med.Buttonop = 0.2;
+                                    med.Buttonntop = 0.2;
                                 }
                             }
                             else
@@ -880,15 +888,12 @@ public partial class MainSchedule : ContentPage
 
                 if (getitem != null)
                 {
-
+                    MedsFeedbackRemove.Clear();
 
                     if (getitem.Type == "Medication")
                     {
 
                         var getusermeditem = AllUserMedications.Where(x => x.id == label.UsermedID).FirstOrDefault();
-
-
-
 
                         getitem.Buttonop = 1;
 
@@ -904,31 +909,28 @@ public partial class MainSchedule : ContentPage
                             //feedback is null initalize before hand 
                             getusermeditem.feedback = new ObservableCollection<MedSuppFeedback>();
                         }
+                        foreach(var item in getusermeditem.feedback)
+                        {
+                            if(item.id == newfeedback.id)
+                            {
+                                if (item.datetime == newfeedback.datetime)
+                                {
+                                    MedsFeedbackRemove.Add(item); 
+                                }
+                            }
+                        }
+                       
+                        foreach(var item in MedsFeedbackRemove)
+                        {
+                            getusermeditem.feedback.Remove(item);
+                        }
 
                         getusermeditem.feedback.Add(newfeedback);
                         await aPICalls.UpdateMedicationFeedbackAsync(getusermeditem);
 
 
-                        foreach (var item in AllUserSupplements)
-                        {
-                            if (item.id == getusermeditem.id)
-                            {
-                                foreach (var feedback in getusermeditem.feedback)
-                                {
-                                    // Ensure no duplicate feedback entries
-                                    if (!item.feedback.Any(f => f.datetime == feedback.datetime))
-                                    {
-                                        item.feedback.Add(feedback);
-                                    }
-                                }
-                            }
-                        }
-
-                        //Update Feedback on AllSupplements Page
-                        //WeakReferenceMessenger.Default.Send(new UpdateAllMeds(AllUserSupplements));
-
-                        //Update Feedback on SingleSupplements Page
-
+                        //Update Feedback on SingleMedications Page
+                        WeakReferenceMessenger.Default.Send(new UpdateShowAllMeds(getusermeditem));
                     }
                     else
                     {
@@ -951,29 +953,36 @@ public partial class MainSchedule : ContentPage
                             getusermeditem.feedback = new ObservableCollection<MedSuppFeedback>();
                         }
 
+                        foreach (var item in getusermeditem.feedback)
+                        {
+                            if (item.id == newfeedback.id)
+                            {
+                                if (item.datetime == newfeedback.datetime)
+                                {
+                                    MedsFeedbackRemove.Add(item);
+                                }
+                            }
+                        }
+
+                        foreach (var item in MedsFeedbackRemove)
+                        {
+                            getusermeditem.feedback.Remove(item);
+                        }
+
                         getusermeditem.feedback.Add(newfeedback);
                         await aPICalls.UpdateSupplementFeedbackAsync(getusermeditem);
 
-                        //foreach(var item in AllUserSupplements)
-                        //{
-                        //    if(item.id == label.UsermedID)
-                        //    {
-                        //        foreach(var x in item.feedback)
-                        //        {
-                        //            AllUserSupplement
-                        //        }
-                        //    }
-
-                        //}
-
-
-                        //Update Feedback on AllSupplements Page
-                        //WeakReferenceMessenger.Default.Send(new UpdateAllSupp(AllUserSupplements));
-
-                        //Update Feedback on SingleSupplements Page
+                        //Update Feedback on SingleSupplements Page (selectedSupp) 
+                        WeakReferenceMessenger.Default.Send(new UpdateShowAllSupps(getusermeditem));
 
                     }
-                }
+
+                    //update Button On / Off View 
+                    var Updateitem = ScheduleList.Where(x => x.Feedbackid == label.FeedbackID).FirstOrDefault();
+                    Updateitem.Buttonntop = 0.2;
+
+                    }
+           
             }
             else
             {
@@ -1003,7 +1012,7 @@ public partial class MainSchedule : ContentPage
                 var getitem = ScheduleList.Where(x => x.Feedbackid == label.FeedbackID).FirstOrDefault();
                 if (getitem != null)
                 {
-
+                    MedsFeedbackRemove.Clear();
 
                     if (getitem.Type == "Medication")
                     {
@@ -1025,8 +1034,27 @@ public partial class MainSchedule : ContentPage
                             getusermeditem.feedback = new ObservableCollection<MedSuppFeedback>();
                         }
 
+                        foreach (var item in getusermeditem.feedback)
+                        {
+                            if (item.id == newfeedback.id)
+                            {
+                                if (item.datetime == newfeedback.datetime)
+                                {
+                                    MedsFeedbackRemove.Add(item);
+                                }
+                            }
+                        }
+
+                        foreach (var item in MedsFeedbackRemove)
+                        {
+                            getusermeditem.feedback.Remove(item);
+                        }
+
                         getusermeditem.feedback.Add(newfeedback);
                         await aPICalls.UpdateMedicationFeedbackAsync(getusermeditem);
+
+                        //Update Feedback on SingleMedications Page
+                        WeakReferenceMessenger.Default.Send(new UpdateShowAllMeds(getusermeditem));
 
                     }
                     else
@@ -1049,10 +1077,33 @@ public partial class MainSchedule : ContentPage
                             getusermeditem.feedback = new ObservableCollection<MedSuppFeedback>();
                         }
 
+                        foreach (var item in getusermeditem.feedback)
+                        {
+                            if (item.id == newfeedback.id)
+                            {
+                                if (item.datetime == newfeedback.datetime)
+                                {
+                                    MedsFeedbackRemove.Add(item);
+                                }
+                            }
+                        }
+
+                        foreach (var item in MedsFeedbackRemove)
+                        {
+                            getusermeditem.feedback.Remove(item);
+                        }
+
                         getusermeditem.feedback.Add(newfeedback);
                         await aPICalls.UpdateSupplementFeedbackAsync(getusermeditem);
 
+                        //Update Feedback on SingleSupplements Page (selectedSupp) 
+                        WeakReferenceMessenger.Default.Send(new UpdateShowAllSupps(getusermeditem));
+
                     }
+
+                    //update Button On / Off View 
+                    var Updateitem = ScheduleList.Where(x => x.Feedbackid == label.FeedbackID).FirstOrDefault();
+                    Updateitem.Buttonop = 0.2;
                 }
             }
             else

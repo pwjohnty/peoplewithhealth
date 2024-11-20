@@ -77,7 +77,7 @@
 
                                     <Label Text="{Binding title}" FontFamily="HankenGroteskRegular" Margin="5,0,0,0" Grid.Row="0" Grid.Column="0" Padding="0" HorizontalOptions="Start"  VerticalOptions="Start" TextColor="#031926" FontSize="14" FontAttributes="None" />
 
-                                    <BoxView Grid.Column="0" Grid.Row="1" HeightRequest="1" HorizontalOptions="FillAndExpand" Margin="0,10,0,0" Color="#fff7ea"/>
+                                        <BoxView Grid.Column="0" Grid.Row="1" HeightRequest="1" HorizontalOptions="FillAndExpand" Margin="0,10,0,0" Color="#fff7ea" BackgroundColor="#fff7ea"/>
 
                                 </Grid>
 
@@ -101,7 +101,7 @@
 
                                     <Label Text="{Binding title}" FontFamily="HankenGroteskBold" Margin="5,0,0,0" Grid.Row="0" Grid.Column="0" Padding="0" HorizontalOptions="Start"  VerticalOptions="Start" TextColor="Orange" FontSize="14" FontAttributes="None" />
 
-                                    <BoxView Grid.Column="0" Grid.Row="1" HeightRequest="1" HorizontalOptions="FillAndExpand" Margin="0,10,0,0" Color="#fff7ea"/>
+                                        <BoxView Grid.Column="0" Grid.Row="1" HeightRequest="1" HorizontalOptions="FillAndExpand" Margin="0,10,0,0" Color="#fff7ea" BackgroundColor="#fff7ea"/>
 
                                 </Grid>
                             </Frame>

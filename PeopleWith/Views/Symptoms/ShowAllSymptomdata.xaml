@@ -5,7 +5,7 @@
              xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
              NavigationPage.HasNavigationBar="True" BackgroundColor="White">
     <ContentPage.ToolbarItems>
-        <ToolbarItem x:Name="EditBtn" Text="Delete"  Clicked="EditBtn_Clicked"  />
+        <ToolbarItem x:Name="EditBtn" Text="Edit" Clicked="EditBtn_Clicked"  />
     </ContentPage.ToolbarItems>
     <ScrollView>
         <VerticalStackLayout>

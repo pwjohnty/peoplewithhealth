@@ -82,7 +82,7 @@ SelectionIndicatorColor="Transparent" ChipPadding="4,4,0,0" ChipTextSize="Micro"
 
         <StackLayout x:Name="FinalFeedbackStack" IsVisible="false">
 
-                <Grid RowSpacing="20">
+                <Grid Margin="0,20,0,0" RowSpacing="20">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>

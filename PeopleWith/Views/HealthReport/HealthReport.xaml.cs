@@ -34,6 +34,11 @@ public partial class HealthReport : ContentPage
                 InitializeComponent();
                 HealthReportUrl = HealthReportStart + HealthReportEnd;
                 HealthReportViewer.Source = HealthReportUrl;
+
+                if(DeviceInfo.Current.Platform == DevicePlatform.iOS)
+                {
+                    HealthReportViewer.HeightRequest = 650;
+                }
             }
             else
             {
