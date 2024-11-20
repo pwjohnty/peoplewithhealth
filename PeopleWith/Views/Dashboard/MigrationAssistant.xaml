@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pinview="clr-namespace:PINView.Maui;assembly=PINView.Maui"
+             xmlns:progressBar="clr-namespace:Syncfusion.Maui.ProgressBar;assembly=Syncfusion.Maui.ProgressBar"
+              xmlns:stepProgressBar="clr-namespace:Syncfusion.Maui.ProgressBar;assembly=Syncfusion.Maui.ProgressBar"
+             x:Class="PeopleWith.MigrationAssistant"  HideSoftInputOnTapped="True" NavigationPage.HasNavigationBar="False"
+ Shell.NavBarHasShadow="False" Shell.NavBarIsVisible="False" BackgroundColor="White">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" x:Name="topgrid" Margin="0,20,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="90*"/>
+             
+            </Grid.ColumnDefinitions>
+
+
+
+
+
+            <stepProgressBar:SfStepProgressBar  x:Name="stepbar" BackgroundColor="Transparent"   ProgressBarBackground="#BFDBF7" ActiveStepIndex="0"
+                    Orientation="Horizontal" Grid.Column="1">
+                <stepProgressBar:SfStepProgressBar.CompletedStepSettings>
+                    <stepProgressBar:StepSettings Background="#031926" ContentType="Tick" Stroke="#031926" ContentFillColor="White"/>
+                </stepProgressBar:SfStepProgressBar.CompletedStepSettings>
+                <stepProgressBar:SfStepProgressBar.InProgressStepSettings>
+                    <stepProgressBar:StepSettings Background="#031926" ContentType="Dot" Stroke="#031926" ContentFillColor="White"/>
+                </stepProgressBar:SfStepProgressBar.InProgressStepSettings>
+            </stepProgressBar:SfStepProgressBar>
+
+      
+
+
+        </Grid>
+
+
+
+        <ScrollView Grid.Row="1" Margin="0,30,0,0" BackgroundColor="Transparent">
+
+            <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+
+                <StackLayout x:Name="emailframe" Margin="20,0,20,0">
+
+                    <Label
+  Text="Migration Assistant"
+  FontSize="26"
+  Margin="0,0,0,0"
+  TextColor="#031926"
+  FontFamily="HankenGroteskBold"
+  FontAttributes="Bold"
+  HorizontalOptions="Start" />
+
+                    <Label
+ Text="We’re excited to introduce you to our improved app! To make your transition as smooth as possible, we’ve created this Migration Assistant to securely transfer your existing data and preferences."
+ TextColor="#031926"
+ FontFamily="HankenGroteskRegular"
+ FontAttributes="None"
+ Margin="0,10,0,0"
+ FontSize="15"
+ HorizontalOptions="Start" ></Label>
+
+                    <Label>
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="&#10;" />
+                                <Span Text="&#10;" />
+
+                                <Span Text="• Step 1: Stay Updated with Notifications"   TextColor="#031926" FontSize="16"
+FontFamily="HankenGroteskBold" />
+                                <Span Text="&#10;" />
+                                <Span Text="&#10;" />
+
+                                <!-- Line break -->
+                                <Span Text="To keep you informed, we’d like to send you in-app notifications for important updates, reminders, and new features. You can also choose to receive email notifications for convenient updates when you're not using the app."  FontFamily="HankenGroteskRegular" FontSize="15" TextColor="#031926" />
+                                <Span Text="&#10;" />
+                                <Span Text="&#10;" />
+
+                                <Span Text="• Step 2: Set Up Your PIN Code"   TextColor="#031926" FontSize="16"
+  FontFamily="HankenGroteskBold" />
+                                <Span Text="&#10;" />
+                                <Span Text="&#10;" />
+                                <!-- Line break -->
+                                <Span Text="For enhanced security, we’ll now ask you to set up a 4-digit PIN code. This PIN will help keep your data secure and ensure only you have access to your account."  FontFamily="HankenGroteskRegular" FontSize="15" TextColor="#031926" />
+
+                         
+
+                                <Span Text="&#10;" />
+                                <Span Text="&#10;" />
+                                <Span Text="• Step 3: Data Migration"   TextColor="#031926" FontSize="16"
+FontFamily="HankenGroteskBold" />
+                                <Span Text="&#10;" />
+                                <Span Text="&#10;" />
+                                <!-- Line break -->
+                                <Span Text="We’ll begin by migrating your data. This will include your saved information, preferences, and personalised settings, ensuring everything you need is ready for you here. This process may take a few moments, so please keep the app open until the transfer is complete."  FontFamily="HankenGroteskRegular" FontSize="15" TextColor="#031926" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+
+
+
+
+                </StackLayout>
+
+                <StackLayout x:Name="faceidstack" Margin="20,0,20,0" IsVisible="False">
+
+                    <Label
+ Text="Set up a PIN"
+ FontSize="26"
+ Margin="0,0,0,0"
+ TextColor="#031926"
+ FontFamily="HankenGroteskBold"
+ FontAttributes="Bold"
+ HorizontalOptions="Start" />
+
+                    <Label
+Text="Secure your account by setting up a PIN"
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,0,0,0"
+FontSize="15"
+HorizontalOptions="Start" />
+
+
+                    <Image Source="pinicon.png" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,50,0,0" HeightRequest="80" WidthRequest="80"/>
+
+
+                    <Label
+Text="Setting up a PIN is an important step in securing your device and keeping your personal information safe."
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,30,0,0"
+FontSize="15" HorizontalTextAlignment="Center"
+HorizontalOptions="Center" />
+
+                    <pinview:PINView
+ BoxBackgroundColor="Transparent" Margin="0,20,0,0" x:Name="codepin"
+ BoxShape="RoundCorner" AutoDismissKeyboard="True" PINEntryCompleted="codepin_PINEntryCompleted"
+ PINLength="4" HorizontalOptions="Center" IsPassword="True" PropertyChanged="codepin_PropertyChanged"
+BoxBorderColor="LightGray"
+ Color="#031926" />
+
+                    <Label
+Text="Confirm PIN"
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,20,0,0"
+FontSize="15"
+HorizontalOptions="Center" />
+
+                    <pinview:PINView
+ BoxBackgroundColor="Transparent" Margin="0,10,0,0" x:Name="confirmcodepin"
+ BoxShape="RoundCorner" AutoDismissKeyboard="True"  PINEntryCompleted="confirmcodepin_PINEntryCompleted"
+ PINLength="4" HorizontalOptions="Center" IsPassword="True" PropertyChanged="confirmcodepin_PropertyChanged"
+BoxBorderColor="LightGray"
+ Color="#031926" />
+
+                    <Label
+Text="Invalid Code"
+TextColor="Red"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,10,0,0" x:Name="incorrectcodelbl"
+FontSize="15" IsVisible="False"
+HorizontalOptions="Center" />
+
+
+
+                </StackLayout>
+
+                <StackLayout x:Name="notificationstack" Margin="20,0,20,0" IsVisible="False">
+
+                    <Label
+ Text="Allow Notifications"
+ FontSize="26"
+ Margin="0,0,0,0"
+ TextColor="#031926"
+ FontFamily="HankenGroteskBold"
+ FontAttributes="Bold"
+ HorizontalOptions="Start" />
+
+                    <Label
+Text="Allow us to send you notifications"
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,0,0,0"
+FontSize="15"
+HorizontalOptions="Start" />
+
+
+                    <Image Source="notificationicon.png" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,50,0,0" HeightRequest="80" WidthRequest="80"/>
+
+
+                    <Label
+Text="Enable notifications to receive important updates, reminders, and alerts. Stay on top of your schedule, never miss a critical update, and get timely information right when you need it. Stay connected and in control!"
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,30,0,0"
+FontSize="15" HorizontalTextAlignment="Center"
+HorizontalOptions="Center" />
+
+
+                    <Frame HasShadow="False" Padding="10" Margin="0,20,0,0" BackgroundColor="Transparent" BorderColor="#BFDBF7" CornerRadius="10">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90*"/>
+                                <ColumnDefinition Width="10*"/>
+                            </Grid.ColumnDefinitions>
+                            <CheckBox Grid.Column="1" Grid.Row="0" Color="#031926" x:Name="emailcheck" IsChecked="True" Margin="0,-5,0,0" HorizontalOptions="End" VerticalOptions="Center"/>
+                            <Label Grid.Row="0" Grid.Column="0" Margin="0,5,0,0" VerticalOptions="Center" HorizontalOptions="Center">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="I agree to allow " TextColor="Gray" FontSize="15" FontFamily="HankenGroteskRegular" />
+                                        <Span Text="PeopleWith to send me Email Notifications" TextColor="#031926" FontSize="15" FontFamily="HankenGroteskBold" FontAttributes="None" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </Grid>
+                    </Frame>
+
+
+
+
+                </StackLayout>
+
+                <StackLayout x:Name="migratestack" VerticalOptions="Center" Margin="20,0,20,0" IsVisible="False">
+
+
+                    <Image Source="migration.png" x:Name="migimg" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,0,0,50" HeightRequest="120" WidthRequest="120"/>
+
+
+
+                    <progressBar:SfLinearProgressBar  x:Name="topprogress"
+                        TrackHeight="8"  TrackFill="#BFDBF7" ProgressFill="#031926"
+                        TrackCornerRadius="5" SecondaryProgressFill="#BFDBF7" Maximum="100"
+                        ProgressHeight="8" Margin="30,0,30,30" AnimationEasing="{x:Static Easing.CubicInOut}"
+                         VerticalOptions="Center" IsIndeterminate="False" AnimationDuration="60000"
+                                    BackgroundColor="Transparent"
+                        ProgressCornerRadius="5" />
+
+
+
+                    <Label
+ Text="Migrating Data"
+ FontSize="26"
+ Margin="0,20,0,0" x:Name="mdlbl"
+ TextColor="#031926"
+ FontFamily="HankenGroteskBold"
+ FontAttributes="Bold"
+ HorizontalOptions="Center" />
+
+                    <Label
+Text="Please bare with us as this may take a few minutes..."
+TextColor="#031926" x:Name="md2lbl"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,5,0,0"
+FontSize="15" HorizontalTextAlignment="Center"
+HorizontalOptions="Center" />
+
+
+                  
+
+
+                   
+
+
+
+
+                </StackLayout>
+
+
+            </Grid>
+        </ScrollView>
+
+
+
+        <StackLayout Grid.Row="1" x:Name="bottomstack" VerticalOptions="EndAndExpand" BackgroundColor="White">
+
+            <Button
+BackgroundColor="#031926"
+HorizontalOptions="FillAndExpand"
+TextColor="White" IsVisible="False"
+      x:Name="updateuserbtn" Clicked="updateuserbtn_Clicked"
+FontAttributes="None"
+     Margin="20,0,20,10"
+FontFamily="HankenGroteskBold"
+Text="Get Started" />
+
+            <Grid x:Name="bottomgrid">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50*"/>
+                    <ColumnDefinition Width="50*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Button
+BackgroundColor="White"
+HorizontalOptions="Start"
+TextColor="#031926"
+   x:Name="skipbtn" IsVisible="False"
+FontAttributes="None" Grid.Row="0" Grid.Column="0"
+     Margin="20,0,20,10"
+FontFamily="HankenGroteskBold"
+Text="Skip" />
+
+
+                <Button
+   BackgroundColor="#031926"
+   HorizontalOptions="EndAndExpand"
+   TextColor="White"
+         x:Name="nextbtn" Clicked="nextbtn_Clicked"
+   FontAttributes="None" Grid.Row="0" Grid.Column="1"
+        Margin="20,0,20,10"
+   FontFamily="HankenGroteskBold"
+   Text="Next" />
+
+
+
+          
+
+
+
+
+            </Grid>
+        </StackLayout>
+
+
+
+
+
+    </Grid>
+</ContentPage>

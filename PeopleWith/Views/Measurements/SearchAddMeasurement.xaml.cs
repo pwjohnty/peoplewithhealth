@@ -11,6 +11,7 @@ public partial class SearchAddMeasurement : ContentPage
     public ObservableCollection<measurement> SortedMeasurements = new ObservableCollection<measurement>();
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
+    userfeedback userfeedbacklistpassed = new userfeedback();
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
 
@@ -44,6 +45,22 @@ public partial class SearchAddMeasurement : ContentPage
         {
             InitializeComponent();
             UserMeasurements = usermeasurementlist;
+            getmeasurementlist();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    public SearchAddMeasurement(ObservableCollection<usermeasurement> usermeasurementlist, userfeedback userfeedbacklist)
+    {
+        try
+        {
+            InitializeComponent();
+            UserMeasurements = usermeasurementlist;
+
+            userfeedbacklistpassed = userfeedbacklist;
             getmeasurementlist();
         }
         catch (Exception Ex)
@@ -96,7 +113,7 @@ public partial class SearchAddMeasurement : ContentPage
         try
         {
             var item = e.DataItem as measurement;
-            await Navigation.PushAsync(new AddMeasurement(item, UserMeasurements, Measurements), false);
+            await Navigation.PushAsync(new AddMeasurement(item, UserMeasurements, Measurements, userfeedbacklistpassed), false);
         }
         catch (Exception Ex)
         {

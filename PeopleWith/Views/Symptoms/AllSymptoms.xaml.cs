@@ -391,7 +391,7 @@ public partial class AllSymptoms : ContentPage
     {
         try
         {
-            await Navigation.PushAsync(new AddSymptom(AllUserSymptoms));
+            await Navigation.PushAsync(new AddSymptom(AllUserSymptoms, userfeedbacklistpassed));
         }
         catch (Exception Ex)
         {
@@ -513,7 +513,7 @@ public partial class AllSymptoms : ContentPage
             {
                 //Limit No. of Taps 
                 AddBtn.IsEnabled = false;
-                await Navigation.PushAsync(new AddSymptom(AllUserSymptoms));
+                await Navigation.PushAsync(new AddSymptom(AllUserSymptoms, userfeedbacklistpassed));
                 AddBtn.IsEnabled = true;
             }
             else

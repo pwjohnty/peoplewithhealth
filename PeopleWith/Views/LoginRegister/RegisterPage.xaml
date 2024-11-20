@@ -308,7 +308,7 @@ x:Name="signupcodeinfodes"
 TextColor="#031926"
 FontFamily="HankenGroteskRegular"
 FontAttributes="None"
-Margin="0,20,0,0"
+Margin="0,20,0,20"
 FontSize="15" HorizontalTextAlignment="Center"
 HorizontalOptions="Center" />
 

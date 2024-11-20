@@ -14,6 +14,7 @@ public partial class AllMood : ContentPage
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
+    userfeedback userfeedbacklistpassed = new userfeedback();
 
     async public void NotasyncMethod(Exception Ex)
     {
@@ -41,6 +42,21 @@ public partial class AllMood : ContentPage
         }
     }
 
+    public AllMood(userfeedback userfeedbacklist)
+    {
+        try
+        {
+            InitializeComponent();
+            initialload = true;
+            userfeedbacklistpassed = userfeedbacklist;
+            GetAllUserMoods();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
     public AllMood(ObservableCollection<usermood> AllUserMoods)
     {
         try
@@ -49,6 +65,23 @@ public partial class AllMood : ContentPage
             AllMoods = AllUserMoods;
             initialload = false;
             GetAllUserMoods(); 
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+
+    }
+
+    public AllMood(ObservableCollection<usermood> AllUserMoods, userfeedback userfeedbacklist)
+    {
+        try
+        {
+            InitializeComponent();
+            AllMoods = AllUserMoods;
+            initialload = false;
+            userfeedbacklistpassed = userfeedbacklist;
+            GetAllUserMoods();
         }
         catch (Exception Ex)
         {
@@ -108,6 +141,7 @@ public partial class AllMood : ContentPage
                 EmptyStack.IsVisible = false;
                 MoodOverview.IsVisible = true;
                 AllMoodView.ItemsSource = AllMoods;
+                AllMoodView.HeightRequest = AllMoods.Count * 80;
             }
             else
             {
@@ -132,7 +166,7 @@ public partial class AllMood : ContentPage
             {
                 //Limit No. of Taps 
                 AddBtn.IsEnabled = false;
-                await Navigation.PushAsync(new AddMood(AllMoods, "Add"));
+                await Navigation.PushAsync(new AddMood(AllMoods, "Add" , userfeedbacklistpassed));
                 AddBtn.IsEnabled = true;
             }
             else

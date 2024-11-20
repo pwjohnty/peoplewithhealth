@@ -230,7 +230,7 @@ Text="Age at Diagnosis"
 
                     <inputLayout:SfTextInputLayout InputViewPadding="10" IsHintAlwaysFloated="True" BackgroundColor="Transparent" ShowHint="False" Margin="5,10,5,0" UnfocusedStrokeThickness="1" Stroke="LightGray" ContainerBackground="Transparent" ContainerType="Outlined" OutlineCornerRadius="5"
 >
-                        <Entry FontSize="Small" ReturnType="Done" IsEnabled="False" PlaceholderColor="Gray" Keyboard="Numeric" HorizontalTextAlignment="Center" FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" x:Name="ageentry" TextColor="#031926"/>
+                        <Entry FontSize="26" ReturnType="Done" IsEnabled="False" PlaceholderColor="Gray" Keyboard="Numeric" HorizontalTextAlignment="Center" FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" x:Name="ageentry" TextColor="#031926"/>
                     </inputLayout:SfTextInputLayout>
 
                     <Label

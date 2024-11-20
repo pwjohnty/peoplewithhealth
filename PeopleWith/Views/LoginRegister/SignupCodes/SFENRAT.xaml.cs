@@ -90,6 +90,7 @@ public partial class SFENRAT : ContentPage
 
         topprogress.SetProgress(progressp + 6, 0);
 
+
         primaryconditionlist.Add("Adrenal Cortical Cancer (ACC)");
         primaryconditionlist.Add("Phaeo Para Syndromes (Paraganglioma or Phaeochromocytoma (PPGL))");
 
@@ -102,7 +103,12 @@ public partial class SFENRAT : ContentPage
 
         additonalconsent = addtionalcon;
 
-        var splitlist = signupcodeinfo.symptoms.Split(',').ToList();
+            if (!string.IsNullOrEmpty(signupcodeinfo.externalidentifier))
+            {
+                extidlbl.Text = signupcodeinfo.externalidentifier;
+            }
+
+            var splitlist = signupcodeinfo.symptoms.Split(',').ToList();
 
         foreach(var item in splitlist)
         {

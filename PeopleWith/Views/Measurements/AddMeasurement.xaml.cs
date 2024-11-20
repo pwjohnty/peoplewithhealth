@@ -20,6 +20,7 @@ public partial class AddMeasurement : ContentPage
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
+    userfeedback userfeedbacklistpassed = new userfeedback();
 
     async public void NotasyncMethod(Exception Ex)
     {
@@ -45,7 +46,7 @@ public partial class AddMeasurement : ContentPage
         }
     }
 
-    public AddMeasurement(measurement measurementp, ObservableCollection<usermeasurement> usermeasurementsp, ObservableCollection<measurement> measurementlistpassed)
+    public AddMeasurement(measurement measurementp, ObservableCollection<usermeasurement> usermeasurementsp, ObservableCollection<measurement> measurementlistpassed, userfeedback userfeedbacklist)
     {
         try
         {
@@ -54,6 +55,7 @@ public partial class AddMeasurement : ContentPage
             measurementpassed = measurementp;
             usermeasurementlistpassed = usermeasurementsp;
             measurementlist = measurementlistpassed;
+            userfeedbacklistpassed = userfeedbacklist;
 
             measurementname.Text = "Add " + measurementpassed.measurementname;
             measurementnamestring = measurementpassed.measurementname;
@@ -93,7 +95,7 @@ public partial class AddMeasurement : ContentPage
             NotasyncMethod(Ex);
         }
     }
-    public AddMeasurement(usermeasurement usermeasurementp, ObservableCollection<usermeasurement> usermeasurementsp, ObservableCollection<measurement> measurementlistpassed)
+    public AddMeasurement(usermeasurement usermeasurementp, ObservableCollection<usermeasurement> usermeasurementsp, ObservableCollection<measurement> measurementlistpassed, userfeedback userfeedbacklist)
     {
         try
         {
@@ -102,6 +104,7 @@ public partial class AddMeasurement : ContentPage
             usermeasurementpassed = usermeasurementp;
             usermeasurementlistpassed = usermeasurementsp;
             measurementlist = measurementlistpassed;
+            userfeedbacklistpassed = userfeedbacklist;
 
             measurementname.Text = "Add " + usermeasurementpassed.measurementname;
             measurementnamestring = usermeasurementpassed.measurementname;
@@ -3949,6 +3952,28 @@ public partial class AddMeasurement : ContentPage
                         // Remove the item directly from the measurementlist
                         measurementlist.Remove(checkitem);
                     }
+
+                    var newsym = new feedbackdata();
+                    newsym.value = newmeasurment.value;
+                    newsym.datetime = newmeasurment.inputdatetime;
+                    newsym.action = "update";
+                    newsym.label = newmeasurment.measurementname;
+                    newsym.unit = inputvalue;
+
+                    if (userfeedbacklistpassed.measurementfeedbacklist == null)
+                    {
+                        userfeedbacklistpassed.measurementfeedbacklist = new ObservableCollection<feedbackdata>();
+                    }
+
+                    userfeedbacklistpassed.measurementfeedbacklist.Add(newsym);
+
+                    string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.measurementfeedbacklist);
+                    userfeedbacklistpassed.measurementfeedback = newsymJson;
+
+
+                    await aPICalls.UserfeedbackUpdateMeasurementData(userfeedbacklistpassed);
+
+
 
 
                     await MopupService.Instance.PushAsync(new PopupPageHelper("Measurement Added") { });

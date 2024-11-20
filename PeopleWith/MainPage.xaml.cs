@@ -25,9 +25,19 @@
                 var userid = Preferences.Default.Get("userid", string.Empty);
                 var biometrics = Preferences.Default.Get("biometrics", true);
                 var pincode = Preferences.Default.Get("pincode", string.Empty);
+                string um = Preferences.Default.Get("usermigrated", string.Empty);
 
                 if (!string.IsNullOrEmpty(userid))
                 {
+
+                    if(um == "false" || string.IsNullOrEmpty(um) || um == "False")
+                    {
+                        //go to migration assitant
+
+                        await Navigation.PushAsync(new MigrationAssistant(), false);
+                        return;
+                    }
+
                     //User still Logged in 
                     if(string.IsNullOrEmpty(pincode))
                     {

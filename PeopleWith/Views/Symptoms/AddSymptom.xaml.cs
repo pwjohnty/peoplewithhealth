@@ -25,6 +25,7 @@ public partial class AddSymptom : ContentPage
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
+    userfeedback userfeedbacklistpassed = new userfeedback();
     async public void NotasyncMethod(Exception Ex)
     {
         try
@@ -34,6 +35,22 @@ public partial class AddSymptom : ContentPage
         catch (Exception ex)
         {
             //Dunno 
+        }
+    }
+
+    public AddSymptom(ObservableCollection<usersymptom> ItemsPassed, userfeedback userfeedbacklist)
+    {
+        try
+        {
+            InitializeComponent();
+            SymptomsPassed = ItemsPassed;
+            userfeedbacklistpassed = userfeedbacklist;
+            GetBCCall();
+            //viewModel = BindingContext as PopupViewModel;
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
         }
     }
 
@@ -152,6 +169,26 @@ public partial class AddSymptom : ContentPage
                     var returnedsymptom = await database.PostSymptomAsync(NewSymptom);
 
                     SymptomsPassed.Add(returnedsymptom);
+
+                    var newsym = new feedbackdata();
+                    newsym.value = "50";
+                    newsym.datetime = AddNewFeedback[0].timestamp;
+                    newsym.action = "update";
+                    newsym.label = NewSymptom.symptomtitle;
+
+                    if (userfeedbacklistpassed.symptomfeedbacklist == null)
+                    {
+                        userfeedbacklistpassed.symptomfeedbacklist = new ObservableCollection<feedbackdata>();
+                    }
+
+                    userfeedbacklistpassed.symptomfeedbacklist.Add(newsym);
+
+                    string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.symptomfeedbacklist);
+                    userfeedbacklistpassed.symptomfeedback = newsymJson;
+
+
+                    await database.UserfeedbackUpdateSymptomData(userfeedbacklistpassed);
+
 
                     await MopupService.Instance.PushAsync(new PopupPageHelper("Symptom Added") { });
                     await Task.Delay(1500);

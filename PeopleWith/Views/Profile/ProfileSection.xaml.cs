@@ -34,6 +34,55 @@ public partial class ProfileSection : ContentPage
     //	InitializeComponent();
     //}
 
+    public ProfileSection()
+    {
+        try
+        {
+            InitializeComponent();
+           // AllUserData = AllUserDetails;
+            //Icon and user's Name 
+            var FirstName = Helpers.Settings.FirstName;
+            var Surname = Helpers.Settings.Surname;
+            if (!string.IsNullOrEmpty(FirstName))
+            {
+                one = FirstName.Substring(0, 1);
+            }
+
+            if (!string.IsNullOrEmpty(Surname))
+            {
+                two = Surname.Substring(0, 1);
+            }
+            if (!string.IsNullOrEmpty(one) && !string.IsNullOrEmpty(two))
+            {
+                Initals.Text = one + two;
+            }
+
+            if (string.IsNullOrEmpty(Initals.Text))
+            {
+                Initals.Text = "PW";
+            }
+            //Namelbl.Text = Helpers.Settings.FirstName + " " + Helpers.Settings.Surname;
+            //if(Namelbl.Text == " ")
+            //{
+            //    Namelbl.Text = "Health Details"; 
+            //}
+            Useridlbl.Text = Helpers.Settings.UserKey;
+
+            string version = AppInfo.Current.VersionString;
+            string build = AppInfo.Current.BuildString;
+            ReleaseVersion.Text = "ReleaseVersion " + version + " | " + "Build Version " + build;
+
+            GetHealthDetails();
+            GetSettings();
+            GetPrivacyDetails();
+
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
     public ProfileSection(user AllUserDetails)
     {
         try
@@ -178,7 +227,7 @@ public partial class ProfileSection : ContentPage
             var Notification = new user();
             Notification.SettingsTitle = "Notifications";
 
-            Notification.SettingsItem = "ON";
+            Notification.SettingsItem = Helpers.Settings.Notifications;
 
             SettingsList.Add(Notification);
 
@@ -343,7 +392,7 @@ public partial class ProfileSection : ContentPage
 
                         string subject = "";
                         string body = "Userid: " + Helpers.Settings.UserKey;
-                        string[] recipients = new[] { "chris.johnston@peoplewith.com" };
+                        string[] recipients = new[] { "support@peoplewith.com" };
 
                         var message = new EmailMessage
                         {
