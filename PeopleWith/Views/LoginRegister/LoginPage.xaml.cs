@@ -114,7 +114,8 @@ public partial class LoginPage : ContentPage
     {
         try
         {
-
+            emailhelper.HasError = false;
+            emailhelper.ErrorText = "";
         }
         catch (Exception Ex)
         {
@@ -257,6 +258,11 @@ public partial class LoginPage : ContentPage
                         await DisplayAlert("Account Deleted", "Your account has been deleted", "OK");
                         return; 
                     }
+                    else if (users[0].registrationstatus == "Onboarding")
+                    {
+                        await DisplayAlert("Account Onboarding", "Please use your email to continue registering", "OK");
+                        return;
+                    }
 
                     ValidEmail = true;
 
@@ -295,11 +301,25 @@ public partial class LoginPage : ContentPage
                 Preferences.Set("userpasswordhash", users[0].password);
                 Preferences.Set("signupcode", users[0].signupcodeid);
                 Preferences.Set("pincode", users[0].userpin);
-                Preferences.Set("launchvideo", "seen");
-                Preferences.Set("clinicaltrial", "Yes");
+                Preferences.Set("notifications", users[0].pushnotifications);
+                Preferences.Set("usermigrated", users[0].usermigrated.ToString());
+
+                if (users[0].usermigrated == false)
+                {
+                    //add the userfeedback column
+                    var newuseritem = new userfeedback();
+                    newuseritem.userid = users[0].userid;
+
+                    APICalls databasee = new APICalls();
+                    await databasee.InsertUserFeedback(newuseritem);
+                }
+
+
+                //  Preferences.Set("launchvideo", "seen");
+                //Preferences.Set("clinicaltrial", "Yes");
                 //Change based on User Having Notifcations Enabled/Disabled
-                Preferences.Set("NotificationsEnabled", true);
-                Preferences.Set("validationcode", users[0].validationcode);
+                // Preferences.Set("NotificationsEnabled", true);
+                // Preferences.Set("validationcode", users[0].validationcode);
 
                 //Add Push Notification Tags
                 AddBackTags();

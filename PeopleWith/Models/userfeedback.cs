@@ -17,6 +17,8 @@ namespace PeopleWith
         //public string updatedAt { get; set; }
         //public string version { get; set; }
         //public bool deleted { get; set; }
+
+        public string userid { get; set; }
         public string symptomfeedback { get; set; }
         public string medicationfeedback { get; set; }
         public string supplementfeedback { get; set; }

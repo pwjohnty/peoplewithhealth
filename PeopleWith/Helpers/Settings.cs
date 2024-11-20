@@ -308,12 +308,20 @@ namespace PeopleWith.Helpers
         }
 
 
-        private const string MedNotificationsKey = "mednotifications";
-        private static readonly string MedNotificationsDefault = string.Empty;
-        public static string MedNotifications
+        private const string NotificationsKey = "notifications";
+        private static readonly string NotificationsDefault = string.Empty;
+        public static string Notifications
         {
-            get => Preferences.Get(MedNotificationsKey, MedNotificationsDefault);
-            set => Preferences.Set(MedNotifications, value);
+            get => Preferences.Get(NotificationsKey, NotificationsDefault);
+            set => Preferences.Set(Notifications, value);
+        }
+
+        private const string UserMigratedKey = "usermigrated";
+        private static readonly string UserMigratedDefault = string.Empty;
+        public static string UserMigrated
+        {
+            get => Preferences.Get(UserMigratedKey, UserMigratedDefault);
+            set => Preferences.Set(UserMigrated, value);
         }
 
         private const string SuppNotificationsKey = "suppnotifications";

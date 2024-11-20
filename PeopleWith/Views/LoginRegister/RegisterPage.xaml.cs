@@ -41,6 +41,7 @@ public partial class RegisterPage : ContentPage
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
+    bool onboarding;
 
     async public void NotasyncMethod(Exception Ex)
     {
@@ -289,6 +290,8 @@ public partial class RegisterPage : ContentPage
             nextbtn.IsVisible = false;
             nextbtnloader.IsVisible = true;
 
+            onboarding = false;
+
             //check if email is in the db
             
             var serializerOptions = new JsonSerializerOptions
@@ -301,7 +304,7 @@ public partial class RegisterPage : ContentPage
 
             HttpResponseMessage response = await client.GetAsync(url);
 
-            if(response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
                 string content = await response.Content.ReadAsStringAsync();
                 var userResponse = JsonConvert.DeserializeObject<APIUserResponse>(content);
@@ -312,18 +315,21 @@ public partial class RegisterPage : ContentPage
                     //user Still Trying to register
                     if (users[0].registrationstatus == "Onboarding")
                     {
+                        onboarding = true;
+                        newuser.userid = users[0].userid;
                         //update the ui and progress bar
-                        emailframe.IsVisible = false;
-                        confirmemailframe.IsVisible = true;
-                        nextbtn.IsVisible = true;
-                        nextbtnloader.IsVisible = false;
-                        UpdateProgress();
+                        //emailframe.IsVisible = false;
+                        //confirmemailframe.IsVisible = true;
+                        //nextbtn.IsVisible = true;
+                        //nextbtnloader.IsVisible = false;
+                        //UpdateProgress();
 
-                        //add the user into the db with onboarding as the status
-                        newuser.email = emailentry.Text;
-                        //Spelling Mistake (Change)
-                        newuser.registrationstatus = "Onboarding";
-                        return;
+                        ////add the user into the db with onboarding as the status
+                        //newuser.email = emailentry.Text;
+                        ////Spelling Mistake (Change)
+                        //newuser.registrationstatus = "Onboarding";
+                        //return;
+                     
 
                     }
                     else
@@ -348,12 +354,15 @@ public partial class RegisterPage : ContentPage
             nextbtnloader.IsVisible = false;
             UpdateProgress();
 
+            
+
             //add the user into the db with onboarding as the status
             newuser.email = emailentry.Text;
             //Spelling Mistake (Change)
             newuser.registrationstatus = "Onboarding";
 
             //generate validation code
+
             var randomnum = new Random();
             var num = randomnum.Next(10000, 99999);
 
@@ -362,21 +371,57 @@ public partial class RegisterPage : ContentPage
             string hashedPassword = await HashPasswordAsync(confirmpassentry.Text);
             newuser.password = hashedPassword;
 
-            Uri uri = new Uri(string.Format("https://pwdevapi.peoplewith.com/api/user", string.Empty));
-            string json = System.Text.Json.JsonSerializer.Serialize<user>(newuser, serializerOptions);
-            StringContent contentt = new StringContent(json, Encoding.UTF8, "application/json");
-            HttpResponseMessage responsee = null;
+            newuser.validationcode = num.ToString();
 
-            response = await client.PostAsync(uri, contentt);
-
-
-            if (response.IsSuccessStatusCode)
+            if (onboarding)
             {
-                string responseBody = await response.Content.ReadAsStringAsync();
-                var userResponseconsent = JsonConvert.DeserializeObject<APIUserResponse>(responseBody);
-                var consent = userResponseconsent.Value[0];
+                var serializerOptionss = new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    WriteIndented = true
+                };
 
-                newuser = consent;
+                var urll = $"https://pwdevapi.peoplewith.com/api/user/userid/{newuser.userid}";
+                string jsonn = System.Text.Json.JsonSerializer.Serialize(new { password = newuser.password, validationcode = newuser.validationcode});
+
+                StringContent contenttt = new StringContent(jsonn, Encoding.UTF8, "application/json");
+                HttpResponseMessage responsee1 = null;
+
+                responsee1 = await client.PatchAsync(urll, contenttt);
+
+
+                if (responsee1.IsSuccessStatusCode)
+                {
+                    string responseBody = await responsee1.Content.ReadAsStringAsync();
+                    var userResponseconsent = JsonConvert.DeserializeObject<APIUserResponse>(responseBody);
+                    var consent = userResponseconsent.Value[0];
+
+                    newuser = consent;
+                }
+
+            }
+            else
+            {
+
+
+
+
+                Uri uri = new Uri(string.Format("https://pwdevapi.peoplewith.com/api/user", string.Empty));
+                string json = System.Text.Json.JsonSerializer.Serialize<user>(newuser, serializerOptions);
+                StringContent contentt = new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage responsee = null;
+
+                response = await client.PostAsync(uri, contentt);
+
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    var userResponseconsent = JsonConvert.DeserializeObject<APIUserResponse>(responseBody);
+                    var consent = userResponseconsent.Value[0];
+
+                    newuser = consent;
+                }
             }
 
             //email generate
@@ -387,7 +432,7 @@ public partial class RegisterPage : ContentPage
            // check if the response is successful
            if (emailresponse.IsSuccessStatusCode)
             {
-                await DisplayAlert("Email Sent", "Email Containing Confirmation Code Sent, If the email is not in your inbox. Check your Junk Mail", "Close"); 
+                await DisplayAlert("Email Sent", "Email Containing Confirmation Code Sent. If the email is not in your inbox. Check your Junk Mail", "Close"); 
 
                 //string content = await emailresponse.content.readasstringasync();
                 // debug.writeline(content); // uncomment this line if you want to debug the content

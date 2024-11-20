@@ -105,7 +105,7 @@ public partial class RegisterFinalPage : ContentPage
 
             faceidstack.IsVisible = true;
 
-            skipbtn.IsVisible = true;
+            skipbtn.IsVisible = false;
         }
         catch (Exception Ex)
         {
@@ -201,6 +201,7 @@ public partial class RegisterFinalPage : ContentPage
         {
             //handle notification
 
+         
 
             if (DeviceInfo.Platform == DevicePlatform.Android)
             {
@@ -376,6 +377,9 @@ public partial class RegisterFinalPage : ContentPage
 
             if(codepin.PINValue == confirmcodepin.PINValue)
             {
+                //ask if they want to use faceid
+
+
                 newuser.userpin = codepin.PINValue.ToString();
                 faceidstack.IsVisible = false;
                 notificationstack.IsVisible = true;
@@ -428,16 +432,45 @@ public partial class RegisterFinalPage : ContentPage
                 newuser.devicemodel = DeviceInfo.Model;
                 newuser.usermigrated = true;
 
-                if(notcheck.IsChecked)
+                PermissionStatus status;
+
+                if (DeviceInfo.Platform == DevicePlatform.Android)
                 {
-                    newuser.pushnotifications = "True";
+                    // Request and capture the permission status on Android
+                    status = await Permissions.CheckStatusAsync<Permissions.PostNotifications>();
+
+                    if (status == PermissionStatus.Granted)
+                    {
+                        // Set notifications as enabled
+                        newuser.pushnotifications = "True";
+                    }
+                    else
+                    {
+                        // Set notifications as disabled
+                        newuser.pushnotifications = "Disabled";
+                    }
                 }
                 else
                 {
-                    newuser.pushnotifications = "False";
+                    // Request permission on iOS via dependency service
+                    var notificationService = DependencyService.Get<INotificationService>();
+                    bool isGranted = await notificationService.CheckRequestNotificationPermissionAsync();
+
+                    // Set notifications based on whether permission was granted
+                    if (isGranted)
+                    {
+                        // Set notifications as enabled
+                        newuser.pushnotifications = "True";
+                    }
+                    else
+                    {
+                        // Set notifications as disabled
+                        newuser.pushnotifications = "Disabled";
+                    }
                 }
 
-                if(emailcheck.IsChecked)
+
+                if (emailcheck.IsChecked)
                 {
                     newuser.emailnotifications = true;
                 }
@@ -607,14 +640,25 @@ public partial class RegisterFinalPage : ContentPage
                 //add the user settings
                 Preferences.Default.Set("userid", newuser.userid);
                 Preferences.Default.Set("signupcode", newuser.signupcodeid);
+                Preferences.Set("email", newuser.email);
+                Preferences.Default.Set("pincode", newuser.userpin);
+                Preferences.Default.Set("gender", newuser.gender);
+                Preferences.Default.Set("ethnicity", newuser.ethnicity);
+                Preferences.Default.Set("age", newuser.dateofbirth);
+                Preferences.Default.Set("userpasswordhash", newuser.password);
+                Preferences.Default.Set("notifications", newuser.pushnotifications);
+                Preferences.Default.Set("usermigrated", newuser.usermigrated.ToString());
 
-                if (!string.IsNullOrEmpty(newuser.userpin))
-                {
-                    Preferences.Default.Set("pincode", newuser.userpin);
-                }
 
-                Preferences.Default.Set("validationcode", newuser.validationcode);
 
+                //add the userfeedback column
+                var newuseritem = new userfeedback();
+                newuseritem.userid = newuser.userid;
+
+                APICalls databasee = new APICalls();
+                await databasee.InsertUserFeedback(newuseritem);
+
+                // Preferences.Default.Set("validationcode", newuser.validationcode);
 
                 await Task.Delay(3000);
                 Application.Current.MainPage = new NavigationPage(new MainDashboard());
@@ -804,7 +848,7 @@ public partial class RegisterFinalPage : ContentPage
                 }
                 else if (faceidstack.IsVisible == true)
                 {
-
+                    Navigation.RemovePage(this);
                 }
             }
             else

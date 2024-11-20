@@ -40,7 +40,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios'">
-	  <CodesignKey>Apple Development: Created via API (QB732BRMZC)</CodesignKey>
+	  <CodesignKey>Apple Development: Created via API (9AF7WV24ZX)</CodesignKey>
 	  <CodesignProvision>VS: com.peoplewith.peoplewith Development</CodesignProvision>
 	  <ProvisioningType>automatic</ProvisioningType>
 	</PropertyGroup>
@@ -113,6 +113,7 @@
 	  <None Remove="Resources\Images\icontime.png" />
 	  <None Remove="Resources\Images\icontimepicker.png" />
 	  <None Remove="Resources\Images\imageicon.png" />
+	  <None Remove="Resources\Images\insight.png" />
 	  <None Remove="Resources\Images\laughing.png" />
 	  <None Remove="Resources\Images\link.png" />
 	  <None Remove="Resources\Images\location.png" />
@@ -123,6 +124,7 @@
 	  <None Remove="Resources\Images\medicinehome.png" />
 	  <None Remove="Resources\Images\medpillicon.png" />
 	  <None Remove="Resources\Images\medssuccess.png" />
+	  <None Remove="Resources\Images\migration.png" />
 	  <None Remove="Resources\Images\moodhome.png" />
 	  <None Remove="Resources\Images\neutral.png" />
 	  <None Remove="Resources\Images\medtime.png" />
@@ -280,6 +282,12 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Dashboard\MainDashboard.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Dashboard\MigrationAssistant.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Dashboard\SearchPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Diagnosis\AddDiagnosis.xaml">

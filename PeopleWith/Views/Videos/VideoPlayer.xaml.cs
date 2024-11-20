@@ -14,29 +14,29 @@ public partial class VideoPlayer : ContentPage
     private bool isPaused = false;
     APICalls database = new APICalls(); 
 
-    protected override bool OnBackButtonPressed()
-    {
-        try
-        {
-            if (Video.IsVisible == true)
-            {
-                VideoDetails.IsVisible = true;
-                Video.IsVisible = false;
-                VideoEngagement.closeaction = "UserClosed";
-                UpdateVideoEngagement();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        catch (Exception Ex)
-        {
-            return false;
-        }
+    //protected override bool OnBackButtonPressed()
+    //{
+    //    try
+    //    {
+    //        if (Video.IsVisible == true)
+    //        {
+    //            VideoDetails.IsVisible = true;
+    //            Video.IsVisible = false;
+    //            VideoEngagement.closeaction = "UserClosed";
+    //            UpdateVideoEngagement();
+    //            return true;
+    //        }
+    //        else
+    //        {
+    //            return false;
+    //        }
+    //    }
+    //    catch (Exception Ex)
+    //    {
+    //        return false;
+    //    }
 
-    }
+    //}
     async public void NotasyncMethod(Exception Ex)
     {
         try
@@ -54,17 +54,39 @@ public partial class VideoPlayer : ContentPage
 		{
             InitializeComponent();
             SelectedVideo = VideoSelected;
-            VideoThumbnail.Source = SelectedVideo.thumbnail;
-            Titlelbl.Text = SelectedVideo.title;
-            SubTitlelbl.Text = SelectedVideo.subtitle;
-            Dateandlenthlbl.Text = "Date Added: " + SelectedVideo.dateadded;
-            lengthlbl.Text = SelectedVideo.lenght; 
+          //  VideoThumbnail.Source = SelectedVideo.thumbnail;
+          //  Titlelbl.Text = SelectedVideo.title;
+           // SubTitlelbl.Text = SelectedVideo.subtitle;
+           // Dateandlenthlbl.Text = "Date Added: " + SelectedVideo.dateadded;
+           // lengthlbl.Text = SelectedVideo.lenght; 
             MediaElement.Source = SelectedVideo.filename;
+            MediaElement.ShouldAutoPlay = true;
+
+            Navigation.RemovePage(this);
 
             VideoEngagement.userid = Helpers.Settings.UserKey;
             VideoEngagement.videoid = VideoSelected.videoid;
 
-}
+
+            var pages = Navigation.NavigationStack.ToList();
+            int i = 0;
+            foreach (var page in pages)
+            {
+                if (i == 0)
+                {
+                }
+                else if (i == 1 || i == 2 || i == 3)
+                {
+                    Navigation.RemovePage(page);
+                }
+                else
+                {
+                    //Navigation.RemovePage(page);
+                }
+                i++;
+            }
+
+        }
 		catch (Exception Ex)
 		{
             NotasyncMethod(Ex);
@@ -75,7 +97,7 @@ public partial class VideoPlayer : ContentPage
     {
         try
         {
-            VideoDetails.IsVisible = true;
+         //   VideoDetails.IsVisible = true;
             Video.IsVisible = false;
             PlayDuration.Stop();
             isPlaying = false;
@@ -159,7 +181,7 @@ public partial class VideoPlayer : ContentPage
             PlayDuration.Reset();
             PauseDuration.Reset();
 
-            VideoDetails.IsVisible = false;
+           // VideoDetails.IsVisible = false;
             Video.IsVisible = true;
             MediaElement.Play();
             isPlaying = true;

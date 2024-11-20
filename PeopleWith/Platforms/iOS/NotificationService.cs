@@ -20,5 +20,19 @@ namespace PeopleWith
 
             await tcs.Task;
         }
+
+        public async Task<bool> CheckRequestNotificationPermissionAsync()
+        {
+            var tcs = new TaskCompletionSource<bool>();
+
+            UNUserNotificationCenter.Current.RequestAuthorization(
+                UNAuthorizationOptions.Alert | UNAuthorizationOptions.Badge | UNAuthorizationOptions.Sound,
+                (granted, error) =>
+                {
+                    tcs.SetResult(granted);
+                });
+
+            return await tcs.Task;
+        }
     }
 }

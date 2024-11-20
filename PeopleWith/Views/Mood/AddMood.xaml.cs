@@ -17,6 +17,7 @@ public partial class AddMood : ContentPage
     public ObservableCollection<usermood> AddedMood = new ObservableCollection<usermood>();
     public ObservableCollection<usermood> MoodtoUpdate = new ObservableCollection<usermood>();
     public ObservableCollection<moodlist> AllMoods { get; set; }
+    userfeedback userfeedbacklistpassed = new userfeedback();
     public moodlist GetMoodlist { get; set; }
     string EditAdd;
     //DatePickerViewModel ViewModel = new DatePickerViewModel();
@@ -132,6 +133,90 @@ public partial class AddMood : ContentPage
         }
     }
 
+    public AddMood(ObservableCollection<usermood> MoodsPassed, string AddEdit, userfeedback userfeedbacklist)
+    {
+        try
+        {
+            InitializeComponent();
+            GetMoodlist = new moodlist();
+            AllMoods = GetMoodlist.GetList();
+            AlluserMoods = MoodsPassed;
+            EditAdd = AddEdit;
+            userfeedbacklistpassed = userfeedbacklist;
+
+            MoodListview.ItemsSource = AllMoods;
+
+            if (EditAdd == "Add")
+            {
+                adddatepicker.Date = DateTime.Now;
+                addtimepicker.Time = DateTime.Now.TimeOfDay;
+            }
+            else
+            {
+                foreach (var item in AlluserMoods)
+                {
+                    if (item.id == AddEdit)
+                    {
+
+                        var GetDateTime = DateTime.Parse(item.datetime);
+                        adddatepicker.Date = GetDateTime;
+                        addtimepicker.Time = GetDateTime.TimeOfDay;
+                        //Datelbl.Text = GetDateTime.ToString("dd MMM");
+                        //Timelbl.Text = GetDateTime.ToString("HH:mm");
+
+                        //ViewModel.SelectedDate = GetDateTime.ToString("dd/MM/yyyy");
+                        var gettime = GetDateTime.ToString("HH:mm:ss");
+                        //ViewModel.SelectedTime = TimeSpan.Parse(gettime);
+
+                        //Schedulepopup.BindingContext = ViewModel;
+                        //Timepopup.BindingContext = ViewModel;
+
+                        var selected = item.title;
+
+                        foreach (var x in AllMoods)
+                        {
+                            if (x.Text == selected)
+                            {
+                                MoodListview.SelectedItem = x;
+
+                            }
+                        }
+
+                        for (int i = 0; i < AllMoods.Count; i++)
+                        {
+
+                            if (AllMoods[i].Text == selected)
+                            {
+                                Selectedindex = i;
+                                MoodListview.ItemsLayout.ScrollToRowIndex(Selectedindex, true);
+                            }
+
+                        }
+
+
+                        if (string.IsNullOrEmpty(item.notes))
+                        {
+
+                        }
+                        else
+                        {
+                            Notes.Text = item.notes;
+
+                        }
+
+                        AddMoodBtn.Text = "Update Mood";
+
+                    }
+                }
+            }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+
 
     private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
@@ -215,6 +300,27 @@ public partial class AddMood : ContentPage
                     {
                         AlluserMoods.Add(item);
                     }
+
+                    var newsym = new feedbackdata();
+                    newsym.value = NewMood.notes;
+                    newsym.datetime = NewMood.datetime;
+                    newsym.action = "update";
+                    newsym.label = NewMood.title;
+
+                    if (userfeedbacklistpassed.moodfeedbacklist == null)
+                    {
+                        userfeedbacklistpassed.moodfeedbacklist = new ObservableCollection<feedbackdata>();
+                    }
+
+                    userfeedbacklistpassed.moodfeedbacklist.Add(newsym);
+
+                    string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.moodfeedbacklist);
+                    userfeedbacklistpassed.moodfeedback = newsymJson;
+
+
+                    await database.UserfeedbackUpdateMoodData(userfeedbacklistpassed);
+
+
                 }
                 else
                 {
@@ -265,7 +371,7 @@ public partial class AddMood : ContentPage
                 AddMoodBtn.IsEnabled = true;
 
                 //Push Through new Added Data
-                await Navigation.PushAsync(new AllMood(AlluserMoods));
+                await Navigation.PushAsync(new AllMood(AlluserMoods, userfeedbacklistpassed));
 
                 var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is AllMood);
                 var pageToRemove = Navigation.NavigationStack.FirstOrDefault(x => x is SingleMood);

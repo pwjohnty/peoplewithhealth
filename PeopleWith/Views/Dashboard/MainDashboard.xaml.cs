@@ -3,6 +3,7 @@
 //using Java.Time.Temporal;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel.Design;
 using System.Diagnostics;
 
 namespace PeopleWith;
@@ -28,26 +29,47 @@ public partial class MainDashboard : ContentPage
 		InitializeComponent();
 
         //Get All user Details & Set Helpers.Settings
-        GetUserDetails();
+        Checkifuserhasmigrated();
 
 		NavigationPage.SetHasNavigationBar(this, false);
 
         string firstName = Preferences.Default.Get("userid", "Unknown");
 
+       
+
         loadcatergories();
 
-        getuserfeedbackdata();
+       // getuserfeedbackdata();
 
         checksignupinfo();
 
 		//lbl.Text = firstName;
     }
 
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+
+      
+        getuserfeedbackdata();
+    }
+
     async void checksignupinfo()
     {
         try
         {
-            signupcodecollection = await database.GetUserSignUpCodeInfo("SFEAT14");
+            if(string.IsNullOrEmpty(Helpers.Settings.SignUp))
+            {
+                infotab.IsVisible = false;
+
+                var getimagesource = new Uri("https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/PeopleWithApp-AppImage-TemplateFeb23.png");
+
+                maindashimage.Source = ImageSource.FromUri(getimagesource);
+
+                return;
+            }
+
+            signupcodecollection = await database.GetUserSignUpCodeInfo(Helpers.Settings.SignUp);
 
 
             if (signupcodecollection != null)
@@ -96,10 +118,14 @@ public partial class MainDashboard : ContentPage
               
 
             }
+            else
+            {
+                //infotab.IsVisible = false;
+            }
 
 
             //get video support 
-            if (!string.IsNullOrEmpty("SFEAT14"))
+            if (!string.IsNullOrEmpty(Helpers.Settings.SignUp))
             {
 
                 var allvideos = await database.GetAllVideoswithsignupcode();
@@ -132,8 +158,10 @@ public partial class MainDashboard : ContentPage
             //get all user feedback data
 
             // Start the stopwatch to measure elapsed time
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
+            // Stopwatch stopwatch = new Stopwatch();
+            // stopwatch.Start();
+
+            foryouuserlist.Clear();
 
             // Retrieve all user feedback data
             userfeedbacklist = await database.GetUserFeedback();
@@ -152,7 +180,7 @@ public partial class MainDashboard : ContentPage
 
 
             // Stop the stopwatch after retrieval
-            stopwatch.Stop();
+           // stopwatch.Stop();
 
 
 
@@ -162,12 +190,15 @@ public partial class MainDashboard : ContentPage
             // Set the randomized list as the ItemsSource
             activitylist.ItemsSource = randomizedList;
 
+            listloader.IsVisible = false;
+            activitylist.IsVisible = true;
+
             // Show the elapsed time in a DisplayAlert
-            await Application.Current.MainPage.DisplayAlert(
-                "Data Retrieval Time",
-                $"Data retrieval took {stopwatch.Elapsed}.",
-                "OK"
-            );
+            //await Application.Current.MainPage.DisplayAlert(
+            //    "Data Retrieval Time",
+            //    $"Data retrieval took {stopwatch.Elapsed}.",
+            //    "OK"
+            //);
         }
         catch(Exception ex)
         {
@@ -181,386 +212,499 @@ public partial class MainDashboard : ContentPage
         {
 
             //symptom data
-
-            //var groupedsymptoms = userfeedbacklist[0].symptomfeedbacklist.GroupBy(x => x.label).ToList();
-
-            // Group by label and select the first item from each group
-            var filteredSymptoms = userfeedbacklist[0].symptomfeedbacklist
-                 .OrderByDescending(x => DateTime.Parse(x.datetime))
-                .GroupBy(x => x.label)
-                .Select(g => g.First())  // Select only the first item in each group
-                .ToList();
-
-            var filteredmeasurements = userfeedbacklist[0].measurementfeedbacklist
-                .OrderByDescending(x => DateTime.Parse(x.datetime))
-     .GroupBy(x => x.label)
-     .Select(g => g.First())  // Select only the first item in each group
-     .ToList();
-
-
-            var filteredmoods = userfeedbacklist[0].moodfeedbacklist
-                .OrderByDescending(x => DateTime.Parse(x.datetime))
-     .GroupBy(x => x.label)
-     .Select(g => g.First())  // Select only the first item in each group
-     .ToList();
-
-            int symptomrecordedcount = 0;
-
-            foreach (var item in filteredSymptoms)
+            if (userfeedbacklist[0].symptomfeedbacklist != null)
             {
+                //var groupedsymptoms = userfeedbacklist[0].symptomfeedbacklist.GroupBy(x => x.label).ToList();
 
-                var convertdate = DateTime.Parse(item.datetime);
-                TimeSpan timeDifference = DateTime.Now.Date - convertdate.Date;
+                // Group by label and select the first item from each group
+                var filteredSymptoms = userfeedbacklist[0].symptomfeedbacklist
+                     .OrderByDescending(x => DateTime.Parse(x.datetime))
+                    .GroupBy(x => x.label)
+                    .Select(g => g.First())  // Select only the first item in each group
+                    .ToList();
 
-                if (timeDifference.TotalDays < 1)
+
+
+                int symptomrecordedcount = 0;
+
+                foreach (var item in filteredSymptoms)
                 {
-                    item.datetimestring = "Today";
-                }
-                else if (timeDifference.TotalDays == 1)
-                {
-                    item.datetimestring = "Yesterday";
-                }
-                else
-                {
-                    item.datetimestring = $"{(int)timeDifference.TotalDays} days ago";
-                }
 
-                var sl = userfeedbacklist[0].symptomfeedbacklist.Where(x => x.label == item.label).OrderByDescending(x => DateTime.Parse(x.datetime)).ToList();
+                    var convertdate = DateTime.Parse(item.datetime);
+                    TimeSpan timeDifference = DateTime.Now.Date - convertdate.Date;
 
-                var ifrecorded = userfeedbacklist[0].symptomfeedbacklist.Where(x => x.label == item.label).Where(x => DateTime.Parse(x.datetime).Date == DateTime.Now.Date).FirstOrDefault();
-
-                if(ifrecorded != null)
-                {
-                    symptomrecordedcount++;
-                }
-
-                if(sl.Count >= 2)
-                {
-                    // Compare the newest and the previous score
-                    var newestScore = Convert.ToInt32(sl[0].value);      // Assuming .value represents the score
-                    var previousScore = Convert.ToInt32(sl[1].value);
-
-                    if (newestScore > previousScore)
+                    if (timeDifference.TotalDays < 1)
                     {
-                        item.img = "downarrow.png";
-                        item.improvelbl = "Worsening";
-
-                    
+                        item.datetimestring = "Today";
                     }
-                    else if (newestScore < previousScore)
+                    else if (timeDifference.TotalDays == 1)
                     {
-                        item.img = "uparrow.png";
-                        item.improvelbl = "Improving";
+                        item.datetimestring = "Yesterday";
                     }
                     else
                     {
+                        item.datetimestring = $"{(int)timeDifference.TotalDays} days ago";
+                    }
+
+                    var sl = userfeedbacklist[0].symptomfeedbacklist.Where(x => x.label == item.label).OrderByDescending(x => DateTime.Parse(x.datetime)).ToList();
+
+                    var ifrecorded = userfeedbacklist[0].symptomfeedbacklist.Where(x => x.label == item.label).Where(x => DateTime.Parse(x.datetime).Date == DateTime.Now.Date).FirstOrDefault();
+
+                    if (ifrecorded != null)
+                    {
+                        symptomrecordedcount++;
+                    }
+
+                    if (sl.Count >= 2)
+                    {
+                        // Compare the newest and the previous score
+                        var newestScore = Convert.ToInt32(sl[0].value);      // Assuming .value represents the score
+                        var previousScore = Convert.ToInt32(sl[1].value);
+
+                        if (newestScore > previousScore)
+                        {
+                            item.img = "downarrow.png";
+                            item.improvelbl = "Worsening";
+
+
+                        }
+                        else if (newestScore < previousScore)
+                        {
+                            item.img = "uparrow.png";
+                            item.improvelbl = "Improving";
+                        }
+                        else
+                        {
+                            item.img = "equal.png";
+                            item.improvelbl = "No Change";
+                        }
+
+
+                        item.nooftimesstring = sl.Count.ToString();
+
+                        var scores = sl.Select(x => Convert.ToInt32(x.value)).ToList();
+
+                        // Calculate highest score and average score
+                        var highestScore = scores.Max();
+                        var averageScore = scores.Average();
+
+                        item.highstring = highestScore.ToString();
+                        item.avgstring = averageScore.ToString("0");
+
+                    }
+                    else
+                    {
+                        //no change
                         item.img = "equal.png";
                         item.improvelbl = "No Change";
+
+                        item.avgstring = "50";
+                        item.highstring = "50";
+                        item.nooftimesstring = "1";
                     }
 
+                    //if(sl.Count < 3)
+                    //{
+                    //    item.symptominfo = "Recently added. Monitoring for trends";
+                    //}
+                    //else
+                    //{
+                    //    Random random = new Random();
 
-                    item.nooftimesstring = sl.Count.ToString();
+                    //    int randomNumber = random.Next(1, 8);
 
-                    var scores = sl.Select(x => Convert.ToInt32(x.value)).ToList();
+                    //    //choose a random stat to show
 
-                    // Calculate highest score and average score
-                    var highestScore = scores.Max();
-                    var averageScore = scores.Average();
-
-                    item.highstring = highestScore.ToString();
-                    item.avgstring = averageScore.ToString("0");
-
-                }
-                else
-                {
-                    //no change
-                    item.img = "equal.png";
-                    item.improvelbl = "No Change";
-
-                    item.avgstring = "50";
-                    item.highstring = "50";
-                    item.nooftimesstring = "1";
-                }
-
-                //if(sl.Count < 3)
-                //{
-                //    item.symptominfo = "Recently added. Monitoring for trends";
-                //}
-                //else
-                //{
-                //    Random random = new Random();
- 
-                //    int randomNumber = random.Next(1, 8);
-
-                //    //choose a random stat to show
-
-                //    if(randomNumber == 1)
-                //    {
-                //        //average per day
-                //        var days = sl.GroupBy(x => DateTime.Parse(x.datetime).Date).Count();
-                //        var count = sl.Count(x => x.label == item.label);
-                //        var sum = (double)count / days;
+                    //    if(randomNumber == 1)
+                    //    {
+                    //        //average per day
+                    //        var days = sl.GroupBy(x => DateTime.Parse(x.datetime).Date).Count();
+                    //        var count = sl.Count(x => x.label == item.label);
+                    //        var sum = (double)count / days;
 
 
-                //        item.symptominfo = "Recorded " + sum.ToString() + " times per day on average";
-                //    }
-                //    else if(randomNumber == 2)
-                //    {
+                    //        item.symptominfo = "Recorded " + sum.ToString() + " times per day on average";
+                    //    }
+                    //    else if(randomNumber == 2)
+                    //    {
 
-                //        var maxScore = sl.Max(x => x.value);
+                    //        var maxScore = sl.Max(x => x.value);
 
-                //        item.symptominfo = "Highest frequency of " + maxScore + " recorded";
-                //    }
-                //    else if (randomNumber == 3)
-                //    {
-                //        // Date and time of the highest score recorded
-                //        var maxRecord = sl.OrderByDescending(x => x.value).First();
-                //        var maxDate = DateTime.Parse(maxRecord.datetime);
-                //        item.symptominfo = "Highest score recorded on " + maxDate.ToString("dd/MM/yyyy HH:mm");
-                //    }
-                //    else if (randomNumber == 4)
-                //    {
-                //        // Check if average score has increased or decreased over the last week
-                //        DateTime now = DateTime.Now;
+                    //        item.symptominfo = "Highest frequency of " + maxScore + " recorded";
+                    //    }
+                    //    else if (randomNumber == 3)
+                    //    {
+                    //        // Date and time of the highest score recorded
+                    //        var maxRecord = sl.OrderByDescending(x => x.value).First();
+                    //        var maxDate = DateTime.Parse(maxRecord.datetime);
+                    //        item.symptominfo = "Highest score recorded on " + maxDate.ToString("dd/MM/yyyy HH:mm");
+                    //    }
+                    //    else if (randomNumber == 4)
+                    //    {
+                    //        // Check if average score has increased or decreased over the last week
+                    //        DateTime now = DateTime.Now;
 
-                //        var lastWeekData = sl.Where(x => DateTime.Parse(x.datetime) >= now.AddDays(-7)).ToList();
-                //        var priorWeekData = sl.Where(x => DateTime.Parse(x.datetime) >= now.AddDays(-14) && DateTime.Parse(x.datetime) < now.AddDays(-7)).ToList();
+                    //        var lastWeekData = sl.Where(x => DateTime.Parse(x.datetime) >= now.AddDays(-7)).ToList();
+                    //        var priorWeekData = sl.Where(x => DateTime.Parse(x.datetime) >= now.AddDays(-14) && DateTime.Parse(x.datetime) < now.AddDays(-7)).ToList();
 
-                //        var lastWeekAverage = lastWeekData.Any() ? lastWeekData.Average(x => double.TryParse(x.value, out double result) ? result : 0) : 0;
+                    //        var lastWeekAverage = lastWeekData.Any() ? lastWeekData.Average(x => double.TryParse(x.value, out double result) ? result : 0) : 0;
 
-                //        var priorWeekAverage = priorWeekData.Any()
-                //            ? priorWeekData.Average(x => double.TryParse(x.value, out double result) ? result : 0)
-                //            : 0;
+                    //        var priorWeekAverage = priorWeekData.Any()
+                    //            ? priorWeekData.Average(x => double.TryParse(x.value, out double result) ? result : 0)
+                    //            : 0;
 
-                //        if (lastWeekAverage > priorWeekAverage)
-                //        {
-                //            item.symptominfo = "Average score has increased over the last week";
-                //        }
-                //        else if (lastWeekAverage < priorWeekAverage)
-                //        {
-                //            item.symptominfo = "Average score has decreased over the last week";
-                //        }
-                //        else
-                //        {
-                //            item.symptominfo = "Average score remained stable over the last week";
-                //        }
-                //    }
-                //    else if (randomNumber == 5)
-                //    {
-                //        // Frequency increase over the last week
-                //        var lastWeekCount = sl.Count(x => DateTime.Parse(x.datetime) >= DateTime.Now.AddDays(-7));
-                //        var priorWeekCount = sl.Count(x => DateTime.Parse(x.datetime) >= DateTime.Now.AddDays(-14) && DateTime.Parse(x.datetime) < DateTime.Now.AddDays(-7));
+                    //        if (lastWeekAverage > priorWeekAverage)
+                    //        {
+                    //            item.symptominfo = "Average score has increased over the last week";
+                    //        }
+                    //        else if (lastWeekAverage < priorWeekAverage)
+                    //        {
+                    //            item.symptominfo = "Average score has decreased over the last week";
+                    //        }
+                    //        else
+                    //        {
+                    //            item.symptominfo = "Average score remained stable over the last week";
+                    //        }
+                    //    }
+                    //    else if (randomNumber == 5)
+                    //    {
+                    //        // Frequency increase over the last week
+                    //        var lastWeekCount = sl.Count(x => DateTime.Parse(x.datetime) >= DateTime.Now.AddDays(-7));
+                    //        var priorWeekCount = sl.Count(x => DateTime.Parse(x.datetime) >= DateTime.Now.AddDays(-14) && DateTime.Parse(x.datetime) < DateTime.Now.AddDays(-7));
 
-                //        if (lastWeekCount > priorWeekCount)
-                //        {
-                //            item.symptominfo = "Recording frequency has increased over the last week";
-                //        }
-                //        else if (lastWeekCount < priorWeekCount)
-                //        {
-                //            item.symptominfo = "Recording frequency has decreased over the last week";
-                //        }
-                //        else
-                //        {
-                //            item.symptominfo = "Recording frequency remained the same over the last week";
-                //        }
-                //    }
-                //    else if (randomNumber == 6)
-                //    {
-                //        // Check if recorded daily in the last week
-                //        var lastWeekDays = sl.Where(x => DateTime.Parse(x.datetime) >= DateTime.Now.AddDays(-7))
-                //                             .GroupBy(x => DateTime.Parse(x.datetime).Date)
-                //                             .Count();
+                    //        if (lastWeekCount > priorWeekCount)
+                    //        {
+                    //            item.symptominfo = "Recording frequency has increased over the last week";
+                    //        }
+                    //        else if (lastWeekCount < priorWeekCount)
+                    //        {
+                    //            item.symptominfo = "Recording frequency has decreased over the last week";
+                    //        }
+                    //        else
+                    //        {
+                    //            item.symptominfo = "Recording frequency remained the same over the last week";
+                    //        }
+                    //    }
+                    //    else if (randomNumber == 6)
+                    //    {
+                    //        // Check if recorded daily in the last week
+                    //        var lastWeekDays = sl.Where(x => DateTime.Parse(x.datetime) >= DateTime.Now.AddDays(-7))
+                    //                             .GroupBy(x => DateTime.Parse(x.datetime).Date)
+                    //                             .Count();
 
-                //        if (lastWeekDays >= 7)
-                //        {
-                //            item.symptominfo = "Recorded daily in the last week";
-                //        }
-                //        else
-                //        {
-                //            item.symptominfo = "Not recorded daily in the last week";
-                //        }
-                //    }
-                //    else if (randomNumber == 7)
-                //    {
-                //        // Consistency of recording frequency
-                //        //var dailyCounts = sl.Where(x => DateTime.Parse(x.datetime) >= DateTime.Now.AddDays(-7))
-                //        //                    .GroupBy(x => DateTime.Parse(x.datetime).Date)
-                //        //                    .Select(g => g.Count())
-                //        //                    .ToList();
+                    //        if (lastWeekDays >= 7)
+                    //        {
+                    //            item.symptominfo = "Recorded daily in the last week";
+                    //        }
+                    //        else
+                    //        {
+                    //            item.symptominfo = "Not recorded daily in the last week";
+                    //        }
+                    //    }
+                    //    else if (randomNumber == 7)
+                    //    {
+                    //        // Consistency of recording frequency
+                    //        //var dailyCounts = sl.Where(x => DateTime.Parse(x.datetime) >= DateTime.Now.AddDays(-7))
+                    //        //                    .GroupBy(x => DateTime.Parse(x.datetime).Date)
+                    //        //                    .Select(g => g.Count())
+                    //        //                    .ToList();
 
-                //        //var mean = dailyCounts.Average();
-                //        //var variance = dailyCounts.Sum(c => Math.Pow(c - mean, 2)) / dailyCounts.Count;
-                //        //var stddev = Math.Sqrt(variance);
+                    //        //var mean = dailyCounts.Average();
+                    //        //var variance = dailyCounts.Sum(c => Math.Pow(c - mean, 2)) / dailyCounts.Count;
+                    //        //var stddev = Math.Sqrt(variance);
 
-                //        //if (stddev < 1)
-                //        //{
-                //        //    item.symptominfo = "Recording frequency is consistent";
-                //        //}
-                //        //else
-                //        //{
-                //        //    item.symptominfo = "Recording frequency is inconsistent";
-                //        //}
-                //    }
-                //    else if (randomNumber == 8)
-                //    {
-                //        // Additional custom trend: e.g., proportion of recordings in the morning/afternoon/evening
-                //        var morningCount = sl.Count(x => DateTime.Parse(x.datetime).Hour < 12);
-                //        var afternoonCount = sl.Count(x => DateTime.Parse(x.datetime).Hour >= 12 && DateTime.Parse(x.datetime).Hour < 18);
-                //        var eveningCount = sl.Count(x => DateTime.Parse(x.datetime).Hour >= 18);
+                    //        //if (stddev < 1)
+                    //        //{
+                    //        //    item.symptominfo = "Recording frequency is consistent";
+                    //        //}
+                    //        //else
+                    //        //{
+                    //        //    item.symptominfo = "Recording frequency is inconsistent";
+                    //        //}
+                    //    }
+                    //    else if (randomNumber == 8)
+                    //    {
+                    //        // Additional custom trend: e.g., proportion of recordings in the morning/afternoon/evening
+                    //        var morningCount = sl.Count(x => DateTime.Parse(x.datetime).Hour < 12);
+                    //        var afternoonCount = sl.Count(x => DateTime.Parse(x.datetime).Hour >= 12 && DateTime.Parse(x.datetime).Hour < 18);
+                    //        var eveningCount = sl.Count(x => DateTime.Parse(x.datetime).Hour >= 18);
 
-                //        if (morningCount > afternoonCount && morningCount > eveningCount)
-                //        {
-                //            item.symptominfo = "Most recordings occur in the morning";
-                //        }
-                //        else if (afternoonCount > morningCount && afternoonCount > eveningCount)
-                //        {
-                //            item.symptominfo = "Most recordings occur in the afternoon";
-                //        }
-                //        else
-                //        {
-                //            item.symptominfo = "Most recordings occur in the evening";
-                //        }
-                //    }
-
-
-                //    //item.symptominfo = "Recently added. Monitoring for trends";
-                //}
-                var ss = "";
-
-                //          item.symptominfo = foryouuserlistsymptom
-                //.Where(x => x.title.Contains(item.label))
-                //.ToList();
-                //  item.symptomlist = userfeedbacklist[0].symptomfeedbacklist.Where(x => x.label == item.label).ToList();
-            }
+                    //        if (morningCount > afternoonCount && morningCount > eveningCount)
+                    //        {
+                    //            item.symptominfo = "Most recordings occur in the morning";
+                    //        }
+                    //        else if (afternoonCount > morningCount && afternoonCount > eveningCount)
+                    //        {
+                    //            item.symptominfo = "Most recordings occur in the afternoon";
+                    //        }
+                    //        else
+                    //        {
+                    //            item.symptominfo = "Most recordings occur in the evening";
+                    //        }
+                    //    }
 
 
-            double percentageRecorded = filteredSymptoms.Count > 0 ? (double)symptomrecordedcount / filteredSymptoms.Count * 100 : 0;
+                    //    //item.symptominfo = "Recently added. Monitoring for trends";
+                    //}
+                    var ss = "";
 
-            symprogressbar.Progress = percentageRecorded;
-
-            foreach (var item in filteredmeasurements)
-            {
-                var convertdate = DateTime.Parse(item.datetime);
-                TimeSpan timeDifference = DateTime.Now.Date - convertdate.Date;
-
-                if(timeDifference.TotalDays < 1)
-                {
-                    item.datetimestring = "Today";
-                }
-                else if(timeDifference.TotalDays == 1)
-                {
-                    item.datetimestring = "Yesterday";
-                }
-                else
-                {
-                    item.datetimestring = $"{(int)timeDifference.TotalDays} days ago";
+                    //          item.symptominfo = foryouuserlistsymptom
+                    //.Where(x => x.title.Contains(item.label))
+                    //.ToList();
+                    //  item.symptomlist = userfeedbacklist[0].symptomfeedbacklist.Where(x => x.label == item.label).ToList();
                 }
 
-                // Ensure userfeedbacklist has data
-                if (userfeedbacklist != null && userfeedbacklist.Count > 0)
+
+                double percentageRecorded = filteredSymptoms.Count > 0 ? (double)symptomrecordedcount / filteredSymptoms.Count * 100 : 0;
+
+                symprogressbar.Progress = percentageRecorded;
+
+                symptomdetaillist.ItemsSource = filteredSymptoms;
+
+                // Initialize a list to store data points for the last seven days
+                var lastSevenDaysData = new List<feedbackdata>();
+
+                // Loop through each of the past 7 days
+                for (int i = 6; i >= 0; i--)
                 {
-                    if (item.label == "Blood Pressure")
+                    var targetDate = DateTime.Now.Date.AddDays(-i);
+
+                    // Count the items for the target date
+                    int countForDay = filteredSymptoms
+                        .Count(item => DateTime.Parse(item.datetime).Date == targetDate);
+
+                    // Add data point to the list
+                    lastSevenDaysData.Add(new feedbackdata
                     {
+                        datetime = targetDate.Date.ToString("dd MMM"),
+                        Count = countForDay
+                    });
+                }
 
+
+                //find max and add one
+                int maxCount = lastSevenDaysData.Max(data => data.Count) + 1;
+                chartnumaxis.Maximum = maxCount;
+                // Bind the data to your chart
+                symptomprogresschart.ItemsSource = lastSevenDaysData;
+            }
+           
+
+
+
+            // Set the filtered list as the ItemsSource for the ListView
+            if (userfeedbacklist[0].measurementfeedbacklist != null)
+            {
+
+
+
+                var filteredmeasurements = userfeedbacklist[0].measurementfeedbacklist
+        .OrderByDescending(x => DateTime.Parse(x.datetime))
+    .GroupBy(x => x.label)
+    .Select(g => g.First())  // Select only the first item in each group
+    .ToList();
+
+                foreach (var item in filteredmeasurements)
+                {
+                    var convertdate = DateTime.Parse(item.datetime);
+                    TimeSpan timeDifference = DateTime.Now.Date - convertdate.Date;
+
+                    if (timeDifference.TotalDays < 1)
+                    {
+                        item.datetimestring = "Today";
+                    }
+                    else if (timeDifference.TotalDays == 1)
+                    {
+                        item.datetimestring = "Yesterday";
                     }
                     else
                     {
-
-                        item.symptomlist = userfeedbacklist[0].measurementfeedbacklist
-                            .Where(x => x.label == item.label)
-                            .ToList();
+                        item.datetimestring = $"{(int)timeDifference.TotalDays} days ago";
                     }
+
+                    // Ensure userfeedbacklist has data
+                    if (userfeedbacklist != null && userfeedbacklist.Count > 0)
+                    {
+                        if (item.label == "Blood Pressure")
+                        {
+
+                        }
+                        else
+                        {
+
+                            item.symptomlist = userfeedbacklist[0].measurementfeedbacklist
+                                .Where(x => x.label == item.label)
+                                .ToList();
+                        }
+                    }
+
+                    item.labelandunit = item.value + " " + item.unit;
                 }
 
-                 item.labelandunit = item.value + " " + item.unit;
-            }
 
-            // Set the filtered list as the ItemsSource for the ListView
-            symptomdetaillist.ItemsSource = filteredSymptoms;
-
-
-            
-
-            if (filteredmeasurements.Count > 1)
-            {
-                var takefivemeasurements = filteredmeasurements.Take(1).ToList();
-
-                measurementdetaillist.ItemsSource = takefivemeasurements;
-                measurementdetaillist.HeightRequest = 152 * takefivemeasurements.Count;
-
-                if(filteredmeasurements.Count > 5)
+                if (filteredmeasurements.Count > 1)
                 {
+                    var takefivemeasurements = filteredmeasurements.Take(1).ToList();
 
-                    // Take the next four items for measurementnochartdetaillist
-                    var nextFourMeasurements = filteredmeasurements.Skip(1).Take(4).ToList();
+                    measurementdetaillist.ItemsSource = takefivemeasurements;
+                    measurementdetaillist.HeightRequest = 152 * takefivemeasurements.Count;
 
-                    measurementnochartdetaillist.ItemsSource = nextFourMeasurements;
-                    measurementnochartdetaillist.HeightRequest = 52 * nextFourMeasurements.Count;
+                    if (filteredmeasurements.Count > 5)
+                    {
+
+                        // Take the next four items for measurementnochartdetaillist
+                        var nextFourMeasurements = filteredmeasurements.Skip(1).Take(4).ToList();
+
+                        measurementnochartdetaillist.ItemsSource = nextFourMeasurements;
+                        measurementnochartdetaillist.HeightRequest = 52 * nextFourMeasurements.Count;
+                    }
+                    else
+                    {
+                        var nextFourMeasurements = filteredmeasurements.Skip(1).ToList();
+
+                        measurementnochartdetaillist.ItemsSource = nextFourMeasurements;
+                        measurementnochartdetaillist.HeightRequest = 52 * nextFourMeasurements.Count;
+
+                    }
+
+
+
+
+
                 }
                 else
                 {
-                    var nextFourMeasurements = filteredmeasurements.Skip(1).ToList();
-
-                    measurementnochartdetaillist.ItemsSource = nextFourMeasurements;
-                    measurementnochartdetaillist.HeightRequest = 52 * nextFourMeasurements.Count;
-
+                    measurementdetaillist.ItemsSource = filteredmeasurements;
+                    measurementdetaillist.HeightRequest = 152 * filteredmeasurements.Count;
                 }
 
-          
-
-
+                measlbl.IsVisible = true;
+                measurementdetaillist.IsVisible = true;
+                measurementnochartdetaillist.IsVisible = true;
+                nomeasurementdataframe.IsVisible = false;
 
             }
             else
             {
-                measurementdetaillist.ItemsSource = filteredmeasurements;
-                measurementdetaillist.HeightRequest = 152 * filteredmeasurements.Count;
-            }
+                measlbl.IsVisible = false;
+                measurementdetaillist.IsVisible = false;
+                measurementnochartdetaillist.IsVisible = false;
+                nomeasurementdataframe.IsVisible = true;
 
-            // Initialize a list to store data points for the last seven days
-            var lastSevenDaysData = new List<feedbackdata>();
-
-            // Loop through each of the past 7 days
-            for (int i = 6; i >= 0; i--)
-            {
-                var targetDate = DateTime.Now.Date.AddDays(-i);
-
-                // Count the items for the target date
-                int countForDay = filteredSymptoms
-                    .Count(item => DateTime.Parse(item.datetime).Date == targetDate);
-
-                // Add data point to the list
-                lastSevenDaysData.Add(new feedbackdata
+                var newItem = new
                 {
-                    datetime = targetDate.Date.ToString("dd MMM"),
-                    Count = countForDay
-                });
+                    ContactImage = "measurementhome.png",
+                    Title = "Start recording your measurements",
+                    BackgroundColor = "#e5f0fb" // Example color
+                };
+                foryouuserlist.Add(newItem);
+
+
             }
 
-
-            //find max and add one
-            int maxCount = lastSevenDaysData.Max(data => data.Count) + 1;
-            chartnumaxis.Maximum = maxCount;
-            // Bind the data to your chart
-            symptomprogresschart.ItemsSource = lastSevenDaysData;
-
-
-            var mooddata = new List<feedbackdata>();
-
-            foreach (var item in filteredmoods)
+            if (userfeedbacklist[0].moodfeedbacklist != null)
             {
-                var countForDay = userfeedbacklist[0].moodfeedbacklist.Where(x => x.label == item.label).Count();
 
-                mooddata.Add(new feedbackdata
+                var filteredmoods = userfeedbacklist[0].moodfeedbacklist
+              .OrderByDescending(x => DateTime.Parse(x.datetime))
+    .GroupBy(x => x.label)
+    .Select(g => g.First())  // Select only the first item in each group
+    .ToList();
+
+
+                var mooddata = new List<feedbackdata>();
+
+                foreach (var item in filteredmoods)
                 {
-                    label = item.label,
-                    Count = countForDay
-                });
+                    var countForDay = userfeedbacklist[0].moodfeedbacklist.Where(x => x.label == item.label).Count();
+
+                    mooddata.Add(new feedbackdata
+                    {
+                        label = item.label,
+                        Count = countForDay
+                    });
+
+                }
+
+
+                moodchart.ItemsSource = mooddata;
+
+                moodlbl.IsVisible = true;
+                moodframe.IsVisible = true;
+                nomooddataframe.IsVisible = false;
+
+                var targetDate = DateTime.Today;
+
+                // Filter moods for the specified date
+                var moodsForDay = userfeedbacklist[0].moodfeedbacklist
+                    .Where(x => DateTime.Parse(x.datetime).Date == targetDate)
+                    .GroupBy(x => x.label)
+                    .Select(g => new
+                    {
+                        MoodLabel = g.Key,
+                        Count = g.Count()
+                    })
+                    .OrderByDescending(x => x.Count)
+                    .FirstOrDefault(); // Get the most common mood for the day
+
+                if (moodsForDay != null)
+                {
+                    // Display the most common mood
+                    var mostCommonMood = moodsForDay.MoodLabel;
+
+                    var newItem2 = new
+                    {
+                        ContactImage = "moodhome.png",
+                        Title = "You're mostly feeling " + mostCommonMood + " today",
+                        BackgroundColor = "#FFF8DC" // Example color
+                    };
+
+                    foryouuserlist.Add(newItem2);
+
+                }
+                else
+                {
+                    var newItem1 = new
+                    {
+                        ContactImage = "moodhome.png",
+                        Title = "No mood recorded today",
+                        BackgroundColor = "#FFF8DC" // Example color
+                    };
+
+                    foryouuserlist.Add(newItem1);
+
+                }
+
+                var newItem = new
+                {
+                    ContactImage = "moodhome.png",
+                    Title = "Start updating your mood",
+                    BackgroundColor = "#FFF8DC" // Example color
+                };
+
+                if (foryouuserlist.Contains(newItem))
+                {
+
+                    foryouuserlist.Remove(newItem);
+                }
 
             }
+            else
+            {
+                moodlbl.IsVisible = false;
+                moodframe.IsVisible = false;
+                nomooddataframe.IsVisible = true;
+
+                var newItem = new
+                {
+                    ContactImage = "moodhome.png",
+                    Title = "Start updating your mood",
+                    BackgroundColor = "#FFF8DC" // Example color
+                };
+                foryouuserlist.Add(newItem);
 
 
-            moodchart.ItemsSource = mooddata;
+            }
 
         }
         catch(Exception ex)
@@ -586,8 +730,41 @@ public partial class MainDashboard : ContentPage
             Dictionary<string, int> symptomFrequencyLast3Days = new Dictionary<string, int>();
             List<string> symptomsNotRecordedIn7Days = new List<string>();
 
-          
 
+            if (userfeedbacklist[0].symptomfeedbacklist == null)
+            {
+
+                var newItem = new
+                {
+                    ContactImage = "symptomshome.png",
+                    Title = "Start recording your symptoms today",
+                    BackgroundColor = "#fff7ea" // Example color
+                };
+                foryouuserlist.Add(newItem);
+
+
+                recentsymlbl.IsVisible = false;
+                symptomdetaillist.IsVisible = false;
+                symdataframe.IsVisible = false;
+                nosymdataframe.IsVisible = true;
+                return;
+            }
+
+            recentsymlbl.IsVisible = true;
+            symptomdetaillist.IsVisible = true;
+            symdataframe.IsVisible = true;
+            nosymdataframe.IsVisible = false;
+
+            var newItemm = new
+            {
+                ContactImage = "symptomshome.png",
+                Title = "Start recording your symptoms today",
+                BackgroundColor = "#fff7ea" // Example color
+            };
+            if (foryouuserlist.Contains(newItemm))
+            {
+                foryouuserlist.Remove(newItemm);
+            }
 
 
             bool hasRecentUpdates = userfeedbacklist[0].symptomfeedbacklist.Any(e => e.action == "update" &&
@@ -832,6 +1009,26 @@ public partial class MainDashboard : ContentPage
             int medicationsDueToday = 0;
             int recordedMedicationsToday = 0;
 
+            if (AllUserSupplements.Count == 0)
+            {
+                var newItem = new
+                {
+                    ContactImage = "supphome.png",
+                    Title = "Add your first Supplement",
+                    BackgroundColor = "#f9f4e5" // Example color
+                };
+
+                // Add the new item to the list
+                foryouuserlist.Add(newItem);
+
+                nosupdataframe.IsVisible = true;
+
+                return;
+            }
+
+            nosupdataframe.IsVisible = false;
+
+
             foreach (var item in AllUserSupplements)
             {
                 DateTime startDate = DateTime.Parse(item.startdate);
@@ -1033,6 +1230,25 @@ public partial class MainDashboard : ContentPage
 
             int medicationsDueToday = 0;
             int recordedMedicationsToday = 0;
+
+            if(AllUserMedications.Count == 0)
+            {
+                var newItem = new
+                {
+                    ContactImage = "medicinehome.png",
+                    Title = "Add your first Medication",
+                    BackgroundColor = "#e5f9f4" // Example color
+                };
+
+                // Add the new item to the list
+                foryouuserlist.Add(newItem);
+
+                nomeddataframe.IsVisible = true;
+
+                return;
+            }
+
+            nomeddataframe.IsVisible = false;
 
             foreach (var item in AllUserMedications)
             {
@@ -1261,8 +1477,7 @@ public partial class MainDashboard : ContentPage
     new { Title = "Account Settings" },
     new { Title = "Developer Feedback & Support" },
     new { Title = "Communication Preferences" },
-    new { Title = "Terms Of Use" },
-    new { Title = "About" }
+    new { Title = "Terms Of Use" }
 };
 
             // Set the height of the account list based on the item count
@@ -1288,26 +1503,30 @@ public partial class MainDashboard : ContentPage
         }
     }
 
-    async private void GetUserDetails()
+    async private void Checkifuserhasmigrated()
     {
         try
         {
-            UserDetails = await database.GetuserDetails();
+            // UserDetails = await database.GetuserDetails();
+
+            //string um = Preferences.Default.Get("usermigrated", "false");
+
+            //if (um == "True" || string.IsNullOrEmpty(um) || um == "False")
+            //{
+                
+            //        //go to migration assitant
+
+            //        await Navigation.PushAsync(new MigrationAssistant(), false);
+            //        return;
+
+
+                
+                
+            //}
          
-            AllUserDetails.firstname = UserDetails[0].firstname;
-            Helpers.Settings.FirstName = UserDetails[0].firstname; 
-
-            AllUserDetails.surname = UserDetails[0].surname;
-            Helpers.Settings.Surname = UserDetails[0].surname; 
-
-            AllUserDetails.email = UserDetails[0].email;
-            Helpers.Settings.Email = UserDetails[0].email;
-
-            AllUserDetails.dateofbirth = UserDetails[0].dateofbirth;
-            Helpers.Settings.Age = UserDetails[0].dateofbirth;
-
+           
             // Assuming UserDetails[0].dateofbirth is a string in a format like "yyyy-MM-dd"
-            string dateOfBirthString = UserDetails[0].dateofbirth;
+            string dateOfBirthString = Helpers.Settings.Age;
 
             // Convert the string to DateTime
             DateTime dateOfBirth = DateTime.Parse(dateOfBirthString);
@@ -1324,41 +1543,17 @@ public partial class MainDashboard : ContentPage
             // Display the age in the label
             agelbl.Text = age.ToString();
 
-            AllUserDetails.gender = UserDetails[0].gender;
-            Helpers.Settings.Gender = UserDetails[0].gender;
+            //AllUserDetails.gender = UserDetails[0].gender;
+           //Helpers.Settings.Gender = UserDetails[0].gender;
 
-            genderlbl.Text = UserDetails[0].gender;
+            genderlbl.Text = Helpers.Settings.Gender;
 
-            AllUserDetails.ethnicity = UserDetails[0].ethnicity;
-            Helpers.Settings.Ethnicity = UserDetails[0].ethnicity;
+         //   AllUserDetails.ethnicity = UserDetails[0].ethnicity;
+          //  Helpers.Settings.Ethnicity = UserDetails[0].ethnicity;
 
-            ethlbl.Text = UserDetails[0].ethnicity;
+            ethlbl.Text = Helpers.Settings.Ethnicity;
 
-            AllUserDetails.signupcodeid = UserDetails[0].signupcodeid;
-            Helpers.Settings.SignUp = UserDetails[0].signupcodeid;
-
-            AllUserDetails.referral = UserDetails[0].referral;
-            //No Referral Helper.settings. 
-
-            AllUserDetails.biometrics = UserDetails[0].biometrics;
-            Helpers.Settings.biometrics = UserDetails[0].biometrics;
-
-            //if (UserDetails[0].userpin.Contains(","))
-            //{
-            //    var split = UserDetails[0].userpin.Split(','); 
-            //    AllUserDetails.userpin = split[1];
-            //    Helpers.Settings.PinCode = split[1];
-            //}
-            //else
-            //{
-                AllUserDetails.userpin = UserDetails[0].userpin;
-                Helpers.Settings.PinCode = UserDetails[0].userpin;
-            //}
-
-
-            AllUserDetails.password = UserDetails[0].password; 
-            Helpers.Settings.Password = UserDetails[0].password;
-            Helpers.Settings.UserPasswordHash = UserDetails[0].password;
+          
 
         }
         catch (Exception ex)
@@ -1455,7 +1650,7 @@ public partial class MainDashboard : ContentPage
             }
             else if (item != null && item.Title == "Mood")
             {
-                await Navigation.PushAsync(new AllMood(), false);
+                await Navigation.PushAsync(new AllMood(userfeedbacklist[0]), false);
             }
             else if (item != null && item.Title == "Appointments")
             {
@@ -1559,6 +1754,182 @@ public partial class MainDashboard : ContentPage
             await Navigation.PushAsync(new AllQuestionnaires(), false);
         }
         catch (Exception Ex)
+        {
+
+        }
+    }
+
+    private async  void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        //profile section tapped 
+
+        try
+        {
+            await Navigation.PushAsync(new ProfileSection(), false);
+
+        }
+        catch(Exception ex)
+        {
+
+        }
+
+
+    }
+
+    private async void catergorieslist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
+    {
+        try
+        {
+
+            var item = e.DataItem as dynamic;
+
+            if (item != null && item.Title == "Medications")
+            {
+                await Navigation.PushAsync(new AllMedications(), false);
+            }
+
+            else if (item != null && item.Title == "Symptoms")
+            {
+                await Navigation.PushAsync(new AllSymptoms(userfeedbacklist[0]), false);
+            }
+            else if (item != null && item.Title == "Supplements")
+            {
+                await Navigation.PushAsync(new AllSupplements(), false);
+            }
+            else if (item != null && item.Title == "Measurements")
+            {
+                await Navigation.PushAsync(new MeasurementsPage(), false);
+            }
+            else if (item != null && item.Title == "Diagnosis")
+            {
+                await Navigation.PushAsync(new AllDiagnosis(), false);
+            }
+            else if (item != null && item.Title == "Mood")
+            {
+                await Navigation.PushAsync(new AllMood(userfeedbacklist[0]), false);
+            }
+            else if (item != null && item.Title == "Appointments")
+            {
+                await Navigation.PushAsync(new Appointments(), false);
+            }
+            else if (item != null && item.Title == "HCPs")
+            {
+                await Navigation.PushAsync(new HCPs(), false);
+            }
+            else if (item != null && item.Title == "Questionnaires")
+            {
+                await Navigation.PushAsync(new AllQuestionnaires(), false);
+            }
+            else if (item != null && item.Title == "Allergens")
+            {
+                await Navigation.PushAsync(new AllAllergies(), false);
+            }
+            else if (item != null && item.Title == "Help Videos")
+            {
+                await Navigation.PushAsync(new AllVideos(), false);
+            }
+            else if (item != null && item.Title == "Profile")
+            {
+                await Navigation.PushAsync(new ProfileSection(), false);
+            }
+
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    private async void Button_Clicked_1(object sender, EventArgs e)
+    {
+        try
+        {
+            //no symptom data button click
+            await Navigation.PushAsync(new AllSymptoms(userfeedbacklist[0]), false);
+
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
+    private async void Button_Clicked_2(object sender, EventArgs e)
+    {
+        try
+        {
+            //no symptom data button click
+            await Navigation.PushAsync(new AllMood(userfeedbacklist[0]), false);
+
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    private async void accountlist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
+    {
+        try
+        {
+
+            var item = e.DataItem as string;
+
+            if(item == "Account Settings")
+            {
+                await Navigation.PushAsync(new ProfileSection(), false);
+            }
+            else if(item == "Developer Feedback & Support")
+            {
+                if (Email.Default.IsComposeSupported)
+                {
+
+                    string subject = "";
+                    string body = "Userid: " + Helpers.Settings.UserKey;
+                    string[] recipients = new[] { "support@peoplewith.com" };
+
+                    var message = new EmailMessage
+                    {
+                        Subject = subject,
+                        Body = body,
+                        BodyFormat = EmailBodyFormat.PlainText,
+                        To = new List<string>(recipients)
+                    };
+
+                    await Email.Default.ComposeAsync(message);
+                }
+            }
+            else if(item == "Terms Of Use")
+            {
+
+            }
+
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
+    private async void Button_Clicked_3(object sender, EventArgs e)
+    {
+        try
+        {
+            await Navigation.PushAsync(new AllSupplements(), false);
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
+    private async void TapGestureRecognizer_Tapped_1(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            await Navigation.PushAsync(new SearchPage(), false);
+        }
+        catch(Exception ex)
         {
 
         }

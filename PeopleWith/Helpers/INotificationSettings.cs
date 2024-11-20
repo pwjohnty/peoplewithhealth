@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace PeopleWith
 {
-    public interface INotificationService
+    public interface INotificationSettings
     {
-        Task RequestNotificationPermissionAsync();
-
-        Task<bool> CheckRequestNotificationPermissionAsync();
+        Task OpenNotificationSettingsAsync();
     }
 }
