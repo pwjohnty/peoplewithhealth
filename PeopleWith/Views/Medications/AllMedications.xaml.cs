@@ -159,6 +159,7 @@ public partial class AllMedications : ContentPage
                 datastack.IsVisible = true;
                 AllUserMedsList.IsVisible = true; 
                 AllUserMedsList.ItemsSource = AllUserMedications;
+                
 
                 await MopupService.Instance.PopAllAsync(false);
 

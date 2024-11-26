@@ -28,6 +28,7 @@ public partial class UpdateSingleSymptom : ContentPage
     string feedbackid;
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
+    string triggorinterstring;
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
     userfeedback userfeedbacklistpassed = new userfeedback();
@@ -72,6 +73,7 @@ public partial class UpdateSingleSymptom : ContentPage
             {
                 // SymptomTitle.Text = item.symptomtitle;
             }
+
             if (EditAdd == "Add")
             {
                 foreach (var item in SymptomPassed)
@@ -112,8 +114,11 @@ public partial class UpdateSingleSymptom : ContentPage
                                     var hours = Duration[0];
                                     var Seconds = Duration[2];
                                     string GetDuration = hours + ":" + Seconds + ":00";
-                                    TimeSpan DurationPick = TimeSpan.Parse(GetDuration);
-                                    DurationPicker.SelectedTime = DurationPick;                              
+
+                                hoursentry.Text = hours;
+                                minsentry.Text = Seconds;
+                                   // TimeSpan DurationPick = TimeSpan.Parse(GetDuration);
+                                   // DurationPicker.SelectedTime = DurationPick;                              
                             }
                             if (string.IsNullOrEmpty(x.notes) || x.notes == null)
                             {
@@ -266,28 +271,28 @@ public partial class UpdateSingleSymptom : ContentPage
 
                                 TriggersStack.IsVisible = true;
                                 //Add Chips
-                                string[] itemsArray = x.triggers.Split(',');
-                                foreach (string A in itemsArray)
-                                {
-                                    Triggerss.Add(A);
-                                }
-                                foreach (var items in Triggerss)
-                                {
-                                    foreach (var p in Triggers)
-                                    {
-                                        if (p.title == items)
-                                        {
-                                            TriggerChips.Add(p);
-                                            TriggersAdded.Add(p);
-                                        }
-                                    }
-                                }
-                                foreach (var q in TriggerChips)
-                                {
-                                    Triggers.Remove(q);
-                                }
-                                TriggChips.ItemsSource = TriggerChips;
-                                TriggChips.DisplayMemberPath = "title";
+                                //string[] itemsArray = x.triggers.Split(',');
+                                //foreach (string A in itemsArray)
+                                //{
+                                //    Triggerss.Add(A);
+                                //}
+                                //foreach (var items in Triggerss)
+                                //{
+                                //    foreach (var p in Triggers)
+                                //    {
+                                //        if (p.title == items)
+                                //        {
+                                //            TriggerChips.Add(p);
+                                //            TriggersAdded.Add(p);
+                                //        }
+                                //    }
+                                //}
+                                //foreach (var q in TriggerChips)
+                                //{
+                                //    Triggers.Remove(q);
+                                //}
+                                //TriggChips.ItemsSource = TriggerChips;
+                                //TriggChips.DisplayMemberPath = "title";
                             }
                             if (string.IsNullOrEmpty(x.interventions) || x.interventions == null)
                             {
@@ -297,28 +302,28 @@ public partial class UpdateSingleSymptom : ContentPage
                             {
                                 InterventionsStack.IsVisible = true;
                                 //Add Chips
-                                string[] itemsArray = x.interventions.Split(',');
-                                foreach (string A in itemsArray)
-                                {
-                                    Intervention.Add(A);
-                                }
-                                foreach (var items in Intervention)
-                                {
-                                    foreach (var p in Interventions)
-                                    {
-                                        if (p.title == items)
-                                        {
-                                            InterventionChips.Add(p);
-                                            InterventionsAdded.Add(p);
-                                        }
-                                    }
-                                }
-                                foreach (var q in InterventionChips)
-                                {
-                                    Interventions.Remove(q);
-                                }
-                                IntervChips.ItemsSource = InterventionChips;
-                                IntervChips.DisplayMemberPath = "title";
+                                //string[] itemsArray = x.interventions.Split(',');
+                                //foreach (string A in itemsArray)
+                                //{
+                                //    Intervention.Add(A);
+                                //}
+                                //foreach (var items in Intervention)
+                                //{
+                                //    foreach (var p in Interventions)
+                                //    {
+                                //        if (p.title == items)
+                                //        {
+                                //            InterventionChips.Add(p);
+                                //            InterventionsAdded.Add(p);
+                                //        }
+                                //    }
+                                //}
+                                //foreach (var q in InterventionChips)
+                                //{
+                                //    Interventions.Remove(q);
+                                //}
+                                //IntervChips.ItemsSource = InterventionChips;
+                                //IntervChips.DisplayMemberPath = "title";
                             }
                         }
                     }
@@ -477,6 +482,8 @@ public partial class UpdateSingleSymptom : ContentPage
             }
             SliderValue = value.ToString();
             scorelbl.Text = value.ToString();
+
+            updateResultCount();
         }
         catch(Exception Ex)
         {
@@ -539,46 +546,79 @@ public partial class UpdateSingleSymptom : ContentPage
                 items.notes = NotesEntry;
                 if (triggORInter == "Trigger")
                 {
-                    Triggerss.Clear();
-                    foreach (var itemx in TriggerChips)
-                    {
-                        var itemtoadd = itemx.title.ToString();
-                        Triggerss.Add(itemtoadd);
-                    }
-                    if (Triggerss.Count == 0)
-                    {
-                        items.triggers = null;
-                    }
-                    else
-                    {
-                        List<string> NoDuplicates = Triggerss.Distinct().ToList();
-                        string trig = string.Join(",", NoDuplicates);
-                        items.triggers = trig;
-                    }
+                    items.triggers = triggorinterstring;
+                    //Triggerss.Clear();
+                    //foreach (var itemx in TriggerChips)
+                    //{
+                    //    var itemtoadd = itemx.title.ToString();
+                    //    Triggerss.Add(itemtoadd);
+                    //}
+                    //if (Triggerss.Count == 0)
+                    //{
+                    //    items.triggers = null;
+                    //}
+                    //else
+                    //{
+                    //    List<string> NoDuplicates = Triggerss.Distinct().ToList();
+                    //    string trig = string.Join(",", NoDuplicates);
+                    //    items.triggers = trig;
+                    //}
                 }
                 else if (triggORInter == "Intervention")
                 {
-                    Intervention.Clear();
-                    foreach (var item in InterventionChips)
-                    {
-                        var itemtoadd = item.title.ToString();
-                        Intervention.Add(itemtoadd);
-                    }
-                    if (Intervention.Count == 0)
-                    {
-                        items.interventions = null;
-                    }
-                    else
-                    {
-                        List<string> NoDuplicates = Intervention.Distinct().ToList();
-                        string Inter = string.Join(",", NoDuplicates);
-                        items.interventions = Inter;
-                    }
+                    items.interventions = triggorinterstring;
+                    //Intervention.Clear();
+                    //foreach (var item in InterventionChips)
+                    //{
+                    //    var itemtoadd = item.title.ToString();
+                    //    Intervention.Add(itemtoadd);
+                    //}
+                    //if (Intervention.Count == 0)
+                    //{
+                    //    items.interventions = null;
+                    //}
+                    //else
+                    //{
+                    //    List<string> NoDuplicates = Intervention.Distinct().ToList();
+                    //    string Inter = string.Join(",", NoDuplicates);
+                    //    items.interventions = Inter;
+                    //}
                 }
 
 
+                if(string.IsNullOrEmpty(hoursentry.Text) && string.IsNullOrEmpty(minsentry.Text))
+                {
+                    items.duration = null;
+                }
+                else
+                {
+                    var hours = "";
+                    var mins = "";
 
-                items.duration = Duration;
+                    if(string.IsNullOrEmpty(hoursentry.Text))
+                    {
+                        hours = "00";
+                    }
+                    else
+                    {
+                        hours = hoursentry.Text;
+                    }
+
+                    if (string.IsNullOrEmpty(minsentry.Text))
+                    {
+                        mins = "00";
+                    }
+                    else
+                    {
+                        mins = minsentry.Text;
+                    }
+
+                    var timestring = hours + " Hours " + mins + " Minutes";
+                    items.duration = timestring;
+                }
+
+
+               // items.duration = Duration;
                 if (EditAdd == "Add")
                 {
                     foreach (var item in PassedSymptom)
@@ -682,19 +722,20 @@ public partial class UpdateSingleSymptom : ContentPage
         try
         {
             var title = (e.DataItem as interventiontrigger).title;
-            foreach (var item in Interventions)
-            {
-                if (title == item.title)
-                {
-                    InterventionChips.Add(item);
-                    InterventionsAdded.Add(item);
-                }
-            }
-            var matchingItem = InterventionChips.FirstOrDefault(item => item.title == title);
-            Interventions.Remove(matchingItem);
-            IntervChips.ItemsSource = InterventionChips;
-            IntervChips.DisplayMemberPath = "title";
-            updateResultCount();
+            //foreach (var item in Interventions)
+            //{
+            //    if (title == item.title)
+            //    {
+            //        InterventionChips.Add(item);
+            //        InterventionsAdded.Add(item);
+            //    }
+            //}
+            //var matchingItem = InterventionChips.FirstOrDefault(item => item.title == title);
+            //Interventions.Remove(matchingItem);
+            //IntervChips.ItemsSource = InterventionChips;
+            //IntervChips.DisplayMemberPath = "title";
+            //updateResultCount();
+            triggorinterstring = title;
         }
         catch(Exception Ex)
         {
@@ -755,19 +796,21 @@ public partial class UpdateSingleSymptom : ContentPage
         try
         {
             var title = (e.DataItem as interventiontrigger).title;
-            foreach (var item in Triggers)
-            {
-                if (title == item.title)
-                {
-                    TriggerChips.Add(item);
-                    TriggersAdded.Add(item);
-                }
-            }
-            var matchingItem = TriggerChips.FirstOrDefault(item => item.title == title);
-            Triggers.Remove(matchingItem);
-            TriggChips.ItemsSource = TriggerChips;
-            TriggChips.DisplayMemberPath = "title";
-            updateResultCount();
+            //foreach (var item in Triggers)
+            //{
+            //    if (title == item.title)
+            //    {
+            //        TriggerChips.Add(item);
+            //        TriggersAdded.Add(item);
+            //    }
+            //}
+            //var matchingItem = TriggerChips.FirstOrDefault(item => item.title == title);
+            //Triggers.Remove(matchingItem);
+            //TriggChips.ItemsSource = TriggerChips;
+            //TriggChips.DisplayMemberPath = "title";
+            // updateResultCount();
+            triggorinterstring = title;
+
         }
         catch(Exception Ex)
         {
@@ -805,6 +848,217 @@ public partial class UpdateSingleSymptom : ContentPage
         catch (Exception Ex)
         {
             NotasyncMethod(Ex);
+        }
+    }
+
+    private void Entry_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        try
+        {
+            //hours entry text changed
+            var entry = sender as Entry;
+            if (entry == null) return;
+
+            // Get the new text value
+            var newText = e.NewTextValue;
+
+            // Ensure the text is numeric and limit to 2 digits
+            if (!string.IsNullOrEmpty(newText))
+            {
+                // Remove non-numeric characters
+                newText = new string(newText.Where(char.IsDigit).ToArray());
+
+                // Limit to 2 characters
+                if (newText.Length > 2)
+                {
+                    newText = newText.Substring(0, 2);
+                }
+            }
+
+            // Set the corrected text back to the entry
+            if (entry.Text != newText)
+            {
+                entry.Text = newText;
+            }
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
+    private void Entry_TextChanged_1(object sender, TextChangedEventArgs e)
+    {
+        try
+        {
+            var entry = sender as Entry;
+            if (entry == null) return;
+
+            // Get the new text value
+            var newText = e.NewTextValue;
+
+            // Ensure the text is numeric and limit to 2 digits
+            if (!string.IsNullOrEmpty(newText))
+            {
+                // Remove non-numeric characters
+                newText = new string(newText.Where(char.IsDigit).ToArray());
+
+                // Limit to 2 characters
+                if (newText.Length > 2)
+                {
+                    newText = newText.Substring(0, 2);
+                }
+
+                // Validate the value is within the range (0-59)
+                if (int.TryParse(newText, out int minutes))
+                {
+                    if (minutes > 59)
+                    {
+                        newText = "00"; // Set to max value
+                    }
+                }
+            }
+
+            // Set the corrected text back to the entry
+            if (entry.Text != newText)
+            {
+                entry.Text = newText;
+            }
+        }
+        catch(Exception ex)
+        {
+         
+        }
+    }
+
+    private void Button_Clicked_1(object sender, EventArgs e)
+    {
+        try
+        {
+
+            int hours = int.TryParse(hoursentry.Text, out int h) ? h : 0;
+            int minutes = int.TryParse(minsentry.Text, out int m) ? m : 0;
+
+            // Add 15 minutes
+            minutes += 15;
+
+            // Handle overflow into hours
+            if (minutes >= 60)
+            {
+                minutes -= 60;
+                hours += 1;
+            }
+
+            // Handle hour overflow (optional, if you want to wrap hours to a 24-hour format)
+            if (hours >= 24)
+            {
+                hours = 0;
+            }
+
+            // Update the Entries with the new values
+            hoursentry.Text = hours.ToString("D2");   // Ensure 2-digit format
+            minsentry.Text = minutes.ToString("D2");
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
+    private void Button_Clicked_2(object sender, EventArgs e)
+    {
+        try
+        {
+
+            int hours = int.TryParse(hoursentry.Text, out int h) ? h : 0;
+            int minutes = int.TryParse(minsentry.Text, out int m) ? m : 0;
+
+            // Add 15 minutes
+            minutes += 30;
+
+            // Handle overflow into hours
+            if (minutes >= 60)
+            {
+                minutes -= 60;
+                hours += 1;
+            }
+
+            // Handle hour overflow (optional, if you want to wrap hours to a 24-hour format)
+            if (hours >= 24)
+            {
+                hours = 0;
+            }
+
+            // Update the Entries with the new values
+            hoursentry.Text = hours.ToString("D2");   // Ensure 2-digit format
+            minsentry.Text = minutes.ToString("D2");
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    private void Button_Clicked_3(object sender, EventArgs e)
+    {
+        try
+        {
+
+            int hours = int.TryParse(hoursentry.Text, out int h) ? h : 0;
+            int minutes = int.TryParse(minsentry.Text, out int m) ? m : 0;
+
+            // Add 60 minutes (equivalent to adding 1 hour)
+            hours += 1;
+
+            // Handle hour overflow (optional, wrap to a 24-hour format)
+            if (hours >= 24)
+            {
+                hours = 0; // Reset to 0 if over 23 (for 24-hour format)
+            }
+
+            // Update the Entries with the new values
+            hoursentry.Text = hours.ToString("D2");   // Ensure 2-digit format
+            minsentry.Text = minutes.ToString("D2");
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    private void Button_Clicked_4(object sender, EventArgs e)
+    {
+        try
+        {
+
+            // Parse the current hour and minute values
+            int hours = int.TryParse(hoursentry.Text, out int h) ? h : 0;
+            int minutes = int.TryParse(minsentry.Text, out int m) ? m : 0;
+
+            // Add 1 hour and 30 minutes
+            minutes += 30;
+            hours += 1;
+
+            // Handle minute overflow
+            if (minutes >= 60)
+            {
+                minutes -= 60; // Adjust minutes
+                hours += 1;    // Increment hours for overflow
+            }
+
+            // Handle hour overflow (optional, wrap to a 24-hour format)
+            if (hours >= 24)
+            {
+                hours = 0; // Reset to 0 if over 23 (for 24-hour format)
+            }
+
+            // Update the Entries with the new values
+            hoursentry.Text = hours.ToString("D2");   // Ensure 2-digit format
+            minsentry.Text = minutes.ToString("D2");
+        }
+        catch (Exception ex)
+        {
+
         }
     }
 }

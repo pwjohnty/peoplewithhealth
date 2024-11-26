@@ -1,13 +1,18 @@
-﻿namespace PeopleWith
+﻿//using AndroidX.Activity;
+using System.Collections.ObjectModel;
+
+namespace PeopleWith
 {
     public partial class MainPage : ContentPage
     {
-        int thirtytwo; 
+        int thirtytwo;
+        ObservableCollection<user> updateuser = new ObservableCollection<user>();
+
         public MainPage()
         {
             InitializeComponent();
 
-
+           // checkuser();
             // Checkifappisupdated();
             checkifuserisloggedin();
 
@@ -29,6 +34,8 @@
 
                 if (!string.IsNullOrEmpty(userid))
                 {
+                    //check if user has migrated
+                   // checkuser();
 
                     if(um == "false" || string.IsNullOrEmpty(um) || um == "False")
                     {
@@ -78,6 +85,19 @@
                 }
 
 
+            }
+            catch(Exception ex)
+            {
+
+            }
+        }
+
+        async void checkuser()
+        {
+            try
+            {
+
+               // updateuser = await database.GetuserDetails();
             }
             catch(Exception ex)
             {

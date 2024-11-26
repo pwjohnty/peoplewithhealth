@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:pinview="clr-namespace:PINView.Maui;assembly=PINView.Maui"
              xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
-             xmlns:local="clr-namespace:PeopleWith"
+             xmlns:local="clr-namespace:PeopleWith" Shell.NavBarHasShadow="False" Shell.NavBarIsVisible="False"
              x:Class="PeopleWith.BiometricsLogin" NavigationPage.IconColor="#031926" BackgroundColor="#ffffff">
     <ContentPage.BindingContext>
         <local:keypaditem />

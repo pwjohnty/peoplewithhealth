@@ -28,6 +28,7 @@ public partial class RegisterFinalPage : ContentPage
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
+    userfeedback userfeedbacklistpassed = new userfeedback();
 
     async public void NotasyncMethod(Exception Ex)
     {
@@ -528,6 +529,13 @@ public partial class RegisterFinalPage : ContentPage
 
                     if (symptomstoadd != null || symptomstoadd.Count != 0)
                     {
+                        if (userfeedbacklistpassed.symptomfeedbacklist == null)
+                        {
+                            userfeedbacklistpassed.symptomfeedbacklist = new ObservableCollection<feedbackdata>();
+                        }
+
+                        userfeedbacklistpassed.userid = newuser.userid;
+
                         //add the symtpoms
                         foreach (var item in symptomstoadd)
                         {
@@ -545,7 +553,23 @@ public partial class RegisterFinalPage : ContentPage
                                 string errorcontent = await response.Content.ReadAsStringAsync();
                                 var s = errorcontent;
                             }
+
+
+                            //add to feedback list
+                            var newsym = new feedbackdata();
+                            newsym.value = "50";
+                            newsym.datetime = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+                            newsym.action = "add";
+                            newsym.label = item.symptomtitle;
+
+                            userfeedbacklistpassed.symptomfeedbacklist.Add(newsym);
                         }
+
+                        string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.symptomfeedbacklist);
+                        userfeedbacklistpassed.symptomfeedback = newsymJson;
+
+                        APICalls databaseenew = new APICalls();
+                        await databaseenew.InsertUserFeedback(userfeedbacklistpassed);
 
                     }
 

@@ -19,7 +19,6 @@ public partial class LoginPage : ContentPage
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
-
     async public void NotasyncMethod(Exception Ex)
     {
         try
@@ -304,6 +303,8 @@ public partial class LoginPage : ContentPage
                 Preferences.Set("notifications", users[0].pushnotifications);
                 Preferences.Set("usermigrated", users[0].usermigrated.ToString());
 
+                AddBackTags();
+
                 if (users[0].usermigrated == false)
                 {
                     //add the userfeedback column
@@ -312,6 +313,9 @@ public partial class LoginPage : ContentPage
 
                     APICalls databasee = new APICalls();
                     await databasee.InsertUserFeedback(newuseritem);
+
+                    await Navigation.PushAsync(new MigrationAssistant(), false);
+                    return;
                 }
 
 
@@ -322,7 +326,7 @@ public partial class LoginPage : ContentPage
                 // Preferences.Set("validationcode", users[0].validationcode);
 
                 //Add Push Notification Tags
-                AddBackTags();
+               
                 Application.Current.MainPage = new NavigationPage(new MainDashboard());
 
             }

@@ -31,30 +31,30 @@ public partial class ShowAllSymptomData : ContentPage
         try
         {
             //Clear the Toolbar item on Back Pressed and reset to Original
-            deletelbl.IsVisible = false;
-            // Set DeleteCheck and DeleteSelected to false for all items in SymptomFeedback
-            foreach (var item in SymptomFeedback)
-            {
-                item.DeleteCheck = false;
-                item.DeleteSelected = false;
-            }
-            AllDataLV.ItemsSource = SymptomFeedback;
-            AllDataLV.HeightRequest = SymptomFeedback.Count * 160;
+            //deletelbl.IsVisible = false;
+            //// Set DeleteCheck and DeleteSelected to false for all items in SymptomFeedback
+            //foreach (var item in SymptomFeedback)
+            //{
+            //    item.DeleteCheck = false;
+            //    item.DeleteSelected = false;
+            //}
+            //AllDataLV.ItemsSource = SymptomFeedback;
+            //AllDataLV.HeightRequest = SymptomFeedback.Count * 160;
 
-            this.ToolbarItems.Clear();
+            //this.ToolbarItems.Clear();
 
-            ToolbarItem itemm = new ToolbarItem
-            {
-                Text = "Edit"
+            //ToolbarItem itemm = new ToolbarItem
+            //{
+            //    Text = "Edit"
 
-            };
+            //};
 
-            itemm.Clicked += EditBtn_Clicked;
+            //itemm.Clicked += EditBtn_Clicked;
 
-            // "this" refers to a Page object
-            this.ToolbarItems.Add(itemm);
+            //// "this" refers to a Page object
+            //this.ToolbarItems.Add(itemm);
 
-            EditBtn.IsEnabled = true;
+            //EditBtn.IsEnabled = true;
         }
         catch (Exception Ex)
         {
@@ -93,30 +93,33 @@ public partial class ShowAllSymptomData : ContentPage
                 item.formattedDateTime = format;
                 if (!string.IsNullOrEmpty(item.triggers))
                 {
-                    item.triggerorIntervention = "Trigger: ";
+                    item.triggerorIntervention = "Trigger";
                     item.TriggerBool = true;
                 }
                 else if (!string.IsNullOrEmpty(item.interventions))
                 {
-                    item.triggerorIntervention = "Intervention: ";
+                    item.triggerorIntervention = "Intervention";
                     item.InterventionBool = true;
                 }
                 else
                 {
-                    item.triggerorIntervention = "Trigger/Intervention: ";
+                    item.triggerorIntervention = "Trigger/Intervention";
                     item.OtherBool = true;
                 }
-                if (item.duration == "00 Hours 00 Minutes" || item.duration == null || item.duration == "--")
+                if (item.duration == "00 Hours 00 Minutes" || item.duration == null || item.duration == "--" || string.IsNullOrEmpty(item.duration))
                 {
                     item.duration = "No Duration";
                 }
-                if (item.notes == "--" || item.notes == null)
+                if (item.notes == "--" || item.notes == null || string.IsNullOrEmpty(item.notes))
                 {
                     item.notes = "No Notes";
                 }
             }
-            AllDataLV.ItemsSource = SymptomFeedback;
-            AllDataLV.HeightRequest = SymptomFeedback.Count * 160; 
+
+            var orderlist = SymptomFeedback.OrderByDescending(x => DateTime.Parse(x.timestamp)).ToList();
+
+            AllDataLV.ItemsSource = orderlist;
+            AllDataLV.HeightRequest = SymptomFeedback.Count * 110; 
         }
         catch (Exception Ex)
         {
@@ -135,7 +138,7 @@ public partial class ShowAllSymptomData : ContentPage
                 //Limit No. of Taps 
                 EditBtn.IsEnabled = false;
 
-                deletelbl.IsVisible = true;
+               // deletelbl.IsVisible = true;
                 foreach (var item in SymptomFeedback)
                 {
                     if (item.symptomfeedbackid == SymptomFeedback[0].symptomfeedbackid)
@@ -200,7 +203,7 @@ public partial class ShowAllSymptomData : ContentPage
                 if (DeleteVisible)
                 {
                     //Nothing Selected Return to orignial View 
-                    deletelbl.IsVisible = false;
+                   // deletelbl.IsVisible = false;
                     // Set DeleteCheck and DeleteSelected to false for all items in SymptomFeedback
                     foreach (var item in SymptomFeedback)
                     {
@@ -357,18 +360,22 @@ public partial class ShowAllSymptomData : ContentPage
                 }
                 else
                 {
-                    bool Result = await DisplayAlert("Edit symptom", "Would you like to edit the following Record?", "Accept", "Decline");
-                    if (Result)
-                    {
-                        //Edit
-                        await Navigation.PushAsync(new UpdateSingleSymptom(SymptomPassed, Symptom.symptomfeedbackid, AllSymptomsData));
-                        return;
-                    }
-                    else
-                    {
-                        //Cancel
-                        return;
-                    }
+
+                    await Navigation.PushAsync(new UpdateSingleSymptom(SymptomPassed, Symptom.symptomfeedbackid, AllSymptomsData));
+                    return;
+
+                    //bool Result = await DisplayAlert("Edit symptom", "Would you like to edit the following Record?", "Accept", "Decline");
+                    //if (Result)
+                    //{
+                    //    //Edit
+                    //    await Navigation.PushAsync(new UpdateSingleSymptom(SymptomPassed, Symptom.symptomfeedbackid, AllSymptomsData));
+                    //    return;
+                    //}
+                    //else
+                    //{
+                    //    //Cancel
+                    //    return;
+                    //}
                 }
             }
         }
