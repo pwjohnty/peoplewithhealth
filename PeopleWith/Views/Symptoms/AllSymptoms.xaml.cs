@@ -94,16 +94,16 @@ public partial class AllSymptoms : ContentPage
 
                 var getSymptomsTask = aPICalls.GetUserSymptomAsync();
 
-                var delayTask = Task.Delay(1000);
+                //var delayTask = Task.Delay(500);
 
-                if (await Task.WhenAny(getSymptomsTask, delayTask) == delayTask)
-                {
+                //if (await Task.WhenAny(getSymptomsTask, delayTask) == delayTask)
+                //{
                     await MopupService.Instance.PushAsync(new GettingReady("Loading Symptoms") { });
-                }
+                //}
 
                 AllUserSymptoms = await getSymptomsTask;
 
-                await MopupService.Instance.PopAllAsync(false);
+                
             }
 
 
@@ -217,6 +217,7 @@ public partial class AllSymptoms : ContentPage
                 AllSymptomView.ItemsSource = orderlist;
                 //populatelsitview();
             }
+            await MopupService.Instance.PopAllAsync(false);
 
         }
         catch (Exception Ex)

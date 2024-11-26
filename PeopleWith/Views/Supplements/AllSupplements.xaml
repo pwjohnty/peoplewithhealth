@@ -271,7 +271,7 @@ Padding="0">
                         </DataTemplate>
                     </syncfusion:SfListView.ItemTemplate>
                 </syncfusion:SfListView>
-                <Label Text="No As Requried Supplements added" x:Name="noARmedlbl" IsVisible="False" FontSize="14" TextColor="#031926" FontFamily="HankenGroteskRegular" Margin="0,50,0,0" HorizontalOptions="Center" VerticalOptions="Center" VerticalTextAlignment="Center" />
+                <Label Text="No As Required Supplements added" x:Name="noARmedlbl" IsVisible="False" FontSize="14" TextColor="#031926" FontFamily="HankenGroteskRegular" Margin="0,50,0,0" HorizontalOptions="Center" VerticalOptions="Center" VerticalTextAlignment="Center" />
 
 
 

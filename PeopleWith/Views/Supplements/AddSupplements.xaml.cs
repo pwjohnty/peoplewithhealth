@@ -791,9 +791,13 @@ public partial class AddSupplement : ContentPage
             {
                 FilterResults.Clear();
                 Medicationslistview.IsVisible = false;
+                MedListLoading.IsVisible = false;
+                MedListLoadlbl.IsVisible = false;
             }
             else
             {
+                MedListLoading.IsVisible = true;
+                MedListLoadlbl.IsVisible = true;
                 var countofcharacters = e.NewTextValue.Length;
 
                 if (countofcharacters > 2)
@@ -803,6 +807,9 @@ public partial class AddSupplement : ContentPage
 
                     Medicationslistview.ItemsSource = filteredmeds;
                     Medicationslistview.IsVisible = true;
+
+                    MedListLoading.IsVisible = false;
+                    MedListLoadlbl.IsVisible = false;
                     // Medicationslistview.HeightRequest = filteredmeds.Count * 50;
                 }
 

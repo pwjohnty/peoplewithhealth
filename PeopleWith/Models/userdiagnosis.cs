@@ -23,6 +23,15 @@ namespace PeopleWith
         public string additionalparameters { get; set; }
         public string notes { get; set; }
 
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool PendingDiag { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool ActiveDiag { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string status { get; set; }
+
     }
 
     public class ApiResponseUserDiagnosis

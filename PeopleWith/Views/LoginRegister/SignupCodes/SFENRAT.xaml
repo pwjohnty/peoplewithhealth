@@ -382,22 +382,21 @@ Text="Additional Added Symptoms"
  HorizontalOptions="Start" />
 
                     <chip:SfChipGroup
-	ChipType="Filter"
+	ChipType="Input" 
 	x:Name="additionalsymptomchiplistnrat" IsVisible="False"
     BackgroundColor="Transparent"
-    SelectionChanged="symptomchiplistnrat_SelectionChanged"
     ChipStrokeThickness="1"
-    ShowIcon="False" ChipTextColor="Gray"
+    ShowIcon="False" ChipTextColor="#031926"
     VerticalOptions="Center"
     Margin="0,10,0,10"
-    ChipBackground="Transparent" 
-	SelectedChipBackground="#BFDBF7"
+    ChipBackground="#BFDBF7" 
+	SelectedChipBackground="Transparent"
     ChipStroke="LightGray"
-    SelectedChipTextColor="#031926"
+    SelectedChipTextColor="Gray"
     SelectionIndicatorColor="Transparent"
 	ChipPadding="4,4,0,0"
     ChipTextSize="Micro"
-	DisplayMemberPath="Description">
+	DisplayMemberPath="title">
 
                         <chip:SfChipGroup.ItemTemplate>
                             <DataTemplate>
@@ -431,7 +430,7 @@ Text="Other Symptoms"
  HorizontalOptions="Start" />
 
                     <Label
-Text="Please search for other symptoms below."
+Text="Please search for other symptoms below, Tap to Add and Remove a symptom."
 TextColor="#031926"
 FontFamily="HankenGroteskRegular"
 FontAttributes="None"
@@ -530,7 +529,7 @@ BorderColor="LightGray">
                             </syncfusion:SfListView.SelectedItemTemplate>
                         </syncfusion:SfListView>
 
-
+                        <ActivityIndicator x:Name="SympAInd" IsVisible="False" IsRunning="True" Grid.Row="0" Margin="0,20,0,0" Color="#BFDBF7"  HorizontalOptions="Center" VerticalOptions="Center" />
 
 
 
@@ -550,21 +549,61 @@ Text="Medications"
  FontFamily="HankenGroteskBold"
  FontAttributes="Bold"
  HorizontalOptions="Start" />
+                    <!--Medications info  -->
+                    <Frame BorderColor="#BFDBF7" Margin="0,5,0,0"  HorizontalOptions="FillAndExpand" VerticalOptions="Start" Padding="10,5,10,5" CornerRadius="5" BackgroundColor="Transparent" HasShadow="False">
+
+                        <Grid RowSpacing="0.5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="18*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" FontSize="Micro" TextColor="#031926" FontAttributes="Bold" Text="Medications that DO NOT need a prescription (over the counter):"/>
+                            <Label Grid.Column="0" Grid.Row="1" Text="&#x2022;" VerticalOptions="Center" HorizontalOptions="Start"/>
+                            <Label Grid.Column="1" Grid.Row="1" Text="Metoclopramide (For sickness and/or vertigo)" FontSize="8" TextColor="#031926" VerticalOptions="Center" HorizontalOptions="Start"/>
+                            <Label Grid.Column="0" Grid.Row="2" Text="&#x2022;" VerticalOptions="Center" HorizontalOptions="Start"/>
+                            <Label Grid.Column="1" Grid.Row="2" Text="Prochlorperazine (For sickness and/or vertigo)" FontSize="8" TextColor="#031926" VerticalOptions="Center" HorizontalOptions="Start"/>
+                            <Label Grid.Column="0" Grid.Row="3" Text="&#x2022;" VerticalOptions="Center" HorizontalOptions="Start"/>
+                            <Label Grid.Column="1" Grid.Row="3" Text="Pseudoephedrine (For colds/flu)" FontSize="8" TextColor="#031926" VerticalOptions="Center" HorizontalOptions="Start"/>
+                            <Label Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" FontSize="Micro" TextColor="#031926" FontAttributes="Bold" Text="Medications that DO need a prescription:"/>
+                            <Label Grid.Column="0" Grid.Row="5" Text="&#x2022;" VerticalOptions="Center" HorizontalOptions="Start"/>
+                            <Label Grid.Column="1" Grid.Row="5" Text="Corticosteriods (prednisolone, dexamethasone, hydrocortisone, betamethasone) (For inflammatory conditions e.g., arthritis)" FontSize="8" TextColor="#031926" VerticalOptions="Center" HorizontalOptions="Start"/>
+                            <Label Grid.Column="0" Grid.Row="6" Text="&#x2022;" VerticalOptions="Center" HorizontalOptions="Start"/>
+                            <Label Grid.Column="1" Grid.Row="6" Text="Opiates (morphine, pethidine, tramadol) (For pain)" FontSize="8" TextColor="#031926" VerticalOptions="Center" HorizontalOptions="Start"/>
+                            <Label Grid.Column="0" Grid.Row="7" Text="&#x2022;" VerticalOptions="Center" HorizontalOptions="Start"/>
+                            <Label Grid.Column="1" Grid.Row="7" Text="SNRI/SSRI, TCA, MAO inhibitors (amitriptyline, imipramine, paroxetine, fluoxetine) (For depression)" FontSize="8" TextColor="#031926" VerticalOptions="Center" HorizontalOptions="Start"/>
+                            <Label Grid.Column="0" Grid.Row="8" Text="&#x2022;" VerticalOptions="Center" HorizontalOptions="Start"/>
+                            <Label Grid.Column="1" Grid.Row="8" Text="Dopamine antagonists (sulpiride, amisulpride, tiapride, chlorpromazine) (For psychosis)" FontSize="8" TextColor="#031926" VerticalOptions="Center" HorizontalOptions="Start"/>
+
+                        </Grid>
+                    </Frame>
 
                     <Label
 Text="What medications are you currently taking?"
 TextColor="#031926"
-FontFamily="HankenGroteskRegular"
+FontFamily="HankenGroteskBold"
 FontAttributes="None"
-Margin="0,0,0,0"
+Margin="0,10,0,0"
 FontSize="15"
 HorizontalOptions="Start" />
+                    
+                   
 
                     <chip:SfChipGroup
 	ChipType="Filter"
 	x:Name="medicationchiplistnrat"
     BackgroundColor="Transparent"
-    SelectionChanged="symptomchiplistnrat_SelectionChanged"
+    SelectionChanged="medicationchiplistnrat_SelectionChanged"
     ChipStrokeThickness="1"
     ShowIcon="False" ChipTextColor="Gray"
     VerticalOptions="Center"
@@ -576,7 +615,7 @@ HorizontalOptions="Start" />
     SelectionIndicatorColor="Transparent"
     ChipPadding="4,4,0,0"
     ChipTextSize="Micro"
-    DisplayMemberPath="Description">
+    DisplayMemberPath="title">
 
                         <chip:SfChipGroup.ItemTemplate>
                             <DataTemplate>
@@ -609,22 +648,21 @@ Text="Additional Added Medications"
  HorizontalOptions="Start" />
 
                     <chip:SfChipGroup
-	ChipType="Filter" 
+	ChipType="Input" 
 	x:Name="additionalmedicationchiplistnrat" IsVisible="False"
     BackgroundColor="Transparent"
-    SelectionChanged="symptomchiplistnrat_SelectionChanged"
     ChipStrokeThickness="1"
-    ShowIcon="False" ChipTextColor="Gray"
+    ShowIcon="False" ChipTextColor="#031926"
     VerticalOptions="Center"
     Margin="0,10,0,10"
-    ChipBackground="Transparent" 
-    SelectedChipBackground="#BFDBF7"
+    ChipBackground="#BFDBF7" 
+	SelectedChipBackground="Transparent"
     ChipStroke="LightGray"
-    SelectedChipTextColor="#031926"
+    SelectedChipTextColor="Gray"
     SelectionIndicatorColor="Transparent"
-    ChipPadding="4,4,0,0"
+	ChipPadding="4,4,0,0"
     ChipTextSize="Micro"
-    DisplayMemberPath="Description">
+	DisplayMemberPath="Description">
 
                         <chip:SfChipGroup.ItemTemplate>
                             <DataTemplate>
@@ -651,14 +689,14 @@ Text="Additional Added Medications"
                     <Label
 Text="Other Medications"
  FontSize="15"
- Margin="0,20,0,0"
+ Margin="0,10,0,0"
  TextColor="#031926"
  FontFamily="HankenGroteskBold"
  FontAttributes="Bold"
  HorizontalOptions="Start" />
 
                     <Label
-Text="Please search for other medications below."
+Text="Please search for other medications below, Tap to Add and Remove a Medication."
 TextColor="#031926"
 FontFamily="HankenGroteskRegular"
 FontAttributes="None"
@@ -679,7 +717,6 @@ HorizontalOptions="Start" />
 
                             <Image Source="searchbaricon.png" HorizontalOptions="Center" VerticalOptions="Center" HeightRequest="15" WidthRequest="15" Grid.Row="0" Grid.Column="0"/>
                             <Entry BackgroundColor="Transparent" Background="Transparent" x:Name="searchmedentry" TextChanged="searchmedentry_TextChanged"  Placeholder="Search Medications" Margin="5,0,10,0" PlaceholderColor="LightGray" Grid.Row="0" Grid.Column="1" IsTextPredictionEnabled="False" Keyboard="Text" TextColor="#031926" FontFamily="HankenGroteskRegular"/>
-
                         </Grid>
                     </Frame>
 
@@ -701,15 +738,15 @@ HorizontalOptions="Start" />
                               Grid.Column="0"
      Grid.Row="0" ItemTapped="additionlmedlist_ItemTapped"
                       SelectionMode="Multiple"
-               IsVisible="False"
+               IsVisible="False" IsScrollingEnabled="True"
                        ScrollBarVisibility="Never"
              SelectionBackground="Transparent"
              Orientation="Vertical"                                                                                                                       
              >
                             <syncfusion:SfListView.HeightRequest>
                                 <OnPlatform x:TypeArguments="x:Double">
-                                    <On Platform="Android" Value="300" />
-                                    <On Platform="iOS" Value="300" />
+                                    <On Platform="Android" Value="400" />
+                                    <On Platform="iOS" Value="400" />
                                 </OnPlatform>
                             </syncfusion:SfListView.HeightRequest>
 
@@ -757,6 +794,7 @@ BorderColor="LightGray">
                             </syncfusion:SfListView.SelectedItemTemplate>
                         </syncfusion:SfListView>
 
+                        <ActivityIndicator x:Name="MedAInd" IsRunning="True" IsVisible="False" Grid.Row="0" Margin="0,20,0,0" Color="#BFDBF7"  HorizontalOptions="Center" VerticalOptions="Center" />
 
 
 

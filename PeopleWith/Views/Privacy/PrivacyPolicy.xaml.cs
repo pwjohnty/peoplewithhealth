@@ -13,6 +13,15 @@ public partial class PrivacyPolicy : ContentPage
         {
             InitializeComponent();
             BackArrow.IsVisible = true;
+            NavigationPage.SetHasNavigationBar(this, false);
+            if(DeviceInfo.Current.Platform == DevicePlatform.Android)
+            {
+                AndroidBtn.IsVisible = true; 
+            }
+            else if (DeviceInfo.Current.Platform == DevicePlatform.iOS)
+            {
+                IOSBtn.IsVisible = true; 
+            }
             //ListViewGrid.Margin = (0, 0, 0, 0); 
             PopulatelistView();
         }
@@ -26,6 +35,7 @@ public partial class PrivacyPolicy : ContentPage
         try
         {
             InitializeComponent();
+            NavigationPage.SetHasNavigationBar(this, true);
             PopulatelistView();
 
 
@@ -52,7 +62,19 @@ public partial class PrivacyPolicy : ContentPage
             }
         }
 
-    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    //private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    //{
+    //    try
+    //    {
+    //        Navigation.RemovePage(this);
+    //    }
+    //    catch (Exception Ex)
+    //    {
+
+    //    }
+    //}
+
+    async private void AndroidBtn_Clicked(object sender, EventArgs e)
     {
         try
         {

@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.Messaging;
+using Mopups.Services;
 using Syncfusion.Maui.DataSource.Extensions;
 using Syncfusion.Maui.Scheduler;
 using System.Collections.ObjectModel;
@@ -10,7 +11,9 @@ public partial class Appointments : ContentPage
     public ObservableCollection<hcp> AllHCPs = new ObservableCollection<hcp>();
     public ObservableCollection<appointment> AllAppointments = new ObservableCollection<appointment>();
     public ObservableCollection<appointmentcalendar> CalendarData = new ObservableCollection<appointmentcalendar>();
-    public appointment AppointmenttoPass = new appointment(); 
+    public appointment AppointmenttoPass = new appointment();
+    public appointment UpdatedAppointment = new appointment();
+    public ObservableCollection<appointment> itemstoremove = new ObservableCollection<appointment>();
     APICalls database = new APICalls();
     bool AddedAppointment;
     //Connectivity Changed 
@@ -35,6 +38,53 @@ public partial class Appointments : ContentPage
         {
             InitializeComponent();
             GetAllHCPData();
+
+            WeakReferenceMessenger.Default.Register<UpdateAppFeedback>(this, (r, m) =>
+            {
+
+                AllAppointments = (ObservableCollection<appointment>)m.Value;
+
+                foreach(var item in AllAppointments)
+                {
+                    if(item.id == AppointmenttoPass.id)
+                    {
+                        UpdatedAppointment = item; 
+                    }
+                }
+
+                //Update FeedBack Page 
+                Feedbacktitle.IsVisible = false;
+                Feedbackbtn.IsVisible = false;
+                //Attendedlbl.Text = SelectedAppointment.attended; 
+                if (UpdatedAppointment.attended == "No")
+                {
+                    FeedbackNotRecorded.IsVisible = true;
+                }
+                else
+                {
+                    FeedbackRecorded.IsVisible = true;
+                    ActualDurationlbl.Text = UpdatedAppointment.feedback[0].ActualDuration;
+                    if (string.IsNullOrEmpty(UpdatedAppointment.feedback[0].DoctorsNotes))
+                    {
+                        DoctorsNotesbl.Text = "No Doctors Notes Recorded";
+                    }
+                    else
+                    {
+                        DoctorsNotesbl.Text = UpdatedAppointment.feedback[0].DoctorsNotes;
+                    }
+                    if (string.IsNullOrEmpty(UpdatedAppointment.feedback[0].AdditionalNotes))
+                    {
+                        AddNoteslbl.Text = "No Additional Notes Recorded";
+                    }
+                    else
+                    {
+                        AddNoteslbl.Text = UpdatedAppointment.feedback[0].AdditionalNotes; 
+                    }
+
+                }
+
+
+            });
         }
         catch (Exception Ex)
         {
@@ -52,12 +102,6 @@ public partial class Appointments : ContentPage
             AllHCPs = GetAllHCPS;
             GetAllHCPData();
 
-            //WeakReferenceMessenger.Default.Register<UpdateAppFeedback>(this, (r, m) =>
-            //{
-
-            //    AllUserMedications = (ObservableCollection<UpdateAppointFeedback>)m.Value;
-
-            //});
         }
         catch (Exception Ex)
         {
@@ -91,8 +135,22 @@ public partial class Appointments : ContentPage
     {
         try
         {
+            CalendarData.Clear(); 
 
             foreach(var item in AllAppointments)
+            {
+                if(item.deleted == true)
+                {
+                    itemstoremove.Add(item); 
+                }
+            }
+
+            foreach(var item in itemstoremove)
+            {
+                AllAppointments.Remove(item);
+            }
+
+            foreach (var item in AllAppointments)
             {
                 var StartDateTime = DateTime.Parse(item.datetime);
                 string Eventtitle;
@@ -124,9 +182,8 @@ public partial class Appointments : ContentPage
                     From = StartDateTime,
                     To = EndDateTime,
                     EventName = Eventtitle,
-                    //Background = Color.FromRgba("#ffcccb"),
-                    //Background = Colors.Red,
-                    //TextColor = Colors.Blue
+                    Background = new SolidColorBrush(Color.FromArgb("#ffcccb")),
+                    TextColor = Colors.White
                 };
 
                 CalendarData.Add(appoint); 
@@ -137,7 +194,8 @@ public partial class Appointments : ContentPage
                 StartTime = nameof(appointmentcalendar.From),
                 EndTime = nameof(appointmentcalendar.To),
                 Subject = nameof(appointmentcalendar.EventName),
-                //Background = nameof(appointmentcalendar.Background),
+                Background = nameof(appointmentcalendar.Background),
+                TextColorMapping = nameof(appointmentcalendar.TextColor),
                 IsAllDay = nameof(appointmentcalendar.IsAllDay)
             };
 
@@ -222,16 +280,26 @@ public partial class Appointments : ContentPage
                         {
                             if (SelectedAppointment.feedback == null || SelectedAppointment.feedback.Count == 0)
                             {
-                                Feedbacktitle.IsVisible = true;
-                                Feedbackbtn.IsVisible = true;
+                                if(SelectedAppointment.attended == "No")
+                                {
+                                    FeedbackNotRecorded.IsVisible = true;
+                                }
+                                else
+                                {
+                                    Feedbacktitle.IsVisible = true;
+                                    Feedbackbtn.IsVisible = true;
+                                }
+
                             }
                             else
                             {
                                 //Show Feedback 
-                                Attendedlbl.Text = SelectedAppointment.attended; 
+                                Feedbacktitle.IsVisible = false;
+                                Feedbackbtn.IsVisible = false;
+                                //Attendedlbl.Text = SelectedAppointment.attended; 
                                 if (SelectedAppointment.attended == "No")
                                 {
-                                    FeedbackRecorded.IsVisible = true; 
+                                    FeedbackNotRecorded.IsVisible = true; 
                                 }
                                 else
                                 {
@@ -247,7 +315,7 @@ public partial class Appointments : ContentPage
                                     }
                                     if (string.IsNullOrEmpty(SelectedAppointment.feedback[0].AdditionalNotes))
                                     {
-                                        DoctorsNotesbl.Text = "No Additional Notes Recorded";
+                                        AddNoteslbl.Text = "No Additional Notes Recorded";
                                     }
                                     else
                                     {
@@ -375,6 +443,49 @@ public partial class Appointments : ContentPage
             else
             {
                 AddAppoint.IsEnabled = true;
+            }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    async private void Deletebtn_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Delete Appointment
+                Deletebtn.IsEnabled = false;
+
+            APICalls database = new APICalls();
+            AppointmenttoPass.deleted = true;
+            await database.DeleteUserAppointment(AppointmenttoPass);
+
+            await MopupService.Instance.PushAsync(new PopupPageHelper("Appointment Deleted") { });
+            await Task.Delay(1500);
+            AppointmentCalendar.IsVisible = true;
+            AppointmentDetails.IsVisible = false;
+            Calendar.View = Syncfusion.Maui.Scheduler.SchedulerView.Month;
+            AddAppoint.IsEnabled = true;
+
+            AllAppointments.Remove(AppointmenttoPass);
+
+            PopulateCalendar();
+
+            await MopupService.Instance.PopAllAsync(false);
+
+            Deletebtn.IsEnabled = true;
+
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
             }
         }
         catch (Exception Ex)

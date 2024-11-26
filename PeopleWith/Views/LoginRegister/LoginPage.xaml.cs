@@ -135,7 +135,7 @@ public partial class LoginPage : ContentPage
         }
     }
 
-    private void Signin_Clicked(object sender, EventArgs e)
+    private async void Signin_Clicked(object sender, EventArgs e)
     {
         try
         {
@@ -146,6 +146,7 @@ public partial class LoginPage : ContentPage
                 //Limit No. of Taps 
                 Signin.IsEnabled = false;
                 Handleemailframe();
+                await Task.Delay(1500);
                 Signin.IsEnabled = true;
             }
             else

@@ -101,16 +101,16 @@ public partial class AllMood : ContentPage
 
                 var getMoodsTask = database.GetUserMoodsAsync(Userid);
 
-                var delayTask = Task.Delay(1000);
+                //var delayTask = Task.Delay(1000);
 
-                if (await Task.WhenAny(getMoodsTask, delayTask) == delayTask)
-                {
+                //if (await Task.WhenAny(getMoodsTask, delayTask) == delayTask)
+                //{
                     await MopupService.Instance.PushAsync(new GettingReady("Just Getting Mood Ready for you") { });
-                }
+                //}
 
                 AllMoods = await getMoodsTask;
 
-                await MopupService.Instance.PopAllAsync(false);
+                
 
             }
 
@@ -140,7 +140,7 @@ public partial class AllMood : ContentPage
 
                 EmptyStack.IsVisible = false;
                 MoodOverview.IsVisible = true;
-                AllMoodView.ItemsSource = AllMoods;
+                AllMoodView.ItemsSource = AllMoods.OrderByDescending(f => DateTime.Parse(f.datetime)).ToList();
                 AllMoodView.HeightRequest = AllMoods.Count * 80;
             }
             else
@@ -148,6 +148,8 @@ public partial class AllMood : ContentPage
                 EmptyStack.IsVisible = true;
                 MoodOverview.IsVisible = false;
             }
+
+            await MopupService.Instance.PopAllAsync(false);
         }
         catch (Exception Ex)
         {

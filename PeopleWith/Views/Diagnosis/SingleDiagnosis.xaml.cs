@@ -49,14 +49,36 @@ public partial class SingleDiagnosis : ContentPage
             InitializeComponent();
             DiagnosisPassed = DiagPassed;
             AllUserDiagnosis = AllDiagnosis;
-            DiagnosisTitle.Text = DiagnosisPassed[0].diagnosistitle;
-            var date = DateTime.Parse(DiagnosisPassed[0].dateofdiagnosis);
-            DiagnosisDate.Text = "Diagnosed on: " + date.ToString("dd MMMM yyyy");
-            DateofDiagnosis = DiagnosisPassed[0].dateofdiagnosis;
-            DateEntry.Text = date.ToString("dd/MM/yyyy");
 
-            loadMedInformation(); 
+            if (DiagnosisPassed[0].status == "Pending")
+            {
+                //Add Diagnosis Date 
+                NavigationPage.SetHasNavigationBar(this, false);
+                EditBtn.IsEnabled = false;
+                DiagnosisSingle.IsVisible = false;
+                dateofBirth.IsVisible = true;
+                Diagnosislbl.Text = DiagnosisPassed[0].diagnosistitle;
+                EditBtn.IsEnabled = true;
+                if (DeviceInfo.Current.Platform == DevicePlatform.Android)
+                {
+                    AndroidBtn.IsVisible = true;
+                }
+                else if (DeviceInfo.Current.Platform == DevicePlatform.iOS)
+                {
+                    IOSBtn.IsVisible = true;
+                }
+            }
+            else
+            {
+                DiagnosisTitle.Text = DiagnosisPassed[0].diagnosistitle;
+                var date = DateTime.Parse(DiagnosisPassed[0].dateofdiagnosis);
+                DiagnosisDate.Text = "Diagnosed on: " + date.ToString("dd MMMM yyyy");
+                DateofDiagnosis = DiagnosisPassed[0].dateofdiagnosis;
+                DateEntry.Text = date.ToString("dd/MM/yyyy");
 
+                loadMedInformation();
+
+            }
         }
         catch (Exception Ex)
         {
