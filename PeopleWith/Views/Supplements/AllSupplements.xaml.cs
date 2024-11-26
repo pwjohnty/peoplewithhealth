@@ -77,25 +77,8 @@ public partial class AllSupplements : ContentPage
 
             AllUserMedications = AllUsermeds;
 
-            if (AllUserMedications.Count == 0 && CompletedMedications.Count == 0 && AsRequiredMedications.Count == 0)
-            {
-                nodatastack.IsVisible = true;
-                datastack.IsVisible = false;
-            }
-            else if (AllUserMedications.Count == 0)
-            {
-                noActivemedlbl.IsVisible = true;
-                AllUserMedsList.IsVisible = false;
-            }
-            else
-            {
-                nodatastack.IsVisible = false;
-                datastack.IsVisible = true;
-
-                AllUserMedsList.ItemsSource = AllUserMedications;
-
-                WorkOutNextDue();
-            }
+            WorkOutNextDue();
+            
 
             //if (AllUserMedications.Count == 0)
             //{
@@ -125,39 +108,17 @@ public partial class AllSupplements : ContentPage
         {
             var getMedicationsTask = aPICalls.GetUserSupplementsAsync();
 
-            var delayTask = Task.Delay(1000);
+            //var delayTask = Task.Delay(500);
 
-            if (await Task.WhenAny(getMedicationsTask, delayTask) == delayTask)
-            {
+            //if (await Task.WhenAny(getMedicationsTask, delayTask) == delayTask)
+            //{
                 await MopupService.Instance.PushAsync(new GettingReady("Loading Supplements") { });
-            }
+            //}
 
             AllUserMedications = await getMedicationsTask;
 
-            if (AllUserMedications.Count == 0 && CompletedMedications.Count == 0 && AsRequiredMedications.Count == 0)
-            {
-                nodatastack.IsVisible = true;
-                datastack.IsVisible = false;
-                await MopupService.Instance.PopAllAsync(false);
-            }
-            else if (AllUserMedications.Count == 0)
-            {
-                noActivemedlbl.IsVisible = true;
-                AllUserMedsList.IsVisible = false;
-                await MopupService.Instance.PopAllAsync(false);
-            }
-            else
-            {
-                noActivemedlbl.IsVisible = false;
-                nodatastack.IsVisible = false;
-                datastack.IsVisible = true;
-                AllUserMedsList.IsVisible = true;
-                AllUserMedsList.ItemsSource = AllUserMedications;
-
-                await MopupService.Instance.PopAllAsync(false);
-
-                WorkOutNextDue();
-            }
+            WorkOutNextDue();
+           
         }
         catch (Exception Ex)
         {
@@ -757,15 +718,29 @@ public partial class AllSupplements : ContentPage
 
 
             //Active Medications List 
-            if (sortedbyname.Count == 0)
+            if (sortedbyname.Count == 0 && sortedbyname2.Count == 0 && sortedbyname3.Count == 0)
             {
-                AllUserMedsList.IsVisible = false;
+                nodatastack.IsVisible = true;
+                datastack.IsVisible = false;
+                await Task.Delay(2000);
+                await MopupService.Instance.PopAllAsync(false);
+            }
+            else if (AllUserMedications.Count == 0)
+            {
                 noActivemedlbl.IsVisible = true;
+                AllUserMedsList.IsVisible = false;
+                await Task.Delay(2000);
+                await MopupService.Instance.PopAllAsync(false);
             }
             else
             {
-                AllUserMedsList.IsVisible = true;
                 noActivemedlbl.IsVisible = false;
+                nodatastack.IsVisible = false;
+                datastack.IsVisible = true;
+                AllUserMedsList.IsVisible = true;
+                AllUserMedsList.ItemsSource = AllUserMedications;
+
+                await MopupService.Instance.PopAllAsync(false);
             }
 
             AllUserMedsList.ItemsSource = sortedbyname;

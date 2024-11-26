@@ -160,16 +160,16 @@ public partial class MeasurementsPage : ContentPage
                 APICalls database = new APICalls();
                 var getMeasurementsTask = database.GetUserMeasurements();
 
-                var delayTask = Task.Delay(1000);
+                //var delayTask = Task.Delay(1000);
 
-                if (await Task.WhenAny(getMeasurementsTask, delayTask) == delayTask)
-                {
+                //if (await Task.WhenAny(getMeasurementsTask, delayTask) == delayTask)
+                //{
                     await MopupService.Instance.PushAsync(new GettingReady("Loading Measurements") { });
-                }
+                //}
 
                 UserMeasurements = await getMeasurementsTask;
 
-                await MopupService.Instance.PopAllAsync(false);
+                
 
             }
 
@@ -200,7 +200,8 @@ public partial class MeasurementsPage : ContentPage
 
 
                 usermeasurementlist.ItemsSource = newlist;
-               // usermeasurementlist.BackgroundColor = Colors.Red;
+                await MopupService.Instance.PopAllAsync(false);
+                // usermeasurementlist.BackgroundColor = Colors.Red;
                 return;
             }
 
@@ -208,6 +209,7 @@ public partial class MeasurementsPage : ContentPage
             {
                 nodatastack.IsVisible = true;
                 datastack.IsVisible = false;
+                await MopupService.Instance.PopAllAsync(false);
                 return;
             }
 
@@ -253,6 +255,8 @@ public partial class MeasurementsPage : ContentPage
                 usermeasurementlist.ItemsSource = filteredMeasurements;
                 usermeasurementlist.HeightRequest = filteredMeasurements.Count * 110;
 
+                
+
                 ////remove any user measurements in measurement list
                 //foreach(var item in Measurements)
                 //{
@@ -271,7 +275,7 @@ public partial class MeasurementsPage : ContentPage
                 //measurementlist.ItemsSource = ordermeasurementlist;
                 //measurementlist.HeightRequest = ordermeasurementlist.Count * 57;
             }
-
+            await MopupService.Instance.PopAllAsync(false);
         }
 		catch(Exception Ex)
 		{

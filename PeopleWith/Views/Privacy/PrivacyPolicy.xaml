@@ -14,11 +14,15 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Image Source="backbutton.png" Grid.Column="0" BackgroundColor="Transparent" HorizontalOptions="Start" VerticalOptions="Center" Margin="20,0,0,0" HeightRequest="20" WidthRequest="20">
+                <ImageButton x:Name="AndroidBtn" Clicked="AndroidBtn_Clicked" IsVisible="False" Grid.Row="0" Grid.Column="0" Source="androidarrow.png" HeightRequest="25" WidthRequest="25" HorizontalOptions="Start" VerticalOptions="Center" Margin="15,15,0,0"/>
+                <ImageButton x:Name="IOSBtn" Clicked="AndroidBtn_Clicked" IsVisible="False" Grid.Row="0" Grid.Column="0" Source="iosback.png" HeightRequest="50" WidthRequest="60" HorizontalOptions="Start" VerticalOptions="Center" Margin="15,5,0,0"/>
+
+
+                <!--<Image Source="backbutton.png" Grid.Column="0" BackgroundColor="Transparent" HorizontalOptions="Start" VerticalOptions="Center" Margin="20,0,0,0" HeightRequest="20" WidthRequest="20">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
                     </Image.GestureRecognizers>
-                </Image>
+                </Image>-->
             </Grid>
 
             <Grid x:Name="ListViewGrid" Margin="10,0,10,0" RowSpacing="10">
@@ -39,8 +43,8 @@
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
 
-                                        <Label Text="{Binding title}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  Grid.Row="0" HorizontalTextAlignment="Start"  HorizontalOptions="Start" TextColor="#4682B4"  FontSize="24"/>
-                                        <Label Text="{Binding content}" FontFamily="HankenGroteskRegular" Margin="0,0,0,8"  Grid.Row="1" HorizontalTextAlignment="Center"  HorizontalOptions="Center" TextColor="#031926" FontSize="14" />
+                                        <Label Text="{Binding title}" HorizontalTextAlignment="Start" FontFamily="HankenGroteskBold" Margin="5,0,5,0"  Grid.Row="0"  HorizontalOptions="Start" TextColor="#4682B4"  FontSize="24"/>
+                                        <Label Text="{Binding content}" HorizontalTextAlignment="Start"  FontFamily="HankenGroteskRegular" Margin="10,0,10,8"  Grid.Row="1"  HorizontalOptions="StartAndExpand" TextColor="#031926" FontSize="14" />
 
 
                                     </Grid>

@@ -1,3 +1,4 @@
+using CommunityToolkit.Mvvm.Messaging;
 using Mopups.Services;
 using System.Collections.ObjectModel;
 
@@ -238,9 +239,10 @@ public partial class AppointmentFeedback : ContentPage
                 //Limit No. of Taps 
                 FeedbackAdd.IsEnabled = false;
                 //Validation 
-                if (btnno.BackgroundColor == Color.FromRgba("#ffcccb") || btnyes.BackgroundColor == Color.FromRgba("#ffcccb"))
+                if (btnno.BackgroundColor == Colors.Transparent && btnyes.BackgroundColor == Colors.Transparent)
                 {
                     await DisplayAlert("Did you Attend", "select if you Attend the Appointment", "Close");
+                    FeedbackAdd.IsEnabled = true;
                     return;
                 }
                 else if (Attended == "No")
@@ -254,11 +256,13 @@ public partial class AppointmentFeedback : ContentPage
                     if (string.IsNullOrEmpty(Durationlbl.Text))
                     {
                         await DisplayAlert("Actual Duration", "select either Days, Hours or Minutes", "Close");
+                        FeedbackAdd.IsEnabled = true;
                         return;
                     }
                     else if (string.IsNullOrEmpty(DurationEntry.Text))
                     {
                         await DisplayAlert("Actual Duration", "Duration cannot be Empty, Please enter a Duration", "Close");
+                        FeedbackAdd.IsEnabled = true;
                         return;
                     }
                     else
@@ -311,6 +315,12 @@ public partial class AppointmentFeedback : ContentPage
                 await Task.Delay(1500);
                 FeedbackAdd.IsEnabled = true;
                 await MopupService.Instance.PopAllAsync(false);
+
+
+                WeakReferenceMessenger.Default.Send(new UpdateAppFeedback(AllAppointments));
+
+                Navigation.RemovePage(this);
+
                 //await Navigation.PushAsync(new Appointments(AllAppointments, AllHCPs));
                 //var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is Appointments);
                 //if (pageToRemoves != null)

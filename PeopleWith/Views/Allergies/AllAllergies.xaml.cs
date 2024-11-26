@@ -71,19 +71,19 @@ public partial class AllAllergies : ContentPage
                 var getAllUserAllergiesTask = database.GetUserAllergiesAsync(Userid);
                 var getAllergiesListTask = database.GetAsyncAllergies();
 
-                var delayTask = Task.Delay(1000);
+                //var delayTask = Task.Delay(1000);
 
                 
-                if (await Task.WhenAny(Task.WhenAll(getAllUserAllergiesTask, getAllergiesListTask), delayTask) == delayTask)
-                {
+                //if (await Task.WhenAny(Task.WhenAll(getAllUserAllergiesTask, getAllergiesListTask), delayTask) == delayTask)
+                //{
                    
                     await MopupService.Instance.PushAsync(new GettingReady("Loading Allergies") { });
-                }
+                //}
                 
                 AllUserAllergies = await getAllUserAllergiesTask;
                 AllergiesList = await getAllergiesListTask;
 
-                await MopupService.Instance.PopAllAsync(false);
+                
 
 
                 foreach (var item in AllUserAllergies)
@@ -97,7 +97,7 @@ public partial class AllAllergies : ContentPage
                     }
                 }
                 //stopWatch.Stop();
-                await MopupService.Instance.PopAllAsync(false);
+                
             }
             foreach (var item in AllUserAllergies)
             {
@@ -137,6 +137,8 @@ public partial class AllAllergies : ContentPage
                 EmptyStack.IsVisible = true;
                 DiagnosisOverview.IsVisible = false;
             }
+
+            await MopupService.Instance.PopAllAsync(false);
         }
         catch (Exception Ex)
         {

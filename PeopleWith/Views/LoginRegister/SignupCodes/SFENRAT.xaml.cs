@@ -5,6 +5,7 @@ using PeopleWith;
 using Syncfusion.Maui.Core;
 using Syncfusion.Maui.DataSource.Extensions;
 using System.Collections.ObjectModel;
+using System.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Color = Microsoft.Maui.Graphics.Color;
 
@@ -26,17 +27,19 @@ public partial class SFENRAT : ContentPage
 
     ObservableCollection<symptom> symptomchipselectedlist = new ObservableCollection<symptom>();
     ObservableCollection<usersymptom> symptomstoadd = new ObservableCollection<usersymptom>();
+    ObservableCollection<usersymptom> symptomstoCheck = new ObservableCollection<usersymptom>();
 
     ObservableCollection<medication> filteredmedicationlist = new ObservableCollection<medication>();
     ObservableCollection<medication> additionalfilteredmedicationlist = new ObservableCollection<medication>();
 
     ObservableCollection<medication> medicationchipselectedlist = new ObservableCollection<medication>();
     ObservableCollection<usermedication> medicationstoadd = new ObservableCollection<usermedication>();
+    ObservableCollection<usermedication> medicationstoCheck = new ObservableCollection<usermedication>();
     ObservableCollection<userresponse> userresponselist = new ObservableCollection<userresponse>();
     question ctquestion;
     question commprefquestion;
     string CommandPassed;
-    ObservableCollection<answer> GetAnswers = new ObservableCollection<answer>();
+    ObservableCollection<answer> GetAnswers = new ObservableCollection<answer>(); 
     ObservableCollection<answer> GetCommPref = new ObservableCollection<answer>();
 
     List<string> commprefaddedlist = new List<string>();
@@ -69,7 +72,7 @@ public partial class SFENRAT : ContentPage
         {
             InitializeComponent();
 
-
+            //additionalsymptomchiplistnrat.SelectionChanged += additionalsymptomchiplistnrat_SelectionChanged;
             primaryconditionlist.Add("ACC");
             primaryconditionlist.Add("PPGL");
 
@@ -90,7 +93,7 @@ public partial class SFENRAT : ContentPage
 
         topprogress.SetProgress(progressp + 6, 0);
 
-
+        //additionalsymptomchiplistnrat.SelectionChanged += additionalsymptomchiplistnrat_SelectionChanged;
         primaryconditionlist.Add("Adrenal Cortical Cancer (ACC)");
         primaryconditionlist.Add("Phaeo Para Syndromes (Paraganglioma or Phaeochromocytoma (PPGL))");
 
@@ -356,6 +359,10 @@ public partial class SFENRAT : ContentPage
         try
         {
             var item = e.AddedItem as symptom;
+            if(item == null)
+            {
+                item = e.RemovedItem as symptom; 
+            }
 
             if(symptomchipselectedlist.Contains(item))
             {
@@ -365,8 +372,55 @@ public partial class SFENRAT : ContentPage
             {
                 symptomchipselectedlist.Add(item);
             }
+           
+
         }
         catch(Exception ex)
+        {
+            //Leave Empty
+        }
+    }
+
+    private async void additionalsymptomchiplistnrat_SelectionChanged(object sender, Syncfusion.Maui.Core.Chips.SelectionChangedEventArgs e)
+    {
+        try
+        {
+
+            var item = e.AddedItem as symptom;
+
+            if(item == null)
+            {
+                item = e.RemovedItem as symptom; 
+            }
+
+            searchsymsentry.IsEnabled = false;
+            searchsymsentry.IsEnabled = true;
+
+            // Convert the selected item to a ChipItem
+            if (additionalfilteredsymptomlist.Contains(item))
+            {
+                additionalfilteredsymptomlist.Remove(item);
+                symptomchipselectedlist.Remove(item);
+            }
+
+            if (additionlsymlist.SelectedItems.Contains(item))
+            {
+                additionlsymlist.SelectedItems.Remove(item);
+            }
+            if (additionalfilteredsymptomlist.Count == 0)
+            {
+                addlbl1.IsVisible = false;
+                additionalsymptomchiplistnrat.IsVisible = false;
+            }
+            else
+            {
+                addlbl1.IsVisible = true;
+                additionalsymptomchiplistnrat.ItemsSource = additionalfilteredsymptomlist;
+                additionalsymptomchiplistnrat.IsVisible = true;
+            }
+            await Task.Delay(500);
+        }
+        catch (Exception ex)
         {
             //Leave Empty
         }
@@ -377,9 +431,11 @@ public partial class SFENRAT : ContentPage
         try
         {
             //symptom search entry
+            SympAInd.IsVisible = true;
 
-            if(string.IsNullOrEmpty(e.NewTextValue))
+            if (string.IsNullOrEmpty(e.NewTextValue))
             {
+                SympAInd.IsVisible = false;
                 additionlsymlist.IsVisible = false;
                 searchsymsentry.IsEnabled = false;
                 searchsymsentry.IsEnabled = true;
@@ -387,7 +443,6 @@ public partial class SFENRAT : ContentPage
             }
             else
             {
-
                 var collectionone = allsymptomlist.Where(x => x.title.ToLowerInvariant().StartsWith(e.NewTextValue.ToLowerInvariant()));
                 var count = collectionone.Count();
                 if (count == 0)
@@ -404,6 +459,8 @@ public partial class SFENRAT : ContentPage
                     additionlsymlist.IsVisible = true;
          
                 }
+
+                SympAInd.IsVisible = false;
 
             }
 
@@ -769,7 +826,8 @@ public partial class SFENRAT : ContentPage
 
             //check if there are any symptoms added and add them into a collection
 
-            foreach(var item in symptomchipselectedlist)
+            symptomstoadd.Clear(); 
+            foreach (var item in symptomchipselectedlist)
             {
                 var neewitem = new usersymptom();
                 neewitem.symptomid = item.symptomid;
@@ -816,7 +874,7 @@ public partial class SFENRAT : ContentPage
     {
         try
         {
-
+            medicationstoadd.Clear(); 
             foreach(var item in medicationchipselectedlist)
             {
 
@@ -972,9 +1030,10 @@ public partial class SFENRAT : ContentPage
         try
         {
             //medication search entry
-
+            MedAInd.IsVisible = true;
             if (string.IsNullOrEmpty(e.NewTextValue))
             {
+                MedAInd.IsVisible = false; 
                 additionlmedlist.IsVisible = false;
                 searchmedentry.IsEnabled = false;
                 searchmedentry.IsEnabled = true;
@@ -982,13 +1041,13 @@ public partial class SFENRAT : ContentPage
             }
             else
             {
-
+                
                 var collectionone = allmedicationlist.Where(x => x.title.ToLowerInvariant().StartsWith(e.NewTextValue.ToLowerInvariant()));
                 var count = collectionone.Count();
                 if (count == 0)
                 {
                     additionlmedlist.IsVisible = false;
-
+                 
                 }
                 else
                 {
@@ -999,7 +1058,7 @@ public partial class SFENRAT : ContentPage
                     additionlmedlist.IsVisible = true;
 
                 }
-
+                MedAInd.IsVisible = false;
             }
 
         }
@@ -1009,7 +1068,7 @@ public partial class SFENRAT : ContentPage
         }
     }
 
-    private void additionlmedlist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
+    private async void additionlmedlist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
     {
         try
         {
@@ -1041,8 +1100,10 @@ public partial class SFENRAT : ContentPage
             else
             {
                 addmedlbl1.IsVisible = true;
+                additionalmedicationchiplistnrat.ItemsSource = additionalfilteredmedicationlist; 
                 additionalmedicationchiplistnrat.IsVisible = true;
             }
+            await Task.Delay(500); 
         }
         catch (Exception Ex)
         {
@@ -1055,6 +1116,10 @@ public partial class SFENRAT : ContentPage
         try
         {
             var item = e.AddedItem as medication;
+            if (item == null)
+            {
+                item = e.RemovedItem as medication;
+            }
 
             if (medicationchipselectedlist.Contains(item))
             {
@@ -1135,12 +1200,15 @@ public partial class SFENRAT : ContentPage
                 {
                     symptomsframe.IsVisible = false;
                     dateofdiagframe.IsVisible = true;
+                    //skipbtn.IsEnabled = false;
+                    skipbtn.IsVisible = false; 
 
                 }
                 else if (dateofdiagframe.IsVisible == true)
                 {
                     dateofdiagframe.IsVisible = false;
                     primaryconframe.IsVisible = true;
+                   
 
                 }
                 else if (primaryconframe.IsVisible == true)
@@ -1199,5 +1267,46 @@ public partial class SFENRAT : ContentPage
         {
             NotasyncMethod(Ex);
         }
+    }
+
+    private void additionalmedicationchiplistnrat_SelectionChanged(object sender, Syncfusion.Maui.Core.Chips.SelectionChangedEventArgs e)
+    {
+        try
+        {
+            var item = e.AddedItem as medication;
+            if (item == null)
+            {
+                item = e.RemovedItem as medication;
+            }
+
+            searchmedentry.IsEnabled = false;
+            searchmedentry.IsEnabled = true;
+
+            // Convert the selected item to a ChipItem
+            if (additionalfilteredmedicationlist.Contains(item))
+            {
+                additionalfilteredmedicationlist.Remove(item);
+                medicationchipselectedlist.Remove(item);
+            }
+            if (additionlmedlist.SelectedItems.Contains(item))
+            {
+                additionlmedlist.SelectedItems.Remove(item);
+            }
+            if (additionalfilteredmedicationlist.Count == 0)
+            {
+                addmedlbl1.IsVisible = false;
+                additionalmedicationchiplistnrat.IsVisible = false;
+            }
+            else
+            {
+                addmedlbl1.IsVisible = true;
+                additionalmedicationchiplistnrat.IsVisible = true;
+            }
+        }
+        catch (Exception Ex)
+        {
+          //Leave Empty
+        }
+        
     }
 }
