@@ -369,25 +369,27 @@ public partial class ProfileSection : ContentPage
                     }
                     else
                     {
-                        if (DeviceInfo.Platform == DevicePlatform.Android)
-                        {
+                        AppInfo.ShowSettingsUI();
 
-                            //await Permissions.RequestAsync<Permissions.PostNotifications>();
-                            //if(That didnt work Do this) - Needs changed to open Notifications page- Then same for android 
-                            var context = Android.App.Application.Context;
+                        //if (DeviceInfo.Platform == DevicePlatform.Android)
+                        //{
+                           
+                        //    //await Permissions.RequestAsync<Permissions.PostNotifications>();
+                        //    //if(That didnt work Do this) - Needs changed to open Notifications page- Then same for android 
+                        //    var context = Android.App.Application.Context;
 
-                            var intent = new Android.Content.Intent(Android.Provider.Settings.ActionAppNotificationSettings);
-                            intent.PutExtra(Android.Provider.Settings.ExtraAppPackage, context.PackageName);
-                            intent.AddFlags(Android.Content.ActivityFlags.NewTask);
+                        //    var intent = new Android.Content.Intent(Android.Provider.Settings.ActionAppNotificationSettings);
+                        //    intent.PutExtra(Android.Provider.Settings.ExtraAppPackage, context.PackageName);
+                        //    intent.AddFlags(Android.Content.ActivityFlags.NewTask);
 
-                            context.StartActivity(intent);
-                        }
-                        else
-                        {
-                            var notificationService = DependencyService.Get<INotificationService>();
-                            await notificationService.RequestNotificationPermissionAsync();
+                        //    context.StartActivity(intent);
+                        //}
+                        //else
+                        //{
+                        //    var notificationService = DependencyService.Get<INotificationService>();
+                        //    await notificationService.RequestNotificationPermissionAsync();
 
-                        }
+                        //}
                     }
                 }
                 else

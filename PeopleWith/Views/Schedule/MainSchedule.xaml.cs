@@ -379,6 +379,7 @@ public partial class MainSchedule : ContentPage
                                 newitem.Buttonop = 1;
                                 newitem.Buttonntop = 0;
                                 newitem.AsReqlblVis = true;
+                            
                                 ScheduleList.Add(newitem);
                             }
                         }
@@ -663,6 +664,7 @@ public partial class MainSchedule : ContentPage
                                     //Medication Taken 
                                     med.Buttonop = 1;
                                     med.Buttonntop = 0.2;
+                                    med.AsReqHidelbl = true;
                                 }
                                 else if(getfeedbackitem.Recorded == "Not Taken")
                                 {
@@ -670,11 +672,14 @@ public partial class MainSchedule : ContentPage
                                  
                                     med.Buttonop = 0.2;
                                     med.Buttonntop = 1;
+                                    med.AsReqHidelbl = true;
                                 }
                                 else
                                 {
-                                    med.Buttonop = 0.2;
-                                    med.Buttonntop = 0.2;
+                                    //as required
+                                    med.Buttonop = 1;
+                                    med.Buttonntop = 0;
+                                    med.AsReqHidelbl = false;
                                 }
                             }
                             else
@@ -689,6 +694,7 @@ public partial class MainSchedule : ContentPage
                             //Not Recorded
                             med.Buttonop = 0.2;
                             med.Buttonntop = 0.2;
+                            med.AsReqHidelbl = true;
                         }
                     }
                     else
@@ -720,17 +726,21 @@ public partial class MainSchedule : ContentPage
                                     //Medication Taken 
                                     med.Buttonop = 1;
                                     med.Buttonntop = 0.2;
+                                    med.AsReqHidelbl = true;
                                 }
                                 else if(getfeedbackitemsupp.Recorded == "Not Taken")
                                 {
                                     //Not Taken
                                     med.Buttonop = 0.2;
                                     med.Buttonntop = 1;
+                                    med.AsReqHidelbl = true;
                                 }
                                 else
                                 {
-                                    med.Buttonop = 0.2;
-                                    med.Buttonntop = 0.2;
+                                    //as required
+                                    med.Buttonop = 1;
+                                    med.Buttonntop = 0;
+                                    med.AsReqHidelbl = false;
                                 }
                             }
                             else
@@ -745,6 +755,7 @@ public partial class MainSchedule : ContentPage
                             //Not Recorded
                             med.Buttonop = 0.2;
                             med.Buttonntop = 0.2;
+                            med.AsReqHidelbl = true;
                         }
                     }
 
