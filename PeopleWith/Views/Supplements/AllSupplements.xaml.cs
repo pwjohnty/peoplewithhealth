@@ -727,7 +727,7 @@ public partial class AllSupplements : ContentPage
                 await Task.Delay(2000);
                 //await MopupService.Instance.PopAllAsync(false);
             }
-            else if (AllUserMedications.Count == 0)
+            else if (sortedbyname.Count == 0)
             {
                 noActivemedlbl.IsVisible = true;
                 AllUserMedsList.IsVisible = false;

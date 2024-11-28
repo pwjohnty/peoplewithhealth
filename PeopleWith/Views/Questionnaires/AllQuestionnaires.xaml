@@ -26,7 +26,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Label Text="Questionnaires" FontSize="26" Grid.Column="0" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
-                    <Frame x:Name="QuesInfo" HasShadow="False" Padding="0" CornerRadius="5" Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,0,20,0" BorderColor="#766647" BackgroundColor="#fff9ec">
+                    <Frame x:Name="QuesInfo" HasShadow="False" Padding="0" CornerRadius="15" Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,0,20,0" BorderColor="#766647" BackgroundColor="Transparent">
                         <Label Text="i" FontFamily="HankenGroteskBold" HorizontalOptions="Center" TextColor="#766647" FontSize="12"  Grid.Column="1" VerticalOptions="Center" />
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
@@ -131,6 +131,9 @@ Padding="0">
                         </DataTemplate>
                     </syncfusion:SfListView.ItemTemplate>
                 </syncfusion:SfListView>
+
+                <Label Text="No Completed Questionnaires Added" x:Name="noCompleteQues" IsVisible="False" FontSize="14" TextColor="#031926" FontFamily="HankenGroteskRegular" Margin="0,50,0,0" HorizontalOptions="Center" VerticalOptions="Center" VerticalTextAlignment="Center" />
+
 
                 <Grid x:Name="QuesLoading" Margin="0,120,0,0" IsVisible="False">
                     <Grid.RowDefinitions>
