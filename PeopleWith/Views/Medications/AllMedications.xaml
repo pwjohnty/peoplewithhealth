@@ -32,7 +32,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Label Text="Medications" FontSize="26" Grid.Column="0" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
-                    <Frame x:Name="MedsInfo" HasShadow="False" Padding="0" CornerRadius="5" Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,0,20,0" BorderColor="Teal" BackgroundColor="#e5f9f4">
+                    <Frame x:Name="MedsInfo" HasShadow="False" Padding="0" CornerRadius="15" Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,0,20,0" BorderColor="Teal" BackgroundColor="Transparent">
                         <Label Text="i" FontFamily="HankenGroteskBold" HorizontalOptions="Center" TextColor="Teal" FontSize="12"  Grid.Column="1" VerticalOptions="Center" />
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>

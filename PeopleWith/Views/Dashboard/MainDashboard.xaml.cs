@@ -1773,7 +1773,7 @@ public partial class MainDashboard : ContentPage
         }
         catch(Exception ex)
         {
-
+            //await Navigation.PushAsync(new ErrorPage()) ,false);  
         }
     }
 

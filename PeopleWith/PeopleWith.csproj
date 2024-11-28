@@ -113,6 +113,7 @@
 	  <None Remove="Resources\Images\filterorange.png" />
 	  <None Remove="Resources\Images\finger.png" />
 	  <None Remove="Resources\Images\fingerprint.png" />
+	  <None Remove="Resources\Images\grateful.png" />
 	  <None Remove="Resources\Images\happy.png" />
 	  <None Remove="Resources\Images\hcphome.png" />
 	  <None Remove="Resources\Images\healthreporticon.png" />
@@ -127,7 +128,6 @@
 	  <None Remove="Resources\Images\link.png" />
 	  <None Remove="Resources\Images\location.png" />
 	  <None Remove="Resources\Images\logo.png" />
-	  <None Remove="Resources\Images\love.png" />
 	  <None Remove="Resources\Images\loved.png" />
 	  <None Remove="Resources\Images\measurementhome.png" />
 	  <None Remove="Resources\Images\medcalendericon.png" />

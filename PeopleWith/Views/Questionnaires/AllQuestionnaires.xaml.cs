@@ -1,4 +1,5 @@
 using Mopups.Services;
+using Syncfusion.Pdf.Lists;
 using System.Collections.ObjectModel;
 
 namespace PeopleWith;
@@ -7,6 +8,7 @@ public partial class AllQuestionnaires : ContentPage
 {
 	public questionnaire userquestionnaireinfo = new questionnaire();
 	public ObservableCollection<questionnaire> questionnaires = new ObservableCollection<questionnaire>();
+    public ObservableCollection<userquestionnaire> userQuestionnaires = new ObservableCollection<userquestionnaire>();
     APICalls aPICalls = new APICalls();
 
     //Connectivity Changed 
@@ -67,8 +69,8 @@ public partial class AllQuestionnaires : ContentPage
 	{
 		try
 		{
-
-			var userquestionnaires = await aPICalls.GetUserQuestionnaires();
+            userQuestionnaires.Clear();
+            var userquestionnaires = await aPICalls.GetUserQuestionnaires();
 
 			foreach(var item in userquestionnaires)
 			{
@@ -83,7 +85,11 @@ public partial class AllQuestionnaires : ContentPage
 
 			var orderlist = userquestionnaires.OrderByDescending(x => DateTime.Parse(x.completedatetime)).ToList();
 
-            Alluserquestionnaires.ItemsSource = orderlist;
+            foreach( var item in orderlist)
+            {
+                userQuestionnaires.Add(item); 
+            }
+            Alluserquestionnaires.ItemsSource = userQuestionnaires;
 
             QuesLoading.IsVisible = false;
 
@@ -126,12 +132,23 @@ public partial class AllQuestionnaires : ContentPage
             {
 				Allquestionnaires.IsVisible = true;
 				Alluserquestionnaires.IsVisible = false;
+                noCompleteQues.IsVisible = false;
             }
 			else if(index == 1)
 			{
-				Allquestionnaires.IsVisible = false;
-				Alluserquestionnaires.IsVisible = true;
-			}
+                if (userQuestionnaires.Count > 0)
+                {
+                    Allquestionnaires.IsVisible = false;
+                    Alluserquestionnaires.IsVisible = true;
+                    noCompleteQues.IsVisible = false;
+                }
+                else
+                {
+                    Allquestionnaires.IsVisible = false;
+                    Alluserquestionnaires.IsVisible = false;
+                    noCompleteQues.IsVisible = true;
+                }
+            }
         }
         catch (Exception Ex)
         {
