@@ -201,58 +201,61 @@ public partial class SingleSymptom : ContentPage
                 symptomlbl.Text = item.symptomtitle;
                 for (int i = 0; i < item.feedback.Count; i++)
                 {
-                    var AddFB = new symptomfeedback();
-                    DateTime DateTimes = DateTime.Parse(item.feedback[i].timestamp);
-                    string Convert = DateTimes.ToString("dd/MM/yy HH:mm");
-                    AddFB.timestamp = Convert;
-                    AddFB.symptomfeedbackid = item.feedback[i].symptomfeedbackid;
-                    AddFB.intensity = item.feedback[i].intensity;
+                    if (item.feedback[i].action != "deleted")
+                    {
+                        var AddFB = new symptomfeedback();
+                        DateTime DateTimes = DateTime.Parse(item.feedback[i].timestamp);
+                        string Convert = DateTimes.ToString("dd/MM/yy HH:mm");
+                        AddFB.timestamp = Convert;
+                        AddFB.symptomfeedbackid = item.feedback[i].symptomfeedbackid;
+                        AddFB.intensity = item.feedback[i].intensity;
 
-                    if (String.IsNullOrEmpty(item.feedback[i].interventions))
-                    {
-                        AddFB.interventions = "--";
+                        if (String.IsNullOrEmpty(item.feedback[i].interventions))
+                        {
+                            AddFB.interventions = "--";
+                        }
+                        else
+                        {
+                            string input = item.feedback[i].interventions;
+                            string[] items = input.Split(',');
+                            string formattedString = string.Join("\n", items);
+                            AddFB.interventions = formattedString;
+                            AddFB.InterventionBool = true;
+                            AddFB.TriggerBool = false;
+                        }
+                        if (String.IsNullOrEmpty(item.feedback[i].triggers))
+                        {
+                            AddFB.triggers = "--";
+                        }
+                        else
+                        {
+                            string input = item.feedback[i].triggers;
+                            string[] items = input.Split(',');
+                            string formattedString = string.Join("\n", items);
+                            AddFB.triggers = formattedString;
+                            AddFB.InterventionBool = false;
+                            AddFB.TriggerBool = true;
+                        }
+                        if (String.IsNullOrEmpty(item.feedback[i].notes) || item.feedback[i].notes == "null")
+                        {
+                            AddFB.notes = "--";
+                        }
+                        else
+                        {
+                            AddFB.notes = item.feedback[i].notes;
+                        }
+                        if (String.IsNullOrEmpty(item.feedback[i].duration) || item.feedback[i].duration == "null" || item.feedback[i].duration == "00 Hours 00 Minutes" || item.feedback[i].duration == "No Duration")
+                        {
+                            AddFB.duration = "--";
+                        }
+                        else
+                        {
+                            var split = item.feedback[i].duration;
+                            var splits = split.Split(' ');
+                            AddFB.duration = splits[0] + "H " + splits[2] + "m";
+                        }
+                        SymptomFeedback.Add(AddFB);
                     }
-                    else
-                    {
-                        string input = item.feedback[i].interventions;
-                        string[] items = input.Split(',');
-                        string formattedString = string.Join("\n", items);
-                        AddFB.interventions = formattedString;
-                        AddFB.InterventionBool = true;
-                        AddFB.TriggerBool = false;
-                    }
-                    if (String.IsNullOrEmpty(item.feedback[i].triggers))
-                    {
-                        AddFB.triggers = "--";
-                    }
-                    else
-                    {
-                        string input = item.feedback[i].triggers;
-                        string[] items = input.Split(',');
-                        string formattedString = string.Join("\n", items);
-                        AddFB.triggers = formattedString;
-                        AddFB.InterventionBool = false;
-                        AddFB.TriggerBool = true;
-                    }
-                    if (String.IsNullOrEmpty(item.feedback[i].notes) || item.feedback[i].notes == "null")
-                    {
-                        AddFB.notes = "--";
-                    }
-                    else
-                    {
-                        AddFB.notes = item.feedback[i].notes;
-                    }
-                    if (String.IsNullOrEmpty(item.feedback[i].duration) || item.feedback[i].duration == "null" || item.feedback[i].duration == "00 Hours 00 Minutes" || item.feedback[i].duration == "No Duration")
-                    {
-                        AddFB.duration = "--";
-                    }
-                    else
-                    {
-                        var split = item.feedback[i].duration;
-                        var splits = split.Split(' ');
-                        AddFB.duration = splits[0] + "H " + splits[2] + "m";
-                    }
-                    SymptomFeedback.Add(AddFB);
                 }
             }
 
@@ -266,7 +269,11 @@ public partial class SingleSymptom : ContentPage
                 var allIntensities = new List<int>();
                 foreach (var item in SymptomFeedback)
                 {
-                    allIntensities.Add(Int32.Parse(item.intensity));
+                    if(item.action != "deleted")
+                    {
+                        allIntensities.Add(Int32.Parse(item.intensity));
+                    }
+                   
                 }
                 int largest = allIntensities.Max();
                 int smallest = allIntensities.Min();
@@ -317,7 +324,10 @@ public partial class SingleSymptom : ContentPage
             {
                 foreach(var x in item.feedback)
                 {
-                    FeedbackList.Add(x);
+                    if (x.action != "deleted")
+                    {
+                        FeedbackList.Add(x);
+                    }
                 }
             }
 
@@ -494,37 +504,74 @@ public partial class SingleSymptom : ContentPage
             {
                 //Limit No. of Taps 
                 DeleteBtn.IsEnabled = false;
-                bool Delete = await DisplayAlert("Delete Symptom", "Are you sure you would like the delete this Symptom? Once deleted it cannot be retrieved", "Delete", "Cancel");
+                bool Delete = await DisplayAlert("Delete Symptom", "Are you sure you would like the delete this Symptom? Once deleted it cannot be retrieved", "Continue", "Cancel");
                 if (Delete == true)
                 {
-                    foreach (var item in PassedSymptom)
+                    bool finalConfirmation = await DisplayAlert(
+    "Final Confirmation",
+    "This action is irreversible. Are you absolutely sure you want to permanently delete this symptom?",
+    "Yes, Delete",
+    "No, Cancel"
+);
+
+                    if (finalConfirmation)
                     {
-                        item.deleted = true;
-                    }
-                    APICalls database = new APICalls();
-                    await database.DeleteSymptom(PassedSymptom);
-                    DeleteBtn.IsEnabled = true;
-                    //Symptom Deleted Message
-                    await MopupService.Instance.PushAsync(new PopupPageHelper("Symptom Deleted") { });
-                    await Task.Delay(1500);
-
-
-                    await MopupService.Instance.PopAllAsync(false);
-
-                    foreach (var item in AllSymptomData)
-                    {
-                        if (item.id == PassedSymptom[0].id)
+                        // Proceed with deletion
+                        foreach (var item in PassedSymptom)
                         {
-                            item.deleted = PassedSymptom[0].deleted;
+                            item.deleted = true;
                         }
+                        APICalls database = new APICalls();
+                        await database.DeleteSymptom(PassedSymptom);
+
+
+                        var updatedelete = userfeedbacklistpassed.symptomfeedbacklist.Where(x => x.label == PassedSymptom[0].symptomtitle).ToList();
+
+                        foreach(var item in updatedelete)
+                        {
+                            item.action = "symptomdeleted";
+                        }
+
+                        string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.symptomfeedbacklist);
+                        userfeedbacklistpassed.symptomfeedback = newsymJson;
+
+
+                        await database.UserfeedbackUpdateSymptomData(userfeedbacklistpassed);
+
+
+                        DeleteBtn.IsEnabled = true;
+                        //Symptom Deleted Message
+                        await MopupService.Instance.PushAsync(new PopupPageHelper("Symptom Deleted") { });
+                        await Task.Delay(1500);
+
+
+                        await MopupService.Instance.PopAllAsync(false);
+
+                        foreach (var item in AllSymptomData)
+                        {
+                            if (item.id == PassedSymptom[0].id)
+                            {
+                                item.deleted = PassedSymptom[0].deleted;
+                            }
+                        }
+                        await Navigation.PushAsync(new AllSymptoms(AllSymptomData, userfeedbacklistpassed));
+                        var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(p => p is AllSymptoms);
+                        if (pageToRemoves != null)
+                        {
+                            Navigation.RemovePage(pageToRemoves);
+                        }
+                        Navigation.RemovePage(this);
                     }
-                    await Navigation.PushAsync(new AllSymptoms(AllSymptomData));
-                    var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(p => p is AllSymptoms);
-                    if (pageToRemoves != null)
+                    else
                     {
-                        Navigation.RemovePage(pageToRemoves);
+                        // User cancelled at final confirmation
+                        DeleteBtn.IsEnabled = true;
+                        return;
                     }
-                    Navigation.RemovePage(this);
+
+
+
+                   
                 }
                 else
                 {
@@ -573,7 +620,18 @@ public partial class SingleSymptom : ContentPage
     {
         try
         {
-            await Navigation.PushAsync(new ShowAllSymptomData(PassedSymptom, PassedSymptom[0].feedback , AllSymptomData), false);
+            var allfeedback = new ObservableCollection<symptomfeedback>();
+
+            foreach(var item in PassedSymptom[0].feedback)
+            {
+                if(item.action != "deleted")
+                {
+                    allfeedback.Add(item);
+                }
+            }
+
+
+            await Navigation.PushAsync(new ShowAllSymptomData(PassedSymptom, allfeedback, AllSymptomData, userfeedbacklistpassed), false);
         }
         catch(Exception Ex)
         {

@@ -561,6 +561,8 @@ public partial class RegisterFinalPage : ContentPage
                             newsym.datetime = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
                             newsym.action = "add";
                             newsym.label = item.symptomtitle;
+                            newsym.id = item.feedback[0].symptomfeedbackid;
+                            
 
                             userfeedbacklistpassed.symptomfeedbacklist.Add(newsym);
                         }
@@ -568,8 +570,8 @@ public partial class RegisterFinalPage : ContentPage
                         string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.symptomfeedbacklist);
                         userfeedbacklistpassed.symptomfeedback = newsymJson;
 
-                        APICalls databaseenew = new APICalls();
-                        await databaseenew.InsertUserFeedback(userfeedbacklistpassed);
+                     //   APICalls databaseenew = new APICalls();
+                     //   await databaseenew.InsertUserFeedback(userfeedbacklistpassed);
 
                     }
 
@@ -676,11 +678,11 @@ public partial class RegisterFinalPage : ContentPage
 
 
                 //add the userfeedback column
-                var newuseritem = new userfeedback();
-                newuseritem.userid = newuser.userid;
+               // var newuseritem = new userfeedback();
+                userfeedbacklistpassed.userid = newuser.userid;
 
                 APICalls databasee = new APICalls();
-                await databasee.InsertUserFeedback(newuseritem);
+                await databasee.InsertUserFeedback(userfeedbacklistpassed);
 
                 // Preferences.Default.Set("validationcode", newuser.validationcode);
 

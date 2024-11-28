@@ -17,6 +17,7 @@ public partial class CompareSymptoms : ContentPage
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
+    public ObservableCollection<usersymptom> Newchartusersymptoms = new ObservableCollection<usersymptom>();
 
     async public void NotasyncMethod(Exception Ex)
     {
@@ -247,18 +248,61 @@ public partial class CompareSymptoms : ContentPage
             }
             else
             {
-                SymptomProgChart.Series.Clear();
-                foreach (var item in AllUserSymptoms)
+
+                var allItem = SymptomName.SelectedItems.FirstOrDefault(item =>
+               item is ChipItem chipItem && chipItem.Text == "All");
+
+                if (allItem != null)
                 {
-                    if (getitem.Text == item.symptomtitle)
-                    {
+                    SymptomName.SelectedItems.Remove(allItem);
+                    SymptomProgChart.Series.Clear();
+                }
+
+                //if (getitem.IsSelected == true && SymptomName.SelectedItems.Count == 1)
+                //{
+                //    SymptomProgChart.Series.Clear();
+                //    getitem.IsSelected = false;
+                //    return;
+                //}
+
+                if(getitem.IsSelected == true)
+                {
+                    getitem.IsSelected = false;
+                }
+                else
+                {
+                    getitem.IsSelected = true;
+                }
+           
+                
+                SymptomProgChart.Series.Clear();
+               
+                // Check if any selected item is "All"
+
+                var finditem = AllUserSymptoms.Where(x => x.symptomtitle == getitem.Text).FirstOrDefault();
+
+                if(Newchartusersymptoms.Contains(finditem))
+                {
+                    Newchartusersymptoms.Remove(finditem);
+                }
+                else
+                {
+                    Newchartusersymptoms.Add(finditem);
+                }
+
+
+                foreach (var item in Newchartusersymptoms)
+                {
+                   
+                    
+
                         var filteredFeedback = item.feedback.OrderBy(f => DateTime.Parse(f.timestamp));
                         LineSeries series = new LineSeries
                         {
                             ItemsSource = filteredFeedback.ToList(),
                             XBindingPath = "timestamp",
                             YBindingPath = "intensity",
-                            Fill = Color.FromArgb("#FFC000"),
+                            //Fill = Color.FromArgb("#FFC000"),
                             Label = item.symptomtitle,
                             EnableTooltip = true,
                             ShowTrackballLabel = true,
@@ -270,11 +314,11 @@ public partial class CompareSymptoms : ContentPage
                             Type = Syncfusion.Maui.Charts.ShapeType.Circle,
                             StrokeWidth = 0,
                             Height = 8,
-                            Width = 8,
-                            Fill = Color.FromArgb("#FFC000")
+                            Width = 8
+                            //Fill = Color.FromArgb("#FFC000")
                         };
                         SymptomProgChart.Series.Add(series);
-                    }
+                    
 
                 }
                 //var allTimestamps = new List<DateTime>();

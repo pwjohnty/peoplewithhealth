@@ -12,7 +12,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Button BackgroundColor="ForestGreen" CornerRadius="5" FontFamily="HankenGroteskBold" TextColor="White" Margin="20,0,20,5" Grid.Row="0" HeightRequest="40" Text="Print Health Report" Clicked="Button_Clicked" />
+        <Button BackgroundColor="#031926" CornerRadius="5" FontFamily="HankenGroteskBold" TextColor="White" Margin="20,0,20,5" Grid.Row="0" HeightRequest="40" Text="Print Health Report" Clicked="Button_Clicked" />
 
         <WebView x:Name="HealthReportViewer" Grid.Row="1" Navigated="HealthReportViewer_Navigated" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"  />
     </Grid>

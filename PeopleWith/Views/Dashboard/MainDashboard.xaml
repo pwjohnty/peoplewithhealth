@@ -132,7 +132,7 @@
 
                                 <ActivityIndicator IsRunning="True" Margin="0,50,0,50" Color="#031926" VerticalOptions="Center" HorizontalOptions="Center" x:Name="listloader" IsVisible="True"/>
 
-                                <syncfusion:SfListView x:Name="activitylist" IsVisible="False" BackgroundColor="Transparent"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Horizontal" ItemSize="250" HeightRequest="160"     Margin="0,10,0,10" >
+                                <syncfusion:SfListView x:Name="activitylist" ItemTapped="activitylist_ItemTapped" IsVisible="False" BackgroundColor="Transparent"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Horizontal" ItemSize="250" HeightRequest="160"     Margin="0,10,0,10" >
                                     <syncfusion:SfListView.ItemsLayout>
                                         <syncfusion:GridLayout SpanCount="2" />
                                     </syncfusion:SfListView.ItemsLayout>

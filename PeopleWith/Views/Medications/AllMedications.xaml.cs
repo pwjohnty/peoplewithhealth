@@ -177,13 +177,16 @@ public partial class AllMedications : ContentPage
                                 }
                             }
 
-                            // Find the next time that is greater than the current time
-                            var nextTimeDue = times.Where(t => t > currentTime).OrderBy(t => t).FirstOrDefault();
+                       
+                                // Find the next time that is greater than the current time
+                                var nextTimeDue = times.Where(t => t > currentTime).OrderBy(t => t).FirstOrDefault();
 
-                            if(nextTimeDue == DateTime.MinValue)
-                            {
-                                nextTimeDue = times[0];
-                            }
+
+                                if (nextTimeDue == DateTime.MinValue)
+                                {
+                                    nextTimeDue = times[0];
+                                }
+                            
 
                             //Daily 
                             if (freq[0] == "Daily")

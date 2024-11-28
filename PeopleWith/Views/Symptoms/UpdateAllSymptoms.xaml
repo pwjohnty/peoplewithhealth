@@ -150,14 +150,14 @@
                                 <Grid>
 
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="8*"/>
-                                        <ColumnDefinition Width="92*"/>
+                                        <ColumnDefinition Width="0*"/>
+                                        <ColumnDefinition Width="100*"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
 
-                                    <sync:SfRadioButton IsChecked="False" IsEnabled="False" Grid.Row="0"  Grid.Column="0" Grid.RowSpan="3" CheckedColor="Orange" UncheckedColor="#fff7ea"  HorizontalOptions="Start" VerticalOptions="Center"  />
+                                    <sync:SfRadioButton IsChecked="False" IsEnabled="False" IsVisible="False" InputTransparent="False" Grid.Row="0"  Grid.Column="0" Grid.RowSpan="3" CheckedColor="Orange" UncheckedColor="#fff7ea"  HorizontalOptions="Start" VerticalOptions="Center"  />
 
                                     <Border Stroke="Transparent" StrokeThickness="1" Grid.Row="0" Grid.Column="1" Padding="5" Opacity="0.5" Margin="10,5,10,0" StrokeShape="RoundRectangle 10"  Background="#fff7ea" HorizontalOptions="FillAndExpand">
 
@@ -206,14 +206,14 @@ InactiveSize="2" />
                                 <Grid>
 
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="8*"/>
-                                        <ColumnDefinition Width="92*"/>
+                                        <ColumnDefinition Width="0*"/>
+                                        <ColumnDefinition Width="100*"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
 
-                                    <sync:SfRadioButton IsChecked="True" IsEnabled="True" Grid.Row="0" InputTransparent="True"  Grid.Column="0" Grid.RowSpan="3" CheckedColor="Orange" UncheckedColor="#fff7ea"  HorizontalOptions="Start" VerticalOptions="Center"  />
+                                    <sync:SfRadioButton IsChecked="True" IsVisible="False" IsEnabled="True" Grid.Row="0" InputTransparent="True"  Grid.Column="0" Grid.RowSpan="3" CheckedColor="Orange" UncheckedColor="#fff7ea"  HorizontalOptions="Start" VerticalOptions="Center"  />
 
                                     <Border Stroke="Transparent" StrokeThickness="1" Grid.Row="0" Grid.Column="1" Padding="5" Opacity="1" Margin="10,5,10,0" StrokeShape="RoundRectangle 10"  Background="#fff7ea" HorizontalOptions="FillAndExpand">
                                         <!--<Frame HasShadow="False" Margin="10,5,10,0" Grid.Row="0" Grid.Column="1" InputTransparent="False" Opacity="1" BorderColor="Transparent" Padding="5" CornerRadius="10" BackgroundColor="#fff7ea" >-->

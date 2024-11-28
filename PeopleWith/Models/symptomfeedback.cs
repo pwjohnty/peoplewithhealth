@@ -12,6 +12,8 @@ namespace PeopleWith
     {
         bool deleteCheck;
         bool dateSelected;
+
+        public string action { get; set; }
         public string timestamp { get; set; }
         public string symptomfeedbackid { get; set; }
         public string intensity { get; set; }
@@ -19,6 +21,8 @@ namespace PeopleWith
         public string triggers { get; set; }
         public string interventions { get; set; }
         public string duration { get; set; }
+
+     
         [System.Text.Json.Serialization.JsonIgnore]
         public string formattedDateTime { get; set; }
         [System.Text.Json.Serialization.JsonIgnore]

@@ -65,13 +65,14 @@ public partial class AllSymptoms : ContentPage
 
     }
 
-    public AllSymptoms(ObservableCollection<usersymptom> AllSymptoms)
+    public AllSymptoms(ObservableCollection<usersymptom> AllSymptoms, userfeedback userfeedbacklist)
     {
         try
         {
             InitializeComponent();
             addsymptom = true;
             AllUserSymptoms.Clear();
+            userfeedbacklistpassed = userfeedbacklist;
 
             AllUserSymptoms = AllSymptoms;
             GetUserSymptoms();
@@ -114,13 +115,20 @@ public partial class AllSymptoms : ContentPage
                 var allTimestamps = new List<DateTime>();
                 foreach (var x in item.feedback)
                 {
-                    if (int.TryParse(x.intensity, out int intensity))
+                    if (x.action == "deleted")
                     {
-                        allIntensities.Add(intensity);
+                        //do nothing
                     }
-                    if (DateTime.TryParse(x.timestamp, out DateTime timestamp))
+                    else
                     {
-                        allTimestamps.Add(timestamp);
+                        if (int.TryParse(x.intensity, out int intensity))
+                        {
+                            allIntensities.Add(intensity);
+                        }
+                        if (DateTime.TryParse(x.timestamp, out DateTime timestamp))
+                        {
+                            allTimestamps.Add(timestamp);
+                        }
                     }
                 }
                 if (allIntensities.Count > 0 && allTimestamps.Count > 0)
@@ -129,7 +137,7 @@ public partial class AllSymptoms : ContentPage
                     int smallest = allIntensities.Min();
                     double average = allIntensities.Average();
                     DateTime lastUpdate = allTimestamps.Max();
-                    var current = item.feedback.OrderByDescending(f => DateTime.Parse(f.timestamp)).FirstOrDefault()?.intensity;
+                    var current = item.feedback.Where(f => f.action != "deleted").OrderByDescending(f => DateTime.Parse(f.timestamp)).FirstOrDefault()?.intensity;
                     int Score = Int32.Parse(current);
                     var Scorelabel = "";
                     if (Score == 0)

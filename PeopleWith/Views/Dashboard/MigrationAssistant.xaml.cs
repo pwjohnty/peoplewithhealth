@@ -205,7 +205,7 @@ public partial class MigrationAssistant : ContentPage
                     {
                         if (topprogress.Progress <= 100)
                         {
-                            topprogress.Progress += 2.5;  // Increase by 1% each update
+                            topprogress.Progress += 5;  // Increase by 1% each update
                         }
                         else
                         {
