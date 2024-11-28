@@ -42,7 +42,7 @@
             </Frame>
 
             <Label Text="Details" Margin="10,0,0,0" FontFamily="HankenGroteskBold"  FontSize="20" VerticalOptions="Center" TextColor="#031926" />
-            <Frame x:Name="NoDiagDetails" IsVisible="False"  HasShadow="False" BorderColor="#E5E5E5" BackgroundColor="Transparent" Margin="10,10,10,0">
+            <Frame x:Name="NoDiagDetails"  HasShadow="False" BorderColor="#E5E5E5" BackgroundColor="Transparent" Margin="10,10,10,0">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="90*"/>
@@ -55,7 +55,7 @@
                     <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1" NumberOfTapsRequired="1"/>
                 </Frame.GestureRecognizers>
             </Frame>
-            <Frame x:Name="DiagDetails" IsVisible="False"  HasShadow="False" BorderColor="#E5E5E5" BackgroundColor="Transparent" Margin="10,10,10,0">
+            <!--<Frame x:Name="DiagDetails" IsVisible="False"  HasShadow="False" BorderColor="#E5E5E5" BackgroundColor="Transparent" Margin="10,10,10,0">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="15*"/>
@@ -69,7 +69,7 @@
                 <Frame.GestureRecognizers>
                     <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_2" NumberOfTapsRequired="1"/>
                 </Frame.GestureRecognizers>
-            </Frame>
+            </Frame>-->
 
 
 

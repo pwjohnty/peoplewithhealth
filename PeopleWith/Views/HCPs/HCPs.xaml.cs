@@ -59,18 +59,19 @@ public partial class HCPs : ContentPage
         {
             if(!HCPAdded)
             {
+                HcpLoading.IsVisible = true; 
                 var getHCPSTask = aPICalls.GetUserHCP();
 
-                var delayTask = Task.Delay(1000);
+                //var delayTask = Task.Delay(1000);
 
-                if (await Task.WhenAny(getHCPSTask, delayTask) == delayTask)
-                {
-                    await MopupService.Instance.PushAsync(new GettingReady("Loading HCP's") { });
-                }
+                //if (await Task.WhenAny(getHCPSTask, delayTask) == delayTask)
+                //{
+                //    await MopupService.Instance.PushAsync(new GettingReady("Loading HCP's") { });
+                //}
 
                 AllUserHCPs = await getHCPSTask;
 
-                await MopupService.Instance.PopAllAsync(false);
+                //await MopupService.Instance.PopAllAsync(false);
             }
            
             foreach(var item in AllUserHCPs)
@@ -89,6 +90,7 @@ public partial class HCPs : ContentPage
                 HCPListViewGrid.IsVisible = false;
                 EmptyStack.IsVisible = true;
             }
+            HcpLoading.IsVisible = false; 
         }
         catch (Exception Ex)
         {

@@ -15,8 +15,13 @@ public partial class SingleMeasurement : ContentPage
     ObservableCollection<usermeasurement> orderlistbydate = new ObservableCollection<usermeasurement>();
     ObservableCollection<measurement> measurementlist = new ObservableCollection<measurement>();
     ObservableCollection<usermeasurement> deleeteusermeasurementlistpassed = new ObservableCollection<usermeasurement>();
+    measurement MeasureInfo = new measurement();
+
     //List<VerticalLinePoint> verticalLinePoints = new List<VerticalLinePoint>();
     bool newmeasurement;
+    //string WebpageLink;
+    //public string WeborPdf;
+
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
@@ -65,6 +70,8 @@ public partial class SingleMeasurement : ContentPage
             datelbl.Text = "Today";
 
             charticon.IsVisible = false;
+
+            Measurementinfo();
         }
         catch (Exception Ex)
         {
@@ -90,8 +97,10 @@ public partial class SingleMeasurement : ContentPage
             detailslbl.IsVisible = true;
             detailsframe.IsVisible = true;
             showallbtn.IsVisible = true;
-
+             
             populatechart();
+
+            Measurementinfo(); 
 
             WeakReferenceMessenger.Default.Register<SendItemMessage>(this, (r, m) =>
             {
@@ -99,6 +108,22 @@ public partial class SingleMeasurement : ContentPage
                 Task.Delay(100);
                 populatechart();
             });
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    async void Measurementinfo()
+    {
+        try
+        {
+            //var StringId = usermeasurementpassed.measurementid;
+            MeasureInfo.measurementid = usermeasurementpassed.measurementid;
+            APICalls Database = new APICalls();
+            var GetmeasureInfo  = await Database.GetMeasurementsInfo(MeasureInfo);
+            MeasureInfo = GetmeasureInfo; 
         }
         catch (Exception Ex)
         {
@@ -729,11 +754,79 @@ public partial class SingleMeasurement : ContentPage
         try
         {
             //Add Symptom Info Here
-            await DisplayAlert("Measurement Information", "No Information is saved against this Measurement", "Close");
+            if(MeasureInfo.measurementinformation != null)
+            {
+                var Title = usermeasurementpassed.measurementname; 
+                await Navigation.PushAsync(new MeasurementsInfo(MeasureInfo, Title), false); 
+            }
+            else
+            {
+                await DisplayAlert("Measurement Information", "No Information is saved against this Measurement", "Close");
+
+            }
         }
         catch (Exception Ex)
         {
             NotasyncMethod(Ex);
         }
     }
+
+    //async private void TapGestureRecognizer_Tapped_1(object sender, TappedEventArgs e)
+    //{
+    //    try
+    //    {
+
+    //        if (WeborPdf == "Web")
+    //        {
+    //            mainstack.IsVisible = false;
+    //            WebViewerStack.IsVisible = true;
+    //            NavigationPage.SetHasNavigationBar(this, false);
+    //            if (DeviceInfo.Current.Platform == DevicePlatform.Android)
+    //            {
+    //                AndroidBtn.IsVisible = true;
+    //            }
+    //            else if (DeviceInfo.Current.Platform == DevicePlatform.iOS)
+    //            {
+    //                IOSBtn.IsVisible = true;
+    //            }
+    //        }
+    //        else
+    //        {
+    //            var pdflink = WebpageLink;
+    //            await Browser.OpenAsync(pdflink, new BrowserLaunchOptions
+    //            {
+    //                LaunchMode = BrowserLaunchMode.SystemPreferred,
+    //                TitleMode = BrowserTitleMode.Hide
+    //            });
+    //        }
+
+    //        if (DeviceInfo.Current.Platform == DevicePlatform.Android)
+    //        {
+    //            WebView.HeightRequest = 700;
+    //        }
+    //    }
+    //    catch (Exception Ex)
+    //    {
+    //        NotasyncMethod(Ex);
+    //    }
+    //}
+
+    //async private void BackBtn_Clicked(object sender, EventArgs e)
+    //{
+    //    try
+    //    {
+    //        if (WebViewerStack.IsVisible == true)
+    //        {
+    //            WebViewerStack.IsVisible = false;
+    //            mainstack.IsVisible = true;
+    //            AndroidBtn.IsVisible = false;
+    //            IOSBtn.IsVisible = false;
+    //            NavigationPage.SetHasNavigationBar(this, true);
+    //        }
+    //    }
+    //    catch (Exception Ex)
+    //    {
+    //        NotasyncMethod(Ex);
+    //    }
+    //}
 }

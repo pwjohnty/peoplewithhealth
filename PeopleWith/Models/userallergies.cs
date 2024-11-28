@@ -32,8 +32,6 @@ namespace PeopleWith
         public bool deleted { get; set; }
         public string userid { get; set; }
         public string allergyid { get; set; }
-
-        [System.Text.Json.Serialization.JsonIgnore]
         public string title { get; set; }
 
         //[System.Text.Json.Serialization.JsonIgnore]

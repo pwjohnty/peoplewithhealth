@@ -226,6 +226,55 @@ public partial class ShowAllMedication : ContentPage
                         }
                     }
 
+                    //var categorizedMedicationList = MedicationList
+                    //    .Select(m => new
+                    //    {
+                    //        Medication = m,
+                    //        ParsedDate = DateTime.Parse(m.MedDateTime),
+                    //        ActionGroup = m.Action.ToLower()
+                    //    })
+                    //    .GroupBy(m => m.ActionGroup)
+                    //    .ToDictionary(g => g.Key, g => g.OrderByDescending(m => m.ParsedDate).Select(x => x.Medication).ToList());
+
+                    //// Update the ListView's ItemsSource and height
+                    //var sortedList = categorizedMedicationList
+                    //    .SelectMany(g => g.Value)
+                    //    .OrderByDescending(m => DateTime.Parse(m.MedDateTime)) 
+                    //    .ToList();
+
+                    //UserMedicationSchedule.ItemsSource = sortedList;
+                    //UserMedicationSchedule.HeightRequest = sortedList.Count * 120;
+
+                    //// Assign filtered lists using TryGetValue
+                    //if (categorizedMedicationList.TryGetValue("taken", out var takenList))
+                    //{
+                    //    TakenMedicationList = new ObservableCollection<usermedication>(takenList);
+                    //}
+                    //else
+                    //{
+                    //    TakenMedicationList = new ObservableCollection<usermedication>();
+                    //}
+
+                    //if (categorizedMedicationList.TryGetValue("not taken", out var notTakenList))
+                    //{
+                    //    NotTakenMedicationList = new ObservableCollection<usermedication>(notTakenList);
+                    //}
+                    //else
+                    //{
+                    //    NotTakenMedicationList = new ObservableCollection<usermedication>();
+                    //}
+
+                    //if (categorizedMedicationList.TryGetValue("not recorded", out var notRecordedList))
+                    //{
+                    //    NotRecordedMedicationList = new ObservableCollection<usermedication>(notRecordedList);
+                    //}
+                    //else
+                    //{
+                    //    NotRecordedMedicationList = new ObservableCollection<usermedication>();
+                    //}
+
+
+
                     var sortedList = MedicationList.OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToList();
                     UserMedicationSchedule.ItemsSource = sortedList;
                     UserMedicationSchedule.HeightRequest = sortedList.Count * 120;
@@ -524,9 +573,9 @@ public partial class ShowAllMedication : ContentPage
                 UserMedicationSchedule.IsVisible = true;
                 noFilterstack.IsVisible = false;
 
-                var sortedList = MedicationList.OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToList();
-                UserMedicationSchedule.ItemsSource = sortedList;
-                UserMedicationSchedule.HeightRequest = sortedList.Count * 120;
+                //var sortedList = MedicationList.OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToList();
+                UserMedicationSchedule.ItemsSource = MedicationList;
+                UserMedicationSchedule.HeightRequest = MedicationList.Count * 120;
                
             }
             else if (parameter == "Taken")
@@ -541,9 +590,9 @@ public partial class ShowAllMedication : ContentPage
                     UserMedicationSchedule.IsVisible = true;
                     noFilterstack.IsVisible = false;
 
-                    var sortedList = TakenMedicationList.OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToList();
-                    UserMedicationSchedule.ItemsSource = sortedList;
-                    UserMedicationSchedule.HeightRequest = sortedList.Count * 120;
+                    //var sortedList = TakenMedicationList.OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToList();
+                    UserMedicationSchedule.ItemsSource = TakenMedicationList;
+                    UserMedicationSchedule.HeightRequest = TakenMedicationList.Count * 120;
                 }
                 else
                 {
@@ -565,9 +614,9 @@ public partial class ShowAllMedication : ContentPage
                         UserMedicationSchedule.IsVisible = true;
                         noFilterstack.IsVisible = false;
 
-                        var sortedList = NotTakenMedicationList.OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToList();
-                        UserMedicationSchedule.ItemsSource = sortedList;
-                        UserMedicationSchedule.HeightRequest = sortedList.Count * 120;
+                        //var sortedList = NotTakenMedicationList.OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToList();
+                        UserMedicationSchedule.ItemsSource = NotTakenMedicationList;
+                        UserMedicationSchedule.HeightRequest = NotTakenMedicationList.Count * 120;
                     }
                     else
                     {
@@ -589,9 +638,9 @@ public partial class ShowAllMedication : ContentPage
                         UserMedicationSchedule.IsVisible = true;
                         noFilterstack.IsVisible = false;
 
-                        var sortedList = NotRecordedMedicationList.OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToList();
-                        UserMedicationSchedule.ItemsSource = sortedList;
-                        UserMedicationSchedule.HeightRequest = sortedList.Count * 120;
+                        //var sortedList = NotRecordedMedicationList.OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToList();
+                        UserMedicationSchedule.ItemsSource = NotRecordedMedicationList;
+                        UserMedicationSchedule.HeightRequest = NotRecordedMedicationList.Count * 120;
                     }
                     else
                     {

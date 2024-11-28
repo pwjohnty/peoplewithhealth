@@ -96,6 +96,7 @@ public partial class AllMood : ContentPage
         {
             if(initialload == true)
             {
+                MoodLoading.IsVisible = true; 
                 var Userid = Helpers.Settings.UserKey;
                 APICalls database = new APICalls();
 
@@ -105,7 +106,7 @@ public partial class AllMood : ContentPage
 
                 //if (await Task.WhenAny(getMoodsTask, delayTask) == delayTask)
                 //{
-                    await MopupService.Instance.PushAsync(new GettingReady("Just Getting Mood Ready for you") { });
+                    //await MopupService.Instance.PushAsync(new GettingReady("Just Getting Mood Ready for you") { });
                 //}
 
                 AllMoods = await getMoodsTask;
@@ -149,7 +150,8 @@ public partial class AllMood : ContentPage
                 MoodOverview.IsVisible = false;
             }
 
-            await MopupService.Instance.PopAllAsync(false);
+            MoodLoading.IsVisible = false; 
+            //await MopupService.Instance.PopAllAsync(false);
         }
         catch (Exception Ex)
         {

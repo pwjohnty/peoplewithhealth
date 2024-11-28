@@ -37,8 +37,9 @@ public partial class AllMedications : ContentPage
         try
         {
             InitializeComponent();
+            
             getusermedications();
-
+         
             //if (AllUserMedications.Count == 0 && CompletedMedications.Count == 0 && AsRequiredMedications.Count == 0)
             //{
             //    nodatastack.IsVisible = true;
@@ -110,20 +111,22 @@ public partial class AllMedications : ContentPage
     async void getusermedications()
 	{
 		try
-		{
+        {
+            MedsLoading.IsVisible = true;
+           
             var getMedicationsTask =  aPICalls.GetUserMedicationsAsync();
 
             //var delayTask = Task.Delay(500);
 
             //if (await Task.WhenAny(getMedicationsTask, delayTask) == delayTask)
             //{
-                await MopupService.Instance.PushAsync(new GettingReady("Loading Medications") { });
+               // await MopupService.Instance.PushAsync(new GettingReady("Loading Medications") { });
             //}
         
             AllUserMedications = await getMedicationsTask;
             
             WorkOutNextDue();
-            
+            MedsLoading.IsVisible = false;
         }
         catch (Exception Ex)
         {
@@ -165,8 +168,10 @@ public partial class AllMedications : ContentPage
                                 var parts = x.Split('|');
                                 if (parts.Length > 0)
                                 {
-                                    if (DateTime.TryParseExact(parts[0], "HH:mm", null, System.Globalization.DateTimeStyles.None, out DateTime parsedTime))
+                                    //string[] formats = { "HH:mm", "HH:mm:ss" };
+                                    if (DateTime.TryParse(parts[0], out DateTime parsedTime))
                                     {
+                                        //string formattedTime = parsedTime.ToString("HH:mm");
                                         times.Add(parsedTime);
                                     }
                                 }
@@ -196,7 +201,7 @@ public partial class AllMedications : ContentPage
                                     foreach (var p in item.TimeDosage)
                                     {
                                         var split = p.Split('|');
-                                        if (DateTime.TryParseExact(split[0], "HH:mm", null, System.Globalization.DateTimeStyles.None, out DateTime timePart))
+                                        if (DateTime.TryParse(split[0], out DateTime timePart))
                                         {
                                             if (timePart == firstTimeForTomorrow)
                                             {
@@ -234,7 +239,8 @@ public partial class AllMedications : ContentPage
                                     foreach (var p in item.TimeDosage)
                                     {
                                         var split = p.Split('|');
-                                        if (DateTime.TryParseExact(split[0], "HH:mm", null, System.Globalization.DateTimeStyles.None, out DateTime timePart))
+                                        //string[] formats = { "HH:mm", "HH:mm:ss" };
+                                        if (DateTime.TryParse(split[0], out DateTime timePart))
                                         {
                                             if (timePart == nextTimeDue)
                                             {
@@ -293,7 +299,7 @@ public partial class AllMedications : ContentPage
                                         foreach (var p in item.TimeDosage)
                                         {
                                             var split = p.Split('|');
-                                            if (DateTime.TryParseExact(split[0], "HH:mm", null, System.Globalization.DateTimeStyles.None, out DateTime timePart))
+                                            if (DateTime.TryParse(split[0], out DateTime timePart))
                                             {
                                                 if (timePart == nextTimeDue)
                                                 {
@@ -398,7 +404,7 @@ public partial class AllMedications : ContentPage
                                         foreach (var p in item.TimeDosage)
                                         {
                                             var split = p.Split('|');
-                                            if (DateTime.TryParseExact(split[0], "HH:mm", null, System.Globalization.DateTimeStyles.None, out DateTime timePart))
+                                            if (DateTime.TryParse(split[0], out DateTime timePart))
                                             {
                                                 if (timePart == nextTimeDue)
                                                 {
@@ -552,7 +558,7 @@ public partial class AllMedications : ContentPage
                                     DateTime nextDueDate = currentDate.AddDays(daysUntilNextDue);
 
                                     var firstTimeDosage = x.Split('|');
-                                    if (firstTimeDosage.Length >= 2 && DateTime.TryParseExact(firstTimeDosage[0], "HH:mm", null, System.Globalization.DateTimeStyles.None, out DateTime parsedTime))
+                                    if (firstTimeDosage.Length >= 2 && DateTime.TryParse(firstTimeDosage[0], out DateTime parsedTime))
                                     {
 
                                         DateTime nextDueDateTime = new DateTime(nextDueDate.Year, nextDueDate.Month, nextDueDate.Day, parsedTime.Hour, parsedTime.Minute, 0);
@@ -721,14 +727,14 @@ public partial class AllMedications : ContentPage
                 nodatastack.IsVisible = true;
                 datastack.IsVisible = false;
                 await Task.Delay(2000);
-                await MopupService.Instance.PopAllAsync(false);
+                //await MopupService.Instance.PopAllAsync(false);
             }
             else if (AllUserMedications.Count == 0)
             {
                 noActivemedlbl.IsVisible = true;
                 AllUserMedsList.IsVisible = false;
                 await Task.Delay(2000);
-                await MopupService.Instance.PopAllAsync(false);
+                //await MopupService.Instance.PopAllAsync(false);
             }
             else
             {
@@ -738,7 +744,7 @@ public partial class AllMedications : ContentPage
                 AllUserMedsList.IsVisible = true;
                 AllUserMedsList.ItemsSource = AllUserMedications;
 
-                await MopupService.Instance.PopAllAsync(false);
+                //await MopupService.Instance.PopAllAsync(false);
             }
 
             AllUserMedsList.ItemsSource = sortedbyname;
@@ -947,6 +953,18 @@ public partial class AllMedications : ContentPage
             {
                 await Navigation.PushAsync(new SingleMedication(AllUserMedications, SelectedMed), false);
             }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    async private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            await MopupService.Instance.PushAsync(new Infopopup("med") { });
         }
         catch (Exception Ex)
         {

@@ -63,6 +63,7 @@ public partial class AllDiagnosis : ContentPage
         {
             if(initalload == true)
             {
+                DiagLoading.IsVisible = true; 
                 var Userid = Helpers.Settings.UserKey;
                 APICalls database = new APICalls();
 
@@ -72,7 +73,7 @@ public partial class AllDiagnosis : ContentPage
 
                 //if (await Task.WhenAny(getDiagnosisTask, delayTask) == delayTask)
                 //{
-                    await MopupService.Instance.PushAsync(new GettingReady("Loading Diagnosis") { });
+                    //await MopupService.Instance.PushAsync(new GettingReady("Loading Diagnosis") { });
                 //}
 
                 DiagnosisList = await getDiagnosisTask;
@@ -109,6 +110,7 @@ public partial class AllDiagnosis : ContentPage
 
             //var sortedDiagnosis = DiagnosisList.OrderByDescending(f => DateTime.Parse(f.dateofdiagnosis)).ToList();
 
+            //Code For Pending Medication From Nsat Reg Process
             var sortedDiagnosis = DiagnosisList.OrderBy(x => x.status == "Pending" ? 0 : 1)
                     .ThenByDescending(x =>
                     {
@@ -134,7 +136,8 @@ public partial class AllDiagnosis : ContentPage
                 DiagnosisOverview.IsVisible = false;
             }
 
-            await MopupService.Instance.PopAllAsync(false);
+            DiagLoading.IsVisible = false; 
+            //await MopupService.Instance.PopAllAsync(false);
 
         }
         catch (Exception Ex)

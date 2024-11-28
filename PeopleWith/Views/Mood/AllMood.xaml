@@ -48,13 +48,13 @@
 
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="20*"/>
-                                        <ColumnDefinition Width="70*"/>
+                                        <ColumnDefinition Width="15*"/>
+                                        <ColumnDefinition Width="75*"/>
                                         <ColumnDefinition Width="10*"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <Image Source="{Binding source}" Margin="0,0,0,0"  VerticalOptions="End" Grid.Row="0" Grid.Column="0"  Grid.RowSpan="2"  />
-                                    <Label Text="{Binding title}" Margin="10,0,0,0" FontFamily="HankenGroteskBold"  FontSize="14" VerticalOptions="End" Grid.Row="0" Grid.Column="1"  TextColor="#B8860B" />
+                                    <Image Source="{Binding source}" Margin="0,0,0,0"  HeightRequest="35" WidthRequest="35" VerticalOptions="Center" Grid.Row="0" Grid.Column="0"  Grid.RowSpan="2"  />
+                                    <Label Text="{Binding title}" Margin="10,0,0,0" FontFamily="HankenGroteskBold"  FontSize="14" VerticalOptions="End" HorizontalOptions="Start" Grid.Row="0" Grid.Column="1"  TextColor="#B8860B" />
                                     <Label Text="{Binding datetime}" FontFamily="HankenGroteskBold" VerticalOptions="Start" Margin="10,0,0,0" HorizontalOptions="Start" FontSize="12" Grid.Row="1" Grid.Column="1"  TextColor="DarkGray" />
 
                                     <Image Source="nextdarker.png" Grid.Row="0" Grid.Column="3"  Grid.RowSpan="2"  Margin="0,0,0,0"  HeightRequest="12" WidthRequest="12" VerticalOptions="Center" HorizontalOptions="End" />
@@ -67,5 +67,16 @@
                 </syncfusion:SfListView.ItemTemplate>
             </syncfusion:SfListView>
         </StackLayout>
+
+        <Grid x:Name="MoodLoading" Margin="0,150,0,0"  IsVisible="False">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <ActivityIndicator IsRunning="True" Grid.Row="0" Color="#B8860B" HorizontalOptions="Center" VerticalOptions="Start" />
+            <Label Text="Loading Mood..." Grid.Row="1" TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="Center" Margin="0,5,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" />
+
+
+        </Grid>
     </VerticalStackLayout>
 </ContentPage>

@@ -66,6 +66,17 @@
             </syncfusion:SfListView>
         </Grid>
 
+        <Grid x:Name="AllergyLoading" Margin="0,150,0,0" IsVisible="False">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <ActivityIndicator IsRunning="True" Grid.Row="0" Color="#BC8F8F" HorizontalOptions="Center" VerticalOptions="Start" />
+            <Label Text="Loading Allergies..." Grid.Row="1" TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="Center" Margin="0,5,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" />
+
+
+        </Grid>
+
 
     </VerticalStackLayout>
 </ContentPage>

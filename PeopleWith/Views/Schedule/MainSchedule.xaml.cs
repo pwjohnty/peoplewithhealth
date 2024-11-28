@@ -144,15 +144,16 @@ public partial class MainSchedule : ContentPage
     {
         try
         {
-
+            SchedLoading.IsVisible = true; 
             AllUserMedications = await aPICalls.GetUserMedicationsAsync();
 
             AllUserSupplements = await aPICalls.GetUserSupplementsAsync();
-
+            SchedLoading.IsVisible = false; 
             populateschedule();
         }
         catch (Exception Ex)
         {
+            SchedLoading.IsVisible = false;
             NotasyncMethod(Ex);
         }
 

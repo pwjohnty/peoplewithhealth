@@ -8,6 +8,19 @@
 
         <StackLayout VerticalOptions="FillAndExpand" Margin="20,0,20,0" HorizontalOptions="FillAndExpand">
 
+            <!--<Grid x:Name="NavStack" HorizontalOptions="FillAndExpand">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <ImageButton x:Name="AndroidBtn" Clicked="BackBtn_Clicked" IsVisible="False" Grid.Row="0" Grid.Column="0" Source="androidarrow.png" HeightRequest="24" WidthRequest="24" HorizontalOptions="Start" VerticalOptions="Center" Margin="-5,15,0,0"/>
+                <ImageButton x:Name="IOSBtn" Clicked="BackBtn_Clicked" IsVisible="False" Grid.Row="0" Grid.Column="0" Source="iosback.png" HeightRequest="50" WidthRequest="60" HorizontalOptions="Start" VerticalOptions="Center" Margin="15,5,0,0"/>
+
+            </Grid>-->
+
             <StackLayout x:Name="mainstack">
 
 
@@ -98,8 +111,8 @@ Padding="10">
                         <Label x:Name="unitlbl" FontSize="20" Margin="0,0,5,0" Grid.Row="0" TextColor="#031926" FontFamily="HankenGroteskBold" VerticalOptions="Center" FontAttributes="None" HorizontalOptions="End" />
 
 
-                        <BoxView HorizontalOptions="FillAndExpand" Margin="0,20,0,20" Color="#e5f0fb" BackgroundColor="#e5f0fb" HeightRequest="1" Grid.Row="1" />
-                        <Frame Padding="0" Grid.Row="2" HasShadow="False" BorderColor="Transparent" BackgroundColor="Transparent" >
+                        <BoxView  HorizontalOptions="FillAndExpand" Margin="0,20,0,20" Color="#e5f0fb" BackgroundColor="#e5f0fb" HeightRequest="1" Grid.Row="1" />
+                        <Frame x:Name="NoDetialsAdded"  Padding="0" Grid.Row="2" HasShadow="False" BorderColor="Transparent" BackgroundColor="Transparent" >
                             <Grid >
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="90*"/>
@@ -112,6 +125,22 @@ Padding="10">
                                 <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
                             </Frame.GestureRecognizers>
                         </Frame>
+
+                        <!--<Frame x:Name="MeasDetails" Grid.Row="2" IsVisible="False"  Padding="0"  HasShadow="False" BorderColor="Transparent" BackgroundColor="Transparent" >
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="15*"/>
+                                    <ColumnDefinition Width="75*"/>
+                                    <ColumnDefinition Width="10*"/>
+                                </Grid.ColumnDefinitions>
+                                <Image  x:Name="MeasDetailsIMG" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Start" HeightRequest="30" WidthRequest="30" />
+                                <Label  x:Name="MeasDetailslbl"  Margin="0,0,0,0" Grid.Column="1" FontFamily="HankenGroteskBold"  FontSize="16" VerticalOptions="Center" TextColor="#031926" />
+                                <Image  Source="backbutton.png" Grid.Column="2" Rotation="180" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="15" WidthRequest="15" />
+                            </Grid>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1" NumberOfTapsRequired="1"/>
+                            </Frame.GestureRecognizers>
+                        </Frame>-->
 
                     </Grid>
                 </Frame>
@@ -132,6 +161,17 @@ Text="Show all data" />
                 <Label HorizontalTextAlignment="Center" Text="If your Measurement is deleted you will lose all your Measurement feedback" Margin="5,0,5,20" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="DarkGray"  />
 
             </StackLayout>
+
+            <Grid  x:Name="WebViewerStack" IsVisible="False">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <WebView x:Name="WebView" Grid.Row="0" IsEnabled="True"  HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"  />
+            </Grid>
 
         </StackLayout>
         

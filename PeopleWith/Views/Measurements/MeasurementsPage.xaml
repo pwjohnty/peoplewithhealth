@@ -84,8 +84,18 @@
                         </syncfusion:SfListView.ItemTemplate>
                     </syncfusion:SfListView>
 
+                <Grid x:Name="MeasLoading" Margin="0,150,0,0"  IsVisible="False">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <ActivityIndicator IsRunning="True" Grid.Row="0" Color="#031926" HorizontalOptions="Center" VerticalOptions="Start" />
+                    <Label Text="Loading Measurements..." Grid.Row="1" TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="Center" Margin="0,5,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" />
 
-                    <!--<Label Text="Add a New Measurement" IsVisible="False" FontSize="20" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
+
+                </Grid>
+
+                <!--<Label Text="Add a New Measurement" IsVisible="False" FontSize="20" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
                     <Label Text="Tap on a new measurement below to begin" IsVisible="False" FontSize="12" Margin="20,10,0,0" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
 
                     <syncfusion:SfListView x:Name="measurementlist" ItemTapped="measurementlist_ItemTapped" Margin="10,0,10,30" HeightRequest="500" ScrollBarVisibility="Never" SelectionBackground="Transparent" SelectionMode="Single" BackgroundColor="Transparent">

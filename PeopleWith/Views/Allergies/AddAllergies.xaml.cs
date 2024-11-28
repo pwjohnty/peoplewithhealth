@@ -135,6 +135,7 @@ public partial class AddAllergies : ContentPage
                     var NewAllergy = new userallergies();
                     NewAllergy.userid = Userid;
                     NewAllergy.allergyid = Allergy.Allergyid;
+                    NewAllergy.title = Allergy.Title; 
 
                     AllergytoAdd.Add(NewAllergy);
 
