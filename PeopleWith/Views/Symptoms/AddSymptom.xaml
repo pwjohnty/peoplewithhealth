@@ -6,6 +6,7 @@
              xmlns:popup="clr-namespace:Syncfusion.Maui.Popup;assembly=Syncfusion.Maui.Popup"
              xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
              x:Class="PeopleWith.AddSymptom" NavigationPage.HasNavigationBar="True"
+             HideSoftInputOnTapped="True"
              xmlns:local="clr-namespace:PeopleWith" BackgroundColor="White" 
              >
     <ScrollView>

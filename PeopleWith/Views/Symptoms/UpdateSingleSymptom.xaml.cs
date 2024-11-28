@@ -1,5 +1,6 @@
 //using Java.Time.Temporal;
 using Mopups.Services;
+using Syncfusion.Maui.DataSource.Extensions;
 using Syncfusion.Maui.Picker;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Design;
@@ -32,6 +33,7 @@ public partial class UpdateSingleSymptom : ContentPage
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
     userfeedback userfeedbacklistpassed = new userfeedback();
+    bool edit;
 
     async public void NotasyncMethod(Exception Ex)
     {
@@ -57,18 +59,25 @@ public partial class UpdateSingleSymptom : ContentPage
             NotasyncMethod(Ex);
         }
     }
-    public UpdateSingleSymptom(ObservableCollection<usersymptom> SymptomPassed, String AddEdit, ObservableCollection<usersymptom> AllSymptomData)
+    public UpdateSingleSymptom(ObservableCollection<usersymptom> SymptomPassed, String AddEdit, ObservableCollection<usersymptom> AllSymptomData, userfeedback userfeedbacklist , string editpage)
     {
         try
         {
+
+            //edit data page
+
             InitializeComponent();
             addtimepicker.Time = DateTime.Now.TimeOfDay;
             addtimepicker.Time = DateTime.Now.TimeOfDay;
+            userfeedbacklistpassed = userfeedbacklist;
             gettriggersandinterventions();
             PassedSymptom = SymptomPassed;
             EditAdd = AddEdit;
             AllSymptomDataPassed = AllSymptomData;
             TItlelbl.Text = PassedSymptom[0].symptomtitle;
+            DeleteBtn.IsVisible = true;
+            edit = true;
+
             foreach (var item in SymptomPassed)
             {
                 // SymptomTitle.Text = item.symptomtitle;
@@ -144,6 +153,8 @@ public partial class UpdateSingleSymptom : ContentPage
     {
         try
         {
+            //add data page
+
             InitializeComponent();
             addtimepicker.Time = DateTime.Now.TimeOfDay;
             addtimepicker.Time = DateTime.Now.TimeOfDay;
@@ -153,6 +164,9 @@ public partial class UpdateSingleSymptom : ContentPage
             EditAdd = AddEdit;
             AllSymptomDataPassed = AllSymptomData;
             TItlelbl.Text = PassedSymptom[0].symptomtitle;
+
+            UpdateBtn.Text = "Add";
+
             foreach (var item in SymptomPassed)
             {
                 // SymptomTitle.Text = item.symptomtitle;
@@ -270,6 +284,32 @@ public partial class UpdateSingleSymptom : ContentPage
                             {
 
                                 TriggersStack.IsVisible = true;
+
+                                var newcollection = Triggers.OrderBy(p => p.title).ToList();
+
+                                // TriggersLV.SelectedItem = x.triggers;
+
+                                var sl = Triggers.Where(m => m.title == x.triggers).FirstOrDefault();
+
+                                if (sl != null)
+                                {
+                                    // Remove the item from the collection
+                                    newcollection.Remove(sl);
+
+                                    // Insert the item at the first position
+                                    newcollection.Insert(0, sl);
+
+                                }
+
+                                //int index = Triggers.IndexOf(sl);
+                                TriggersLV.ItemsSource = newcollection;
+
+                                TriggersLV.SelectedItems.Add(sl);
+
+                               // int index = TriggersLV.DataSource.DisplayItems.IndexOf(sl);
+                                // Programmatic scrolling based on the item index.
+                               // TriggersLV.ItemsLayout.ScrollToRowIndex(index, Microsoft.Maui.Controls.ScrollToPosition.MakeVisible, false);
+
                                 //Add Chips
                                 //string[] itemsArray = x.triggers.Split(',');
                                 //foreach (string A in itemsArray)
@@ -301,6 +341,34 @@ public partial class UpdateSingleSymptom : ContentPage
                             else
                             {
                                 InterventionsStack.IsVisible = true;
+
+                                var newcollection = Interventions.OrderBy(p => p.title).ToList();
+
+
+                                var sl = Interventions.Where(m => m.title == x.interventions).FirstOrDefault();
+
+                                //  int index = Interventions.IndexOf(sl);
+
+                                if (sl != null)
+                                {
+                                    // Remove the item from the collection
+                                    newcollection.Remove(sl);
+
+                                    // Insert the item at the first position
+                                    newcollection.Insert(0, sl);
+
+                                }
+
+                                InterventionLV.ItemsSource = newcollection;
+
+
+                                InterventionLV.SelectedItems.Add(sl);
+
+                              //  int index = InterventionLV.DataSource.DisplayItems.IndexOf(sl);
+                                // Programmatic scrolling based on the item index.
+                                //InterventionLV.ItemsLayout.ScrollToRowIndex(index, Microsoft.Maui.Controls.ScrollToPosition.MakeVisible, false);
+
+
                                 //Add Chips
                                 //string[] itemsArray = x.interventions.Split(',');
                                 //foreach (string A in itemsArray)
@@ -635,12 +703,14 @@ public partial class UpdateSingleSymptom : ContentPage
                         {
                             if (i.symptomfeedbackid == feedbackid)
                             {
+                                i.action = "update";
                                 i.intensity = items.intensity;
                                 i.notes = items.notes;
                                 i.timestamp = items.timestamp;
                                 i.interventions = items.interventions;
                                 i.triggers = items.triggers;
                                 i.duration = items.duration;
+                                
                             }
                         }
                     }
@@ -655,6 +725,14 @@ public partial class UpdateSingleSymptom : ContentPage
             newsym.datetime = items.timestamp;
             newsym.action = "update";
             newsym.label = PassedSymptom[0].symptomtitle;
+            newsym.id = items.symptomfeedbackid;
+
+                var remove = userfeedbacklistpassed.symptomfeedbacklist.FirstOrDefault(x => x.id == items.symptomfeedbackid);
+
+                if(remove != null)
+                {
+                    userfeedbacklistpassed.symptomfeedbacklist.Remove(remove);
+                }
 
             userfeedbacklistpassed.symptomfeedbacklist.Add(newsym);
 
@@ -664,11 +742,18 @@ public partial class UpdateSingleSymptom : ContentPage
 
             await database.UserfeedbackUpdateSymptomData(userfeedbacklistpassed);
 
-
+                if(DeleteBtn.IsVisible)
+                {
+                    await MopupService.Instance.PushAsync(new PopupPageHelper("Symptom Data Updated") { });
+                }
+                else
+                {
+                    await MopupService.Instance.PushAsync(new PopupPageHelper("Symptom Data Added") { });
+                }
             //   await Navigation.PushAsync(new SingleSymptom(PassedSymptom, AllSymptomDataPassed));
-            await MopupService.Instance.PushAsync(new PopupPageHelper("Symptom Data Added") { });
-            await Task.Delay(1500);
-            await Navigation.PushAsync(new AllSymptoms(AllSymptomDataPassed));
+            
+            await Task.Delay(1000);
+            await Navigation.PushAsync(new AllSymptoms(AllSymptomDataPassed, userfeedbacklistpassed));
             await MopupService.Instance.PopAllAsync(false);
             var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is SingleSymptom);
             var pageToRemove = Navigation.NavigationStack.FirstOrDefault(x => x is AllSymptoms);
@@ -1057,6 +1142,100 @@ public partial class UpdateSingleSymptom : ContentPage
             minsentry.Text = minutes.ToString("D2");
         }
         catch (Exception ex)
+        {
+
+        }
+    }
+
+    private async void DeleteBtn_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+
+            var userresponse = await DisplayAlert("Confirm Delete", "Are you sure you want to delete this symptom feedback ?", "Cancel", "Yes");
+
+            if (!userresponse)
+            {
+
+
+                foreach (var item in PassedSymptom)
+                {
+                    foreach (var i in item.feedback)
+                    {
+                        if (i.symptomfeedbackid == feedbackid)
+                        {
+                            i.action = "deleted";
+                        }
+                    }
+                }
+            
+
+
+            APICalls database = new APICalls();
+            await database.PutSymptomAsync(PassedSymptom);
+
+
+            var remove = userfeedbacklistpassed.symptomfeedbacklist.FirstOrDefault(x => x.id == EditAdd);
+
+                if (remove != null)
+                {
+                    remove.action = "deleted";
+                }
+
+
+                string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.symptomfeedbacklist);
+                userfeedbacklistpassed.symptomfeedback = newsymJson;
+
+                
+                await database.UserfeedbackUpdateSymptomData(userfeedbacklistpassed);
+
+                //remove it from local collection
+
+                var symptomToRemove = AllSymptomDataPassed.FirstOrDefault(x => x.id == PassedSymptom[0].id);
+                if (symptomToRemove != null)
+                {
+                    AllSymptomDataPassed.Remove(symptomToRemove);
+                }
+
+                // Add the updated symptom
+                AllSymptomDataPassed.Add(PassedSymptom[0]);
+
+
+                await MopupService.Instance.PushAsync(new PopupPageHelper("Symptom Feedback Deleted") { });
+                
+                //   await Navigation.PushAsync(new SingleSymptom(PassedSymptom, AllSymptomDataPassed));
+
+                await Task.Delay(1000);
+                await Navigation.PushAsync(new AllSymptoms(AllSymptomDataPassed, userfeedbacklistpassed));
+                await MopupService.Instance.PopAllAsync(false);
+
+                var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is SingleSymptom);
+                var pageToRemove = Navigation.NavigationStack.FirstOrDefault(x => x is AllSymptoms);
+
+                if (pageToRemoves != null)
+                {
+                    Navigation.RemovePage(pageToRemoves);
+                }
+                if (pageToRemove != null)
+                {
+                    Navigation.RemovePage(pageToRemove);
+                }
+
+                if (EditAdd != "Add")
+                {
+                    var RemovedPage = Navigation.NavigationStack.FirstOrDefault(x => x is ShowAllSymptomData);
+                    if (RemovedPage != null)
+                    {
+                        Navigation.RemovePage(RemovedPage);
+                    }
+                }
+                Navigation.RemovePage(this);
+
+            }
+
+
+        }
+        catch(Exception ex)
         {
 
         }

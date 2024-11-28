@@ -835,14 +835,14 @@ public partial class SFENRAT : ContentPage
 
                 var sf = new symptomfeedback();
                 sf.timestamp = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
-                Random random = new Random();
-                int num = random.Next(10000000, 1000000000);
-                sf.symptomfeedbackid = num.ToString();
+                Guid newUUID = Guid.NewGuid();
+                sf.symptomfeedbackid = newUUID.ToString();
                 sf.intensity = "50";
                 sf.notes = null;
                 sf.triggers = null;
                 sf.interventions = null;
                 sf.duration = null;
+                sf.action = "add";
 
                 var newcollection = new ObservableCollection<symptomfeedback>
                 {

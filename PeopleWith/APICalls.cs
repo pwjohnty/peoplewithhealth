@@ -345,7 +345,14 @@ namespace PeopleWith
 
                         foreach (var feedback in feedbackSymptoms)
                         {
-                            newUserSymptom.feedback.Add(feedback);
+                            if (feedback.action == "deleted")
+                            {
+
+                            }
+                            else
+                            {
+                                newUserSymptom.feedback.Add(feedback);
+                            }
                         }
                         userSymptomsList.Add(newUserSymptom);
                     }
@@ -1250,7 +1257,7 @@ namespace PeopleWith
                             supplementquestions = rawSymptom.supplementquestions
                         };
                         // Deserialize the feedback string into the FeedbackList
-                        if (rawSymptom.schedule == null)
+                        if (rawSymptom.schedule == null || rawSymptom.schedule == "[]" || string.IsNullOrEmpty(rawSymptom.schedule))
                         {
 
                         }
@@ -1261,51 +1268,54 @@ namespace PeopleWith
 
                             int Index = 0;
 
-                            foreach (var feedback in feedbackSymptoms)
-                            {
-                                newUserSymptom.schedule.Add(feedback);
-                                var dosage = feedback.Dosage;
-                                var time = feedback.time;
-                                List<string> days = new List<string>();
+                         
 
-                                var getfreq = newUserSymptom.frequency.Split('|');
+                                foreach (var feedback in feedbackSymptoms)
+                                {
+                                    newUserSymptom.schedule.Add(feedback);
+                                    var dosage = feedback.Dosage;
+                                    var time = feedback.time;
+                                    List<string> days = new List<string>();
 
-                                //weekly Days
-                                if (getfreq[1].Contains(","))
-                                {
-                                    days = getfreq[1].Split(',').ToList();
-                                    int GetCount = feedbackSymptoms.Count() / days.Count;
-                                    var duplicatedDays = Enumerable.Repeat(days, GetCount).SelectMany(x => x).ToList();
-                                    var uniqueDays = duplicatedDays.Distinct().ToList();
-                                    days = uniqueDays.SelectMany(day => duplicatedDays.Where(d => d == day)).ToList();
-                                }
+                                    var getfreq = newUserSymptom.frequency.Split('|');
 
-                                //Daily
-                                if (getfreq[0] == "Daily" || getfreq[0] == "Days Interval")
-                                {
-                                    var DosageTime = time + "|" + dosage;
-                                    newUserSymptom.TimeDosage.Add(DosageTime);
-                                }
-                                //Weekly
-                                else if (getfreq[0] == "Weekly" || getfreq[0] == "Weekly ")
-                                {
-                                    string DosageTime = String.Empty;
+                                    //weekly Days
                                     if (getfreq[1].Contains(","))
                                     {
-                                        DosageTime = time + "|" + dosage + "|" + days[Index];
-
+                                        days = getfreq[1].Split(',').ToList();
+                                        int GetCount = feedbackSymptoms.Count() / days.Count;
+                                        var duplicatedDays = Enumerable.Repeat(days, GetCount).SelectMany(x => x).ToList();
+                                        var uniqueDays = duplicatedDays.Distinct().ToList();
+                                        days = uniqueDays.SelectMany(day => duplicatedDays.Where(d => d == day)).ToList();
                                     }
-                                    else
+
+                                    //Daily
+                                    if (getfreq[0] == "Daily" || getfreq[0] == "Days Interval")
                                     {
-                                        var day = getfreq[1];
-                                        DosageTime = time + "|" + dosage + "|" + day;
+                                        var DosageTime = time + "|" + dosage;
+                                        newUserSymptom.TimeDosage.Add(DosageTime);
+                                    }
+                                    //Weekly
+                                    else if (getfreq[0] == "Weekly" || getfreq[0] == "Weekly ")
+                                    {
+                                        string DosageTime = String.Empty;
+                                        if (getfreq[1].Contains(","))
+                                        {
+                                            DosageTime = time + "|" + dosage + "|" + days[Index];
+
+                                        }
+                                        else
+                                        {
+                                            var day = getfreq[1];
+                                            DosageTime = time + "|" + dosage + "|" + day;
+                                        }
+
+                                        newUserSymptom.TimeDosage.Add(DosageTime);
+                                        Index = Index + 1;
                                     }
 
-                                    newUserSymptom.TimeDosage.Add(DosageTime);
-                                    Index = Index + 1;
                                 }
-
-                            }
+                            
                         }
 
                         if (rawSymptom.feedback == null)
@@ -2776,6 +2786,8 @@ namespace PeopleWith
                                 item.moodfeedbacklist = new ObservableCollection<feedbackdata> { singleItem };
                             }
                         }
+
+
 
                         newcollection.Add(item);
                     }

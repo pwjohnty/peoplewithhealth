@@ -123,10 +123,22 @@ public partial class UpdateAllSymptoms : ContentPage
     {
         try
         {
-            var sfslide = sender as Syncfusion.Maui.Sliders.SfSlider;
-            var slidvalue = Math.Round(sfslide.Value);
-            var selectedItem = sfslide.BindingContext as usersymptom;
-            selectedItem.CurrentIntensityUA = slidvalue.ToString();
+            var sfSlide = sender as Syncfusion.Maui.Sliders.SfSlider;
+            if (sfSlide != null)
+            {
+                // Round the slider's value
+                var roundedValue = Math.Round(sfSlide.Value);
+
+                // Update the slider's value to the rounded one if necessary
+                sfSlide.Value = roundedValue;
+
+                // Set the rounded value in your model
+                var selectedItem = sfSlide.BindingContext as usersymptom;
+                if (selectedItem != null)
+                {
+                    selectedItem.CurrentIntensityUA = roundedValue.ToString();
+                }
+            }
 
         }
         catch(Exception Ex)
@@ -170,22 +182,24 @@ public partial class UpdateAllSymptoms : ContentPage
                             items.timestamp = SelectedDate + " " + SelectedTime;
                             Guid newUUID = Guid.NewGuid();
                             items.symptomfeedbackid = newUUID.ToString().ToUpper();
-                            items.intensity = symptom.Slidervalue.ToString();
+                            items.intensity = symptom.SlidervalueUA.ToString();
                             items.notes = null;
                             items.triggers = null;
                             items.interventions = null;
                             items.duration = null;
                             symptom.feedback.Add(items);
                             SymptomUpdateNewlist.Add(symptom);
+                            
 
 
-                    var newsym = new feedbackdata();
-                    newsym.value = symptom.Slidervalue.ToString(); ;
-                    newsym.datetime = items.timestamp;
-                    newsym.action = "update";
-                    newsym.label = symptom.symptomtitle;
+                            var newsym = new feedbackdata();
+                            newsym.value = symptom.SlidervalueUA.ToString(); ;
+                            newsym.datetime = items.timestamp;
+                            newsym.action = "update";
+                            newsym.label = symptom.symptomtitle;
+                            newsym.id = items.symptomfeedbackid;
 
-                    userfeedbacklistpassed.symptomfeedbacklist.Add(newsym);
+                            userfeedbacklistpassed.symptomfeedbacklist.Add(newsym);
 
 
                         }               
@@ -202,11 +216,11 @@ public partial class UpdateAllSymptoms : ContentPage
             await database.UserfeedbackUpdateSymptomData(userfeedbacklistpassed);
 
             await MopupService.Instance.PushAsync(new PopupPageHelper("Symptoms Updated") { });
-            await Task.Delay(1500);
+            await Task.Delay(1000);
 
-            await Navigation.PushAsync(new AllSymptoms(UserSymptomsPassed));
-
-            await MopupService.Instance.PopAllAsync(false);
+                //await Navigation.PushAsync(new AllSymptoms(UserSymptomsPassed));
+                await Navigation.PushAsync(new AllSymptoms(UserSymptomsPassed, userfeedbacklistpassed));
+                await MopupService.Instance.PopAllAsync(false);
 
             var pageToRemoveAllSymptoms = Navigation.NavigationStack.FirstOrDefault(x => x is AllSymptoms);
             if (pageToRemoveAllSymptoms != null)

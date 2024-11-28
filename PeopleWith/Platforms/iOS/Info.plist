@@ -25,7 +25,7 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>XSAppIconAssets</key>
-	<string>Assets.xcassets/appicon.appiconset</string>
+	<string>Assets.xcassets/pwhealthicon.appiconset</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Need your face to unlock!</string>
 	<key>CFBundleIdentifier</key>

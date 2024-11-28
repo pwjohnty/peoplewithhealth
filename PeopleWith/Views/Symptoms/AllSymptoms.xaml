@@ -20,7 +20,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
             <Label Text="Symptoms" FontSize="26" Grid.Column="0" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
-                <Frame x:Name="SympInfo" HasShadow="False" Padding="0" CornerRadius="5" Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,0,20,0" BorderColor="Orange" BackgroundColor="#fff7ea">
+                <Frame x:Name="SympInfo" HasShadow="False" Padding="0" CornerRadius="15" Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,0,20,0" BorderColor="Orange" BackgroundColor="Transparent">
                     <Label Text="i" FontFamily="HankenGroteskBold" HorizontalOptions="Center" TextColor="Orange" FontSize="12"  Grid.Column="1" VerticalOptions="Center" />
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Tapped="SympInfoTapped" NumberOfTapsRequired="1"/>
@@ -29,7 +29,7 @@
                 
             </Grid>
             <!-- Update & Compare Stack -->
-            <Grid Margin="10,5,10,5" >
+            <Grid Margin="10,10,10,5" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="50*"/>
                     <ColumnDefinition Width="50*"/>
@@ -38,28 +38,28 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <Frame HasShadow="False" x:Name="CompareFrame" Padding="0" Grid.Row="0" Grid.Column="0" HeightRequest="40" Margin="0,0,5,0" HorizontalOptions="FillAndExpand" CornerRadius="10" BorderColor="Orange" BackgroundColor="Transparent">
+                <Frame HasShadow="False" x:Name="CompareFrame" Padding="0" Grid.Row="0" Grid.Column="0" HeightRequest="40" Margin="0,0,5,0" HorizontalOptions="FillAndExpand" CornerRadius="10" BorderColor="Orange" BackgroundColor="Orange">
                     <Grid Padding="0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="30*"/>
                             <ColumnDefinition Width="70*"/>
                         </Grid.ColumnDefinitions>
                         <Image Source="compare.png" Grid.Row="0" Grid.Column="0" HeightRequest="20" />
-                        <Label Text="COMPARE ALL" FontFamily="HankenGroteskBold" HorizontalOptions="Start" TextColor="Orange" FontSize="12" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" VerticalOptions="Center" />
+                        <Label Text="COMPARE ALL" FontFamily="HankenGroteskBold" HorizontalOptions="Start" TextColor="White" FontSize="12" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" VerticalOptions="Center" />
                     </Grid>
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_3"  NumberOfTapsRequired="1"/>
                     </Frame.GestureRecognizers>
                 </Frame>
 
-                <Frame HasShadow="False" x:Name="UpdateFrame" Padding="0" Grid.Row="0" Grid.Column="1" CornerRadius="10" Margin="5,0,0,0" BorderColor="Orange" BackgroundColor="Transparent">
+                <Frame HasShadow="False" x:Name="UpdateFrame" Padding="0" Grid.Row="0" Grid.Column="1" CornerRadius="10" Margin="5,0,0,0" BorderColor="Orange" BackgroundColor="Orange">
                     <Grid Padding="0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="30*"/>
                             <ColumnDefinition Width="70*"/>
                         </Grid.ColumnDefinitions>
                         <Image Source="update.png" Grid.Row="0" Grid.Column="0" HeightRequest="20" />
-                        <Label Text="UPDATE ALL" FontFamily="HankenGroteskBold" HorizontalOptions="Start" TextColor="Orange" FontSize="12" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" VerticalOptions="Center" />
+                        <Label Text="UPDATE ALL" FontFamily="HankenGroteskBold" HorizontalOptions="Start" TextColor="White" FontSize="12" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" VerticalOptions="Center" />
                     </Grid>
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_2" NumberOfTapsRequired="1"/>

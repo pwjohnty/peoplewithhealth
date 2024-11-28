@@ -4,7 +4,7 @@ namespace PeopleWith;
 public partial class HealthReport : ContentPage
 {
     public const string HealthReportStart = "https://portal.peoplewith.com/migration/health-report.php?";
-    public string HealthReportEnd = "id=" + Helpers.Settings.UserKey + "&pid=" + Helpers.Settings.ValidationCode;
+    public string HealthReportEnd = "id=" + Helpers.Settings.UserKey;
     public string HealthReportUrl;
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;

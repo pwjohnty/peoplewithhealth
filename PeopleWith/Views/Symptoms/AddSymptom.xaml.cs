@@ -173,8 +173,9 @@ public partial class AddSymptom : ContentPage
                     var newsym = new feedbackdata();
                     newsym.value = "50";
                     newsym.datetime = AddNewFeedback[0].timestamp;
-                    newsym.action = "update";
+                    newsym.action = "add";
                     newsym.label = NewSymptom.symptomtitle;
+                    newsym.id = usersymptom.symptomfeedbackid;
 
                     if (userfeedbacklistpassed.symptomfeedbacklist == null)
                     {
@@ -193,7 +194,7 @@ public partial class AddSymptom : ContentPage
                     await MopupService.Instance.PushAsync(new PopupPageHelper("Symptom Added") { });
                     await Task.Delay(1500);
 
-                    await Navigation.PushAsync(new AllSymptoms(SymptomsPassed));
+                    await Navigation.PushAsync(new AllSymptoms(SymptomsPassed, userfeedbacklistpassed));
 
                     await MopupService.Instance.PopAllAsync(false);
 

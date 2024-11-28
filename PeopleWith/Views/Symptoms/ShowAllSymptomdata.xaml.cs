@@ -13,7 +13,7 @@ public partial class ShowAllSymptomData : ContentPage
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
-
+    userfeedback userfeedbacklistpassed = new userfeedback();
     async public void NotasyncMethod(Exception Ex)
     {
         try
@@ -73,7 +73,7 @@ public partial class ShowAllSymptomData : ContentPage
             NotasyncMethod(Ex);
         }
     }
-    public ShowAllSymptomData(ObservableCollection<usersymptom> PassedSymptom, ObservableCollection<symptomfeedback> PassedSymptomFeedback, ObservableCollection<usersymptom> AllSymptoms)
+    public ShowAllSymptomData(ObservableCollection<usersymptom> PassedSymptom, ObservableCollection<symptomfeedback> PassedSymptomFeedback, ObservableCollection<usersymptom> AllSymptoms, userfeedback userfeedbacklist)
     {
         try
         {
@@ -83,6 +83,8 @@ public partial class ShowAllSymptomData : ContentPage
             SymptomFeedback = Feedbacksymptom;
             AllSymptomsData = AllSymptoms;
             ShowAllTitle.Text = SymptomPassed[0].Shorttitle;
+            userfeedbacklistpassed = userfeedbacklist;
+
             foreach (var item in SymptomFeedback)
             {
                 item.OtherBool = false;
@@ -295,7 +297,7 @@ public partial class ShowAllSymptomData : ContentPage
 
                     EditBtn.IsEnabled = true;
                     //Navigate Back to AllSymptoms
-                    await Navigation.PushAsync(new AllSymptoms(AllSymptomsData));
+                    await Navigation.PushAsync(new AllSymptoms(AllSymptomsData, userfeedbacklistpassed));
                     var pageToRemove = Navigation.NavigationStack.FirstOrDefault(x => x is AllSymptoms);
                     var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is SingleSymptom);
 
@@ -361,7 +363,7 @@ public partial class ShowAllSymptomData : ContentPage
                 else
                 {
 
-                    await Navigation.PushAsync(new UpdateSingleSymptom(SymptomPassed, Symptom.symptomfeedbackid, AllSymptomsData));
+                    await Navigation.PushAsync(new UpdateSingleSymptom(SymptomPassed, Symptom.symptomfeedbackid, AllSymptomsData, userfeedbacklistpassed, "editpage"));
                     return;
 
                     //bool Result = await DisplayAlert("Edit symptom", "Would you like to edit the following Record?", "Accept", "Decline");

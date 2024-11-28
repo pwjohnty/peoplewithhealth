@@ -19,6 +19,8 @@ public partial class MainDashboard : ContentPage
     DateTime? nextDueTimeSupp = null;
     List<object> foryouuserlist = new List<object>();
     List<object> foryouuserlistsymptom = new List<object>();
+    List<object> foryouuserlistmeds = new List<object>();
+    List<object> foryouuserlistsupps = new List<object>();
     ObservableCollection<userfeedback> userfeedbacklist = new ObservableCollection<userfeedback>();
     ObservableCollection<usermedication> AllUserMedications = new ObservableCollection<usermedication>();
     ObservableCollection<usersupplement> AllUserSupplements = new ObservableCollection<usersupplement>();
@@ -62,7 +64,7 @@ public partial class MainDashboard : ContentPage
             {
                 infotab.IsVisible = false;
 
-                var getimagesource = new Uri("https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/PeopleWithApp-AppImage-TemplateFeb23.png");
+                var getimagesource = new Uri("https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/PeopleWithApp-AppImage-TemplateNov24.png");
 
                 maindashimage.Source = ImageSource.FromUri(getimagesource);
 
@@ -180,10 +182,19 @@ public partial class MainDashboard : ContentPage
 
 
             // Stop the stopwatch after retrieval
-           // stopwatch.Stop();
+            // stopwatch.Stop();
 
 
 
+            var newItems = new List<object>
+{
+    new { ContactImage = "healthreporticon.png", Title = "Generate your Health Report", BackgroundColor = "#e5f5fc" },
+    new { ContactImage = "diagnosishome.png", Title = "Have you received a new diagnosis?", BackgroundColor = "#E6E6FA" },
+    new { ContactImage = "appointhome.png", Title = "Record a new appointment", BackgroundColor = "#ffcccb" }
+};
+
+            // Add new items to the existing list
+            foryouuserlist.AddRange(newItems);
             // Randomize the order of the list
             var randomizedList = foryouuserlist.OrderBy(x => Guid.NewGuid()).ToList();
 
@@ -219,6 +230,7 @@ public partial class MainDashboard : ContentPage
                 // Group by label and select the first item from each group
                 var filteredSymptoms = userfeedbacklist[0].symptomfeedbacklist
                      .OrderByDescending(x => DateTime.Parse(x.datetime))
+                     .Where(x => !x.action.Contains("deleted"))
                     .GroupBy(x => x.label)
                     .Select(g => g.First())  // Select only the first item in each group
                     .ToList();
@@ -795,6 +807,16 @@ public partial class MainDashboard : ContentPage
                 foryouuserlist.Remove(newItemm);
             }
 
+            //remove any deleted or symtpomdeleted items
+            for (int i = userfeedbacklist[0].symptomfeedbacklist.Count - 1; i >= 0; i--)
+            {
+                var feedback = userfeedbacklist[0].symptomfeedbacklist[i];
+                if (feedback.action == "deleted" || feedback.action == "symptomdeleted")
+                {
+                    userfeedbacklist[0].symptomfeedbacklist.RemoveAt(i);
+                }
+            }
+
 
             bool hasRecentUpdates = userfeedbacklist[0].symptomfeedbacklist.Any(e => e.action == "update" &&
                 DateTime.TryParse(e.datetime, out DateTime dateTime) &&
@@ -1031,6 +1053,8 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
+            foryouuserlistsupps.Clear();
+
             //added to see if there is any due
             bool hasDueMedications = false;
             string timeoflastnotrecordedmed = "";
@@ -1060,188 +1084,204 @@ public partial class MainDashboard : ContentPage
 
             foreach (var item in AllUserSupplements)
             {
-                DateTime startDate = DateTime.Parse(item.startdate);
-                DateTime? endDate = !string.IsNullOrEmpty(item.enddate) ? DateTime.Parse(item.enddate) : (DateTime?)null;
-                bool isOngoing = !endDate.HasValue || today <= endDate.Value;
-
-                var splitString = item.frequency.Split('|');
-                string frequencyType = splitString[0];
-
-                // Check if medication is due today based on frequency
-                bool isDueToday = false;
-
-                if (frequencyType == "Daily" && today >= startDate && isOngoing)
+                if (item.status != "Pending")
                 {
-                    isDueToday = true;
-                }
-                else if (frequencyType == "Weekly" && today >= startDate && isOngoing)
-                {
-                    // Get days of the week from frequency (e.g., "Mon,Wed,Fri")
-                    var weekDays = splitString[1].Split(',');
-                    var todayDayName = today.ToString("ddd");
 
-                    // Check if today is one of the specified days
-                    if (weekDays.Contains(todayDayName))
+
+                    DateTime startDate = DateTime.Parse(item.startdate);
+                    DateTime? endDate = !string.IsNullOrEmpty(item.enddate) ? DateTime.Parse(item.enddate) : (DateTime?)null;
+                    bool isOngoing = !endDate.HasValue || today <= endDate.Value;
+
+                    var splitString = item.frequency.Split('|');
+                    string frequencyType = splitString[0];
+
+                    // Check if medication is due today based on frequency
+                    bool isDueToday = false;
+
+                    if (frequencyType == "Daily" && today >= startDate && isOngoing)
                     {
                         isDueToday = true;
                     }
-                }
-                else if (frequencyType == "Days Interval" && today >= startDate && isOngoing)
-                {
-                    int dayInterval = Convert.ToInt32(splitString[1]);
-                    var daysSinceStart = (today - startDate).Days;
+                    else if (frequencyType == "Weekly" && today >= startDate && isOngoing)
+                    {
+                        // Get days of the week from frequency (e.g., "Mon,Wed,Fri")
+                        var weekDays = splitString[1].Split(',');
+                        var todayDayName = today.ToString("ddd");
 
-                    // Check if today's date falls on an interval
-                    if (daysSinceStart % dayInterval == 0)
-                    {
-                        isDueToday = true;
-                    }
-                }
-                else if (frequencyType == "As Required" && item.feedback != null)
-                {
-                    foreach (var feedback in item.feedback)
-                    {
-                        DateTime feedbackDate = DateTime.Parse(feedback.datetime);
-                        if (feedbackDate.Date == today)
+                        // Check if today is one of the specified days
+                        if (weekDays.Contains(todayDayName))
                         {
                             isDueToday = true;
-                            break;
                         }
                     }
-                }
-
-                // If due today, add to the list
-                if (isDueToday)
-                {
-                    hasDueMedications = true;
-
-                    foreach (var medTime in item.schedule)
+                    else if (frequencyType == "Days Interval" && today >= startDate && isOngoing)
                     {
-                        var time = TimeSpan.Parse(medTime.time);
-                        DateTime scheduledTimeToday = DateTime.Today.Add(time); // Add time component to today's date
+                        int dayInterval = Convert.ToInt32(splitString[1]);
+                        var daysSinceStart = (today - startDate).Days;
 
-                        medicationsDueToday++;
-
-                        if (scheduledTimeToday < DateTime.Now)
+                        // Check if today's date falls on an interval
+                        if (daysSinceStart % dayInterval == 0)
                         {
-                            var dt = scheduledTimeToday.ToString("dd/MM/yyyy");
+                            isDueToday = true;
+                        }
+                    }
+                    else if (frequencyType == "As Required" && item.feedback != null)
+                    {
+                        foreach (var feedback in item.feedback)
+                        {
+                            DateTime feedbackDate = DateTime.Parse(feedback.datetime);
+                            if (feedbackDate.Date == today)
+                            {
+                                isDueToday = true;
+                                break;
+                            }
+                        }
+                    }
 
-                            bool hasBeenRecorded = item.feedback != null && item.feedback
+                    // If due today, add to the list
+                    if (isDueToday)
+                    {
+                        hasDueMedications = true;
+
+                        foreach (var medTime in item.schedule)
+                        {
+                            var time = TimeSpan.Parse(medTime.time);
+                            DateTime scheduledTimeToday = DateTime.Today.Add(time); // Add time component to today's date
+
+                            medicationsDueToday++;
+
+                            if (scheduledTimeToday < DateTime.Now)
+                            {
+                                var dt = scheduledTimeToday.ToString("dd/MM/yyyy");
+
+                                bool hasBeenRecorded = item.feedback != null && item.feedback
+                                .Any(x => x.id == medTime.id.ToString() && x.datetime.Contains(dt));
+
+                                //bool hasBeenRecorded = item.feedback != null && item.feedback.Where(x => x.id == medTime.Feedbackid)
+                                // .Any(feedback => feedback.datetime.Contains(scheduledTimeToday.ToString("HH:mm, dd/MM/yyyy")));
+
+                                // If not recorded, update nextDueTime
+                                if (!hasBeenRecorded)
+                                {
+                                    timeoflastnotrecordedmed = scheduledTimeToday.ToString("HH:mm");
+                                }
+                                else
+                                {
+                                    recordedMedicationsToday++;
+                                }
+                            }
+                            // Check if this time is in the future and closer than the current nextDueTime
+                            else if (scheduledTimeToday > DateTime.Now && (nextDueTime == null || scheduledTimeToday < nextDueTime))
+                            {
+                                // Check if this scheduled time has already been recorded in user feedback
+                                //  bool hasBeenRecorded = item.feedback != null && item.feedback.Where(x => x.id == medTime.Feedbackid)
+                                //    .Any(feedback => feedback.datetime.Contains(scheduledTimeToday.ToString("HH:mm, dd/MM/yyyy")));
+
+                                var dt = scheduledTimeToday.ToString("dd/MM/yyyy");
+
+                                bool hasBeenRecorded = item.feedback != null && item.feedback
                             .Any(x => x.id == medTime.id.ToString() && x.datetime.Contains(dt));
 
-                            //bool hasBeenRecorded = item.feedback != null && item.feedback.Where(x => x.id == medTime.Feedbackid)
-                            // .Any(feedback => feedback.datetime.Contains(scheduledTimeToday.ToString("HH:mm, dd/MM/yyyy")));
+                                // If not recorded, update nextDueTime
+                                if (!hasBeenRecorded)
+                                {
+                                    nextDueTime = scheduledTimeToday;
+                                }
+                                else
+                                {
+                                    recordedMedicationsToday++;
+                                }
+                            }
 
-                            // If not recorded, update nextDueTime
-                            if (!hasBeenRecorded)
-                            {
-                                timeoflastnotrecordedmed = scheduledTimeToday.ToString("HH:mm");
-                            }
-                            else
-                            {
-                                recordedMedicationsToday++;
-                            }
                         }
-                        // Check if this time is in the future and closer than the current nextDueTime
-                        else if (scheduledTimeToday > DateTime.Now && (nextDueTime == null || scheduledTimeToday < nextDueTime))
-                        {
-                            // Check if this scheduled time has already been recorded in user feedback
-                            //  bool hasBeenRecorded = item.feedback != null && item.feedback.Where(x => x.id == medTime.Feedbackid)
-                            //    .Any(feedback => feedback.datetime.Contains(scheduledTimeToday.ToString("HH:mm, dd/MM/yyyy")));
-
-                            var dt = scheduledTimeToday.ToString("dd/MM/yyyy");
-
-                            bool hasBeenRecorded = item.feedback != null && item.feedback
-                        .Any(x => x.id == medTime.id.ToString() && x.datetime.Contains(dt));
-
-                            // If not recorded, update nextDueTime
-                            if (!hasBeenRecorded)
-                            {
-                                nextDueTime = scheduledTimeToday;
-                            }
-                            else
-                            {
-                                recordedMedicationsToday++;
-                            }
-                        }
-
                     }
-                }
-            }
-
-            double percentageRecorded = medicationsDueToday > 0 ? (double)recordedMedicationsToday / medicationsDueToday * 100 : 0;
-
-            suppprogressbar.Progress = percentageRecorded;
-
-            if (hasDueMedications == false)
-            {
-                // Create a new item to add
-                var newItem = new
-                {
-                    ContactImage = "supphome.png",
-                    Title = "No Supplements Due Today",
-                    BackgroundColor = "#f9f4e5" // Example color
-                };
-
-                // Add the new item to the list
-                foryouuserlist.Add(newItem);
 
 
-                //possibly check if they are recording as required medications a lot in the last seven days
+                    double percentageRecorded = medicationsDueToday > 0 ? (double)recordedMedicationsToday / medicationsDueToday * 100 : 0;
 
-            }
+                    suppprogressbar.Progress = percentageRecorded;
 
-            else if (nextDueTime == null)
-            {
-                //no more times
-
-                if (hasDueMedications)
-                {
-                    //check if they have added feedback for previous meds for that day 
-
-
-                    if (!string.IsNullOrEmpty(timeoflastnotrecordedmed))
+                    if (hasDueMedications == false)
                     {
-                        var nnewItem = new
+                        // Create a new item to add
+                        var newItem = new
                         {
                             ContactImage = "supphome.png",
-                            Title = "Have you recorded your " + timeoflastnotrecordedmed + " Supplements ?",
+                            Title = "No Supplements Due Today",
                             BackgroundColor = "#f9f4e5" // Example color
                         };
 
                         // Add the new item to the list
-                        foryouuserlist.Add(nnewItem);
+                        foryouuserlistsupps.Add(newItem);
+
+
+                        //possibly check if they are recording as required medications a lot in the last seven days
+
                     }
 
-
-                    var newItem = new
+                    else if (nextDueTime == null)
                     {
-                        ContactImage = "supphome.png",
-                        Title = "No More Supplements Due Today",
-                        BackgroundColor = "#f9f4e5" // Example color
-                    };
+                        //no more times
 
-                    // Add the new item to the list
-                    foryouuserlist.Add(newItem);
+                        if (hasDueMedications)
+                        {
+                            //check if they have added feedback for previous meds for that day 
+
+
+                            if (!string.IsNullOrEmpty(timeoflastnotrecordedmed))
+                            {
+                                var nnewItem = new
+                                {
+                                    ContactImage = "supphome.png",
+                                    Title = "Have you recorded your " + timeoflastnotrecordedmed + " Supplements ?",
+                                    BackgroundColor = "#f9f4e5" // Example color
+                                };
+
+                                // Add the new item to the list
+                                foryouuserlistsupps.Add(nnewItem);
+                            }
+
+
+                            var newItem = new
+                            {
+                                ContactImage = "supphome.png",
+                                Title = "No More Supplements Due Today",
+                                BackgroundColor = "#f9f4e5" // Example color
+                            };
+
+                            // Add the new item to the list
+                            foryouuserlistsupps.Add(newItem);
+                        }
+
+                    }
+                    else
+                    {
+
+                        // Create a new item to add
+                        var newItem = new
+                        {
+                            ContactImage = "supphome.png",
+                            Title = "Record your " + nextDueTime.Value.ToString("HH:mm") + " Supplements",
+                            BackgroundColor = "#f9f4e5" // Example color
+                        };
+
+                        // Add the new item to the list
+                        foryouuserlistsupps.Add(newItem);
+
+                    }
                 }
-
             }
-            else
-            {
 
-                // Create a new item to add
-                var newItem = new
-                {
-                    ContactImage = "supphome.png",
-                    Title = "Record your " + nextDueTime.Value.ToString("HH:mm") + " Supplements",
-                    BackgroundColor = "#f9f4e5" // Example color
-                };
+            Random random = new Random();
 
-                // Add the new item to the list
-                foryouuserlist.Add(newItem);
+            // Select 3 random items from foryouuserlistsymptomlist
+            var randomItems = foryouuserlistsupps
+                .OrderBy(x => random.Next())
+                .Take(1)
+                .ToList();
 
+            foryouuserlist.AddRange(randomItems);
 
-            }
         }
         catch(Exception ex)
         {
@@ -1253,6 +1293,8 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
+            foryouuserlistmeds.Clear();
+
             //added to see if there is any due
             bool hasDueMedications = false;
             string timeoflastnotrecordedmed = "";
@@ -1281,188 +1323,206 @@ public partial class MainDashboard : ContentPage
 
             foreach (var item in AllUserMedications)
             {
-                DateTime startDate = DateTime.Parse(item.startdate);
-                DateTime? endDate = !string.IsNullOrEmpty(item.enddate) ? DateTime.Parse(item.enddate) : (DateTime?)null;
-                bool isOngoing = !endDate.HasValue || today <= endDate.Value;
-
-                var splitString = item.frequency.Split('|');
-                string frequencyType = splitString[0];
-
-                // Check if medication is due today based on frequency
-                bool isDueToday = false;
-
-                if (frequencyType == "Daily" && today >= startDate && isOngoing)
+                if (item.status != "Pending")
                 {
-                    isDueToday = true;
-                }
-                else if (frequencyType == "Weekly" && today >= startDate && isOngoing)
-                {
-                    // Get days of the week from frequency (e.g., "Mon,Wed,Fri")
-                    var weekDays = splitString[1].Split(',');
-                    var todayDayName = today.ToString("ddd");
 
-                    // Check if today is one of the specified days
-                    if (weekDays.Contains(todayDayName))
+
+                    DateTime startDate = DateTime.Parse(item.startdate);
+                    DateTime? endDate = !string.IsNullOrEmpty(item.enddate) ? DateTime.Parse(item.enddate) : (DateTime?)null;
+                    bool isOngoing = !endDate.HasValue || today <= endDate.Value;
+
+                    var splitString = item.frequency.Split('|');
+                    string frequencyType = splitString[0];
+
+                    // Check if medication is due today based on frequency
+                    bool isDueToday = false;
+
+                    if (frequencyType == "Daily" && today >= startDate && isOngoing)
                     {
                         isDueToday = true;
                     }
-                }
-                else if (frequencyType == "Days Interval" && today >= startDate && isOngoing)
-                {
-                    int dayInterval = Convert.ToInt32(splitString[1]);
-                    var daysSinceStart = (today - startDate).Days;
+                    else if (frequencyType == "Weekly" && today >= startDate && isOngoing)
+                    {
+                        // Get days of the week from frequency (e.g., "Mon,Wed,Fri")
+                        var weekDays = splitString[1].Split(',');
+                        var todayDayName = today.ToString("ddd");
 
-                    // Check if today's date falls on an interval
-                    if (daysSinceStart % dayInterval == 0)
-                    {
-                        isDueToday = true;
-                    }
-                }
-                else if (frequencyType == "As Required" && item.feedback != null)
-                {
-                    foreach (var feedback in item.feedback)
-                    {
-                        DateTime feedbackDate = DateTime.Parse(feedback.datetime);
-                        if (feedbackDate.Date == today)
+                        // Check if today is one of the specified days
+                        if (weekDays.Contains(todayDayName))
                         {
                             isDueToday = true;
-                            break;
                         }
                     }
-                }
-
-                // If due today, add to the list
-                if (isDueToday)
-                {
-                    hasDueMedications = true;
-
-                    foreach (var medTime in item.schedule)
+                    else if (frequencyType == "Days Interval" && today >= startDate && isOngoing)
                     {
-                        medicationsDueToday++;
+                        int dayInterval = Convert.ToInt32(splitString[1]);
+                        var daysSinceStart = (today - startDate).Days;
 
-                        var time = TimeSpan.Parse(medTime.time);
-                        DateTime scheduledTimeToday = DateTime.Today.Add(time); // Add time component to today's date
-
-                        if (scheduledTimeToday < DateTime.Now)
+                        // Check if today's date falls on an interval
+                        if (daysSinceStart % dayInterval == 0)
                         {
-                            var dt = scheduledTimeToday.ToString("dd/MM/yyyy");
+                            isDueToday = true;
+                        }
+                    }
+                    else if (frequencyType == "As Required" && item.feedback != null)
+                    {
+                        foreach (var feedback in item.feedback)
+                        {
+                            DateTime feedbackDate = DateTime.Parse(feedback.datetime);
+                            if (feedbackDate.Date == today)
+                            {
+                                isDueToday = true;
+                                break;
+                            }
+                        }
+                    }
 
-                            bool hasBeenRecorded = item.feedback != null && item.feedback
+                    // If due today, add to the list
+                    if (isDueToday)
+                    {
+                        hasDueMedications = true;
+
+                        foreach (var medTime in item.schedule)
+                        {
+                            medicationsDueToday++;
+
+                            var time = TimeSpan.Parse(medTime.time);
+                            DateTime scheduledTimeToday = DateTime.Today.Add(time); // Add time component to today's date
+
+                            if (scheduledTimeToday < DateTime.Now)
+                            {
+                                var dt = scheduledTimeToday.ToString("dd/MM/yyyy");
+
+                                bool hasBeenRecorded = item.feedback != null && item.feedback
+                                .Any(x => x.id == medTime.id.ToString() && x.datetime.Contains(dt));
+
+                                //bool hasBeenRecorded = item.feedback != null && item.feedback.Where(x => x.id == medTime.Feedbackid)
+                                // .Any(feedback => feedback.datetime.Contains(scheduledTimeToday.ToString("HH:mm, dd/MM/yyyy")));
+
+                                // If not recorded, update nextDueTime
+                                if (!hasBeenRecorded)
+                                {
+                                    timeoflastnotrecordedmed = scheduledTimeToday.ToString("HH:mm");
+                                }
+                                else
+                                {
+                                    recordedMedicationsToday++;
+                                }
+                            }
+                            // Check if this time is in the future and closer than the current nextDueTime
+                            else if (scheduledTimeToday > DateTime.Now && (nextDueTime == null || scheduledTimeToday < nextDueTime))
+                            {
+                                // Check if this scheduled time has already been recorded in user feedback
+                                //  bool hasBeenRecorded = item.feedback != null && item.feedback.Where(x => x.id == medTime.Feedbackid)
+                                //    .Any(feedback => feedback.datetime.Contains(scheduledTimeToday.ToString("HH:mm, dd/MM/yyyy")));
+
+                                var dt = scheduledTimeToday.ToString("dd/MM/yyyy");
+
+                                bool hasBeenRecorded = item.feedback != null && item.feedback
                             .Any(x => x.id == medTime.id.ToString() && x.datetime.Contains(dt));
 
-                            //bool hasBeenRecorded = item.feedback != null && item.feedback.Where(x => x.id == medTime.Feedbackid)
-                            // .Any(feedback => feedback.datetime.Contains(scheduledTimeToday.ToString("HH:mm, dd/MM/yyyy")));
+                                // If not recorded, update nextDueTime
+                                if (!hasBeenRecorded)
+                                {
+                                    nextDueTime = scheduledTimeToday;
+                                }
+                                else
+                                {
+                                    recordedMedicationsToday++;
+                                }
+                            }
 
-                            // If not recorded, update nextDueTime
-                            if (!hasBeenRecorded)
-                            {
-                                timeoflastnotrecordedmed = scheduledTimeToday.ToString("HH:mm");
-                            }
-                            else
-                            {
-                                recordedMedicationsToday++;
-                            }
                         }
-                        // Check if this time is in the future and closer than the current nextDueTime
-                        else if (scheduledTimeToday > DateTime.Now && (nextDueTime == null || scheduledTimeToday < nextDueTime))
-                        {
-                            // Check if this scheduled time has already been recorded in user feedback
-                            //  bool hasBeenRecorded = item.feedback != null && item.feedback.Where(x => x.id == medTime.Feedbackid)
-                            //    .Any(feedback => feedback.datetime.Contains(scheduledTimeToday.ToString("HH:mm, dd/MM/yyyy")));
-
-                            var dt = scheduledTimeToday.ToString("dd/MM/yyyy");
-
-                            bool hasBeenRecorded = item.feedback != null && item.feedback
-                        .Any(x => x.id == medTime.id.ToString() && x.datetime.Contains(dt));
-
-                            // If not recorded, update nextDueTime
-                            if (!hasBeenRecorded)
-                            {
-                                nextDueTime = scheduledTimeToday;
-                            }
-                            else
-                            {
-                                recordedMedicationsToday++;
-                            }
-                        }
-
                     }
-                }
-            }
-
-            // Calculate the percentage of recorded medications for the progress bar
-            double percentageRecorded = medicationsDueToday > 0 ? (double)recordedMedicationsToday / medicationsDueToday * 100 : 0;
-            medprogressbar.Progress = percentageRecorded;
 
 
-            if (hasDueMedications == false)
-            {
-                // Create a new item to add
-                var newItem = new
-                {
-                    ContactImage = "medicinehome.png",
-                    Title = "No Medications Due Today",
-                    BackgroundColor = "#e5f9f4" // Example color
-                };
-
-                // Add the new item to the list
-                foryouuserlist.Add(newItem);
-
-                //possibly check if they are recording as required medications a lot in the last seven days
-
-            }
-
-            else if (nextDueTime == null)
-            {
-                //no more times
-
-                if (hasDueMedications)
-                {
-                    //check if they have added feedback for previous meds for that day 
+                    // Calculate the percentage of recorded medications for the progress bar
+                    double percentageRecorded = medicationsDueToday > 0 ? (double)recordedMedicationsToday / medicationsDueToday * 100 : 0;
+                    medprogressbar.Progress = percentageRecorded;
 
 
-                    if (!string.IsNullOrEmpty(timeoflastnotrecordedmed))
+                    if (hasDueMedications == false)
                     {
-                        var nnewItem = new
+                        // Create a new item to add
+                        var newItem = new
                         {
                             ContactImage = "medicinehome.png",
-                            Title = "Have you recorded your " + timeoflastnotrecordedmed + " Medications ?",
+                            Title = "No Medications Due Today",
                             BackgroundColor = "#e5f9f4" // Example color
                         };
 
                         // Add the new item to the list
-                        foryouuserlist.Add(nnewItem);
+                        foryouuserlistmeds.Add(newItem);
+
+                        //possibly check if they are recording as required medications a lot in the last seven days
+
                     }
 
-
-                    var newItem = new
+                    else if (nextDueTime == null)
                     {
-                        ContactImage = "medicinehome.png",
-                        Title = "No More Medications Due Today",
-                        BackgroundColor = "#e5f9f4" // Example color
-                    };
+                        //no more times
 
-                    // Add the new item to the list
-                    foryouuserlist.Add(newItem);
+                        if (hasDueMedications)
+                        {
+                            //check if they have added feedback for previous meds for that day 
+
+
+                            if (!string.IsNullOrEmpty(timeoflastnotrecordedmed))
+                            {
+                                var nnewItem = new
+                                {
+                                    ContactImage = "medicinehome.png",
+                                    Title = "Have you recorded your " + timeoflastnotrecordedmed + " Medications ?",
+                                    BackgroundColor = "#e5f9f4" // Example color
+                                };
+
+                                // Add the new item to the list
+                                foryouuserlistmeds.Add(nnewItem);
+                            }
+
+
+                            var newItem = new
+                            {
+                                ContactImage = "medicinehome.png",
+                                Title = "No More Medications Due Today",
+                                BackgroundColor = "#e5f9f4" // Example color
+                            };
+
+                            // Add the new item to the list
+                            foryouuserlistmeds.Add(newItem);
+                        }
+
+                    }
+                    else
+                    {
+
+                        // Create a new item to add
+                        var newItem = new
+                        {
+                            ContactImage = "medicinehome.png",
+                            Title = "Record your " + nextDueTime.Value.ToString("HH:mm") + " Medications",
+                            BackgroundColor = "#e5f9f4" // Example color
+                        };
+
+                        // Add the new item to the list
+                        foryouuserlistmeds.Add(newItem);
+
+
+                    }
                 }
 
             }
-            else
-            {
 
-                // Create a new item to add
-                var newItem = new
-                {
-                    ContactImage = "medicinehome.png",
-                    Title = "Record your " + nextDueTime.Value.ToString("HH:mm") + " Medications",
-                    BackgroundColor = "#e5f9f4" // Example color
-                };
+            Random random = new Random();
 
-                // Add the new item to the list
-                foryouuserlist.Add(newItem);
+            // Select 3 random items from foryouuserlistsymptomlist
+            var randomItems = foryouuserlistmeds
+                .OrderBy(x => random.Next())
+                .Take(1)
+                .ToList();
 
+            foryouuserlist.AddRange(randomItems);
 
-            }
         }
         catch(Exception ex)
         {
@@ -1512,14 +1572,14 @@ public partial class MainDashboard : ContentPage
             accountlist.HeightRequest = listforaccountlist.Count * 48;
             accountlist.ItemsSource = listforaccountlist;
 
-            foryouuserlist = new List<object>
-            {
-               // new { ContactImage = "symptomshome.png", Title = "Update Backache", BackgroundColor = "#fff7ea" },
-                new { ContactImage = "healthreporticon.png", Title = "Generate your Health Report", BackgroundColor = "#e5f5fc" },
-                new { ContactImage = "diagnosishome.png", Title = "Have you received a new diagnosis ?", BackgroundColor = "#E6E6FA" },
-                new { ContactImage = "appointhome.png", Title = "Record a new appointment", BackgroundColor = "#ffcccb" },
+            //foryouuserlist = new List<object>
+            //{
+            //   // new { ContactImage = "symptomshome.png", Title = "Update Backache", BackgroundColor = "#fff7ea" },
+            //    new { ContactImage = "healthreporticon.png", Title = "Generate your Health Report", BackgroundColor = "#e5f5fc" },
+            //    new { ContactImage = "diagnosishome.png", Title = "Have you received a new diagnosis ?", BackgroundColor = "#E6E6FA" },
+            //    new { ContactImage = "appointhome.png", Title = "Record a new appointment", BackgroundColor = "#ffcccb" },
     
-            };
+            //};
 
            // activitylist.ItemsSource = foryouuserlist;
 
@@ -1968,6 +2028,78 @@ public partial class MainDashboard : ContentPage
         try
         {
             await Navigation.PushAsync(new MeasurementsPage(userfeedbacklist[0]), false);
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
+    private async void activitylist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
+    {
+        try
+        {
+     
+            dynamic tappedItem = e.DataItem;
+            if (tappedItem != null)
+            {
+                // Access properties dynamically
+                var bc = tappedItem.BackgroundColor;
+                var text = tappedItem.Title;
+
+                //health report
+                if(bc == "#e5f5fc")
+                {
+                    await Navigation.PushAsync(new HealthReport(), false);
+                }
+                else if(bc == "#E6E6FA")
+                {
+                    await Navigation.PushAsync(new AllDiagnosis(), false);
+                }
+                else if(bc == "#ffcccb")
+                {
+                    await Navigation.PushAsync(new Appointments(), false);
+                }
+                else if (bc == "#e5f0fb")
+                {
+                    await Navigation.PushAsync(new MeasurementsPage(userfeedbacklist[0]), false);
+                }
+                else if (bc == "#fff7ea")
+                {
+                    await Navigation.PushAsync(new AllSymptoms(userfeedbacklist[0]), false);
+                }
+                else if (bc == "#FFF8DC")
+                {
+                    await Navigation.PushAsync(new AllMood(userfeedbacklist[0]), false);
+                }
+                else if (bc == "#f9f4e5")
+                {
+                    if (text.Contains(":"))
+                    {
+                        await Navigation.PushAsync(new MainSchedule(), false);
+                    }
+                    else
+                    {
+                        await Navigation.PushAsync(new AllSupplements(), false);
+                    }
+                }
+                else if (bc == "#e5f9f4")
+                {
+                    if (text.Contains(":"))
+                    {
+                        await Navigation.PushAsync(new MainSchedule(), false);
+                    }
+                    else
+                    {
+                        await Navigation.PushAsync(new AllMedications(), false);
+                    }
+                }
+
+            }
+
+
+
+
         }
         catch(Exception ex)
         {
