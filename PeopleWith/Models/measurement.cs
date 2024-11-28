@@ -20,6 +20,7 @@ namespace PeopleWith
         public string measurementname { get; set; }
         public string measurementStatus { get; set; }
         public string units { get; set; }
+        public string measurementinformation { get; set; }
 
 
     }

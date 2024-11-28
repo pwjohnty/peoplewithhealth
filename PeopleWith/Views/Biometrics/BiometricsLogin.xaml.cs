@@ -83,7 +83,7 @@ public partial class BiometricsLogin : ContentPage
         }
         catch (Exception Ex)
         {
-
+           
         }
 
     }
@@ -139,6 +139,7 @@ public partial class BiometricsLogin : ContentPage
                 if (GetPinSplit[1] == e.PIN)
                 {
                     LoadingInd.IsVisible = true;
+                    Loadinglbl.IsVisible = true; 
                     PinKeyPad.IsVisible = false;
                     ForgotPassword.IsVisible = false;
                     await Task.Delay(2000);
@@ -155,6 +156,7 @@ public partial class BiometricsLogin : ContentPage
                 if (Helpers.Settings.PinCode == e.PIN)
                 {
                     LoadingInd.IsVisible = true;
+                    Loadinglbl.IsVisible = true;
                     PinKeyPad.IsVisible = false;
                     ForgotPassword.IsVisible = false;
                     await Task.Delay(2000);
@@ -170,7 +172,11 @@ public partial class BiometricsLogin : ContentPage
         }
         catch (Exception Ex)
         {
-
+            PinKeyPad.IsVisible = true;
+            ForgotPassword.IsVisible = true;
+            Name.IsVisible = true;
+            incorrectcodelbl.IsVisible = false;
+            LoadingInd.IsVisible = false;
         }
     }
 

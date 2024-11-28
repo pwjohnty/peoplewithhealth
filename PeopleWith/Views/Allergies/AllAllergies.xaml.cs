@@ -65,6 +65,7 @@ public partial class AllAllergies : ContentPage
         {
             if (InitalLoad == true)
             {
+                AllergyLoading.IsVisible = true; 
                 var Userid = Helpers.Settings.UserKey;
                 APICalls database = new APICalls();
               
@@ -77,7 +78,7 @@ public partial class AllAllergies : ContentPage
                 //if (await Task.WhenAny(Task.WhenAll(getAllUserAllergiesTask, getAllergiesListTask), delayTask) == delayTask)
                 //{
                    
-                    await MopupService.Instance.PushAsync(new GettingReady("Loading Allergies") { });
+                    //await MopupService.Instance.PushAsync(new GettingReady("Loading Allergies") { });
                 //}
                 
                 AllUserAllergies = await getAllUserAllergiesTask;
@@ -86,16 +87,16 @@ public partial class AllAllergies : ContentPage
                 
 
 
-                foreach (var item in AllUserAllergies)
-                {
-                    for (int i = 0; i < AllergiesList.Count; i++)
-                    {
-                        if (AllergiesList[i].Allergyid == item.allergyid)
-                        {
-                            item.title = AllergiesList[i].Title;
-                        }
-                    }
-                }
+                //foreach (var item in AllUserAllergies)
+                //{
+                //    for (int i = 0; i < AllergiesList.Count; i++)
+                //    {
+                //        if (AllergiesList[i].Allergyid == item.allergyid)
+                //        {
+                //            item.title = AllergiesList[i].Title;
+                //        }
+                //    }
+                //}
                 //stopWatch.Stop();
                 
             }
@@ -137,8 +138,8 @@ public partial class AllAllergies : ContentPage
                 EmptyStack.IsVisible = true;
                 DiagnosisOverview.IsVisible = false;
             }
-
-            await MopupService.Instance.PopAllAsync(false);
+            AllergyLoading.IsVisible = false;
+            //await MopupService.Instance.PopAllAsync(false);
         }
         catch (Exception Ex)
         {

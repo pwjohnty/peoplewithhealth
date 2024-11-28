@@ -7,7 +7,7 @@
              xmlns:data="clr-namespace:Syncfusion.Maui.DataSource;assembly=Syncfusion.Maui.DataSource"
              xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
              xmlns:chart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"
-              xmlns:tabView="clr-namespace:Syncfusion.Maui.TabView;assembly=Syncfusion.Maui.TabView"
+             xmlns:tabView="clr-namespace:Syncfusion.Maui.TabView;assembly=Syncfusion.Maui.TabView"
              xmlns:progressBar="clr-namespace:Syncfusion.Maui.ProgressBar;assembly=Syncfusion.Maui.ProgressBar"
              x:Class="PeopleWith.MainDashboard" BackgroundColor="White"
              >
@@ -1014,7 +1014,7 @@ Aspect="AspectFit"
                                  <SfListView.ItemTemplate>-->
                                     <DataTemplate>
                                         <ViewCell>
-                                            <Frame CornerRadius="10" BackgroundColor="White" BorderColor="White" Padding="10"  HasShadow="False" Margin="10,10,10,0">
+                                            <Frame CornerRadius="10" BackgroundColor="White" BorderColor="White" Padding="10" InputTransparent="True"  HasShadow="False" Margin="10,10,10,0">
                                                 <Grid Margin="0,10,0,0" >
                                                     <Grid.RowDefinitions>
                                                         <RowDefinition Height="Auto"/>

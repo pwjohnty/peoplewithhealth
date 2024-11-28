@@ -1481,13 +1481,18 @@ public partial class MainDashboard : ContentPage
                 new { ContactImage = "medicinehome.png", Title = "Medications", BackgroundColor = "#e5f9f4" },
                 new { ContactImage = "supphome.png", Title = "Supplements", BackgroundColor = "#f9f4e5" },
                 new { ContactImage = "measurementhome.png", Title = "Measurements", BackgroundColor = "#e5f0fb" },
+                new { ContactImage = "schedulehome.png", Title = "Schedule", BackgroundColor = "#eff7ed" },
                 new { ContactImage = "diagnosishome.png", Title = "Diagnosis", BackgroundColor = "#E6E6FA" },
                 new { ContactImage = "moodhome.png", Title = "Mood", BackgroundColor = "#FFF8DC" },
                 new { ContactImage = "appointhome.png", Title = "Appointments", BackgroundColor = "#ffcccb" },
                 new { ContactImage = "hcphome.png", Title = "HCPs", BackgroundColor = "#CBC3E3" },
                 new { ContactImage = "questionnairehome.png", Title = "Questionnaires", BackgroundColor = "#fff9ec" },
-                new { ContactImage = "allergenhome.png", Title = "Allergens", BackgroundColor = "#FFF5EE" }
+                new { ContactImage = "allergenhome.png", Title = "Allergens", BackgroundColor = "#FFF5EE" },
+                new { ContactImage = "healthreporticon.png", Title = "Health Report", BackgroundColor = "#ededed" },
+               
             };
+
+            
 
             allhelpvideocatlist.ItemsSource = allcatvideolist;
 
@@ -1696,6 +1701,14 @@ public partial class MainDashboard : ContentPage
             {
                 await Navigation.PushAsync(new AllAllergies(), false);
             }
+            else if (item != null && item.Title == "Health Report") 
+            {
+                await Navigation.PushAsync(new HealthReport(), false);
+            }
+            else if (item != null && item.Title == "Schedule")
+            {
+                await Navigation.PushAsync(new MainSchedule(), false);
+            }
 
         }
         catch(Exception ex)
@@ -1860,6 +1873,14 @@ public partial class MainDashboard : ContentPage
             {
                 await Navigation.PushAsync(new ProfileSection(), false);
             }
+            else if (item != null && item.Title == "Health Report") 
+            {
+                await Navigation.PushAsync(new HealthReport(), false);
+            }
+            else if (item != null && item.Title == "Schedule")
+            {
+                await Navigation.PushAsync(new MainSchedule(), false);
+            }
 
         }
         catch (Exception ex)
@@ -1901,13 +1922,13 @@ public partial class MainDashboard : ContentPage
         try
         {
 
-            var item = e.DataItem as string;
+            var item = e.DataItem as dynamic;
 
-            if(item == "Account Settings")
+            if (item != null && item.Title == "Account Settings")
             {
                 await Navigation.PushAsync(new ProfileSection(), false);
             }
-            else if(item.Contains("Developer Feedback"))
+            else if(item != null && item.Title == "Developer Feedback & Support")
             {
                 if (Email.Default.IsComposeSupported)
                 {
@@ -1927,9 +1948,9 @@ public partial class MainDashboard : ContentPage
                     await Email.Default.ComposeAsync(message);
                 }
             }
-            else if(item == "Terms Of Use")
+            else if(item != null && item.Title == "Terms Of Use")
             {
-
+                await Navigation.PushAsync(new PrivacyPolicy(), false);
             }
 
         }

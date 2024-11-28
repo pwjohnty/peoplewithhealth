@@ -152,6 +152,36 @@ namespace PeopleWith
         }
 
 
+        public async Task<measurement> GetMeasurementsInfo(measurement Getinfo)
+        {
+            try
+            {
+                var id = Getinfo.measurementid; 
+                var url = $"https://pwdevapi.peoplewith.com/api/measurement/measurementid/{id}";
+                HttpClient client = new HttpClient();
+                HttpResponseMessage responseconsent = await client.GetAsync(url);
+
+                if (responseconsent.IsSuccessStatusCode)
+                {
+                    string contentconsent = await responseconsent.Content.ReadAsStringAsync();
+                    var userResponseconsent = JsonConvert.DeserializeObject<ApiResponseMeasurement>(contentconsent);
+                    var consent = userResponseconsent.Value;
+                    Getinfo.measurementinformation = consent[0].measurementinformation; 
+                    return Getinfo;
+
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
         public async Task<ObservableCollection<usermeasurement>> GetUserMeasurements()
         {
             try
@@ -779,7 +809,10 @@ namespace PeopleWith
                             {
                                 newUserSymptom.schedule.Add(feedback);
                                 var dosage = feedback.Dosage;
+                                var Updatetime = DateTime.Parse(feedback.time).ToString("HH:mm");
+                                feedback.time = Updatetime; 
                                 var time = feedback.time;
+                              
                                 List<string> days = new List<string>();
 
                                 var getfreq = newUserSymptom.frequency.Split('|');
@@ -1265,6 +1298,8 @@ namespace PeopleWith
                             {
                                 newUserSymptom.schedule.Add(feedback);
                                 var dosage = feedback.Dosage;
+                                var Updatetime = DateTime.Parse(feedback.time).ToString("HH:mm");
+                                feedback.time = Updatetime;
                                 var time = feedback.time;
                                 List<string> days = new List<string>();
 
@@ -1535,26 +1570,35 @@ namespace PeopleWith
         //}
 
         //Get Single Diagnosis Information
-        public async Task<ObservableCollection<diagnosis>> GetAsyncSingleDiagnosis(string Diagid)
+        public async Task<diagnosis> GetAsyncSingleDiagnosis(diagnosis GetInfo)
         {
             try
             {
+                var id = GetInfo.Diagnosisid;
                 HttpClient client = new HttpClient();
 
-                // Use string interpolation to insert Diagid
-                var URl = $"https://pwdevapi.peoplewith.com/api/diagnosis/diagnosisid/{Diagid}";
+                // Use string id interpolation to insert Diagid
+                var URl = $"https://pwdevapi.peoplewith.com/api/diagnosis/diagnosisid/{id}";
 
                 HttpResponseMessage response = await client.GetAsync(URl);
-                string data = await response.Content.ReadAsStringAsync();
 
-                var userResponse = JsonConvert.DeserializeObject<ApiDiagnosis>(data);
-                ObservableCollection<diagnosis> users = userResponse.Value;
-                return new ObservableCollection<diagnosis>(users.Take(Range.All));
+                if (response.IsSuccessStatusCode)
+                {
+                    string contentconsent = await response.Content.ReadAsStringAsync();
+                    var userResponseconsent = JsonConvert.DeserializeObject<ApiDiagnosis>(contentconsent);
+                    var consent = userResponseconsent.Value;
+                    GetInfo.Diagnosisinformation = consent[0].Diagnosisinformation;
+                    return GetInfo;
 
+                }
+                else
+                {
+                    return null;
+                }
             }
             catch (Exception ex)
             {
-                return new ObservableCollection<diagnosis>();
+                return null;
             }
         }
 

@@ -1,5 +1,6 @@
 //using Android.Telephony;
 //using Java.Time.Temporal;
+using Com.Google.Android.Exoplayer2.Util;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 using Mopups.Services;
@@ -155,7 +156,7 @@ public partial class MeasurementsPage : ContentPage
             {
                 //Original 
                 //UserMeasurements = await aPICalls.GetUserMeasurements();
-
+                MeasLoading.IsVisible = true; 
 
                 APICalls database = new APICalls();
                 var getMeasurementsTask = database.GetUserMeasurements();
@@ -164,7 +165,7 @@ public partial class MeasurementsPage : ContentPage
 
                 //if (await Task.WhenAny(getMeasurementsTask, delayTask) == delayTask)
                 //{
-                    await MopupService.Instance.PushAsync(new GettingReady("Loading Measurements") { });
+                    //await MopupService.Instance.PushAsync(new GettingReady("Loading Measurements") { });
                 //}
 
                 UserMeasurements = await getMeasurementsTask;
@@ -200,6 +201,7 @@ public partial class MeasurementsPage : ContentPage
 
 
                 usermeasurementlist.ItemsSource = newlist;
+                MeasLoading.IsVisible = false;
                 await MopupService.Instance.PopAllAsync(false);
                 // usermeasurementlist.BackgroundColor = Colors.Red;
                 return;
@@ -209,7 +211,7 @@ public partial class MeasurementsPage : ContentPage
             {
                 nodatastack.IsVisible = true;
                 datastack.IsVisible = false;
-                await MopupService.Instance.PopAllAsync(false);
+                MeasLoading.IsVisible = false;
                 return;
             }
 
@@ -275,7 +277,8 @@ public partial class MeasurementsPage : ContentPage
                 //measurementlist.ItemsSource = ordermeasurementlist;
                 //measurementlist.HeightRequest = ordermeasurementlist.Count * 57;
             }
-            await MopupService.Instance.PopAllAsync(false);
+            MeasLoading.IsVisible = false; 
+            //await MopupService.Instance.PopAllAsync(false);
         }
 		catch(Exception Ex)
 		{

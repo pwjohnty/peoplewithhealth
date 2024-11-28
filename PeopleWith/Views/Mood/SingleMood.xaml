@@ -21,7 +21,7 @@
                         <ColumnDefinition Width="10*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Image x:Name="Moodimg" Margin="0,0,0,0"  VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="0" Grid.Column="0"  Grid.RowSpan="2"  />
+                    <Image x:Name="Moodimg" Margin="0,0,0,0" HeightRequest="50" WidthRequest="50"  VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="0" Grid.Column="0"  Grid.RowSpan="2"  />
                     <Label x:Name="MoodTitle" Margin="10,0,0,0" FontFamily="HankenGroteskBold"  FontSize="20" VerticalOptions="End" Grid.Row="0" Grid.Column="1"  TextColor="#031926" />
                     <Label x:Name="MoodDate" FontFamily="HankenGroteskBold" VerticalOptions="Start" Margin="10,0,0,0" HorizontalOptions="Start" FontSize="12" Grid.Row="1" Grid.Column="1"  TextColor="DarkGray" />
                     <Label x:Name="MoodNotes" FontFamily="HankenGroteskBold" VerticalOptions="Start" Margin="10,5,0,0" HorizontalOptions="Start" FontSize="12" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3"  TextColor="DarkGray" />

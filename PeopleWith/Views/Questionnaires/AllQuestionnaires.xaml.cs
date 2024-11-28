@@ -1,3 +1,4 @@
+using Mopups.Services;
 using System.Collections.ObjectModel;
 
 namespace PeopleWith;
@@ -43,7 +44,8 @@ public partial class AllQuestionnaires : ContentPage
 	{
 		try
 		{
-			questionnaires = await aPICalls.GetQuestionnaires();
+            QuesLoading.IsVisible = true; 
+            questionnaires = await aPICalls.GetQuestionnaires();
 
 			if (questionnaires != null)
 			{
@@ -83,7 +85,9 @@ public partial class AllQuestionnaires : ContentPage
 
             Alluserquestionnaires.ItemsSource = orderlist;
 
-		}
+            QuesLoading.IsVisible = false;
+
+        }
         catch (Exception Ex)
         {
             NotasyncMethod(Ex);
@@ -153,6 +157,18 @@ public partial class AllQuestionnaires : ContentPage
                 ConnectivityChanged?.Invoke(this, isConnected);
             }
 		}
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    async private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            await MopupService.Instance.PushAsync(new Infopopup("question") { });
+        }
         catch (Exception Ex)
         {
             NotasyncMethod(Ex);

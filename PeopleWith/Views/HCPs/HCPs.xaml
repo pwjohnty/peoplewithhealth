@@ -71,6 +71,17 @@
                     </syncfusion:SfListView>
                 </Grid>
 
+            <Grid x:Name="HcpLoading" Margin="0,150,0,0"  IsVisible="False">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <ActivityIndicator IsRunning="True" Grid.Row="0" Color="#9F2B68" HorizontalOptions="Center" VerticalOptions="Start" />
+                <Label Text="Loading HCP's..." Grid.Row="1" TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="Center" Margin="0,5,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" />
+
+
+            </Grid>
+
 
             <!--Empty Stack for No HCPS -->
             <StackLayout x:Name="EmptyStack" Margin="0,150,0,0" IsVisible="False" VerticalOptions="CenterAndExpand">

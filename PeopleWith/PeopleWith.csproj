@@ -78,14 +78,17 @@
 	  <None Remove="Resources\Images\allergenhome.png" />
 	  <None Remove="Resources\Images\androidarrow.png" />
 	  <None Remove="Resources\Images\angry.png" />
+	  <None Remove="Resources\Images\anxious.png" />
 	  <None Remove="Resources\Images\appconstructionicon.png" />
 	  <None Remove="Resources\Images\appointhome.png" />
 	  <None Remove="Resources\Images\backbutton.png" />
 	  <None Remove="Resources\Images\background.png" />
+	  <None Remove="Resources\Images\bored.png" />
 	  <None Remove="Resources\Images\charticon.png" />
 	  <None Remove="Resources\Images\close.png" />
 	  <None Remove="Resources\Images\compare.png" />
 	  <None Remove="Resources\Images\confused.png" />
+	  <None Remove="Resources\Images\content.png" />
 	  <None Remove="Resources\Images\crying.png" />
 	  <None Remove="Resources\Images\dashbrowseactive.png" />
 	  <None Remove="Resources\Images\dashbrowseinactive.png" />
@@ -96,12 +99,15 @@
 	  <None Remove="Resources\Images\dashsearch.png" />
 	  <None Remove="Resources\Images\delete.png" />
 	  <None Remove="Resources\Images\deleteicon.png" />
+	  <None Remove="Resources\Images\depressed.png" />
 	  <None Remove="Resources\Images\diagnosishome.png" />
 	  <None Remove="Resources\Images\diagnosisicon2022.png" />
 	  <None Remove="Resources\Images\doctor.png" />
 	  <None Remove="Resources\Images\downarrow.png" />
+	  <None Remove="Resources\Images\emotional.png" />
 	  <None Remove="Resources\Images\equal.png" />
 	  <None Remove="Resources\Images\erroricon.png" />
+	  <None Remove="Resources\Images\excited.png" />
 	  <None Remove="Resources\Images\faceid.png" />
 	  <None Remove="Resources\Images\filtergray.png" />
 	  <None Remove="Resources\Images\filterorange.png" />
@@ -121,6 +127,7 @@
 	  <None Remove="Resources\Images\link.png" />
 	  <None Remove="Resources\Images\location.png" />
 	  <None Remove="Resources\Images\logo.png" />
+	  <None Remove="Resources\Images\love.png" />
 	  <None Remove="Resources\Images\loved.png" />
 	  <None Remove="Resources\Images\measurementhome.png" />
 	  <None Remove="Resources\Images\medcalendericon.png" />
@@ -129,7 +136,6 @@
 	  <None Remove="Resources\Images\medssuccess.png" />
 	  <None Remove="Resources\Images\migration.png" />
 	  <None Remove="Resources\Images\moodhome.png" />
-	  <None Remove="Resources\Images\neutral.png" />
 	  <None Remove="Resources\Images\medtime.png" />
 	  <None Remove="Resources\Images\medtimelg.png" />
 	  <None Remove="Resources\Images\nextdarker.png" />
@@ -152,7 +158,10 @@
 	  <None Remove="Resources\Images\questionnaireicon.png" />
 	  <None Remove="Resources\Images\regcompletetick.png" />
 	  <None Remove="Resources\Images\regtick.png" />
+	  <None Remove="Resources\Images\Relaxed.png" />
 	  <None Remove="Resources\Images\sad.png" />
+	  <None Remove="Resources\Images\scared.png" />
+	  <None Remove="Resources\Images\schedulehome.png" />
 	  <None Remove="Resources\Images\search.png" />
 	  <None Remove="Resources\Images\searchbaricon.png" />
 	  <None Remove="Resources\Images\searchbrown.png" />
@@ -168,6 +177,7 @@
 	  <None Remove="Resources\Images\searchorange.png" />
 	  <None Remove="Resources\Images\searchteal.png" />
 	  <None Remove="Resources\Images\smartwatchicon.png" />
+	  <None Remove="Resources\Images\stressed.png" />
 	  <None Remove="Resources\Images\successtick.png" />
 	  <None Remove="Resources\Images\supphome.png" />
 	  <None Remove="Resources\Images\surprised.png" />
@@ -177,6 +187,7 @@
 	  <None Remove="Resources\Images\uparrow.png" />
 	  <None Remove="Resources\Images\update.png" />
 	  <None Remove="Resources\Images\updateicon.png" />
+	  <None Remove="Resources\Images\upset.png" />
 	  <None Remove="Resources\Images\usericon.png" />
 	  <None Remove="Resources\Images\videoicon.png" />
 	  <None Remove="Resources\Images\warningicon.png" />
@@ -302,6 +313,9 @@
 	  <MauiXaml Update="Views\Diagnosis\AllDiagnosis.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Diagnosis\DiagnosisInfo.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Diagnosis\SingleDiagnosis.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -357,6 +371,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Measurements\AddMeasurement.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Measurements\MeasurementsInfo.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Measurements\MeasurementsPage.xaml">

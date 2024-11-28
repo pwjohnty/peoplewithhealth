@@ -20,9 +20,20 @@
             </StackLayout>-->
 
             <StackLayout x:Name="datastack">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Text="Questionnaires" FontSize="26" Grid.Column="0" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
+                    <Frame x:Name="QuesInfo" HasShadow="False" Padding="0" CornerRadius="5" Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,0,20,0" BorderColor="#766647" BackgroundColor="#fff9ec">
+                        <Label Text="i" FontFamily="HankenGroteskBold" HorizontalOptions="Center" TextColor="#766647" FontSize="12"  Grid.Column="1" VerticalOptions="Center" />
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
 
-
-                <Label Text="Questionnaires" FontSize="26" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
+                </Grid>
 
                 <buttons:SfSegmentedControl x:Name="segmentedControl" SelectionChanged="segmentedControl_SelectionChanged" SegmentBackground="#fff9ec" Stroke="LightGray"  SelectedIndex="0" DisabledSegmentTextColor="Gray" CornerRadius="5"
                 Margin="8,8,8,0">
@@ -120,6 +131,17 @@ Padding="0">
                         </DataTemplate>
                     </syncfusion:SfListView.ItemTemplate>
                 </syncfusion:SfListView>
+
+                <Grid x:Name="QuesLoading" Margin="0,120,0,0" IsVisible="False">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <ActivityIndicator IsRunning="True" Grid.Row="0" Color="#766647" HorizontalOptions="Center" VerticalOptions="Start" />
+                    <Label Text="Loading Questionnaires..." Grid.Row="1" TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="Center" Margin="0,5,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" />
+
+
+                </Grid>
 
 
 

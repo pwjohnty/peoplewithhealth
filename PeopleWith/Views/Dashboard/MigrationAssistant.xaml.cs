@@ -177,12 +177,12 @@ public partial class MigrationAssistant : ContentPage
 
                     skipbtn.IsVisible = false;
 
-                    
 
+                    Helpers.Settings.PinCode = codepin.PINValue.ToString(); 
                     updateuser[0].userpin = codepin.PINValue.ToString();
 
-                     bottomgrid.IsVisible = false;
-                     topgrid.IsVisible = false;
+                    bottomgrid.IsVisible = false;
+                    topgrid.IsVisible = false;
                     faceidstack.IsVisible = false;
                     migratestack.IsVisible = true;
 

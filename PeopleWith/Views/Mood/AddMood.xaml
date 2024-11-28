@@ -108,39 +108,52 @@
                 <Label Text="How are you Feeling?" FontFamily="HankenGroteskBold" Margin="20,10,0,0"  VerticalOptions="Center" HorizontalOptions="Start"   FontSize="16" TextColor="#031926" />
 
                 <!-- Emoji Picker -->
-                <syncfusion:SfListView x:Name="MoodListview"
-                       Orientation="Horizontal"
-                       ItemSpacing="0"
-                       ItemTapped="MoodListview_ItemTapped"
-                       HeightRequest="120"
-                       ScrollBarVisibility="Never"
-                       AutoFitMode="DynamicHeight"
-                       BackgroundColor="Transparent">
-                    <syncfusion:SfListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <Frame HasShadow="False" CornerRadius="10" Padding="10" Margin="5"  InputTransparent="True" WidthRequest="100" BorderColor="Transparent" BackgroundColor="#E5E5E5" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
-                                    <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Spacing="5">
-                                        <Image Source="{Binding ImageSource}" WidthRequest="50" HeightRequest="50" />
-                                        <Label Text="{Binding Text}" FontAttributes="Bold" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#031926" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" />
-                                    </StackLayout>
-                                </Frame>
-                            </ViewCell>
-                        </DataTemplate>
-                    </syncfusion:SfListView.ItemTemplate>
-                    <syncfusion:SfListView.SelectedItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <Frame HasShadow="False" CornerRadius="10" Padding="10" Margin="5" InputTransparent="True" WidthRequest="100"  BorderColor="Transparent" BackgroundColor="#FFF8DC" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
-                                    <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Spacing="5">
-                                        <Image Source="{Binding ImageSource}" WidthRequest="50" HeightRequest="50" />
-                                        <Label Text="{Binding Text}" FontAttributes="Bold" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#031926" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" />
-                                    </StackLayout>
-                                </Frame>
-                            </ViewCell>
-                        </DataTemplate>
-                    </syncfusion:SfListView.SelectedItemTemplate>
-                </syncfusion:SfListView>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="0"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/> 
+                    </Grid.RowDefinitions>
+
+                    <syncfusion:SfListView x:Name="MoodListview"
+        Orientation="Horizontal" Grid.Row="0" Grid.Column="1"
+        ItemSpacing="0" Margin="10,0,10,0"
+        ItemTapped="MoodListview_ItemTapped"
+        HeightRequest="120"
+        ScrollBarVisibility="Never"
+        AutoFitMode="DynamicHeight"
+        BackgroundColor="Transparent">
+                        <syncfusion:SfListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Frame HasShadow="False" CornerRadius="10" Padding="10" Margin="5"  InputTransparent="True" WidthRequest="100" BorderColor="Transparent" BackgroundColor="#fafafa" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+                                        <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Spacing="5">
+                                            <Image Source="{Binding ImageSource}" WidthRequest="50" HeightRequest="50" />
+                                            <Label Text="{Binding Text}" FontAttributes="Bold" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#031926" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" />
+                                        </StackLayout>
+                                    </Frame>
+                                </ViewCell>
+                            </DataTemplate>
+                        </syncfusion:SfListView.ItemTemplate>
+                        <syncfusion:SfListView.SelectedItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Frame HasShadow="False" CornerRadius="10" Padding="10" Margin="5" InputTransparent="True" WidthRequest="100"  BorderColor="Transparent" BackgroundColor="#FFF8DC" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+                                        <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Spacing="5">
+                                            <Image Source="{Binding ImageSource}" WidthRequest="50" HeightRequest="50" />
+                                            <Label Text="{Binding Text}" FontAttributes="Bold" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#031926" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" />
+                                        </StackLayout>
+                                    </Frame>
+                                </ViewCell>
+                            </DataTemplate>
+                        </syncfusion:SfListView.SelectedItemTemplate>
+                    </syncfusion:SfListView>
+
+                </Grid>
+               
 
 
 

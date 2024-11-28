@@ -8,6 +8,7 @@ public partial class SingleDiagnosis : ContentPage
 {
     public ObservableCollection<userdiagnosis> AllUserDiagnosis = new ObservableCollection<userdiagnosis>();
     public ObservableCollection<userdiagnosis> DiagnosisPassed = new ObservableCollection<userdiagnosis>();
+    diagnosis SelectedDiagnosis = new diagnosis(); 
     string DateofDiagnosis;
     bool isEditing;
     bool validdob;
@@ -89,39 +90,10 @@ public partial class SingleDiagnosis : ContentPage
     {
         try
         {
-            var id = DiagnosisPassed[0].diagnosisid;
-            APICalls datbase = new APICalls();
-            var selectedDiagnosis = await datbase.GetAsyncSingleDiagnosis(id);
-            //var selectedDiagnosis = DiagnosisList.FirstOrDefault(d => d.Diagnosisid == id);
-
-            if (selectedDiagnosis != null)
-            {
-                if (string.IsNullOrEmpty(selectedDiagnosis[0].Diagnosisinformation))
-                {
-                    NoDiagDetails.IsVisible = true; 
-                }
-                else
-                {
-                    var Split = selectedDiagnosis[0].Diagnosisinformation.Split('|');
-                    DiagDetails.IsVisible = true;
-                    DiagDetailslbl.Text = Split[0];
-                    WebpageLink = Split[1];
-                    if (Split[2] == "Web")
-                    {
-                        DiagDetailsIMG.Source = "link.png";
-                        WebView.Source = WebpageLink;
-                        WeborPdf = "Web";
-
-                    }
-                    else 
-                    {
-                        DiagDetailsIMG.Source = "pdf.png";
-
-                        WeborPdf = "Pdf";                      
-                   }                   
-                }
-                // Do something with selectedDiagnosis
-            }
+            SelectedDiagnosis.Diagnosisid = DiagnosisPassed[0].diagnosisid;
+            APICalls Database = new APICalls();
+            var GetDiagInfo = await Database.GetAsyncSingleDiagnosis(SelectedDiagnosis);
+            SelectedDiagnosis = GetDiagInfo;
         }
         catch (Exception Ex)
         {
@@ -353,7 +325,17 @@ public partial class SingleDiagnosis : ContentPage
     {
         try
         {
-            await DisplayAlert("Diagnosis Information", "No Information is saved against this Diagnosis", "Close");
+            if(SelectedDiagnosis.Diagnosisinformation != null)
+            {
+                var title = DiagnosisPassed[0].diagnosistitle;
+                await Navigation.PushAsync(new DiagnosisInfo(SelectedDiagnosis, title), false); 
+
+            }
+            else
+            {
+                await DisplayAlert("Diagnosis Information", "No Information is saved against this Diagnosis", "Close");
+
+            }
         }
         catch (Exception Ex)
         {
@@ -491,15 +473,15 @@ public partial class SingleDiagnosis : ContentPage
                 Title = null;
                 NavigationPage.SetHasNavigationBar(this, true); 
             }
-            else if (WebViewerStack.IsVisible == true)
-            {
-                WebViewerStack.IsVisible = false;
-                DiagnosisSingle.IsVisible = true;
-                EditBtn.IsEnabled = true;
-                AndroidBtn.IsVisible = false;
-                IOSBtn.IsVisible = false;
-                NavigationPage.SetHasNavigationBar(this, true);
-            }
+            //else if (WebViewerStack.IsVisible == true)
+            //{
+            //    WebViewerStack.IsVisible = false;
+            //    DiagnosisSingle.IsVisible = true;
+            //    EditBtn.IsEnabled = true;
+            //    AndroidBtn.IsVisible = false;
+            //    IOSBtn.IsVisible = false;
+            //    NavigationPage.SetHasNavigationBar(this, true);
+            //}
         }
         catch (Exception Ex)
         {

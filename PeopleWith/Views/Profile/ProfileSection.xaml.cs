@@ -1,4 +1,5 @@
 using Mopups.Services;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace PeopleWith;
@@ -8,6 +9,7 @@ public partial class ProfileSection : ContentPage
     public List<user> UserDetailsList = new List<user>();
     public List<user> SettingsList = new List<user>();
     public List<user> PrivacyDetailsList = new List<user>();
+    public ObservableCollection<user> UserData = new ObservableCollection<user>(); 
     user AllUserData = new user(); 
     string one;
     string two;
@@ -72,6 +74,8 @@ public partial class ProfileSection : ContentPage
             string build = AppInfo.Current.BuildString;
             ReleaseVersion.Text = "ReleaseVersion " + version + " | " + "Build Version " + build;
 
+            GetAllUserData(); 
+
             GetHealthDetails();
             GetSettings();
             GetPrivacyDetails();
@@ -131,7 +135,28 @@ public partial class ProfileSection : ContentPage
             NotasyncMethod(Ex);
         }
     }
+    async private void GetAllUserData()
+    {
+        try
+        {
+            APICalls Database = new APICalls();
+            UserData = await Database.GetuserDetails();
+            AllUserData.password = UserData[0].password; 
+            AllUserData.firstname = UserData[0].firstname;
+            AllUserData.surname = UserData[0].surname;
+            AllUserData.email = UserData[0].email;
+            AllUserData.dateofbirth = UserData[0].dateofbirth;
+            AllUserData.gender = UserData[0].gender;
+            AllUserData.ethnicity = UserData[0].ethnicity;
+            AllUserData.biometrics = UserData[0].biometrics; 
+            AllUserData.userpin = UserData[0].userpin;
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
 
+    }
     private void GetHealthDetails()
     {
         try
@@ -210,7 +235,7 @@ public partial class ProfileSection : ContentPage
         }
     }
 
-    private void GetSettings()
+   async private void GetSettings()
     {
         try
         {
@@ -227,7 +252,17 @@ public partial class ProfileSection : ContentPage
             var Notification = new user();
             Notification.SettingsTitle = "Notifications";
 
-            Notification.SettingsItem = Helpers.Settings.Notifications;
+            //Notification.SettingsItem = Helpers.Settings.Notifications;
+
+            PermissionStatus status = await Permissions.CheckStatusAsync<Permissions.PostNotifications>();
+            if (status == PermissionStatus.Granted)
+            {
+                Notification.SettingsItem = "Enabled";
+            }
+            else
+            {
+                Notification.SettingsItem = "Disabled";
+            }
 
             SettingsList.Add(Notification);
 
@@ -245,7 +280,7 @@ public partial class ProfileSection : ContentPage
                 Signup.SettingsItem = Helpers.Settings.SignUp;
             }
 
-            SettingsList.Add(Signup);
+            //SettingsList.Add(Signup);
 
             Settings.ItemsSource = SettingsList;
         }
@@ -281,7 +316,7 @@ public partial class ProfileSection : ContentPage
             var Permission = new user();
             Permission.SettingsTitle = "Permissions";
 
-            PrivacyDetailsList.Add(Permission);
+            //PrivacyDetailsList.Add(Permission);
 
             PrivacyList.ItemsSource = PrivacyDetailsList;
         }
@@ -326,8 +361,41 @@ public partial class ProfileSection : ContentPage
             {
                 var ItemTapped = e.DataItem as user;
                 var SelectedItem = ItemTapped.SettingsTitle;
-                string Selected = "Settings";
-                await Navigation.PushAsync(new ProfileEdit(SelectedItem, Selected, AllUserData), false);
+                if (SelectedItem == "Notifications")
+                {
+                    if(ItemTapped.SettingsItem == "Enabled")
+                    {
+                        //Do Nothing 
+                    }
+                    else
+                    {
+                        if (DeviceInfo.Platform == DevicePlatform.Android)
+                        {
+
+                            //await Permissions.RequestAsync<Permissions.PostNotifications>();
+                            //if(That didnt work Do this) - Needs changed to open Notifications page- Then same for android 
+                            var context = Android.App.Application.Context;
+
+                            var intent = new Android.Content.Intent(Android.Provider.Settings.ActionAppNotificationSettings);
+                            intent.PutExtra(Android.Provider.Settings.ExtraAppPackage, context.PackageName);
+                            intent.AddFlags(Android.Content.ActivityFlags.NewTask);
+
+                            context.StartActivity(intent);
+                        }
+                        else
+                        {
+                            var notificationService = DependencyService.Get<INotificationService>();
+                            await notificationService.RequestNotificationPermissionAsync();
+
+                        }
+                    }
+                }
+                else
+                {
+                    string Selected = "Settings";
+                    await Navigation.PushAsync(new ProfileEdit(SelectedItem, Selected, AllUserData), false);
+                }
+               
             }
             else
             {
