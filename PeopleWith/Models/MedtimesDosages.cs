@@ -123,6 +123,21 @@ namespace PeopleWith
             }
         }
 
+        private bool asReqHidelbl;
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool AsReqHidelbl
+        {
+            get { return asReqHidelbl; }
+            set
+            {
+                asReqHidelbl = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(asReqHidelbl)));
+                }
+            }
+        }
+
 
         private bool timepickerVis;
         [System.Text.Json.Serialization.JsonIgnore]

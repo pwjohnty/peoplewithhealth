@@ -856,7 +856,7 @@ BackgroundColor="Teal"
 HorizontalOptions="FillAndExpand"
 TextColor="White" 
       Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
-FontAttributes="None" 
+FontAttributes="None" Clicked="Button_Clicked_5"
      Margin="10,10,10,10"
 FontFamily="HankenGroteskBold"
 Text="Get Started" />

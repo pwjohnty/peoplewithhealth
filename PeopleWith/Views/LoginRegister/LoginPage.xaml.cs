@@ -313,7 +313,7 @@ public partial class LoginPage : ContentPage
                     newuseritem.userid = users[0].userid;
 
                     APICalls databasee = new APICalls();
-                    await databasee.InsertUserFeedback(newuseritem);
+                    //await databasee.InsertUserFeedback(newuseritem);
 
                     await Navigation.PushAsync(new MigrationAssistant(), false);
                     return;
