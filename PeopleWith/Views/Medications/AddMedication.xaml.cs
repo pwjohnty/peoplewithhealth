@@ -3835,8 +3835,8 @@ public partial class AddMedication : ContentPage
             if(freqstring == "Specfic Days of the Week")
             {
                 //means their is multiple days in list
-               // if (selectedDosages[0].Day.Contains(','))
-               // {
+                if (selectedDosages[0].Day.Contains(','))
+                {
 
                     foreach (var d in listofdays) // Iterate over the list of days first
                     {
@@ -3863,13 +3863,13 @@ public partial class AddMedication : ContentPage
 
                     selectedDosages = WeeklyChangedselectedDosages;
 
-               // }
-               // else
-               // {
+                }
+                else
+                {
                     //means the days are already in there own record
                    
 
-               // }
+                }
 
 
                 //schdeule notifications using new collection now
