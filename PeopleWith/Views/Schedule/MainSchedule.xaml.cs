@@ -257,7 +257,7 @@ public partial class MainSchedule : ContentPage
                                 //add all the items 
                                 foreach (var medtimes in item.schedule)
                                 {
-                                    if(medtimes.Day == dayname || medtimes.Day == dayfour)
+                                    if(medtimes.Day.Contains(dayname) || medtimes.Day == dayfour)
                                     {
                                         medtimes.Type = "Medication";
                                         medtimes.Usermedid = item.id;
@@ -288,7 +288,7 @@ public partial class MainSchedule : ContentPage
                                 //add all the items 
                                 foreach (var medtimes in item.schedule)
                                 {
-                                    if (medtimes.Day == dayname)
+                                    if (medtimes.Day.Contains(dayname))
                                     {
                                         medtimes.Type = "Medication";
                                         medtimes.Usermedid = item.id;

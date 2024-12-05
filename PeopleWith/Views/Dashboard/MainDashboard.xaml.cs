@@ -5,6 +5,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using Microsoft.Azure.NotificationHubs;
 
 namespace PeopleWith;
 
@@ -27,6 +28,7 @@ public partial class MainDashboard : ContentPage
 
     ObservableCollection<signupcode> signupcodecollection = new ObservableCollection<signupcode>();
     bool setnotificationsfromlogin;
+    MedSuppNotifications ScheduleNotifications = new MedSuppNotifications();
     public MainDashboard()
 	{
 		InitializeComponent();
@@ -655,7 +657,7 @@ public partial class MainDashboard : ContentPage
                 measurementnochartdetaillist.IsVisible = false;
                 nomeasurementdataframe.IsVisible = true;
 
-                var newItem = new
+                var newItem = new dashitem
                 {
                     ContactImage = "measurementhome.png",
                     Type = "Measurements",
@@ -717,7 +719,7 @@ public partial class MainDashboard : ContentPage
                     // Display the most common mood
                     var mostCommonMood = moodsForDay.MoodLabel;
 
-                    var newItem2 = new
+                    var newItem2 = new dashitem
                     {
                         ContactImage = "moodhome.png",
                         Type = "Mood",
@@ -730,7 +732,7 @@ public partial class MainDashboard : ContentPage
                 }
                 else
                 {
-                    var newItem1 = new
+                    var newItem1 = new dashitem
                     {
                         ContactImage = "moodhome.png",
                         Type = "Mood",
@@ -742,7 +744,7 @@ public partial class MainDashboard : ContentPage
 
                 }
 
-                var newItem = new
+                var newItem = new dashitem
                 {
                     ContactImage = "moodhome.png",
                     Type = "Mood",
@@ -763,7 +765,7 @@ public partial class MainDashboard : ContentPage
                 moodframe.IsVisible = false;
                 nomooddataframe.IsVisible = true;
 
-                var newItem = new
+                var newItem = new dashitem
                 {
                     ContactImage = "moodhome.png",
                     Type = "Mood",
@@ -803,7 +805,7 @@ public partial class MainDashboard : ContentPage
             if (userfeedbacklist[0].symptomfeedbacklist == null)
             {
 
-                var newItem = new
+                var newItem = new dashitem
                 {
                     ContactImage = "symptomshome.png",
                     Type = "Symptoms",
@@ -825,7 +827,7 @@ public partial class MainDashboard : ContentPage
             symdataframe.IsVisible = true;
             nosymdataframe.IsVisible = false;
 
-            var newItemm = new
+            var newItemm = new dashitem
             {
                 ContactImage = "symptomshome.png",
                 Type = "Symptoms",
@@ -854,7 +856,7 @@ public partial class MainDashboard : ContentPage
 
             if (!hasRecentUpdates)
             {
-                var newItem = new
+                var newItem = new dashitem
                 {
                     ContactImage = "symptomshome.png",
                     Type = "Symptoms",
@@ -891,7 +893,7 @@ public partial class MainDashboard : ContentPage
                 var highIntensityEntry = entries.LastOrDefault(e => e.action == "update" && int.TryParse(e.value, out int value) && value >= 50);
                 if (highIntensityEntry != null && DateTime.TryParse(highIntensityEntry.datetime, out DateTime highIntensityDateTime))
                 {
-                    var newItem = new
+                    var newItem = new dashitem
                     {
                         ContactImage = "symptomshome.png",
                         Type = "Symptoms",
@@ -903,7 +905,7 @@ public partial class MainDashboard : ContentPage
                 // Frequency detection for repeated updates in a short period
                 if (entries.Count(e => e.action == "update" && DateTime.TryParse(e.datetime, out DateTime frequencyDateTime) && frequencyDateTime.Hour >= 9 && frequencyDateTime.Hour < 12) > 3)
                 {
-                    var newItem = new
+                    var newItem = new dashitem
                     {
                         ContactImage = "symptomshome.png",
                         Type = "Symptoms",
@@ -915,7 +917,7 @@ public partial class MainDashboard : ContentPage
                 // New symptom detection
                 if (entries.Any(e => e.action == "addNew"))
                 {
-                    var newItem = new
+                    var newItem = new dashitem
                     {
                         ContactImage = "symptomshome.png",
                         Type = "Symptoms",
@@ -930,7 +932,7 @@ public partial class MainDashboard : ContentPage
                 {
                     if (int.Parse(recentEntries[0].value) > int.Parse(recentEntries[1].value) && int.Parse(recentEntries[1].value) > int.Parse(recentEntries[2].value))
                     {
-                        var newItem = new
+                        var newItem = new dashitem
                         {
                             ContactImage = "symptomshome.png",
                             Type = "Symptoms",
@@ -941,7 +943,7 @@ public partial class MainDashboard : ContentPage
                     }
                     else if (int.Parse(recentEntries[0].value) < int.Parse(recentEntries[1].value) && int.Parse(recentEntries[1].value) < int.Parse(recentEntries[2].value))
                     {
-                        var newItem = new
+                        var newItem = new dashitem
                         {
                             ContactImage = "symptomshome.png",
                             Type = "Symptoms",
@@ -959,7 +961,7 @@ public partial class MainDashboard : ContentPage
                     .Count();
                 if (consecutiveHighIntensity >= 3)
                 {
-                    var newItem = new
+                    var newItem = new dashitem
                     {
                         ContactImage = "symptomshome.png",
                         Type = "Symptoms",
@@ -973,7 +975,7 @@ public partial class MainDashboard : ContentPage
                 var eveningEntries = entries.Where(e => DateTime.TryParse(e.datetime, out DateTime eveningDateTime) && eveningDateTime.Hour >= 17 && eveningDateTime.Hour < 22).Count();
                 if (morningEntries > 5)
                 {
-                    var newItem = new
+                    var newItem = new dashitem
                     {
                         ContactImage = "symptomshome.png",
                         Type = "Symptoms",
@@ -984,7 +986,7 @@ public partial class MainDashboard : ContentPage
                 }
                 if (eveningEntries > 5)
                 {
-                    var newItem = new
+                    var newItem = new dashitem
                     {
                         ContactImage = "symptomshome.png",
                         Type = "Symptoms",
@@ -997,7 +999,7 @@ public partial class MainDashboard : ContentPage
                 var latestUpdate = entries.Where(e => e.action == "update").OrderByDescending(e => DateTime.Parse(e.datetime)).FirstOrDefault();
                 if (latestUpdate != null && (now - DateTime.Parse(latestUpdate.datetime)).TotalDays > 7)
                 {
-                    var newItem = new
+                    var newItem = new dashitem
                     {
                         ContactImage = "symptomshome.png",
                         Type = "Symptoms",
@@ -1010,7 +1012,7 @@ public partial class MainDashboard : ContentPage
                 var lastTwoEntries = entries.Where(e => e.action == "update").OrderByDescending(e => DateTime.Parse(e.datetime)).Take(2).ToList();
                 if (lastTwoEntries.Count == 2 && (int.Parse(lastTwoEntries[0].value) - int.Parse(lastTwoEntries[1].value)) > 20)
                 {
-                    var newItem = new
+                    var newItem = new dashitem
                     {
                         ContactImage = "symptomshome.png",
                         Type = "Symptoms",
@@ -1026,7 +1028,7 @@ public partial class MainDashboard : ContentPage
                     var daysSinceFirst = (now - DateTime.Parse(firstEntry.datetime)).TotalDays;
                     if (daysSinceFirst > 30)
                     {
-                        var newItem = new
+                        var newItem = new dashitem
                         {
                             ContactImage = "symptomshome.png",
                             Type = "Symptoms",
@@ -1048,7 +1050,7 @@ public partial class MainDashboard : ContentPage
 
                 if (mostRecordedSymptom.Value > 0)
                 {
-                    var newItem = new
+                    var newItem = new dashitem
                     {
                         ContactImage = "symptomshome.png",
                         Type = "Symptoms",
@@ -1062,7 +1064,7 @@ public partial class MainDashboard : ContentPage
             // 2. Display symptoms not recorded in the last 7 days
             foreach (var symptom in symptomsNotRecordedIn7Days)
             {
-                var newItem = new
+                var newItem = new dashitem
                 {
                     ContactImage = "symptomshome.png",
                     Type = "Symptoms",
@@ -1108,7 +1110,7 @@ public partial class MainDashboard : ContentPage
 
             if (AllUserSupplements.Count == 0)
             {
-                var newItem = new
+                var newItem = new dashitem
                 {
                     ContactImage = "supphome.png",
                     Type = "Supplements",
@@ -1249,7 +1251,7 @@ public partial class MainDashboard : ContentPage
                     if (hasDueMedications == false)
                     {
                         // Create a new item to add
-                        var newItem = new
+                        var newItem = new dashitem
                         {
                             ContactImage = "supphome.png",
                             Type = "Supplements",
@@ -1276,7 +1278,7 @@ public partial class MainDashboard : ContentPage
 
                             if (!string.IsNullOrEmpty(timeoflastnotrecordedmed))
                             {
-                                var nnewItem = new
+                                var nnewItem = new dashitem
                                 {
                                     ContactImage = "supphome.png",
                                     Type = "Supplements",
@@ -1289,7 +1291,7 @@ public partial class MainDashboard : ContentPage
                             }
 
 
-                            var newItem = new
+                            var newItem = new dashitem
                             {
                                 ContactImage = "supphome.png",
                                 Type = "Supplements",
@@ -1306,7 +1308,7 @@ public partial class MainDashboard : ContentPage
                     {
 
                         // Create a new item to add
-                        var newItem = new
+                        var newItem = new dashitem
                         {
                             ContactImage = "supphome.png",
                             Type = "Supplements",
@@ -1331,6 +1333,101 @@ public partial class MainDashboard : ContentPage
 
             foryouuserlist.AddRange(randomItems);
 
+
+            if (setnotificationsfromlogin)
+            {
+                var daycount = 0;
+                var mednottitle = "Supplement Reminder";
+
+                foreach (var item in AllUserSupplements)
+                {
+                    foreach (var it in item.schedule)
+                    {
+
+                        Random randomm = new Random();
+                        int randomNumberr = randomm.Next(100000, 100000001);
+
+                        it.id = randomNumberr;
+
+
+                        var timeconverted = TimeSpan.Parse(it.time);
+
+
+
+                        if (item.frequency.Contains("Daily"))
+                        {
+                            if (string.IsNullOrEmpty(item.enddate))
+                            {
+                                await ScheduleNotifications.DailyNotifications(mednottitle, it.id, item.supplementtitle, item.Dosage, it.dosageunit, timeconverted, item.startdate);
+                            }
+                            else
+                            {
+                                await ScheduleNotifications.DailyWithEndDateNotifications(mednottitle, it.id, item.supplementtitle, item.Dosage, it.dosageunit, timeconverted, item.startdate, item.enddate);
+                            }
+
+
+                        }
+                        else if (item.frequency.Contains("Days Interval"))
+                        {
+
+                            var splitfrequency = item.frequency.Split('|');
+                            var DIdaycount = Convert.ToInt32(splitfrequency[1]);
+
+
+
+                            if (string.IsNullOrEmpty(item.enddate))
+                            {
+                                await ScheduleNotifications.DaysIntervalNotifications(mednottitle, it.id, item.supplementtitle, item.Dosage, it.dosageunit, timeconverted, item.startdate, DIdaycount);
+                            }
+                            else
+                            {
+                                await ScheduleNotifications.DaysIntervalWithEndDateNotifications(mednottitle, it.id, item.supplementtitle, item.Dosage, it.dosageunit, timeconverted, item.startdate, item.enddate, DIdaycount);
+                            }
+                        }
+                        else if (item.frequency.Contains("Weekly"))
+                        {
+                            var splitfrequency = item.frequency.Split("|");
+
+                            var daylist = new List<string>();
+                            //means there is multiple days so loop through list
+                            if (splitfrequency[1].Contains(','))
+                            {
+                                // Split the string by commas and trim any whitespace
+                                var days = splitfrequency[1].Split(',').Select(day => day.Trim());
+
+                                // Add each day to the daylist
+                                daylist.AddRange(days);
+                            }
+                            else
+                            {
+                                // If there's only one day, add it directly
+                                daylist.Add(splitfrequency[1].Trim());
+                            }
+
+
+
+                            foreach (var wday in daylist)
+                            {
+                                if (string.IsNullOrEmpty(item.enddate))
+                                {
+                                    await ScheduleNotifications.WeeklyNotifications(mednottitle, it.id, item.supplementtitle, item.Dosage, it.dosageunit, timeconverted, item.startdate, wday);
+                                }
+                                else
+                                {
+                                    await ScheduleNotifications.WeeklyWithEndDateNotifications(mednottitle, it.id, item.supplementtitle, item.Dosage, it.dosageunit, timeconverted, item.startdate, wday, item.enddate);
+                                }
+
+                            }
+
+
+                        }
+
+
+                    }
+                }
+            }
+
+
         }
         catch(Exception ex)
         {
@@ -1353,7 +1450,7 @@ public partial class MainDashboard : ContentPage
 
             if(AllUserMedications.Count == 0)
             {
-                var newItem = new
+                var newItem = new dashitem
                 {
                     ContactImage = "medicinehome.png",
                     Type = "Medications",
@@ -1494,7 +1591,7 @@ public partial class MainDashboard : ContentPage
                     if (hasDueMedications == false)
                     {
                         // Create a new item to add
-                        var newItem = new
+                        var newItem = new dashitem
                         {
                             ContactImage = "medicinehome.png",
                             Type = "Medications",
@@ -1520,7 +1617,7 @@ public partial class MainDashboard : ContentPage
 
                             if (!string.IsNullOrEmpty(timeoflastnotrecordedmed))
                             {
-                                var nnewItem = new
+                                var nnewItem = new dashitem
                                 {
                                     ContactImage = "medicinehome.png",
                                     Type = "Medications",
@@ -1533,7 +1630,7 @@ public partial class MainDashboard : ContentPage
                             }
 
 
-                            var newItem = new
+                            var newItem = new dashitem
                             {
                                 ContactImage = "medicinehome.png",
                                 Type = "Medications",
@@ -1550,8 +1647,8 @@ public partial class MainDashboard : ContentPage
                     {
 
                         // Create a new item to add
-                        var newItem = new
-                        {
+                        var newItem = new dashitem
+                        { 
                             ContactImage = "medicinehome.png",
                             Type = "Medications",
                             Title = "Record your " + nextDueTime.Value.ToString("HH:mm") + " Medications",
@@ -1590,9 +1687,89 @@ public partial class MainDashboard : ContentPage
                     foreach(var it in item.schedule)
                     {
 
+                        Random randomm = new Random();
+                        int randomNumberr = randomm.Next(100000, 100000001);
+
+                        it.id = randomNumberr;
+
+
+                        var timeconverted = TimeSpan.Parse(it.time);
+
+
+
+                        if (item.frequency.Contains("Daily"))
+                        {
+                            if (string.IsNullOrEmpty(item.enddate))
+                            {
+                                await ScheduleNotifications.DailyNotifications(mednottitle, it.id, item.medicationtitle, item.Dosage, it.dosageunit, timeconverted, item.startdate);
+                            }
+                            else
+                            {
+                                await ScheduleNotifications.DailyWithEndDateNotifications(mednottitle, it.id, item.medicationtitle, item.Dosage, it.dosageunit, timeconverted, item.startdate, item.enddate);
+                            }
+
+
+                        }
+                        else if (item.frequency.Contains("Days Interval"))
+                        {
+
+                            var splitfrequency = item.frequency.Split('|');
+                            var DIdaycount = Convert.ToInt32(splitfrequency[1]);
+
+
+
+                            if (string.IsNullOrEmpty(item.enddate))
+                            {
+                                await ScheduleNotifications.DaysIntervalNotifications(mednottitle, it.id, item.medicationtitle, item.Dosage, it.dosageunit, timeconverted, item.startdate, DIdaycount);
+                            }
+                            else
+                            {
+                                await ScheduleNotifications.DaysIntervalWithEndDateNotifications(mednottitle, it.id, item.medicationtitle, item.Dosage, it.dosageunit, timeconverted, item.startdate, item.enddate, DIdaycount);
+                            }
+                        }
+                        else if(item.frequency.Contains("Weekly"))
+                        {
+                            var splitfrequency = item.frequency.Split("|");
+
+                            var daylist = new List<string>();
+                            //means there is multiple days so loop through list
+                            if (splitfrequency[1].Contains(','))
+                            {
+                                // Split the string by commas and trim any whitespace
+                                var days = splitfrequency[1].Split(',').Select(day => day.Trim());
+
+                                // Add each day to the daylist
+                                daylist.AddRange(days);
+                            }
+                            else
+                            {
+                                // If there's only one day, add it directly
+                                daylist.Add(splitfrequency[1].Trim());
+                            }
+
+
+
+                            foreach (var wday in daylist)
+                            {
+                                if (string.IsNullOrEmpty(item.enddate))
+                                {
+                                    await ScheduleNotifications.WeeklyNotifications(mednottitle, it.id, item.medicationtitle, item.Dosage, it.dosageunit, timeconverted, item.startdate, wday);
+                                }
+                                else
+                                {
+                                    await ScheduleNotifications.WeeklyWithEndDateNotifications(mednottitle, it.id, item.medicationtitle, item.Dosage, it.dosageunit, timeconverted, item.startdate, wday, item.enddate);
+                                }
+
+                            }
+
+
+                        }
+
+
                     }
                 }
             }
+
 
 
         }
@@ -1628,10 +1805,10 @@ public partial class MainDashboard : ContentPage
 
             allhelpvideocatlist.ItemsSource = allcatvideolist;
 
-            var extendedCatvideolist = new List<object>(allcatvideolist)
+            var extendedCatvideolist = new List<dashitem>(allcatvideolist)
             {
-              new { Type = "Videos", ContactImage = "videoicon.png", Title = "Help Videos", BackgroundColor = Color.FromArgb("#e9e9e9") },
-              new { Type = "Profile", ContactImage = "profileicon.png", Title = "Profile", BackgroundColor = Color.FromArgb("#deeff5") }
+              new dashitem { Type = "Videos", ContactImage = "videoicon.png", Title = "Help Videos", BackgroundColor = Color.FromArgb("#e9e9e9") },
+              new dashitem { Type = "Profile", ContactImage = "profileicon.png", Title = "Profile", BackgroundColor = Color.FromArgb("#deeff5") }
             };
 
             // Set the extended list as the data source for catergorieslist
