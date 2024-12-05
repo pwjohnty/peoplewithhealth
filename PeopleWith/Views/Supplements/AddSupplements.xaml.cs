@@ -127,7 +127,7 @@ public partial class AddSupplement : ContentPage
         weekdayslist.Add("Mon");
         weekdayslist.Add("Tues");
         weekdayslist.Add("Wed");
-        weekdayslist.Add("Thrus");
+        weekdayslist.Add("Thurs");
         weekdayslist.Add("Fri");
         weekdayslist.Add("Sat");
 
@@ -398,7 +398,7 @@ public partial class AddSupplement : ContentPage
         weekdayslist.Add("Mon");
         weekdayslist.Add("Tues");
         weekdayslist.Add("Wed");
-        weekdayslist.Add("Thrus");
+        weekdayslist.Add("Thurs");
         weekdayslist.Add("Fri");
         weekdayslist.Add("Sat");
 

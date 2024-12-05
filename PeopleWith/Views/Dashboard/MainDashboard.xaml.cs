@@ -26,6 +26,7 @@ public partial class MainDashboard : ContentPage
     ObservableCollection<usersupplement> AllUserSupplements = new ObservableCollection<usersupplement>();
 
     ObservableCollection<signupcode> signupcodecollection = new ObservableCollection<signupcode>();
+    bool setnotificationsfromlogin;
     public MainDashboard()
 	{
 		InitializeComponent();
@@ -37,8 +38,6 @@ public partial class MainDashboard : ContentPage
 
         string firstName = Preferences.Default.Get("userid", "Unknown");
 
-       
-
         loadcatergories();
 
        // getuserfeedbackdata();
@@ -46,6 +45,28 @@ public partial class MainDashboard : ContentPage
         checksignupinfo();
 
 		//lbl.Text = firstName;
+    }
+
+    public MainDashboard(bool fromlogin)
+    {
+        InitializeComponent();
+
+        setnotificationsfromlogin = fromlogin;
+
+        //Get All user Details & Set Helpers.Settings
+        Checkifuserhasmigrated();
+
+        NavigationPage.SetHasNavigationBar(this, false);
+
+        string firstName = Preferences.Default.Get("userid", "Unknown");
+
+        loadcatergories();
+
+        // getuserfeedbackdata();
+
+        checksignupinfo();
+
+        //lbl.Text = firstName;
     }
 
     protected override void OnAppearing()
@@ -186,11 +207,11 @@ public partial class MainDashboard : ContentPage
 
 
 
-            var newItems = new List<object>
+            var newItems = new List<dashitem>
 {
-    new { ContactImage = "healthreporticon.png", Title = "Generate your Health Report", BackgroundColor = "#e5f5fc" },
-    new { ContactImage = "diagnosishome.png", Title = "Have you received a new diagnosis?", BackgroundColor = "#E6E6FA" },
-    new { ContactImage = "appointhome.png", Title = "Record a new appointment", BackgroundColor = "#ffcccb" }
+    new dashitem { ContactImage = "healthreporticon.png", Title = "Generate your Health Report", BackgroundColor = Color.FromArgb("#e5f5fc"), Type = "Health Report" },
+    new dashitem { ContactImage = "diagnosishome.png", Title = "Have you received a new diagnosis?", BackgroundColor = Color.FromArgb("#E6E6FA"), Type = "Diagnosis" },
+    new dashitem { ContactImage = "appointhome.png", Title = "Record a new appointment", BackgroundColor =  Color.FromArgb("#ffcccb"), Type = "Appointments" }
 };
 
             // Add new items to the existing list
@@ -602,21 +623,23 @@ public partial class MainDashboard : ContentPage
                 {
                    // var mostCommonMood = moodsForDay.MoodLabel;
 
-                    var newItem2 = new
+                    var newItem2 = new dashitem
                     {
                         ContactImage = "measurementhome.png",
                         Title = "Update your " + selectedMeasurement.label,
-                        BackgroundColor = "#e5f0fb" // Example color
+                        Type = "Measurements",
+                        BackgroundColor = Color.FromArgb("#e5f0fb") // Example color
                     };
 
                     foryouuserlist.Add(newItem2);
                 }
 
-                var newItem = new
+                var newItem = new dashitem
                 {
                     ContactImage = "measurementhome.png",
                     Title = "Start recording your measurements",
-                    BackgroundColor = "#e5f0fb" // Example color
+                    Type = "Measurements",
+                    BackgroundColor = Color.FromArgb("#e5f0fb") // Example color
                 };
 
                 if (foryouuserlist.Contains(newItem))
@@ -635,8 +658,9 @@ public partial class MainDashboard : ContentPage
                 var newItem = new
                 {
                     ContactImage = "measurementhome.png",
+                    Type = "Measurements",
                     Title = "Start recording your measurements",
-                    BackgroundColor = "#e5f0fb" // Example color
+                    BackgroundColor = Color.FromArgb("#e5f0fb") // Example color
                 };
                 foryouuserlist.Add(newItem);
 
@@ -696,8 +720,9 @@ public partial class MainDashboard : ContentPage
                     var newItem2 = new
                     {
                         ContactImage = "moodhome.png",
+                        Type = "Mood",
                         Title = "You're mostly feeling " + mostCommonMood + " today",
-                        BackgroundColor = "#FFF8DC" // Example color
+                        BackgroundColor = Color.FromArgb("#FFF8DC") // Example color
                     };
 
                     foryouuserlist.Add(newItem2);
@@ -708,8 +733,9 @@ public partial class MainDashboard : ContentPage
                     var newItem1 = new
                     {
                         ContactImage = "moodhome.png",
+                        Type = "Mood",
                         Title = "No mood recorded today",
-                        BackgroundColor = "#FFF8DC" // Example color
+                        BackgroundColor = Color.FromArgb("#FFF8DC") // Example color
                     };
 
                     foryouuserlist.Add(newItem1);
@@ -719,8 +745,9 @@ public partial class MainDashboard : ContentPage
                 var newItem = new
                 {
                     ContactImage = "moodhome.png",
+                    Type = "Mood",
                     Title = "Start updating your mood",
-                    BackgroundColor = "#FFF8DC" // Example color
+                    BackgroundColor = Color.FromArgb("#FFF8DC") // Example color
                 };
 
                 if (foryouuserlist.Contains(newItem))
@@ -739,8 +766,9 @@ public partial class MainDashboard : ContentPage
                 var newItem = new
                 {
                     ContactImage = "moodhome.png",
+                    Type = "Mood",
                     Title = "Start updating your mood",
-                    BackgroundColor = "#FFF8DC" // Example color
+                    BackgroundColor = Color.FromArgb("#FFF8DC") // Example color
                 };
                 foryouuserlist.Add(newItem);
 
@@ -778,8 +806,9 @@ public partial class MainDashboard : ContentPage
                 var newItem = new
                 {
                     ContactImage = "symptomshome.png",
+                    Type = "Symptoms",
                     Title = "Start recording your symptoms today",
-                    BackgroundColor = "#fff7ea" // Example color
+                    BackgroundColor = Color.FromArgb("#fff7ea") // Example color
                 };
                 foryouuserlist.Add(newItem);
 
@@ -799,8 +828,9 @@ public partial class MainDashboard : ContentPage
             var newItemm = new
             {
                 ContactImage = "symptomshome.png",
+                Type = "Symptoms",
                 Title = "Start recording your symptoms today",
-                BackgroundColor = "#fff7ea" // Example color
+                BackgroundColor = Color.FromArgb("#fff7ea") // Example color
             };
             if (foryouuserlist.Contains(newItemm))
             {
@@ -827,8 +857,9 @@ public partial class MainDashboard : ContentPage
                 var newItem = new
                 {
                     ContactImage = "symptomshome.png",
+                    Type = "Symptoms",
                     Title = "You haven't recorded any symptom updates in the last 24 hours",
-                    BackgroundColor = "#fff7ea" // Example color
+                    BackgroundColor = Color.FromArgb("#fff7ea") // Example color
                 };
                 foryouuserlistsymptom.Add(newItem);
             }
@@ -863,8 +894,9 @@ public partial class MainDashboard : ContentPage
                     var newItem = new
                     {
                         ContactImage = "symptomshome.png",
+                        Type = "Symptoms",
                         Title = $"High intensity of {highIntensityEntry.value} recorded for {symptomname}",
-                        BackgroundColor = "#fff7ea"
+                        BackgroundColor = Color.FromArgb("#fff7ea")
                     };
                     foryouuserlistsymptom.Add(newItem);
                 }
@@ -874,8 +906,9 @@ public partial class MainDashboard : ContentPage
                     var newItem = new
                     {
                         ContactImage = "symptomshome.png",
+                        Type = "Symptoms",
                         Title = "Frequent " + symptomname + " activity detected in the morning hours",
-                        BackgroundColor = "#fff7ea"
+                        BackgroundColor = Color.FromArgb("#fff7ea")
                     };
                     foryouuserlistsymptom.Add(newItem);
                 }
@@ -885,8 +918,9 @@ public partial class MainDashboard : ContentPage
                     var newItem = new
                     {
                         ContactImage = "symptomshome.png",
+                        Type = "Symptoms",
                         Title = symptomname + " recently added. Monitoring for trends",
-                        BackgroundColor = "#fff7ea"
+                        BackgroundColor = Color.FromArgb("#fff7ea")
                     };
                     foryouuserlistsymptom.Add(newItem);
                 }
@@ -899,8 +933,9 @@ public partial class MainDashboard : ContentPage
                         var newItem = new
                         {
                             ContactImage = "symptomshome.png",
+                            Type = "Symptoms",
                             Title = symptomname + " intensity appears to be worsening",
-                            BackgroundColor = "#fff7ea"
+                            BackgroundColor = Color.FromArgb("#fff7ea")
                         };
                         foryouuserlistsymptom.Add(newItem);
                     }
@@ -909,8 +944,9 @@ public partial class MainDashboard : ContentPage
                         var newItem = new
                         {
                             ContactImage = "symptomshome.png",
+                            Type = "Symptoms",
                             Title = symptomname + " intensity appears to be improving",
-                            BackgroundColor = "#fff7ea"
+                            BackgroundColor = Color.FromArgb("#fff7ea")
                         };
                         foryouuserlistsymptom.Add(newItem);
                     }
@@ -926,8 +962,9 @@ public partial class MainDashboard : ContentPage
                     var newItem = new
                     {
                         ContactImage = "symptomshome.png",
+                        Type = "Symptoms",
                         Title = "Persistent high intensity for " + symptomname + " reported",
-                        BackgroundColor = "#fff7ea"
+                        BackgroundColor = Color.FromArgb("#fff7ea")
                     };
                     foryouuserlistsymptom.Add(newItem);
                 }
@@ -939,8 +976,9 @@ public partial class MainDashboard : ContentPage
                     var newItem = new
                     {
                         ContactImage = "symptomshome.png",
+                        Type = "Symptoms",
                         Title = symptomname + " commonly reported during morning hours",
-                        BackgroundColor = "#fff7ea"
+                        BackgroundColor = Color.FromArgb("#fff7ea")
                     };
                     foryouuserlistsymptom.Add(newItem);
                 }
@@ -949,8 +987,9 @@ public partial class MainDashboard : ContentPage
                     var newItem = new
                     {
                         ContactImage = "symptomshome.png",
+                        Type = "Symptoms",
                         Title = symptomname + " commonly reported during evening hours",
-                        BackgroundColor = "#fff7ea"
+                        BackgroundColor = Color.FromArgb("#fff7ea")
                     };
                     foryouuserlistsymptom.Add(newItem);
                 }
@@ -961,8 +1000,9 @@ public partial class MainDashboard : ContentPage
                     var newItem = new
                     {
                         ContactImage = "symptomshome.png",
+                        Type = "Symptoms",
                         Title = "No recent updates for " + symptomname + " in the past week",
-                        BackgroundColor = "#fff7ea"
+                        BackgroundColor = Color.FromArgb("#fff7ea")
                     };
                     foryouuserlistsymptom.Add(newItem);
                 }
@@ -973,8 +1013,9 @@ public partial class MainDashboard : ContentPage
                     var newItem = new
                     {
                         ContactImage = "symptomshome.png",
+                        Type = "Symptoms",
                         Title = "Sudden spike in intensity detected for " + symptomname,
-                        BackgroundColor = "#fff7ea"
+                        BackgroundColor = Color.FromArgb("#fff7ea")
                     };
                     foryouuserlistsymptom.Add(newItem);
                 }
@@ -988,8 +1029,9 @@ public partial class MainDashboard : ContentPage
                         var newItem = new
                         {
                             ContactImage = "symptomshome.png",
+                            Type = "Symptoms",
                             Title = symptomname + " has been tracked for over " + Math.Round(daysSinceFirst) + " days",
-                            BackgroundColor = "#fff7ea"
+                            BackgroundColor = Color.FromArgb("#fff7ea")
                         };
                         foryouuserlistsymptom.Add(newItem);
                     }
@@ -1009,8 +1051,9 @@ public partial class MainDashboard : ContentPage
                     var newItem = new
                     {
                         ContactImage = "symptomshome.png",
+                        Type = "Symptoms",
                         Title = $"Most recorded symptom in the last 3 days: {mostRecordedSymptom.Key}",
-                        BackgroundColor = "#fff7ea"
+                        BackgroundColor = Color.FromArgb("#fff7ea")
                     };
                     foryouuserlistsymptom.Add(newItem);
                 }
@@ -1022,8 +1065,9 @@ public partial class MainDashboard : ContentPage
                 var newItem = new
                 {
                     ContactImage = "symptomshome.png",
+                    Type = "Symptoms",
                     Title = $"{symptom} has not been recorded in the last 7 days. Update now",
-                    BackgroundColor = "#fff7ea"
+                    BackgroundColor = Color.FromArgb("#fff7ea")
                 };
                 foryouuserlistsymptom.Add(newItem);
             }
@@ -1067,8 +1111,9 @@ public partial class MainDashboard : ContentPage
                 var newItem = new
                 {
                     ContactImage = "supphome.png",
+                    Type = "Supplements",
                     Title = "Add your first Supplement",
-                    BackgroundColor = "#f9f4e5" // Example color
+                    BackgroundColor = Color.FromArgb("#f9f4e5") // Example color
                 };
 
                 // Add the new item to the list
@@ -1207,8 +1252,9 @@ public partial class MainDashboard : ContentPage
                         var newItem = new
                         {
                             ContactImage = "supphome.png",
+                            Type = "Supplements",
                             Title = "No Supplements Due Today",
-                            BackgroundColor = "#f9f4e5" // Example color
+                            BackgroundColor = Color.FromArgb("#f9f4e5") // Example color
                         };
 
                         // Add the new item to the list
@@ -1233,8 +1279,9 @@ public partial class MainDashboard : ContentPage
                                 var nnewItem = new
                                 {
                                     ContactImage = "supphome.png",
+                                    Type = "Supplements",
                                     Title = "Have you recorded your " + timeoflastnotrecordedmed + " Supplements ?",
-                                    BackgroundColor = "#f9f4e5" // Example color
+                                    BackgroundColor = Color.FromArgb("#f9f4e5") // Example color
                                 };
 
                                 // Add the new item to the list
@@ -1245,8 +1292,9 @@ public partial class MainDashboard : ContentPage
                             var newItem = new
                             {
                                 ContactImage = "supphome.png",
+                                Type = "Supplements",
                                 Title = "No More Supplements Due Today",
-                                BackgroundColor = "#f9f4e5" // Example color
+                                BackgroundColor = Color.FromArgb("#f9f4e5") // Example color
                             };
 
                             // Add the new item to the list
@@ -1261,8 +1309,9 @@ public partial class MainDashboard : ContentPage
                         var newItem = new
                         {
                             ContactImage = "supphome.png",
+                            Type = "Supplements",
                             Title = "Record your " + nextDueTime.Value.ToString("HH:mm") + " Supplements",
-                            BackgroundColor = "#f9f4e5" // Example color
+                            BackgroundColor = Color.FromArgb("#f9f4e5") // Example color
                         };
 
                         // Add the new item to the list
@@ -1307,8 +1356,9 @@ public partial class MainDashboard : ContentPage
                 var newItem = new
                 {
                     ContactImage = "medicinehome.png",
+                    Type = "Medications",
                     Title = "Add your first Medication",
-                    BackgroundColor = "#e5f9f4" // Example color
+                    BackgroundColor = Color.FromArgb("#e5f9f4") // Example color
                 };
 
                 // Add the new item to the list
@@ -1447,8 +1497,9 @@ public partial class MainDashboard : ContentPage
                         var newItem = new
                         {
                             ContactImage = "medicinehome.png",
+                            Type = "Medications",
                             Title = "No Medications Due Today",
-                            BackgroundColor = "#e5f9f4" // Example color
+                            BackgroundColor = Color.FromArgb("#e5f9f4") // Example color
                         };
 
                         // Add the new item to the list
@@ -1472,8 +1523,9 @@ public partial class MainDashboard : ContentPage
                                 var nnewItem = new
                                 {
                                     ContactImage = "medicinehome.png",
+                                    Type = "Medications",
                                     Title = "Have you recorded your " + timeoflastnotrecordedmed + " Medications ?",
-                                    BackgroundColor = "#e5f9f4" // Example color
+                                    BackgroundColor = Color.FromArgb("#e5f9f4") // Example color
                                 };
 
                                 // Add the new item to the list
@@ -1484,8 +1536,9 @@ public partial class MainDashboard : ContentPage
                             var newItem = new
                             {
                                 ContactImage = "medicinehome.png",
+                                Type = "Medications",
                                 Title = "No More Medications Due Today",
-                                BackgroundColor = "#e5f9f4" // Example color
+                                BackgroundColor = Color.FromArgb("#e5f9f4") // Example color
                             };
 
                             // Add the new item to the list
@@ -1500,8 +1553,9 @@ public partial class MainDashboard : ContentPage
                         var newItem = new
                         {
                             ContactImage = "medicinehome.png",
+                            Type = "Medications",
                             Title = "Record your " + nextDueTime.Value.ToString("HH:mm") + " Medications",
-                            BackgroundColor = "#e5f9f4" // Example color
+                            BackgroundColor = Color.FromArgb("#e5f9f4") // Example color
                         };
 
                         // Add the new item to the list
@@ -1523,6 +1577,24 @@ public partial class MainDashboard : ContentPage
 
             foryouuserlist.AddRange(randomItems);
 
+
+
+            //add the med notifications if they have logged in again
+            if(setnotificationsfromlogin)
+            {
+                var daycount = 0;
+                var mednottitle = "Medication Reminder";
+
+                foreach (var item in AllUserMedications)
+                {
+                    foreach(var it in item.schedule)
+                    {
+
+                    }
+                }
+            }
+
+
         }
         catch(Exception ex)
         {
@@ -1535,20 +1607,20 @@ public partial class MainDashboard : ContentPage
         try
         {
             // Add all categories for help videos
-            var allcatvideolist = new List<object>
+            var allcatvideolist = new List<dashitem>
             {
-                new { ContactImage = "symptomshome.png", Title = "Symptoms", BackgroundColor = "#fff7ea" },
-                new { ContactImage = "medicinehome.png", Title = "Medications", BackgroundColor = "#e5f9f4" },
-                new { ContactImage = "supphome.png", Title = "Supplements", BackgroundColor = "#f9f4e5" },
-                new { ContactImage = "measurementhome.png", Title = "Measurements", BackgroundColor = "#e5f0fb" },
-                new { ContactImage = "schedulehome.png", Title = "Schedule", BackgroundColor = "#eff7ed" },
-                new { ContactImage = "diagnosishome.png", Title = "Diagnosis", BackgroundColor = "#E6E6FA" },
-                new { ContactImage = "moodhome.png", Title = "Mood", BackgroundColor = "#FFF8DC" },
-                new { ContactImage = "appointhome.png", Title = "Appointments", BackgroundColor = "#ffcccb" },
-                new { ContactImage = "hcphome.png", Title = "HCPs", BackgroundColor = "#CBC3E3" },
-                new { ContactImage = "questionnairehome.png", Title = "Questionnaires", BackgroundColor = "#fff9ec" },
-                new { ContactImage = "allergenhome.png", Title = "Allergens", BackgroundColor = "#FFF5EE" },
-                new { ContactImage = "healthreporticon.png", Title = "Health Report", BackgroundColor = "#ededed" },
+                new dashitem { Type = "Symptoms", ContactImage = "symptomshome.png", Title = "Symptoms", BackgroundColor = Color.FromArgb("#fff7ea") },
+                new dashitem { Type = "Medications", ContactImage = "medicinehome.png", Title = "Medications", BackgroundColor = Color.FromArgb("#e5f9f4") },
+                new dashitem { Type = "Supplements", ContactImage = "supphome.png", Title = "Supplements", BackgroundColor = Color.FromArgb("#f9f4e5") },
+                new dashitem { Type = "Measurements",  ContactImage = "measurementhome.png", Title = "Measurements", BackgroundColor = Color.FromArgb("#e5f0fb") },
+                new dashitem {Type = "Schedule",   ContactImage = "schedulehome.png", Title = "Schedule", BackgroundColor = Color.FromArgb("#eff7ed") },
+                new dashitem {Type = "Diagnosis",  ContactImage = "diagnosishome.png", Title = "Diagnosis", BackgroundColor = Color.FromArgb("#E6E6FA") },
+                new dashitem { Type = "Mood", ContactImage = "moodhome.png", Title = "Mood", BackgroundColor = Color.FromArgb("#FFF8DC") },
+                new dashitem { Type = "Appointments",  ContactImage = "appointhome.png", Title = "Appointments", BackgroundColor = Color.FromArgb("#ffcccb") },
+                new dashitem {Type = "HCP",  ContactImage = "hcphome.png", Title = "HCPs", BackgroundColor = Color.FromArgb("#CBC3E3") },
+                new dashitem { Type = "Questionnaires", ContactImage = "questionnairehome.png", Title = "Questionnaires", BackgroundColor = Color.FromArgb("#fff9ec") },
+                new dashitem { Type = "Allergy",  ContactImage = "allergenhome.png", Title = "Allergens", BackgroundColor = Color.FromArgb("#FFF5EE") },
+                new dashitem { Type = "Health Report",  ContactImage = "healthreporticon.png", Title = "Health Report", BackgroundColor = Color.FromArgb("#ededed") },
                
             };
 
@@ -1558,19 +1630,19 @@ public partial class MainDashboard : ContentPage
 
             var extendedCatvideolist = new List<object>(allcatvideolist)
             {
-              new { ContactImage = "videoicon.png", Title = "Help Videos", BackgroundColor = "#e9e9e9" },
-              new { ContactImage = "profileicon.png", Title = "Profile", BackgroundColor = "#deeff5" }
+              new { Type = "Videos", ContactImage = "videoicon.png", Title = "Help Videos", BackgroundColor = Color.FromArgb("#e9e9e9") },
+              new { Type = "Profile", ContactImage = "profileicon.png", Title = "Profile", BackgroundColor = Color.FromArgb("#deeff5") }
             };
 
             // Set the extended list as the data source for catergorieslist
             catergorieslist.ItemsSource = extendedCatvideolist;
 
 
-            var listforaccountlist = new List<object>
+            var listforaccountlist = new List<dashitem>
 {
-    new { Title = "Account Settings" },
-    new { Title = "Developer Feedback & Support" },
-    new { Title = "Terms Of Use" }
+    new dashitem { Title = "Account Settings" },
+    new dashitem { Title = "Developer Feedback & Support" },
+    new dashitem { Title = "Terms Of Use" }
 };
 
             // Set the height of the account list based on the item count
@@ -1718,7 +1790,7 @@ public partial class MainDashboard : ContentPage
         try
         {
 
-            var item = e.DataItem as dynamic;
+            var item = e.DataItem as dashitem;
 
             if (item != null && item.Title == "Medications")
             {
@@ -1882,7 +1954,7 @@ public partial class MainDashboard : ContentPage
         try
         {
 
-            var item = e.DataItem as dynamic;
+            var item = e.DataItem as dashitem;
 
             if (item != null && item.Title == "Medications")
             {
@@ -1982,7 +2054,7 @@ public partial class MainDashboard : ContentPage
         try
         {
 
-            var item = e.DataItem as dynamic;
+            var item = e.DataItem as dashitem;
 
             if (item != null && item.Title == "Account Settings")
             {
@@ -2060,40 +2132,40 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
-     
-            dynamic tappedItem = e.DataItem;
+
+            var tappedItem = e.DataItem as dashitem;
             if (tappedItem != null)
             {
                 // Access properties dynamically
-                var bc = tappedItem.BackgroundColor;
+                var bc = tappedItem.Type;
                 var text = tappedItem.Title;
 
                 //health report
-                if(bc == "#e5f5fc")
+                if(bc == "Health Report")
                 {
                     await Navigation.PushAsync(new HealthReport(), false);
                 }
-                else if(bc == "#E6E6FA")
+                else if(bc == "Diagnosis")
                 {
                     await Navigation.PushAsync(new AllDiagnosis(), false);
                 }
-                else if(bc == "#ffcccb")
+                else if(bc == "Appointments")
                 {
                     await Navigation.PushAsync(new Appointments(), false);
                 }
-                else if (bc == "#e5f0fb")
+                else if (bc == "Measurements")
                 {
                     await Navigation.PushAsync(new MeasurementsPage(userfeedbacklist[0]), false);
                 }
-                else if (bc == "#fff7ea")
+                else if (bc == "Symptoms")
                 {
                     await Navigation.PushAsync(new AllSymptoms(userfeedbacklist[0]), false);
                 }
-                else if (bc == "#FFF8DC")
+                else if (bc == "Mood")
                 {
                     await Navigation.PushAsync(new AllMood(userfeedbacklist[0]), false);
                 }
-                else if (bc == "#f9f4e5")
+                else if (bc == "Supplements")
                 {
                     if (text.Contains(":"))
                     {
@@ -2104,7 +2176,7 @@ public partial class MainDashboard : ContentPage
                         await Navigation.PushAsync(new AllSupplements(), false);
                     }
                 }
-                else if (bc == "#e5f9f4")
+                else if (bc == "Medications")
                 {
                     if (text.Contains(":"))
                     {

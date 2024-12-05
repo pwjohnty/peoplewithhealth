@@ -327,8 +327,9 @@ public partial class LoginPage : ContentPage
                 // Preferences.Set("validationcode", users[0].validationcode);
 
                 //Add Push Notification Tags
-               
-                Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                var setnotificationloginbool = true;
+
+                Application.Current.MainPage = new NavigationPage(new MainDashboard(setnotificationloginbool));
 
             }
             else
