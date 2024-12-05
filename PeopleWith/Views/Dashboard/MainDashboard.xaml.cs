@@ -26,33 +26,56 @@ public partial class MainDashboard : ContentPage
     ObservableCollection<usersupplement> AllUserSupplements = new ObservableCollection<usersupplement>();
 
     ObservableCollection<signupcode> signupcodecollection = new ObservableCollection<signupcode>();
+
+    public event EventHandler<bool> ConnectivityChanged;
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.CrashDetectedSend(Ex);
+            await Navigation.PushAsync(new ErrorPage("Dashboard"), false); 
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
     public MainDashboard()
 	{
-		InitializeComponent();
+        try
+        {
+            InitializeComponent();
 
-        //Get All user Details & Set Helpers.Settings
-        Checkifuserhasmigrated();
+            //Get All user Details & Set Helpers.Settings
+            Checkifuserhasmigrated();
 
-		NavigationPage.SetHasNavigationBar(this, false);
+            NavigationPage.SetHasNavigationBar(this, false);
 
-        string firstName = Preferences.Default.Get("userid", "Unknown");
+            string firstName = Preferences.Default.Get("userid", "Unknown");
 
-       
 
-        loadcatergories();
 
-       // getuserfeedbackdata();
+            loadcatergories();
 
-        checksignupinfo();
+            //getuserfeedbackdata();
 
-		//lbl.Text = firstName;
+            checksignupinfo();
+
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+
+        //lbl.Text = firstName;
     }
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
-
-      
         getuserfeedbackdata();
     }
 
@@ -141,14 +164,10 @@ public partial class MainDashboard : ContentPage
                 vidhelplbl.IsVisible = false;
                 videoslist.IsVisible = false;
             }
-        
-
-
-
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -211,9 +230,9 @@ public partial class MainDashboard : ContentPage
             //    "OK"
             //);
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -465,11 +484,25 @@ public partial class MainDashboard : ContentPage
                     //.ToList();
                     //  item.symptomlist = userfeedbacklist[0].symptomfeedbacklist.Where(x => x.label == item.label).ToList();
                 }
+                double progress = filteredSymptoms.Count > 0 ? (double)symptomrecordedcount / filteredSymptoms.Count * 100 : 0;
+
+                // Update the progress bar value
+                symprogressbar.Progress = progress;
+
+                var SuppsLeft = filteredSymptoms.Count - symptomrecordedcount;
+                if(SuppsLeft > 0)
+                {
+                    var SuppsRem = SuppsLeft + " " + "Symptoms to Record";
+                    SympRemain.Text = SuppsRem; 
+                }
+                else
+                {
+                    var SuppsRem = "All Symptoms Updated";
+                    SympRemain.Text = SuppsRem;
+                }
+              
 
 
-                double percentageRecorded = filteredSymptoms.Count > 0 ? (double)symptomrecordedcount / filteredSymptoms.Count * 100 : 0;
-
-                symprogressbar.Progress = percentageRecorded;
 
                 symptomdetaillist.ItemsSource = filteredSymptoms;
 
@@ -748,9 +781,9 @@ public partial class MainDashboard : ContentPage
             }
 
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -966,18 +999,20 @@ public partial class MainDashboard : ContentPage
                     };
                     foryouuserlistsymptom.Add(newItem);
                 }
+
+                //Chris Wanted this Removed (To Suggestive)
                 // Sudden intensity spike detection
-                var lastTwoEntries = entries.Where(e => e.action == "update").OrderByDescending(e => DateTime.Parse(e.datetime)).Take(2).ToList();
-                if (lastTwoEntries.Count == 2 && (int.Parse(lastTwoEntries[0].value) - int.Parse(lastTwoEntries[1].value)) > 20)
-                {
-                    var newItem = new
-                    {
-                        ContactImage = "symptomshome.png",
-                        Title = "Sudden spike in intensity detected for " + symptomname,
-                        BackgroundColor = "#fff7ea"
-                    };
-                    foryouuserlistsymptom.Add(newItem);
-                }
+                //var lastTwoEntries = entries.Where(e => e.action == "update").OrderByDescending(e => DateTime.Parse(e.datetime)).Take(2).ToList();
+                //if (lastTwoEntries.Count == 2 && (int.Parse(lastTwoEntries[0].value) - int.Parse(lastTwoEntries[1].value)) > 20)
+                //{
+                //    var newItem = new
+                //    {
+                //        ContactImage = "symptomshome.png",
+                //        Title = "Sudden spike in intensity detected for " + symptomname,
+                //        BackgroundColor = "#fff7ea"
+                //    };
+                //    foryouuserlistsymptom.Add(newItem);
+                //}
                 // Time since first recorded entry
                 var firstEntry = entries.OrderBy(e => DateTime.Parse(e.datetime)).FirstOrDefault();
                 if (firstEntry != null)
@@ -1043,9 +1078,9 @@ public partial class MainDashboard : ContentPage
 
 
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -1197,9 +1232,22 @@ public partial class MainDashboard : ContentPage
                     }
 
 
-                    double percentageRecorded = medicationsDueToday > 0 ? (double)recordedMedicationsToday / medicationsDueToday * 100 : 0;
+                    double progress = medicationsDueToday > 0 ? (double)recordedMedicationsToday / medicationsDueToday * 100 : 0;
 
-                    suppprogressbar.Progress = percentageRecorded;
+                    // Update the progress bar value
+                    suppprogressbar.Progress = progress;
+
+                    var SuppsLeft = medicationsDueToday - recordedMedicationsToday;
+                    if (SuppsLeft > 0)
+                    {
+                        var SuppsRem = SuppsLeft + " " + "Supplements Remaining";
+                        SuppsRemain.Text = SuppsRem;
+                    }
+                    else
+                    {
+                        var SuppsRem = "All Supplements Recorded";
+                        SuppsRemain.Text = SuppsRem;
+                    }
 
                     if (hasDueMedications == false)
                     {
@@ -1283,9 +1331,9 @@ public partial class MainDashboard : ContentPage
             foryouuserlist.AddRange(randomItems);
 
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -1434,11 +1482,68 @@ public partial class MainDashboard : ContentPage
 
                         }
                     }
+                    double progress = medicationsDueToday > 0 ? (double)recordedMedicationsToday / medicationsDueToday * 100 : 0;
 
+                    // Update the progress bar value
+                    medprogressbar.Progress = progress;
 
-                    // Calculate the percentage of recorded medications for the progress bar
-                    double percentageRecorded = medicationsDueToday > 0 ? (double)recordedMedicationsToday / medicationsDueToday * 100 : 0;
-                    medprogressbar.Progress = percentageRecorded;
+                    var SuppsLeft = medicationsDueToday - recordedMedicationsToday;
+                    if (SuppsLeft > 0)
+                    {
+                        var SuppsRem = SuppsLeft + " " + "Medications Remaining";
+                        MedsRemain.Text = SuppsRem;
+                    }
+                    else
+                    {
+                        var SuppsRem = "All Medications Recorded";
+                        MedsRemain.Text = SuppsRem;
+                    }
+
+                    // Update the gradient stops
+                    //                var gradientBrush = new LinearGradientBrush
+                    //                {
+                    //                    StartPoint = new Point(0, 0),
+                    //                    EndPoint = new Point(1, 0),
+                    //                    GradientStops =
+                    //{
+                    //    // Teal fills up to the progress point
+                    //    new GradientStop { Color = Colors.Teal, Offset = (float)Math.Max(progress, 0.001f) },
+                    //    // #e5f9f4 fills the remainder
+                    //    //new GradientStop { Color = Color.FromHex("#e5f9f4"), Offset = 1 }
+                    //}
+                    //                };
+
+                    //// If progress is 0, set Due colour to all 
+                    //if (progress == 0)
+                    //{
+                    //    gradientBrush.GradientStops.Clear();
+                    //    gradientBrush.GradientStops.Add(new GradientStop { Color = Color.FromHex("#e5f9f4"), Offset = 1 });
+                    //}
+
+                    // Apply the gradient
+                    //medprogressbar.ProgressFill = gradientBrush;
+
+                    //if (medicationsDueToday > 0)
+                    //{
+                    //    // Calculate the percentage of recorded medications for the progress bar
+                    //    if(recordedMedicationsToday > 0)
+                    //    {
+                    //        double percentageRecorded = medicationsDueToday > 0 ? (double)recordedMedicationsToday / medicationsDueToday * 100 : 0;
+
+                    //        medprogressbar.Progress = percentageRecorded;
+                    //    }
+                    //    else
+                    //    {
+
+                    //        medprogressbar.Progress = medicationsDueToday;
+                    //    }
+
+                    //}
+                    //else
+                    //{
+                    //    // No medications are due, set progress to 100
+                    //    medprogressbar.Progress = 100;
+                    //}
 
 
                     if (hasDueMedications == false)
@@ -1524,9 +1629,9 @@ public partial class MainDashboard : ContentPage
             foryouuserlist.AddRange(randomItems);
 
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -1590,9 +1695,9 @@ public partial class MainDashboard : ContentPage
 
 
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -1649,9 +1754,9 @@ public partial class MainDashboard : ContentPage
           
 
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -1707,9 +1812,9 @@ public partial class MainDashboard : ContentPage
             }
  
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -1771,8 +1876,9 @@ public partial class MainDashboard : ContentPage
             }
 
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
+            NotasyncMethod(Ex);
             //await Navigation.PushAsync(new ErrorPage()) ,false);  
         }
     }
@@ -1796,9 +1902,9 @@ public partial class MainDashboard : ContentPage
             }
 
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -1831,8 +1937,9 @@ public partial class MainDashboard : ContentPage
             }
          
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
+            NotasyncMethod(Ex);
         }
     }
 
@@ -1844,7 +1951,7 @@ public partial class MainDashboard : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -1856,7 +1963,7 @@ public partial class MainDashboard : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -1869,12 +1976,10 @@ public partial class MainDashboard : ContentPage
             await Navigation.PushAsync(new ProfileSection(), false);
 
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
-
-
     }
 
     private async void catergorieslist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
@@ -1943,9 +2048,9 @@ public partial class MainDashboard : ContentPage
             }
 
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -1957,9 +2062,9 @@ public partial class MainDashboard : ContentPage
             await Navigation.PushAsync(new AllSymptoms(userfeedbacklist[0]), false);
 
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -1971,9 +2076,9 @@ public partial class MainDashboard : ContentPage
             await Navigation.PushAsync(new AllMood(userfeedbacklist[0]), false);
 
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -2014,7 +2119,7 @@ public partial class MainDashboard : ContentPage
             }
 
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
 
         }
@@ -2026,9 +2131,9 @@ public partial class MainDashboard : ContentPage
         {
             await Navigation.PushAsync(new AllSupplements(), false);
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -2038,7 +2143,7 @@ public partial class MainDashboard : ContentPage
         {
             await Navigation.PushAsync(new SearchPage(), false);
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
 
         }
@@ -2050,9 +2155,9 @@ public partial class MainDashboard : ContentPage
         {
             await Navigation.PushAsync(new MeasurementsPage(userfeedbacklist[0]), false);
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -2122,9 +2227,9 @@ public partial class MainDashboard : ContentPage
 
 
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -2132,4 +2237,77 @@ public partial class MainDashboard : ContentPage
     {
 
     }
+
+    async private void symptomdetaillist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
+    {
+        try
+        {
+            await Navigation.PushAsync(new AllSymptoms(userfeedbacklist[0]), false);
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }      
+    }
+
+    async private void TapGestureRecognizer_Tapped_2(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            await Navigation.PushAsync(new MeasurementsPage(userfeedbacklist[0]), false);
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    async private void TapGestureRecognizer_Tapped_3(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            await Navigation.PushAsync(new AllMood(userfeedbacklist[0]), false);
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    async private void TapGestureRecognizer_Tapped_4(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            await Navigation.PushAsync(new AllSymptoms(userfeedbacklist[0]), false);
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    async private void TapGestureRecognizer_Tapped_5(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            await Navigation.PushAsync(new MainSchedule(), false);
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+       
+    }
+
+    //async private void measurementdetaillist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
+    //{
+    //    try
+    //    {
+    //        await Navigation.PushAsync(new MeasurementsPage(userfeedbacklist[0]), false);
+    //    }
+    //    catch (Exception Ex)
+    //    {
+    //        NotasyncMethod(Ex);
+    //    }
+    //}
 }

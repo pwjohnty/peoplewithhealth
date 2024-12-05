@@ -158,7 +158,7 @@ Text="As Required Medications/Supplements" />
                                             </Label.FormattedText>
                                         </Label>
 
-                                        <local:ExtendedImage  Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Source="scheduletick.png" Opacity="{Binding Buttonop}" Margin="0,0,10,0" FeedbackID="{Binding Feedbackid}" UsermedID="{Binding Usermedid}"  HeightRequest="40" WidthRequest="40" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                                        <local:ExtendedImage  Grid.Row="0" Grid.Column="1" IsVisible="{Binding AsReqHidelbl}" Grid.RowSpan="2" Source="scheduletick.png" Opacity="{Binding Buttonop}" Margin="0,0,10,0" FeedbackID="{Binding Feedbackid}" UsermedID="{Binding Usermedid}"  HeightRequest="40" WidthRequest="40" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
                                             <local:ExtendedImage.GestureRecognizers>
                                                 <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
                                             </local:ExtendedImage.GestureRecognizers>

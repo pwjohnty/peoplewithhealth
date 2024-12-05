@@ -21,6 +21,7 @@ public partial class AllQuestionnaires : ContentPage
         try
         {
             await crashHandler.CrashDetectedSend(Ex);
+            await Navigation.PushAsync(new ErrorPage("Dashboard"), false);
         }
         catch (Exception ex)
         {
@@ -108,7 +109,17 @@ public partial class AllQuestionnaires : ContentPage
             if (accessType == NetworkAccess.Internet)
             {
                 var item = e.DataItem as questionnaire;
-                await Navigation.PushAsync(new QuestionnairePage(item), false);
+
+                if(DeviceInfo.Current.Platform == DevicePlatform.Android)
+                {
+                    await Navigation.PushAsync(new AndroidQuestionnaires(item), false);
+                }
+                else
+                {
+                    //await Navigation.PushAsync(new AndroidQuestionnaires(item), false);
+                     await Navigation.PushAsync(new QuestionnairePage(item), false);
+                }
+               
             }
             else
             {
@@ -166,7 +177,15 @@ public partial class AllQuestionnaires : ContentPage
             {
                 var item = e.DataItem as userquestionnaire;
                 userquestionnaireinfo = questionnaires.Where(x => x.questionnaireid == item.questionnaireid).FirstOrDefault();
-                await Navigation.PushAsync(new QuestionnairePage(item, userquestionnaireinfo), false);
+
+                if (DeviceInfo.Current.Platform == DevicePlatform.Android)
+                {
+                    await Navigation.PushAsync(new AndroidQuestionnaires(item, userquestionnaireinfo), false);
+                }
+                else
+                {
+                    await Navigation.PushAsync(new QuestionnairePage(item, userquestionnaireinfo), false);
+                }
             }
             else
             {

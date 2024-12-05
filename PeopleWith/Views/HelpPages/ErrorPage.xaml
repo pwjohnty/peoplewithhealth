@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="PeopleWith.ErrorPage" Shell.NavBarIsVisible="False"
+             x:Class="PeopleWith.ErrorPage" Shell.NavBarIsVisible="False" NavigationPage.HasNavigationBar="False"
              >
     <AbsoluteLayout IgnoreSafeArea="True">
         <!-- Background Image covering the entire page -->
@@ -51,34 +51,41 @@ Spacing="10"
 AbsoluteLayout.LayoutBounds="0,1,1,AutoSize"
 AbsoluteLayout.LayoutFlags="PositionProportional,WidthProportional">
 
-            <Button
+            <Button x:Name="DashReturnbtn" IsVisible="False"
     BackgroundColor="#BFDBF7"
+    Clicked="DashReturnbtn_Clicked"
     HorizontalOptions="FillAndExpand"
     TextColor="#031926"
-      
     FontAttributes="None"
-         Margin="20,0,20,0"
+    Margin="20,0,20,0"
     FontFamily="HankenGroteskBold"
     Text="Return to Dashboard" />
-
-            <Button
-       BackgroundColor="White"
+ 
+            <Button x:Name="LoginReturnbtn" IsVisible="False"
+       BackgroundColor="#BFDBF7"
+       Clicked="LoginReturnbtn_Clicked"                  
        HorizontalOptions="FillAndExpand"
-       TextColor="#031926" Opacity="0"
+       TextColor="#031926" 
        Margin="20,0,20,0"
        FontAttributes="None"   
        FontFamily="HankenGroteskRegular"
-       Text="Login" />
+       Text="Return to Login" />
 
 
             <Label
-       Text="Privacy Policy"
-       TextColor="#BFDBF7" Opacity="0"
+       Text="Privacy Policy" x:Name="PrivPolicy"
+       TextColor="#BFDBF7" Opacity="1"
        FontFamily="HankenGroteskRegular"
        FontAttributes="Bold"
        Margin="0,10,0,0"
        FontSize="10"
-       HorizontalOptions="Center" />
+       HorizontalOptions="Center" >
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
+                </Label.GestureRecognizers>
+                
+            </Label>
+
 
 
 

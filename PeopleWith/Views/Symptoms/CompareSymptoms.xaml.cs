@@ -24,6 +24,7 @@ public partial class CompareSymptoms : ContentPage
         try
         {
             await crashHandler.CrashDetectedSend(Ex);
+            await Navigation.PushAsync(new ErrorPage("Dashboard"), false);
         }
         catch (Exception ex)
         {
@@ -185,7 +186,7 @@ public partial class CompareSymptoms : ContentPage
         }
         catch(Exception Ex)
         {
-            await crashHandler.CrashDetectedSend(Ex); 
+            NotasyncMethod(Ex);
         }
     }
     async private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
@@ -196,7 +197,7 @@ public partial class CompareSymptoms : ContentPage
         }
         catch(Exception Ex)
         {
-            await crashHandler.CrashDetectedSend(Ex);
+            NotasyncMethod(Ex);
         }
     }
     private void segmentedControl_SelectionChanged(object sender, Syncfusion.Maui.Buttons.SelectionChangedEventArgs e)
@@ -233,7 +234,7 @@ public partial class CompareSymptoms : ContentPage
         }
         catch(Exception Ex)
         {
-            NotasyncMethod(Ex); 
+            
         }
     }
     private void SymptomName_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)

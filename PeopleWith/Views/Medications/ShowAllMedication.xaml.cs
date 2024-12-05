@@ -23,6 +23,7 @@ public partial class ShowAllMedication : ContentPage
         try
         {
             await crashHandler.CrashDetectedSend(Ex);
+            await Navigation.PushAsync(new ErrorPage("Dashboard"), false);
         }
         catch (Exception ex)
         {
@@ -226,52 +227,33 @@ public partial class ShowAllMedication : ContentPage
                         }
                     }
 
-                    //var categorizedMedicationList = MedicationList
-                    //    .Select(m => new
-                    //    {
-                    //        Medication = m,
-                    //        ParsedDate = DateTime.Parse(m.MedDateTime),
-                    //        ActionGroup = m.Action.ToLower()
-                    //    })
-                    //    .GroupBy(m => m.ActionGroup)
-                    //    .ToDictionary(g => g.Key, g => g.OrderByDescending(m => m.ParsedDate).Select(x => x.Medication).ToList());
+                    // Preprocess MedicationList
+                    foreach (var medication in MedicationList)
+                    {
+                        if (DateTime.TryParse(medication.MedDateTime, out var parsedDate))
+                        {
+                            medication.DatetimeOrder = parsedDate;
+                        }
+                    }
 
-                    //// Update the ListView's ItemsSource and height
-                    //var sortedList = categorizedMedicationList
-                    //    .SelectMany(g => g.Value)
-                    //    .OrderByDescending(m => DateTime.Parse(m.MedDateTime)) 
-                    //    .ToList();
+                    //Attempt to Iterate through the List Faster. Not Fast Enough.
+                    //var categorizedList = MedicationList
+                    //    .OrderByDescending(m => m.DatetimeOrder)
+                    //    .GroupBy(m => m.Action?.ToLowerInvariant())
+                    //    .ToDictionary(g => g.Key, g => g.ToList());
 
-                    //UserMedicationSchedule.ItemsSource = sortedList;
-                    //UserMedicationSchedule.HeightRequest = sortedList.Count * 120;
+                    //if (categorizedList.TryGetValue("taken", out var takenList))
+                    //    TakenMedicationList = takenList.ToObservableCollection();
 
-                    //// Assign filtered lists using TryGetValue
-                    //if (categorizedMedicationList.TryGetValue("taken", out var takenList))
-                    //{
-                    //    TakenMedicationList = new ObservableCollection<usermedication>(takenList);
-                    //}
-                    //else
-                    //{
-                    //    TakenMedicationList = new ObservableCollection<usermedication>();
-                    //}
+                    //if (categorizedList.TryGetValue("not taken", out var notTakenList))
+                    //    NotTakenMedicationList = notTakenList.ToObservableCollection();
 
-                    //if (categorizedMedicationList.TryGetValue("not taken", out var notTakenList))
-                    //{
-                    //    NotTakenMedicationList = new ObservableCollection<usermedication>(notTakenList);
-                    //}
-                    //else
-                    //{
-                    //    NotTakenMedicationList = new ObservableCollection<usermedication>();
-                    //}
+                    //if (categorizedList.TryGetValue("not recorded", out var notRecordedList))
+                    //    NotRecordedMedicationList = notRecordedList.ToObservableCollection();
 
-                    //if (categorizedMedicationList.TryGetValue("not recorded", out var notRecordedList))
-                    //{
-                    //    NotRecordedMedicationList = new ObservableCollection<usermedication>(notRecordedList);
-                    //}
-                    //else
-                    //{
-                    //    NotRecordedMedicationList = new ObservableCollection<usermedication>();
-                    //}
+                    //// Update main list and height request
+                    //UserMedicationSchedule.ItemsSource = MedicationList.OrderByDescending(m => m.DatetimeOrder).ToList();
+                    //UserMedicationSchedule.HeightRequest = MedicationList.Count * 120;
 
 
 

@@ -37,6 +37,7 @@ public partial class AddAppointment : ContentPage
         try
         {
             await crashHandler.CrashDetectedSend(Ex);
+            await Navigation.PushAsync(new ErrorPage("Dashboard"), false);
         }
         catch (Exception ex)
         {
@@ -94,6 +95,9 @@ public partial class AddAppointment : ContentPage
 
             NavFrom = "HCPs";
 
+            //adddatepicker.Date = DateTime.Now;
+            //addtimepicker.Time = DateTime.Now.TimeOfDay;
+
             PopulateAllItems();
         }
         catch (Exception Ex)
@@ -126,6 +130,9 @@ public partial class AddAppointment : ContentPage
             }
 
             NavFrom = "Appointments";
+
+            //adddatepicker.Date = DateTime.Now;
+            //addtimepicker.Time = DateTime.Now.TimeOfDay;
 
             PopulateAllItems();
         }
@@ -270,7 +277,7 @@ public partial class AddAppointment : ContentPage
         }
         catch (Exception Ex)
         {
-            NotasyncMethod(Ex);
+            //NotasyncMethod(Ex);
         }
     }
 

@@ -1443,6 +1443,41 @@ namespace PeopleWith
             }
         }
 
+
+        //Get Single Allergy Informaiton 
+        public async Task<allergies> GetAsyncSingleAllergy(allergies GetInfo)
+        {
+            try
+            {
+                var id = GetInfo.Allergyid;
+                HttpClient client = new HttpClient();
+
+                var URl = $"https://pwdevapi.peoplewith.com/api/allergy/allergyid/{id}";
+
+                HttpResponseMessage response = await client.GetAsync(URl);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string contentconsent = await response.Content.ReadAsStringAsync();
+                    var userResponseconsent = JsonConvert.DeserializeObject<ApiAllergies>(contentconsent);
+                    var consent = userResponseconsent.Value;
+                    GetInfo.Allergyinformation = consent[0].Allergyinformation;
+                    return GetInfo;
+
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
+
         //Post UserAllergies Data  
         public async Task<ObservableCollection<userallergies>> PostUserAllergiesAsync(ObservableCollection<userallergies> AllergyPassed)
         {

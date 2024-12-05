@@ -40,9 +40,9 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios'">
-	  <CodesignKey>Apple Development: Created via API (9AF7WV24ZX)</CodesignKey>
-	  <CodesignProvision>VS: com.peoplewith.peoplewith Development</CodesignProvision>
-	  <ProvisioningType>automatic</ProvisioningType>
+	  <CodesignKey>Apple Development: Created via API (QB732BRMZC)</CodesignKey>
+	  <CodesignProvision>PeopleWith Development - Oct 2022</CodesignProvision>
+	  <ProvisioningType>manual</ProvisioningType>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -262,6 +262,9 @@
 	  <Compile Update="Helpers\PopupPageHelper.xaml.cs">
 	    <DependentUpon>PopupPageHelper.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\Allergies\AllergyInfo.xaml.cs">
+	    <DependentUpon>AllergyInfo.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -278,6 +281,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Allergies\AllAllergies.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Allergies\AllergyInfo.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Allergies\SingleAllergies.xaml">
@@ -419,6 +425,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Questionnaires\AllQuestionnaires.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Questionnaires\AndroidQuestionnaires.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Questionnaires\QuestionnairePage.xaml">

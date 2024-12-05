@@ -44,7 +44,7 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Button x:Name="Deletebtn" Grid.Row="0" Margin="20,50,20,0"  FontSize="Small" TextColor="Red" BackgroundColor="#ffe5e5" FontFamily="HankenGroteskBold" CornerRadius="10" Text="Delete Allergy" Clicked="Deletebtn_Clicked" />
-            <Label HorizontalTextAlignment="Start" Grid.Row="1" Text="If this Allergy is deleted, you will lose all of your Allergy Data." Margin="20,0,20,20" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="DarkGray"  />
+                <Label HorizontalTextAlignment="Start" Grid.Row="1" Text="If this Allergy is deleted, you will lose all of your Allergy Data" Margin="20,5,20,20" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="DarkGray"  />
             </Grid>
         </StackLayout>
     </VerticalStackLayout>

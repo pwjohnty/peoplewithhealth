@@ -27,7 +27,8 @@ public partial class SingleSymptom : ContentPage
     {
         try
         {
-            NotasyncMethod(Ex);
+            await crashHandler.CrashDetectedSend(Ex);
+            await Navigation.PushAsync(new ErrorPage("Dashboard"), false);
         }
         catch (Exception ex)
         {
@@ -612,7 +613,7 @@ public partial class SingleSymptom : ContentPage
         }
         catch (Exception Ex)
         {
-            NotasyncMethod(Ex); 
+            
         }
     }
 

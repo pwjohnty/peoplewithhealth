@@ -8,6 +8,7 @@ public partial class SingleAllergies : ContentPage
     public ObservableCollection<userallergies> AllUserAllergies = new ObservableCollection<userallergies>();
     public ObservableCollection<userallergies> AllergyPassed = new ObservableCollection<userallergies>();
     public ObservableCollection<allergies> Allergies = new ObservableCollection<allergies>();
+    allergies SelectedAllergy = new allergies(); 
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
@@ -18,6 +19,7 @@ public partial class SingleAllergies : ContentPage
         try
         {
             await crashHandler.CrashDetectedSend(Ex);
+            await Navigation.PushAsync(new ErrorPage("Dashboard"), false);
         }
         catch (Exception ex)
         {
@@ -41,6 +43,8 @@ public partial class SingleAllergies : ContentPage
 
             AlergyTitle.Text = AllergyPassed[0].title;
             AllergyDate.Text = AllergyPassed[0].createdAt;
+
+            loadMedInformation();
         }
         catch (Exception Ex)
         {
@@ -49,11 +53,37 @@ public partial class SingleAllergies : ContentPage
 
     }
 
+    async void loadMedInformation()
+    {
+        try
+        {
+            SelectedAllergy.Allergyid = AllergyPassed[0].allergyid;
+            APICalls Database = new APICalls();
+            var GetDiagInfo = await Database.GetAsyncSingleAllergy(SelectedAllergy);
+            SelectedAllergy = GetDiagInfo;
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
     async private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
         try
         {
-            await DisplayAlert("Allergy Information", "There is no Information against this Allergy", "Close");
+            if (SelectedAllergy.Allergyinformation != null)
+            {
+                var title = AllergyPassed[0].title;
+                await Navigation.PushAsync(new AllergyInfo(SelectedAllergy, title), false);
+
+            }
+            else
+            {
+                await DisplayAlert("Diagnosis Information", "No Information is saved against this Diagnosis", "Close");
+
+            }
+            //await DisplayAlert("Allergy Information", "There is no Information against this Allergy", "Close");
         }
         catch (Exception Ex)
         {

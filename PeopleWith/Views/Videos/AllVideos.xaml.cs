@@ -7,6 +7,7 @@ namespace PeopleWith;
 public partial class AllVideos : ContentPage
 {
     public ObservableCollection<videos> AllVideosList = new ObservableCollection<videos>();
+    public ObservableCollection<videos> VideosList = new ObservableCollection<videos>();
     public ObservableCollection<videos> FilterListData = new ObservableCollection<videos>();
     //public ObservableCollection<videoengage> VideoEngagement = new ObservableCollection<videoengage>();
     videoengage SelectedVideoEngage = new videoengage(); 
@@ -22,6 +23,7 @@ public partial class AllVideos : ContentPage
         try
         {
             await crashHandler.CrashDetectedSend(Ex);
+            await Navigation.PushAsync(new ErrorPage("Dashboard"), false);
         }
         catch (Exception ex)
         {
@@ -45,40 +47,57 @@ public partial class AllVideos : ContentPage
     {
         try
         {
-
+            VidsLoading.IsVisible = true;
+            var signupCode = Helpers.Settings.SignUp;
             var GetVideos = aPICalls.GetAllVideos();
             //var GetEngagement = aPICalls.GetAllVideosEngagement(); 
 
-            var delayTask = Task.Delay(1000);
+            //var delayTask = Task.Delay(1000);
 
-            if (await Task.WhenAny(GetVideos, delayTask) == delayTask)
-            {
-                await MopupService.Instance.PushAsync(new GettingReady("Loading Videos") { });
-            }
+            //if (await Task.WhenAny(GetVideos, delayTask) == delayTask)
+            //{
+            //    await MopupService.Instance.PushAsync(new GettingReady("Loading Videos") { });
+            //}
 
             AllVideosList = await GetVideos;
+
+            foreach(var item in AllVideosList)
+            {
+                if (item.signupcodeid == null && item.referral == null)
+                {
+                    VideosList.Add(item);
+                }
+                else if ((item.signupcodeid != null && item.signupcodeid.Contains(signupCode)) ||
+           (item.referral != null && item.referral.Contains(signupCode)))
+                {
+                    VideosList.Add(item);
+                }
+            }
             //VideoEngagement = await GetEngagement; 
 
-            await MopupService.Instance.PopAllAsync(false);
+           // await MopupService.Instance.PopAllAsync(false);
 
-            VideosListview.ItemsSource = AllVideosList;
+            VideosListview.ItemsSource = VideosList;
             //VideosListview.HeightRequest = AllVideosList.Count() * 110;
 
             //Set Filter chips
             var AddALL = new videos();
             AddALL.category = "All";
-            AllVideosList.Add(AddALL);
+            VideosList.Add(AddALL);
 
-            var FilterTabList = AllVideosList.GroupBy(s => s.category).Select(g => g.First()).ToList().OrderBy(g => g.category);
+            var FilterTabList = VideosList.GroupBy(s => s.category).Select(g => g.First()).ToList().OrderBy(g => g.category);
             FilterListData = new ObservableCollection<videos>(FilterTabList);
-            var count = AllVideosList.Count().ToString();
+            var count = VideosList.Count().ToString();
             Results.Text = "Results" + " (" + count + ")";
    
             FilterTabs.ItemsSource = FilterListData;
             FilterTabs.DisplayMemberPath = "category";
+            //FilterTabs.SelectedItem;
+            VidsLoading.IsVisible = false; 
         }
         catch (Exception Ex)
         {
+            VidsLoading.IsVisible = false;
             NotasyncMethod(Ex);
         }
     }
@@ -136,7 +155,7 @@ public partial class AllVideos : ContentPage
                 return input.Replace("®", "").Trim();  // Code to Remove Saxenda ® - Causing Crash 
             }
 
-            var FilteredVideo = AllVideosList.Where(s => !string.IsNullOrEmpty(s.title) && CleanString(s.title).Contains(CleanString(Characters), StringComparison.OrdinalIgnoreCase))
+            var FilteredVideo = VideosList.Where(s => !string.IsNullOrEmpty(s.title) && CleanString(s.title).Contains(CleanString(Characters), StringComparison.OrdinalIgnoreCase))
                 .OrderBy(m => m.title);
 
             var FilteredVideoCollection = new ObservableCollection<videos>(FilteredVideo);
@@ -160,9 +179,9 @@ public partial class AllVideos : ContentPage
             var item = tappedFrame.Text;
             if(item == "All")
             {
-                var count = AllVideosList.Count().ToString();
+                var count = VideosList.Count().ToString();
                 Results.Text = "Results" + " (" + count + ")";
-                VideosListview.ItemsSource = AllVideosList;
+                VideosListview.ItemsSource = VideosList;
                 //VideosListview.HeightRequest = AllVideosList.Count() * 110;
             }
             else
