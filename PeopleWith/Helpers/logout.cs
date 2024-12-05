@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using Plugin.LocalNotification;
 
 namespace PeopleWith
 {
@@ -19,6 +20,10 @@ namespace PeopleWith
         {
             try
             {
+                //clear local notifcations
+                LocalNotificationCenter.Current.ClearAll();
+
+                //clear tags for azure notications
                 var notificationService = new PWNotificationService();
                 await notificationService.ClearTagsAsync();
             }
