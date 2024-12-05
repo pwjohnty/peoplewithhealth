@@ -240,6 +240,7 @@ Padding="0">
                                             </Grid.ColumnDefinitions>
 
                                             <Label Text="{Binding ChangedMedName}" FontFamily="HankenGroteskBold"  FontSize="14" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Margin="10,0,0,10" TextColor="#031926" />
+                                            <Label Text="{Binding medicationtitle}" IsVisible="{Binding ChangedMed}" FontFamily="HankenGroteskBold"  FontSize="12" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Margin="10,-5,0,5" TextColor="Gray" />
 
 
                                             <Image Opacity="1" Source="medcalendericon.png" Margin="0,0,0,5" Grid.Row="2" Grid.Column="0" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="20" WidthRequest="20"/>
@@ -265,6 +266,10 @@ Padding="0">
                                             <Label Text="{Binding NextTime}" IsVisible="False" FontFamily="HankenGroteskRegular"  FontSize="Small" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="Center" HorizontalOptions="End" VerticalTextAlignment="Center" Margin="10,0,0,10" TextColor="gray" />
 
                                             <Image Source="nextdarker.png" HeightRequest="15" Margin="0,0,0,10"  Grid.Row="0" Grid.Column="4" VerticalOptions="Center" HorizontalOptions="Center" />
+                                            <Image Opacity="1" Source="notesicon.png" Grid.Row="3" Grid.Column="0" VerticalOptions="Start" IsVisible="{Binding ChangedNotes}" HorizontalOptions="Center" HeightRequest="20" WidthRequest="20"/>
+
+
+                                            <Label Text="{Binding ChangedMedNotes}" FontFamily="HankenGroteskBold"  FontSize="12" Grid.Row="3" IsVisible="{Binding ChangedNotes}" Grid.Column="1" Grid.ColumnSpan="1" Margin="0,0,0,10" TextColor="Gray" />
 
                                         </Grid>
                                     </Frame>

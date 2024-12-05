@@ -64,8 +64,10 @@
 
                                     </Grid>
                                 </Frame>
+                                
+                                <!-- Changed to Include Unknown/Forgot -->
 
-                                <Grid IsVisible="{Binding PendingDiag}">
+                                <!--<Grid IsVisible="{Binding PendingDiag}">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
@@ -94,7 +96,7 @@
 
                                         </Grid>
                                     </Frame>
-                                </Grid>
+                                </Grid>-->
                             </StackLayout>
                         </ViewCell>
                     </DataTemplate>

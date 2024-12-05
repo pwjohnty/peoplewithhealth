@@ -48,6 +48,7 @@ public partial class RegisterPage : ContentPage
         try
         {
             await crashHandler.CrashDetectedSend(Ex);
+            await Navigation.PushAsync(new ErrorPage("Login"), false);
         }
         catch (Exception ex)
         {

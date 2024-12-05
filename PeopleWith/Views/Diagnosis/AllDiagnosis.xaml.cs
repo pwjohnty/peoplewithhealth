@@ -19,6 +19,7 @@ public partial class AllDiagnosis : ContentPage
         try
         {
             await crashHandler.CrashDetectedSend(Ex);
+            await Navigation.PushAsync(new ErrorPage("Dashboard"), false);
         }
         catch (Exception ex)
         {
@@ -92,9 +93,12 @@ public partial class AllDiagnosis : ContentPage
                 }
                 else if (item.dateofdiagnosis == null)
                 {
-                    item.PendingDiag = true;
-                    item.ActiveDiag = false;
-                    item.status = "Pending";
+                    item.dateofdiagnosis = "Unknown";
+
+                    //For Pending Diagnosis Date
+                    //item.PendingDiag = true;
+                    //item.ActiveDiag = false;
+                    //item.status = "Pending";
                 }
             }
 

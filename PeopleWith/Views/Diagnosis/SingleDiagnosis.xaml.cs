@@ -9,7 +9,7 @@ public partial class SingleDiagnosis : ContentPage
     public ObservableCollection<userdiagnosis> AllUserDiagnosis = new ObservableCollection<userdiagnosis>();
     public ObservableCollection<userdiagnosis> DiagnosisPassed = new ObservableCollection<userdiagnosis>();
     diagnosis SelectedDiagnosis = new diagnosis(); 
-    string DateofDiagnosis;
+    string DateofDiagnosis = null;
     bool isEditing;
     bool validdob;
     string WebpageLink;
@@ -24,6 +24,7 @@ public partial class SingleDiagnosis : ContentPage
         try
         {
             await crashHandler.CrashDetectedSend(Ex);
+            await Navigation.PushAsync(new ErrorPage("Dashboard"), false);
         }
         catch (Exception ex)
         {
@@ -72,10 +73,20 @@ public partial class SingleDiagnosis : ContentPage
             else
             {
                 DiagnosisTitle.Text = DiagnosisPassed[0].diagnosistitle;
-                var date = DateTime.Parse(DiagnosisPassed[0].dateofdiagnosis);
-                DiagnosisDate.Text = "Diagnosed on: " + date.ToString("dd MMMM yyyy");
-                DateofDiagnosis = DiagnosisPassed[0].dateofdiagnosis;
-                DateEntry.Text = date.ToString("dd/MM/yyyy");
+                if(DiagnosisPassed[0].dateofdiagnosis == "Unknown")
+                {
+                    DiagnosisDate.Text = "Diagnosed on: " + DiagnosisPassed[0].dateofdiagnosis;
+                    diagdatecheckbox.IsChecked = true;
+                }
+                else
+                {
+                    var date = DateTime.Parse(DiagnosisPassed[0].dateofdiagnosis);
+                    DiagnosisDate.Text = "Diagnosed on: " + date.ToString("dd MMMM yyyy");
+                    DateofDiagnosis = DiagnosisPassed[0].dateofdiagnosis;
+                    DateEntry.Text = date.ToString("dd/MM/yyyy");
+                    diagdatecheckbox.IsChecked = false;
+
+                }
 
                 loadMedInformation();
 
@@ -122,39 +133,7 @@ public partial class SingleDiagnosis : ContentPage
 
                 if (DOB.Date <= DateTime.Now.Date)
                 {
-                    DateEntry.Unfocus();
-                    dateofBirth.IsVisible = false;
-
-                    AndroidBtn.IsVisible = false;
-                    IOSBtn.IsVisible = false; 
-
-                    foreach (var item in DiagnosisPassed)
-                    {
-                        item.dateofdiagnosis = DateofDiagnosis;
-                    }
-
-
-                    APICalls database = new APICalls();
-                    await database.PutDiagnosisAsync(DiagnosisPassed);
-
-                    await MopupService.Instance.PushAsync(new PopupPageHelper("Diagnosis Updated") { });
-                    await Task.Delay(1500);
-                    foreach (var item in AllUserDiagnosis)
-                    {
-                        if (item.id == DiagnosisPassed[0].id)
-                        {
-                            item.dateofdiagnosis = DateofDiagnosis;
-                        }
-                    }
-                    await MopupService.Instance.PopAllAsync(false);
-                    await Navigation.PushAsync(new AllDiagnosis(AllUserDiagnosis));
-                    var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is AllDiagnosis);
-                    if (pageToRemoves != null)
-                    {
-
-                        Navigation.RemovePage(pageToRemoves);
-                    }
-                    Navigation.RemovePage(this);
+                    HandleDiagnosisAdd();
                 }
                 else if (DOB.Date > DateTime.Now.Date)
                 {
@@ -169,13 +148,20 @@ public partial class SingleDiagnosis : ContentPage
             }
             else
             {
-                DateEntry.Focus();
-                EntryError.IsVisible = true;
-                EntryError.Text = "Diagnosis Date is Not Valid Date, Enter a Valid Date";
-                await Task.Delay(5000);
-                EntryError.Text = null;
-                EntryError.IsVisible = false;
 
+                if (diagdatecheckbox.IsChecked == true)
+                {
+                    HandleDiagnosisAdd();
+                }
+                else
+                {
+                    DateEntry.Focus();
+                    EntryError.IsVisible = true;
+                    EntryError.Text = "Diagnosis Date is Not Valid Date, Enter a Valid Date";
+                    await Task.Delay(5000);
+                    EntryError.Text = null;
+                    EntryError.IsVisible = false;
+                }
             }
         }
         catch (Exception Ex)
@@ -183,6 +169,51 @@ public partial class SingleDiagnosis : ContentPage
             NotasyncMethod(Ex);
         }
     }
+
+    async private void HandleDiagnosisAdd()
+    {
+        try
+        {
+            DateEntry.Unfocus();
+            dateofBirth.IsVisible = false;
+
+            AndroidBtn.IsVisible = false;
+            IOSBtn.IsVisible = false;
+
+            foreach (var item in DiagnosisPassed)
+            {
+                item.dateofdiagnosis = DateofDiagnosis;
+            }
+
+
+            APICalls database = new APICalls();
+            await database.PutDiagnosisAsync(DiagnosisPassed);
+
+            await MopupService.Instance.PushAsync(new PopupPageHelper("Diagnosis Updated") { });
+            await Task.Delay(1500);
+            foreach (var item in AllUserDiagnosis)
+            {
+                if (item.id == DiagnosisPassed[0].id)
+                {
+                    item.dateofdiagnosis = DateofDiagnosis;
+                }
+            }
+            await MopupService.Instance.PopAllAsync(false);
+            await Navigation.PushAsync(new AllDiagnosis(AllUserDiagnosis));
+            var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is AllDiagnosis);
+            if (pageToRemoves != null)
+            {
+
+                Navigation.RemovePage(pageToRemoves);
+            }
+            Navigation.RemovePage(this);
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
 
     async private void Deletebtn_Clicked(object sender, EventArgs e)
     {
@@ -486,6 +517,20 @@ public partial class SingleDiagnosis : ContentPage
         catch (Exception Ex)
         {
             NotasyncMethod(Ex);
+        }
+    }
+
+    private void diagdatecheckbox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+        try
+        {
+            DateEntry.Text = string.Empty;
+            DateofDiagnosis = null;
+            validdob = true;
+        }
+        catch (Exception Ex)
+        {
+
         }
     }
 }

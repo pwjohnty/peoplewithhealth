@@ -24,6 +24,9 @@ namespace PeopleWith
         public string questionorder { get; set; }
         public string questioncatergory { get; set; }
 
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string questionnum { get; set; }
+
         public bool questionrequired { get; set; }
 
         //  [JsonConverter(typeof(QuestionnaireAnswerConverter))]

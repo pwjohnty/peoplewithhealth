@@ -22,6 +22,7 @@ public partial class UpdateAllSymptoms : ContentPage
         try
         {
             await crashHandler.CrashDetectedSend(Ex);
+            await Navigation.PushAsync(new ErrorPage("Dashboard"), false);
         }
         catch (Exception ex)
         {
@@ -193,13 +194,17 @@ public partial class UpdateAllSymptoms : ContentPage
 
 
                             var newsym = new feedbackdata();
-                            newsym.value = symptom.SlidervalueUA.ToString(); ;
+                            newsym.value = symptom.SlidervalueUA.ToString();
                             newsym.datetime = items.timestamp;
                             newsym.action = "update";
                             newsym.label = symptom.symptomtitle;
                             newsym.id = items.symptomfeedbackid;
+                        if (userfeedbacklistpassed.symptomfeedbacklist == null)
+                        {
+                            userfeedbacklistpassed.symptomfeedbacklist = new ObservableCollection<feedbackdata>();
+                        }
 
-                            userfeedbacklistpassed.symptomfeedbacklist.Add(newsym);
+                        userfeedbacklistpassed.symptomfeedbacklist.Add(newsym);
 
 
                         }               

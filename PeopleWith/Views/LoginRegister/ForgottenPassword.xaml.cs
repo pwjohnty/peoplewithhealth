@@ -21,6 +21,7 @@ public partial class ForgottenPassword : ContentPage
         try
         {
             await crashHandler.CrashDetectedSend(Ex);
+            await Navigation.PushAsync(new ErrorPage("Login"), false);
         }
         catch (Exception ex)
         {
@@ -105,6 +106,8 @@ public partial class ForgottenPassword : ContentPage
             emailhelper.HasError = true;
             Vibration.Vibrate();
             emailentry.Focus();
+            await Task.Delay(3000);
+            emailhelper.HasError = false;
             return;
         }
 
@@ -117,6 +120,8 @@ public partial class ForgottenPassword : ContentPage
             emailhelper.HasError = true;
             Vibration.Vibrate();
             emailentry.Focus();
+            await Task.Delay(3000);
+            emailhelper.HasError = false;
             return;
         }
 
@@ -144,6 +149,8 @@ public partial class ForgottenPassword : ContentPage
                 emailhelper.HasError = true;
                 Vibration.Vibrate();
                 emailentry.Focus();
+                await Task.Delay(3000);
+                emailhelper.HasError = false;
                 return;
             }
             else
@@ -151,28 +158,29 @@ public partial class ForgottenPassword : ContentPage
                 //Valid Email Address
                 //Temporary Check
                 await MopupService.Instance.PushAsync(new PopupPageHelper("Email Verification Sent") { });
-                await Task.Delay(1500);
+                //await Task.Delay(1500);
 
-                //email generate Update URL
-                //StringContent mail_content = new StringContent(newuser.email, System.Text.Encoding.UTF8, "application/json");
+                    //email generate Update URL
+                    //StringContent mail_content = new StringContent(emailentry.Text, System.Text.Encoding.UTF8, "application/json");
 
-                //var emailresponse = await client.PostAsync("https://peoplewithwebapp.azurewebsites.net/hub/email-validation.php?uid=" + newuser.email, mail_content);
+                    //var emailresponse = await client.PostAsync("https://peoplewithwebapp.azurewebsites.net/hub/email-validation.php?uid=" + emailentry.Text, mail_content);
+                    HttpClient hTTPClient = new HttpClient();
 
-                //if (Email.Default.IsComposeSupported)
-                //{
+                    String json = String.Format(@"{{""Email"":""{0}""}}", emailentry.Text);
 
-                //    string subject = "";
-                //    string body = "Userid: " + Helpers.Settings.UserKey;
-                //    string[] recipients = new[] { "chris.johnston@peoplewith.com" };
+                    StringContent mail_content = new StringContent(json);
 
-                //    var message = new EmailMessage
-                //    {
-                //        Subject = subject,
-                //        Body = body,
-                //        BodyFormat = EmailBodyFormat.PlainText,
-                //        To = new List<string>(recipients)
-                //    };
-                //    await MopupService.Instance.PopAllAsync(false);
+                    var GetResponse = await hTTPClient.PostAsync("https://portal.peoplewith.com/process-password-request.php?email=" + emailentry.Text, mail_content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+
+                        //Successful
+
+                    }
+
+
+                    await MopupService.Instance.PopAllAsync(false);
                 //    await Email.Default.ComposeAsync(message);
 
                 //}

@@ -21,6 +21,7 @@ public partial class AddAsRequiredDosage : ContentPage
         try
         {
             await crashHandler.CrashDetectedSend(Ex);
+            await Navigation.PushAsync(new ErrorPage("Dashboard"), false);
         }
         catch (Exception ex)
         {
@@ -220,18 +221,37 @@ public partial class AddAsRequiredDosage : ContentPage
 
                     foreach (var page in pageToRemoves)
                     {
-                        if (ii == 0)
+                        if(pageToRemoves.Count == 6)
                         {
-                        }
-                        else if (ii == 1 || ii == 2)
-                        {
-                            Navigation.RemovePage(page);
+                            if (ii == 0)
+                            {
+                            }
+                            else if (ii == 3 || ii == 4)
+                            {
+                                Navigation.RemovePage(page);
+                            }
+                            else
+                            {
+                                //Navigation.RemovePage(page);
+                            }
+                            ii++;
                         }
                         else
                         {
-                            //Navigation.RemovePage(page);
+                            if (ii == 0)
+                            {
+                            }
+                            else if (ii == 1 || ii == 2)
+                            {
+                                Navigation.RemovePage(page);
+                            }
+                            else
+                            {
+                                //Navigation.RemovePage(page);
+                            }
+                            ii++;
                         }
-                        ii++;
+                      
                     }
 
                 }

@@ -31,6 +31,7 @@ public partial class MainSchedule : ContentPage
         try
         {
             await crashHandler.CrashDetectedSend(Ex);
+            await Navigation.PushAsync(new ErrorPage("Dashboard"), false);
         }
         catch (Exception ex)
         {
@@ -687,6 +688,7 @@ public partial class MainSchedule : ContentPage
                                 //Not Recorded
                                 med.Buttonop = 0.2;
                                 med.Buttonntop = 0.2;
+                                med.AsReqHidelbl = true;
                             }
                         }
                         else
@@ -748,6 +750,7 @@ public partial class MainSchedule : ContentPage
                                 //Not Recorded
                                 med.Buttonop = 0.2;
                                 med.Buttonntop = 0.2;
+                                med.AsReqHidelbl = true;
                             }
                         }
                         else
