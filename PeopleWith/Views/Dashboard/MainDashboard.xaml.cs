@@ -37,7 +37,7 @@ public partial class MainDashboard : ContentPage
 
         string firstName = Preferences.Default.Get("userid", "Unknown");
 
-       
+        var test = "just a test string";
 
         loadcatergories();
 
