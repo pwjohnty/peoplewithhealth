@@ -4,7 +4,8 @@
              xmlns:pinview="clr-namespace:PINView.Maui;assembly=PINView.Maui"
              xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
              xmlns:local="clr-namespace:PeopleWith" Shell.NavBarHasShadow="False" Shell.NavBarIsVisible="False"
-             x:Class="PeopleWith.BiometricsLogin" NavigationPage.IconColor="#031926" BackgroundColor="#ffffff">
+              HideSoftInputOnTapped="True"
+             x:Class="PeopleWith.BiometricsLogin" NavigationPage.IconColor="#031926" BackgroundColor="White">
     <ContentPage.BindingContext>
         <local:keypaditem />
     </ContentPage.BindingContext>
@@ -34,11 +35,11 @@
                     <!--<ColumnDefinition Width="*"/>-->
                 </Grid.ColumnDefinitions>
 
-                <Label Grid.Column="0" x:Name="Name"  Text="Enter your Pin Code" HorizontalOptions="Center" Margin="10,0,0,0" FontFamily="HankenGroteskBold" FontSize="20" TextColor="#031926"/>
+                <Label Grid.Column="0" x:Name="Name"  Text="Enter your Pin Code" HorizontalOptions="Center" Margin="10,20,0,0" FontFamily="HankenGroteskBold" FontSize="20" TextColor="#031926"/>
                 <Image Grid.Column="1" HorizontalOptions="Start" IsVisible="False" HeightRequest="20" WidthRequest="20" Source="pinicon.png" />
             </Grid>
 
-            <pinview:PINView x:Name="Pincode" Grid.Row="3" PINValue="{Binding PinValue}" Focused="Pincode_Focused" IsPassword="True" BoxBackgroundColor="Transparent" Margin="0,10,0,0"  BoxShape="Circle" AutoDismissKeyboard="True" PropertyChanged="Pincode_PropertyChanged"
+            <pinview:PINView x:Name="Pincode" Grid.Row="3" PINValue="{Binding PinValue}" IsEnabled="False" Focused="Pincode_Focused" IsPassword="True" BoxBackgroundColor="Transparent" Margin="0,20,0,0"  BoxShape="Circle" AutoDismissKeyboard="True" PropertyChanged="Pincode_PropertyChanged"
              PINLength="4" HorizontalOptions="Center" PINEntryCompleted="Pincode_PINEntryCompleted" BoxBorderColor="LightGray" Color="#031926" >
             </pinview:PINView>
 
@@ -63,21 +64,21 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Text="1" Command="{Binding KeyTapped}" Padding="0" BackgroundColor="Transparent" BorderColor="Transparent" CommandParameter="1" HeightRequest="60" TextColor="#031926" Grid.Row="0" Grid.Column="0" x:Name="Numone" FontFamily="HankenGroteskBold" FontAttributes="None" FontSize="25" HorizontalOptions="Center" />
-                <Button Text="2" Command="{Binding KeyTapped}" Padding="0" BackgroundColor="Transparent" CommandParameter="2" HeightRequest="60" TextColor="#031926" Grid.Row="0" Grid.Column="1" x:Name="Numtwo" FontFamily="HankenGroteskBold" FontAttributes="None" FontSize="25" HorizontalOptions="Center" />
-                <Button Text="3" Command="{Binding KeyTapped}" Padding="0" BackgroundColor="Transparent" CommandParameter="3" HeightRequest="60" TextColor="#031926" Grid.Row="0" Grid.Column="2" x:Name="Numthree" FontFamily="HankenGroteskBold" FontAttributes="None" FontSize="25" HorizontalOptions="Center" />
+                <Button Text="1" Command="{Binding KeyTapped}" Padding="0" Margin="5"  BackgroundColor="#fcfcfd" BorderColor="Transparent" CommandParameter="1" HeightRequest="60" TextColor="#031926" Grid.Row="0" Grid.Column="0" x:Name="Numone" FontFamily="HankenGroteskBold" FontAttributes="None" FontSize="25" HorizontalOptions="FillAndExpand" />
+                <Button Text="2" Command="{Binding KeyTapped}" Padding="0" Margin="5"  BackgroundColor="#fcfcfd" CommandParameter="2" HeightRequest="60" TextColor="#031926" Grid.Row="0" Grid.Column="1" x:Name="Numtwo" FontFamily="HankenGroteskBold" FontAttributes="None" FontSize="25" HorizontalOptions="FillAndExpand" />
+                <Button Text="3" Command="{Binding KeyTapped}" Padding="0" Margin="5"  BackgroundColor="#fcfcfd" CommandParameter="3" HeightRequest="60" TextColor="#031926" Grid.Row="0" Grid.Column="2" x:Name="Numthree" FontFamily="HankenGroteskBold" FontAttributes="None" FontSize="25" HorizontalOptions="FillAndExpand" />
 
-                <Button Text="4" Command="{Binding KeyTapped}" Padding="0" BackgroundColor="Transparent" CommandParameter="4" HeightRequest="60" TextColor="#031926" Grid.Row="1" Grid.Column="0" x:Name="Numfour" FontFamily="HankenGroteskBold" FontAttributes="None" FontSize="25" HorizontalOptions="Center" />
-                <Button Text="5" Command="{Binding KeyTapped}" Padding="0" BackgroundColor="Transparent" CommandParameter="5" HeightRequest="60" TextColor="#031926" Grid.Row="1" Grid.Column="1" x:Name="Numfive" FontFamily="HankenGroteskBold" FontAttributes="None" FontSize="25" HorizontalOptions="Center" />
-                <Button Text="6" Command="{Binding KeyTapped}" Padding="0" BackgroundColor="Transparent" CommandParameter="6" HeightRequest="60" TextColor="#031926" Grid.Row="1" Grid.Column="2" x:Name="Numsix" FontFamily="HankenGroteskBold" FontAttributes="None" FontSize="25" HorizontalOptions="Center" />
+                <Button Text="4" Command="{Binding KeyTapped}" Padding="0" Margin="5" BackgroundColor="#fcfcfd" CommandParameter="4" HeightRequest="60" TextColor="#031926" Grid.Row="1" Grid.Column="0" x:Name="Numfour" FontFamily="HankenGroteskBold" FontAttributes="None" FontSize="25" HorizontalOptions="FillAndExpand" />
+                <Button Text="5" Command="{Binding KeyTapped}" Padding="0" Margin="5" BackgroundColor="#fcfcfd" CommandParameter="5" HeightRequest="60" TextColor="#031926" Grid.Row="1" Grid.Column="1" x:Name="Numfive" FontFamily="HankenGroteskBold" FontAttributes="None" FontSize="25" HorizontalOptions="FillAndExpand" />
+                <Button Text="6" Command="{Binding KeyTapped}" Padding="0" Margin="5" BackgroundColor="#fcfcfd" CommandParameter="6" HeightRequest="60" TextColor="#031926" Grid.Row="1" Grid.Column="2" x:Name="Numsix" FontFamily="HankenGroteskBold" FontAttributes="None" FontSize="25" HorizontalOptions="FillAndExpand" />
 
-                <Button Text="7" Command="{Binding KeyTapped}" Padding="0" BackgroundColor="Transparent" CommandParameter="7" HeightRequest="60" TextColor="#031926" Grid.Row="2" Grid.Column="0" x:Name="Numseven" FontFamily="HankenGroteskBold" FontAttributes="None" FontSize="25" HorizontalOptions="Center" />
-                <Button Text="8" Command="{Binding KeyTapped}" Padding="0" BackgroundColor="Transparent" CommandParameter="8" HeightRequest="60" TextColor="#031926" Grid.Row="2" Grid.Column="1" x:Name="Numeight" FontFamily="HankenGroteskBold" FontAttributes="None" FontSize="25" HorizontalOptions="Center" />
-                <Button Text="9" Command="{Binding KeyTapped}" Padding="0" BackgroundColor="Transparent" CommandParameter="9" HeightRequest="60" TextColor="#031926" Grid.Row="2" Grid.Column="2" x:Name="Numnine" FontFamily="HankenGroteskBold" FontAttributes="None" FontSize="25" HorizontalOptions="Center" />
+                <Button Text="7" Command="{Binding KeyTapped}" Padding="0" Margin="5" BackgroundColor="#fcfcfd" CommandParameter="7" HeightRequest="60" TextColor="#031926" Grid.Row="2" Grid.Column="0" x:Name="Numseven" FontFamily="HankenGroteskBold" FontAttributes="None" FontSize="25" HorizontalOptions="FillAndExpand" />
+                <Button Text="8" Command="{Binding KeyTapped}" Padding="0" Margin="5" BackgroundColor="#fcfcfd" CommandParameter="8" HeightRequest="60" TextColor="#031926" Grid.Row="2" Grid.Column="1" x:Name="Numeight" FontFamily="HankenGroteskBold" FontAttributes="None" FontSize="25" HorizontalOptions="FillAndExpand" />
+                <Button Text="9" Command="{Binding KeyTapped}" Padding="0" Margin="5" BackgroundColor="#fcfcfd" CommandParameter="9" HeightRequest="60" TextColor="#031926" Grid.Row="2" Grid.Column="2" x:Name="Numnine" FontFamily="HankenGroteskBold" FontAttributes="None" FontSize="25" HorizontalOptions="FillAndExpand" />
 
-                <ImageButton Command="{Binding FingerprintTapped}"  HeightRequest="30" WidthRequest="30" Grid.Row="3" Grid.Column="0" x:Name="fingerprint" HorizontalOptions="Center" VerticalOptions="Center" />
-                <Button Command="{Binding KeyTapped}" Padding="0" BackgroundColor="Transparent" CommandParameter="0" HeightRequest="60" TextColor="#031926" Text="0" Grid.Row="3" Grid.Column="1" x:Name="Numzero" FontFamily="HankenGroteskBold" FontAttributes="None" FontSize="25" HorizontalOptions="Center" VerticalOptions="Center" />
-                <ImageButton Source="delete.png" Command="{Binding DeleteTapped}" HeightRequest="30" WidthRequest="30" Grid.Row="3" Grid.Column="2" x:Name="delete" HorizontalOptions="Center"  VerticalOptions="Center"/>
+                <ImageButton Command="{Binding FingerprintTapped}"  HeightRequest="25" WidthRequest="25" Grid.Row="3" Grid.Column="0" x:Name="fingerprint" HorizontalOptions="Center" VerticalOptions="Center" />
+                <Button Command="{Binding KeyTapped}" Padding="0" Margin="5" BackgroundColor="#fcfcfd" CommandParameter="0" HeightRequest="60" TextColor="#031926" Text="0" Grid.Row="3" Grid.Column="1" x:Name="Numzero" FontFamily="HankenGroteskBold" FontAttributes="None" FontSize="25" HorizontalOptions="FillAndExpand" VerticalOptions="Center" />
+                <ImageButton Source="delete.png" Command="{Binding DeleteTapped}" HeightRequest="25" WidthRequest="25" Grid.Row="3" Grid.Column="2" x:Name="delete" HorizontalOptions="Center"  VerticalOptions="Center"/>
 
             </Grid>
             <ActivityIndicator x:Name="LoadingInd" Grid.Row="6" Margin="0,50,0,0" IsVisible="False" IsRunning="True" Color="#BFDBF7"  HorizontalOptions="Center" VerticalOptions="Center" />

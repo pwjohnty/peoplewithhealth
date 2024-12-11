@@ -18,6 +18,8 @@ public partial class BiometricsLogin : ContentPage
             InitializeComponent();
 
 
+            NavigationPage.SetHasNavigationBar(this, false);
+
             if (DeviceInfo.Current.Platform == DevicePlatform.Android)
             {
                 fingerprint.Source = "fingerprint.png"; 

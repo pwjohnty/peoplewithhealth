@@ -197,7 +197,7 @@ public partial class UpdateAllSymptoms : ContentPage
                             newsym.value = symptom.SlidervalueUA.ToString();
                             newsym.datetime = items.timestamp;
                             newsym.action = "update";
-                            newsym.label = symptom.symptomtitle;
+                            newsym.label = symptom.symptomtitle.TrimEnd();
                             newsym.id = items.symptomfeedbackid;
                         if (userfeedbacklistpassed.symptomfeedbacklist == null)
                         {

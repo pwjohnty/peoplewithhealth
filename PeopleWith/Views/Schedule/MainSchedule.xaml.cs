@@ -171,156 +171,54 @@ public partial class MainSchedule : ContentPage
 
             foreach (var item in AllUserMedications)
             {
-                 sd = DateTime.Parse(item.startdate);
-
-                if(!string.IsNullOrEmpty(item.enddate))
-                {
-                     ed = DateTime.Parse(item.enddate);
-                }
-                else
-                {
-                    hasnoendate = true;
-                }
-
-                //find out if it is daily, weekly or days interval
-
-                var splitstring = item.frequency.Split('|');
-
-                if (splitstring[0] == "Daily")
+                if (item.status == "Active")
                 {
 
-                   if(hasnoendate)
+                    sd = DateTime.Parse(item.startdate);
+
+                    if (!string.IsNullOrEmpty(item.enddate))
                     {
-                        
-                        if(dateforschedule >= sd)
-                        {
-
-                            //add all the items 
-                            foreach(var medtimes in item.schedule)
-                            {
-                                medtimes.Type = "Medication";
-                                medtimes.Usermedid = item.id;
-                                medtimes.Feedbackid = medtimes.id.ToString();
-                                medtimes.Name = item.medicationtitle;
-                                ScheduleList.Add(medtimes);
-                            }
-
-
-                        }
-
-
-                    }
-                   else
-                    {
-
-                        if(dateforschedule >= sd && dateforschedule <= ed)
-                        {
-                            //add all the items 
-                            foreach (var medtimes in item.schedule)
-                            {
-                                medtimes.Type = "Medication";
-                                medtimes.Usermedid = item.id;
-                                medtimes.Feedbackid = medtimes.id.ToString();
-                                medtimes.Name = item.medicationtitle;
-                                ScheduleList.Add(medtimes);
-                            }
-                        }
-
-                    }
-
-
-
-
-
-                }
-                else if (splitstring[0] == "Weekly")
-                {
-                    if (hasnoendate)
-                    {
-
-                        if (dateforschedule >= sd)
-                        {
-
-                            var dayname = dateforschedule.ToString("ddd");
-                            var daynames = dateforschedule.ToString("dddd");
-                            var dayfour = daynames.Substring(0, 4); 
-                            //check if today is within the days list
-                            if (splitstring[1].Contains(dayname))
-                            {
-                                int Index = 0;
-                                foreach (var x in item.schedule)
-                                {
-                                    var GetDay = item.TimeDosage[Index].Split('|');
-                                    x.Day = GetDay[2];
-                                    Index = Index + 1;
-                                }
-
-                                //add all the items 
-                                foreach (var medtimes in item.schedule)
-                                {
-                                    if(medtimes.Day.Contains(dayname) || medtimes.Day == dayfour)
-                                    {
-                                        medtimes.Type = "Medication";
-                                        medtimes.Usermedid = item.id;
-                                        medtimes.Feedbackid = medtimes.id.ToString();
-                                        medtimes.Name = item.medicationtitle;
-                                        ScheduleList.Add(medtimes);
-                                    }
-                                }
-                            }            
-                        }
+                        ed = DateTime.Parse(item.enddate);
                     }
                     else
                     {
+                        hasnoendate = true;
+                    }
 
-                        if (dateforschedule >= sd && dateforschedule <= ed)
+                    //find out if it is daily, weekly or days interval
+
+                    var splitstring = item.frequency.Split('|');
+
+                    if (splitstring[0] == "Daily")
+                    {
+
+                        if (hasnoendate)
                         {
-                            var dayname = dateforschedule.ToString("ddd");
-                            //check if today is within the days list
-                            if (splitstring[1].Contains(dayname))
+
+                            if (dateforschedule >= sd)
                             {
-                                int Index = 0;
-                                foreach (var x in item.schedule)
-                                {
-                                    var GetDay = item.TimeDosage[Index].Split('|');
-                                    x.Day = GetDay[2];
-                                    Index = Index + 1;
-                                }
+
                                 //add all the items 
                                 foreach (var medtimes in item.schedule)
                                 {
-                                    if (medtimes.Day.Contains(dayname))
-                                    {
-                                        medtimes.Type = "Medication";
-                                        medtimes.Usermedid = item.id;
-                                        medtimes.Feedbackid = medtimes.id.ToString();
-                                        medtimes.Name = item.medicationtitle;
-                                        ScheduleList.Add(medtimes);
-                                    }
+                                    medtimes.Type = "Medication";
+                                    medtimes.Usermedid = item.id;
+                                    medtimes.Feedbackid = medtimes.id.ToString();
+                                    medtimes.Name = item.medicationtitle;
+                                    ScheduleList.Add(medtimes);
                                 }
+
+
                             }
+
+
                         }
-
-                    }
-                }
-                else if (splitstring[0] == "Days Interval")
-                {
-
-                    var daycount = Convert.ToInt32(splitstring[1]);
-
-                    if (hasnoendate)
-                    {
-
-                        if (dateforschedule >= sd)
+                        else
                         {
 
-                            // Calculate the difference in days from the start date
-                            var daysDifference = (dateforschedule - sd).Days;
-
-                            // Check if today's date is a multiple of the daycount (e.g., every 3rd day)
-                            if (daysDifference % daycount == 0)
+                            if (dateforschedule >= sd && dateforschedule <= ed)
                             {
-                                // Add all the items for today
+                                //add all the items 
                                 foreach (var medtimes in item.schedule)
                                 {
                                     medtimes.Type = "Medication";
@@ -330,154 +228,326 @@ public partial class MainSchedule : ContentPage
                                     ScheduleList.Add(medtimes);
                                 }
                             }
+
+                        }
+
+
+
+
+
+                    }
+                    else if (splitstring[0] == "Weekly")
+                    {
+                        if (hasnoendate)
+                        {
+
+                            if (dateforschedule >= sd)
+                            {
+
+                                var dayname = dateforschedule.ToString("ddd");
+                                var daynames = dateforschedule.ToString("dddd");
+                                var dayfour = daynames.Substring(0, 4);
+                                //check if today is within the days list
+                                if (splitstring[1].Contains(dayname))
+                                {
+                                    int Index = 0;
+                                    foreach (var x in item.schedule)
+                                    {
+                                        var GetDay = item.TimeDosage[Index].Split('|');
+                                        x.Day = GetDay[2];
+                                        Index = Index + 1;
+                                    }
+
+                                    //add all the items 
+                                    foreach (var medtimes in item.schedule)
+                                    {
+                                        if (medtimes.Day.Contains(dayname) || medtimes.Day == dayfour)
+                                        {
+                                            medtimes.Type = "Medication";
+                                            medtimes.Usermedid = item.id;
+                                            medtimes.Feedbackid = medtimes.id.ToString();
+                                            medtimes.Name = item.medicationtitle;
+                                            ScheduleList.Add(medtimes);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+
+                            if (dateforschedule >= sd && dateforschedule <= ed)
+                            {
+                                var dayname = dateforschedule.ToString("ddd");
+                                //check if today is within the days list
+                                if (splitstring[1].Contains(dayname))
+                                {
+                                    int Index = 0;
+                                    foreach (var x in item.schedule)
+                                    {
+                                        var GetDay = item.TimeDosage[Index].Split('|');
+                                        x.Day = GetDay[2];
+                                        Index = Index + 1;
+                                    }
+                                    //add all the items 
+                                    foreach (var medtimes in item.schedule)
+                                    {
+                                        if (medtimes.Day.Contains(dayname))
+                                        {
+                                            medtimes.Type = "Medication";
+                                            medtimes.Usermedid = item.id;
+                                            medtimes.Feedbackid = medtimes.id.ToString();
+                                            medtimes.Name = item.medicationtitle;
+                                            ScheduleList.Add(medtimes);
+                                        }
+                                    }
+                                }
+                            }
+
                         }
                     }
-                    else
+                    else if (splitstring[0] == "Days Interval")
                     {
 
-                        if (dateforschedule >= sd && dateforschedule <= ed)
-                        {
-                            // Calculate the difference in days from the start date
-                            var daysDifference = (DateTime.Now - sd).TotalDays;
+                        var daycount = Convert.ToInt32(splitstring[1]);
 
-                            // Check if today's date is a multiple of the daycount (e.g., every 3rd day)
-                            if (daysDifference % daycount == 0)
+                        if (hasnoendate)
+                        {
+
+                            if (dateforschedule >= sd)
                             {
-                                // Add all the items for today
-                                foreach (var medtimes in item.schedule)
+
+                                // Calculate the difference in days from the start date
+                                var daysDifference = (dateforschedule - sd).Days;
+
+                                // Check if today's date is a multiple of the daycount (e.g., every 3rd day)
+                                if (daysDifference % daycount == 0)
                                 {
-                                    medtimes.Type = "Medication";
-                                    medtimes.Usermedid = item.id;
-                                    medtimes.Feedbackid = medtimes.id.ToString();
-                                    medtimes.Name = item.medicationtitle;
-                                    ScheduleList.Add(medtimes);
+                                    // Add all the items for today
+                                    foreach (var medtimes in item.schedule)
+                                    {
+                                        medtimes.Type = "Medication";
+                                        medtimes.Usermedid = item.id;
+                                        medtimes.Feedbackid = medtimes.id.ToString();
+                                        medtimes.Name = item.medicationtitle;
+                                        ScheduleList.Add(medtimes);
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+
+                            if (dateforschedule >= sd && dateforschedule <= ed)
+                            {
+                                // Calculate the difference in days from the start date
+                                var daysDifference = (DateTime.Now - sd).TotalDays;
+
+                                // Check if today's date is a multiple of the daycount (e.g., every 3rd day)
+                                if (daysDifference % daycount == 0)
+                                {
+                                    // Add all the items for today
+                                    foreach (var medtimes in item.schedule)
+                                    {
+                                        medtimes.Type = "Medication";
+                                        medtimes.Usermedid = item.id;
+                                        medtimes.Feedbackid = medtimes.id.ToString();
+                                        medtimes.Name = item.medicationtitle;
+                                        ScheduleList.Add(medtimes);
+                                    }
+                                }
+                            }
+
+                        }
+
+
+                    }
+                    else if (splitstring[0] == "As Required")
+                    {
+                        if (item.feedback != null)
+                        {
+
+                            foreach (var medtimes in item.feedback)
+                            {
+                                var convertdate = DateTime.Parse(medtimes.datetime);
+
+                                if (convertdate.Date == dateforschedule.Date)
+                                {
+                                    var newitem = new MedtimesDosages();
+                                    newitem.Type = "Medication";
+                                    newitem.Usermedid = item.id;
+                                    newitem.Feedbackid = medtimes.id.ToString();
+                                    newitem.Name = item.medicationtitle;
+                                    newitem.Dosage = medtimes.Recorded + " " + item.unit;
+                                    newitem.time = "00:00";
+                                    newitem.Buttonop = 1;
+                                    newitem.Buttonntop = 0;
+                                    newitem.AsReqlblVis = true;
+
+                                    ScheduleList.Add(newitem);
                                 }
                             }
                         }
 
+
                     }
-
-
-                }
-                else if (splitstring[0] == "As Required")
-                {
-                    if (item.feedback != null)
-                    {
-
-                        foreach (var medtimes in item.feedback)
-                        {
-                            var convertdate = DateTime.Parse(medtimes.datetime);
-    
-                            if(convertdate.Date == dateforschedule.Date)
-                            {
-                                var newitem = new MedtimesDosages();
-                                newitem.Type = "Medication";
-                                newitem.Usermedid = item.id;
-                                newitem.Feedbackid = medtimes.id.ToString();
-                                newitem.Name = item.medicationtitle;
-                                newitem.Dosage = medtimes.Recorded + " " + item.unit;
-                                newitem.time = "00:00";
-                                newitem.Buttonop = 1;
-                                newitem.Buttonntop = 0;
-                                newitem.AsReqlblVis = true;
-                            
-                                ScheduleList.Add(newitem);
-                            }
-                        }
-                    }
-
-
                 }
 
             }
 
             foreach (var item in AllUserSupplements)
-            {
-                sd = DateTime.Parse(item.startdate);
-
-                if (!string.IsNullOrEmpty(item.enddate))
-                {
-                    ed = DateTime.Parse(item.enddate);
-                }
-                else
-                {
-                    hasnoendate = true;
-                }
-
-                //find out if it is daily, weekly or days interval
-
-                var splitstring = item.frequency.Split('|');
-
-                if (splitstring[0] == "Daily")
+            { 
+                if (item.status == "Active")
                 {
 
-                    if (hasnoendate)
+                    sd = DateTime.Parse(item.startdate);
+
+                    if (!string.IsNullOrEmpty(item.enddate))
                     {
-
-                        if (dateforschedule >= sd)
-                        {
-
-                            //add all the items 
-                            foreach (var medtimes in item.schedule)
-                            {
-                                medtimes.Type = "Supplement";
-                                medtimes.Usermedid = item.id;
-                                medtimes.Feedbackid = medtimes.id.ToString();
-                                medtimes.Name = item.supplementtitle;
-                                ScheduleList.Add(medtimes);
-                            }
-
-
-                        }
-
-
+                        ed = DateTime.Parse(item.enddate);
                     }
                     else
                     {
-
-                        if (dateforschedule >= sd && dateforschedule <= ed)
-                        {
-                            //add all the items 
-                            foreach (var medtimes in item.schedule)
-                            {
-                                medtimes.Type = "Supplement";
-                                medtimes.Usermedid = item.id;
-                                medtimes.Feedbackid = medtimes.id.ToString();
-                                medtimes.Name = item.supplementtitle;
-                                ScheduleList.Add(medtimes);
-                            }
-                        }
-
+                        hasnoendate = true;
                     }
 
+                    //find out if it is daily, weekly or days interval
 
+                    var splitstring = item.frequency.Split('|');
 
-
-
-                }
-                else if (splitstring[0] == "Weekly")
-                {
-                    if (hasnoendate)
+                    if (splitstring[0] == "Daily")
                     {
 
-                        if (dateforschedule >= sd)
+                        if (hasnoendate)
                         {
 
-                            var dayname = dateforschedule.ToString("ddd");
-                            //check if today is within the days list
-                            if (splitstring[1].Contains(dayname))
+                            if (dateforschedule >= sd)
                             {
-                                int Index = 0;
-                                foreach (var x in item.schedule)
-                                {
-                                    var GetDay = item.TimeDosage[Index].Split('|');
-                                    x.Day = GetDay[2];
-                                    Index = Index + 1;
-                                }
+
                                 //add all the items 
                                 foreach (var medtimes in item.schedule)
                                 {
-                                    if (medtimes.Day == dayname)
+                                    medtimes.Type = "Supplement";
+                                    medtimes.Usermedid = item.id;
+                                    medtimes.Feedbackid = medtimes.id.ToString();
+                                    medtimes.Name = item.supplementtitle;
+                                    ScheduleList.Add(medtimes);
+                                }
+
+
+                            }
+
+
+                        }
+                        else
+                        {
+
+                            if (dateforschedule >= sd && dateforschedule <= ed)
+                            {
+                                //add all the items 
+                                foreach (var medtimes in item.schedule)
+                                {
+                                    medtimes.Type = "Supplement";
+                                    medtimes.Usermedid = item.id;
+                                    medtimes.Feedbackid = medtimes.id.ToString();
+                                    medtimes.Name = item.supplementtitle;
+                                    ScheduleList.Add(medtimes);
+                                }
+                            }
+
+                        }
+
+
+
+
+
+                    }
+                    else if (splitstring[0] == "Weekly")
+                    {
+                        if (hasnoendate)
+                        {
+
+                            if (dateforschedule >= sd)
+                            {
+
+                                var dayname = dateforschedule.ToString("ddd");
+                                //check if today is within the days list
+                                if (splitstring[1].Contains(dayname))
+                                {
+                                    int Index = 0;
+                                    foreach (var x in item.schedule)
+                                    {
+                                        var GetDay = item.TimeDosage[Index].Split('|');
+                                        x.Day = GetDay[2];
+                                        Index = Index + 1;
+                                    }
+                                    //add all the items 
+                                    foreach (var medtimes in item.schedule)
+                                    {
+                                        if (medtimes.Day == dayname)
+                                        {
+                                            medtimes.Type = "Supplement";
+                                            medtimes.Usermedid = item.id;
+                                            medtimes.Feedbackid = medtimes.id.ToString();
+                                            medtimes.Name = item.supplementtitle;
+                                            ScheduleList.Add(medtimes);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+
+                            if (dateforschedule >= sd && dateforschedule <= ed)
+                            {
+                                var dayname = dateforschedule.ToString("ddd");
+                                //check if today is within the days list
+                                if (splitstring[1].Contains(dayname))
+                                {
+                                    int Index = 0;
+                                    foreach (var x in item.schedule)
+                                    {
+                                        var GetDay = item.TimeDosage[Index].Split('|');
+                                        x.Day = GetDay[2];
+                                        Index = Index + 1;
+                                    }
+                                    //add all the items 
+                                    foreach (var medtimes in item.schedule)
+                                    {
+                                        if (medtimes.Day == dayname)
+                                        {
+                                            medtimes.Type = "Supplement";
+                                            medtimes.Usermedid = item.id;
+                                            medtimes.Feedbackid = medtimes.id.ToString();
+                                            medtimes.Name = item.supplementtitle;
+                                            ScheduleList.Add(medtimes);
+
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (splitstring[0] == "Days Interval")
+                    {
+
+                        var daycount = Convert.ToInt32(splitstring[1]);
+
+                        if (hasnoendate)
+                        {
+
+                            if (dateforschedule >= sd)
+                            {
+
+                                // Calculate the difference in days from the start date
+                                var daysDifference = (DateTime.Now - sd).Days;
+
+                                // Check if today's date is a multiple of the daycount (e.g., every 3rd day)
+                                if (daysDifference % daycount == 0)
+                                {
+                                    // Add all the items for today
+                                    foreach (var medtimes in item.schedule)
                                     {
                                         medtimes.Type = "Supplement";
                                         medtimes.Usermedid = item.id;
@@ -488,123 +558,61 @@ public partial class MainSchedule : ContentPage
                                 }
                             }
                         }
-                    }
-                    else
-                    {
-
-                        if (dateforschedule >= sd && dateforschedule <= ed)
+                        else
                         {
-                            var dayname = dateforschedule.ToString("ddd");
-                            //check if today is within the days list
-                            if (splitstring[1].Contains(dayname))
+
+                            if (dateforschedule >= sd && dateforschedule <= ed)
                             {
-                                int Index = 0;
-                                foreach (var x in item.schedule)
+                                // Calculate the difference in days from the start date
+                                var daysDifference = (DateTime.Now - sd).TotalDays;
+
+                                // Check if today's date is a multiple of the daycount (e.g., every 3rd day)
+                                if (daysDifference % daycount == 0)
                                 {
-                                    var GetDay = item.TimeDosage[Index].Split('|');
-                                    x.Day = GetDay[2];
-                                    Index = Index + 1;
-                                }
-                                //add all the items 
-                                foreach (var medtimes in item.schedule)
-                                {
-                                    if (medtimes.Day == dayname)
+                                    // Add all the items for today
+                                    foreach (var medtimes in item.schedule)
                                     {
                                         medtimes.Type = "Supplement";
                                         medtimes.Usermedid = item.id;
                                         medtimes.Feedbackid = medtimes.id.ToString();
                                         medtimes.Name = item.supplementtitle;
                                         ScheduleList.Add(medtimes);
-
                                     }
                                 }
                             }
+
                         }
+
+
                     }
-                }
-                else if (splitstring[0] == "Days Interval")
-                {
-
-                    var daycount = Convert.ToInt32(splitstring[1]);
-
-                    if (hasnoendate)
+                    else if (splitstring[0] == "As Required")
                     {
-
-                        if (dateforschedule >= sd)
+                        if (item.feedback != null)
                         {
 
-                            // Calculate the difference in days from the start date
-                            var daysDifference = (DateTime.Now - sd).Days;
-
-                            // Check if today's date is a multiple of the daycount (e.g., every 3rd day)
-                            if (daysDifference % daycount == 0)
+                            foreach (var medtimes in item.feedback)
                             {
-                                // Add all the items for today
-                                foreach (var medtimes in item.schedule)
+                                var convertdate = DateTime.Parse(medtimes.datetime);
+
+                                if (convertdate.Date == dateforschedule.Date)
                                 {
-                                    medtimes.Type = "Supplement";
-                                    medtimes.Usermedid = item.id;
-                                    medtimes.Feedbackid = medtimes.id.ToString();
-                                    medtimes.Name = item.supplementtitle;
-                                    ScheduleList.Add(medtimes);
+                                    var newitem = new MedtimesDosages();
+                                    newitem.Type = "Supplement";
+                                    newitem.Usermedid = item.id;
+                                    newitem.Feedbackid = medtimes.id.ToString();
+                                    newitem.Name = item.supplementtitle;
+                                    newitem.Dosage = medtimes.Recorded + " " + item.unit;
+                                    newitem.time = "00:00";
+                                    newitem.Buttonop = 1;
+                                    newitem.Buttonntop = 0;
+                                    newitem.AsReqlblVis = true;
+                                    ScheduleList.Add(newitem);
                                 }
                             }
                         }
                     }
-                    else
-                    {
-
-                        if (dateforschedule >= sd && dateforschedule <= ed)
-                        {
-                            // Calculate the difference in days from the start date
-                            var daysDifference = (DateTime.Now - sd).TotalDays;
-
-                            // Check if today's date is a multiple of the daycount (e.g., every 3rd day)
-                            if (daysDifference % daycount == 0)
-                            {
-                                // Add all the items for today
-                                foreach (var medtimes in item.schedule)
-                                {
-                                    medtimes.Type = "Supplement";
-                                    medtimes.Usermedid = item.id;
-                                    medtimes.Feedbackid = medtimes.id.ToString();
-                                    medtimes.Name = item.supplementtitle;
-                                    ScheduleList.Add(medtimes);
-                                }
-                            }
-                        }
-
-                    }
-
 
                 }
-                else if (splitstring[0] == "As Required")
-                {
-                    if (item.feedback != null)
-                    {
-
-                        foreach (var medtimes in item.feedback)
-                        {
-                            var convertdate = DateTime.Parse(medtimes.datetime);
-
-                            if (convertdate.Date == dateforschedule.Date)
-                            {
-                                var newitem = new MedtimesDosages();
-                                newitem.Type = "Supplement";
-                                newitem.Usermedid = item.id;
-                                newitem.Feedbackid = medtimes.id.ToString();
-                                newitem.Name = item.supplementtitle;
-                                newitem.Dosage = medtimes.Recorded + " " + item.unit;
-                                newitem.time = "00:00";
-                                newitem.Buttonop = 1;
-                                newitem.Buttonntop = 0;
-                                newitem.AsReqlblVis = true;
-                                ScheduleList.Add(newitem);
-                            }
-                        }
-                    }
-                }
-
             }
 
 

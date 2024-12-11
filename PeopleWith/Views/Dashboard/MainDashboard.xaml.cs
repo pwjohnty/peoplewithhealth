@@ -32,6 +32,7 @@ public partial class MainDashboard : ContentPage
     MedSuppNotifications ScheduleNotifications = new MedSuppNotifications();
 
     public event EventHandler<bool> ConnectivityChanged;
+    ObservableCollection<dashitem> dailytasklist = new ObservableCollection<dashitem>();
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
 
@@ -233,8 +234,8 @@ public partial class MainDashboard : ContentPage
             var newItems = new List<dashitem>
 {
     new dashitem { ContactImage = "healthreporticon.png", Title = "Generate your Health Report", BackgroundColor = Color.FromArgb("#e5f5fc"), Type = "Health Report" },
-    new dashitem { ContactImage = "diagnosishome.png", Title = "Have you received a new diagnosis?", BackgroundColor = Color.FromArgb("#E6E6FA"), Type = "Diagnosis" },
-    new dashitem { ContactImage = "appointhome.png", Title = "Record a new appointment", BackgroundColor =  Color.FromArgb("#ffcccb"), Type = "Appointments" }
+  //  new dashitem { ContactImage = "diagnosishome.png", Title = "Have you received a new diagnosis?", BackgroundColor = Color.FromArgb("#E6E6FA"), Type = "Diagnosis" },
+  //  new dashitem { ContactImage = "appointhome.png", Title = "Record a new appointment", BackgroundColor =  Color.FromArgb("#ffcccb"), Type = "Appointments" }
 };
 
             // Add new items to the existing list
@@ -276,7 +277,12 @@ public partial class MainDashboard : ContentPage
                      .OrderByDescending(x => DateTime.Parse(x.datetime))
                      .Where(x => !x.action.Contains("deleted"))
                     .GroupBy(x => x.label)
-                    .Select(g => g.First())  // Select only the first item in each group
+                     .Select(g =>
+                     {
+                         var firstItem = g.First();
+                         firstItem.label = firstItem.label.TrimEnd(); // Trim whitespace at the end
+                         return firstItem;
+                     })
                     .ToList();
 
 
@@ -509,6 +515,8 @@ public partial class MainDashboard : ContentPage
                     //.ToList();
                     //  item.symptomlist = userfeedbacklist[0].symptomfeedbacklist.Where(x => x.label == item.label).ToList();
                 }
+
+
                 double progress = filteredSymptoms.Count > 0 ? (double)symptomrecordedcount / filteredSymptoms.Count * 100 : 0;
 
                 // Update the progress bar value
@@ -518,7 +526,12 @@ public partial class MainDashboard : ContentPage
                 if(SuppsLeft > 0)
                 {
                     var SuppsRem = SuppsLeft + " " + "Symptoms to Record";
-                    SympRemain.Text = SuppsRem; 
+                    SympRemain.Text = SuppsRem;
+
+                    //var newdaily = new dashitem();
+                    //newdaily.Title = SuppsLeft + " Symptoms to Record";
+                    //dailytasklist.Add(newdaily);
+
                 }
                 else
                 {
@@ -540,7 +553,7 @@ public partial class MainDashboard : ContentPage
                     var targetDate = DateTime.Now.Date.AddDays(-i);
 
                     // Count the items for the target date
-                    int countForDay = filteredSymptoms
+                    int countForDay = userfeedbacklist[0].symptomfeedbacklist
                         .Count(item => DateTime.Parse(item.datetime).Date == targetDate);
 
                     // Add data point to the list
@@ -614,26 +627,26 @@ public partial class MainDashboard : ContentPage
 
                 if (filteredmeasurements.Count > 1)
                 {
-                    var takefivemeasurements = filteredmeasurements.Take(1).ToList();
+                   // var takefivemeasurements = filteredmeasurements.Take(1).ToList();
 
-                    measurementdetaillist.ItemsSource = takefivemeasurements;
-                    measurementdetaillist.HeightRequest = 152 * takefivemeasurements.Count;
+                   // measurementdetaillist.ItemsSource = takefivemeasurements;
+                   // measurementdetaillist.HeightRequest = 152 * takefivemeasurements.Count;
 
                     if (filteredmeasurements.Count > 5)
                     {
 
                         // Take the next four items for measurementnochartdetaillist
-                        var nextFourMeasurements = filteredmeasurements.Skip(1).Take(4).ToList();
+                        var nextFourMeasurements = filteredmeasurements.Skip(1).Take(5).ToList();
 
                         measurementnochartdetaillist.ItemsSource = nextFourMeasurements;
-                        measurementnochartdetaillist.HeightRequest = 52 * nextFourMeasurements.Count;
+                        measurementnochartdetaillist.HeightRequest = 54 * nextFourMeasurements.Count;
                     }
                     else
                     {
-                        var nextFourMeasurements = filteredmeasurements.Skip(1).ToList();
+                        var nextFourMeasurements = filteredmeasurements.ToList();
 
                         measurementnochartdetaillist.ItemsSource = nextFourMeasurements;
-                        measurementnochartdetaillist.HeightRequest = 52 * nextFourMeasurements.Count;
+                        measurementnochartdetaillist.HeightRequest = 54 * nextFourMeasurements.Count;
 
                     }
 
@@ -644,12 +657,12 @@ public partial class MainDashboard : ContentPage
                 }
                 else
                 {
-                    measurementdetaillist.ItemsSource = filteredmeasurements;
-                    measurementdetaillist.HeightRequest = 152 * filteredmeasurements.Count;
+                  //  measurementdetaillist.ItemsSource = filteredmeasurements;
+                  //  measurementdetaillist.HeightRequest = 152 * filteredmeasurements.Count;
                 }
 
                 measlbl.IsVisible = true;
-                measurementdetaillist.IsVisible = true;
+               // measurementdetaillist.IsVisible = true;
                 measurementnochartdetaillist.IsVisible = true;
                 nomeasurementdataframe.IsVisible = false;
 
@@ -658,17 +671,26 @@ public partial class MainDashboard : ContentPage
 
                 if(selectedMeasurement != null)
                 {
-                   // var mostCommonMood = moodsForDay.MoodLabel;
-
-                    var newItem2 = new dashitem
+                    // var mostCommonMood = moodsForDay.MoodLabel;
+                    if (selectedMeasurement.label == "Height")
                     {
-                        ContactImage = "measurementhome.png",
-                        Title = "Update your " + selectedMeasurement.label,
-                        Type = "Measurements",
-                        BackgroundColor = Color.FromArgb("#e5f0fb") // Example color
-                    };
 
-                    foryouuserlist.Add(newItem2);
+                    }
+                    else
+                    {
+
+
+
+                        var newItem2 = new dashitem
+                        {
+                            ContactImage = "measurementhome.png",
+                            Title = "Update your " + selectedMeasurement.label,
+                            Type = "Measurements",
+                            BackgroundColor = Color.FromArgb("#e5f0fb") // Example color
+                        };
+
+                        foryouuserlist.Add(newItem2);
+                    }
                 }
 
                 var newItem = new dashitem
@@ -688,7 +710,7 @@ public partial class MainDashboard : ContentPage
             else
             {
                 measlbl.IsVisible = false;
-                measurementdetaillist.IsVisible = false;
+               // measurementdetaillist.IsVisible = false;
                 measurementnochartdetaillist.IsVisible = false;
                 nomeasurementdataframe.IsVisible = true;
 
@@ -771,7 +793,7 @@ public partial class MainDashboard : ContentPage
                     {
                         ContactImage = "moodhome.png",
                         Type = "Mood",
-                        Title = "No mood recorded today",
+                        Title = "How is your mood today?",
                         BackgroundColor = Color.FromArgb("#FFF8DC") // Example color
                     };
 
@@ -811,6 +833,10 @@ public partial class MainDashboard : ContentPage
 
 
             }
+
+
+           // dailytaskinfolist.ItemsSource = dailytasklist;
+
 
         }
         catch(Exception Ex)
@@ -1281,23 +1307,6 @@ public partial class MainDashboard : ContentPage
                     }
 
 
-                    double progress = medicationsDueToday > 0 ? (double)recordedMedicationsToday / medicationsDueToday * 100 : 0;
-
-                    // Update the progress bar value
-                    suppprogressbar.Progress = progress;
-
-                    var SuppsLeft = medicationsDueToday - recordedMedicationsToday;
-                    if (SuppsLeft > 0)
-                    {
-                        var SuppsRem = SuppsLeft + " " + "Supplements Remaining";
-                        SuppsRemain.Text = SuppsRem;
-                    }
-                    else
-                    {
-                        var SuppsRem = "All Supplements Recorded";
-                        SuppsRemain.Text = SuppsRem;
-                    }
-
                     if (hasDueMedications == false)
                     {
                         // Create a new item to add
@@ -1373,6 +1382,29 @@ public partial class MainDashboard : ContentPage
                 }
             }
 
+            double progress = medicationsDueToday > 0 ? (double)recordedMedicationsToday / medicationsDueToday * 100 : 0;
+
+            // Update the progress bar value
+            suppprogressbar.Progress = progress;
+
+            var SuppsLeft = medicationsDueToday - recordedMedicationsToday;
+            if (SuppsLeft > 0)
+            {
+                var SuppsRem = SuppsLeft + " " + "Supplements Remaining";
+                SuppsRemain.Text = SuppsRem;
+
+                //var newdaily = new dashitem();
+
+                //newdaily.Title = SuppsLeft + " Supplements Remaining";
+                //dailytasklist.Add(newdaily);
+
+            }
+            else
+            {
+                var SuppsRem = "All Supplements Recorded";
+                SuppsRemain.Text = SuppsRem;
+            }
+
             Random random = new Random();
 
             // Select 3 random items from foryouuserlistsymptomlist
@@ -1382,6 +1414,29 @@ public partial class MainDashboard : ContentPage
                 .ToList();
 
             foryouuserlist.AddRange(randomItems);
+
+            //check if there any as required supplements
+            if (AllUserSupplements.Any(x => x.frequency.Contains("As Required")))
+            {
+
+                var asRequiredMeds = AllUserSupplements
+       .Where(x => x.frequency.Contains("As Required"))
+       .ToList();
+
+                var randomm = new Random();
+                var randomMed = asRequiredMeds[randomm.Next(asRequiredMeds.Count)];
+
+                var newItem = new dashitem
+                {
+                    ContactImage = "supphome.png",
+                    Type = "Supplements",
+                    Title = "Have you taken any " + randomMed.supplementtitle,
+                    BackgroundColor = Color.FromArgb("#f9f4e5") // Example color
+                };
+
+                // Add the new item to the list
+                foryouuserlist.Add(newItem);
+            }
 
 
             if (setnotificationsfromlogin)
@@ -1631,22 +1686,28 @@ public partial class MainDashboard : ContentPage
 
                         }
                     }
-                    double progress = medicationsDueToday > 0 ? (double)recordedMedicationsToday / medicationsDueToday * 100 : 0;
+                    //double progress = medicationsDueToday > 0 ? (double)recordedMedicationsToday / medicationsDueToday * 100 : 0;
 
-                    // Update the progress bar value
-                    medprogressbar.Progress = progress;
+                    //// Update the progress bar value
+                    //medprogressbar.Progress = progress;
 
-                    var SuppsLeft = medicationsDueToday - recordedMedicationsToday;
-                    if (SuppsLeft > 0)
-                    {
-                        var SuppsRem = SuppsLeft + " " + "Medications Remaining";
-                        MedsRemain.Text = SuppsRem;
-                    }
-                    else
-                    {
-                        var SuppsRem = "All Medications Recorded";
-                        MedsRemain.Text = SuppsRem;
-                    }
+                    //var SuppsLeft = medicationsDueToday - recordedMedicationsToday;
+                    //if (SuppsLeft > 0)
+                    //{
+                    //    var SuppsRem = SuppsLeft + " " + "Medications Remaining";
+                    //    MedsRemain.Text = SuppsRem;
+
+                    //    var newdaily = new dashitem();
+
+                    //    newdaily.Title = SuppsLeft + " Medications Remaining";
+                    //    dailytasklist.Add(newdaily);
+
+                    //}
+                    //else
+                    //{
+                    //    var SuppsRem = "All Medications Recorded";
+                    //    MedsRemain.Text = SuppsRem;
+                    //}
 
                     // Update the gradient stops
                     //                var gradientBrush = new LinearGradientBrush
@@ -1771,6 +1832,29 @@ public partial class MainDashboard : ContentPage
 
             }
 
+            double progress = medicationsDueToday > 0 ? (double)recordedMedicationsToday / medicationsDueToday * 100 : 0;
+
+            // Update the progress bar value
+            medprogressbar.Progress = progress;
+
+            var SuppsLeft = medicationsDueToday - recordedMedicationsToday;
+            if (SuppsLeft > 0)
+            {
+                var SuppsRem = SuppsLeft + " " + "Medications Remaining";
+                MedsRemain.Text = SuppsRem;
+
+                //var newdaily = new dashitem();
+
+                //newdaily.Title = SuppsLeft + " Medications Remaining";
+                //dailytasklist.Add(newdaily);
+
+            }
+            else
+            {
+                var SuppsRem = "All Medications Recorded";
+                MedsRemain.Text = SuppsRem;
+            }
+
             Random random = new Random();
 
             // Select 3 random items from foryouuserlistsymptomlist
@@ -1780,6 +1864,30 @@ public partial class MainDashboard : ContentPage
                 .ToList();
 
             foryouuserlist.AddRange(randomItems);
+
+
+            //check if there any as required medications
+            if(AllUserMedications.Any(x => x.frequency.Contains("As Required")))
+            {
+
+                var asRequiredMeds = AllUserMedications
+       .Where(x => x.frequency.Contains("As Required"))
+       .ToList();
+
+                var randomm = new Random();
+                var randomMed = asRequiredMeds[randomm.Next(asRequiredMeds.Count)];
+
+                var newItem = new dashitem
+                {
+                    ContactImage = "medicinehome.png",
+                    Type = "Medications",
+                    Title = "Have you taken any " + randomMed.medicationtitle,
+                    BackgroundColor = Color.FromArgb("#e5f9f4") // Example color
+                };
+
+                // Add the new item to the list
+                foryouuserlist.Add(newItem);
+            }
 
 
 
@@ -1895,9 +2003,9 @@ public partial class MainDashboard : ContentPage
             {
                 new dashitem { Type = "Symptoms", ContactImage = "symptomshome.png", Title = "Symptoms", BackgroundColor = Color.FromArgb("#fff7ea") },
                 new dashitem { Type = "Medications", ContactImage = "medicinehome.png", Title = "Medications", BackgroundColor = Color.FromArgb("#e5f9f4") },
+                new dashitem {Type = "Schedule",   ContactImage = "schedulehome.png", Title = "Schedule", BackgroundColor = Color.FromArgb("#eff7ed") },
                 new dashitem { Type = "Supplements", ContactImage = "supphome.png", Title = "Supplements", BackgroundColor = Color.FromArgb("#f9f4e5") },
                 new dashitem { Type = "Measurements",  ContactImage = "measurementhome.png", Title = "Measurements", BackgroundColor = Color.FromArgb("#e5f0fb") },
-                new dashitem {Type = "Schedule",   ContactImage = "schedulehome.png", Title = "Schedule", BackgroundColor = Color.FromArgb("#eff7ed") },
                 new dashitem {Type = "Diagnosis",  ContactImage = "diagnosishome.png", Title = "Diagnosis", BackgroundColor = Color.FromArgb("#E6E6FA") },
                 new dashitem { Type = "Mood", ContactImage = "moodhome.png", Title = "Mood", BackgroundColor = Color.FromArgb("#FFF8DC") },
                 new dashitem { Type = "Appointments",  ContactImage = "appointhome.png", Title = "Appointments", BackgroundColor = Color.FromArgb("#ffcccb") },
@@ -2451,7 +2559,7 @@ public partial class MainDashboard : ContentPage
                 }
                 else if (bc == "Supplements")
                 {
-                    if (text.Contains(":"))
+                    if (text.Contains(":") || text.Contains("Have you taken"))
                     {
                         await Navigation.PushAsync(new MainSchedule(), false);
                     }
@@ -2462,7 +2570,7 @@ public partial class MainDashboard : ContentPage
                 }
                 else if (bc == "Medications")
                 {
-                    if (text.Contains(":"))
+                    if (text.Contains(":") || text.Contains("Have you taken"))
                     {
                         await Navigation.PushAsync(new MainSchedule(), false);
                     }
