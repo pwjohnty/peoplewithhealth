@@ -209,6 +209,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -222,13 +223,18 @@
                     </inputLayout:SfTextInputLayout.ErrorLabelStyle>
                     </inputLayout:SfTextInputLayout>
 
-
-
-
                     <!--<pinview:PINView Grid.Row="0" BoxBackgroundColor="Transparent" Focused="emailconfigpin_Focused" Margin="0,80,0,0" x:Name="emailconfigpin" BoxShape="RoundCorner" AutoDismissKeyboard="False" PropertyChanged="emailconfigpin_PropertyChanged"
                     PINLength="5" HorizontalOptions="Center" PINEntryCompleted="emailconfigpin_PINEntryCompleted" BoxBorderColor="LightGray" Color="#031926" />-->
 
                     <Label Grid.Row="1" Text="Invalid Code" TextColor="Red" FontFamily="HankenGroteskRegular" FontAttributes="None" Margin="0,20,0,0" x:Name="incorrectcodelbl" FontSize="15" IsVisible="False" HorizontalOptions="Center" />
+
+                    <Label Grid.Row="2" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="Bold" FontSize="12" Text="Forgotten Password?" Margin="0,0,10,10" VerticalOptions="Center" HorizontalOptions="End" >
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="ForgottenPassword_Tapped" NumberOfTapsRequired="1"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+
+
                 </Grid>
                 <Grid x:Name="PasswordStack" Margin="10,0,10,0" IsVisible="False">
                     <Grid.RowDefinitions>

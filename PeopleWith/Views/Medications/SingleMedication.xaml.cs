@@ -333,4 +333,5 @@ public partial class SingleMedication : ContentPage
             NotasyncMethod(Ex);
         }
     }
+
 }

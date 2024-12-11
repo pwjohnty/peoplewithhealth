@@ -119,6 +119,7 @@ public partial class AddSymptom : ContentPage
             FilterTabsList = new ObservableCollection<symptom>(distinctSymptoms);
             FilterTabs.ItemsSource = FilterTabsList;
             FilterTabs.DisplayMemberPath = "classification";
+            Filterstack.IsVisible = true;
             Symptomloading.IsVisible = false;
         }
         catch(Exception Ex)
@@ -278,8 +279,20 @@ public partial class AddSymptom : ContentPage
             SymptomsListview.ItemsSource = filteredSymptoms;
             var count = filteredSymptoms.Count().ToString();
             Results.Text = "Results" + " (" + count + ")";
+
+            if (count == "0")
+            {
+                NoResultslbl.IsVisible = true;
+                SymptomsListview.IsVisible = false;
+            }
+            else
+            {
+                SymptomsListview.IsVisible = true;
+                NoResultslbl.IsVisible = false;
+            }
+
         }
-        catch(Exception Ex)
+        catch (Exception Ex)
         {
             NotasyncMethod(Ex);
         }

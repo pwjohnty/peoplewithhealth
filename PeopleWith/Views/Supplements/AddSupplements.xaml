@@ -1265,7 +1265,7 @@ BorderColor="#f9f4e5">
 
 
                     <Label Text="Display Name (Optional)" FontSize="20" Margin="0,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
-                    <Label Text="Add a display name to help remember your supplement" FontSize="12" Margin="0,0,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
+                    <Label Text="This display name is only for your personal use to support supplement reminders. Before administration of a supplement please ensure the correct supplement is being taken and do not rely solely on the supplement display name." FontSize="12" Margin="0,0,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
 
 
                     <Border Stroke="#f9f4e5"

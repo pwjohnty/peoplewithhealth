@@ -261,8 +261,22 @@ namespace PeopleWith
         [System.Text.Json.Serialization.JsonIgnore]
         public string numericentrytext { get; set; }
 
+
+        public double slidervalue;
         [System.Text.Json.Serialization.JsonIgnore]
-        public double slidervalue { get; set; }
+        public double SliderValue
+        {
+            get { return slidervalue; }
+            set
+            {
+                slidervalue = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(SliderValue)));
+                }
+            }
+        }
+
 
         [System.Text.Json.Serialization.JsonIgnore]
         public string doubleentry1 { get; set; }
@@ -314,6 +328,12 @@ namespace PeopleWith
 
         [System.Text.Json.Serialization.JsonIgnore]
         public bool selectedms { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool bordervis { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string ImgSource { get; set; }
 
 
     }

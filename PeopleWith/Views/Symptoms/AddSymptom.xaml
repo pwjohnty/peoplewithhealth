@@ -16,7 +16,7 @@
     
         <Label Text="Add Symptom" FontFamily="HankenGroteskBold" FontSize="26"  Margin="20,20,0,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" />
 
-        <Label Text="To add a Symptom either type into the search bar below or use filters icon to narrow your search, then Select Zed Symptom from the list below."  Margin="20,5,20,0" FontFamily="HankenGroteskRegular" FontSize="12"  HorizontalOptions="Center" VerticalOptions="Center" TextColor="Gray" />
+        <Label Text="To add a Symptom either type into the search bar below or use the filter buttons to narrow your search, then Select the Symptom from the list below."  Margin="20,5,20,0" FontFamily="HankenGroteskRegular" FontSize="12"  HorizontalOptions="Center" VerticalOptions="Center" TextColor="Gray" />
 
 
         <Grid Margin="20,10,20,0" x:Name="MainGrid">
@@ -46,7 +46,7 @@
                 </Grid>
             </Frame>
 
-            <StackLayout x:Name="Filterstack" Margin="0,10,0,0"  Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" IsVisible="True">
+            <StackLayout x:Name="Filterstack" Margin="0,10,0,0"  Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" IsVisible="False">
 
                 <Label Text="Filters" Margin="0,0,0,5" Grid.Row="1" Grid.Column="0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" FontSize="Small" FontFamily="HankenGroteskBold" />
 
@@ -56,10 +56,10 @@
             </StackLayout>
 
 
-            <ActivityIndicator x:Name="Symptomloading" Margin="0,0,0,0"  Grid.Row="3" Grid.Column="0" Grid.RowSpan="2" HorizontalOptions="Center" VerticalOptions="Start"  IsVisible="False" IsRunning="True" Color="#BFDBF7" />
+            <ActivityIndicator x:Name="Symptomloading" Margin="0,40,0,0"  Grid.Row="3" Grid.Column="0" Grid.RowSpan="2" HorizontalOptions="Center" VerticalOptions="Start"  IsVisible="False" IsRunning="True" Color="#BFDBF7" />
 
             <StackLayout x:Name="ListViewStack" Margin="0,20,0,0" Grid.Row="3" IsVisible="True" Grid.Column="0" Grid.RowSpan="2">
-                <Label x:Name="Results" Margin="0,0,20,0" Grid.Row="3" Grid.Column="0"  HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskBold" />
+                <Label x:Name="Results" Margin="0,10,20,0" Grid.Row="3" Grid.Column="0"  HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskBold" />
 
 
                 <syncfusion:SfListView x:Name="SymptomsListview" ItemTapped="SymptomsListview_ItemTapped" AutoFitMode="Height" BackgroundColor="Transparent"  Grid.Row="4" Grid.Column="0" Padding="5"  Margin="0,10,0,50" ScrollBarVisibility="Never">
@@ -78,7 +78,7 @@
 
                                     <Label Text="{Binding title}" FontFamily="HankenGroteskRegular" Margin="5,0,0,0" Grid.Row="0" Grid.Column="0" Padding="0" HorizontalOptions="Start"  VerticalOptions="Start" TextColor="#031926" FontSize="14" FontAttributes="None" />
 
-                                        <BoxView Grid.Column="0" Grid.Row="1" HeightRequest="1" HorizontalOptions="FillAndExpand" Margin="0,10,0,0" Color="#fff7ea" BackgroundColor="#fff7ea"/>
+                                        <BoxView Grid.Column="0" Grid.Row="1" HeightRequest="1" HorizontalOptions="FillAndExpand" Margin="0,10,0,0" Color="#fafafa" BackgroundColor="#fafafa"/>
 
                                 </Grid>
 
@@ -110,7 +110,9 @@
                         </DataTemplate>
                     </syncfusion:SfListView.SelectedItemTemplate>
                 </syncfusion:SfListView>
-            </StackLayout>
+                    <Label x:Name="NoResultslbl" Text="No Results to matching your search" Margin="0,40,0,0" Grid.Row="4" Grid.Column="0" IsVisible="False" HorizontalOptions="Center" VerticalOptions="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskBold" />
+
+                </StackLayout>
         </Grid>
         <popup:SfPopup x:Name="popup" IsOpen="False" AnimationMode="Fade"   AutoSizeMode="Height" AcceptCommand="{Binding PopupAcceptCommand}"
                        DeclineCommand="{Binding PopupDeclineCommand}" 
