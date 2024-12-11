@@ -35,7 +35,7 @@ public partial class AllQuestionnaires : ContentPage
         {
             InitializeComponent();
             getquestionnaires();
-            getuserquestionnaires();
+            //getuserquestionnaires();
         }
         catch (Exception Ex)
         {
@@ -47,48 +47,38 @@ public partial class AllQuestionnaires : ContentPage
 	{
 		try
 		{
-            QuesLoading.IsVisible = true; 
-            questionnaires = await aPICalls.GetQuestionnaires();
+            QuesLoading.IsVisible = true;
+            var getQuestionairesTask = await aPICalls.GetQuestionnaires();
+            questionnaires = getQuestionairesTask;
 
-			if (questionnaires != null)
-			{
-				foreach (var item in questionnaires)
-				{
-
-				}
-
-				Allquestionnaires.ItemsSource = questionnaires;
-            }
-		}
-        catch (Exception Ex)
-        {
-            NotasyncMethod(Ex);
-        }
-    }
-
-	async void getuserquestionnaires()
-	{
-		try
-		{
             userQuestionnaires.Clear();
             var userquestionnaires = await aPICalls.GetUserQuestionnaires();
 
-			foreach(var item in userquestionnaires)
+            if (questionnaires != null)
 			{
-				var questionnaire = questionnaires.Where(x => x.questionnaireid == item.questionnaireid).FirstOrDefault();
+				Allquestionnaires.ItemsSource = questionnaires;
+            }
+            else
+            {
+                //Show Empty Prompt If NO Completed Questionnaires 
+            }        
 
-				if(questionnaire != null)
-				{
-					item.questionnairename = questionnaire.title;
+            foreach (var item in userquestionnaires)
+            {
+                var questionnaire = questionnaires.Where(x => x.questionnaireid == item.questionnaireid).FirstOrDefault();
 
-                }              
+                if (questionnaire != null)
+                {
+                    item.questionnairename = questionnaire.title;
+
+                }
             }
 
-			var orderlist = userquestionnaires.OrderByDescending(x => DateTime.Parse(x.completedatetime)).ToList();
+            var orderlist = userquestionnaires.OrderByDescending(x => DateTime.Parse(x.completedatetime)).ToList();
 
-            foreach( var item in orderlist)
+            foreach (var item in orderlist)
             {
-                userQuestionnaires.Add(item); 
+                userQuestionnaires.Add(item);
             }
             Alluserquestionnaires.ItemsSource = userQuestionnaires;
 
@@ -100,6 +90,41 @@ public partial class AllQuestionnaires : ContentPage
             NotasyncMethod(Ex);
         }
     }
+
+	//async void getuserquestionnaires()
+	//{
+	//	try
+	//	{
+ //           userQuestionnaires.Clear();
+ //           var userquestionnaires = await aPICalls.GetUserQuestionnaires();
+
+	//		foreach(var item in userquestionnaires)
+	//		{
+	//			var questionnaire = questionnaires.Where(x => x.questionnaireid == item.questionnaireid).FirstOrDefault();
+
+	//			if(questionnaire != null)
+	//			{
+	//				item.questionnairename = questionnaire.title;
+
+ //               }              
+ //           }
+
+	//		var orderlist = userquestionnaires.OrderByDescending(x => DateTime.Parse(x.completedatetime)).ToList();
+
+ //           foreach( var item in orderlist)
+ //           {
+ //               userQuestionnaires.Add(item); 
+ //           }
+ //           Alluserquestionnaires.ItemsSource = userQuestionnaires;
+
+ //           QuesLoading.IsVisible = false;
+
+ //       }
+ //       catch (Exception Ex)
+ //       {
+ //           NotasyncMethod(Ex);
+ //       }
+ //   }
     private async void Allquestionnaires_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
     {
 		try

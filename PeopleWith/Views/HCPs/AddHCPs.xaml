@@ -20,17 +20,17 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <inputLayout:SfTextInputLayout x:Name="FirstNameTIL" Grid.Row="0" Grid.Column="0" InputViewPadding="10" ShowHint="False" Hint="Firstname" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,20,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
+            <inputLayout:SfTextInputLayout x:Name="FirstNameTIL" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="1" InputViewPadding="10" ShowHint="False" Hint="Firstname" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,20,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
                 <Entry FontSize="Small" Grid.Row="0" Grid.Column="0" PlaceholderColor="Gray" x:Name="FirstNameEntry" TextChanged="FirstNameEntry_TextChanged" FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Firstname"  TextColor="#031926"/>
                     <inputLayout:SfTextInputLayout.ErrorLabelStyle>
-                        <inputLayout:LabelStyle TextColor="Red"   FontFamily="HankenGroteskBold" />
+                        <inputLayout:LabelStyle TextColor="Red"  FontFamily="HankenGroteskBold" />
                     </inputLayout:SfTextInputLayout.ErrorLabelStyle>
                 </inputLayout:SfTextInputLayout>
 
                 <inputLayout:SfTextInputLayout x:Name="SurNameTIL" Grid.Row="0" Grid.Column="1" InputViewPadding="10" ShowHint="False" Hint="Surname" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,20,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
                 <Entry FontSize="Small" Grid.Row="0"  Grid.Column="1" PlaceholderColor="Gray" x:Name="SurNameEntry" TextChanged="SurNameEntry_TextChanged" FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Surname" TextColor="#031926"/>
                     <inputLayout:SfTextInputLayout.ErrorLabelStyle>
-                        <inputLayout:LabelStyle TextColor="Red"   FontFamily="HankenGroteskBold" />
+                        <inputLayout:LabelStyle TextColor="Red" FontFamily="HankenGroteskBold" />
                     </inputLayout:SfTextInputLayout.ErrorLabelStyle>
                 </inputLayout:SfTextInputLayout>
         </Grid>

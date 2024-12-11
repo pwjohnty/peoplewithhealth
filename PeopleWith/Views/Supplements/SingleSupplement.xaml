@@ -14,9 +14,21 @@
 
             <StackLayout x:Name="mainstack">
 
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label x:Name="Medicationname" Grid.Column="0" FontSize="20" Margin="0,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
 
+                    <Frame x:Name="MedsInfo" HasShadow="False" Padding="0" CornerRadius="15" Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,0,20,0" BorderColor="#ac5735" BackgroundColor="Transparent">
+                        <Label Text="i" FontFamily="HankenGroteskBold" HorizontalOptions="Center" TextColor="#ac5735" FontSize="12"  Grid.Column="1" VerticalOptions="Center" />
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
 
-                <Label x:Name="Medicationname" FontSize="20" Margin="0,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
+                </Grid>
 
                 <Frame CornerRadius="5"  Margin="0,5,0,5"
  BackgroundColor="#f9f4e5" HasShadow="False" x:Name="dataframe"
@@ -169,7 +181,7 @@ Padding="10">
                                     <ColumnDefinition Width="90*"/>
                                     <ColumnDefinition Width="10*"/>
                                 </Grid.ColumnDefinitions>
-                                <Label Text="Supplement Information" FontSize="14" Margin="0,0,0,0" Grid.Column="0" TextColor="#031926" FontFamily="HankenGroteskBold" VerticalOptions="Center" FontAttributes="None" HorizontalOptions="Start" />
+                                <Label Text="Information and Resources" FontSize="14" Margin="0,0,0,0" Grid.Column="0" TextColor="#031926" FontFamily="HankenGroteskBold" VerticalOptions="Center" FontAttributes="None" HorizontalOptions="Start" />
                                 <Image Source="nextdarker.png" HeightRequest="15" Margin="0,0,5,0"  Grid.Column="1" VerticalOptions="Center" HorizontalOptions="End" />
                             </Grid>
                             <Frame.GestureRecognizers>

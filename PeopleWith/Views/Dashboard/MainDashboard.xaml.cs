@@ -571,6 +571,16 @@ public partial class MainDashboard : ContentPage
                 // Bind the data to your chart
                 symptomprogresschart.ItemsSource = lastSevenDaysData;
             }
+            else
+            {
+                
+                RecentHealthlbl.IsVisible = false;
+                recentsymlbl.IsVisible = false;
+                symptomdetaillist.IsVisible = false;
+                symdataframe.IsVisible = false;
+                nosymdataframe.IsVisible = true;
+                SympRemain.Text = "No Symptoms Added";
+            }
            
 
 
@@ -1186,6 +1196,8 @@ public partial class MainDashboard : ContentPage
 
                 nosupdataframe.IsVisible = true;
 
+                SuppsRemain.Text = "No Scheduled Supplements";
+
                 return;
             }
 
@@ -1567,6 +1579,8 @@ public partial class MainDashboard : ContentPage
                 foryouuserlist.Add(newItem);
 
                 nomeddataframe.IsVisible = true;
+
+                MedsRemain.Text = "No Scheduled Medications";
 
                 return;
             }

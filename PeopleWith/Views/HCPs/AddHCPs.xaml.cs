@@ -355,25 +355,40 @@ public partial class AddHCPs : ContentPage
                 //Limit No. of Taps 
                 HCPAdd.IsEnabled = false;
                 //Only Check FirstName, Surname, Role, location
-                if (string.IsNullOrEmpty(FirstNameEntry.Text))
+                if (string.IsNullOrEmpty(FirstNameEntry.Text) && string.IsNullOrEmpty(SurNameEntry.Text))
                 {
                     FirstNameTIL.ErrorText = "Please enter a Firstname";
+                    SurNameTIL.ErrorText = "or a Surname";
                     FirstNameTIL.HasError = true;
+                    SurNameTIL.HasError = true;
                     Vibration.Vibrate();
                     FirstNameEntry.Focus();
                     await Task.Delay(2000);
                     FirstNameTIL.HasError = false;
+                    SurNameTIL.HasError = false;
                     HCPAdd.IsEnabled = true;
                     return;
                 }
-                else if (string.IsNullOrEmpty(SurNameEntry.Text))
+                //else if (string.IsNullOrEmpty(SurNameEntry.Text))
+                //{
+                //    SurNameTIL.ErrorText = "Please enter a Surname";
+                //    SurNameTIL.HasError = true;
+                //    Vibration.Vibrate();
+                //    SurNameEntry.Focus();
+                //    await Task.Delay(2000);
+                //    SurNameTIL.HasError = false;
+                //    HCPAdd.IsEnabled = true;
+                //    return;
+                //}
+               
+                else if (string.IsNullOrEmpty(LocationEntry.Text))
                 {
-                    SurNameTIL.ErrorText = "Please enter a Surname";
-                    SurNameTIL.HasError = true;
+                    LocationTIL.ErrorText = "Please enter a Location";
+                    LocationTIL.HasError = true;
                     Vibration.Vibrate();
-                    SurNameEntry.Focus();
+                    LocationEntry.Focus();
                     await Task.Delay(2000);
-                    SurNameTIL.HasError = false;
+                    LocationTIL.HasError = false;
                     HCPAdd.IsEnabled = true;
                     return;
                 }
@@ -388,21 +403,25 @@ public partial class AddHCPs : ContentPage
                     HCPAdd.IsEnabled = true;
                     return;
                 }
-                else if (string.IsNullOrEmpty(LocationEntry.Text))
-                {
-                    LocationTIL.ErrorText = "Please enter a Location";
-                    LocationTIL.HasError = true;
-                    Vibration.Vibrate();
-                    LocationEntry.Focus();
-                    await Task.Delay(2000);
-                    LocationTIL.HasError = false;
-                    HCPAdd.IsEnabled = true;
-                    return;
-                }
 
                 var NEWHCP = new hcp();
-                NEWHCP.firstname = FirstNameEntry.Text;
-                NEWHCP.surname = SurNameEntry.Text;
+                if (!string.IsNullOrEmpty(FirstNameEntry.Text))
+                {
+                    NEWHCP.firstname = FirstNameEntry.Text;
+                }
+                else
+                {
+                    NEWHCP.firstname = null;
+                }
+                if (!string.IsNullOrEmpty(SurNameEntry.Text))
+                {
+                    NEWHCP.firstname = SurNameEntry.Text;
+                }
+                else
+                {
+                    NEWHCP.surname = null;
+                }
+
                 NEWHCP.role = RoleEntry.Text;
                 NEWHCP.locationname = LocationEntry.Text;
 

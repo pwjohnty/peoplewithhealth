@@ -1641,4 +1641,16 @@ public partial class ProfileEdit : ContentPage
             NotasyncMethod(Ex);
         }
     }
+
+    async private void ForgottenPassword_Tapped(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            await Navigation.PushAsync(new ForgottenPassword(), false);
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
 }

@@ -3562,7 +3562,7 @@ public partial class AddMeasurement : ContentPage
                         }
                     }
                 }
-                else if (measurementnamestring == "Respiration Rate")
+                else if (measurementnamestring == "Respiration Rate (Breathes Per Minute)")
                 {
                     //make the label show the most recent number 
                     unitentry.Text = e.NewTextValue;

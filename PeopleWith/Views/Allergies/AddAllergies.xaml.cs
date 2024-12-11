@@ -101,6 +101,17 @@ public partial class AddAllergies : ContentPage
             var count = filteredSymptoms.Count().ToString();
 
             Results.Text = "Results" + " (" + count + ")";
+
+            if (count == "0")
+            {
+                NoResultslbl.IsVisible = true;
+                AllergyListview.IsVisible = false;
+            }
+            else
+            {
+                AllergyListview.IsVisible = true;
+                NoResultslbl.IsVisible = false;
+            }
         }
         catch (Exception Ex)
         {

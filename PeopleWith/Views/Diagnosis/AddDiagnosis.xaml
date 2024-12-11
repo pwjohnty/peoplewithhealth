@@ -61,7 +61,7 @@
                 <ActivityIndicator x:Name="Diagnosisloading" Margin="0,50,0,0"  Grid.Row="1" Grid.Column="0"  Grid.RowSpan="2"  HorizontalOptions="Center" VerticalOptions="Start"  IsVisible="False" IsRunning="True" Color="#E6E6FA" />
 
                 <StackLayout x:Name="ListViewStack" Margin="0,10,0,0" Grid.Row="1" Grid.Column="0"  Grid.RowSpan="2">
-                    <Label x:Name="Results" Margin="5,0,0,0" Grid.Row="1" Grid.Column="0"  HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskRegular" />
+                    <Label x:Name="Results" Margin="5,0,0,0" Grid.Row="1" Grid.Column="0"  HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskBold" />
 
 
                     <syncfusion:SfListView x:Name="DiagnosisListview" ItemTapped="DiagnosisListview_ItemTapped"  ItemSize="40" Grid.Row="2" Grid.Column="0" Padding="5"  Margin="0,10,0,0" ScrollBarVisibility="Never">
@@ -103,6 +103,9 @@
                     </syncfusion:SfListView>
                 </StackLayout>
             </Grid>
+
+            <Label x:Name="NoResultslbl" Text="No Results to matching your search" Margin="0,40,0,0" Grid.Row="4" Grid.Column="0" IsVisible="False" HorizontalOptions="Center" VerticalOptions="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskBold" />
+
         </StackLayout>
 
         <StackLayout x:Name="dateofBirth" IsVisible="False">

@@ -2822,7 +2822,14 @@ namespace PeopleWith
                             try
                             {
                                 // Attempt to deserialize as an array
-                                item.symptomfeedbacklist = JsonConvert.DeserializeObject<ObservableCollection<feedbackdata>>(item.symptomfeedback);
+                                if(item.symptomfeedback == "[]")
+                                {
+                                    
+                                }
+                                else
+                                {
+                                    item.symptomfeedbacklist = JsonConvert.DeserializeObject<ObservableCollection<feedbackdata>>(item.symptomfeedback);
+                                }
                             }
                             catch (JsonSerializationException)
                             {

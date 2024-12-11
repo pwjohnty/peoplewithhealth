@@ -133,6 +133,17 @@ public partial class AddDiagnosis : ContentPage
             var count = filteredSymptoms.Count().ToString();
 
             Results.Text = "Results" + " (" + count + ")";
+
+            if (count == "0")
+            {
+                NoResultslbl.IsVisible = true;
+                DiagnosisListview.IsVisible = false;
+            }
+            else
+            {
+                DiagnosisListview.IsVisible = true;
+                NoResultslbl.IsVisible = false;
+            }
         }
         catch (Exception Ex)
         {
