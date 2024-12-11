@@ -17,6 +17,11 @@ namespace PeopleWith
             {
                 var result = base.FinishedLaunching(application, launchOptions);
 
+                this.InvokeOnMainThread(() =>
+                {
+                    UIApplication.SharedApplication.RegisterForRemoteNotifications();
+                  //  UNUserNotificationCenter.Current.Delegate = new UserNotificaitonCenterDelegate();
+                });
                 //removed so the user is asked on the reg about notification , check if azure notifications later
 
                 //var authOptions = UNAuthorizationOptions.Alert | UNAuthorizationOptions.Badge | UNAuthorizationOptions.Sound;
@@ -59,6 +64,8 @@ namespace PeopleWith
                     {
                         token = deviceToken.Description.Trim('<', '>');
                     }
+
+                    Preferences.Set("token", token);
                 }
                 //  var hubName = "PWDevHub";
                 //  var connectionString = "Endpoint=sb://PWDevelopment.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=ZiwsFi5CJVNru6prZMix/55OIDEZJvXumOSBkRjU4gM="; // Can be found in Access policy. Use Listen connection

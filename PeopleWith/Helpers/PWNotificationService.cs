@@ -12,7 +12,10 @@ namespace PeopleWith
         {
             hub = NotificationHubClient.CreateClientFromConnectionString(Constants.ListenConnectionString, Constants.NotificationHubName);
             installationId = Helpers.Settings.DeviceID;
-            token = Helpers.Settings.Token;
+
+            string tokentag = Preferences.Default.Get("token", "Unknown");
+
+            token = tokentag;
         }
 
         public async Task ClearTagsAsync()
