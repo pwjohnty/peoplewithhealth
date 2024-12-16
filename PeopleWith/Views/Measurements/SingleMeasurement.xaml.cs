@@ -177,19 +177,24 @@ public partial class SingleMeasurement : ContentPage
     //    }
     //}
 
-    async public Task<int> ConvertStonePoundsToPounds(string input)
+    async public Task<double> ConvertStonePoundsToPounds(string input)
     {
         try
         {
             string cleanInput = input.Replace("st", "").Replace("lbs", "").Trim();
             string[] parts = cleanInput.Split(' ');
 
-            int stone = int.Parse(parts[0]);
-            int pounds = int.Parse(parts[1]);
+            int stone = Int32.Parse(parts[0]);
+            int pounds = Int32.Parse(parts[1]);
+
+            //var stone = parts[0];
+            //var pounds = parts[1];
 
             // Convert stone to pounds (1 stone = 14 pounds)
-            int totalPounds = (stone * 14) + pounds;
+            double totalPounds = Convert.ToDouble((stone * 14) + pounds);
+            //double newvalue = Convert.ToDouble(stone + "." + pounds);
 
+            //return newvalue;
             return totalPounds;
         }
         catch (Exception Ex)
@@ -265,13 +270,30 @@ public partial class SingleMeasurement : ContentPage
                 {
                     if(usermeasurementpassed.unit == "Feet/Inches")
                     {
-                        var num = await ConvertFeetInchesToInches(item.value);
-                        item.numconverted = num;
+                        if (item.value.Contains("'"))
+                        {
+                            var num = await ConvertFeetInchesToInches(item.value);
+                            item.numconverted = num;
+                        }
+                        else
+                        {
+                            //Check This
+                            item.numconverted = Convert.ToDouble(item.value);
+                        }
                     }
                     else if(usermeasurementpassed.unit == "Stones/Pounds")
                     {
-                        var num = await ConvertStonePoundsToPounds(item.value);
-                        item.numconverted = num;
+                        if (item.value.Contains("st"))
+                        {
+                            var num = await ConvertStonePoundsToPounds(item.value);
+                            item.numconverted = num;
+                        }
+                        else
+                        {
+                            //Check This
+                            item.numconverted = Convert.ToDouble(item.value);
+                        }
+                        
                     }
                     else
                     {
@@ -461,35 +483,88 @@ public partial class SingleMeasurement : ContentPage
                   
                     if (usermeasurementpassed.unit == "Feet/Inches")
                     {
-                        NumericalAxis secondaryAxis = new NumericalAxis();
-                        secondaryAxis.LabelStyle.TextColor = Colors.LightGray;
-                        secondaryAxis.LabelStyle.FontFamily = "HankenGroteskRegular";
-                        secondaryAxis.LabelStyle.LabelFormat = "0' In";
-                        secondaryAxis.LabelStyle.FontSize = 8;
-                        secondaryAxis.AxisLineStyle.Stroke = Colors.LightGray;
-                        secondaryAxis.MajorTickStyle.Stroke = Colors.LightGray;
-                        secondaryAxis.AxisLineStyle.StrokeWidth = 1;//Hide Axis line 
-                        secondaryAxis.MajorTickStyle.StrokeWidth = 1;//Hide TickLines 
-                        secondaryAxis.IsVisible = true;
-                        secondaryAxis.Minimum = minvalue - 5;
-                        secondaryAxis.Maximum = maxvalue + 5;
+
+
+
+                        NumericalAxis secondaryAxis = new NumericalAxis
+                        {
+                            LabelStyle = new ChartAxisLabelStyle
+                            {
+                                TextColor = Colors.LightGray,
+                                FontFamily = "HankenGroteskRegular",
+                                FontSize = 8
+                            },
+                            AxisLineStyle = new ChartLineStyle
+                            {
+                                Stroke = Colors.LightGray,
+                                StrokeWidth = 1 // Axis line width
+                            },
+                            MajorTickStyle = new ChartAxisTickStyle
+                            {
+                                Stroke = Colors.LightGray,
+                                StrokeWidth = 1 // Tick line width
+                            },
+                            IsVisible = true,
+                            Minimum = minvalue - 5,
+                            Maximum = maxvalue + 5
+                        };
+
+                        // Customizing the Y-axis labels
+                        secondaryAxis.LabelCreated += (sender, args) =>
+                        {
+                            if (args.Label is string labelText && double.TryParse(labelText, out double value))
+                            {
+                                int inches = (int)value;
+                                int feet = inches / 12; 
+                                int remainingInches = inches % 12; 
+                                args.Label = $"{feet}' {remainingInches}\"";
+                            }
+
+                        };
+
                         datachart.YAxes.Add(secondaryAxis);
+
                     }
                     else if (usermeasurementpassed.unit == "Stones/Pounds")
                     {
-                        NumericalAxis secondaryAxis = new NumericalAxis();
-                        secondaryAxis.LabelStyle.TextColor = Colors.LightGray;
-                        secondaryAxis.LabelStyle.FontFamily = "HankenGroteskRegular";
-                        secondaryAxis.LabelStyle.LabelFormat = "0' lbs";
-                        secondaryAxis.LabelStyle.FontSize = 8;
-                        secondaryAxis.AxisLineStyle.Stroke = Colors.LightGray;
-                        secondaryAxis.MajorTickStyle.Stroke = Colors.LightGray;
-                        secondaryAxis.AxisLineStyle.StrokeWidth = 1;//Hide Axis line 
-                        secondaryAxis.MajorTickStyle.StrokeWidth = 1;//Hide TickLines 
-                        secondaryAxis.IsVisible = true;
-                        secondaryAxis.Minimum = minvalue - 5;
-                        secondaryAxis.Maximum = maxvalue + 5;
+
+                            NumericalAxis secondaryAxis = new NumericalAxis
+                            {
+                                LabelStyle = new ChartAxisLabelStyle
+                                {
+                                    TextColor = Colors.LightGray,
+                                    FontFamily = "HankenGroteskRegular",
+                                    FontSize = 8
+                                },
+                                AxisLineStyle = new ChartLineStyle
+                                {
+                                    Stroke = Colors.LightGray,
+                                    StrokeWidth = 1 // Axis line width
+                                },
+                                MajorTickStyle = new ChartAxisTickStyle
+                                {
+                                    Stroke = Colors.LightGray,
+                                    StrokeWidth = 1 // Tick line width
+                                },
+                                IsVisible = true,
+                                Minimum = minvalue - 5,
+                                Maximum = maxvalue + 5
+                            };
+
+                        // Customizing the Y-axis labels
+                        secondaryAxis.LabelCreated += (sender, args) =>
+                        {
+                            if (args.Label is string labelText && double.TryParse(labelText, out double value))
+                            {
+                                int lbs = (int)value; 
+                                int stones = lbs / 14; 
+                                int pounds = lbs % 14; 
+                                args.Label = $"{stones}st {pounds}lbs"; 
+                            }
+                        };
+
                         datachart.YAxes.Add(secondaryAxis);
+                        
                     }
                     else
                     {
@@ -550,6 +625,7 @@ public partial class SingleMeasurement : ContentPage
                             MarkerSettings = chartMarker
                         };
                         columnseries.ShowDataLabels = false;
+
                         datachart.Series.Add(columnseries);
                     }
                     else
@@ -596,7 +672,25 @@ public partial class SingleMeasurement : ContentPage
 
             var es = e.NewIndexes[0];
 
-            lblvalue.Text = orderlistbydate[es].value;
+            if(orderlistbydate[es].unit == "Stones/Pounds")
+            {
+                if (orderlistbydate[es].value.Contains("st"))
+                {
+                    lblvalue.Text = orderlistbydate[es].value;
+                }
+                else
+                {
+                    var GetStones = orderlistbydate[es].value.Split('.');
+                    var Newlbl = GetStones[0] + "st" + " " + GetStones[1] + "lbs";
+                    lblvalue.Text = Newlbl;
+                }
+
+            }
+            else
+            {
+                lblvalue.Text = orderlistbydate[es].value;
+            }
+          
 
             var convertdate = DateTime.Parse(orderlistbydate[es].inputdatetime);
 

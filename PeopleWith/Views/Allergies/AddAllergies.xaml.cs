@@ -81,6 +81,8 @@ public partial class AddAllergies : ContentPage
             //Results inital count
             Results.Text = "Results" + " (" + count + ")";
 
+            //AllergyListview.HeightRequest = allergies.Count() * 35; 
+
             Allergyloading.IsVisible = false;
         }
         catch (Exception Ex)

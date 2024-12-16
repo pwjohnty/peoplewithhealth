@@ -171,8 +171,6 @@ public partial class MeasurementsPage : ContentPage
 
                 UserMeasurements = await getMeasurementsTask;
 
-                
-
             }
 
 
@@ -235,6 +233,38 @@ public partial class MeasurementsPage : ContentPage
                 {
                     item.datechanged = dateconverted.ToString("dd MMM");
                 }
+
+
+                //Update Stones/Pounds && Feet/Inches After Add 
+
+                    if (item.unit == "Stones/Pounds")
+                    {
+                        if (item.value.Contains("st"))
+                        {
+                            //Do Nothing
+                        }
+                        else
+                        {
+                            var split = item.value.Split('.');
+                            var Newlbl = split[0] + "st" + " " + split[1] + "lbs";
+                            item.value = Newlbl;
+                        }
+                    }
+                    else if (item.unit == "Feet/Inches")
+                    {
+                        if (item.value.Contains("'"))
+                        {
+                            //Do Nothing
+                        }
+                        else
+                        {
+                            var split = item.value.Split('.');
+                            var Newlbl = split[0] + "'" + " " + split[1] + "\"";
+                            item.value = Newlbl;
+                        }
+                    }
+               
+
             }
 
 

@@ -89,6 +89,19 @@ public partial class ShowAllData : ContentPage
             {
                 var dt = DateTime.Parse(item.inputdatetime);
                 item.datechanged = dt.ToString("HH:mm, dd/MM/yyyy");
+                if(item.unit == "Stones/Pounds")
+                {
+                    if (item.value.Contains("st"))
+                    {
+
+                    }
+                    else
+                    {
+                        var split = item.value.Split('.');
+                        var Newlbl = split[0] + "st" + " " + split[1] + "lbs";
+                        item.value = Newlbl;
+                    }
+                }
             }
 
             usermeasurementlistpassed = new ObservableCollection<usermeasurement>(usermeasurementlistpassed.OrderByDescending(x => DateTime.Parse(x.inputdatetime)));

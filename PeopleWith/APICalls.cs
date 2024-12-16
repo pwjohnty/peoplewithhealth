@@ -2596,6 +2596,7 @@ namespace PeopleWith
                         if (item.deleted == true)
                         {
                             //Ignore
+                       
                         }
                         else
                         {

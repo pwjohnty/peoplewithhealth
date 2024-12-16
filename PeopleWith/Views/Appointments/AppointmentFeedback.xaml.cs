@@ -318,7 +318,7 @@ public partial class AppointmentFeedback : ContentPage
                 await MopupService.Instance.PopAllAsync(false);
 
 
-                WeakReferenceMessenger.Default.Send(new UpdateAppFeedback(AllAppointments));
+                WeakReferenceMessenger.Default.Send(new UpdateAppFeedback(AllAppointments, AppointmentPassed.id));
 
                 Navigation.RemovePage(this);
 

@@ -411,12 +411,14 @@ public partial class AddAppointment : ContentPage
                 {
                     Vibration.Vibrate();
                     await DisplayAlert("Select Location", "Please select a location from this list", "Ok");
+                    AppointmentAdd.IsEnabled = true;
                     return;
                 }
                 else if (string.IsNullOrEmpty(SelectedType))
                 {
                     Vibration.Vibrate();
                     await DisplayAlert("Select Type", "Please select a type from this list", "Ok");
+                    AppointmentAdd.IsEnabled = true;
                     return;
                 }
                 else
@@ -456,15 +458,45 @@ public partial class AddAppointment : ContentPage
 
 
                     //Get Duration (Convert for Notifiction)
-                    if (Duration == "00 Hours 00 Minutes")
+                    if (string.IsNullOrEmpty(hoursentry.Text) && string.IsNullOrEmpty(minsentry.Text))
                     {
-                        //Dont Add
+                        NewAppointment.expectedduration = null;
                     }
                     else
                     {
-                        NewAppointment.expectedduration = Duration;
+                        var hours = "";
+                        var mins = "";
 
+                        if (string.IsNullOrEmpty(hoursentry.Text))
+                        {
+                            hours = "00";
+                        }
+                        else
+                        {
+                            hours = hoursentry.Text;
+                        }
+
+                        if (string.IsNullOrEmpty(minsentry.Text))
+                        {
+                            mins = "00";
+                        }
+                        else
+                        {
+                            mins = minsentry.Text;
+                        }
+
+                        var timestring = hours + " Hours " + mins + " Minutes";
+                        NewAppointment.expectedduration = timestring;
                     }
+                    //if (Duration == "00 Hours 00 Minutes")
+                    //{
+                    //    //Dont Add
+                    //}
+                    //else
+                    //{
+                    //    NewAppointment.expectedduration = Duration;
+
+                    //}
 
                     //Get Notes (Can Be Empty) 
                     NewAppointment.reason = notesentry.Text;
@@ -588,6 +620,216 @@ public partial class AddAppointment : ContentPage
         catch (Exception Ex)
         {
             NotasyncMethod(Ex);
+        }
+    }
+
+    private void hoursentry_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        try
+        {
+            //hours entry text changed
+            var entry = sender as Entry;
+            if (entry == null) return;
+
+            // Get the new text value
+            var newText = e.NewTextValue;
+
+            // Ensure the text is numeric and limit to 2 digits
+            if (!string.IsNullOrEmpty(newText))
+            {
+                // Remove non-numeric characters
+                newText = new string(newText.Where(char.IsDigit).ToArray());
+
+                // Limit to 2 characters
+                if (newText.Length > 2)
+                {
+                    newText = newText.Substring(0, 2);
+                }
+            }
+
+            // Set the corrected text back to the entry
+            if (entry.Text != newText)
+            {
+                entry.Text = newText;
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    private void minsentry_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        try
+        {
+            var entry = sender as Entry;
+            if (entry == null) return;
+
+            // Get the new text value
+            var newText = e.NewTextValue;
+
+            // Ensure the text is numeric and limit to 2 digits
+            if (!string.IsNullOrEmpty(newText))
+            {
+                // Remove non-numeric characters
+                newText = new string(newText.Where(char.IsDigit).ToArray());
+
+                // Limit to 2 characters
+                if (newText.Length > 2)
+                {
+                    newText = newText.Substring(0, 2);
+                }
+
+                // Validate the value is within the range (0-59)
+                if (int.TryParse(newText, out int minutes))
+                {
+                    if (minutes > 59)
+                    {
+                        newText = "00"; // Set to max value
+                    }
+                }
+            }
+
+            // Set the corrected text back to the entry
+            if (entry.Text != newText)
+            {
+                entry.Text = newText;
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    private void fifteenminsbtn_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            int hours = int.TryParse(hoursentry.Text, out int h) ? h : 0;
+            int minutes = int.TryParse(minsentry.Text, out int m) ? m : 0;
+
+            // Add 15 minutes
+            minutes += 15;
+
+            // Handle overflow into hours
+            if (minutes >= 60)
+            {
+                minutes -= 60;
+                hours += 1;
+            }
+
+            // Handle hour overflow (optional, if you want to wrap hours to a 24-hour format)
+            if (hours >= 24)
+            {
+                hours = 0;
+            }
+
+            // Update the Entries with the new values
+            hoursentry.Text = hours.ToString("D2");   // Ensure 2-digit format
+            minsentry.Text = minutes.ToString("D2");
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    private void thirtyminsbtn_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+
+            int hours = int.TryParse(hoursentry.Text, out int h) ? h : 0;
+            int minutes = int.TryParse(minsentry.Text, out int m) ? m : 0;
+
+            // Add 15 minutes
+            minutes += 30;
+
+            // Handle overflow into hours
+            if (minutes >= 60)
+            {
+                minutes -= 60;
+                hours += 1;
+            }
+
+            // Handle hour overflow (optional, if you want to wrap hours to a 24-hour format)
+            if (hours >= 24)
+            {
+                hours = 0;
+            }
+
+            // Update the Entries with the new values
+            hoursentry.Text = hours.ToString("D2");   // Ensure 2-digit format
+            minsentry.Text = minutes.ToString("D2");
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    private void sixtyminsbtn_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+
+            int hours = int.TryParse(hoursentry.Text, out int h) ? h : 0;
+            int minutes = int.TryParse(minsentry.Text, out int m) ? m : 0;
+
+            // Add 60 minutes (equivalent to adding 1 hour)
+            hours += 1;
+
+            // Handle hour overflow (optional, wrap to a 24-hour format)
+            if (hours >= 24)
+            {
+                hours = 0; // Reset to 0 if over 23 (for 24-hour format)
+            }
+
+            // Update the Entries with the new values
+            hoursentry.Text = hours.ToString("D2");   // Ensure 2-digit format
+            minsentry.Text = minutes.ToString("D2");
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    private void ninetyminsbtn_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+
+            // Parse the current hour and minute values
+            int hours = int.TryParse(hoursentry.Text, out int h) ? h : 0;
+            int minutes = int.TryParse(minsentry.Text, out int m) ? m : 0;
+
+            // Add 1 hour and 30 minutes
+            minutes += 30;
+            hours += 1;
+
+            // Handle minute overflow
+            if (minutes >= 60)
+            {
+                minutes -= 60; // Adjust minutes
+                hours += 1;    // Increment hours for overflow
+            }
+
+            // Handle hour overflow (optional, wrap to a 24-hour format)
+            if (hours >= 24)
+            {
+                hours = 0; // Reset to 0 if over 23 (for 24-hour format)
+            }
+
+            // Update the Entries with the new values
+            hoursentry.Text = hours.ToString("D2");   // Ensure 2-digit format
+            minsentry.Text = minutes.ToString("D2");
+        }
+        catch (Exception ex)
+        {
+
         }
     }
 }

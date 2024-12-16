@@ -7,10 +7,22 @@ using System.Threading.Tasks;
 
 namespace PeopleWith
 {
-    public class UpdateAppFeedback : ValueChangedMessage<object>
+    //public class UpdateAppFeedback : ValueChangedMessage<object>
+    //{
+    //    public UpdateAppFeedback(object value) : base(value)
+    //    {
+    //    }
+    //}
+     public class UpdateAppFeedback
     {
-        public UpdateAppFeedback(object value) : base(value)
+        public object AllAppointments { get; }
+        public string AppointmentId { get; }
+
+        public UpdateAppFeedback(object allAppointments, string appointmentId)
         {
+            AllAppointments = allAppointments;
+            AppointmentId = appointmentId;
         }
     }
+
 }
