@@ -9,7 +9,7 @@
              xmlns:picker="clr-namespace:Syncfusion.Maui.Picker;assembly=Syncfusion.Maui.Picker"
              NavigationPage.HasNavigationBar="True" BackgroundColor="White">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Select All" x:Name="SelectAll" Clicked="ToolbarItem_Clicked"/>
+        <ToolbarItem Text="" x:Name="SelectAll" Clicked="ToolbarItem_Clicked"/>
     </ContentPage.ToolbarItems>
     <ScrollView Orientation="Vertical">
         <VerticalStackLayout x:Name="Mainstack">
@@ -21,7 +21,7 @@
             <Label Text="Update All Symptoms" FontFamily="HankenGroteskBold" FontSize="26"  Margin="20,20,0,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" />
 
 
-            <Label Text="To Update a Symptom, click on the selected symptom to enable it to be edited. Then to Update the Intensity to the desired result click 'Update'." Margin="20,5,20,0"  FontFamily="HankenGroteskRegular"  HorizontalOptions="Center" FontSize="12"  TextColor="Gray" />
+            <Label Text="To update a symptom, adjust its intensity to the desired level, or leave it unchanged. Then, click 'Update' button to save your changes." Margin="20,5,20,0"  FontFamily="HankenGroteskRegular"  HorizontalOptions="Center" FontSize="12"  TextColor="Gray" />
 
 
             <Border Stroke="LightGray"
@@ -136,15 +136,15 @@
                 
                 <syncfusion:SfListView x:Name="SymptomUpdateLV" 
                      Padding="0"
-                     Margin="0,10,0,20" ItemTapped="SymptomUpdateLV_ItemTapped"
+                     Margin="0,10,0,0" ItemTapped="SymptomUpdateLV_ItemTapped"
                      SelectionBackground="Transparent"
                      BackgroundColor="Transparent"
-                    SelectionMode="Multiple"
+                    SelectionMode="None"
                      IsScrollingEnabled="False"
                      AutoFitMode="DynamicHeight"
                      VerticalOptions="StartAndExpand"
                      HorizontalOptions="Center">
-                    <syncfusion:SfListView.ItemTemplate>
+                    <syncfusion:SfListView.SelectedItemTemplate>
                         <DataTemplate>
                             <ViewCell>
                                 <Grid>
@@ -199,8 +199,8 @@ InactiveSize="2" />
                                 </Grid>
                             </ViewCell>
                         </DataTemplate>
-                    </syncfusion:SfListView.ItemTemplate>
-                    <syncfusion:SfListView.SelectedItemTemplate>
+                    </syncfusion:SfListView.SelectedItemTemplate>
+                    <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
                                 <Grid>
@@ -254,7 +254,7 @@ InactiveSize="2" />
                                 </Grid>
                             </ViewCell>
                         </DataTemplate>
-                    </syncfusion:SfListView.SelectedItemTemplate>
+                    </syncfusion:SfListView.ItemTemplate>
                 </syncfusion:SfListView>
 
 

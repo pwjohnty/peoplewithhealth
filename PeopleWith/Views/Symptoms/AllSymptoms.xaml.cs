@@ -208,6 +208,15 @@ public partial class AllSymptoms : ContentPage
                 {
                     itemstoremove.Add(item);
                 }
+
+                if(item.feedback.Count == 1)
+                {
+                    item.Firstadd = true;
+                }
+                else
+                {
+                    item.Firstadd = false;
+                }
             }
             foreach (var item in itemstoremove)
             {

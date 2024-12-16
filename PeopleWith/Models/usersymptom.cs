@@ -18,6 +18,7 @@ namespace PeopleWith
         double slidervalue;
         string currentIntensityua;
         double slidervalueua;
+        bool firstadd;
 
         public ObservableCollection<usersymptom> allsymptoms;
         [System.Text.Json.Serialization.JsonIgnore]
@@ -145,6 +146,20 @@ namespace PeopleWith
 
         [System.Text.Json.Serialization.JsonIgnore]
         public string DateUpdatedAll { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool Firstadd
+        {
+            get => firstadd;
+            set
+            {
+                if (firstadd != value)
+                {
+                    firstadd = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
 
         // INotifyPropertyChanged implementation

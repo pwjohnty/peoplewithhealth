@@ -51,8 +51,8 @@ public partial class UpdateAllSymptoms : ContentPage
 
             foreach (var item in UserSymptomsPassed)
             {
-                item.Enabled = false;
-                item.Opacity = 0.5;
+                item.Enabled = true;
+                item.Opacity = 1;
                 item.Slidervalue = Convert.ToDouble(item.CurrentIntensity);
                 item.SlidervalueUA = Convert.ToDouble(item.CurrentIntensity);
                 item.CurrentIntensityUA = item.CurrentIntensity;
@@ -67,13 +67,13 @@ public partial class UpdateAllSymptoms : ContentPage
 
             if (DeviceInfo.Platform == DevicePlatform.iOS)
             {
-                SymptomUpdateLV.HeightRequest = UserSymptomsPassed.Count * 90;
+                SymptomUpdateLV.HeightRequest = UserSymptomsPassed.Count * 80;
             }
             var sortedSymptoms = UserSymptomsPassed.OrderByDescending(f => DateTime.Parse(f.LastUpdatedTime)).ToList();
             SymptomUpdateLV.ItemsSource = sortedSymptoms;
             //change visual state on page load, as button is not updating;
             UpdateBtn.IsEnabled = true;
-            UpdateBtn.IsEnabled = false;
+           // UpdateBtn.IsEnabled = false;
 
         }
         catch (Exception Ex)
@@ -92,8 +92,8 @@ public partial class UpdateAllSymptoms : ContentPage
 
             foreach (var item in UserSymptomsPassed)
             {
-                item.Enabled = false;
-                item.Opacity = 0.5;
+                item.Enabled = true;
+                item.Opacity = 1;
                 item.Slidervalue = Convert.ToDouble(item.CurrentIntensity);
                 item.SlidervalueUA = Convert.ToDouble(item.CurrentIntensity);
                 item.CurrentIntensityUA = item.CurrentIntensity;
@@ -106,13 +106,13 @@ public partial class UpdateAllSymptoms : ContentPage
 
             if (DeviceInfo.Platform == DevicePlatform.iOS)
             {
-                SymptomUpdateLV.HeightRequest = UserSymptomsPassed.Count * 100;
+                SymptomUpdateLV.HeightRequest = UserSymptomsPassed.Count * 90;
             }
             var sortedSymptoms = UserSymptomsPassed.OrderByDescending(f => DateTime.Parse(f.LastUpdated)).ToList();
             SymptomUpdateLV.ItemsSource = UserSymptomsPassed;
             //change visual state on page load, as button is not updating;
             UpdateBtn.IsEnabled = true;
-            UpdateBtn.IsEnabled = false;
+           // UpdateBtn.IsEnabled = false;
 
         }
         catch (Exception Ex)
@@ -163,86 +163,101 @@ public partial class UpdateAllSymptoms : ContentPage
     {
         try
         {
-            //Connectivity Changed 
-            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
-            if (accessType == NetworkAccess.Internet)
-            { 
+ 
 
-            UpdateBtn.IsEnabled = false;
-            var allfeedback = new ObservableCollection<userfeedback>();
+            // Check Internet Connectivity
+            if (Connectivity.Current.NetworkAccess == NetworkAccess.Internet)
+            {
+                UpdateBtn.IsEnabled = false;
 
-                    foreach (var symptom in UserSymptomsPassed)
+                // Prepare Feedback Data
+                var updates = new List<feedbackdata>();
+                var symptomUpdates = new List<symptom>();
+
+                Parallel.ForEach(UserSymptomsPassed.Where(s => s.Enabled), symptom =>
+                {
+                    var items = new symptomfeedback
                     {
-
-                        if (symptom.Enabled == true)
-                        {
-                            var items = new symptomfeedback();
-                            SelectedDate = adddatepicker.Date.ToString("dd/MM/yyyy");
-                            SelectedTime = addtimepicker.Time.ToString(@"hh\:mm");
-
-                            items.timestamp = SelectedDate + " " + SelectedTime;
-                            Guid newUUID = Guid.NewGuid();
-                            items.symptomfeedbackid = newUUID.ToString().ToUpper();
-                            items.intensity = symptom.SlidervalueUA.ToString();
-                            items.notes = null;
-                            items.triggers = null;
-                            items.interventions = null;
-                            items.duration = null;
-                            symptom.feedback.Add(items);
-                            SymptomUpdateNewlist.Add(symptom);
-                            
-
-
-                            var newsym = new feedbackdata();
-                            newsym.value = symptom.SlidervalueUA.ToString();
-                            newsym.datetime = items.timestamp;
-                            newsym.action = "update";
-                            newsym.label = symptom.symptomtitle.TrimEnd();
-                            newsym.id = items.symptomfeedbackid;
-                        if (userfeedbacklistpassed.symptomfeedbacklist == null)
-                        {
-                            userfeedbacklistpassed.symptomfeedbacklist = new ObservableCollection<feedbackdata>();
-                        }
-
-                        userfeedbacklistpassed.symptomfeedbacklist.Add(newsym);
-
-
-                        }               
-
+                        timestamp = $"{adddatepicker.Date:dd/MM/yyyy} {addtimepicker.Time:hh\\:mm}",
+                        symptomfeedbackid = Guid.NewGuid().ToString().ToUpper(),
+                        intensity = symptom.SlidervalueUA.ToString(),
+                    };
+                    lock (symptom.feedback)
+                    {
+                        symptom.feedback.Add(items);
                     }
-            //Need Loading Screen
-            APICalls database = new APICalls();
-            await database.UpdateAll(SymptomUpdateNewlist);
+                    lock (SymptomUpdateNewlist)
+                    {
+                        SymptomUpdateNewlist.Add(symptom);
+                    }
 
-            string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.symptomfeedbacklist);
-            userfeedbacklistpassed.symptomfeedback = newsymJson;
+                    updates.Add(new feedbackdata
+                    {
+                        value = symptom.SlidervalueUA.ToString(),
+                        datetime = items.timestamp,
+                        action = "update",
+                        label = symptom.symptomtitle.TrimEnd(),
+                        id = items.symptomfeedbackid
+                    });
+                });
 
+                // Add Feedback Data to User List
+                if (userfeedbacklistpassed.symptomfeedbacklist == null)
+                {
+                    userfeedbacklistpassed.symptomfeedbacklist = new ObservableCollection<feedbackdata>();
+                }
 
-            await database.UserfeedbackUpdateSymptomData(userfeedbacklistpassed);
+                foreach (var update in updates)
+                {
+                    userfeedbacklistpassed.symptomfeedbacklist.Add(update);
+                }
 
-            await MopupService.Instance.PushAsync(new PopupPageHelper("Symptoms Updated") { });
-            await Task.Delay(1000);
+                // Serialize Feedback Data Once
+                userfeedbacklistpassed.symptomfeedback = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.symptomfeedbacklist);
 
-                //await Navigation.PushAsync(new AllSymptoms(UserSymptomsPassed));
+                // Show Loading Screen
+                var popup = new PopupPageHelper("Updating...");
+
+                // Show the Loading Popup
+                await MopupService.Instance.PushAsync(popup);
+                
+
+                // Perform API Calls Concurrently
+                var database = new APICalls();
+                await Task.WhenAll(
+                    database.UpdateAll(SymptomUpdateNewlist),
+                    database.UserfeedbackUpdateSymptomData(userfeedbacklistpassed)
+                );
+
+                popup.UpdateMessage("Symptoms Updated");
+                await Task.Delay(1000);
+                //await MopupService.Instance.PopAllAsync(false);
+                //await MopupService.Instance.PushAsync(new PopupPageHelper("Symptoms Updated"));
+                // Navigate to Updated Symptoms Page
                 await Navigation.PushAsync(new AllSymptoms(UserSymptomsPassed, userfeedbacklistpassed));
+                // Dismiss Loading Screen
                 await MopupService.Instance.PopAllAsync(false);
 
-            var pageToRemoveAllSymptoms = Navigation.NavigationStack.FirstOrDefault(x => x is AllSymptoms);
-            if (pageToRemoveAllSymptoms != null)
+             
+
+                // Remove Pages from Navigation Stack
+                var pageToRemove = Navigation.NavigationStack.FirstOrDefault(x => x is AllSymptoms);
+                if (pageToRemove != null)
                 {
-                    Navigation.RemovePage(pageToRemoveAllSymptoms);
+                    Navigation.RemovePage(pageToRemove);
                 }
                 Navigation.RemovePage(this);
+
+     
             }
             else
             {
-                var isConnected = accessType == NetworkAccess.Internet;
-                ConnectivityChanged?.Invoke(this, isConnected);
-            }  
+                ConnectivityChanged?.Invoke(this, false);
+            }
         }
-        catch(Exception Ex)
+        catch (Exception ex)
         {
-            NotasyncMethod(Ex);
+            NotasyncMethod(ex);
         }
     }
     private void SelectDatePicker_SelectionChanged(object sender, Syncfusion.Maui.Picker.DatePickerSelectionChangedEventArgs e)
@@ -438,21 +453,21 @@ public partial class UpdateAllSymptoms : ContentPage
     {
         try
         {
-            this.ToolbarItems.Clear();
+            //this.ToolbarItems.Clear();
 
-            ToolbarItem itemm = new ToolbarItem
-            {
-                Text = "Select All"
+            //ToolbarItem itemm = new ToolbarItem
+            //{
+            //    Text = "Select All"
 
-            };
-            itemm.Clicked += ToolbarItem_Clicked;
-            this.ToolbarItems.Add(itemm);
-            SymptomUpdateLV.SelectedItems.Clear();
-            foreach (var item in UserSymptomsPassed)
-            {
-                item.Enabled = false;
-            }
-            UpdateBtn.IsEnabled = false;
+            //};
+            //itemm.Clicked += ToolbarItem_Clicked;
+            //this.ToolbarItems.Add(itemm);
+            //SymptomUpdateLV.SelectedItems.Clear();
+            //foreach (var item in UserSymptomsPassed)
+            //{
+            //    item.Enabled = false;
+            //}
+            //UpdateBtn.IsEnabled = false;
         
         }
         catch (Exception Ex)
@@ -466,29 +481,29 @@ public partial class UpdateAllSymptoms : ContentPage
         try
         {
             
-            var item = e.DataItem as usersymptom;
+            //var item = e.DataItem as usersymptom;
 
-            if(item != null)
-            {
-                if(item.Enabled)
-                {
-                    item.Enabled = false;
-                }
-                else
-                {
-                    item.Enabled = true;
-                }
-            }
+            //if(item != null)
+            //{
+            //    if(item.Enabled)
+            //    {
+            //        item.Enabled = false;
+            //    }
+            //    else
+            //    {
+            //        item.Enabled = true;
+            //    }
+            //}
 
-            bool hasEnabledItem = UserSymptomsPassed.Any(item => item.Enabled == true);
-            if (hasEnabledItem)
-            {
-                UpdateBtn.IsEnabled = true;
-            }
-            else
-            {
-                UpdateBtn.IsEnabled = false;
-            }
+            //bool hasEnabledItem = UserSymptomsPassed.Any(item => item.Enabled == true);
+            //if (hasEnabledItem)
+            //{
+            //    UpdateBtn.IsEnabled = true;
+            //}
+            //else
+            //{
+            //    UpdateBtn.IsEnabled = false;
+            //}
 
         }
         catch(Exception Ex)
