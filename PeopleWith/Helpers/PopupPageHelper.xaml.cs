@@ -13,6 +13,29 @@ public partial class PopupPageHelper : PopupPage
     {
         InitializeComponent();
 
+
+        if (message != null)
+        {
+            if (message == "Updating...")
+            {
+                listloader.IsVisible = true;
+                detaillbl2.IsVisible = true;
+                img.IsVisible = false;
+            }
+        }
+
         detaillbl.Text = message;
+    }
+
+
+    public void UpdateMessage(string newMessage)
+    {
+        if (newMessage != null)
+        {
+            img.IsVisible = true;
+            listloader.IsVisible = false;
+            detaillbl2.IsVisible = false; 
+            detaillbl.Text = newMessage;
+        }
     }
 }

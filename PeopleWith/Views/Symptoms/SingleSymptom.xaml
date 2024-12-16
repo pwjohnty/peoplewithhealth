@@ -153,7 +153,7 @@ Padding="0">
                             <Label Text="Average" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="Gray" Grid.Row="0" Grid.Column="2" />
                             <Label x:Name="Averagelbl"  FontFamily="HankenGroteskBold" VerticalOptions="Center" HorizontalOptions="Center" FontSize="20" TextColor="Orange" Grid.Row="1" Grid.Column="2" />
 
-                            <Label Text="Previous Score" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="Gray" Grid.Row="0" Grid.Column="3" />
+                            <Label Text="Current Score" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="Gray" Grid.Row="0" Grid.Column="3" />
                             <Label x:Name="Percentagelbl"  FontFamily="HankenGroteskBold" VerticalOptions="Center" HorizontalOptions="Center" FontSize="20" TextColor="Orange" Grid.Row="1" Grid.Column="3" />
 
 
@@ -215,11 +215,16 @@ Padding="10">
 
 
 
-                <Button BackgroundColor="#fff7ea" Clicked="showallbtn_Clicked" HorizontalOptions="FillAndExpand" TextColor="Orange" FontAttributes="None" x:Name="showallbtn"  Margin="0,10,0,40" FontFamily="HankenGroteskBold" Text="Show all data" />
+                <Label Text="Your Symptom Data" x:Name="showalllbl1" IsVisible="True" FontSize="20" Margin="0,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
+
+                <Label Text="Tap on the Show All Data button to view, update and delete your symptom data" x:Name="showalllbl2" IsVisible="True" FontSize="12" Margin="0,5,0,0" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
+
+
+                <Button BackgroundColor="#fff7ea" Clicked="showallbtn_Clicked" HorizontalOptions="FillAndExpand" TextColor="Orange" FontAttributes="None" x:Name="showallbtn"  Margin="0,20,0,60" FontFamily="HankenGroteskBold" Text="Show all data" />
 
 
                 <Button  Text="Delete Symptom" x:Name="DeleteBtn" Clicked="Button_Clicked_1" FontSize="Small" Margin="0,40,0,5" FontFamily="HankenGroteskBold" BackgroundColor="#ffe5e5" TextColor="Red" CornerRadius="10" />
-                <Label HorizontalTextAlignment="Start" Text="If your symptom is deleted you will lose all your symptom feedback" Margin="20,0,20,20" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Start" FontSize="10" TextColor="DarkGray"  />
+                <Label HorizontalTextAlignment="Center" Text="If your symptom is deleted you will lose all your symptom feedback" Margin="20,0,20,20" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="DarkGray"  />
 
 
 

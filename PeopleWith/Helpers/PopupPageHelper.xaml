@@ -21,9 +21,11 @@
                BackgroundColor="Transparent" HasShadow="False"
                 BorderColor="Transparent" InputTransparent="True" Padding="0">
             <StackLayout>
-       
-        <Image Source="successtick.png" HeightRequest="50" WidthRequest="50" HorizontalOptions="Center" VerticalOptions="Start" />
+
+                <ActivityIndicator IsRunning="True" Margin="0,0,0,10" Color="#031926" VerticalOptions="Center" HorizontalOptions="Center" x:Name="listloader" IsVisible="False"/>
+                <Image Source="successtick.png" x:Name="img" HeightRequest="50" WidthRequest="50" HorizontalOptions="Center" VerticalOptions="Start" />
                 <Label x:Name="detaillbl" FontSize="20" TextColor="#031926" FontFamily="HankenGroteskBold" HorizontalOptions="Center" HorizontalTextAlignment="Center" Margin="0,10,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" />
+                <Label x:Name="detaillbl2" IsVisible="False" Text="This process may take a few seconds, especially if there are many symptoms to update." FontSize="12" TextColor="#031926" FontFamily="HankenGroteskBold" HorizontalOptions="Center" HorizontalTextAlignment="Center" Margin="0,10,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" />
             </StackLayout>
         </Frame>
     </VerticalStackLayout>

@@ -25,6 +25,7 @@ public partial class MainDashboard : ContentPage
     ObservableCollection<userfeedback> userfeedbacklist = new ObservableCollection<userfeedback>();
     ObservableCollection<usermedication> AllUserMedications = new ObservableCollection<usermedication>();
     ObservableCollection<usersupplement> AllUserSupplements = new ObservableCollection<usersupplement>();
+    public ObservableCollection<usersymptom> UserSymptomPassed = new ObservableCollection<usersymptom>();
 
     ObservableCollection<signupcode> signupcodecollection = new ObservableCollection<signupcode>();
 
@@ -577,7 +578,9 @@ public partial class MainDashboard : ContentPage
                 RecentHealthlbl.IsVisible = false;
                 recentsymlbl.IsVisible = false;
                 symptomdetaillist.IsVisible = false;
-                symdataframe.IsVisible = false;
+                symdataframelbl1.IsVisible = false;
+                symdataframelbl2.IsVisible = false;
+                SymptomProgChart.IsVisible = false;
                 nosymdataframe.IsVisible = true;
                 SympRemain.Text = "No Symptoms Added";
             }
@@ -888,14 +891,19 @@ public partial class MainDashboard : ContentPage
 
                 recentsymlbl.IsVisible = false;
                 symptomdetaillist.IsVisible = false;
-                symdataframe.IsVisible = false;
+                
+                symdataframelbl1.IsVisible = false;
+                symdataframelbl2.IsVisible = false;
+                SymptomProgChart.IsVisible = false;
                 nosymdataframe.IsVisible = true;
                 return;
             }
 
             recentsymlbl.IsVisible = true;
             symptomdetaillist.IsVisible = true;
-            symdataframe.IsVisible = true;
+            symdataframelbl1.IsVisible = true;
+            symdataframelbl2.IsVisible = true;
+            SymptomProgChart.IsVisible = true;
             nosymdataframe.IsVisible = false;
 
             var newItemm = new dashitem
@@ -2615,7 +2623,17 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
-            await Navigation.PushAsync(new AllSymptoms(userfeedbacklist[0]), false);
+
+            UserSymptomPassed.Clear();
+
+            var item = e.DataItem as feedbackdata;
+
+           // UserSymptomPassed.Add(item);
+
+            await Navigation.PushAsync(new UpdateSingleSymptom(userfeedbacklist[0], item.label, item.value), false);
+
+
+            // await Navigation.PushAsync(new AllSymptoms(userfeedbacklist[0]), false);
         }
         catch (Exception Ex)
         {
@@ -2670,6 +2688,41 @@ public partial class MainDashboard : ContentPage
             NotasyncMethod(Ex);
         }
        
+    }
+
+    private async void measurementnochartdetaillist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
+    {
+        try
+        {
+            var item = e.DataItem as feedbackdata;
+
+            await Navigation.PushAsync(new MeasurementsPage(userfeedbacklist[0]), false);
+
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
+    private async void Button_Clicked_6(object sender, EventArgs e)
+    {
+        try
+        {
+            //update button on symptom list clicked
+           // Show the elapsed time in a DisplayAlert
+            await Application.Current.MainPage.DisplayAlert(
+                "Test buttton click",
+                $"Data retrieval took",
+                "OK"
+            );
+
+
+        }
+        catch (Exception ex)
+        {
+
+        }
     }
 
     //async private void measurementdetaillist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)

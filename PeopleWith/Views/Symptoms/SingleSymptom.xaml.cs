@@ -140,7 +140,7 @@ public partial class SingleSymptom : ContentPage
                 Lowestlbl.Text = smallest.ToString();
                 Highestlbl.Text = largest.ToString();
                 Averagelbl.Text = average.ToString("F0");
-                int num = SymptomFeedback.Count - 2;
+                int num = SymptomFeedback.Count - 1;
                 Percentagelbl.Text = SymptomFeedback[num].intensity;
             }
             else
@@ -186,7 +186,8 @@ public partial class SingleSymptom : ContentPage
             PassedSymptom = SymptomPassed;
             lblvalue.Text = PassedSymptom[0].CurrentIntensity;
             lblunit.Text = PassedSymptom[0].Score;
-            datelbl.Text = PassedSymptom[0].LastUpdated;
+            var GetGet = DateTime.Parse(PassedSymptom[0].LastUpdatedTime);
+            datelbl.Text = GetGet.ToString("HH:mm, dd MMMM yyyy");
 
             foreach (var item in PassedSymptom)
             {
@@ -282,7 +283,7 @@ public partial class SingleSymptom : ContentPage
                 Lowestlbl.Text = smallest.ToString();
                 Highestlbl.Text = largest.ToString();
                 Averagelbl.Text = average.ToString("F0");
-                int num = SymptomFeedback.Count - 2;
+                int num = SymptomFeedback.Count - 1;
                 Percentagelbl.Text = SymptomFeedback[num].intensity;
             }
             else
@@ -407,12 +408,12 @@ public partial class SingleSymptom : ContentPage
                     symptomProgression.Text = "DateRange: " + Firstupdate.ToString("dd MMM") + " - " + lastUpdate.ToString("dd MMM");
                 }
 
-                datestartedlbl.Text = Firstupdate.ToString("dd MMM");
+                datestartedlbl.Text = Firstupdate.ToString("dd MMM yyyy");
             }
             else
             {
                 DateTime GetDate = DateTime.Parse(SymptomFeedback[0].timestamp);
-                datestartedlbl.Text = GetDate.ToString("dd MMM");
+                datestartedlbl.Text = GetDate.ToString("dd MMM yyyy");
                 symptomProgression.Text = "DateRange: " + GetDate.ToString("dd MMM");
             }
         }

@@ -103,6 +103,7 @@
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
+                                <StackLayout>
                                 <Frame CornerRadius="10"  Margin="0,5,0,5"
         BackgroundColor="#fff7ea" HasShadow="False"
                        BorderColor="Transparent" InputTransparent="True"
@@ -137,7 +138,22 @@
 
                                     </Grid>
                                 </Frame>
+                                    <Border StrokeShape="RoundRectangle 10" Padding="5" IsVisible="{Binding Firstadd}"  Stroke="Orange" BackgroundColor="White" Margin="0,0,0,10" >
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="10*"/>
+                                                <ColumnDefinition Width="90*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Image Source="warningicon.png" Grid.Column="0" Grid.Row="0" HeightRequest="20" WidthRequest="20" Aspect="AspectFit" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+                                            <Label Text="Your symptom has been added at an intensity of 50. All symptoms are added at 50 to show improvement or deterioration of your symptom, with 0 representing the symptom is no longer evident and 100 representing the worst the symptom has ever been." Grid.Row="0" Grid.Column="1" Margin="0,0,0,0" FontSize="11" TextColor="#031926" FontFamily="HankenGroteskRegular"/>
 
+                                        </Grid>
+                                        
+                                    </Border>
+                                </StackLayout>
                             </ViewCell>
                         </DataTemplate>
                     </syncfusion:SfListView.ItemTemplate>

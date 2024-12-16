@@ -209,7 +209,7 @@
 		<PackageReference Include="FreakyControls" Version="0.5.0" />
 		<PackageReference Include="Microsoft.Azure.NotificationHubs" Version="4.2.0" />
 		<PackageReference Include="Microsoft.Datasync.Client" Version="6.0.0" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.7" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Maui.Essentials" Version="8.0.93" />
@@ -471,6 +471,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Symptoms\UpdateSingleSymptom.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Symptoms\UpdateSymptomDash.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Videos\AllVideos.xaml">

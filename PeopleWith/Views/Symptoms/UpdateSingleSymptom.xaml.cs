@@ -34,6 +34,7 @@ public partial class UpdateSingleSymptom : ContentPage
     CrashDetected crashHandler = new CrashDetected();
     userfeedback userfeedbacklistpassed = new userfeedback();
     bool edit;
+    bool dashupdate;
 
     async public void NotasyncMethod(Exception Ex)
     {
@@ -232,6 +233,78 @@ public partial class UpdateSingleSymptom : ContentPage
         catch (Exception Ex)
         {
             NotasyncMethod(Ex);
+        }
+    }
+
+    public UpdateSingleSymptom(userfeedback userfeedbacklist, string symptomtitle, string symptomscore)
+    {
+        try
+        {
+            //add data page
+
+            InitializeComponent();
+            addtimepicker.Time = DateTime.Now.TimeOfDay;
+            addtimepicker.Time = DateTime.Now.TimeOfDay;
+            userfeedbacklistpassed = userfeedbacklist;
+            gettriggersandinterventions();
+          //  PassedSymptom = SymptomPassed;
+            EditAdd = "Add";
+          //  AllSymptomDataPassed = AllSymptomData;
+            TItlelbl.Text = symptomtitle;
+            SymptomSlider.Value = Convert.ToInt32(symptomscore);
+
+            UpdateBtn.Text = "Add";
+            dashupdate = true;
+
+ 
+            updateResultCount();
+
+
+            //get the user symptom details
+            getUserSymptoms();
+
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    async void getUserSymptoms()
+    {
+        try
+        {
+            APICalls aPICalls = new APICalls();
+
+            var getSymptomsTask = aPICalls.GetUserSymptomAsync();
+
+            //var delayTask = Task.Delay(500);
+
+            //if (await Task.WhenAny(getSymptomsTask, delayTask) == delayTask)
+            //{
+            // await MopupService.Instance.PushAsync(new GettingReady("Loading Symptoms") { });
+            //}
+
+            var AllUserSymptoms = await getSymptomsTask;
+
+
+            foreach (var item in AllUserSymptoms)
+            {
+
+                if (item.symptomtitle == TItlelbl.Text)
+                {
+                    PassedSymptom.Add(item);
+                }
+
+
+            }
+
+
+
+        }
+        catch (Exception Ex)
+        {
+
         }
     }
 
@@ -751,9 +824,17 @@ public partial class UpdateSingleSymptom : ContentPage
                 {
                     await MopupService.Instance.PushAsync(new PopupPageHelper("Symptom Data Added") { });
                 }
-            //   await Navigation.PushAsync(new SingleSymptom(PassedSymptom, AllSymptomDataPassed));
-            
-            await Task.Delay(1000);
+                //   await Navigation.PushAsync(new SingleSymptom(PassedSymptom, AllSymptomDataPassed));
+
+                await Task.Delay(1000);
+               if(dashupdate)
+                {
+                    Navigation.RemovePage(this);
+                    await MopupService.Instance.PopAllAsync(false);
+                    return;
+
+                }
+               
             await Navigation.PushAsync(new AllSymptoms(AllSymptomDataPassed, userfeedbacklistpassed));
             await MopupService.Instance.PopAllAsync(false);
             var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is SingleSymptom);
