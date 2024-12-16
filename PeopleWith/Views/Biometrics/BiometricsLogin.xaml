@@ -45,13 +45,13 @@
 
             <Label x:Name="incorrectcodelbl" Grid.Row="4" Text="Invalid Code" TextColor="Red" FontFamily="HankenGroteskRegular" FontAttributes="None" Margin="0,20,0,0" FontSize="15" IsVisible="False" HorizontalOptions="Center" />
 
-            <Label x:Name="ForgotPassword" Grid.Row="5" Text="Forgotten your Pin? Login instead" TextColor="#7393B3" FontFamily="HankenGroteskRegular" FontAttributes="None" Margin="0,20,0,0" FontSize="15" HorizontalOptions="Center" >
+            <Label x:Name="ForgotPassword" IsVisible="{Binding Permission}" Grid.Row="5" Text="Forgotten your Pin? Login instead" TextColor="#7393B3" FontFamily="HankenGroteskRegular" FontAttributes="None" Margin="0,20,0,0" FontSize="15" HorizontalOptions="Center" >
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
                 </Label.GestureRecognizers>
             </Label>
 
-            <Grid x:Name="PinKeyPad"  Grid.Row="6" Margin="0,50,0,0">
+            <Grid x:Name="PinKeyPad" IsVisible="{Binding Permission}"  Grid.Row="6" Margin="0,50,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -81,8 +81,8 @@
                 <ImageButton Source="delete.png" Command="{Binding DeleteTapped}" HeightRequest="25" WidthRequest="25" Grid.Row="3" Grid.Column="2" x:Name="delete" HorizontalOptions="Center"  VerticalOptions="Center"/>
 
             </Grid>
-            <ActivityIndicator x:Name="LoadingInd" Grid.Row="6" Margin="0,50,0,0" IsVisible="False" IsRunning="True" Color="#BFDBF7"  HorizontalOptions="Center" VerticalOptions="Center" />
-            <Label x:Name="Loadinglbl" IsVisible="False" Text="Logging you in..." Grid.Row="7" TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="Center" Margin="0,25,0,0" VerticalOptions="End" VerticalTextAlignment="End" />
+            <ActivityIndicator x:Name="LoadingInd" Grid.Row="6" Margin="0,50,0,0" IsVisible="{Binding Success}" IsRunning="True" Color="#BFDBF7"  HorizontalOptions="Center" VerticalOptions="Center" />
+            <Label x:Name="Loadinglbl" Text="Logging you in..." IsVisible="{Binding Success}" Grid.Row="7" TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="Center" Margin="0,25,0,0" VerticalOptions="End" VerticalTextAlignment="End" />
 
         </Grid>
     </VerticalStackLayout>

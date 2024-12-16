@@ -40,15 +40,16 @@ public partial class Appointments : ContentPage
             InitializeComponent();
             GetAllHCPData();
 
-            WeakReferenceMessenger.Default.Register<UpdateAppFeedback>(this, (r, m) =>
+            WeakReferenceMessenger.Default.Register<UpdateAppFeedback>(this, (recipient, message) =>
             {
 
-                AllAppointments = (ObservableCollection<appointment>)m.Value;
+                AllAppointments = (ObservableCollection<appointment>)message.AllAppointments;
 
                 foreach(var item in AllAppointments)
                 {
-                    if(item.id == AppointmenttoPass.id)
+                    if(item.id == message.AppointmentId)
                     {
+                        AppointmenttoPass = item;
                         UpdatedAppointment = item; 
                     }
                 }
@@ -472,7 +473,7 @@ public partial class Appointments : ContentPage
             AppointmentCalendar.IsVisible = true;
             AppointmentDetails.IsVisible = false;
             Calendar.View = Syncfusion.Maui.Scheduler.SchedulerView.Month;
-            AddAppoint.IsEnabled = true;
+            
 
             AllAppointments.Remove(AppointmenttoPass);
 
@@ -480,7 +481,8 @@ public partial class Appointments : ContentPage
 
             await MopupService.Instance.PopAllAsync(false);
 
-            Deletebtn.IsEnabled = true;
+                AddAppoint.IsEnabled = true;
+                Deletebtn.IsEnabled = true;
 
             }
             else

@@ -116,6 +116,11 @@ public partial class BiometricsLogin : ContentPage
 
             if (result.Status == BiometricResponseStatus.Success)
             {
+                  LoadingInd.IsVisible = true;
+                    Loadinglbl.IsVisible = true; 
+                    PinKeyPad.IsVisible = false;
+                    ForgotPassword.IsVisible = false;
+                    await Task.Delay(2000);
                 Application.Current.MainPage = new NavigationPage(new MainDashboard());
             }
             else

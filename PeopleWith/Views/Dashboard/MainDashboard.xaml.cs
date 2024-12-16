@@ -540,8 +540,15 @@ public partial class MainDashboard : ContentPage
                     SympRemain.Text = SuppsRem;
                 }
               
+                //symptom Name too long Trim 
 
-
+                foreach(var item in filteredSymptoms)
+                {
+                    if(item.label.Length > 21)
+                    {
+                        item.label = item.label.Substring(0, 21) + "...";
+                    }
+                }
 
                 symptomdetaillist.ItemsSource = filteredSymptoms;
 
@@ -638,6 +645,37 @@ public partial class MainDashboard : ContentPage
                 }
 
 
+                foreach (var item in filteredmeasurements)
+                {
+                    if (item.unit == "Stones/Pounds")
+                    {
+                        if (item.value.Contains("st"))
+                        {
+                            //Do Nothing
+                        }
+                        else
+                        {
+                            var split = item.value.Split('.');
+                            var Newlbl = split[0] + "st" + " " + split[1] + "lbs";
+                            item.value = Newlbl;
+                        }
+                    }
+                    else if (item.unit == "Feet/Inches")
+                    {
+                        if (item.value.Contains("'"))
+                        {
+                            //Do Nothing
+                        }
+                        else
+                        {
+                            var split = item.value.Split('.');
+                            var Newlbl = split[0] + "'" + " " + split[1] + "\"";
+                            item.value = Newlbl;
+                        }
+                    }
+                }
+
+
                 if (filteredmeasurements.Count > 1)
                 {
                    // var takefivemeasurements = filteredmeasurements.Take(1).ToList();
@@ -647,6 +685,8 @@ public partial class MainDashboard : ContentPage
 
                     if (filteredmeasurements.Count > 5)
                     {
+
+                       
 
                         // Take the next four items for measurementnochartdetaillist
                         var nextFourMeasurements = filteredmeasurements.Skip(1).Take(5).ToList();
@@ -1361,7 +1401,7 @@ public partial class MainDashboard : ContentPage
                                 {
                                     ContactImage = "supphome.png",
                                     Type = "Supplements",
-                                    Title = "Have you recorded your " + timeoflastnotrecordedmed + " Supplements ?",
+                                    Title = "Have you recorded your " + timeoflastnotrecordedmed + " Supplements?",
                                     BackgroundColor = Color.FromArgb("#f9f4e5") // Example color
                                 };
 
@@ -1811,7 +1851,7 @@ public partial class MainDashboard : ContentPage
                                 {
                                     ContactImage = "medicinehome.png",
                                     Type = "Medications",
-                                    Title = "Have you recorded your " + timeoflastnotrecordedmed + " Medications ?",
+                                    Title = "Have you recorded your " + timeoflastnotrecordedmed + " Medications?",
                                     BackgroundColor = Color.FromArgb("#e5f9f4") // Example color
                                 };
 

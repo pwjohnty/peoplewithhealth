@@ -27,6 +27,38 @@ namespace PeopleWith
             }
         }
 
+
+        private bool permission = true;
+
+        public bool Permission 
+        {
+            get => permission;
+            set
+            {
+                if (permission != value)
+                {
+                    permission = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
+        private bool success = false; 
+
+        public bool Success
+        {
+            get => success; 
+            set
+            {
+                if (success != value)
+                {
+                    success = value;
+                    OnPropertyChanged();
+                }
+            }
+        } 
+
         public ICommand KeyTapped { get; private set; }
         public ICommand DeleteTapped { get; private set; }
         public ICommand FingerprintTapped { get; private set; }
@@ -77,6 +109,9 @@ namespace PeopleWith
 
                 if (result.Status == BiometricResponseStatus.Success)
                 {
+                    Permission = false;
+                    Success = true; 
+                    await Task.Delay(2000);
                     Application.Current.MainPage = new NavigationPage(new MainDashboard());
                 }
                 else
@@ -86,7 +121,8 @@ namespace PeopleWith
             }
             catch(Exception Ex)
             {
-
+                Permission = true;
+                Success = false;
             }
         }
 

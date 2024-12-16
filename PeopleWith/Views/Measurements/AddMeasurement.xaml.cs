@@ -4738,9 +4738,21 @@ public partial class AddMeasurement : ContentPage
                         }
                         else
                         {
-                            newmeasurment.value = Stonesinput + "st " + Poundsinput + "lbs";
+                            newmeasurment.value = Stonesinput + "." + Poundsinput;
+                            //newmeasurment.value = Stonesinput + "st " + Poundsinput + "lbs";
                         }
 
+                    }
+                    else if (measurementnamestring == "Height" && inputvalue == "Feet/Inches")
+                    {
+
+                        var height = unitentry.Text.ToString();
+                        string cleanInput = height.Replace("'", "").Replace("\"", "").Trim();
+                        string[] parts = cleanInput.Split(' ');
+
+                        var feet = parts[0];
+                        var inch = parts[1];
+                        newmeasurment.value = feet + "." + inch;
                     }
                     else
                     {

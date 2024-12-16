@@ -120,9 +120,68 @@
             </Grid>
 
             <!--Expected Duration  -->
-            <Label Text="Select Duration" FontFamily="HankenGroteskBold" Margin="20,10,0,0"   VerticalOptions="Center" HorizontalOptions="Start"   FontSize="16" TextColor="#031926" />
+            <!--<Label Text="Select Duration" FontFamily="HankenGroteskBold" Margin="20,10,0,0"   VerticalOptions="Center" HorizontalOptions="Start"   FontSize="16" TextColor="#031926" />-->
+            <Label Text="Enter Duration" FontFamily="HankenGroteskBold" Margin="20,10,0,0" VerticalOptions="Center" HorizontalOptions="Start" FontSize="16" TextColor="#031926" />
+            <Label Text="Enter or select the duration of your Appointment" FontFamily="HankenGroteskBold" Margin="20,5,0,0"  VerticalOptions="Center" HorizontalOptions="Start" FontSize="12" TextColor="#031926" />
 
-            <Frame HasShadow="False" Margin="20,10,20,10" BorderColor="Transparent"  Padding="5" CornerRadius="20"  BackgroundColor="#ffcccb" >
+            <!-- New Duration Picker-->
+
+            <Frame HasShadow="False" Margin="20,10,20,10" BorderColor="Transparent"  Padding="10" CornerRadius="20"  BackgroundColor="#ffcccb" >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="20*"/>
+                        <ColumnDefinition Width="26*"/>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="26*"/>
+                        <ColumnDefinition Width="20*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <inputLayout:SfTextInputLayout Grid.Row="0"  Grid.Column="1" InputViewPadding="10" ShowHint="True" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,0,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
+                        <Entry FontSize="30" TextChanged="hoursentry_TextChanged" x:Name="hoursentry" Grid.Row="0" Keyboard="Numeric" Grid.Column="1" PlaceholderColor="LightGray"  FontFamily="HankenGroteskBold" HorizontalOptions="Center" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand" Placeholder="00" TextColor="#031926"/>
+                    </inputLayout:SfTextInputLayout>
+                    <Label Text=":" FontFamily="HankenGroteskBold" Margin="0,0,0,0"   VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="0" Grid.Column="2"   FontSize="30" TextColor="Red" />
+                    <inputLayout:SfTextInputLayout Grid.Row="0"  Grid.Column="3" InputViewPadding="10" ShowHint="True" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,0,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
+                        <Entry FontSize="30" TextChanged="minsentry_TextChanged" x:Name="minsentry" Grid.Row="0" Keyboard="Numeric" Grid.Column="3" PlaceholderColor="LightGray" HorizontalOptions="Center" HorizontalTextAlignment="Center"  FontFamily="HankenGroteskBold" VerticalOptions="CenterAndExpand" Placeholder="00" TextColor="#031926"/>
+                    </inputLayout:SfTextInputLayout>
+
+
+                    <Label Text="Hours" FontFamily="HankenGroteskBold" Margin="0,0,0,0"   VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="1" Grid.Column="1"   FontSize="12" TextColor="Red" />
+                    <Label Text="Minutes" FontFamily="HankenGroteskBold" Margin="0,0,0,0"   VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="1" Grid.Column="3"   FontSize="12" TextColor="Red" />
+
+
+
+                    <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="5" Margin="0,10,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="25*"/>
+                            <ColumnDefinition Width="25*"/>
+                            <ColumnDefinition Width="25*"/>
+                            <ColumnDefinition Width="25*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Text="+15 mins" x:Name="fifteenminsbtn" FontSize="12" Clicked="fifteenminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="0" BackgroundColor="Red" TextColor="White" />
+                        <Button Text="+30 mins" x:Name="thirtyminsbtn" FontSize="12" Clicked="thirtyminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="1" BackgroundColor="Red" TextColor="White" />
+                        <Button Text="+60 mins" x:Name="sixtyminsbtn" FontSize="12" Clicked="sixtyminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="2" BackgroundColor="Red" TextColor="White" />
+                        <Button Text="+90 mins" x:Name="ninetyminsbtn" FontSize="12" Clicked="ninetyminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="3" BackgroundColor="Red" TextColor="White" />
+
+
+                    </Grid>
+
+
+                </Grid>
+            </Frame>
+
+
+            <!-- Old Duration Picker -->
+            <Frame HasShadow="False" IsVisible="False" Margin="20,10,20,10" BorderColor="Transparent"  Padding="5" CornerRadius="20"  BackgroundColor="#ffcccb" >
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
