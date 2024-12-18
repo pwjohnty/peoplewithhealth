@@ -21,7 +21,7 @@
         </Grid>
 
         <StackLayout x:Name="AppointmentCalendar" >
-            <Calendar:SfScheduler x:Name="Calendar"  TodayHighlightBrush="#ffcccb" CellBorderBrush="#f0f0f0" Tapped="Calendar_Tapped" HeightRequest="{OnPlatform Android='690', iOS='500'}" VerticalOptions="FillAndExpand"  View="Month">
+            <Calendar:SfScheduler x:Name="Calendar"  TodayHighlightBrush="#ffcccb" CellBorderBrush="#f0f0f0" Tapped="Calendar_Tapped" VerticalOptions="FillAndExpand"  View="Month">
                 <Calendar:SfScheduler.MonthView>
                     <Calendar:SchedulerMonthView   AppointmentDisplayMode="Indicator"/>
                 </Calendar:SfScheduler.MonthView>
