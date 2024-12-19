@@ -40,7 +40,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios'">
-	  <CodesignKey>Apple Development: Created via API (QB732BRMZC)</CodesignKey>
+	  <CodesignKey>Apple Development: Created via API (9AF7WV24ZX)</CodesignKey>
 	  <CodesignProvision>VS: com.peoplewith.peoplewith Development</CodesignProvision>
 	  <ProvisioningType>automatic</ProvisioningType>
 	</PropertyGroup>
@@ -48,11 +48,11 @@
 	<ItemGroup>
 		<!-- App Icon -->
 		<!--<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />-->
-		<MauiIcon Include="Resources\AppIcon\pwhealthicon.svg" ForegroundScale="0.70" Color="#FFFFFF" />
+		<MauiIcon Include="Resources\AppIcon\pwhealthicon.svg" Color="#FFFFFF" />
 
 		<!-- Splash Screen -->
 		<!--<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />-->
-		<MauiSplashScreen Include="Resources\Splash\splashpw.svg" Color="#FFFFFF" />
+		<MauiSplashScreen Include="Resources\Splash\splashpw.svg" BaseSize="128,128" Color="#FFFFFF" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
