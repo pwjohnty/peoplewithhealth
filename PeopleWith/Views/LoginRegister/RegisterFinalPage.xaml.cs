@@ -202,7 +202,7 @@ public partial class RegisterFinalPage : ContentPage
         try
         {
             //handle notification
-
+            //test
          
 
             if (DeviceInfo.Platform == DevicePlatform.Android)
