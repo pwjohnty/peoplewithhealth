@@ -25,7 +25,7 @@ namespace PeopleWith
                 .UseMauiApp<App>()
                 .UseLocalNotification()
                 .UseSegmentedControl()
-                .UseSkiaSharp()
+                //.UseSkiaSharp()
 #if ANDROID
                 .ConfigureMauiHandlers(handlers => handlers.AddHandler<Microsoft.Maui.Controls.Entry, PINView.Maui.Platforms.Android.Handlers.EntryHandler>())
 #endif

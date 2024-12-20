@@ -513,7 +513,7 @@ FontSize="8" />
                          
 
 
-                                <Border StrokeShape="RoundRectangle 10" InputTransparent="True" IsVisible="False" x:Name="nosymdataframe" BackgroundColor="#fff7ea" Stroke="Transparent" Padding="10" Margin="10,10,10,0">
+                                <Border StrokeShape="RoundRectangle 10" IsVisible="False" x:Name="nosymdataframe" BackgroundColor="#fff7ea" Stroke="Transparent" Padding="10" Margin="10,10,10,0">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -770,7 +770,7 @@ Text="Get Started" />
                            
 
 
-                                <Border StrokeShape="RoundRectangle 10" InputTransparent="True" IsVisible="False" x:Name="nomeasurementdataframe" BackgroundColor="#e5f0fb" Stroke="Transparent" Padding="10" Margin="10,10,10,0">
+                                <Border StrokeShape="RoundRectangle 10" IsVisible="False" x:Name="nomeasurementdataframe" BackgroundColor="#e5f0fb" Stroke="Transparent" Padding="10" Margin="10,10,10,0">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
