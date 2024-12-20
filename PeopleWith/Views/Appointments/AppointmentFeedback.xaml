@@ -5,8 +5,8 @@
              xmlns:chip="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
              NavigationPage.HasNavigationBar="True" BackgroundColor="White">
     <ScrollView>
-    <VerticalStackLayout>
-        <StackLayout x:Name="AddFeedbackStack" IsVisible="false" >
+        <VerticalStackLayout>
+            <StackLayout x:Name="AddFeedbackStack" IsVisible="false" >
             <!-- Did you Attend? -->
             <Label Text="Appointment Feedback" FontSize="26" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
             <Label Text="Did you Attend?" FontSize="16" Margin="20,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
@@ -16,8 +16,8 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                    <Button CornerRadius="5" FontSize="Small" FontFamily="HankenGroteskBold" x:Name="btnyes" TextColor="#031926" BorderColor="LightGray" BorderWidth="1" BackgroundColor="Transparent" Clicked="btnyes_Clicked" Text="Yes" VerticalOptions="Center" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="0"  />
-                    <Button CornerRadius="5" FontSize="Small" x:Name="btnno" FontFamily="HankenGroteskBold" TextColor="#031926" BorderColor="LightGray" BorderWidth="1" BackgroundColor="Transparent" Clicked="btnno_Clicked"  Text="No" VerticalOptions="Center" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="1"  />
+                    <Button CornerRadius="5" FontSize="12" FontFamily="HankenGroteskBold" x:Name="btnyes" TextColor="#031926" BorderColor="LightGray" BorderWidth="1" BackgroundColor="Transparent" Clicked="btnyes_Clicked" Text="Yes" VerticalOptions="Center" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="0"  />
+                    <Button CornerRadius="5" FontSize="12" x:Name="btnno" FontFamily="HankenGroteskBold" TextColor="#031926" BorderColor="LightGray" BorderWidth="1" BackgroundColor="Transparent" Clicked="btnno_Clicked"  Text="No" VerticalOptions="Center" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="1"  />
 
             </Grid>
             
@@ -37,7 +37,7 @@ SelectionIndicatorColor="Transparent" ChipPadding="4,4,0,0" ChipTextSize="Micro"
                     <chip:SfChipGroup.ItemTemplate>
                         <DataTemplate>
                             <StackLayout Orientation="Horizontal">
-                                <Label Text="{Binding .}" FontSize="Small" TextColor="#031926" FontAttributes="Bold" VerticalOptions="Center" Padding="5" Margin="0" />
+                                <Label Text="{Binding .}" FontSize="12" TextColor="#031926" FontAttributes="Bold" VerticalOptions="Center" Padding="5" Margin="0" />
                             </StackLayout>
                         </DataTemplate>
                     </chip:SfChipGroup.ItemTemplate>

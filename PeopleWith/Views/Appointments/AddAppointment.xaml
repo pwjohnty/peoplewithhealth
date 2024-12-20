@@ -77,7 +77,7 @@
                     <chip:SfChipGroup.ItemTemplate>
                         <DataTemplate>
                             <StackLayout Orientation="Horizontal">
-                                <Label Text="{Binding location}" FontSize="Small" TextColor="#031926" FontAttributes="Bold" VerticalOptions="Center" Padding="10" Margin="0" />
+                                <Label Text="{Binding location}" FontSize="12" TextColor="#031926" FontAttributes="Bold" VerticalOptions="Center" Padding="10" Margin="0" />
                             </StackLayout>
                         </DataTemplate>
                     </chip:SfChipGroup.ItemTemplate>
@@ -97,7 +97,7 @@
                 <chip:SfChipGroup.ItemTemplate>
                     <DataTemplate>
                         <StackLayout Orientation="Horizontal">
-                            <Label Text="{Binding type}" FontSize="Small" TextColor="#031926" FontAttributes="Bold" VerticalOptions="Center" Padding="10" Margin="0" />
+                            <Label Text="{Binding type}" FontSize="12" TextColor="#031926" FontAttributes="Bold" VerticalOptions="Center" Padding="10" Margin="0" />
                         </StackLayout>
                     </DataTemplate>
                 </chip:SfChipGroup.ItemTemplate>
@@ -231,7 +231,7 @@
                     <chip:SfChipGroup.ItemTemplate>
                         <DataTemplate>
                             <StackLayout Orientation="Horizontal">
-                                <Label Text="{Binding .}" FontSize="Small" TextColor="#031926" FontAttributes="Bold" VerticalOptions="Center" Padding="10" Margin="0" />
+                                <Label Text="{Binding .}" FontSize="12" TextColor="#031926" FontAttributes="Bold" VerticalOptions="Center" Padding="10" Margin="0" />
                             </StackLayout>
                         </DataTemplate>
                     </chip:SfChipGroup.ItemTemplate>

@@ -18,7 +18,7 @@
 
             <StackLayout x:Name="loadingstack" VerticalOptions="CenterAndExpand" IsVisible="false">
                 <ActivityIndicator IsRunning="True"/>
-                <Label Text="Loading Questionnaire..." HorizontalOptions="Center" Margin="0,0,0,0" TextColor="Black" FontSize="Small" FontAttributes="Bold"></Label>
+                <Label Text="Loading Questionnaire..." HorizontalOptions="Center" Margin="0,0,0,0" TextColor="Black" FontSize="12" FontAttributes="Bold"></Label>
             </StackLayout>
 
             <StackLayout x:Name="datastack" IsVisible="False">

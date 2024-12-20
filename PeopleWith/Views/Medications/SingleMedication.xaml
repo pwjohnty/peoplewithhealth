@@ -207,7 +207,7 @@ FontFamily="HankenGroteskBold"
 Text="Show all data" />
 
 
-                <Button x:Name="DeleteBtn" Text="Delete Medication" Clicked="DeleteBtn_Clicked" FontSize="Small" Margin="0,40,0,5" FontFamily="HankenGroteskBold" BackgroundColor="#ffe5e5" TextColor="Red" CornerRadius="10" />
+                <Button x:Name="DeleteBtn" Text="Delete Medication" Clicked="DeleteBtn_Clicked" FontSize="14" Margin="0,40,0,5" FontFamily="HankenGroteskBold" BackgroundColor="#ffe5e5" TextColor="Red" CornerRadius="10" />
                 <Label HorizontalTextAlignment="Center" Text="If your Medication is deleted you will lose all your Medication feedback" Margin="5,0,5,20" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="DarkGray"  />
 
 

@@ -122,7 +122,7 @@ BorderColor="LightGray">
 
                                                 </Grid.ColumnDefinitions>
 
-                                                <Label Text="{Binding .}" FontFamily="HankenGroteskRegular" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="Small" />
+                                                <Label Text="{Binding .}" FontFamily="HankenGroteskRegular" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="12" />
 
 
 
@@ -143,7 +143,7 @@ BorderColor="LightGray">
                                                     <ColumnDefinition Width="100*"/>
 
                                                 </Grid.ColumnDefinitions>
-                                                <Label Text="{Binding .}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" FontAttributes="Bold"  TextColor="#031926" FontSize="Small" />
+                                                <Label Text="{Binding .}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" FontAttributes="Bold"  TextColor="#031926" FontSize="12" />
 
                                             </Grid>
                                         </Frame>
@@ -193,7 +193,7 @@ Text="Date of Diagnosis"
 
                     <inputLayout:SfTextInputLayout InputViewPadding="10" IsHintAlwaysFloated="True" BackgroundColor="Transparent" ShowHint="False" Margin="5,10,5,0" UnfocusedStrokeThickness="1" Stroke="LightGray" ContainerBackground="Transparent" ContainerType="Outlined" OutlineCornerRadius="5"
 >
-                        <Entry FontSize="Small" PlaceholderColor="Gray" TextChanged="dateEntry_TextChanged" Keyboard="Numeric" FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" x:Name="dateEntry" Placeholder="DD/MM/YYYY" TextColor="#031926"/>
+                        <Entry FontSize="12" PlaceholderColor="Gray" TextChanged="dateEntry_TextChanged" Keyboard="Numeric" FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" x:Name="dateEntry" Placeholder="DD/MM/YYYY" TextColor="#031926"/>
                     </inputLayout:SfTextInputLayout>
 
                     <Grid Margin="0,-10,0,0">
@@ -285,7 +285,7 @@ Text="Date of Surgery"
 
                     <inputLayout:SfTextInputLayout InputViewPadding="10" IsHintAlwaysFloated="True" x:Name="dosfloat" IsVisible="False" BackgroundColor="Transparent" ShowHint="False" Margin="5,10,5,0" UnfocusedStrokeThickness="1" Stroke="LightGray" ContainerBackground="Transparent" ContainerType="Outlined" OutlineCornerRadius="5"
 >
-                        <Entry FontSize="Small" TextChanged="dateofsurgeryEntry_TextChanged" PlaceholderColor="Gray" Keyboard="Numeric" IsVisible="False" FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" x:Name="dateofsurgeryEntry" Placeholder="DD/MM/YYYY" TextColor="#031926"/>
+                        <Entry FontSize="12" TextChanged="dateofsurgeryEntry_TextChanged" PlaceholderColor="Gray" Keyboard="Numeric" IsVisible="False" FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" x:Name="dateofsurgeryEntry" Placeholder="DD/MM/YYYY" TextColor="#031926"/>
                     </inputLayout:SfTextInputLayout>
 
                     <Grid Margin="0,-10,0,100" x:Name="dosgrid" IsVisible="False">
@@ -354,7 +354,7 @@ ChipTextSize="Micro"
                         <chip:SfChipGroup.ItemTemplate>
                             <DataTemplate>
                                 <StackLayout Orientation="Horizontal">
-                                    <Label Text="{Binding title}" FontSize="Micro" TextColor="#031926" FontAttributes="Bold" VerticalOptions="Center" Padding="10" Margin="0" />
+                                    <Label Text="{Binding title}" FontSize="10" TextColor="#031926" FontAttributes="Bold" VerticalOptions="Center" Padding="10" Margin="0" />
                                     <!-- Remove or customize the indicator here -->
                                 </StackLayout>
                             </DataTemplate>
@@ -401,7 +401,7 @@ Text="Additional Added Symptoms"
                         <chip:SfChipGroup.ItemTemplate>
                             <DataTemplate>
                                 <StackLayout Orientation="Horizontal">
-                                    <Label Text="{Binding title}" FontSize="Micro" TextColor="#031926" FontAttributes="Bold" Padding="10" Margin="0" />
+                                    <Label Text="{Binding title}" FontSize="10" TextColor="#031926" FontAttributes="Bold" Padding="10" Margin="0" />
                                     <!-- Remove or customize the indicator here -->
                                 </StackLayout>
                             </DataTemplate>
@@ -499,7 +499,7 @@ BorderColor="LightGray">
 
                                                 </Grid.ColumnDefinitions>
 
-                                                <Label Text="{Binding title}" FontFamily="HankenGroteskRegular" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="Small" />
+                                                <Label Text="{Binding title}" FontFamily="HankenGroteskRegular" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="12" />
 
 
 
@@ -520,7 +520,7 @@ BorderColor="LightGray">
                                                     <ColumnDefinition Width="100*"/>
 
                                                 </Grid.ColumnDefinitions>
-                                                <Label Text="{Binding title}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" FontAttributes="Bold"  TextColor="#031926" FontSize="Small" />
+                                                <Label Text="{Binding title}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" FontAttributes="Bold"  TextColor="#031926" FontSize="12" />
 
                                             </Grid>
                                         </Frame>
@@ -568,14 +568,14 @@ Text="Medications"
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="18*"/>
                             </Grid.ColumnDefinitions>
-                            <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" FontSize="Micro" TextColor="#031926" FontAttributes="Bold" Text="Medications that DO NOT need a prescription (over the counter):"/>
+                            <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" FontSize="10" TextColor="#031926" FontAttributes="Bold" Text="Medications that DO NOT need a prescription (over the counter):"/>
                             <Label Grid.Column="0" Grid.Row="1" Text="&#x2022;" VerticalOptions="Center" HorizontalOptions="Start"/>
                             <Label Grid.Column="1" Grid.Row="1" Text="Metoclopramide (For sickness and/or vertigo)" FontSize="8" TextColor="#031926" VerticalOptions="Center" HorizontalOptions="Start"/>
                             <Label Grid.Column="0" Grid.Row="2" Text="&#x2022;" VerticalOptions="Center" HorizontalOptions="Start"/>
                             <Label Grid.Column="1" Grid.Row="2" Text="Prochlorperazine (For sickness and/or vertigo)" FontSize="8" TextColor="#031926" VerticalOptions="Center" HorizontalOptions="Start"/>
                             <Label Grid.Column="0" Grid.Row="3" Text="&#x2022;" VerticalOptions="Center" HorizontalOptions="Start"/>
                             <Label Grid.Column="1" Grid.Row="3" Text="Pseudoephedrine (For colds/flu)" FontSize="8" TextColor="#031926" VerticalOptions="Center" HorizontalOptions="Start"/>
-                            <Label Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" FontSize="Micro" TextColor="#031926" FontAttributes="Bold" Text="Medications that DO need a prescription:"/>
+                            <Label Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" FontSize="10" TextColor="#031926" FontAttributes="Bold" Text="Medications that DO need a prescription:"/>
                             <Label Grid.Column="0" Grid.Row="5" Text="&#x2022;" VerticalOptions="Center" HorizontalOptions="Start"/>
                             <Label Grid.Column="1" Grid.Row="5" Text="Corticosteriods (prednisolone, dexamethasone, hydrocortisone, betamethasone) (For inflammatory conditions e.g., arthritis)" FontSize="8" TextColor="#031926" VerticalOptions="Center" HorizontalOptions="Start"/>
                             <Label Grid.Column="0" Grid.Row="6" Text="&#x2022;" VerticalOptions="Center" HorizontalOptions="Start"/>
@@ -620,7 +620,7 @@ HorizontalOptions="Start" />
                         <chip:SfChipGroup.ItemTemplate>
                             <DataTemplate>
                                 <StackLayout Orientation="Horizontal">
-                                    <Label Text="{Binding title}" FontSize="Micro" TextColor="#031926" FontAttributes="Bold" Padding="10" Margin="0" />
+                                    <Label Text="{Binding title}" FontSize="10" TextColor="#031926" FontAttributes="Bold" Padding="10" Margin="0" />
                                     <!-- Remove or customize the indicator here -->
                                 </StackLayout>
                             </DataTemplate>
@@ -667,7 +667,7 @@ Text="Additional Added Medications"
                         <chip:SfChipGroup.ItemTemplate>
                             <DataTemplate>
                                 <StackLayout Orientation="Horizontal">
-                                    <Label Text="{Binding title}" FontSize="Micro" TextColor="#031926" FontAttributes="Bold" Padding="10" Margin="0" />
+                                    <Label Text="{Binding title}" FontSize="10" TextColor="#031926" FontAttributes="Bold" Padding="10" Margin="0" />
                                     <!-- Remove or customize the indicator here -->
                                 </StackLayout>
                             </DataTemplate>
@@ -764,7 +764,7 @@ BorderColor="LightGray">
 
                                                 </Grid.ColumnDefinitions>
 
-                                                <Label Text="{Binding title}" FontFamily="HankenGroteskRegular" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="Small" />
+                                                <Label Text="{Binding title}" FontFamily="HankenGroteskRegular" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="12" />
 
 
 
@@ -785,7 +785,7 @@ BorderColor="LightGray">
                                                     <ColumnDefinition Width="100*"/>
 
                                                 </Grid.ColumnDefinitions>
-                                                <Label Text="{Binding title}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" FontAttributes="Bold"  TextColor="#031926" FontSize="Small" />
+                                                <Label Text="{Binding title}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" FontAttributes="Bold"  TextColor="#031926" FontSize="12" />
 
                                             </Grid>
                                         </Frame>
@@ -869,7 +869,7 @@ BorderColor="LightGray">
 
                                                 </Grid.ColumnDefinitions>
 
-                                                <Label Text="{Binding label}" FontFamily="HankenGroteskRegular" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="Small" />
+                                                <Label Text="{Binding label}" FontFamily="HankenGroteskRegular" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="12" />
 
 
 
@@ -890,7 +890,7 @@ BorderColor="LightGray">
                                                     <ColumnDefinition Width="100*"/>
 
                                                 </Grid.ColumnDefinitions>
-                                                <Label Text="{Binding label}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" FontAttributes="Bold"  TextColor="#031926" FontSize="Small" />
+                                                <Label Text="{Binding label}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" FontAttributes="Bold"  TextColor="#031926" FontSize="12" />
 
                                             </Grid>
                                         </Frame>
@@ -971,7 +971,7 @@ BorderColor="LightGray">
 
                                                 </Grid.ColumnDefinitions>
 
-                                                <Label Text="{Binding label}" FontFamily="HankenGroteskRegular" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="Small" />
+                                                <Label Text="{Binding label}" FontFamily="HankenGroteskRegular" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="12" />
 
 
 
@@ -992,7 +992,7 @@ BorderColor="LightGray">
                                                     <ColumnDefinition Width="100*"/>
 
                                                 </Grid.ColumnDefinitions>
-                                                <Label Text="{Binding label}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" FontAttributes="Bold"  TextColor="#031926" FontSize="Small" />
+                                                <Label Text="{Binding label}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" FontAttributes="Bold"  TextColor="#031926" FontSize="12" />
 
                                             </Grid>
                                         </Frame>

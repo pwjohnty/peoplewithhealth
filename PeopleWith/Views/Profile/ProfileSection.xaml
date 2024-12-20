@@ -9,7 +9,7 @@
     <ScrollView>
         <VerticalStackLayout>
             <!-- Logo & Name-->
-            <Grid>
+            <Grid Margin="0,10,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -17,14 +17,14 @@
                 <Frame Grid.Row="0" CornerRadius="40" HasShadow="False" BackgroundColor="#E5F0FB" HeightRequest="80" WidthRequest="80" BorderColor="Transparent">
                     <Label x:Name="Initals" Padding="0" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" FontFamily="HankenGroteskBold" FontSize="22" TextColor="#031926"/>
                 </Frame>
-                <Label Grid.Row="1" Text="Health Details" HorizontalOptions="Center" Margin="10,0,0,0" FontFamily="HankenGroteskBold" FontSize="25" TextColor="#031926"/>
+                <Label Grid.Row="1" Text="Your Profile" HorizontalOptions="Center" Margin="10,0,0,0" FontFamily="HankenGroteskBold" FontSize="25" TextColor="#031926"/>
             </Grid>
 
             <!-- Health Details-->
             <Frame HasShadow="false" Margin="20,5,20,0" BorderColor="#E8E8E8" Padding="-2" BackgroundColor="Transparent" >
-                <syncfusion:SfListView x:Name="UserDetails" SelectionBackground="Transparent" ItemTapped="UserDetails_ItemTapped" AutoFitMode="Height" >
+                <syncfusion:SfListView x:Name="UserDetails"  SelectionBackground="Transparent" ItemTapped="UserDetails_ItemTapped" AutoFitMode="Height" >
                     <syncfusion:SfListView.ItemTemplate>
-                        <DataTemplate>
+                        <DataTemplate >
                             <ViewCell>
                                 <ViewCell.View>
                                     <Grid>
@@ -37,8 +37,8 @@
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <Label HorizontalOptions="StartAndExpand" Text="{Binding SettingsTitle}" FontFamily="HankenGroteskRegular" HeightRequest="20" FontSize="Micro" VerticalOptions="Center" Grid.Row="0" Grid.Column="0" Margin="10,10,0,0" TextColor="Gray" />
-                                        <Label HorizontalOptions="StartAndExpand" Text="{Binding SettingsItem}" FontFamily="HankenGroteskBold" HeightRequest="25" VerticalOptions="Center" FontSize="Small" Grid.Row="1" Grid.Column="0" Margin="10,0,0,0" FontAttributes="Bold" TextColor="#031926" />
+                                        <Label FontAutoScalingEnabled="False" HorizontalOptions="StartAndExpand" Text="{Binding SettingsTitle}"  FontFamily="HankenGroteskRegular" HeightRequest="20" FontSize="10" VerticalOptions="Center" Grid.Row="0" Grid.Column="0" Margin="10,10,0,0" TextColor="Gray" />
+                                        <Label HorizontalOptions="StartAndExpand" Text="{Binding SettingsItem}" FontFamily="HankenGroteskBold" HeightRequest="25" VerticalOptions="Center" FontSize="12" Grid.Row="1" Grid.Column="0" Margin="10,0,0,0" FontAttributes="Bold" TextColor="#031926" />
                                         <Image Source="backbutton.png" Rotation="180" Grid.Row="0" HeightRequest="10" WidthRequest="10" Grid.RowSpan="2" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="End" Margin="0,10,10,0" />
 
                                         <BoxView HeightRequest="1" Color="#E8E8E8" BackgroundColor="#E8E8E8"  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="1" Margin="10,0,10,0" HorizontalOptions="FillAndExpand" />
@@ -70,8 +70,8 @@
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <Label HorizontalOptions="StartAndExpand" Text="{Binding SettingsTitle}" FontFamily="HankenGroteskRegular" HeightRequest="20" FontSize="Micro" VerticalOptions="Center" Grid.Row="0" Grid.Column="0" Margin="10,10,0,0" TextColor="Gray" />
-                                        <Label HorizontalOptions="StartAndExpand" Text="{Binding SettingsItem}" FontFamily="HankenGroteskBold" HeightRequest="25" VerticalOptions="Center" FontSize="Small" Grid.Row="1" Grid.Column="0" Margin="10,0,0,0" FontAttributes="Bold" TextColor="#031926" />
+                                        <Label HorizontalOptions="StartAndExpand" Text="{Binding SettingsTitle}" FontFamily="HankenGroteskRegular" HeightRequest="20" FontSize="10" VerticalOptions="Center" Grid.Row="0" Grid.Column="0" Margin="10,10,0,0" TextColor="Gray" />
+                                        <Label HorizontalOptions="StartAndExpand" Text="{Binding SettingsItem}" FontFamily="HankenGroteskBold" HeightRequest="25" VerticalOptions="Center" FontSize="12" Grid.Row="1" Grid.Column="0" Margin="10,0,0,0" FontAttributes="Bold" TextColor="#031926" />
                                         <Image Source="backbutton.png" Rotation="180" Grid.Row="0" HeightRequest="10" WidthRequest="10" Grid.RowSpan="2" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="End" Margin="0,10,10,0" />
 
                                         <BoxView HeightRequest="1" Color="#E8E8E8" BackgroundColor="#E8E8E8"  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="1" Margin="10,0,10,0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
@@ -156,7 +156,7 @@
             <!-- Delete Account  Button-->
             <Button Margin="10,20,10,0" x:Name="DeleteAccount" Text="DELETE ACCCOUNT" Clicked="DeleteAccount_Clicked" FontFamily="HankenGroteskBold" HeightRequest="45" FontSize="16" Padding="5" CornerRadius="5" BorderColor="red" BorderWidth="1" BackgroundColor="Transparent" TextColor="red"/>
 
-            <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="Once your Account is Deleted, it cannot be retrieved. Ensure you no longer require access to this Account before Deletion." FontFamily="HankenGroteskBold" HeightRequest="25" FontSize="Micro" VerticalOptions="Center" Margin="20,10,20,20" TextColor="red" />
+            <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="Once your Account is Deleted, it cannot be retrieved. Ensure you no longer require access to this Account before Deletion." FontFamily="HankenGroteskBold"  FontSize="10" VerticalOptions="Center" Margin="20,10,20,20" TextColor="red" />
 
 
 

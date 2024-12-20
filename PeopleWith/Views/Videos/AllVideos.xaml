@@ -89,7 +89,7 @@
 
             <StackLayout x:Name="Filterstack" Margin="0,10,0,0"  Grid.Row="2" Grid.Column="0" Grid.RowSpan="2" IsVisible="True">
 
-                <Label Text="Filters" Margin="0,0,0,5" Grid.Row="2" Grid.Column="0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" FontSize="Small" FontFamily="HankenGroteskBold" />
+                <Label Text="Filters" Margin="0,0,0,5" Grid.Row="2" Grid.Column="0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" FontSize="12" FontFamily="HankenGroteskBold" />
 
                 <ScrollView Orientation="Horizontal" Grid.Row="3" Grid.Column="0" Margin="0,0,0,0"  HorizontalScrollBarVisibility="Never">
                         <chip:SfChipGroup ChipFontFamily="HankenGroteskRegular" ChipType="Choice" SelectionIndicatorColor="Transparent" ChipClicked="FilterTabs_ChipClicked" x:Name="FilterTabs"  Grid.Row="2" Grid.Column="0" SelectedChipBackground="#a9a9a9" ChipStroke="Transparent" ChipPadding="0" ChipTextSize="12" SelectedChipTextColor="#031926" ShowIcon="False" ChipTextColor="#031926" ChipBackground="#FAFAFA"/>

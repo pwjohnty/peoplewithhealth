@@ -6,7 +6,7 @@
     <VerticalStackLayout>
         <StackLayout x:Name="AllergySingle" >
 
-            <Frame x:Name="AllergyInfo" HasShadow="False" Padding="0" CornerRadius="15"  VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,0,20,5" BorderColor="#BC8F8F" BackgroundColor="Transparent">
+            <Frame x:Name="AllergyInfo" HasShadow="False" Padding="0" CornerRadius="15"  VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,10,20,5" BorderColor="#BC8F8F" BackgroundColor="Transparent">
                 <Label Text="i" FontFamily="HankenGroteskBold" HorizontalOptions="Center" TextColor="#BC8F8F" FontSize="12"  VerticalOptions="Center" />
                 <Frame.GestureRecognizers>
                     <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
@@ -50,7 +50,7 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <Button x:Name="Deletebtn" Grid.Row="0" Margin="20,50,20,0"  FontSize="Small" TextColor="Red" BackgroundColor="#ffe5e5" FontFamily="HankenGroteskBold" CornerRadius="10" Text="Delete Allergy" Clicked="Deletebtn_Clicked" />
+                <Button x:Name="Deletebtn" Grid.Row="0" Margin="20,50,20,0"  FontSize="14" TextColor="Red" BackgroundColor="#ffe5e5" FontFamily="HankenGroteskBold" CornerRadius="10" Text="Delete Allergy" Clicked="Deletebtn_Clicked" />
                 <Label HorizontalTextAlignment="Start" Grid.Row="1" Text="If this Allergy is deleted, you will lose all of your Allergy Data" Margin="20,5,20,20" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="DarkGray"  />
             </Grid>
         </StackLayout>

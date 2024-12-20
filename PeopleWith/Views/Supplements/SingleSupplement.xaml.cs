@@ -89,7 +89,18 @@ public partial class SingleSupplement : ContentPage
                         {
                             item.Times = "1 " + MedSelected.preparation;
                             var day = MedSelected.TimeDosage[Index].Split('|');
-                            item.Type = day[2];
+
+                            if(day.Count() == 4)
+                            {
+                                //var msg = day[1] + "|" + day[2]; 
+                                item.Type = day[3];
+                            }
+                            else
+                            {
+                                item.Type = day[2];
+                            }
+
+                            
                         }
                         else if (freqSplit[0] == "Days Interval")
                         {

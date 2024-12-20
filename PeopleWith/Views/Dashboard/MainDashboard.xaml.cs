@@ -548,7 +548,7 @@ public partial class MainDashboard : ContentPage
 
                     if(item.label.Length > 21)
                     {
-                        item.shortlabel = item.label.Substring(0, 21) + "...";
+                        item.shortlabel = item.label.Substring(0, 18) + "...";
                     }
                     else
                     {
