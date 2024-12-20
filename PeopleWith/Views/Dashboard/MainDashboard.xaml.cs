@@ -544,9 +544,15 @@ public partial class MainDashboard : ContentPage
 
                 foreach(var item in filteredSymptoms)
                 {
+                    item.title = item.label;
+
                     if(item.label.Length > 21)
                     {
-                        item.label = item.label.Substring(0, 21) + "...";
+                        item.shortlabel = item.label.Substring(0, 21) + "...";
+                    }
+                    else
+                    {
+                        item.shortlabel = item.label;
                     }
                 }
 
@@ -2654,9 +2660,16 @@ public partial class MainDashboard : ContentPage
         }
     }
 
-    private void Button_Clicked_5(object sender, EventArgs e)
+    private async void Button_Clicked_5(object sender, EventArgs e)
     {
+        try
+        {
+            await Navigation.PushAsync(new AllMedications(), false);
+        }
+        catch(Exception ex)
+        {
 
+        }
     }
 
     async private void symptomdetaillist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
@@ -2670,7 +2683,7 @@ public partial class MainDashboard : ContentPage
 
            // UserSymptomPassed.Add(item);
 
-            await Navigation.PushAsync(new UpdateSingleSymptom(userfeedbacklist[0], item.label, item.value), false);
+            await Navigation.PushAsync(new UpdateSingleSymptom(userfeedbacklist[0], item.title, item.value), false);
 
 
             // await Navigation.PushAsync(new AllSymptoms(userfeedbacklist[0]), false);

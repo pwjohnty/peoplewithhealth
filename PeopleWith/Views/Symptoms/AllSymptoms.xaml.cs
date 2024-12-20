@@ -183,11 +183,11 @@ public partial class AllSymptoms : ContentPage
                     item.PreviousIntensity = previous;
                     //title too long, trim 
                     var title = item.symptomtitle;
-                    if (title.Length > 25)
+                    if (title.Length > 30)
                     {
 
                         var trimtitle = item.symptomtitle;
-                        string cut = trimtitle.Substring(0, 25);
+                        string cut = trimtitle.Substring(0, 30);
                         item.Shorttitle = cut + "...";
                     }
                     else

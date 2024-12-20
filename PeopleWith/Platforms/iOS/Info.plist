@@ -34,11 +34,15 @@
 	<string>The apps need access to your Health Usage Share</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>The apps need access to update your Health Usage Data</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>The apps need access to location when using</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>The apps need access to location when using app</string>
 	<key>UIUserInterfaceStyle</key>
 	<string>Light</string>
-	<key>CFBundleVersion</key>
-	<string>11.1</string>
 	<key>CFBundleShortVersionString</key>
-	<string>11.1.9</string>
+	<string>12.1.5</string>
+	<key>CFBundleVersion</key>
+	<string>12.1</string>
 </dict>
 </plist>
