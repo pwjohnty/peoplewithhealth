@@ -49,6 +49,10 @@ namespace PeopleWith
         {
             try
             {
+                //Lock Font Size 
+                UIKit.UIFont.GetPreferredFontForTextStyle(UIKit.UIFontTextStyle.Body).WithSize(16);
+
+
                 string token = null!;
                 if (deviceToken.Length > 0)
                 {

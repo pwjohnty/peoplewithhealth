@@ -307,7 +307,7 @@ public partial class AllMedications : ContentPage
                                             {
                                                 if (timePart == nextTimeDue)
                                                 {
-                                                    if (split[1].Contains("|"))
+                                                    if (split.Count() == 4)
                                                     {
                                                         item.NextDosage = split[1] + "|" + split[2];
                                                     }
@@ -352,7 +352,7 @@ public partial class AllMedications : ContentPage
                                         {
                                             var split = p.Split('|');
 
-                                            if (split[1].Contains("|"))
+                                            if (split.Count() == 4)
                                             {
                                                 item.NextDosage = split[1] + "|" + split[2];
                                             }
@@ -412,7 +412,7 @@ public partial class AllMedications : ContentPage
                                             {
                                                 if (timePart == nextTimeDue)
                                                 {
-                                                    if (split[1].Contains("|"))
+                                                    if (split.Count() == 4)
                                                     {
                                                         item.NextDosage = split[1] + "|" + split[2];
                                                     }
@@ -457,7 +457,7 @@ public partial class AllMedications : ContentPage
                                         {
                                             var split = p.Split('|');
 
-                                            if (split[1].Contains("|"))
+                                            if (split.Count() == 4)
                                             {
                                                 item.NextDosage = split[1] + "|" + split[2];
                                             }

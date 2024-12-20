@@ -60,6 +60,28 @@
                     </buttons:SfSegmentedControl.ItemsSource>
    
                 </buttons:SfSegmentedControl>
+                
+                <!-- Tab Explanation -->
+                <!--<Border StrokeShape="RoundRectangle 5" Padding="5" IsVisible="False" StrokeThickness="0.5" Opacity="1" Stroke="Teal" BackgroundColor="White" Margin="0,0,0,10" >
+                    <Grid ColumnSpacing="5" Margin="38,0,38,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="8"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="8"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Row="0" Grid.Column="0" HorizontalTextAlignment="Center" Text="Medications you have currently scheduled" FontFamily="HankenGroteskRegular" FontSize="8" TextColor="Teal" />
+                        <BoxView Grid.Row="0" Grid.Column="1" WidthRequest="1" BackgroundColor="Teal" VerticalOptions="FillAndExpand" />
+                        <Label Grid.Row="0" Grid.Column="2" HorizontalTextAlignment="Center" Text="Medications you take as you require them" FontFamily="HankenGroteskRegular" FontSize="8" TextColor="Teal" />
+                        <BoxView Grid.Row="0" Grid.Column="3" WidthRequest="1" BackgroundColor="Teal" VerticalOptions="FillAndExpand" />
+                        <Label Grid.Row="0" Grid.Column="4" HorizontalTextAlignment="Center" Text="Medications you are no longer taking" FontFamily="HankenGroteskRegular" FontSize="8" TextColor="Teal" />
+                    </Grid>
+                </Border>-->
 
                 <syncfusion:SfListView  x:Name="AllUserMedsList" IsVisible="False" Padding="0" Margin="10,10,10,50" ItemTapped="AllUserMedsList_ItemTapped" AutoFitMode="Height"  ItemSpacing="0"  HorizontalOptions="FillAndExpand" IsScrollingEnabled="False"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
                     <syncfusion:SfListView.ItemTemplate>
@@ -128,7 +150,7 @@ Padding="0">
                                             </Label.FormattedText>
                                         </Label>
 
-                                        <Label Text="{Binding NextTime}" IsVisible="False" FontFamily="HankenGroteskRegular"  FontSize="Small" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="Center" HorizontalOptions="End" VerticalTextAlignment="Center" Margin="10,0,0,10" TextColor="gray" />
+                                        <Label Text="{Binding NextTime}" IsVisible="False" FontFamily="HankenGroteskRegular"  FontSize="12" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="Center" HorizontalOptions="End" VerticalTextAlignment="Center" Margin="10,0,0,10" TextColor="gray" />
 
                                         <Image Source="nextdarker.png" HeightRequest="15" Margin="0,0,0,10"  Grid.Row="0" Grid.Column="4" VerticalOptions="Center" HorizontalOptions="Center" />
 
@@ -263,7 +285,7 @@ Padding="0">
                                                 </Label.FormattedText>
                                             </Label>
 
-                                            <Label Text="{Binding NextTime}" IsVisible="False" FontFamily="HankenGroteskRegular"  FontSize="Small" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="Center" HorizontalOptions="End" VerticalTextAlignment="Center" Margin="10,0,0,10" TextColor="gray" />
+                                            <Label Text="{Binding NextTime}" IsVisible="False" FontFamily="HankenGroteskRegular"  FontSize="12" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="Center" HorizontalOptions="End" VerticalTextAlignment="Center" Margin="10,0,0,10" TextColor="gray" />
 
                                             <Image Source="nextdarker.png" HeightRequest="15" Margin="0,0,0,10"  Grid.Row="0" Grid.Column="4" VerticalOptions="Center" HorizontalOptions="Center" />
                                             <Image Opacity="1" Source="notesicon.png" Grid.Row="3" Grid.Column="0" VerticalOptions="Start" IsVisible="{Binding ChangedNotes}" HorizontalOptions="Center" HeightRequest="20" WidthRequest="20"/>
@@ -354,7 +376,7 @@ Padding="0">
                                                 </Label.FormattedText>
                                             </Label>
 
-                                            <Label Text="{Binding NextTime}" IsVisible="False" FontFamily="HankenGroteskRegular"  FontSize="Small" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="Center" HorizontalOptions="End" VerticalTextAlignment="Center" Margin="10,0,0,10" TextColor="gray" />
+                                            <Label Text="{Binding NextTime}" IsVisible="False" FontFamily="HankenGroteskRegular"  FontSize="12" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="Center" HorizontalOptions="End" VerticalTextAlignment="Center" Margin="10,0,0,10" TextColor="gray" />
 
                                             <Image Source="nextdarker.png" HeightRequest="15" IsVisible="False" Margin="0,0,0,10"  Grid.Row="0" Grid.Column="4" VerticalOptions="Center" HorizontalOptions="Center" />
 

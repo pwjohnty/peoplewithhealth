@@ -277,7 +277,7 @@ HorizontalOptions="Center" />
                             </Label>
                         </Grid>
                     </Frame>
-                    <Label x:Name="tcerror" FontSize="Micro" IsVisible="false" TextColor="Red" HorizontalOptions="Start" Margin="10,10,0,10" />
+                    <Label x:Name="tcerror" FontSize="10" IsVisible="false" TextColor="Red" HorizontalOptions="Start" Margin="10,10,0,10" />
 
                     <!--<Frame HasShadow="False" Padding="10" Margin="0,10,0,0" BackgroundColor="Transparent" BorderColor="#BFDBF7" CornerRadius="10">
                         <Grid>

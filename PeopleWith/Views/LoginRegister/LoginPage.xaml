@@ -40,7 +40,7 @@ HorizontalOptions="Start" />
             </Grid.RowDefinitions>
             
             <inputLayout:SfTextInputLayout Grid.Row="0" InputViewPadding="10" ShowHint="True" x:Name="emailhelper" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,20,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
-                <Entry FontSize="Small" PlaceholderColor="Gray" x:Name="emailentry" TextChanged="emailentry_TextChanged"  FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Email Address" TextColor="#031926"/>
+                <Entry FontSize="12" PlaceholderColor="Gray" x:Name="emailentry" TextChanged="emailentry_TextChanged"  FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Email Address" TextColor="#031926"/>
 
                 <inputLayout:SfTextInputLayout.ErrorLabelStyle>
                     <inputLayout:LabelStyle TextColor="Red"   FontFamily="HankenGroteskBold" />
@@ -49,7 +49,7 @@ HorizontalOptions="Start" />
 
             <inputLayout:SfTextInputLayout Grid.Row="1" InputViewPadding="10" ShowHint="True" IsHintAlwaysFloated="True" x:Name="passhelper" BackgroundColor="Transparent" Margin="0,0,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5"
                      EnablePasswordVisibilityToggle="True" >
-                <Entry FontSize="Small" PlaceholderColor="Gray" x:Name="firstpasswordentry" TextChanged="firstpasswordentry_TextChanged" FontFamily="HankenGroteskRegular"  VerticalOptions="CenterAndExpand" Placeholder="Password" TextColor="#031926"/>
+                <Entry FontSize="12" PlaceholderColor="Gray" x:Name="firstpasswordentry" TextChanged="firstpasswordentry_TextChanged" FontFamily="HankenGroteskRegular"  VerticalOptions="CenterAndExpand" Placeholder="Password" TextColor="#031926"/>
                 
                 <inputLayout:SfTextInputLayout.ErrorLabelStyle>
                     <inputLayout:LabelStyle TextColor="Red"   FontFamily="HankenGroteskBold" />

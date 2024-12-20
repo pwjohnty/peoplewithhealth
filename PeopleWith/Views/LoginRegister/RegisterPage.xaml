@@ -80,7 +80,7 @@
 
                     <inputLayout:SfTextInputLayout InputViewPadding="10" ShowHint="True" x:Name="emailhelper" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,20,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5"
                       >
-                        <Entry FontSize="Small" PlaceholderColor="Gray" x:Name="emailentry" TextChanged="emailentry_TextChanged"  FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Email Address" TextColor="#031926"/>
+                        <Entry FontSize="12" PlaceholderColor="Gray" x:Name="emailentry" TextChanged="emailentry_TextChanged"  FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Email Address" TextColor="#031926"/>
 
                         <inputLayout:SfTextInputLayout.ErrorLabelStyle>
                             <inputLayout:LabelStyle TextColor="Red"   FontFamily="HankenGroteskBold" />
@@ -102,7 +102,7 @@ HorizontalOptions="Start" />-->
 
                     <inputLayout:SfTextInputLayout InputViewPadding="10" ShowHint="True" IsHintAlwaysFloated="True" x:Name="passhelper" BackgroundColor="Transparent" Margin="0,0,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5"
                      EnablePasswordVisibilityToggle="True" >
-                        <Entry FontSize="Small" PlaceholderColor="Gray" x:Name="firstpasswordentry" TextChanged="firstpasswordentry_TextChanged" FontFamily="HankenGroteskRegular"  VerticalOptions="CenterAndExpand" Placeholder="Password" TextColor="#031926"/>
+                        <Entry FontSize="12" PlaceholderColor="Gray" x:Name="firstpasswordentry" TextChanged="firstpasswordentry_TextChanged" FontFamily="HankenGroteskRegular"  VerticalOptions="CenterAndExpand" Placeholder="Password" TextColor="#031926"/>
                     </inputLayout:SfTextInputLayout>
 
                     <Label  TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="Bold" FontSize="12" Text="Password must contain:" Margin="0,0,0,10" VerticalOptions="Center" HorizontalOptions="Start" />
@@ -139,7 +139,7 @@ HorizontalOptions="Start" />-->
 
                     <inputLayout:SfTextInputLayout InputViewPadding="10" x:Name="confirmpasshelper" ShowHint="True" IsHintAlwaysFloated="True"  BackgroundColor="Transparent" Margin="0,0,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5"
                       EnablePasswordVisibilityToggle="True">
-                        <Entry FontSize="Small" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" x:Name="confirmpassentry" TextChanged="confirmpassentry_TextChanged"  VerticalOptions="CenterAndExpand" Placeholder="Confirm Password" TextColor="#031926"/>
+                        <Entry FontSize="12" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" x:Name="confirmpassentry" TextChanged="confirmpassentry_TextChanged"  VerticalOptions="CenterAndExpand" Placeholder="Confirm Password" TextColor="#031926"/>
                         <inputLayout:SfTextInputLayout.ErrorLabelStyle>
                             <inputLayout:LabelStyle TextColor="Red"   FontFamily="HankenGroteskBold" />
                         </inputLayout:SfTextInputLayout.ErrorLabelStyle>
@@ -253,7 +253,7 @@ HorizontalOptions="Start" />
 
                     <inputLayout:SfTextInputLayout InputViewPadding="10" x:Name="signupfloat" ShowHint="True" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,20,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5"
            >
-                        <Entry FontSize="Small" PlaceholderColor="Gray" IsTextPredictionEnabled="False" TextChanged="signupcodetext_TextChanged" x:Name="signupcodetext"  FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Sign-Up Code" TextColor="#031926">
+                        <Entry FontSize="12" PlaceholderColor="Gray" IsTextPredictionEnabled="False" TextChanged="signupcodetext_TextChanged" x:Name="signupcodetext"  FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Sign-Up Code" TextColor="#031926">
                             <Entry.Keyboard>
                                 <Keyboard x:FactoryMethod="Create">
                                     <x:Arguments>
@@ -277,7 +277,7 @@ FontAttributes="Bold"
 HorizontalOptions="Center" />
 
 
-                    <Button CornerRadius="10" x:Name="nosignupbtn" Clicked="nosignupbtn_Clicked" Margin="0,20,0,0" Padding="5" BorderWidth="1" Text="I don't have a sign-up code" FontFamily="HankenGroteskRegular" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="Small" BackgroundColor="Transparent" BorderColor="LightGray" />
+                    <Button CornerRadius="10" x:Name="nosignupbtn" Clicked="nosignupbtn_Clicked" Margin="0,20,0,0" Padding="5" BorderWidth="1" Text="I don't have a sign-up code" FontFamily="HankenGroteskRegular" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="12" BackgroundColor="Transparent" BorderColor="LightGray" />
 
 
 
@@ -400,7 +400,7 @@ BorderColor="LightGray">
 
                                                 </Grid.ColumnDefinitions>
 
-                                                <Label Text="{Binding .}" FontFamily="HankenGroteskRegular" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="Small" />
+                                                <Label Text="{Binding .}" FontFamily="HankenGroteskRegular" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="12" />
 
 
 
@@ -421,7 +421,7 @@ BorderColor="LightGray">
                                                     <ColumnDefinition Width="100*"/>
 
                                                 </Grid.ColumnDefinitions>
-                                                <Label Text="{Binding .}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" FontAttributes="Bold"  TextColor="#031926" FontSize="Small" />
+                                                <Label Text="{Binding .}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" FontAttributes="Bold"  TextColor="#031926" FontSize="12" />
 
                                             </Grid>
                                         </Frame>
@@ -469,7 +469,7 @@ HorizontalOptions="Start" />
 
                     <inputLayout:SfTextInputLayout InputViewPadding="10" IsHintAlwaysFloated="True" BackgroundColor="Transparent" ShowHint="False" Margin="5,10,5,0" UnfocusedStrokeThickness="1" Stroke="LightGray" ContainerBackground="Transparent" ContainerType="Outlined" OutlineCornerRadius="5"
           >
-                        <Entry FontSize="Small" PlaceholderColor="Gray" Keyboard="Numeric" FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" x:Name="dateEntry" TextChanged="dateEntry_TextChanged" Placeholder="DD/MM/YYYY" TextColor="#031926"/>
+                        <Entry FontSize="12" PlaceholderColor="Gray" Keyboard="Numeric" FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" x:Name="dateEntry" TextChanged="dateEntry_TextChanged" Placeholder="DD/MM/YYYY" TextColor="#031926"/>
                     </inputLayout:SfTextInputLayout>
 
 
@@ -548,7 +548,7 @@ BorderColor="LightGray">
                                                     <ColumnDefinition Width="10*"/>
                                                 </Grid.ColumnDefinitions>
 
-                                                <Label Text="{Binding .}" FontFamily="HankenGroteskRegular" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="Small" />
+                                                <Label Text="{Binding .}" FontFamily="HankenGroteskRegular" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="12" />
 
                                             </Grid>
                                         </Frame>
@@ -567,7 +567,7 @@ BorderColor="LightGray">
                                                     <ColumnDefinition Width="90*"/>
                                                     <ColumnDefinition Width="10*"/>
                                                 </Grid.ColumnDefinitions>
-                                                <Label Text="{Binding .}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" FontAttributes="Bold"  TextColor="#031926" FontSize="Small" />
+                                                <Label Text="{Binding .}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" FontAttributes="Bold"  TextColor="#031926" FontSize="12" />
 
 
                                             </Grid>

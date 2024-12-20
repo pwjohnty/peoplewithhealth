@@ -734,7 +734,7 @@ Text="Get Started" />
        
        Grid.Column="1" Grid.Row="0">
                                                                 <Label.FormattedText>
-                                                                    <FormattedString>
+                                                                    <FormattedString >
                                                                         <!-- Bind to label -->
                                                                         <Span Text="{Binding value}" FontSize="14" TextColor="#031926" FontFamily="HankenGroteskBold"  />
                                                                         <!-- Add a space or any desired separator -->

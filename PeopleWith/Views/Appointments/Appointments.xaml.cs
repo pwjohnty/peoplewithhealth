@@ -33,6 +33,8 @@ public partial class Appointments : ContentPage
             //Dunno 
         }
     }
+
+
     public Appointments()
     {
         try
@@ -201,8 +203,17 @@ public partial class Appointments : ContentPage
                 IsAllDay = nameof(appointmentcalendar.IsAllDay)
             };
 
-            // Set the AppointmentsSource
-            Calendar.AppointmentsSource = CalendarData;
+            //// Set the AppointmentsSource
+            //Calendar.AppointmentsSource = CalendarData;
+
+            //if (DeviceInfo.Platform == DevicePlatform.iOS)
+            //{
+            //    Calendar.HeightRequest = 500;
+            //}
+            //else if (DeviceInfo.Platform == DevicePlatform.Android)
+            //{
+            //    Calendar.HeightRequest = 690;
+            //}
 
         }
         catch (Exception Ex)
@@ -431,8 +442,17 @@ public partial class Appointments : ContentPage
                 AddAppoint.IsEnabled = true;
                 FeedbackRecorded.IsVisible = false;
                 FeedbackNotRecorded.IsVisible = false;
-                Feedbacktitle.IsVisible = false;
+                Feedbacktitle.IsVisible = false;    
                 Feedbackbtn.IsVisible = false;
+
+                //if (DeviceInfo.Platform == DevicePlatform.iOS)
+                //{
+                //    Calendar.HeightRequest = 500;
+                //}
+                //else if (DeviceInfo.Platform == DevicePlatform.Android)
+                //{
+                //    Calendar.HeightRequest = 690;
+                //}
             }
             else if (Calendar.View == Syncfusion.Maui.Scheduler.SchedulerView.Day)
             {
