@@ -436,42 +436,53 @@ public partial class RegisterFinalPage : ContentPage
                 newuser.devicemodel = DeviceInfo.Model;
                 newuser.usermigrated = true;
 
-                PermissionStatus status;
+                var checknotifications = await LocalNotificationCenter.Current.AreNotificationsEnabled();
 
-                if (DeviceInfo.Platform == DevicePlatform.Android)
+                if ((checknotifications))
                 {
-                    // Request and capture the permission status on Android
-                    status = await Permissions.CheckStatusAsync<Permissions.PostNotifications>();
-
-                    if (status == PermissionStatus.Granted)
-                    {
-                        // Set notifications as enabled
-                        newuser.pushnotifications = "True";
-                    }
-                    else
-                    {
-                        // Set notifications as disabled
-                        newuser.pushnotifications = "Disabled";
-                    }
+                    newuser.pushnotifications = "True";
                 }
                 else
                 {
-                    // Request permission on iOS via dependency service
-                    var notificationService = DependencyService.Get<INotificationService>();
-                    bool isGranted = await notificationService.CheckRequestNotificationPermissionAsync();
-
-                    // Set notifications based on whether permission was granted
-                    if (isGranted)
-                    {
-                        // Set notifications as enabled
-                        newuser.pushnotifications = "True";
-                    }
-                    else
-                    {
-                        // Set notifications as disabled
-                        newuser.pushnotifications = "Disabled";
-                    }
+                    newuser.pushnotifications = "Disabled";
                 }
+
+                //PermissionStatus status;
+
+                //if (DeviceInfo.Platform == DevicePlatform.Android)
+                //{
+                //    // Request and capture the permission status on Android
+                //    status = await Permissions.CheckStatusAsync<Permissions.PostNotifications>();
+
+                //    if (status == PermissionStatus.Granted)
+                //    {
+                //        // Set notifications as enabled
+                //        newuser.pushnotifications = "True";
+                //    }
+                //    else
+                //    {
+                //        // Set notifications as disabled
+                //        newuser.pushnotifications = "Disabled";
+                //    }
+                //}
+                //else
+                //{
+                //    // Request permission on iOS via dependency service
+                //    var notificationService = DependencyService.Get<INotificationService>();
+                //    bool isGranted = await notificationService.CheckRequestNotificationPermissionAsync();
+
+                //    // Set notifications based on whether permission was granted
+                //    if (isGranted)
+                //    {
+                //        // Set notifications as enabled
+                //        newuser.pushnotifications = "True";
+                //    }
+                //    else
+                //    {
+                //        // Set notifications as disabled
+                //        newuser.pushnotifications = "Disabled";
+                //    }
+                //}
 
 
                 if (emailcheck.IsChecked)
