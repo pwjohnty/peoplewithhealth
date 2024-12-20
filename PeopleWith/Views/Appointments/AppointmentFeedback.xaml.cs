@@ -308,9 +308,9 @@ public partial class AppointmentFeedback : ContentPage
 
                 //Change View to Feedback View 
 
-                AddFeedbackStack.IsVisible = false;
-                FinalFeedbackStack.IsVisible = true;
-                PopulatePage();
+                //AddFeedbackStack.IsVisible = false;
+                //FinalFeedbackStack.IsVisible = true;
+                //PopulatePage();
 
                 await MopupService.Instance.PushAsync(new PopupPageHelper("Appointment Feedback Added") { });
                 await Task.Delay(1500);

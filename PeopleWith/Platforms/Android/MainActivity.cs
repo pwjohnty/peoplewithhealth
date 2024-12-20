@@ -1,8 +1,10 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.Content.PM;
+using Android.Content.Res;
 using Android.Net;
 using Android.OS;
+using Android.Util;
 using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
@@ -33,6 +35,7 @@ namespace PeopleWith
 
             // Set the screen orientation to portrait
             RequestedOrientation = ScreenOrientation.Portrait;
+            initFontScale();
 
             AppCompatDelegate.DefaultNightMode = AppCompatDelegate.ModeNightNo;
 
@@ -63,6 +66,23 @@ namespace PeopleWith
             {
                 HandleNotificationTap(Intent);
             }
+
+        }
+
+        private void initFontScale()
+        {
+
+            Resources.Configuration.FontScale = 1.0f;
+            Resources.UpdateConfiguration(Resources.Configuration, Resources.DisplayMetrics);
+            //Configuration configuration = Resources.Configuration;
+            //configuration.FontScale = (float)1;
+            ////0.85 small, 1 standard, 1.15 big，1.3 more bigger ，1.45 supper big 
+            //DisplayMetrics metrics = new DisplayMetrics();
+            //WindowManager.DefaultDisplay.GetMetrics(metrics);
+            //metrics.ScaledDensity = configuration.FontScale * metrics.Density;
+            //// BaseContext.Resources.UpdateConfiguration(configuration, metrics);
+            //BaseContext.Resources.DisplayMetrics.SetTo(metrics);
+            //BaseContext.ApplicationContext.CreateConfigurationContext(configuration);
 
         }
 

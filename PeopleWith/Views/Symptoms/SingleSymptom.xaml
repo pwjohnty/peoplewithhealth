@@ -223,7 +223,7 @@ Padding="10">
                 <Button BackgroundColor="#fff7ea" Clicked="showallbtn_Clicked" HorizontalOptions="FillAndExpand" TextColor="Orange" FontAttributes="None" x:Name="showallbtn"  Margin="0,20,0,60" FontFamily="HankenGroteskBold" Text="Show all data" />
 
 
-                <Button  Text="Delete Symptom" x:Name="DeleteBtn" Clicked="Button_Clicked_1" FontSize="Small" Margin="0,40,0,5" FontFamily="HankenGroteskBold" BackgroundColor="#ffe5e5" TextColor="Red" CornerRadius="10" />
+                <Button  Text="Delete Symptom" x:Name="DeleteBtn" Clicked="Button_Clicked_1"  Margin="0,40,0,5" FontSize="14" FontFamily="HankenGroteskBold" BackgroundColor="#ffe5e5" TextColor="Red" CornerRadius="10" />
                 <Label HorizontalTextAlignment="Center" Text="If your symptom is deleted you will lose all your symptom feedback" Margin="20,0,20,20" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="DarkGray"  />
 
 

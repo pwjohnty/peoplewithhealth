@@ -20,8 +20,8 @@
 
         </Grid>
 
-        <StackLayout x:Name="AppointmentCalendar" >
-            <Calendar:SfScheduler x:Name="Calendar"  TodayHighlightBrush="#ffcccb" CellBorderBrush="#f0f0f0" Tapped="Calendar_Tapped" HeightRequest="{OnPlatform Android='690', iOS='500'}" VerticalOptions="FillAndExpand"  View="Month">
+        <StackLayout x:Name="AppointmentCalendar" VerticalOptions="FillAndExpand">
+            <Calendar:SfScheduler x:Name="Calendar"  TodayHighlightBrush="#ffcccb" CellBorderBrush="#f0f0f0" Tapped="Calendar_Tapped" VerticalOptions="StartAndExpand"  View="Month">
                 <Calendar:SfScheduler.MonthView>
                     <Calendar:SchedulerMonthView   AppointmentDisplayMode="Indicator"/>
                 </Calendar:SfScheduler.MonthView>
@@ -143,7 +143,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Button x:Name="Deletebtn" CornerRadius="10" Margin="10,20,10,0" Text="Delete Appointment" Grid.Row="0" Grid.Column="0" Clicked="Deletebtn_Clicked" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#031926" BackgroundColor="#ffcccb" />
+                            <Button x:Name="Deletebtn" CornerRadius="10" Margin="10,20,10,0" Text="Delete Appointment" Grid.Row="0" Grid.Column="0" Clicked="Deletebtn_Clicked" FontFamily="HankenGroteskBold" FontSize="14" TextColor="#031926" BackgroundColor="#ffcccb" />
                             <Label Text="If your Appointment is deleted, It cannot be retrieved" Margin="20,0,20,20" VerticalOptions="End" HorizontalOptions="Center"  Grid.Row="1" Grid.Column="0" FontFamily="HankenGroteskRegular" FontSize="12" TextColor="#031926"/>
                         </Grid>
 

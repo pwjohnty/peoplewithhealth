@@ -63,7 +63,7 @@
                                                     <RowDefinition Height="Auto"/>
                                                 </Grid.RowDefinitions>
                                                 <Label Text="{Binding measurementname}" TextColor="#031926" FontSize="14" FontAttributes="Bold" FontFamily="HankenGroteskBold" Margin="10,0,0,10" VerticalOptions="Center" VerticalTextAlignment="Center"    Grid.Row="0" Grid.Column="0" />
-                                                <Label Text="{Binding datechanged}" Margin="10,0,0,10" VerticalOptions="Center" HorizontalOptions="End" VerticalTextAlignment="Center"  FontFamily="HankenGroteskRegular" TextColor="Gray" FontSize="Small"   Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
+                                                <Label Text="{Binding datechanged}" Margin="10,0,0,10" VerticalOptions="Center" HorizontalOptions="End" VerticalTextAlignment="Center"  FontFamily="HankenGroteskRegular" TextColor="Gray" FontSize="12"   Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
 
                                                 <Label  FontFamily="HankenGroteskBold"  Margin="10,5,0,10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
                                                     <Label.FormattedText>
