@@ -59,6 +59,12 @@ namespace PeopleWith
         [System.Text.Json.Serialization.JsonIgnore]
         public string nooftimesstring { get; set; }
 
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string title { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string shortlabel { get; set; }
+
     }
 
 }

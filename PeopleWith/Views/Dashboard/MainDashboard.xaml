@@ -410,8 +410,8 @@ FontSize="8" />
                                                                 <ColumnDefinition Width="33*"/>
                                                    
                                                             </Grid.ColumnDefinitions>
-                                     
-                                                            <Label VerticalOptions="Start" HorizontalOptions="Start" HorizontalTextAlignment="Start" Text="{Binding label}" FontSize="14"  Margin="10,10,0,0"  TextColor="#031926" FontFamily="HankenGroteskBold"   Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"/>
+
+                                                            <Label VerticalOptions="Start" HorizontalOptions="Start" HorizontalTextAlignment="Start" Text="{Binding shortlabel}" FontSize="14"  Margin="10,10,0,0"  TextColor="#031926" FontFamily="HankenGroteskBold"   Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"/>
                                                             <Label VerticalOptions="Start" HorizontalOptions="Start" HorizontalTextAlignment="Start" Text="{Binding datetimestring}" FontSize="12"  Margin="10,0,0,0"  TextColor="Gray" FontFamily="HankenGroteskRegular"   Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"/>
 
                                                             <Label VerticalOptions="Center" HorizontalOptions="Start" HorizontalTextAlignment="Start" Text="{Binding value}" FontSize="26"  Margin="20,0,0,0"  TextColor="Orange" FontFamily="HankenGroteskBold"   Grid.Column="3" Grid.ColumnSpan="1" Grid.Row="0" Grid.RowSpan="2"/>

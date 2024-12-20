@@ -9,6 +9,7 @@ using System.Text.Json;
 using Azure.Storage.Blobs;
 using static System.Net.WebRequestMethods;
 using Syncfusion.Maui.Core.Internals;
+using Plugin.LocalNotification;
 
 namespace PeopleWith;
 
@@ -203,18 +204,19 @@ public partial class RegisterFinalPage : ContentPage
         {
             //handle notification
             //test
-         
 
-            if (DeviceInfo.Platform == DevicePlatform.Android)
-            {
-                await Permissions.RequestAsync<Permissions.PostNotifications>();
-            }
-            else
-            {
-                var notificationService = DependencyService.Get<INotificationService>();
-                await notificationService.RequestNotificationPermissionAsync();
+            await LocalNotificationCenter.Current.RequestNotificationPermission();
 
-            }
+            //if (DeviceInfo.Platform == DevicePlatform.Android)
+            //{
+            //    await Permissions.RequestAsync<Permissions.PostNotifications>();
+            //}
+            //else
+            //{
+            //    var notificationService = DependencyService.Get<INotificationService>();
+            //    await notificationService.RequestNotificationPermissionAsync();
+
+            //}
 
             // notificationstack.IsVisible = false;
             // nextbtn.Text = "Finish";

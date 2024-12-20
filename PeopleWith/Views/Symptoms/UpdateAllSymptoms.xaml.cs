@@ -247,8 +247,8 @@ public partial class UpdateAllSymptoms : ContentPage
                     Navigation.RemovePage(pageToRemove);
                 }
                 Navigation.RemovePage(this);
+                UpdateBtn.IsEnabled = true;
 
-     
             }
             else
             {
@@ -257,6 +257,7 @@ public partial class UpdateAllSymptoms : ContentPage
         }
         catch (Exception ex)
         {
+            UpdateBtn.IsEnabled = true;
             NotasyncMethod(ex);
         }
     }
