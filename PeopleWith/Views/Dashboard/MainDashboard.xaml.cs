@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using Microsoft.Azure.NotificationHubs;
+using Plugin.LocalNotification;
 
 namespace PeopleWith;
 
@@ -1482,7 +1483,7 @@ public partial class MainDashboard : ContentPage
             foryouuserlist.AddRange(randomItems);
 
             //check if there any as required supplements
-            if (AllUserSupplements.Any(x => x.frequency.Contains("As Required")))
+            if (AllUserSupplements.Any(x => x.frequency != null && x.frequency.Contains("As Required")))
             {
 
                 var asRequiredMeds = AllUserSupplements
@@ -1935,7 +1936,7 @@ public partial class MainDashboard : ContentPage
 
 
             //check if there any as required medications
-            if(AllUserMedications.Any(x => x.frequency.Contains("As Required")))
+            if (AllUserMedications.Any(x => x.frequency != null && x.frequency.Contains("As Required")))
             {
 
                 var asRequiredMeds = AllUserMedications
@@ -2115,16 +2116,39 @@ public partial class MainDashboard : ContentPage
             //    new { ContactImage = "healthreporticon.png", Title = "Generate your Health Report", BackgroundColor = "#e5f5fc" },
             //    new { ContactImage = "diagnosishome.png", Title = "Have you received a new diagnosis ?", BackgroundColor = "#E6E6FA" },
             //    new { ContactImage = "appointhome.png", Title = "Record a new appointment", BackgroundColor = "#ffcccb" },
-    
+
             //};
 
-           // activitylist.ItemsSource = foryouuserlist;
+            // activitylist.ItemsSource = foryouuserlist;
 
+            checknotifications();
 
         }
         catch (Exception Ex)
         {
             NotasyncMethod(Ex);
+        }
+    }
+
+    async void checknotifications()
+    {
+        try
+        {
+            var check = await LocalNotificationCenter.Current.AreNotificationsEnabled();
+
+            if (!check)
+            {
+                pushnotifcationsframe.IsVisible = true;
+            }
+            else
+            {
+                pushnotifcationsframe.IsVisible = false;
+            }
+
+        }
+        catch(Exception ex)
+        {
+
         }
     }
 
@@ -2777,6 +2801,24 @@ public partial class MainDashboard : ContentPage
 
         }
     }
+
+    private async void Button_Clicked_7(object sender, EventArgs e)
+    {
+        try
+        {
+            //turn on notifications button
+
+            await LocalNotificationCenter.Current.RequestNotificationPermission();
+
+            checknotifications();
+
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
 
     //async private void measurementdetaillist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
     //{
