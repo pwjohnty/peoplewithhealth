@@ -158,6 +158,10 @@ Padding="10">
                     </Grid>
                 </Frame>
 
+                <Label Text="Your Measurement Data" x:Name="showalllbl1" IsVisible="True" FontSize="20" Margin="0,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
+
+                <Label Text="Tap on the Show All Data button to view your measurement adherence data" x:Name="showalllbl2" IsVisible="True" FontSize="12" Margin="0,5,0,0" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
+
 
                 <Button
 BackgroundColor="#e5f0fb"

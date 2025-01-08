@@ -78,8 +78,31 @@ public partial class SingleMedication : ContentPage
                 }
                 else
                 {
+                    if (MedSelected.schedule[0].Dosage.Contains("|"))
+                    {
+                        SingleDosage.IsVisible = false;
+                        DoubleDosage.IsVisible = true;
                         lblvalue.Text = MedSelected.schedule[0].Dosage;
-                        freqSplit = MedSelected.frequency.Split('|');
+
+                        var DosageSplit = MedSelected.schedule[0].Dosage.Split('|');
+                        var unitSplit = MedSelected.unit.Split(' ');
+                        var UnitUno = unitSplit[0] + " " + unitSplit[1];
+                        var unitDos = unitSplit[2];
+
+                        lblvalueone.Text = DosageSplit[0];
+                        lblunitone.Text = UnitUno;
+                        lblvaluetwo.Text = DosageSplit[1];
+                        lblunittwo.Text = unitDos;
+                    }
+                    else
+                    {
+                        SingleDosage.IsVisible = true;
+                        DoubleDosage.IsVisible = false;
+                        lblvalue.Text = MedSelected.schedule[0].Dosage;
+                    }
+
+
+                    freqSplit = MedSelected.frequency.Split('|');
                         int Index = 0;
 
                     foreach (var item in Schedule)
@@ -334,7 +357,7 @@ public partial class SingleMedication : ContentPage
         try
         {
             //Add Symptom Info Here
-            await DisplayAlert("Medication Information", "No Information is saved against this Medication", "Close");
+            await DisplayAlert("Medication Information", "No information or resources available for this Medication", "Close");
         }
         catch (Exception Ex)
         {

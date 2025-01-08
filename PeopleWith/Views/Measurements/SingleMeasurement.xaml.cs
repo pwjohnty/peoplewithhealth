@@ -16,6 +16,7 @@ public partial class SingleMeasurement : ContentPage
     ObservableCollection<measurement> measurementlist = new ObservableCollection<measurement>();
     ObservableCollection<usermeasurement> deleeteusermeasurementlistpassed = new ObservableCollection<usermeasurement>();
     measurement MeasureInfo = new measurement();
+    ObservableCollection<usermeasurement> GroupedSleepData = new ObservableCollection<usermeasurement>();
 
     //List<VerticalLinePoint> verticalLinePoints = new List<VerticalLinePoint>();
     bool newmeasurement;
@@ -40,6 +41,21 @@ public partial class SingleMeasurement : ContentPage
             //Dunno 
         }
     }
+
+    //public class GroupedSleepDataItem
+    //{
+    //    //Stacked
+    //    //public DateTime Date { get; set; }
+    //    // public string FormattedDate => Date.ToString("dd/MM/yyyy");
+    //    // public List<usermeasurement> Measurements { get; set; }
+
+    //    //Column Chart 
+    //    public DateTime Date { get; set; }
+    //    public string FormattedDate => Date.ToString("dd/MM/yyyy");
+    //    public double TotalValue { get; set; }
+    //    public string unit { get; set; }
+    //    public string value { get; set; }
+    //}
 
     public class VerticalLinePoint
     {
@@ -264,11 +280,11 @@ public partial class SingleMeasurement : ContentPage
                     item.BPtwo = splitnum[1];
                     var converttodoubletwo = Convert.ToDouble(splitnum[1]);
                     item.numconvertedtwo = converttodoubletwo;
-              
+
                 }
                 else
                 {
-                    if(usermeasurementpassed.unit == "Feet/Inches")
+                    if (usermeasurementpassed.unit == "Feet/Inches")
                     {
                         if (item.value.Contains("'"))
                         {
@@ -281,7 +297,7 @@ public partial class SingleMeasurement : ContentPage
                             item.numconverted = Convert.ToDouble(item.value);
                         }
                     }
-                    else if(usermeasurementpassed.unit == "Stones/Pounds")
+                    else if (usermeasurementpassed.unit == "Stones/Pounds")
                     {
                         if (item.value.Contains("st"))
                         {
@@ -293,14 +309,22 @@ public partial class SingleMeasurement : ContentPage
                             //Check This
                             item.numconverted = Convert.ToDouble(item.value);
                         }
-                        
+
+                    }
+                    else if (usermeasurementpassed.unit == "Hours/Minutes")
+                    {
+                        string clean = item.value.Replace("h", "").Replace("m", "").Trim();
+                        var Splitvalue = clean.Split(' ');
+                        var getnum = Splitvalue[0] + "." + Splitvalue[1];
+                        var num = Convert.ToDouble(getnum);
+                        item.numconverted = num;
                     }
                     else
                     {
                         var num = Convert.ToDouble(item.value);
                         item.numconverted = num;
                     }
-                    
+
                 }
             }
             if (usermeasurementpassed != null)
@@ -353,16 +377,16 @@ public partial class SingleMeasurement : ContentPage
                     secondaryAxis.Maximum = maxvalue + 5;
                     datachart.YAxes.Add(secondaryAxis);
 
- 
+
                     ScatterSeries bpOneSeries = new ScatterSeries
                     {
                         ItemsSource = orderlistbydate,
                         XBindingPath = "inputdatetime",
                         YBindingPath = "BPone",
-                        PointHeight = 8,    
-                        PointWidth = 8,     
-                        Fill = Color.FromRgba("#031926"),  
-                        Stroke = Color.FromRgba("#031926"), 
+                        PointHeight = 8,
+                        PointWidth = 8,
+                        Fill = Color.FromRgba("#031926"),
+                        Stroke = Color.FromRgba("#031926"),
                         StrokeWidth = 2,
                         EnableTooltip = true,
                         EnableAnimation = true
@@ -375,8 +399,8 @@ public partial class SingleMeasurement : ContentPage
                         YBindingPath = "BPtwo",
                         PointHeight = 8,
                         PointWidth = 8,
-                        Fill = Colors.ForestGreen,  
-                        Stroke = Colors.ForestGreen, 
+                        Fill = Colors.ForestGreen,
+                        Stroke = Colors.ForestGreen,
                         StrokeWidth = 2,
                         EnableTooltip = true,
                         EnableAnimation = true
@@ -391,9 +415,9 @@ public partial class SingleMeasurement : ContentPage
                     // Add an invisible point before the first valid data point, set BPone and BPtwo to 0 if null
                     rangeColumnPoints.Add(new VerticalLinePoint
                     {
-                        inputdatetime = firstDate, 
-                        BPone = orderlistbydate.First().BPone != null ? Double.Parse(orderlistbydate.First().BPone) : 0,  
-                        BPtwo = orderlistbydate.First().BPtwo != null ? Double.Parse(orderlistbydate.First().BPtwo) : 0  
+                        inputdatetime = firstDate,
+                        BPone = orderlistbydate.First().BPone != null ? Double.Parse(orderlistbydate.First().BPone) : 0,
+                        BPtwo = orderlistbydate.First().BPtwo != null ? Double.Parse(orderlistbydate.First().BPtwo) : 0
                     });
 
                     foreach (var item in orderlistbydate.Where(x => x.BPone != null && x.BPtwo != null))
@@ -419,10 +443,10 @@ public partial class SingleMeasurement : ContentPage
                     {
                         ItemsSource = rangeColumnPoints,
                         XBindingPath = "inputdatetime",
-                        High = "BPtwo",  
-                        Low = "BPone",   
-                        Fill = Colors.Gray, 
-                        Width = 0.02, 
+                        High = "BPtwo",
+                        Low = "BPone",
+                        Fill = Colors.Gray,
+                        Width = 0.02,
                         EnableAnimation = true
                     };
 
@@ -432,6 +456,197 @@ public partial class SingleMeasurement : ContentPage
                     datachart.Series.Add(bpTwoSeries);
 
                 }
+                // Attempt at Stacking Chart Data //
+                // StackingColumnSeries //
+                //else if (usermeasurementpassed.measurementname == "Sleep Duration")
+                //{
+                //     Group data by date
+                //     GroupedSleepData = usermeasurementchartlist
+                //        .GroupBy(x => DateTime.Parse(x.inputdatetime).Date)
+                //        .Select(g => new GroupedSleepDataItem
+                //        {
+                //            Date = g.Key,
+                //            Measurements = g.ToList()
+                //        }).OrderBy(g => g.Date)
+                //        .ToList();
+
+                //     Clear existing chart configuration
+                //    datachart.Series.Clear();
+                //    datachart.YAxes.Clear();
+
+                //     Configure Y-Axis based on total sleep durations
+                //    double maxValue = (double)GroupedSleepData.Max(group => group.Measurements.Sum(x => x.numconverted));
+
+                //    double minValue = (double)GroupedSleepData.Min(group => group.Measurements.Sum(x => x.numconverted));
+
+                //    datachart.YAxes.Add(new NumericalAxis
+                //    {
+                //        Minimum = Math.Floor(minValue) - 1,
+                //        Maximum = Math.Ceiling(maxValue) + 1,
+                //        LabelStyle = new ChartAxisLabelStyle { TextColor = Colors.LightGray, FontSize = 10 }
+                //    });
+
+                //     Add series for each group
+                //    foreach (var group in GroupedSleepData)
+                //    {
+                //         Initial sleep session in LightBlue
+                //        var firstMeasurement = group.Measurements.FirstOrDefault();
+                //        if (firstMeasurement != null)
+                //        {
+                //            var firstSeries = new StackingColumnSeries
+                //            {
+                //                ItemsSource = new List<usermeasurement> { firstMeasurement },
+                //                XBindingPath = "FormattedDate",
+                //                YBindingPath = "numconverted",
+                //                Fill = Colors.LightBlue,
+                //                EnableTooltip = true,
+                //                DataLabelSettings = new CartesianDataLabelSettings
+                //                {
+                //                    LabelPlacement = DataLabelPlacement.Outer
+                //                }
+                //            };
+                //            datachart.Series.Add(firstSeries);
+                //        }
+
+                //         Additional sessions stacked with different colors
+                //        var additionalMeasurements = group.Measurements.Skip(1).ToList();
+                //        foreach (var measurement in additionalMeasurements)
+                //        {
+                //            var stackedSeries = new StackingColumnSeries
+                //            {
+                //                ItemsSource = new List<usermeasurement> { measurement },
+                //                XBindingPath = "FormattedDate",
+                //                YBindingPath = "numconverted",
+                //                Fill = Colors.LightGreen,
+                //                EnableTooltip = true,
+                //                DataLabelSettings = new CartesianDataLabelSettings
+                //                {
+                //                    LabelPlacement = DataLabelPlacement.Outer
+                //                }
+                //            };
+                //            datachart.Series.Add(stackedSeries);
+                //        }
+                //    }
+
+                //     Add zoom/pan behavior
+                //    datachart.ZoomPanBehavior = new ChartZoomPanBehavior
+                //    {
+                //        EnablePanning = true,
+                //        EnablePinchZooming = false
+                //    };
+                //}
+
+                else if (usermeasurementpassed.measurementname == "Sleep Duration")
+                {
+                    // Group the data by date (ignoring time) and sum the values
+                    var groupedData = usermeasurementchartlist
+      .GroupBy(
+          x => DateTime.Parse(x.inputdatetime).Date, // Group by date only
+          (key, group) => new
+          {
+              dateconverted = key,
+              numconverted = group.Sum(g => ConvertToMinutes(g.numconverted.GetValueOrDefault())),
+              unit = "Hours/Minutes",
+              value = ConvertMinutesToHoursAndMinutes(group.Sum(g => ConvertToMinutes(g.numconverted.GetValueOrDefault())))
+          })
+      .OrderByDescending(g => g.dateconverted).Take(7)
+      .ToList();
+
+                    // Map grouped data into ObservableCollection<usermeasurement>
+                    GroupedSleepData = new ObservableCollection<usermeasurement>(
+                        groupedData.Select(g => new usermeasurement
+                        {
+                            dateconverted = g.dateconverted,
+                            numconverted = g.numconverted,
+                            unit = g.unit,
+                            value = g.value
+                        }
+                    ));
+
+                    // Calculate min/max values based on the grouped data
+                    double maxvalue = (double)GroupedSleepData.Max(g => g.numconverted) + 60;
+                    double minvalue = (double)GroupedSleepData.Min(g => g.numconverted) - 60;
+
+                    // Sort the list by date
+                    orderlistbydate = new ObservableCollection<usermeasurement>(usermeasurementchartlist.OrderBy(x => DateTime.Parse(x.inputdatetime)).ToList());
+
+                    // Clear any existing data
+                    datachart.Series.Clear();
+                    datachart.XAxes.Clear();
+                    datachart.YAxes.Clear();
+
+                    // Configure X-Axis
+                    CategoryAxis xAxis = new CategoryAxis
+                    {
+                        LabelStyle = new ChartAxisLabelStyle
+                        {
+                            TextColor = Colors.Transparent,
+                            FontSize = 10
+                        },
+                        AxisLineStyle = new ChartLineStyle
+                        {
+                            Stroke = Colors.Transparent,
+                            StrokeWidth = 0
+                        },
+                        ShowMajorGridLines = false,
+                        EdgeLabelsDrawingMode = EdgeLabelsDrawingMode.Shift
+                    };
+                    datachart.XAxes.Add(xAxis);
+
+                    // Configure Y-Axis
+                    NumericalAxis yAxis = new NumericalAxis
+                    {
+                        LabelStyle = new ChartAxisLabelStyle
+                        {
+                            TextColor = Colors.LightGray,
+                            FontSize = 10
+                        },
+                        Minimum = minvalue,
+                        Maximum = maxvalue, 
+                    };
+                    yAxis.LabelCreated += OnYAxisLabelCreated;
+                    datachart.YAxes.Add(yAxis);
+
+                    // Data point selection behavior
+                    DataPointSelectionBehavior selection = new DataPointSelectionBehavior
+                    {
+                        //SelectionBrush = Colors.Red
+                    };
+                    selection.SelectionChanged += OnSelectionChanged;
+
+                    // Configure the Column Series
+                    ColumnSeries columnSeries = new ColumnSeries
+                    {
+                        ItemsSource = GroupedSleepData,
+                        XBindingPath = "dateconverted", 
+                        YBindingPath = "numconverted", 
+                        Width = 0.4,
+                        CornerRadius = new CornerRadius(5, 5, 5, 5),
+                        EnableTooltip = true,
+                        Fill = Colors.LightBlue,
+                        Stroke = Colors.Transparent,
+                        StrokeWidth = 0,
+                        ShowDataLabels = false,
+                        EnableAnimation = true,
+                        TooltipTemplate = datachart.Resources["tooltipTemplate"] as DataTemplate,
+                        SelectionBehavior = selection,
+                        DataLabelSettings = new CartesianDataLabelSettings
+                        {
+                            LabelPlacement = DataLabelPlacement.Outer,
+                        }
+                    };
+                    datachart.Series.Add(columnSeries);
+
+                    // Add horizontal scrolling behavior
+                    ChartZoomPanBehavior zoomPanBehavior = new ChartZoomPanBehavior
+                    {
+                        EnablePanning = true, // Enable horizontal scrolling
+                        EnablePinchZooming = false // Disable pinch-to-zoom
+                    };
+                    datachart.ZoomPanBehavior = zoomPanBehavior;
+                }
+
+
                 else
                 {
 
@@ -447,7 +662,7 @@ public partial class SingleMeasurement : ContentPage
                     var maxusermeasurement = new usermeasurement();
 
                     minusermeasurement.inputdatetime = mindate.AddDays(-1).ToString("dd/MM/yyyy HH:mm");
-                    minusermeasurement.numconverted = null; 
+                    minusermeasurement.numconverted = null;
                     usermeasurementchartlist.Add(minusermeasurement);
 
                     maxusermeasurement.inputdatetime = maxdate.AddDays(+1).ToString("dd/MM/yyyy HH:mm");
@@ -480,7 +695,7 @@ public partial class SingleMeasurement : ContentPage
                     primaryAxis.MajorTickStyle.Stroke = Colors.Transparent;
                     datachart.XAxes.Add(primaryAxis);
 
-                  
+
                     if (usermeasurementpassed.unit == "Feet/Inches")
                     {
 
@@ -515,8 +730,8 @@ public partial class SingleMeasurement : ContentPage
                             if (args.Label is string labelText && double.TryParse(labelText, out double value))
                             {
                                 int inches = (int)value;
-                                int feet = inches / 12; 
-                                int remainingInches = inches % 12; 
+                                int feet = inches / 12;
+                                int remainingInches = inches % 12;
                                 args.Label = $"{feet}' {remainingInches}\"";
                             }
 
@@ -528,43 +743,43 @@ public partial class SingleMeasurement : ContentPage
                     else if (usermeasurementpassed.unit == "Stones/Pounds")
                     {
 
-                            NumericalAxis secondaryAxis = new NumericalAxis
+                        NumericalAxis secondaryAxis = new NumericalAxis
+                        {
+                            LabelStyle = new ChartAxisLabelStyle
                             {
-                                LabelStyle = new ChartAxisLabelStyle
-                                {
-                                    TextColor = Colors.LightGray,
-                                    FontFamily = "HankenGroteskRegular",
-                                    FontSize = 8
-                                },
-                                AxisLineStyle = new ChartLineStyle
-                                {
-                                    Stroke = Colors.LightGray,
-                                    StrokeWidth = 1 // Axis line width
-                                },
-                                MajorTickStyle = new ChartAxisTickStyle
-                                {
-                                    Stroke = Colors.LightGray,
-                                    StrokeWidth = 1 // Tick line width
-                                },
-                                IsVisible = true,
-                                Minimum = minvalue - 5,
-                                Maximum = maxvalue + 5
-                            };
+                                TextColor = Colors.LightGray,
+                                FontFamily = "HankenGroteskRegular",
+                                FontSize = 8
+                            },
+                            AxisLineStyle = new ChartLineStyle
+                            {
+                                Stroke = Colors.LightGray,
+                                StrokeWidth = 1 // Axis line width
+                            },
+                            MajorTickStyle = new ChartAxisTickStyle
+                            {
+                                Stroke = Colors.LightGray,
+                                StrokeWidth = 1 // Tick line width
+                            },
+                            IsVisible = true,
+                            Minimum = minvalue - 5,
+                            Maximum = maxvalue + 5
+                        };
 
                         // Customizing the Y-axis labels
                         secondaryAxis.LabelCreated += (sender, args) =>
                         {
                             if (args.Label is string labelText && double.TryParse(labelText, out double value))
                             {
-                                int lbs = (int)value; 
-                                int stones = lbs / 14; 
-                                int pounds = lbs % 14; 
-                                args.Label = $"{stones}st {pounds}lbs"; 
+                                int lbs = (int)value;
+                                int stones = lbs / 14;
+                                int pounds = lbs % 14;
+                                args.Label = $"{stones}st {pounds}lbs";
                             }
                         };
 
                         datachart.YAxes.Add(secondaryAxis);
-                        
+
                     }
                     else
                     {
@@ -628,6 +843,28 @@ public partial class SingleMeasurement : ContentPage
 
                         datachart.Series.Add(columnseries);
                     }
+
+                    //else if (usermeasurementpassed.unit == "Hours/Minutes")
+                    //{
+                    //    LineSeries columnseries = new LineSeries
+                    //    {
+                    //        ItemsSource = orderlistbydate,
+                    //        XBindingPath = "inputdatetime",
+                    //        YBindingPath = "numconverted",
+                    //        Fill = Color.FromHex("#BFDBF7"),
+                    //        StrokeWidth = 2,
+                    //        EnableTooltip = true,
+                    //        EnableAnimation = true,
+                    //        ShowMarkers = true,
+                    //        ShowTrackballLabel = false,
+                    //        TooltipTemplate = datachart.Resources["tooltipTemplate"] as DataTemplate,
+                    //        SelectionBehavior = selection,
+                    //        MarkerSettings = chartMarker
+                    //    };
+                    //    columnseries.ShowDataLabels = false;
+
+                    //    datachart.Series.Add(columnseries);
+                    //}
                     else
                     {
                         LineSeries columnseries = new LineSeries
@@ -648,13 +885,26 @@ public partial class SingleMeasurement : ContentPage
                         datachart.Series.Add(columnseries);
                     }
                 }
+                if(usermeasurementpassed.unit == "Hours/Minutes")
+                {
+                    lblvalue.Text = GroupedSleepData[0].value;
+                    lblunit.Text = GroupedSleepData[0].unit;
 
-                lblvalue.Text = orderlistbydate[orderlistbydate.Count - 2].value;
-                lblunit.Text = orderlistbydate[orderlistbydate.Count - 2].unit;
+                    var convertdate = GroupedSleepData[0].dateconverted;
 
-                var convertdate = DateTime.Parse(orderlistbydate[orderlistbydate.Count - 2].inputdatetime);
+                    datelbl.Text = convertdate.ToString("dd MMMM yyyy");
+                }
+                else
+                {
+                    lblvalue.Text = orderlistbydate[orderlistbydate.Count - 2].value;
+                    lblunit.Text = orderlistbydate[orderlistbydate.Count - 2].unit;
 
-                datelbl.Text = convertdate.ToString("HH:mm, dd MMMM yyyy");
+                    var convertdate = DateTime.Parse(orderlistbydate[orderlistbydate.Count - 2].inputdatetime);
+
+                    datelbl.Text = convertdate.ToString("HH:mm, dd MMMM yyyy");
+                }
+
+
             }
 
         }
@@ -665,6 +915,69 @@ public partial class SingleMeasurement : ContentPage
         }
     }
 
+    private double ConvertToMinutes(double numconverted)
+    {
+        int hours = (int)numconverted;
+        var Checknum = numconverted.ToString();
+        if (Checknum.Contains("."))
+        {
+            var Splitmins = numconverted.ToString().Split('.');
+            if (Splitmins[1].Length == 1)
+            {
+                Splitmins[1] = Splitmins[1] + "0";
+            }
+            int minutes = int.Parse(Splitmins[1]);
+            return (hours * 60) + minutes;
+        }
+        else
+        {
+            return (hours * 60);
+        }
+     
+    }
+
+    private string ConvertMinutesToHoursAndMinutes(double totalMinutes)
+    {
+        int hours = (int)(totalMinutes / 60);
+        int minutes = (int)(totalMinutes % 60);
+        return $"{hours}h {minutes}m";
+    }
+
+
+    private void OnYAxisLabelCreated(object sender, ChartAxisLabelEventArgs args)
+    {
+        if (args.Label is string labelText && double.TryParse(labelText, out double totalMinutes))
+        {
+            try
+            {
+                int hours = (int)(totalMinutes / 60); 
+                int minutes = (int)(totalMinutes % 60); 
+                args.Label = $"{hours}h {minutes}m"; 
+            }
+            catch
+            {
+                args.Label = labelText; 
+            }
+        }
+    }
+
+    //private void OnYAxisLabelCreated(object sender, ChartAxisLabelEventArgs args)
+    //{
+    //    if (args.Label is string labelText && double.TryParse(labelText, out double value))
+    //    {
+    //        try
+    //        {
+    //            int hours = (int)value;
+    //            int minutes = (int)((value - hours) * 60);
+    //            args.Label = $"{hours}h {minutes}m";
+    //        }
+    //        catch
+    //        {
+
+    //        }
+    //    }
+    //}
+
     async private void OnSelectionChanged(object sender, ChartSelectionChangedEventArgs e)
     {
         try
@@ -672,31 +985,57 @@ public partial class SingleMeasurement : ContentPage
 
             var es = e.NewIndexes[0];
 
-            if(orderlistbydate[es].unit == "Stones/Pounds")
-            {
-                if (orderlistbydate[es].value.Contains("st"))
-                {
-                    lblvalue.Text = orderlistbydate[es].value;
-                }
-                else
-                {
-                    var GetStones = orderlistbydate[es].value.Split('.');
-                    var Newlbl = GetStones[0] + "st" + " " + GetStones[1] + "lbs";
-                    lblvalue.Text = Newlbl;
+            if(usermeasurementpassed.measurementname == "Sleep Duration") 
+            { 
+            
+                    var GetGrouped = GroupedSleepData[es].numconverted.ToString();
+
+                    if (GetGrouped.Contains("h"))
+                    {
+                        lblvalue.Text = GetGrouped;
+                    }
+                    else
+                    {
+                    //var GetSleep = GetGrouped.Split('.');
+                    //var Newlbl = GetSleep[0] + "h" + " " + GetSleep[1] + "m";
+                    //lblvalue.Text = Newlbl;
+                    var Groupie = GroupedSleepData[es].numconverted; 
+
+                    // Convert mins to hours and minutes
+                    int hours = (int)(Groupie / 60);
+                    int minutes = (int)(Groupie % 60);
+
+                    string formattedTime = $"{hours}h {minutes}m";
+                    lblvalue.Text = formattedTime;
                 }
 
+                var convertdate = GroupedSleepData[es].dateconverted;
+                datelbl.Text = convertdate.ToString("dd MMMM yyyy");
             }
             else
             {
-                lblvalue.Text = orderlistbydate[es].value;
+                if (orderlistbydate[es].unit == "Stones/Pounds")
+                {
+                    if (orderlistbydate[es].value.Contains("st"))
+                    {
+                        lblvalue.Text = orderlistbydate[es].value;
+                    }
+                    else
+                    {
+                        var GetStones = orderlistbydate[es].value.Split('.');
+                        var Newlbl = GetStones[0] + "st" + " " + GetStones[1] + "lbs";
+                        lblvalue.Text = Newlbl;
+                    }
+                }
+                else
+                {
+                    lblvalue.Text = orderlistbydate[es].value;
+                }
+
+                var convertdate = DateTime.Parse(orderlistbydate[es].inputdatetime);
+                datelbl.Text = convertdate.ToString("HH:mm, dd MMMM yyyy");
+
             }
-          
-
-            var convertdate = DateTime.Parse(orderlistbydate[es].inputdatetime);
-
-            datelbl.Text = convertdate.ToString("HH:mm, dd MMMM yyyy");
-
-
         }
         catch (Exception Ex)
         {
@@ -856,7 +1195,7 @@ public partial class SingleMeasurement : ContentPage
             }
             else
             {
-                await DisplayAlert("Measurement Information", "No Information is saved against this Measurement", "Close");
+                await DisplayAlert("Measurement Information", "No information or resources available for this Measurement", "Close");
 
             }
         }

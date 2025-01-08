@@ -16,6 +16,8 @@ public partial class AddMeasurement : ContentPage
     string Poundsinput; 
     APICalls aPICalls = new APICalls();
     bool validinput;
+    int HourInput = 0;
+    int MinInput = 0;
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
@@ -81,6 +83,30 @@ public partial class AddMeasurement : ContentPage
                 inputvalue = joinstring;
 
             }
+            else if(measurementnamestring == "Sleep Duration")
+            {
+                //Set Hours/minutes Btn to pre-Selected 
+
+                var joinstring = measurementpassed.units.Replace(',', '/');
+                unitstringlist.Add(joinstring);
+                unitlist.ItemsSource = unitstringlist;
+                unitlist.SelectedItem = joinstring;
+                //Set Sleep Duration Frame to Visible 
+
+                unitentryframe.IsVisible = false;
+                SleepDurationFrame.IsVisible = true;
+                SleepQualFrame.IsVisible = true; 
+
+                //Sleep Quality List 
+
+                List<string> SleepQual = new List<string>();
+                SleepQual.Add("Excellent");
+                SleepQual.Add("Good");
+                SleepQual.Add("Fair");
+                SleepQual.Add("Poor");
+                SleepQualitySelect.ItemsSource = SleepQual; 
+
+            }
             else
             {
                 unitstringlist = measurementpassed.units.Split(',').ToList();
@@ -126,6 +152,22 @@ public partial class AddMeasurement : ContentPage
                 lbslbl.Text = "lbs";
             }
 
+            if (measurementnamestring == "Sleep Duration")
+            {
+                unitentryframe.IsVisible = false;
+                SleepDurationFrame.IsVisible = true;
+                SleepQualFrame.IsVisible = true;
+
+                //Sleep Quality List 
+
+                List<string> SleepQual = new List<string>();
+                SleepQual.Add("Excellent");
+                SleepQual.Add("Good");
+                SleepQual.Add("Fair");
+                SleepQual.Add("Poor");
+                SleepQualitySelect.ItemsSource = SleepQual;
+            }
+
             var unitstringlist = new List<string>();
 
             unitstringlist.Add(usermeasurementpassed.unit);
@@ -166,6 +208,10 @@ public partial class AddMeasurement : ContentPage
             else if (inputvalue == "Systolic/Diastolic")
             {
                 //Do Nothing 
+            }
+            else if(inputvalue == "Hours/Minutes")
+            {
+               //Do Nothing 
             }
             else
             {
@@ -4754,6 +4800,27 @@ public partial class AddMeasurement : ContentPage
                         var inch = parts[1];
                         newmeasurment.value = feet + "." + inch;
                     }
+                    else if (measurementnamestring == "Sleep Duration")
+                    {
+                        //Add Sleep Duration 
+
+                        var hours = hoursentry.Text;
+                        if (!string.IsNullOrEmpty(hours) && hours.Length == 2 && hours.StartsWith("0"))
+                        {
+                            hours = hours.Substring(1); // Remove first char '0;
+                        }
+                        var Mins = minsentry.Text;
+                        var Time = hours + "." + Mins;
+                        newmeasurment.value = Time;
+
+                        if(SleepQualitySelect.SelectedItem != null)
+                        {
+                            newmeasurment.inputmethod = SleepQualitySelect.SelectedItem.ToString();
+                        }
+
+                        //Add Input Value 
+                        inputvalue = "Hours/Minutes";
+                    }
                     else
                     {
 
@@ -5185,5 +5252,259 @@ public partial class AddMeasurement : ContentPage
         {
             NotasyncMethod(Ex);
         }
+    }
+
+
+    private void hoursentry_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        try
+        {
+            //hours entry text changed
+            var entry = sender as Entry;
+            HourInput = 0;
+            if (string.IsNullOrWhiteSpace(hoursentry.Text) || hoursentry.Text == "")
+            {
+                SubmitBtn.IsEnabled = false;
+                validinput = false;
+                SubmitBtn.BackgroundColor = Colors.Gray;
+                SubmitBtn.TextColor = Colors.LightGray;
+                return;
+            }
+            /*if (entry == null) */ 
+
+            // Get the new text value
+            var newText = e.NewTextValue;
+            HourInput = Int32.Parse(newText);
+            validinput = true;
+            SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+            SubmitBtn.TextColor = Colors.White;
+            SubmitBtn.IsEnabled = true; 
+            // Ensure the text is numeric and limit to 2 digits
+            if (!string.IsNullOrEmpty(newText))
+            {
+                // Remove non-numeric characters
+                newText = new string(newText.Where(char.IsDigit).ToArray());
+
+                // Limit to 2 characters
+                if (newText.Length > 2)
+                {
+                    newText = newText.Substring(0, 2);
+                }
+            }
+
+            // Set the corrected text back to the entry
+            if (entry.Text != newText)
+            {
+                entry.Text = newText;
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    private void minsentry_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        try
+        {
+            var entry = sender as Entry;
+            //Check Hours/Mins Input Not Empty
+
+            if (string.IsNullOrWhiteSpace(minsentry.Text) || minsentry.Text == "" )
+            {
+                SubmitBtn.IsEnabled = false;
+                validinput = false;
+                SubmitBtn.BackgroundColor = Colors.Gray;
+                SubmitBtn.TextColor = Colors.LightGray;
+                return;
+            }
+
+            MinInput = 0; 
+            //if (entry == null) return;
+
+            // Get the new text value
+            var newText = e.NewTextValue;
+            validinput = true;
+            MinInput = Int32.Parse(newText); 
+            SubmitBtn.IsEnabled = true;
+            SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+            SubmitBtn.TextColor = Colors.White;
+            // Ensure the text is numeric and limit to 2 digits
+            if (!string.IsNullOrEmpty(newText))
+            {
+                // Remove non-numeric characters
+                newText = new string(newText.Where(char.IsDigit).ToArray());
+
+                // Limit to 2 characters
+                if (newText.Length > 2)
+                {
+                    newText = newText.Substring(0, 2);
+                }
+
+                // Validate the value is within the range (0-59)
+                if (int.TryParse(newText, out int minutes))
+                {
+                    if (minutes > 59)
+                    {
+                        newText = "00"; // Set to max value
+                    }
+                }
+            }
+
+            // Set the corrected text back to the entry
+            if (entry.Text != newText)
+            {
+                entry.Text = newText;
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    private void Fiffteenminsbtn_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            SubmitBtn.IsEnabled = true;
+            SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+            SubmitBtn.TextColor = Colors.White;
+            int hours = int.TryParse(hoursentry.Text, out int h) ? h : 0;
+            int minutes = int.TryParse(minsentry.Text, out int m) ? m : 0;
+
+            // Add 15 minutes
+            minutes += 15;
+
+            // Handle overflow into hours
+            if (minutes >= 60)
+            {
+                minutes -= 60;
+                hours += 1;
+            }
+
+            // Handle hour overflow (optional, if you want to wrap hours to a 24-hour format)
+            if (hours >= 24)
+            {
+                hours = 0;
+            }
+
+            // Update the Entries with the new values
+            hoursentry.Text = hours.ToString("D2");   // Ensure 2-digit format
+            minsentry.Text = minutes.ToString("D2");
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    private void Thirtyminsbtn_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            SubmitBtn.IsEnabled = true;
+            SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+            SubmitBtn.TextColor = Colors.White;
+            int hours = int.TryParse(hoursentry.Text, out int h) ? h : 0;
+            int minutes = int.TryParse(minsentry.Text, out int m) ? m : 0;
+
+            // Add 15 minutes
+            minutes += 30;
+
+            // Handle overflow into hours
+            if (minutes >= 60)
+            {
+                minutes -= 60;
+                hours += 1;
+            }
+
+            // Handle hour overflow (optional, if you want to wrap hours to a 24-hour format)
+            if (hours >= 24)
+            {
+                hours = 0;
+            }
+
+            // Update the Entries with the new values
+            hoursentry.Text = hours.ToString("D2");   // Ensure 2-digit format
+            minsentry.Text = minutes.ToString("D2");
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    private void Sixtyminsbtn_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            SubmitBtn.IsEnabled = true;
+            SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+            SubmitBtn.TextColor = Colors.White;
+            int hours = int.TryParse(hoursentry.Text, out int h) ? h : 0;
+            int minutes = int.TryParse(minsentry.Text, out int m) ? m : 0;
+
+            // Add 60 minutes (equivalent to adding 1 hour)
+            hours += 1;
+
+            // Handle hour overflow (optional, wrap to a 24-hour format)
+            if (hours >= 24)
+            {
+                hours = 0; // Reset to 0 if over 23 (for 24-hour format)
+            }
+
+            // Update the Entries with the new values
+            hoursentry.Text = hours.ToString("D2");   // Ensure 2-digit format
+            minsentry.Text = minutes.ToString("D2");
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    private void Ninetyminsbtn_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            SubmitBtn.IsEnabled = true;
+            SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+            SubmitBtn.TextColor = Colors.White;
+            // Parse the current hour and minute values
+            int hours = int.TryParse(hoursentry.Text, out int h) ? h : 0;
+            int minutes = int.TryParse(minsentry.Text, out int m) ? m : 0;
+
+            // Add 1 hour and 30 minutes
+            minutes += 30;
+            hours += 1;
+
+            // Handle minute overflow
+            if (minutes >= 60)
+            {
+                minutes -= 60; // Adjust minutes
+                hours += 1;    // Increment hours for overflow
+            }
+
+            // Handle hour overflow (optional, wrap to a 24-hour format)
+            if (hours >= 24)
+            {
+                hours = 0; // Reset to 0 if over 23 (for 24-hour format)
+            }
+
+            // Update the Entries with the new values
+            hoursentry.Text = hours.ToString("D2");   // Ensure 2-digit format
+            minsentry.Text = minutes.ToString("D2");
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    private void SleepQualitySelect_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
+    {
+
     }
 }

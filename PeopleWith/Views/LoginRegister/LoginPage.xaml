@@ -7,17 +7,17 @@
  Shell.NavBarHasShadow="False" Shell.NavBarIsVisible="False" BackgroundColor="#ffffff">
     <VerticalStackLayout>
 
-        <Grid Margin="0,20,0,0">
+        <Grid Padding="0,0,5,0" Margin="0,20,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="6*"/>
             </Grid.ColumnDefinitions>
 
-            <Image Source="backbutton.png" Grid.Column="0" BackgroundColor="Transparent" HorizontalOptions="Start" VerticalOptions="Center" Margin="20,0,0,0" HeightRequest="20" WidthRequest="20">
-                <Image.GestureRecognizers>
+            <Image Source="backbutton.png" Grid.Column="0" BackgroundColor="Transparent" HorizontalOptions="Start" VerticalOptions="Center" Margin="20,0,0,0" HeightRequest="20" WidthRequest="20"/>
+                <Grid.GestureRecognizers>
                     <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1" />
-                </Image.GestureRecognizers>
-            </Image>
+                </Grid.GestureRecognizers>
+
         </Grid>
         <Label Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="26" Text="Login Page" VerticalOptions="Center" HorizontalOptions="Start" />
         <Label

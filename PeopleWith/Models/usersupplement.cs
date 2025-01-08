@@ -118,6 +118,26 @@ namespace PeopleWith
         [System.Text.Json.Serialization.JsonIgnore]
         public bool ActiveMeds { get; set; }
 
+        //Used For Double dosage Inside of Listview 
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string UnitOne { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string UnitTwo { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string DosageOne { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string DosageTwo { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool SingleDosage { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool DoubleDosage { get; set; }
+
         // event handler for updating the list views
         public event PropertyChangedEventHandler PropertyChanged;
         //  public void OnPropertyChanged()

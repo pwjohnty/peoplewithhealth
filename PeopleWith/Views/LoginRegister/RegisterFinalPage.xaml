@@ -21,12 +21,14 @@
             </Grid.ColumnDefinitions>
 
 
+            <Border BackgroundColor="Transparent" Grid.Row="0" Margin="15,2,25,2" Grid.Column="0" Stroke="Transparent" >
 
-            <Image Source="backbutton.png" x:Name="backbtn" Grid.Column="0" HorizontalOptions="Start" IsVisible="True" VerticalOptions="Center" Margin="20,0,0,0" HeightRequest="20" WidthRequest="20">
-                <Image.GestureRecognizers>
+                <Image Source="backbutton.png" x:Name="backbtn" Grid.Column="0" HorizontalOptions="Start" IsVisible="True" VerticalOptions="Center" Margin="5,0,0,0" HeightRequest="20" WidthRequest="20"/>
+                <Border.GestureRecognizers>
                     <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
-                </Image.GestureRecognizers>
-            </Image>
+                </Border.GestureRecognizers>
+            </Border>
+
 
             <progressBar:SfLinearProgressBar Progress="6" x:Name="topprogress"
                                 TrackHeight="8"  TrackFill="#BFDBF7" ProgressFill="#031926"
@@ -369,8 +371,8 @@ FontFamily="HankenGroteskBold"
 FontAttributes="Bold"
 HorizontalOptions="Center" />-->
 
-                    <Image Source="peoplewithlogoanimation.gif" IsVisible="False" x:Name="imganimation" BackgroundColor="Transparent" IsAnimationPlaying="True"/>
-                    <WebView x:Name="webLogo" IsVisible="False" BackgroundColor="Transparent" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HeightRequest="300">
+                    <Image Source="peoplewithlogoanimation.gif" IsVisible="False" x:Name="imganimation" HorizontalOptions="CenterAndExpand" HeightRequest="300" WidthRequest="200" BackgroundColor="Transparent" IsAnimationPlaying="True"/>
+                    <WebView x:Name="webLogo" IsVisible="False" BackgroundColor="Transparent" VerticalOptions="FillAndExpand" Margin="80,0,80,0" HorizontalOptions="FillAndExpand"  HeightRequest="300">
 
                         <WebView.Source>
                             <HtmlWebViewSource>
@@ -378,7 +380,7 @@ HorizontalOptions="Center" />-->
                                     <![CDATA[
                         <HTML>
                         <BODY style="background-color:#fefcfe;">
-                        <img src="peoplewithlogoanimation.gif" style="width:100%; border: 1px solid #fefcfe; opacity: 0.99;"/>
+                        <img src="peoplewithlogoanimation.gif" style="width:75%; border: 1px solid #fefcfe; opacity: 0.99;"/>
                         </BODY>
                         </HTML>
                         ]]>

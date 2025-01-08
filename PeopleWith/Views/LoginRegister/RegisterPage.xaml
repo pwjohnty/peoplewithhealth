@@ -11,7 +11,7 @@
              xmlns:controls="clr-namespace:Plugin.Maui.SegmentedControl;assembly=Plugin.Maui.SegmentedControl"
              HideSoftInputOnTapped="True" NavigationPage.HasNavigationBar="False"
              Shell.NavBarHasShadow="False" Shell.NavBarIsVisible="False">
-    <Grid>
+    <Grid >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -25,12 +25,12 @@
             </Grid.ColumnDefinitions>
 
 
-
-            <Image Source="backbutton.png" Grid.Column="0" BackgroundColor="Transparent" HorizontalOptions="Start" VerticalOptions="Center" Margin="20,0,0,0" HeightRequest="20" WidthRequest="20">
-                <Image.GestureRecognizers>
+            <Border BackgroundColor="Transparent" Grid.Row="0" Margin="15,2,25,2" Grid.Column="0" Stroke="Transparent" >
+                <Image Source="backbutton.png" Grid.Column="0" BackgroundColor="Transparent" HorizontalOptions="Start" VerticalOptions="Center" Margin="5,0,0,0" HeightRequest="20" WidthRequest="20"/>
+                <Border.GestureRecognizers>
                     <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
-                </Image.GestureRecognizers>
-            </Image>
+                </Border.GestureRecognizers>
+            </Border>
 
             <progressBar:SfLinearProgressBar Progress="6" x:Name="topprogress"
                                 TrackHeight="8"  TrackFill="#BFDBF7" ProgressFill="#031926"

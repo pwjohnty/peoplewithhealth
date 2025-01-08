@@ -215,13 +215,17 @@ public partial class AllSupplements : ContentPage
                                     if (item.NextDosage.Contains("|"))
                                     {
                                         var split = item.NextDosage.Split('|');
+                                        //Unit Split 
+                                        var unitsplit = item.unit.Split(' ');
+                                        var Unituno = unitsplit[0] + " " + unitsplit[1];
+                                        var unitdos = unitsplit[2];
 
-                                        item.NextTime = "Tomorrow " + firstTimeForTomorrow.ToString("HH:mm") + " - " + split[0] + " " + item.unit + " " + split[1];
+                                        item.NextTime = "Tomorrow " + firstTimeForTomorrow.ToString("HH:mm") + " - " + split[0] + " " + Unituno + " " + split[1] + " " + unitdos;
                                     }
                                     else
                                     {
 
-                                        item.NextTime = "Torrow " + firstTimeForTomorrow.ToString("HH:mm") + " - " + item.NextDosage + " " + item.unit;
+                                        item.NextTime = "Tomorrow " + firstTimeForTomorrow.ToString("HH:mm") + " - " + item.NextDosage + " " + item.unit;
                                     }
                                 }
                                 else
@@ -253,8 +257,11 @@ public partial class AllSupplements : ContentPage
                                     if (item.NextDosage.Contains("|"))
                                     {
                                         var split = item.NextDosage.Split('|');
-
-                                        item.NextTime = "Today " + nextTimeDue.ToString("HH:mm") + " - " + split[0] + " " + item.unit + " " + split[1];
+                                        //Unit Split 
+                                        var unitsplit = item.unit.Split(' ');
+                                        var Unituno = unitsplit[0] + " " + unitsplit[1];
+                                        var unitdos = unitsplit[2]; 
+                                        item.NextTime = "Today " + nextTimeDue.ToString("HH:mm") + " - " + split[0] + " " + Unituno + " " + split[1] + " " + unitdos;
                                     }
                                     else
                                     {
@@ -359,8 +366,12 @@ public partial class AllSupplements : ContentPage
                                     if (item.NextDosage.Contains("|"))
                                     {
                                         var split = item.NextDosage.Split('|');
+                                        //Unit Split 
+                                        var unitsplit = item.unit.Split(' ');
+                                        var Unituno = unitsplit[0] + " " + unitsplit[1];
+                                        var unitdos = unitsplit[2];
 
-                                        item.NextTime = weekdaystring + " " + nextTimeDue.ToString("HH:mm") + " - " + split[0] + " " + item.unit + " " + split[1];
+                                        item.NextTime = weekdaystring + " " + nextTimeDue.ToString("HH:mm") + " - " + split[0] + " " + Unituno + " " + split[1] + " " + unitdos;
                                     }
                                     else
                                     {
@@ -462,8 +473,12 @@ public partial class AllSupplements : ContentPage
                                     if (item.NextDosage.Contains("|"))
                                     {
                                         var split = item.NextDosage.Split('|');
+                                        //Unit Split 
+                                        var unitsplit = item.unit.Split(' ');
+                                        var Unituno = unitsplit[0] + " " + unitsplit[1];
+                                        var unitdos = unitsplit[2];
 
-                                        item.NextTime = weekdaystring + " " + nextTimeDue.ToString("HH:mm") + " - " + split[0] + " " + item.unit + " " + split[1];
+                                        item.NextTime = weekdaystring + " " + nextTimeDue.ToString("HH:mm") + " - " + split[0] + " " + Unituno + " " + split[1] + " " + unitdos;
                                     }
                                     else
                                     {
@@ -560,7 +575,7 @@ public partial class AllSupplements : ContentPage
                                             nextDueDateTime = nextDueDateTime.AddDays(daysInterval);
                                         }
 
-                                        item.NextTime = nextDueDateTime.ToString("ddd HH:mm"); // Next due day and time
+                                        item.NextTime = nextDueDateTime.ToString("ddd HH:mm") + " - " + item.NextDosage + " " + item.unit; // Next due day and time
                                         item.NextDosage = firstTimeDosage[1]; // Set the dosage for this time
                                     }
 
@@ -742,6 +757,8 @@ public partial class AllSupplements : ContentPage
                 datastack.IsVisible = true;
                 AllUserMedsList.IsVisible = true;
                 AllUserMedsList.ItemsSource = AllUserMedications;
+                //Set Segmentlbl
+                SegmentDetails.Text = "Supplements you have currently scheduled";
 
                 //await MopupService.Instance.PopAllAsync(false);
             }
@@ -875,6 +892,7 @@ public partial class AllSupplements : ContentPage
                     }
                     else
                     {
+                        SegmentDetails.Text = "Supplements you have currently scheduled";
                         AllUserMedsList.IsVisible = true;
                         noActivemedlbl.IsVisible = false;
                     }
@@ -890,6 +908,7 @@ public partial class AllSupplements : ContentPage
                 }
                 else
                 {
+                    SegmentDetails.Text = "Supplements you take as you require them";
                     noARmedlbl.IsVisible = false;
                     AsRequiredList.IsVisible = true;
 
@@ -911,6 +930,7 @@ public partial class AllSupplements : ContentPage
                 }
                 else
                 {
+                    SegmentDetails.Text = "Supplements you are no long taking";
                     noCompletedmedlbl.IsVisible = false;
                     CompletedMedsList.IsVisible = true;
                 }

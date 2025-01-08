@@ -87,6 +87,9 @@ public partial class ShowAllData : ContentPage
 
             foreach (var item in usermeasurementlistpassed)
             {
+                item.isnotsleepduration = true;
+                item.issleepduration = false; 
+
                 var dt = DateTime.Parse(item.inputdatetime);
                 item.datechanged = dt.ToString("HH:mm, dd/MM/yyyy");
                 if(item.unit == "Stones/Pounds")
@@ -100,6 +103,21 @@ public partial class ShowAllData : ContentPage
                         var split = item.value.Split('.');
                         var Newlbl = split[0] + "st" + " " + split[1] + "lbs";
                         item.value = Newlbl;
+                    }
+                }
+                else if(item.unit == "Hours/Minutes")
+                {
+                    if(item.inputmethod != null)
+                    {
+                        //Sleep Score Added
+                        item.isnotsleepduration = false;
+                        item.issleepduration = true;
+                    }
+                    else
+                    {
+                        //No Sleep Score Added
+                        item.isnotsleepduration = true;
+                        item.issleepduration = false;
                     }
                 }
             }

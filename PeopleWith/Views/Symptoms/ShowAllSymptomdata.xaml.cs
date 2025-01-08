@@ -122,7 +122,7 @@ public partial class ShowAllSymptomData : ContentPage
             var orderlist = SymptomFeedback.OrderByDescending(x => DateTime.Parse(x.timestamp)).ToList();
 
             AllDataLV.ItemsSource = orderlist;
-            AllDataLV.HeightRequest = SymptomFeedback.Count * 110; 
+            AllDataLV.HeightRequest = SymptomFeedback.Count * 120; 
         }
         catch (Exception Ex)
         {

@@ -80,7 +80,7 @@ public partial class SingleAllergies : ContentPage
             }
             else
             {
-                await DisplayAlert("Diagnosis Information", "No Information is saved against this Diagnosis", "Close");
+                await DisplayAlert("Diagnosis Information", "No information or resources available for this Allergy", "Close");
 
             }
             //await DisplayAlert("Allergy Information", "There is no Information against this Allergy", "Close");

@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-               xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
              xmlns:picker="clr-namespace:Syncfusion.Maui.Picker;assembly=Syncfusion.Maui.Picker"
+             xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
              xmlns:calendar="clr-namespace:Syncfusion.Maui.Calendar;assembly=Syncfusion.Maui.Calendar"
              x:Class="PeopleWith.AddMeasurement" BackgroundColor="White" HideSoftInputOnTapped="True" >
 
+    <ScrollView>
     <StackLayout VerticalOptions="FillAndExpand" Margin="20,0,20,0" HorizontalOptions="FillAndExpand">
 
         <Label x:Name="measurementname" FontSize="26" Margin="0,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
@@ -103,7 +105,123 @@ BorderColor="LightGray">
                 <Label x:Name="lbslbl" Grid.Row="0" Grid.Column="4" FontSize="14" Margin="0,0,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" HorizontalTextAlignment="Center" FontAttributes="None" HorizontalOptions="Center" VerticalOptions="Center"  />
 
             </Grid>
+
+           
         </Frame>
+
+        <Frame HasShadow="False" x:Name="SleepDurationFrame" IsVisible="False"  InputTransparent="False" Margin="20,10,20,10" BorderColor="Transparent"  Padding="10" CornerRadius="20"  BackgroundColor="#e5f0fb" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20*"/>
+                    <ColumnDefinition Width="26*"/>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="26*"/>
+                    <ColumnDefinition Width="20*"/>
+                </Grid.ColumnDefinitions>
+
+                <inputLayout:SfTextInputLayout Grid.Row="0"  Grid.Column="1" InputViewPadding="10" ShowHint="True" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,0,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
+                    <Entry FontSize="30" TextChanged="hoursentry_TextChanged" x:Name="hoursentry" Grid.Row="0" Keyboard="Numeric" Grid.Column="1" PlaceholderColor="LightGray"  FontFamily="HankenGroteskBold" HorizontalOptions="Center" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand" Placeholder="00" TextColor="#031926"/>
+                </inputLayout:SfTextInputLayout>
+                <Label Text=":" FontFamily="HankenGroteskBold" Margin="0,0,0,0"   VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="0" Grid.Column="2"   FontSize="30" TextColor="#031926" />
+                <inputLayout:SfTextInputLayout Grid.Row="0"  Grid.Column="3" InputViewPadding="10" ShowHint="True" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,0,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
+                    <Entry FontSize="30" TextChanged="minsentry_TextChanged" x:Name="minsentry" Grid.Row="0" Keyboard="Numeric" Grid.Column="3" PlaceholderColor="LightGray" HorizontalOptions="Center" HorizontalTextAlignment="Center"  FontFamily="HankenGroteskBold" VerticalOptions="CenterAndExpand" Placeholder="00" TextColor="#031926"/>
+                </inputLayout:SfTextInputLayout>
+
+
+                <Label Text="Hours" FontFamily="HankenGroteskBold" Margin="0,0,0,0"   VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="1" Grid.Column="1"   FontSize="12" TextColor="#031926" />
+                <Label Text="Minutes" FontFamily="HankenGroteskBold" Margin="0,0,0,0"   VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="1" Grid.Column="3"   FontSize="12" TextColor="#031926" />
+
+
+
+                <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="5" Margin="0,10,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="25*"/>
+                        <ColumnDefinition Width="25*"/>
+                        <ColumnDefinition Width="25*"/>
+                        <ColumnDefinition Width="25*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Text="+15 mins" x:Name="Fiffteenminsbtn" FontSize="12" Clicked="Fiffteenminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="0" BackgroundColor="#BFDBF7" TextColor="#031926" />
+                    <Button Text="+30 mins" x:Name="Thirtyminsbtn" FontSize="12" Clicked="Thirtyminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="1" BackgroundColor="#BFDBF7" TextColor="#031926" />
+                    <Button Text="+60 mins" x:Name="Sixtyminsbtn" FontSize="12" Clicked="Sixtyminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="2" BackgroundColor="#BFDBF7" TextColor="#031926" />
+                    <Button Text="+90 mins" x:Name="Ninetyminsbtn" FontSize="12" Clicked="Ninetyminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="3" BackgroundColor="#BFDBF7" TextColor="#031926" />
+
+
+                </Grid>
+                
+
+            </Grid>
+            
+            
+        </Frame>
+
+        <Frame CornerRadius="10" Margin="-10,10,-10,0" x:Name="SleepQualFrame" IsVisible="False" InputTransparent="False" Padding="5"  BackgroundColor="Transparent"  HasShadow="False" BorderColor="Transparent">
+            <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+                    <Label Text="Sleep Quality" FontSize="20" Margin="10,0,0,0" Grid.Row="0" Grid.Column="0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
+                    <Label Text="How would you rate the quality of your sleep? (Optional)" Grid.Row="1" Grid.Column="0" FontSize="12" Margin="10,0,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
+            <syncfusion:SfListView x:Name="SleepQualitySelect" Grid.Row="2" Grid.Column="0"
+               AutoFitMode="Height" ItemTapped="SleepQualitySelect_ItemTapped" Margin="0,10,10,0"
+               BackgroundColor="Transparent" SelectionMode="Single" VerticalOptions="CenterAndExpand"
+               Orientation="Vertical" >
+                <syncfusion:SfListView.ItemsLayout>
+                    <syncfusion:GridLayout SpanCount="4"/>
+                </syncfusion:SfListView.ItemsLayout>
+                <syncfusion:SfListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                                <Frame CornerRadius="10"  Margin="5,5,5,5" Padding="5" HasShadow="False" BackgroundColor="Transparent" InputTransparent="True" BorderColor="#e5f0fb">
+                                <Grid HorizontalOptions="Center" VerticalOptions="Center" Margin="0" Padding="0"  >
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Label Text="{Binding .}" Margin="0,0,0,0" FontFamily="HankenGroteskRegular"  Grid.Row="1" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="14" />
+                                </Grid>
+                            </Frame>
+                        </ViewCell>
+                    </DataTemplate>
+                </syncfusion:SfListView.ItemTemplate>
+                <syncfusion:SfListView.SelectedItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                                <Frame CornerRadius="10"  Margin="5,5,5,5" Padding="5" HasShadow="False" InputTransparent="True" BackgroundColor="#e5f0fb" BorderColor="Transparent">
+                                <Grid HorizontalOptions="Center" VerticalOptions="Center" Margin="0" Padding="0"  >
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                        <Label Text="{Binding .}" Margin="0,0,0,0" FontFamily="HankenGroteskBold"  Grid.Row="1" VerticalOptions="StartAndExpand"  TextColor="#031926" FontSize="14" />
+                                </Grid>
+                            </Frame>
+                        </ViewCell>
+                    </DataTemplate>
+                </syncfusion:SfListView.SelectedItemTemplate>
+            </syncfusion:SfListView>
+
+        </Grid>
+        </Frame>
+
+
 
         <Frame CornerRadius="10" Margin="0,10,0,0" x:Name="bpsysframe" IsVisible="False" InputTransparent="False" Padding="0"  HeightRequest="70"  BackgroundColor="#e5f0fb"  HasShadow="False" BorderColor="Transparent">
             <Grid HorizontalOptions="FillAndExpand" Margin="0,10,0,0" BackgroundColor="Transparent">
@@ -276,5 +394,5 @@ Text="Submit" />
 
     </StackLayout>
 
-
+    </ScrollView>
 </ContentPage>

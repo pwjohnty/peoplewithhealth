@@ -11,5 +11,7 @@ namespace PeopleWith
         Task RequestNotificationPermissionAsync();
 
         Task<bool> CheckRequestNotificationPermissionAsync();
+
+        Task<bool> AreNotificationsEnabledAsync();
     }
 }

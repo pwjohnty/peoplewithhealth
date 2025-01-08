@@ -62,26 +62,16 @@
                 </buttons:SfSegmentedControl>
                 
                 <!-- Tab Explanation -->
-                <!--<Border StrokeShape="RoundRectangle 5" Padding="5" IsVisible="False" StrokeThickness="0.5" Opacity="1" Stroke="Teal" BackgroundColor="White" Margin="0,0,0,10" >
-                    <Grid ColumnSpacing="5" Margin="38,0,38,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="8"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="8"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
+                <Grid Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                        <Label Grid.Row="0" Grid.Column="0" HorizontalTextAlignment="Center" Text="Medications you have currently scheduled" FontFamily="HankenGroteskRegular" FontSize="8" TextColor="Teal" />
-                        <BoxView Grid.Row="0" Grid.Column="1" WidthRequest="1" BackgroundColor="Teal" VerticalOptions="FillAndExpand" />
-                        <Label Grid.Row="0" Grid.Column="2" HorizontalTextAlignment="Center" Text="Medications you take as you require them" FontFamily="HankenGroteskRegular" FontSize="8" TextColor="Teal" />
-                        <BoxView Grid.Row="0" Grid.Column="3" WidthRequest="1" BackgroundColor="Teal" VerticalOptions="FillAndExpand" />
-                        <Label Grid.Row="0" Grid.Column="4" HorizontalTextAlignment="Center" Text="Medications you are no longer taking" FontFamily="HankenGroteskRegular" FontSize="8" TextColor="Teal" />
-                    </Grid>
-                </Border>-->
+                    <Label x:Name="SegmentDetails" Grid.Row="0" Grid.Column="0" HorizontalTextAlignment="Center" FontFamily="HankenGroteskRegular" FontSize="14" TextColor="Teal" />
+                </Grid>
 
                 <syncfusion:SfListView  x:Name="AllUserMedsList" IsVisible="False" Padding="0" Margin="10,10,10,50" ItemTapped="AllUserMedsList_ItemTapped" AutoFitMode="Height"  ItemSpacing="0"  HorizontalOptions="FillAndExpand" IsScrollingEnabled="False"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
                     <syncfusion:SfListView.ItemTemplate>
@@ -348,12 +338,9 @@ Padding="0">
                                             </Grid.ColumnDefinitions>
 
                                             <Label Text="{Binding ChangedMedName}" FontFamily="HankenGroteskBold"  FontSize="14" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Margin="10,0,0,10" TextColor="#031926" />
+                                            <Label Text="{Binding medicationtitle}" IsVisible="{Binding ChangedMed}" FontFamily="HankenGroteskBold"  FontSize="12" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Margin="10,-5,0,5" TextColor="Gray" />
 
-                           
-                                     
-
-
-                                            <Label FontFamily="HankenGroteskRegular"  FontSize="12" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="End" HorizontalOptions="Start" VerticalTextAlignment="Center" Margin="15,0,0,10" TextColor="Gray" >
+                                            <Label FontFamily="HankenGroteskRegular"  FontSize="12" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="End" HorizontalOptions="Start" VerticalTextAlignment="Center" Margin="15,0,0,10" TextColor="Gray" >
                                                 <Label.FormattedText>
                                                     <FormattedString>
                                                         <Span Text="Started - " TextColor="Gray" FontFamily="HankenGroteskRegular" FontSize="12"/>
@@ -363,6 +350,11 @@ Padding="0">
                                                     </FormattedString>
                                                 </Label.FormattedText>
                                             </Label>
+
+
+                                            <Image Opacity="1" Source="notesicon.png" Grid.Row="2" Grid.Column="0" VerticalOptions="Start" IsVisible="{Binding ChangedNotes}" HorizontalOptions="Center" HeightRequest="20" WidthRequest="20"/>
+
+                                            <Label Text="{Binding ChangedMedNotes}" FontFamily="HankenGroteskBold"  FontSize="12" Grid.Row="2" IsVisible="{Binding ChangedNotes}" Grid.Column="1" Grid.ColumnSpan="1" Margin="0,0,0,10" TextColor="Gray" />
 
 
 

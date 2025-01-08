@@ -3,6 +3,7 @@
 //using Com.Google.Android.Exoplayer2.Util;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
+using Microsoft.Extensions.Azure;
 using Mopups.Services;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Metrics;
@@ -15,6 +16,7 @@ public partial class MeasurementsPage : ContentPage
 	public ObservableCollection<measurement> Measurements = new ObservableCollection<measurement>();
     public ObservableCollection<usermeasurement> UserMeasurements = new ObservableCollection<usermeasurement>();
     public ObservableCollection<usermeasurement> newUserMeasurements = new ObservableCollection<usermeasurement>();
+    public ObservableCollection<usermeasurement> itemtoremove = new ObservableCollection<usermeasurement>();
     public ObservableCollection<measurement> SortedMeasurements = new ObservableCollection<measurement>();
     APICalls aPICalls = new APICalls();
     bool hasusermeasurements;
@@ -263,8 +265,57 @@ public partial class MeasurementsPage : ContentPage
                             item.value = Newlbl;
                         }
                     }
+                    else if (item.unit == "Hours/Minutes")
+                {
+                    if(item.numconverted == null)
+                    {
+                        item.numconverted = double.Parse(item.value);
+                    }
+                    if (item.value.Contains("h"))
+                    {
+                        //Do Nothing
+                    }
+                    else
+                    {
+                        var split = item.value.Split('.');
+                        var Newlbl = split[0] + "h" + " " + split[1] + "m";
+                        item.value = Newlbl;
+                    }
+                }
                
 
+            }
+
+            // Sleep Duration Stacked Sleep Duration 
+            var mostRecentGroup = UserMeasurements
+    .Where(x => x.measurementname == "Sleep Duration")
+    .GroupBy(x => DateTime.Parse(x.inputdatetime).Date) 
+    .OrderByDescending(group => group.Key) 
+    .Take(1) // Take the most recent group
+    .Select(group => new
+    {
+        dateconverted = group.Key, 
+        measurementname = "Sleep Duration", 
+        numconverted = group.Sum(g => ConvertToMinutes(g.numconverted.GetValueOrDefault())), 
+        datechanged = group.Select(g => g.datechanged).FirstOrDefault(), 
+        value = ConvertMinutesToHoursAndMinutes(group.Sum(g => ConvertToMinutes(g.numconverted.GetValueOrDefault()))), 
+        unit = "Hours/Minutes",
+        inputdatetime = group.Max(g => DateTime.Parse(g.inputdatetime)).AddSeconds(5).ToString(), 
+        measurementid = group.Select(g => g.measurementid).FirstOrDefault()
+    })
+    .ToList();
+
+            if(mostRecentGroup.Count > 0)
+            {
+                var StackedSleep = new usermeasurement();
+                StackedSleep.measurementname = mostRecentGroup[0].measurementname;
+                StackedSleep.datechanged = mostRecentGroup[0].datechanged;
+                StackedSleep.value = mostRecentGroup[0].value;
+                StackedSleep.unit = mostRecentGroup[0].unit;
+                StackedSleep.inputdatetime = mostRecentGroup[0].inputdatetime;
+                StackedSleep.measurementid = mostRecentGroup[0].measurementid; 
+                StackedSleep.id = "Delete";
+                UserMeasurements.Add(StackedSleep); 
             }
 
 
@@ -282,7 +333,6 @@ public partial class MeasurementsPage : ContentPage
 
 
                 filteredMeasurements = filteredMeasurements.OrderByDescending(x => DateTime.Parse(x.inputdatetime)).ToList();
-
              
            
                 usermeasurementlist.ItemsSource = filteredMeasurements;
@@ -318,6 +368,34 @@ public partial class MeasurementsPage : ContentPage
 
 	}
 
+    private double ConvertToMinutes(double numconverted)
+    {
+        int hours = (int)numconverted;
+        var Checknum = numconverted.ToString();
+        if (Checknum.Contains("."))
+        {
+            var Splitmins = numconverted.ToString().Split('.');
+            if (Splitmins[1].Length == 1)
+            {
+                Splitmins[1] = Splitmins[1] + "0";
+            }
+            int minutes = int.Parse(Splitmins[1]);
+            return (hours * 60) + minutes;
+        }
+        else
+        {
+            return (hours * 60);
+        }
+
+    }
+
+    private string ConvertMinutesToHoursAndMinutes(double totalMinutes)
+    {
+        int hours = (int)(totalMinutes / 60);
+        int minutes = (int)(totalMinutes % 60);
+        return $"{hours}h {minutes}m";
+    }
+
 
     async void getmeasurementlist()
 	{
@@ -346,6 +424,19 @@ public partial class MeasurementsPage : ContentPage
 		{
 			var item = e.DataItem as measurement;
 
+            foreach(var items in UserMeasurements)
+            {
+                if(items.id == "Delete")
+                {
+                    itemtoremove.Add(items); 
+                }
+            }
+
+            foreach(var items in itemtoremove)
+            {
+                UserMeasurements.Remove(items); 
+            }
+
 			await Navigation.PushAsync(new SingleMeasurement(item, UserMeasurements, SortedMeasurements, userfeedbacklistpassed), false);
 
 		}
@@ -360,6 +451,19 @@ public partial class MeasurementsPage : ContentPage
         try
         {
             var item = e.DataItem as usermeasurement;
+
+            foreach (var items in UserMeasurements)
+            {
+                if (items.id == "Delete")
+                {
+                    itemtoremove.Add(items);
+                }
+            }
+
+            foreach (var items in itemtoremove)
+            {
+                UserMeasurements.Remove(items);
+            }
 
             await Navigation.PushAsync(new SingleMeasurement(item, UserMeasurements, SortedMeasurements, userfeedbacklistpassed), false);
 
@@ -380,6 +484,20 @@ public partial class MeasurementsPage : ContentPage
             {
                 //Limit No. of Taps 
                 AddBtn.IsEnabled = false;
+
+                foreach (var items in UserMeasurements)
+                {
+                    if (items.id == "Delete")
+                    {
+                        itemtoremove.Add(items);
+                    }
+                }
+
+                foreach (var items in itemtoremove)
+                {
+                    UserMeasurements.Remove(items);
+                }
+
                 await Navigation.PushAsync(new SearchAddMeasurement(UserMeasurements, userfeedbacklistpassed), false);
                 AddBtn.IsEnabled = true;
             }
@@ -400,6 +518,19 @@ public partial class MeasurementsPage : ContentPage
         //no data , add stack clicked
         try
         {
+            foreach (var items in UserMeasurements)
+            {
+                if (items.id == "Delete")
+                {
+                    itemtoremove.Add(items);
+                }
+            }
+
+            foreach (var items in itemtoremove)
+            {
+                UserMeasurements.Remove(items);
+            }
+
             await Navigation.PushAsync(new SearchAddMeasurement(UserMeasurements, userfeedbacklistpassed), false);
         }
         catch (Exception Ex)

@@ -24,13 +24,14 @@
                 <ColumnDefinition Width="25*"/>
             </Grid.ColumnDefinitions>
 
+            <Border BackgroundColor="Transparent" Grid.Row="0" Margin="15,2,25,2" Grid.Column="0" Stroke="Transparent" >
 
 
-            <Image Source="backbutton.png" Grid.Column="0" HorizontalOptions="Start" BackgroundColor="Transparent" VerticalOptions="Center" Margin="20,0,0,0" HeightRequest="20" WidthRequest="30">
-                <Image.GestureRecognizers>
+                <Image Source="backbutton.png" Grid.Column="0" HorizontalOptions="Start" BackgroundColor="Transparent" VerticalOptions="Center" Margin="5,0,0,0" HeightRequest="20" WidthRequest="30"/>
+                <Border.GestureRecognizers>
                     <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
-                </Image.GestureRecognizers>
-            </Image>
+                </Border.GestureRecognizers>
+            </Border>
 
 
             <progressBar:SfLinearProgressBar Progress="6" x:Name="topprogress"

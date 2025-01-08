@@ -44,7 +44,7 @@ Padding="0">
                             <ColumnDefinition Width="20*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Label  FontFamily="HankenGroteskBold"  Margin="10,10,0,0" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                        <Label x:Name="SingleDosage" FontFamily="HankenGroteskBold"  Margin="10,10,0,0" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
                             <Label.FormattedText>
                                 <FormattedString>
                                     <Span x:Name="lblvalue" TextColor="#031926" FontSize="35" FontFamily="HankenGroteskBold" FontAttributes="Bold"/>
@@ -52,6 +52,20 @@ Padding="0">
                                     <Span x:Name="lblunit" TextColor="Gray" FontFamily="HankenGroteskRegular" FontSize="14"   />
                                 </FormattedString>
                             </Label.FormattedText>
+                        </Label>
+
+                        <Label x:Name="DoubleDosage" IsVisible="False" FontFamily="HankenGroteskBold"  Margin="10,10,0,0" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span x:Name="lblvalueone" TextColor="#031926" FontSize="35" FontFamily="HankenGroteskBold" FontAttributes="Bold"/>
+                                <Span Text=" " TextColor="#031926" FontSize="30" FontAttributes="Bold"/>
+                                <Span x:Name="lblunitone" TextColor="Gray" FontFamily="HankenGroteskRegular" FontSize="14"   />
+                                <Span Text=" " TextColor="#031926" FontSize="30" FontAttributes="Bold"/>
+                                <Span x:Name="lblvaluetwo" TextColor="#031926" FontSize="35" FontFamily="HankenGroteskBold" FontAttributes="Bold"/>
+                                <Span Text=" " TextColor="#031926" FontSize="30" FontAttributes="Bold"/>
+                                <Span x:Name="lblunittwo" TextColor="Gray" FontFamily="HankenGroteskRegular" FontSize="14"   />
+                                </FormattedString>
+                        </Label.FormattedText>
                         </Label>
 
                         <Label  FontFamily="HankenGroteskBold" HorizontalTextAlignment="Start"  Margin="10,10,0,0" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
@@ -191,6 +205,11 @@ Padding="10">
 
                     </Grid>
                 </Frame>
+
+                <Label Text="Your Supplement Data" x:Name="showalllbl1" IsVisible="True" FontSize="20" Margin="0,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
+
+                <Label Text="Tap on the Show All Data button to view your supplement adherence data" x:Name="showalllbl2" IsVisible="True" FontSize="12" Margin="0,5,0,0" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
+
 
 
                 <Button

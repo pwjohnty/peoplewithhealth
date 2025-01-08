@@ -66,6 +66,12 @@ namespace PeopleWith
         [System.Text.Json.Serialization.JsonIgnore]
         public string BPtwo { get; set; }
 
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool issleepduration { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool isnotsleepduration { get; set; }
+
 
 
         // event handler for updating the list views

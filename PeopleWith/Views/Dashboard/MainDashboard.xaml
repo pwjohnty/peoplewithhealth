@@ -192,7 +192,18 @@
                                 <Image Aspect="AspectFill" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" x:Name="maindashimage"/>
 
                             </Frame>
+                            
+                            
+                            <!-- Enable Notifications Prompt-->
+                            <Grid x:Name="EnableNotifStack" IsVisible="False" Margin="20,20,20,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
 
+                                <Label Grid.Row="0" FontFamily="HankenGroteskRegular" Margin="10,0,10,0" HorizontalOptions="Center" HorizontalTextAlignment="Center" TextColor="#031926" FontSize="13" Text="Enable notifications to receive reminders for Medications, Supplements, and Measurements, helping you stay on top of your health. Tap the button below!" />
+                                <Button x:Name="TurnonNotif"  Text="Turn On Notifications" Clicked="TurnonNotif_Clicked" BorderWidth="2" Padding="10" Margin="10" TextColor="White" FontFamily="HankenGroteskBold" Grid.Row="1" HorizontalOptions="FillAndExpand" VerticalOptions="Fill" BorderColor="#4682B4" BackgroundColor="#4682B4" />
+                            </Grid>
 
 
 
@@ -747,7 +758,7 @@ Text="Get Started" />
                                                                 </Label.FormattedText>
                                                             </Label>
 
-                                                            <Label VerticalOptions="Start" HorizontalOptions="End" HorizontalTextAlignment="End" Text="{Binding unit}" FontSize="12"  Margin="0,0,10,0"  TextColor="#031926" FontFamily="HankenGroteskRegular"   Grid.Column="1" Grid.ColumnSpan="1" Grid.Row="1"/>
+                                                            <Label VerticalOptions="Start" HorizontalOptions="End" HorizontalTextAlignment="End" Text="{Binding unit}" FontSize="12"  Margin="0,0,10,0"  TextColor="#031926" FontFamily="HankenGroteskRegular"   Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1"/>
 
 
                                                             <BoxView BackgroundColor="#e5f0fb" Margin="20,5,20,5" HorizontalOptions="FillAndExpand" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HeightRequest="1" />
