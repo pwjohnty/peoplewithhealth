@@ -20,54 +20,39 @@
         <Label Text="Select Unit" FontSize="20" Margin="0,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
         <Label Text="Please select the unit of measurement from the options" FontSize="12" Margin="0,0,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
 
+            <Grid VerticalOptions="Center" HorizontalOptions="StartAndExpand">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="80"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/> 
+                </Grid.ColumnDefinitions>
+    
+            <syncfusion:SfListView x:Name="unitlist" Grid.Row="0" Grid.Column="0" ItemTapped="unitlist_ItemTapped" AutoFitMode="Height" ScrollBarVisibility="Never" IsVisible="True" BackgroundColor="Transparent" 
+                       SelectionMode="Single" Orientation="Horizontal" HorizontalOptions="StartAndExpand" VerticalOptions="Start" Padding="5" Margin="0">
+                <syncfusion:SfListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Border StrokeShape="RoundRectangle 10" StrokeThickness="1" Stroke="LightGray" InputTransparent="True" Padding="0" Margin="5,5" HeightRequest="50" BackgroundColor="Transparent">
+                                <Label Text="{Binding .}" FontFamily="HankenGroteskRegular" Padding="5" Margin="5" VerticalOptions="Center" HorizontalOptions="CenterAndExpand" TextColor="Gray" FontSize="12" />
+                            </Border>
+                        </ViewCell>
+                    </DataTemplate>
+                </syncfusion:SfListView.ItemTemplate>
 
+                <syncfusion:SfListView.SelectedItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                                <Border StrokeShape="RoundRectangle 10" StrokeThickness="1" Stroke="Transparent" InputTransparent="True" Padding="0" Margin="5,5" HeightRequest="50" BackgroundColor="#BFDBF7" >
+                                    <Label Text="{Binding .}" FontFamily="HankenGroteskRegular" Padding="5" Margin="5" VerticalOptions="Center" HorizontalOptions="CenterAndExpand" FontAttributes="Bold" TextColor="#031926" FontSize="12" />
+                            </Border>
+                        </ViewCell>
+                    </DataTemplate>
+                </syncfusion:SfListView.SelectedItemTemplate>
+            </syncfusion:SfListView>
+            </Grid>
 
-        <syncfusion:SfListView x:Name="unitlist" ItemTapped="unitlist_ItemTapped" ScrollBarVisibility="Never" IsVisible="True" SelectionMode="Single" Orientation="Horizontal" HorizontalOptions="StartAndExpand" AutoFitMode="Height" HeightRequest="80" BackgroundColor="Transparent" VerticalOptions="Start"   Margin="0,0,0,0"  >
-            <syncfusion:SfListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <Frame CornerRadius="10" InputTransparent="True" Padding="15"  Margin="5,0,5,0" HeightRequest="50" HasShadow="False" Opacity="1" BackgroundColor="Transparent"
-BorderColor="LightGray">
-                            <Grid HorizontalOptions="FillAndExpand" Margin="0" Padding="0"  >
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100*"/>
-
-                                </Grid.ColumnDefinitions>
-
-                                <Label Text="{Binding .}" FontFamily="HankenGroteskRegular" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="12" />
-
-
-
-                            </Grid>
-                        </Frame>
-                    </ViewCell>
-                </DataTemplate>
-            </syncfusion:SfListView.ItemTemplate>
-            <syncfusion:SfListView.SelectedItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <Frame CornerRadius="10" Margin="5,0,5,0"  InputTransparent="True" Padding="15"  HeightRequest="50"  BackgroundColor="#BFDBF7"  HasShadow="False" BorderColor="Transparent">
-                            <Grid HorizontalOptions="FillAndExpand">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100*"/>
-
-                                </Grid.ColumnDefinitions>
-                                <Label Text="{Binding .}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" FontAttributes="Bold"  TextColor="#031926" FontSize="12" />
-
-                            </Grid>
-                        </Frame>
-                    </ViewCell>
-                </DataTemplate>
-            </syncfusion:SfListView.SelectedItemTemplate>
-        </syncfusion:SfListView>
-
-        <Label Text="Measurement Reading" FontSize="20" Margin="0,0,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
+            <Label Text="Measurement Reading" FontSize="20" Margin="0,0,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
 
         <Label Text="Please enter the amount, reading or volume of the measurement by tapping on the box below:" FontSize="12" Margin="0,0,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
 
