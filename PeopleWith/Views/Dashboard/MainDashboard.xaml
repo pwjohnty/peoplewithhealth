@@ -1141,6 +1141,11 @@ Aspect="AspectFit"
                             </syncfusion:SfListView>
 
 
+                                <Image Aspect="AspectFill" x:Name="novidimg" IsVisible="False" VerticalOptions="FillAndExpand" HorizontalOptions="Center" Source="emptyicon.png"/>
+
+                                <Label Text="No Help and Support Videos Available" IsVisible="False" x:Name="novidlbl" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="14" Margin="0,10,0,20" HorizontalTextAlignment="Center" HorizontalOptions="Center" />
+
+
                             </StackLayout>
 
 

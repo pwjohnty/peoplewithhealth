@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using Microsoft.Azure.NotificationHubs;
+using Mopups.Services;
 using Plugin.LocalNotification;
 
 namespace PeopleWith;
@@ -134,14 +135,14 @@ public partial class MainDashboard : ContentPage
 
                 signuptitlelbl.Text = signupcodecollection[0].title;
 
-                if (signupcodecollection[0].description.Length > 600)
+                if (signupcodecollection[0].appdescription.Length > 600)
                 {
-                    signupcodecollection[0].shortdescription = signupcodecollection[0].description.Substring(0, 600);
+                    signupcodecollection[0].shortdescription = signupcodecollection[0].appdescription.Substring(0, 600);
                     signupdetailslbl.Text = signupcodecollection[0].shortdescription + "...";
                 }
                 else
                 {
-                    signupdetailslbl.Text = signupcodecollection[0].description;
+                    signupdetailslbl.Text = signupcodecollection[0].appdescription;
                 }
 
 
@@ -164,10 +165,13 @@ public partial class MainDashboard : ContentPage
                     {
                         item.img = "webicon.png";
                     }
+
+                    item.type = item.type.ToUpper();
+
                 }
 
                 infolist.ItemsSource = signupcodecollection[0].signupcodeinfolist;
-                infolist.HeightRequest = signupcodecollection[0].signupcodeinfolist.Count * 92;
+                infolist.HeightRequest = signupcodecollection[0].signupcodeinfolist.Count * 96;
               
 
             }
@@ -186,6 +190,14 @@ public partial class MainDashboard : ContentPage
                 videoslist.ItemsSource = allvideos;
 
                 videoslist.HeightRequest = 180 * allvideos.Count;
+
+
+                if (allvideos.Count == 0) 
+                {
+                    novidimg.IsVisible = true;
+                    novidlbl.IsVisible = true;
+                }
+
             }
             else
             {
@@ -2342,7 +2354,7 @@ public partial class MainDashboard : ContentPage
             //see more button
             if(morebtn.Text == "See more")
             {
-                signupdetailslbl.Text = signupcodecollection[0].description;
+                signupdetailslbl.Text = signupcodecollection[0].appdescription;
                 morebtn.Text = "See less";
 
             }
@@ -2365,6 +2377,8 @@ public partial class MainDashboard : ContentPage
         {
             var item = e.DataItem as signupcodeinformation;
 
+            item.type = item.type.ToLower();
+
             if (item.type == "pdf")
             {
                 var pdflink = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/" + item.link;
@@ -2378,9 +2392,19 @@ public partial class MainDashboard : ContentPage
             {
                 var pdflink = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/" + item.link;
                 string imgPath = pdflink + ".mp4";
-              //  var launchvid = new videosupport();
-               // launchvid.URL = item.Filename;
-               // await Navigation.PushModalAsync(new AndroidSingleView(launchvid));
+                //  var launchvid = new videosupport();
+                // launchvid.URL = item.Filename;
+                // await Navigation.PushAsync(new AllVideos(), false);
+
+               // var vid = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/DiagnosisFirstAdd.mp4";
+                await Navigation.PushAsync(new VideoPlayer(item));
+            }
+            else if(item.type == "image")
+            {
+                var pdflink = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/" + item.link;
+
+                await MopupService.Instance.PushAsync(new imagePopUp(pdflink) { });
+
             }
             else
             {

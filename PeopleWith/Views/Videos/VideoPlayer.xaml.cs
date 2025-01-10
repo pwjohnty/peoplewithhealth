@@ -13,6 +13,8 @@ public partial class VideoPlayer : ContentPage
     private bool isPlaying = false;
     private bool isPaused = false;
     APICalls database = new APICalls();
+    bool fromdash;
+    signupcodeinformation vidfromdash = new signupcodeinformation();
 
     async public void NotasyncMethod(Exception Ex)
     {
@@ -48,6 +50,35 @@ public partial class VideoPlayer : ContentPage
             NotasyncMethod(Ex);
         }
     }
+
+    public VideoPlayer(signupcodeinformation vidpassed)
+    {
+        try
+        {
+            InitializeComponent();
+
+            fromdash = true;
+
+            vidfromdash = vidpassed;
+            //  SelectedVideo = VideoSelected;
+            var pdflink = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/" + vidfromdash.thumbnail;
+            VideoThumbnail.Source = pdflink;
+            Titlelbl.Text = vidfromdash.title;
+            SubTitlelbl.Text = vidfromdash.description;
+           // Dateandlenthlbl.Text = "Date Added: " + SelectedVideo.dateadded;
+           // lengthlbl.Text = SelectedVideo.lenght;
+            //   MediaElement.Source = SelectedVideo.filename;
+            VideoEngagement.userid = Helpers.Settings.UserKey;
+          //  VideoEngagement.videoid = VideoSelected.videoid;
+
+        }
+        catch (Exception Ex)
+        {
+
+            NotasyncMethod(Ex);
+        }
+    }
+
     private void MediaElement_MediaEnded(object sender, EventArgs e)
     {
         try
@@ -129,56 +160,82 @@ public partial class VideoPlayer : ContentPage
             NotasyncMethod(Ex);
         }
     }
-    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
         try
         {
-         
 
-            // Create the MediaElement
-            var mediaElement = new MediaElement
-            {
-                HorizontalOptions = LayoutOptions.Center,
-                BackgroundColor = Colors.Black,  // Set background color
-                ShouldAutoPlay = true,           // Autoplay the video
-                Aspect = Aspect.AspectFit            // Set aspect ratio (AspectFit or AspectFill)
-               // WidthRequest = 300,              // Set the desired width (adjust as needed)
-                //HeightRequest = 200             // Set the desired height (adjust as needed)
-            };
 
-          
+            //// Create the MediaElement
+            //var mediaElement = new MediaElement
+            //{
+            //    HorizontalOptions = LayoutOptions.Center,
+            //    BackgroundColor = Colors.Black,  // Set background color
+            //    ShouldAutoPlay = true,           // Autoplay the video
+            //    Aspect = Aspect.AspectFit            // Set aspect ratio (AspectFit or AspectFill)
+            //   // WidthRequest = 300,              // Set the desired width (adjust as needed)
+            //    //HeightRequest = 200             // Set the desired height (adjust as needed)
+            //};
 
-            // Set the media source (replace with your video file path or URL)
-            mediaElement.Source = SelectedVideo.filename;
+
+
+            //// Set the media source (replace with your video file path or URL)
+            //mediaElement.Source = SelectedVideo.filename;
 
             // Add the MediaElement to your page layout
-           
-            Video.Children.Add(mediaElement);
-          
 
+            //Video.Children.Add(mediaElement);
+
+            if (fromdash)
+            {
+                var pdflink = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/" + vidfromdash.link;
+                string imgPath = pdflink + ".mp4";
+
+                await Navigation.PushAsync(new NewPageVideoPlayer(pdflink), false);
+                return;
+            }
+            else
+            {
+
+
+                await Navigation.PushAsync(new NewPageVideoPlayer(SelectedVideo.filename), false);
+                return;
+            }
 
             var zeroTimeSpan = TimeSpan.Zero;
             PlayDuration.Reset();
             PauseDuration.Reset();
             VideoDetails.IsVisible = false;
             Video.IsVisible = true;
+            // Get the screen height
+            var screenHeight = DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density;
+            var mediaElementHeight = screenHeight * 0.8;
+
+            // Apply the calculated height to the MediaElement
+         //  MediaElement.HeightRequest = mediaElementHeight;
+
+           // MediaElement.IsVisible = true;
+           // MediaElement.Source = SelectedVideo.filename;
            // MediaElement.Play();
             isPlaying = true;
             PlayDuration.Start();
             VideoEngagement.datetimeaccessed = DateTime.Now.ToString("dd/MM/yy HH:mm");
             //MediaElement.ShouldMute = false;
             NavigationPage.SetHasNavigationBar(this, false);
+
             if (DeviceInfo.Current.Platform == DevicePlatform.Android)
             {
-              //  AndroidBtn.IsVisible = true;
+                //  AndroidBtn.IsVisible = true;
             }
             else if (DeviceInfo.Current.Platform == DevicePlatform.iOS)
-            {
-                //MediaElement.HeightRequest = 200;
-                //MediaElement.WidthRequest = 300;
+            { 
+               // mediaElement.HeightRequest = 200;
+               // mediaElement.WidthRequest = 300;
                 //IOSBtn.IsVisible = true;
             }
+
             closevideobtn.IsVisible = true;
+        
         }
         catch (Exception Ex)
         {

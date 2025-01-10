@@ -2657,6 +2657,91 @@ namespace PeopleWith
         }
 
 
+        public async Task<ObservableCollection<questionnaire>> GetSingleQuestionnaires()
+        {
+            try
+            {
+                var url = "https://pwdevapi.peoplewith.com/api/questionnaire/";
+                HttpClient client = new HttpClient();
+                HttpResponseMessage responseconsent = await client.GetAsync(url);
+
+                if (responseconsent.IsSuccessStatusCode)
+                {
+                    string contentconsent = await responseconsent.Content.ReadAsStringAsync();
+                    var userResponseconsent = JsonConvert.DeserializeObject<ApiResponseQuestionnaire>(contentconsent);
+                    var consent = userResponseconsent.Value;
+
+                    // var questionAnswers = JsonConvert.DeserializeObject<ObservableCollection<questionanswerinfo>>();
+                    var newcollection = new ObservableCollection<questionnaire>();
+
+                    foreach (var item in consent)
+                    {
+                        if (item.deleted == true)
+                        {
+                            //Ignore
+
+                        }
+                        else
+                        {
+
+                            if (item.title.Contains("EQ-5D"))
+                            {
+
+
+                                try
+                                {
+                                    // Attempt to deserialize as an array
+                                    item.questionanswerjsonlist = JsonConvert.DeserializeObject<ObservableCollection<questionanswerinfo>>(item.questionanswerjson);
+                                }
+                                catch (JsonSerializationException)
+                                {
+                                    // If the JSON is a single object, deserialize it as such and wrap it in a collection
+                                    var singleItem = JsonConvert.DeserializeObject<questionanswerinfo>(item.questionanswerjson);
+                                    item.questionanswerjsonlist = new ObservableCollection<questionanswerinfo> { singleItem };
+                                }
+
+                                var usersignupcode = Helpers.Settings.SignUp;
+
+                                if (string.IsNullOrEmpty(item.signupcodeid))
+                                {
+                                    newcollection.Add(item);
+                                }
+                                else if (string.IsNullOrEmpty(Helpers.Settings.SignUp))
+                                {
+                                    //ignore it
+                                }
+                                else if (item.signupcodeid.Contains(usersignupcode))
+                                {
+                                    newcollection.Add(item);
+                                }
+                                else
+                                {
+                                    //ignore it
+                                }
+                            }
+
+
+                        }
+                    }
+
+                    return new ObservableCollection<questionnaire>(newcollection);
+
+                }
+                else
+                {
+                    return null;
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
         public async Task<userquestionnaire> PostUserQuestionnaire(userquestionnaire userquestionnairepassed)
         {
             try

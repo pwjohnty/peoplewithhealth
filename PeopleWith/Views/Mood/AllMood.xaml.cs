@@ -193,14 +193,23 @@ public partial class AllMood : ContentPage
             SingleMood.Clear();
             var Mood = e.DataItem as usermood;
             var Title = Mood.title;
+
+            var allsamemoods = new ObservableCollection<usermood>();
+
             foreach (var item in AllMoods)
             {
                 if (Mood.id == item.id)
                 {
                     SingleMood.Add(item);
                 }
+
+
+                if(item.title == Title)
+                {
+                    allsamemoods.Add(item);
+                }
             }
-            await Navigation.PushAsync(new SingleMood(SingleMood, AllMoods));
+            await Navigation.PushAsync(new SingleMood(SingleMood, AllMoods, allsamemoods, userfeedbacklistpassed));
         }
 
         catch (Exception Ex)

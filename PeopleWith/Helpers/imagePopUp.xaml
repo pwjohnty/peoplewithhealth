@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Mopups:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                  xmlns:Animations="clr-namespace:Mopups.Animations;assembly=Mopups"
+                  xmlns:Mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+                  BackgroundInputTransparent="True" 
+                  CloseWhenBackgroundIsClicked="False" BackgroundColor="Black"
+                  x:Class="PeopleWith.imagePopUp">
+    <Mopups:PopupPage.Animation>
+        <Animations:ScaleAnimation
+            PositionIn="Center"
+            PositionOut="Center"
+            DurationIn="200"
+            DurationOut="200"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="False"/>
+    </Mopups:PopupPage.Animation>
+    <VerticalStackLayout Margin="0" VerticalOptions="Center" BackgroundColor="White" Opacity="0.2">
+        <Frame HasShadow="False" CornerRadius="10" Margin="10,0,10,0" Padding="5" BackgroundColor="Transparent" Opacity="1" BorderColor="White">
+            <Grid Margin="20,0,20,0" RowSpacing="10" BackgroundColor="White">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    
+                </Grid.ColumnDefinitions>
+
+
+                <Image x:Name="mainimage"
+                       Aspect="AspectFit" Grid.Row="0" Grid.Column="0"
+                       VerticalOptions="FillAndExpand"
+                       HorizontalOptions="FillAndExpand" />
+
+
+
+
+
+            </Grid>
+        </Frame>
+
+
+        <!-- Close Button -->
+        <Button Text="Close"
+                        BackgroundColor="Transparent"
+                        TextColor="#009fe3"  Grid.Row="1" Grid.Column="0"
+                        VerticalOptions="End" FontFamily="HankenGroteskBold" 
+                        HorizontalOptions="Center"
+                        Clicked="Closebtn_Clicked"
+                         />
+    </VerticalStackLayout>
+</Mopups:PopupPage>

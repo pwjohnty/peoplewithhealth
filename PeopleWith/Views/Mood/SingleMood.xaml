@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"
+              xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
              x:Class="PeopleWith.SingleMood"  xmlns:local="clr-namespace:PeopleWith" NavigationPage.IconColor="#031926"  BackgroundColor="White">
     <ContentPage.ToolbarItems>
         <ToolbarItem x:Name="EditBtn" Text="Edit"  Clicked="EditBtn_Clicked"  />
     </ContentPage.ToolbarItems>
     <VerticalStackLayout>
         <StackLayout x:Name="MoodSingle">
-            <Frame HasShadow="False" CornerRadius="10"  InputTransparent="True" Padding="5" BorderColor="Transparent" BackgroundColor="#FFF8DC"  Margin="10,0,10,5">
+            <Frame HasShadow="False" CornerRadius="10"  InputTransparent="True" Padding="5" BorderColor="Transparent" BackgroundColor="#FFF8DC"  Margin="20,20,20,5">
                 <Grid >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="35"/>
@@ -24,12 +26,66 @@
                     <Image x:Name="Moodimg" Margin="0,0,0,0" HeightRequest="50" WidthRequest="50"  VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="0" Grid.Column="0"  Grid.RowSpan="2"  />
                     <Label x:Name="MoodTitle" Margin="10,0,0,0" FontFamily="HankenGroteskBold"  FontSize="20" VerticalOptions="End" Grid.Row="0" Grid.Column="1"  TextColor="#031926" />
                     <Label x:Name="MoodDate" FontFamily="HankenGroteskBold" VerticalOptions="Start" Margin="10,0,0,0" HorizontalOptions="Start" FontSize="12" Grid.Row="1" Grid.Column="1"  TextColor="DarkGray" />
-                    <Label x:Name="MoodNotes" FontFamily="HankenGroteskBold" VerticalOptions="Start" Margin="10,5,0,0" HorizontalOptions="Start" FontSize="12" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3"  TextColor="DarkGray" />
+                    <Label x:Name="MoodNotes" FontFamily="HankenGroteskBold" VerticalOptions="Start" Margin="10,5,0,0" HorizontalOptions="Start" FontSize="12" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3"  TextColor="#031926" />
 
                 </Grid>
             </Frame>
 
-            <Label Text="Details" Margin="10,0,0,0" FontFamily="HankenGroteskBold"  FontSize="20" VerticalOptions="Center" TextColor="#031926" />
+            <StackLayout x:Name="SymptomInsights" Margin="20,10,20,0" IsVisible="True">
+
+                <Label Text="Mood Timeline" Margin="10,20,0,10" FontFamily="HankenGroteskBold"  FontSize="20" VerticalOptions="Center" TextColor="#031926" />
+
+
+
+                <syncfusion:SfListView  x:Name="AllMoodView" Padding="0" Margin="0,0,0,0" AutoFitMode="Height" ItemSpacing="0" BackgroundColor="Transparent" HorizontalOptions="FillAndExpand" IsScrollingEnabled="False"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
+                    <syncfusion:SfListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Frame HasShadow="False" CornerRadius="10"  InputTransparent="True" Padding="5" BorderColor="Transparent" Opacity="1" BackgroundColor="#FFF8DC"  Margin="10,0,10,5">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="25"/>
+                                            <RowDefinition Height="25"/>
+
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="15*"/>
+                                            <ColumnDefinition Width="75*"/>
+                                            <ColumnDefinition Width="10*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Image Source="{Binding source}" Margin="0,0,0,0"  HeightRequest="35" WidthRequest="35" VerticalOptions="Center" Grid.Row="0" Grid.Column="0"  Grid.RowSpan="2"  />
+                                        <Label Text="{Binding title}" Margin="10,0,0,0" FontFamily="HankenGroteskBold"  FontSize="14" VerticalOptions="End" HorizontalOptions="Start" Grid.Row="0" Grid.Column="1"  TextColor="#B8860B" />
+                                        <Label Text="{Binding datetime}" FontFamily="HankenGroteskBold" VerticalOptions="Start" Margin="10,0,0,0" HorizontalOptions="Start" FontSize="12" Grid.Row="1" Grid.Column="1"  TextColor="DarkGray" />
+
+                                     
+                                    </Grid>
+                                </Frame>
+
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.ItemTemplate>
+                </syncfusion:SfListView>
+
+
+                <Button BackgroundColor="#B8860B" x:Name="AddDataBtn" Clicked="AddDataBtn_Clicked" HorizontalOptions="FillAndExpand" TextColor="White"  FontAttributes="None" Margin="0,20,0,10" FontFamily="HankenGroteskBold" Text="Add Data" />
+
+              
+
+
+    
+
+
+      
+
+
+
+             
+
+
+            </StackLayout>
+
+            <Label Text="Details" Margin="20,20,0,0" FontFamily="HankenGroteskBold"  FontSize="20" VerticalOptions="Center" TextColor="#031926" />
             <Frame HasShadow="False" BorderColor="#E5E5E5" BackgroundColor="Transparent" Margin="10,10,10,0">
                 <Grid>
                     <Grid.ColumnDefinitions>

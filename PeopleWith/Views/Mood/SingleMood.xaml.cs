@@ -7,6 +7,8 @@ public partial class SingleMood : ContentPage
 {
     public ObservableCollection<usermood> AlluserMoods = new ObservableCollection<usermood>();
     public ObservableCollection<usermood> MoodPassed = new ObservableCollection<usermood>();
+    public ObservableCollection<usermood> allsamemoods = new ObservableCollection<usermood>();
+    userfeedback userfeedbacklistpassed = new userfeedback();
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
@@ -29,13 +31,15 @@ public partial class SingleMood : ContentPage
         InitializeComponent();
     }
 
-    public SingleMood(ObservableCollection<usermood> singlemood, ObservableCollection<usermood> AllMoods)
+    public SingleMood(ObservableCollection<usermood> singlemood, ObservableCollection<usermood> AllMoods, ObservableCollection<usermood> samemoods, userfeedback userfeedbacklist)
     {
         try
         {
             InitializeComponent();
             AlluserMoods = AllMoods;
             MoodPassed = singlemood;
+            allsamemoods = samemoods;
+            userfeedbacklistpassed = userfeedbacklist;
 
             Moodimg.Source = MoodPassed[0].source;
             MoodTitle.Text = MoodPassed[0].title;
@@ -48,11 +52,17 @@ public partial class SingleMood : ContentPage
             {
                 MoodNotes.Text = "Notes: " + MoodPassed[0].notes;
             }
+
+
+            AllMoodView.ItemsSource = samemoods;
+
         }
         catch (Exception Ex)
         {
             NotasyncMethod(Ex);
         }
+
+        this.userfeedbacklistpassed = userfeedbacklistpassed;
     }
 
     async private void EditBtn_Clicked(object sender, EventArgs e)
@@ -156,5 +166,21 @@ public partial class SingleMood : ContentPage
             NotasyncMethod(Ex);
         }
 
+    }
+
+    private async void AddDataBtn_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+
+            AddDataBtn.IsEnabled = false;
+            await Navigation.PushAsync(new AddMood(AlluserMoods, "Add", userfeedbacklistpassed));
+            AddDataBtn.IsEnabled = true;
+
+        }
+        catch(Exception ex)
+        {
+
+        }
     }
 }
