@@ -42,7 +42,7 @@
 	<PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios'">
 	  <CodesignKey>Apple Development: Created via API (9AF7WV24ZX)</CodesignKey>
 	  <CodesignProvision>VS: com.peoplewith.peoplewith Development</CodesignProvision>
-	  <ProvisioningType>automatic</ProvisioningType>
+	  <ProvisioningType>manual</ProvisioningType>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -271,6 +271,9 @@
 	  <MauiXaml Update="Helpers\GettingReady.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Helpers\imagePopUp.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Helpers\Infopopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -476,6 +479,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Videos\AllVideos.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Videos\NewPageVideoPlayer.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Videos\VideoPlayer.xaml">

@@ -10,6 +10,7 @@ using Azure.Storage.Blobs;
 using static System.Net.WebRequestMethods;
 using Syncfusion.Maui.Core.Internals;
 using Plugin.LocalNotification;
+using CommunityToolkit.Maui.Views;
 
 namespace PeopleWith;
 
@@ -228,6 +229,12 @@ public partial class RegisterFinalPage : ContentPage
            // bottomstack.IsVisible = false;
             notificationstack.IsVisible = false;
             tcstack.IsVisible = true;
+
+            if (additonalconsent.signaturepad == true)
+            {
+                signaturePadStack.IsVisible = true;
+            }
+
             skipbtn.IsVisible = false;
             nextbtn.Text = "Agree and Finish";
             backbtn.IsVisible = false;
@@ -436,42 +443,53 @@ public partial class RegisterFinalPage : ContentPage
                 newuser.devicemodel = DeviceInfo.Model;
                 newuser.usermigrated = true;
 
-                PermissionStatus status;
+                var checknotifications = await LocalNotificationCenter.Current.AreNotificationsEnabled();
 
-                if (DeviceInfo.Platform == DevicePlatform.Android)
+                if ((checknotifications))
                 {
-                    // Request and capture the permission status on Android
-                    status = await Permissions.CheckStatusAsync<Permissions.PostNotifications>();
-
-                    if (status == PermissionStatus.Granted)
-                    {
-                        // Set notifications as enabled
-                        newuser.pushnotifications = "True";
-                    }
-                    else
-                    {
-                        // Set notifications as disabled
-                        newuser.pushnotifications = "Disabled";
-                    }
+                    newuser.pushnotifications = "True";
                 }
                 else
                 {
-                    // Request permission on iOS via dependency service
-                    var notificationService = DependencyService.Get<INotificationService>();
-                    bool isGranted = await notificationService.CheckRequestNotificationPermissionAsync();
-
-                    // Set notifications based on whether permission was granted
-                    if (isGranted)
-                    {
-                        // Set notifications as enabled
-                        newuser.pushnotifications = "True";
-                    }
-                    else
-                    {
-                        // Set notifications as disabled
-                        newuser.pushnotifications = "Disabled";
-                    }
+                    newuser.pushnotifications = "Disabled";
                 }
+
+                //PermissionStatus status;
+
+                //if (DeviceInfo.Platform == DevicePlatform.Android)
+                //{
+                //    // Request and capture the permission status on Android
+                //    status = await Permissions.CheckStatusAsync<Permissions.PostNotifications>();
+
+                //    if (status == PermissionStatus.Granted)
+                //    {
+                //        // Set notifications as enabled
+                //        newuser.pushnotifications = "True";
+                //    }
+                //    else
+                //    {
+                //        // Set notifications as disabled
+                //        newuser.pushnotifications = "Disabled";
+                //    }
+                //}
+                //else
+                //{
+                //    // Request permission on iOS via dependency service
+                //    var notificationService = DependencyService.Get<INotificationService>();
+                //    bool isGranted = await notificationService.CheckRequestNotificationPermissionAsync();
+
+                //    // Set notifications based on whether permission was granted
+                //    if (isGranted)
+                //    {
+                //        // Set notifications as enabled
+                //        newuser.pushnotifications = "True";
+                //    }
+                //    else
+                //    {
+                //        // Set notifications as disabled
+                //        newuser.pushnotifications = "Disabled";
+                //    }
+                //}
 
 
                 if (emailcheck.IsChecked)
@@ -646,13 +664,34 @@ public partial class RegisterFinalPage : ContentPage
                     BlobClient blobClient = containerClient.GetBlobClient(backimagename);
 
                     //Send Signature to Azure 
-                    Stream signatureStream = await signpad.GetStreamAsync(Syncfusion.Maui.Core.ImageFileFormat.Jpeg);
+                    if (DeviceInfo.Platform == DevicePlatform.iOS)
+                    {
+
+                        var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+
+                        Stream drawingStream = await (DrawingView.GetImageStream(drawingpad.Lines, new Size(150, 150),
+                                Microsoft.Maui.Graphics.Colors.Transparent, cts.Token));
+
+
+                        if (drawingStream != null)
+                        {
+                            await blobClient.UploadAsync(drawingStream);
+                        }
+                    }
+                    else
+                    {
+                        Stream signatureStream = await signpad.GetStreamAsync(Syncfusion.Maui.Core.ImageFileFormat.Jpeg);
+
+                        if (signatureStream != null)
+                        {
+                            await blobClient.UploadAsync(signatureStream);
+                        }
+                    }
+
+
 
                     // Upload the signature image stream to Azure Blob Storage
-                    if (signatureStream != null)
-                    {
-                        await blobClient.UploadAsync(signatureStream);
-                    }
+
 
                     //User Consent 
                     var UpdateUserConsent = new userconsent();
@@ -686,6 +725,34 @@ public partial class RegisterFinalPage : ContentPage
 
                 APICalls databasee = new APICalls();
                 await databasee.InsertUserFeedback(userfeedbacklistpassed);
+
+
+                //add questionnaire notification for nsat 
+                if(newuser.signupcodeid != null)
+                {
+                    if(newuser.signupcodeid.Contains("SFEAT"))
+                    {
+                        var notification = new NotificationRequest
+                        {
+                            NotificationId = new Random().Next(1, int.MaxValue),
+                            Title = "Complete your EQ-5D Questionnaire",
+                            Description = "Please take a moment to complete your EQ-5D questionnaire",
+                            BadgeNumber = 0,
+                            Schedule = new NotificationRequestSchedule
+                            {
+                                NotifyTime = DateTime.Now.AddMinutes(1),
+                                RepeatType = NotificationRepeat.No,
+                                NotifyRepeatInterval = null
+                            }
+
+
+
+                        };
+
+                        LocalNotificationCenter.Current.Show(notification);
+                    }
+                }
+
 
                 // Preferences.Default.Set("validationcode", newuser.validationcode);
 
@@ -797,8 +864,8 @@ public partial class RegisterFinalPage : ContentPage
             }
             else 
             {
-                signaturePadStack.IsVisible = true;
-                ConsentBoxesStack.IsVisible = false;
+             //   signaturePadStack.IsVisible = true;
+              //  ConsentBoxesStack.IsVisible = false;
                 tcerror.IsVisible = false;
             }
             
@@ -828,6 +895,12 @@ public partial class RegisterFinalPage : ContentPage
                 {
                     notificationstack.IsVisible = false;
                     tcstack.IsVisible = true;
+
+                    if(additonalconsent.signaturepad == true)
+                    {
+                        signaturePadStack.IsVisible = true;
+                    }
+
                     nextbtn.Text = "Agree and Finish";
                     nextbtn.BackgroundColor = Colors.LightGray;
                     backbtn.IsVisible = false;
@@ -947,7 +1020,7 @@ public partial class RegisterFinalPage : ContentPage
 
             if (!isSignatureBlank)
             {
-                SignPadhaddata = true; 
+                SignPadhaddata = true;
                 nextbtn.BackgroundColor = Color.FromArgb("#031926");
             }
             else
@@ -971,7 +1044,8 @@ public partial class RegisterFinalPage : ContentPage
             NetworkAccess accessType = Connectivity.Current.NetworkAccess;
             if (accessType == NetworkAccess.Internet)
             {
-                signpad.Clear();
+                drawingpad.Clear();
+                //signpad.Clear();
                 nextbtn.BackgroundColor = Colors.LightGray;
                 SignPadhaddata = false;
             }
@@ -984,6 +1058,34 @@ public partial class RegisterFinalPage : ContentPage
         catch (Exception Ex)
         {
             NotasyncMethod(Ex);
+        }
+    }
+
+    private async void DrawingView_DrawingLineCompleted(object sender, CommunityToolkit.Maui.Core.DrawingLineCompletedEventArgs e)
+    {
+        try
+        {
+            var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+
+            Stream drawingStream = await (DrawingView.GetImageStream(drawingpad.Lines, new Size(150, 150),
+                    Microsoft.Maui.Graphics.Colors.Transparent, cts.Token));
+            bool isSignatureBlank = drawingStream.Length == 0;
+
+            if (!isSignatureBlank)
+            {
+                SignPadhaddata = true;
+                nextbtn.BackgroundColor = Color.FromArgb("#031926");
+            }
+            else
+            {
+                SignPadhaddata = false;
+                nextbtn.BackgroundColor = Colors.LightGray;
+            }
+
+        }
+        catch (Exception Ex)
+        {
+            //Leave Empty
         }
     }
 }

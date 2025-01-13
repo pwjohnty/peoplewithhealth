@@ -6,6 +6,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using Microsoft.Azure.NotificationHubs;
+using Mopups.Services;
+using Plugin.LocalNotification;
 
 namespace PeopleWith;
 
@@ -133,14 +135,14 @@ public partial class MainDashboard : ContentPage
 
                 signuptitlelbl.Text = signupcodecollection[0].title;
 
-                if (signupcodecollection[0].description.Length > 600)
+                if (signupcodecollection[0].appdescription.Length > 600)
                 {
-                    signupcodecollection[0].shortdescription = signupcodecollection[0].description.Substring(0, 600);
+                    signupcodecollection[0].shortdescription = signupcodecollection[0].appdescription.Substring(0, 600);
                     signupdetailslbl.Text = signupcodecollection[0].shortdescription + "...";
                 }
                 else
                 {
-                    signupdetailslbl.Text = signupcodecollection[0].description;
+                    signupdetailslbl.Text = signupcodecollection[0].appdescription;
                 }
 
 
@@ -163,10 +165,13 @@ public partial class MainDashboard : ContentPage
                     {
                         item.img = "webicon.png";
                     }
+
+                    item.type = item.type.ToUpper();
+
                 }
 
                 infolist.ItemsSource = signupcodecollection[0].signupcodeinfolist;
-                infolist.HeightRequest = signupcodecollection[0].signupcodeinfolist.Count * 92;
+                infolist.HeightRequest = signupcodecollection[0].signupcodeinfolist.Count * 96;
               
 
             }
@@ -185,6 +190,14 @@ public partial class MainDashboard : ContentPage
                 videoslist.ItemsSource = allvideos;
 
                 videoslist.HeightRequest = 180 * allvideos.Count;
+
+
+                if (allvideos.Count == 0) 
+                {
+                    novidimg.IsVisible = true;
+                    novidlbl.IsVisible = true;
+                }
+
             }
             else
             {
@@ -1482,7 +1495,7 @@ public partial class MainDashboard : ContentPage
             foryouuserlist.AddRange(randomItems);
 
             //check if there any as required supplements
-            if (AllUserSupplements.Any(x => x.frequency.Contains("As Required")))
+            if (AllUserSupplements.Any(x => x.frequency != null && x.frequency.Contains("As Required")))
             {
 
                 var asRequiredMeds = AllUserSupplements
@@ -1935,7 +1948,7 @@ public partial class MainDashboard : ContentPage
 
 
             //check if there any as required medications
-            if(AllUserMedications.Any(x => x.frequency.Contains("As Required")))
+            if (AllUserMedications.Any(x => x.frequency != null && x.frequency.Contains("As Required")))
             {
 
                 var asRequiredMeds = AllUserMedications
@@ -2115,16 +2128,39 @@ public partial class MainDashboard : ContentPage
             //    new { ContactImage = "healthreporticon.png", Title = "Generate your Health Report", BackgroundColor = "#e5f5fc" },
             //    new { ContactImage = "diagnosishome.png", Title = "Have you received a new diagnosis ?", BackgroundColor = "#E6E6FA" },
             //    new { ContactImage = "appointhome.png", Title = "Record a new appointment", BackgroundColor = "#ffcccb" },
-    
+
             //};
 
-           // activitylist.ItemsSource = foryouuserlist;
+            // activitylist.ItemsSource = foryouuserlist;
 
+            checknotifications();
 
         }
         catch (Exception Ex)
         {
             NotasyncMethod(Ex);
+        }
+    }
+
+    async void checknotifications()
+    {
+        try
+        {
+            var check = await LocalNotificationCenter.Current.AreNotificationsEnabled();
+
+            if (!check)
+            {
+                pushnotifcationsframe.IsVisible = true;
+            }
+            else
+            {
+                pushnotifcationsframe.IsVisible = false;
+            }
+
+        }
+        catch(Exception ex)
+        {
+
         }
     }
 
@@ -2318,7 +2354,7 @@ public partial class MainDashboard : ContentPage
             //see more button
             if(morebtn.Text == "See more")
             {
-                signupdetailslbl.Text = signupcodecollection[0].description;
+                signupdetailslbl.Text = signupcodecollection[0].appdescription;
                 morebtn.Text = "See less";
 
             }
@@ -2341,6 +2377,8 @@ public partial class MainDashboard : ContentPage
         {
             var item = e.DataItem as signupcodeinformation;
 
+            item.type = item.type.ToLower();
+
             if (item.type == "pdf")
             {
                 var pdflink = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/" + item.link;
@@ -2354,9 +2392,19 @@ public partial class MainDashboard : ContentPage
             {
                 var pdflink = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/" + item.link;
                 string imgPath = pdflink + ".mp4";
-              //  var launchvid = new videosupport();
-               // launchvid.URL = item.Filename;
-               // await Navigation.PushModalAsync(new AndroidSingleView(launchvid));
+                //  var launchvid = new videosupport();
+                // launchvid.URL = item.Filename;
+                // await Navigation.PushAsync(new AllVideos(), false);
+
+               // var vid = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/DiagnosisFirstAdd.mp4";
+                await Navigation.PushAsync(new VideoPlayer(item));
+            }
+            else if(item.type == "image")
+            {
+                var pdflink = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/" + item.link;
+
+                await MopupService.Instance.PushAsync(new imagePopUp(pdflink) { });
+
             }
             else
             {
@@ -2777,6 +2825,24 @@ public partial class MainDashboard : ContentPage
 
         }
     }
+
+    private async void Button_Clicked_7(object sender, EventArgs e)
+    {
+        try
+        {
+            //turn on notifications button
+
+            await LocalNotificationCenter.Current.RequestNotificationPermission();
+
+            checknotifications();
+
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
 
     //async private void measurementdetaillist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
     //{

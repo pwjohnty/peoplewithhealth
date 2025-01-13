@@ -634,7 +634,7 @@ public partial class RegisterPage : ContentPage
 
                             signupinfotitle.Text = "Welcome to " + users[0].title;
                             signupinfoimage.Source = ImageSource.FromUri(new Uri("https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/logos/" + users[0].logofilename));
-                            signupcodeinfodes.Text = users[0].description;
+                            signupcodeinfodes.Text = users[0].appdescription;
                         
                             signupcodeinfo = users[0];
 

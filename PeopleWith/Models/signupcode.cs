@@ -52,6 +52,8 @@ namespace PeopleWith
         [System.Text.Json.Serialization.JsonIgnore]
         public string shortdescription { get; set; }
 
+        public string appdescription { get; set; }
+
     }
 
     public class ApiResponseSignUpCode

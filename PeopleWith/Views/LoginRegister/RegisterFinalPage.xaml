@@ -5,7 +5,9 @@
              HideSoftInputOnTapped="True" NavigationPage.HasNavigationBar="False"
              xmlns:progressBar="clr-namespace:Syncfusion.Maui.ProgressBar;assembly=Syncfusion.Maui.ProgressBar"
              xmlns:SignaturePad="clr-namespace:Maui.FreakyControls;assembly=Maui.FreakyControls"
+             xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
              xmlns:signPad="clr-namespace:Syncfusion.Maui.SignaturePad;assembly=Syncfusion.Maui.SignaturePad"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="PeopleWith.RegisterFinalPage" Shell.NavBarHasShadow="False" Shell.NavBarIsVisible="False">
     <Grid>
         <Grid.RowDefinitions>
@@ -46,7 +48,7 @@
 
 
 
-        <ScrollView Grid.Row="1" Margin="0,30,0,0" BackgroundColor="Transparent">
+        <ScrollView Grid.Row="1" Margin="0,30,0,0" BackgroundColor="Transparent" ios:ScrollView.ShouldDelayContentTouches="false">
 
             <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
 
@@ -300,7 +302,7 @@ HorizontalOptions="Center" />
                         </Grid>
                     </Frame>-->
 
-                    <Frame HasShadow="False" Padding="10" Margin="0,10,0,120" BackgroundColor="Transparent" BorderColor="#BFDBF7" CornerRadius="10">
+                    <Frame HasShadow="False" Padding="10" Margin="0,10,0,20" BackgroundColor="Transparent" BorderColor="#BFDBF7" CornerRadius="10">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
@@ -309,8 +311,8 @@ HorizontalOptions="Center" />
                                 <ColumnDefinition Width="90*"/>
                                 <ColumnDefinition Width="10*"/>
                             </Grid.ColumnDefinitions>
-                            <CheckBox Grid.Column="1" Grid.Row="0" Color="#031926" x:Name="emailcheck" IsChecked="False" Margin="0,-5,0,0" HorizontalOptions="End" VerticalOptions="Center"/>
-                            <Label Grid.Row="0" Grid.Column="0" Margin="0,5,0,0" VerticalOptions="Center" HorizontalOptions="Center">
+                            <CheckBox Grid.Column="1" Grid.Row="0" Color="#031926" x:Name="emailcheck" IsChecked="False" Margin="0,-5,0,0" HorizontalOptions="Start" VerticalOptions="Center"/>
+                                <Label Grid.Row="0" Grid.Column="0" Margin="0,0,0,0" VerticalOptions="Start" HorizontalOptions="Start" FontSize="15">
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="I agree to allow " TextColor="Gray" FontSize="15" FontFamily="HankenGroteskRegular" />
@@ -330,21 +332,39 @@ HorizontalOptions="Center" />
                                 <RowDefinition Height="100"/>
                             </Grid.RowDefinitions>
 
-                            <Label Text="Please sign your name in the box below" HorizontalOptions="Center" Grid.Row="0" Margin="0,20,0,0"  FontAttributes="Bold" TextColor="Black"/>
+                            <Label Text="Please sign your name in the box below" HorizontalOptions="Center" Grid.Row="0" Margin="0,20,0,10" FontFamily="HankenGroteskRegular"  FontAttributes="Bold" TextColor="Black"/>
 
-                            <Frame Grid.Row="1" HeightRequest="200" Padding="2" CornerRadius="5" Margin="0,0,0,20" HasShadow="False">
+
+
+
+                            <Border StrokeShape="RoundRectangle 10" IsVisible="{OnPlatform iOS=true, Android=false}" Grid.Row="1" Stroke="#BFDBF7" HeightRequest="200" Padding="2"  Margin="0,0,0,20">
                             <!--<SignaturePad:FreakySignaturePadView
                             x:Name="signpad" Grid.Row="1" 
                             BackgroundColor="White" StrokeCompleted="signpad_StrokeCompleted"
                             StrokeColor="Black"
                             StrokeWidth="2" 
                             HeightRequest="250" />-->
+                                <toolkit:DrawingView DrawingLineCompleted="DrawingView_DrawingLineCompleted"
+           HeightRequest="200" Grid.Row="1" BackgroundColor="White" x:Name="drawingpad"
+LineColor="Black" IsMultiLineModeEnabled="True" ShouldClearOnFinish="False"
+LineWidth="2" />
+
+                                <!--<signPad:SfSignaturePad 
+                                x:Name="signpad" Grid.Row="1" VerticalOptions="FillAndExpand"
+                                BackgroundColor="White"
+                                StrokeColor="Black" DrawCompleted="signpad_DrawCompleted"
+                                HeightRequest="200" />-->
+                            </Border>
+
+                            <Border StrokeShape="RoundRectangle 10" IsVisible="{OnPlatform iOS=false, Android=true}" Grid.Row="1" Stroke="#BFDBF7" HeightRequest="200" Padding="2"  Margin="0,0,0,20">
+             
+
                                 <signPad:SfSignaturePad 
                                 x:Name="signpad" Grid.Row="1" VerticalOptions="FillAndExpand"
-                                BackgroundColor="White" 
+                                BackgroundColor="White"
                                 StrokeColor="Black" DrawCompleted="signpad_DrawCompleted"
                                 HeightRequest="200" />
-                            </Frame>
+                            </Border>
 
                             <Button Text="X" Grid.Row="1" HorizontalOptions="End" VerticalOptions="Start" Clicked="Button_Clicked" FontAttributes="Bold" BackgroundColor="Transparent" BorderColor="Transparent" TextColor="#031926" FontSize="18"/>
 
@@ -369,19 +389,20 @@ FontFamily="HankenGroteskBold"
 FontAttributes="Bold"
 HorizontalOptions="Center" />-->
 
-                    <Image Source="peoplewithlogoanimation.gif" IsVisible="False" x:Name="imganimation" BackgroundColor="Transparent" IsAnimationPlaying="True"/>
-                    <WebView x:Name="webLogo" IsVisible="False" BackgroundColor="Transparent" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HeightRequest="300">
+                    <Image Source="peoplewithlogoanimation.gif" IsVisible="False" x:Name="imganimation" BackgroundColor="Transparent" HeightRequest="100" Aspect="AspectFit" IsAnimationPlaying="True"/>
+
+                    <WebView x:Name="webLogo" IsVisible="False" BackgroundColor="Transparent" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HeightRequest="100">
 
                         <WebView.Source>
                             <HtmlWebViewSource>
                                 <HtmlWebViewSource.Html>
                                     <![CDATA[
-                        <HTML>
-                        <BODY style="background-color:#fefcfe;">
-                        <img src="peoplewithlogoanimation.gif" style="width:100%; border: 1px solid #fefcfe; opacity: 0.99;"/>
-                        </BODY>
-                        </HTML>
-                        ]]>
+                  <HTML>
+                  <BODY style="background-color:#fefcfe; display: flex; justify-content: center; align-items: center; height: 100%;">
+                  <img src="peoplewithlogoanimation.gif" style="width:50%; border: 1px solid #fefcfe; opacity: 0.99;"/>
+                  </BODY>
+                  </HTML>
+                  ]]>
                                 </HtmlWebViewSource.Html>
                             </HtmlWebViewSource>
                         </WebView.Source>
