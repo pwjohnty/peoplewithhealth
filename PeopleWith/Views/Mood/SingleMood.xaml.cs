@@ -94,7 +94,7 @@ public partial class SingleMood : ContentPage
     {
         try
         {
-            await DisplayAlert("Mood Information", "There is no Information against this mood", "Close");
+            await DisplayAlert("Mood Information", "No information or resources available for this Mood", "Close");
         }
         catch (Exception Ex)
         {

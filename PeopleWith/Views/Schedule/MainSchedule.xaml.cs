@@ -204,8 +204,26 @@ public partial class MainSchedule : ContentPage
                                     medtimes.Type = "Medication";
                                     medtimes.Usermedid = item.id;
                                     medtimes.Feedbackid = medtimes.id.ToString();
-                                    medtimes.Name = item.medicationtitle;
-                                    ScheduleList.Add(medtimes);
+                                    var SplitDetails = item.details.Split('|');
+                                    if (SplitDetails[0] == "--")
+                                    {
+                                        //Contains Display Name 
+                                        medtimes.DisplayName = item.medicationtitle;
+                                        medtimes.DisplayNameAdded = false;
+                                        medtimes.RowNum = 1;
+                                        medtimes.RowSpan = 2;
+                                    }
+                                    else
+                                    {
+                                        //No Display Name 
+                                        medtimes.DisplayName = SplitDetails[0];
+                                        medtimes.Name = item.medicationtitle;
+                                        medtimes.DisplayNameAdded = true;
+                                        medtimes.RowNum = 2;
+                                        medtimes.RowSpan = 3;
+                                    }
+
+                                        ScheduleList.Add(medtimes);
                                 }
 
 
@@ -224,8 +242,27 @@ public partial class MainSchedule : ContentPage
                                     medtimes.Type = "Medication";
                                     medtimes.Usermedid = item.id;
                                     medtimes.Feedbackid = medtimes.id.ToString();
-                                    medtimes.Name = item.medicationtitle;
-                                    ScheduleList.Add(medtimes);
+
+                                    var SplitDetails = item.details.Split('|');
+                                    if (SplitDetails[0] == "--")
+                                    {
+                                        //Contains Display Name 
+                                        medtimes.DisplayName = item.medicationtitle;
+                                        medtimes.DisplayNameAdded = false;
+                                        medtimes.RowNum = 1;
+                                        medtimes.RowSpan = 2;
+
+                                    }
+                                    else
+                                    {
+                                        //No Display Name 
+                                        medtimes.DisplayName = SplitDetails[0];
+                                        medtimes.Name = item.medicationtitle;
+                                        medtimes.DisplayNameAdded = true;
+                                        medtimes.RowNum = 2;
+                                        medtimes.RowSpan = 3;
+                                    }
+                                        ScheduleList.Add(medtimes);
                                 }
                             }
 
@@ -266,8 +303,26 @@ public partial class MainSchedule : ContentPage
                                             medtimes.Type = "Medication";
                                             medtimes.Usermedid = item.id;
                                             medtimes.Feedbackid = medtimes.id.ToString();
-                                            medtimes.Name = item.medicationtitle;
-                                            ScheduleList.Add(medtimes);
+                                            var SplitDetails = item.details.Split('|');
+                                            if (SplitDetails[0] == "--")
+                                            {
+                                                //Contains Display Name 
+                                                medtimes.DisplayName = item.medicationtitle;
+                                                medtimes.DisplayNameAdded = false;
+                                                medtimes.RowNum = 1;
+                                                medtimes.RowSpan = 2;
+                                            }
+                                            else
+                                            {
+                                                //No Display Name 
+                                                medtimes.DisplayName = SplitDetails[0];
+                                                medtimes.Name = item.medicationtitle;
+                                                medtimes.DisplayNameAdded = true;
+                                                medtimes.RowNum = 2;
+                                                medtimes.RowSpan = 3;
+                                            }
+
+                                                ScheduleList.Add(medtimes);
                                         }
                                     }
                                 }
@@ -297,8 +352,26 @@ public partial class MainSchedule : ContentPage
                                             medtimes.Type = "Medication";
                                             medtimes.Usermedid = item.id;
                                             medtimes.Feedbackid = medtimes.id.ToString();
-                                            medtimes.Name = item.medicationtitle;
-                                            ScheduleList.Add(medtimes);
+                                            var SplitDetails = item.details.Split('|');
+                                            if (SplitDetails[0] == "--")
+                                            {
+                                                //Contains Display Name 
+                                                medtimes.DisplayName = item.medicationtitle;
+                                                medtimes.DisplayNameAdded = false;
+                                                medtimes.RowNum = 1;
+                                                medtimes.RowSpan = 2;
+                                            }
+                                            else
+                                            {
+                                                //No Display Name 
+                                                medtimes.DisplayName = SplitDetails[0];
+                                                medtimes.Name = item.medicationtitle;
+                                                medtimes.DisplayNameAdded = true;
+                                                medtimes.RowNum = 2;
+                                                medtimes.RowSpan = 3;
+                                            }
+
+                                                ScheduleList.Add(medtimes);
                                         }
                                     }
                                 }
@@ -329,7 +402,25 @@ public partial class MainSchedule : ContentPage
                                         medtimes.Type = "Medication";
                                         medtimes.Usermedid = item.id;
                                         medtimes.Feedbackid = medtimes.id.ToString();
-                                        medtimes.Name = item.medicationtitle;
+                                        var SplitDetails = item.details.Split('|');
+                                        if (SplitDetails[0] == "--")
+                                        {
+                                            //Contains Display Name 
+                                            medtimes.DisplayName = item.medicationtitle;
+                                            medtimes.DisplayNameAdded = false;
+                                            medtimes.RowNum = 1;
+                                            medtimes.RowSpan = 2;
+                                        }
+                                        else
+                                        {
+                                            //No Display Name 
+                                            medtimes.DisplayName = SplitDetails[0];
+                                            medtimes.Name = item.medicationtitle;
+                                            medtimes.DisplayNameAdded = true;
+                                            medtimes.RowNum = 2;
+                                            medtimes.RowSpan = 3;
+                                        }
+
                                         ScheduleList.Add(medtimes);
                                     }
                                 }
@@ -352,8 +443,26 @@ public partial class MainSchedule : ContentPage
                                         medtimes.Type = "Medication";
                                         medtimes.Usermedid = item.id;
                                         medtimes.Feedbackid = medtimes.id.ToString();
-                                        medtimes.Name = item.medicationtitle;
-                                        ScheduleList.Add(medtimes);
+                                        var SplitDetails = item.details.Split('|');
+                                        if (SplitDetails[0] == "--")
+                                        {
+                                            //Contains Display Name 
+                                            medtimes.DisplayName = item.medicationtitle;
+                                            medtimes.DisplayNameAdded = false;
+                                            medtimes.RowNum = 1;
+                                            medtimes.RowSpan = 2;
+                                        }
+                                        else
+                                        {
+                                            //No Display Name 
+                                            medtimes.DisplayName = SplitDetails[0];
+                                            medtimes.Name = item.medicationtitle;
+                                            medtimes.DisplayNameAdded = true;
+                                            medtimes.RowNum = 2;
+                                            medtimes.RowSpan = 3;
+                                        }
+
+                                            ScheduleList.Add(medtimes);
                                     }
                                 }
                             }
@@ -377,7 +486,26 @@ public partial class MainSchedule : ContentPage
                                     newitem.Type = "Medication";
                                     newitem.Usermedid = item.id;
                                     newitem.Feedbackid = medtimes.id.ToString();
-                                    newitem.Name = item.medicationtitle;
+                                    var SplitDetails = item.details.Split('|');
+                                    if (SplitDetails[0] == "--")
+                                    {
+                                        //Contains Display Name 
+                                        newitem.DisplayName = item.medicationtitle;
+                                        newitem.DisplayNameAdded = false;
+                                        newitem.RowNum = 1;
+                                        newitem.RowSpan = 2;
+                                    }
+                                    else
+                                    {
+                                        //No Display Name 
+                                        newitem.DisplayName = SplitDetails[0];
+                                        newitem.Name = item.medicationtitle;
+                                        newitem.DisplayNameAdded = true;
+                                        newitem.RowNum = 2;
+                                        newitem.RowSpan = 3;
+
+                                    }
+
                                     newitem.Dosage = medtimes.Recorded + " " + item.unit;
                                     newitem.time = "00:00";
                                     newitem.Buttonop = 1;
@@ -430,7 +558,26 @@ public partial class MainSchedule : ContentPage
                                     medtimes.Type = "Supplement";
                                     medtimes.Usermedid = item.id;
                                     medtimes.Feedbackid = medtimes.id.ToString();
-                                    medtimes.Name = item.supplementtitle;
+
+                                    var SplitDetails = item.details.Split('|');
+                                    if (SplitDetails[0] == "--")
+                                    {
+                                        //Contains Display Name 
+                                        medtimes.DisplayName = item.supplementtitle;
+                                        medtimes.DisplayNameAdded = false;
+                                        medtimes.RowNum = 1;
+                                        medtimes.RowSpan = 2; 
+                                    }
+                                    else
+                                    {
+                                        //No Display Name 
+                                        medtimes.DisplayName = SplitDetails[0];
+                                        medtimes.Name = item.supplementtitle;
+                                        medtimes.DisplayNameAdded = true;
+                                        medtimes.RowNum = 2;
+                                        medtimes.RowSpan = 3;
+                                    }
+
                                     ScheduleList.Add(medtimes);
                                 }
 
@@ -450,7 +597,25 @@ public partial class MainSchedule : ContentPage
                                     medtimes.Type = "Supplement";
                                     medtimes.Usermedid = item.id;
                                     medtimes.Feedbackid = medtimes.id.ToString();
-                                    medtimes.Name = item.supplementtitle;
+
+                                    var SplitDetails = item.details.Split('|');
+                                    if (SplitDetails[0] == "--")
+                                    {
+                                        //Contains Display Name 
+                                        medtimes.DisplayName = item.supplementtitle;
+                                        medtimes.DisplayNameAdded = false;
+                                        medtimes.RowNum = 1;
+                                        medtimes.RowSpan = 2; 
+                                    }
+                                    else
+                                    {
+                                        //No Display Name 
+                                        medtimes.DisplayName = SplitDetails[0];
+                                        medtimes.Name = item.supplementtitle;
+                                        medtimes.DisplayNameAdded = true;
+                                        medtimes.RowNum = 2;
+                                        medtimes.RowSpan = 3; 
+                                    }
                                     ScheduleList.Add(medtimes);
                                 }
                             }
@@ -489,7 +654,25 @@ public partial class MainSchedule : ContentPage
                                             medtimes.Type = "Supplement";
                                             medtimes.Usermedid = item.id;
                                             medtimes.Feedbackid = medtimes.id.ToString();
-                                            medtimes.Name = item.supplementtitle;
+
+                                            var SplitDetails = item.details.Split('|');
+                                            if (SplitDetails[0] == "--")
+                                            {
+                                                //Contains Display Name 
+                                                medtimes.DisplayName = item.supplementtitle;
+                                                medtimes.DisplayNameAdded = false;
+                                                medtimes.RowNum = 1;
+                                                medtimes.RowSpan = 2;
+                                            }
+                                            else
+                                            {
+                                                //No Display Name 
+                                                medtimes.DisplayName = SplitDetails[0];
+                                                medtimes.Name = item.supplementtitle;
+                                                medtimes.DisplayNameAdded = true;
+                                                medtimes.RowNum = 2;
+                                                medtimes.RowSpan = 3; 
+                                            }
                                             ScheduleList.Add(medtimes);
                                         }
                                     }
@@ -520,7 +703,25 @@ public partial class MainSchedule : ContentPage
                                             medtimes.Type = "Supplement";
                                             medtimes.Usermedid = item.id;
                                             medtimes.Feedbackid = medtimes.id.ToString();
-                                            medtimes.Name = item.supplementtitle;
+
+                                            var SplitDetails = item.details.Split('|');
+                                            if (SplitDetails[0] == "--")
+                                            {
+                                                //Contains Display Name 
+                                                medtimes.DisplayName = item.supplementtitle;
+                                                medtimes.DisplayNameAdded = false;
+                                                medtimes.RowNum = 1;
+                                                medtimes.RowSpan = 2; 
+                                            }
+                                            else
+                                            {
+                                                //No Display Name 
+                                                medtimes.DisplayName = SplitDetails[0];
+                                                medtimes.Name = item.supplementtitle;
+                                                medtimes.DisplayNameAdded = true;
+                                                medtimes.RowNum = 2;
+                                                medtimes.RowSpan = 3; 
+                                            }
                                             ScheduleList.Add(medtimes);
 
                                         }
@@ -552,7 +753,25 @@ public partial class MainSchedule : ContentPage
                                         medtimes.Type = "Supplement";
                                         medtimes.Usermedid = item.id;
                                         medtimes.Feedbackid = medtimes.id.ToString();
-                                        medtimes.Name = item.supplementtitle;
+
+                                        var SplitDetails = item.details.Split('|');
+                                        if (SplitDetails[0] == "--")
+                                        {
+                                            //Contains Display Name 
+                                            medtimes.DisplayName = item.supplementtitle;
+                                            medtimes.DisplayNameAdded = false;
+                                            medtimes.RowNum = 1;
+                                            medtimes.RowSpan = 2; 
+                                        }
+                                        else
+                                        {
+                                            //No Display Name 
+                                            medtimes.DisplayName = SplitDetails[0];
+                                            medtimes.Name = item.supplementtitle;
+                                            medtimes.DisplayNameAdded = true;
+                                            medtimes.RowNum = 2;
+                                            medtimes.RowSpan = 3; 
+                                        }
                                         ScheduleList.Add(medtimes);
                                     }
                                 }
@@ -575,7 +794,25 @@ public partial class MainSchedule : ContentPage
                                         medtimes.Type = "Supplement";
                                         medtimes.Usermedid = item.id;
                                         medtimes.Feedbackid = medtimes.id.ToString();
-                                        medtimes.Name = item.supplementtitle;
+
+                                        var SplitDetails = item.details.Split('|');
+                                        if (SplitDetails[0] == "--")
+                                        {
+                                            //Contains Display Name 
+                                            medtimes.DisplayName = item.supplementtitle;
+                                            medtimes.DisplayNameAdded = false;
+                                            medtimes.RowNum = 1;
+                                            medtimes.RowSpan = 2; 
+                                        }
+                                        else
+                                        {
+                                            //No Display Name 
+                                            medtimes.DisplayName = SplitDetails[0];
+                                            medtimes.Name = item.supplementtitle;
+                                            medtimes.DisplayNameAdded = true;
+                                            medtimes.RowNum = 2;
+                                            medtimes.RowSpan = 3; 
+                                        }
                                         ScheduleList.Add(medtimes);
                                     }
                                 }
@@ -600,7 +837,26 @@ public partial class MainSchedule : ContentPage
                                     newitem.Type = "Supplement";
                                     newitem.Usermedid = item.id;
                                     newitem.Feedbackid = medtimes.id.ToString();
-                                    newitem.Name = item.supplementtitle;
+                                    var SplitDetails = item.details.Split('|');
+                                    if (SplitDetails[0] == "--")
+                                    {
+                                        //Contains Display Name 
+                                        newitem.DisplayName = item.supplementtitle;
+                                        newitem.DisplayNameAdded = false;
+                                        newitem.RowNum = 1;
+                                        newitem.RowSpan = 2;
+                                    }
+                                    else
+                                    {
+                                        //No Display Name 
+                                        newitem.DisplayName = SplitDetails[0];
+                                        newitem.Name = item.supplementtitle;
+                                        newitem.DisplayNameAdded = true;
+                                        newitem.RowNum = 2;
+                                        newitem.RowSpan = 3;
+
+                                    }
+
                                     newitem.Dosage = medtimes.Recorded + " " + item.unit;
                                     newitem.time = "00:00";
                                     newitem.Buttonop = 1;
@@ -798,6 +1054,26 @@ public partial class MainSchedule : ContentPage
                     }
                 }
 
+
+                //Add Double Dosage 
+                foreach(var item in orderbytime)
+                {
+                    if (item.Dosage.Contains("|"))
+                    {
+                        item.NormalDosage = false;
+                        item.DoubleDosage = true;
+
+                        var DosageSplit = item.Dosage.Split('|');
+                        var UnitSplit = item.dosageunit.Split(' ');
+                        item.DoubleDosagetxt = DosageSplit[0] + " " + UnitSplit[0] + " " + UnitSplit[1] + " " + DosageSplit[1] + " " + UnitSplit[2];   
+                    }
+                    else
+                    {
+                        item.NormalDosage = true;
+                        item.DoubleDosage = false;
+                    }
+                }
+
                 mainschedulelistview.ItemsSource = orderbytime;
                 //   int totalItems = GroupedScheduleList.Sum(g => g.Count()) + GroupedScheduleList.Count; // Items + Group headers
                 mainschedulelistview.HeightRequest = ScheduleList.Count * 110;
@@ -824,7 +1100,20 @@ public partial class MainSchedule : ContentPage
                     {
                         var Medtime = new MedtimesDosages();
                         Medtime.Usermedid = item.id;
-                        Medtime.Name = item.medicationtitle;
+                        var SplitDetails = item.details.Split('|');
+                        if (SplitDetails[0] == "--")
+                        {
+                            //Contains Display Name 
+                            Medtime.DisplayName = item.medicationtitle;
+                            Medtime.DisplayNameAdded = false;
+                        }
+                        else
+                        {
+                            //No Display Name 
+                            Medtime.DisplayName = SplitDetails[0];
+                            Medtime.Name = item.medicationtitle;
+                            Medtime.DisplayNameAdded = true;
+                        }
                         Medtime.Dosage = splitstring[1];
                         Medtime.dosageunit = item.unit;
                         Medtime.time = "As Required";
@@ -839,7 +1128,20 @@ public partial class MainSchedule : ContentPage
                     {
                         var Medtime = new MedtimesDosages();
                         Medtime.Usermedid = item.id;
-                        Medtime.Name = item.medicationtitle;
+                        var SplitDetails = item.details.Split('|');
+                        if (SplitDetails[0] == "--")
+                        {
+                            //Contains Display Name 
+                            Medtime.DisplayName = item.medicationtitle;
+                            Medtime.DisplayNameAdded = false;
+                        }
+                        else
+                        {
+                            //No Display Name 
+                            Medtime.DisplayName = SplitDetails[0];
+                            Medtime.Name = item.medicationtitle;
+                            Medtime.DisplayNameAdded = true;
+                        }
                         Medtime.Dosage = "N/A";
                         Medtime.dosageunit = item.unit;
                         Medtime.time = "As Required";
@@ -861,7 +1163,20 @@ public partial class MainSchedule : ContentPage
                     {
                         var Medtime = new MedtimesDosages();
                         Medtime.Usermedid = item.id;
-                        Medtime.Name = item.supplementtitle;
+                        var SplitDetails = item.details.Split('|');
+                        if (SplitDetails[0] == "--")
+                        {
+                            //Contains Display Name 
+                            Medtime.DisplayName = item.supplementtitle;
+                            Medtime.DisplayNameAdded = false;
+                        }
+                        else
+                        {
+                            //No Display Name 
+                            Medtime.DisplayName = SplitDetails[0];
+                            Medtime.Name = item.supplementtitle;
+                            Medtime.DisplayNameAdded = true;
+                        }
                         Medtime.Dosage = splitstring[1];
                         Medtime.dosageunit = item.unit;
                         Medtime.time = "As Required";
@@ -876,7 +1191,20 @@ public partial class MainSchedule : ContentPage
                     {
                         var Medtime = new MedtimesDosages();
                         Medtime.Usermedid = item.id;
-                        Medtime.Name = item.supplementtitle;
+                        var SplitDetails = item.details.Split('|');
+                        if (SplitDetails[0] == "--")
+                        {
+                            //Contains Display Name 
+                            Medtime.DisplayName = item.supplementtitle;
+                            Medtime.DisplayNameAdded = false;
+                        }
+                        else
+                        {
+                            //No Display Name 
+                            Medtime.DisplayName = SplitDetails[0];
+                            Medtime.Name = item.supplementtitle;
+                            Medtime.DisplayNameAdded = true;
+                        }
                         Medtime.Dosage = "N/A";
                         Medtime.dosageunit = item.unit;
                         Medtime.time = "As Required";

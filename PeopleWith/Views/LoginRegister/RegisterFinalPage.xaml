@@ -23,12 +23,14 @@
             </Grid.ColumnDefinitions>
 
 
+            <Border BackgroundColor="Transparent" Grid.Row="0" Margin="15,2,25,2" Grid.Column="0" Stroke="Transparent" >
 
-            <Image Source="backbutton.png" x:Name="backbtn" Grid.Column="0" HorizontalOptions="Start" IsVisible="True" VerticalOptions="Center" Margin="20,0,0,0" HeightRequest="20" WidthRequest="20">
-                <Image.GestureRecognizers>
+                <Image Source="backbutton.png" x:Name="backbtn" Grid.Column="0" HorizontalOptions="Start" IsVisible="True" VerticalOptions="Center" Margin="5,0,0,0" HeightRequest="20" WidthRequest="20"/>
+                <Border.GestureRecognizers>
                     <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
-                </Image.GestureRecognizers>
-            </Image>
+                </Border.GestureRecognizers>
+            </Border>
+
 
             <progressBar:SfLinearProgressBar Progress="6" x:Name="topprogress"
                                 TrackHeight="8"  TrackFill="#BFDBF7" ProgressFill="#031926"
@@ -393,6 +395,7 @@ HorizontalOptions="Center" />-->
 
                     <WebView x:Name="webLogo" IsVisible="False" BackgroundColor="Transparent" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HeightRequest="100">
 
+
                         <WebView.Source>
                             <HtmlWebViewSource>
                                 <HtmlWebViewSource.Html>
@@ -403,6 +406,7 @@ HorizontalOptions="Center" />-->
                   </BODY>
                   </HTML>
                   ]]>
+
                                 </HtmlWebViewSource.Html>
                             </HtmlWebViewSource>
                         </WebView.Source>

@@ -34,5 +34,17 @@ namespace PeopleWith
 
             return await tcs.Task;
         }
+
+        public async Task<bool> AreNotificationsEnabledAsync()
+        {
+            var tcs = new TaskCompletionSource<bool>();
+
+            UNUserNotificationCenter.Current.GetNotificationSettings((settings) =>
+            {
+                tcs.SetResult(settings.AuthorizationStatus == UNAuthorizationStatus.Authorized);
+            });
+
+            return await tcs.Task;
+        }
     }
 }

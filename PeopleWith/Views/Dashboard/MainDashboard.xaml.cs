@@ -106,6 +106,7 @@ public partial class MainDashboard : ContentPage
     {
         base.OnAppearing();
         getuserfeedbackdata();
+        checknotificationsEnabled(); 
     }
 
     async void checksignupinfo()
@@ -206,6 +207,44 @@ public partial class MainDashboard : ContentPage
             }
         }
         catch(Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    async void checknotificationsEnabled()
+    {
+        try
+        {
+            if(DeviceInfo.Current.Platform == DevicePlatform.Android)
+            {
+                PermissionStatus status = await Permissions.CheckStatusAsync<Permissions.PostNotifications>();
+                if (status == PermissionStatus.Granted)
+                {
+                    EnableNotifStack.IsVisible = false;
+                }
+                else
+                {
+                    EnableNotifStack.IsVisible = true;
+                }
+            }
+            else if (DeviceInfo.Current.Platform == DevicePlatform.iOS)
+            {
+                var notificationService = DependencyService.Get<INotificationService>();
+                bool notificationsEnabled = await notificationService.CheckRequestNotificationPermissionAsync();
+
+                if (notificationsEnabled)
+                {
+                    EnableNotifStack.IsVisible = false;
+                }
+                else
+                {
+                    EnableNotifStack.IsVisible = true;
+                }
+            }
+           
+        }
+        catch (Exception Ex)
         {
             NotasyncMethod(Ex);
         }
@@ -689,6 +728,19 @@ public partial class MainDashboard : ContentPage
                         {
                             var split = item.value.Split('.');
                             var Newlbl = split[0] + "'" + " " + split[1] + "\"";
+                            item.value = Newlbl;
+                        }
+                    }
+                    else if(item.unit == "Hours/Minutes")
+                    {
+                        if(item.value.Contains("h"))
+                        {
+                            //Do Nothing
+                        }
+                        else
+                        {
+                            var split = item.value.Split('.');
+                            var Newlbl = split[0] + "h" + " " + split[1] + "m";
                             item.value = Newlbl;
                         }
                     }
@@ -2806,23 +2858,15 @@ public partial class MainDashboard : ContentPage
         }
     }
 
-    private async void Button_Clicked_6(object sender, EventArgs e)
+    private void TurnonNotif_Clicked(object sender, EventArgs e)
     {
         try
         {
-            //update button on symptom list clicked
-           // Show the elapsed time in a DisplayAlert
-            await Application.Current.MainPage.DisplayAlert(
-                "Test buttton click",
-                $"Data retrieval took",
-                "OK"
-            );
-
-
+            AppInfo.ShowSettingsUI();
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
@@ -2843,6 +2887,25 @@ public partial class MainDashboard : ContentPage
         }
     }
 
+    //private async void Button_Clicked_6(object sender, EventArgs e)
+    //{
+    //    try
+    //    {
+    //        //update button on symptom list clicked
+    //       // Show the elapsed time in a DisplayAlert
+    //        await Application.Current.MainPage.DisplayAlert(
+    //            "Test buttton click",
+    //            $"Data retrieval took",
+    //            "OK"
+    //        );
+
+
+    //    }
+    //    catch (Exception ex)
+    //    {
+
+    //    }
+    //}
 
     //async private void measurementdetaillist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
     //{

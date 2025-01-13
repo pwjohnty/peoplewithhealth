@@ -255,14 +255,33 @@ public partial class ProfileSection : ContentPage
 
             //Notification.SettingsItem = Helpers.Settings.Notifications;
 
-            PermissionStatus status = await Permissions.CheckStatusAsync<Permissions.PostNotifications>();
-            if (status == PermissionStatus.Granted)
+            if (DeviceInfo.Current.Platform == DevicePlatform.Android)
             {
-                Notification.SettingsItem = "Enabled";
+                PermissionStatus status = await Permissions.CheckStatusAsync<Permissions.PostNotifications>();
+                if (status == PermissionStatus.Granted)
+                {
+                    Notification.SettingsItem = "Enabled";
+                }
+                else
+                {
+                    Notification.SettingsItem = "Disabled";
+                }
             }
-            else
+            else if(DeviceInfo.Current.Platform == DevicePlatform.iOS)
             {
-                Notification.SettingsItem = "Disabled";
+                var notificationService = DependencyService.Get<INotificationService>();
+                bool notificationsEnabled = await notificationService.CheckRequestNotificationPermissionAsync();
+                Notification.SettingsItem = notificationsEnabled ? "Enabled" : "Disabled";
+
+                //if (notificationsEnabled)
+                //{
+                //    Notification.SettingsItem = "Enabled";
+                //}
+                //else
+                //{
+                //    Notification.SettingsItem = "Disabled";
+                //}
+
             }
 
             SettingsList.Add(Notification);

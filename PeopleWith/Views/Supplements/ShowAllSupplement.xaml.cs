@@ -227,6 +227,30 @@ public partial class ShowAllSupplement : ContentPage
                         }
                     }
 
+                    //Check and Update Double Dosage 
+
+                    foreach(var item in MedicationList)
+                    {
+                        if (item.Dosage.Contains("|"))
+                        {
+                            var DosageSplit = item.Dosage.Split('|');
+                            item.DosageOne = DosageSplit[0];
+                            item.DosageTwo = DosageSplit[1];
+
+                            var UnitSplit = item.unit.Split(' ');
+                            item.UnitOne = UnitSplit[0] + " " + UnitSplit[1];
+                            item.UnitTwo = UnitSplit[2];
+
+                            item.DoubleDosage = true;
+                            item.SingleDosage = false; 
+                        }
+                        else
+                        {
+                            item.DoubleDosage = false;
+                            item.SingleDosage = true;
+                        }
+                    }
+
                     var sortedList = MedicationList.OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToList();
                     UserMedicationSchedule.ItemsSource = sortedList;
                     UserMedicationSchedule.HeightRequest = sortedList.Count * 120;
@@ -352,6 +376,31 @@ public partial class ShowAllSupplement : ContentPage
                             MedicationList.Add(item);
                         }
                     }
+
+                    //Check and Update Double Dosage 
+
+                    foreach (var item in MedicationList)
+                    {
+                        if (item.Dosage.Contains("|"))
+                        {
+                            var DosageSplit = item.Dosage.Split('|');
+                            item.DosageOne = DosageSplit[0];
+                            item.DosageTwo = DosageSplit[1];
+
+                            var UnitSplit = item.unit.Split(' ');
+                            item.UnitOne = UnitSplit[0] + " " + UnitSplit[1];
+                            item.UnitTwo = UnitSplit[2];
+
+                            item.DoubleDosage = true;
+                            item.SingleDosage = false;
+                        }
+                        else
+                        {
+                            item.DoubleDosage = false;
+                            item.SingleDosage = true;
+                        }
+                    }
+
                     if (MedicationList.Count == 0)
                     {
                         nodatastack.IsVisible = true;
@@ -456,6 +505,31 @@ public partial class ShowAllSupplement : ContentPage
                             MedicationList.Add(item);
                         }
                     }
+
+                    //Check and Update Double Dosage 
+
+                    foreach (var item in MedicationList)
+                    {
+                        if (item.Dosage.Contains("|"))
+                        {
+                            var DosageSplit = item.Dosage.Split('|');
+                            item.DosageOne = DosageSplit[0];
+                            item.DosageTwo = DosageSplit[1];
+
+                            var UnitSplit = item.unit.Split(' ');
+                            item.UnitOne = UnitSplit[0] + " " + UnitSplit[1];
+                            item.UnitTwo = UnitSplit[2];
+
+                            item.DoubleDosage = true;
+                            item.SingleDosage = false;
+                        }
+                        else
+                        {
+                            item.DoubleDosage = false;
+                            item.SingleDosage = true;
+                        }
+                    }
+
                     if (MedicationList.Count == 0)
                     {
                         nodatastack.IsVisible = true;

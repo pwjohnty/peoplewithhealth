@@ -252,6 +252,7 @@ public partial class UpdateSingleSymptom : ContentPage
           //  AllSymptomDataPassed = AllSymptomData;
             TItlelbl.Text = symptomtitle;
             SymptomSlider.Value = Convert.ToInt32(symptomscore);
+            currentint = Convert.ToInt32(symptomscore);
 
             UpdateBtn.Text = "Add";
             dashupdate = true;
@@ -262,6 +263,10 @@ public partial class UpdateSingleSymptom : ContentPage
 
             //get the user symptom details
             getUserSymptoms();
+
+            //Set Both Stacks to False on Load 
+            TriggersStack.IsVisible = false;
+            InterventionsStack.IsVisible = false;
 
         }
         catch (Exception Ex)

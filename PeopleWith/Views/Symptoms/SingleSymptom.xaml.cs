@@ -646,7 +646,7 @@ public partial class SingleSymptom : ContentPage
         try
         {
             //Add Symptom Info Here
-            await DisplayAlert("Symptom Information", "No Information is saved against this Symptom", "Close");
+            await DisplayAlert("Symptom Information", "No information or resources available for this Symptom", "Close");
         }
         catch (Exception Ex)
         {

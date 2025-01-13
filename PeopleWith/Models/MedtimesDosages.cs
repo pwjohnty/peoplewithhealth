@@ -330,7 +330,23 @@ namespace PeopleWith
         public bool DoubleDosage { get; set; }
 
         [System.Text.Json.Serialization.JsonIgnore]
+        public string DoubleDosagetxt { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string DisplayName { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool DisplayNameAdded { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public int RowNum { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore]
+        public int RowSpan { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
         public Color ListBackgroundColor { get; set; }
+
+
 
         // event handler for updating the list views
         public event PropertyChangedEventHandler PropertyChanged;

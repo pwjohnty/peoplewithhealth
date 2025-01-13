@@ -61,6 +61,19 @@
 
                 </buttons:SfSegmentedControl>
 
+
+                <!-- Tab Explanation -->
+                <Grid Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Label x:Name="SegmentDetails" Grid.Row="0" Grid.Column="0" HorizontalTextAlignment="Center" FontFamily="HankenGroteskRegular" FontSize="14" TextColor="#ac5735" />
+                </Grid>
+
                 <syncfusion:SfListView  x:Name="AllUserMedsList"  Padding="0" Margin="10,10,10,50" ItemTapped="AllUserMedsList_ItemTapped" AutoFitMode="Height"  ItemSpacing="0"  HorizontalOptions="FillAndExpand" IsScrollingEnabled="False"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
@@ -87,7 +100,7 @@ Padding="0">
 
                                             <Label Text="{Binding ChangedMedName}" FontFamily="HankenGroteskBold"  FontSize="14" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Margin="10,0,0,0" TextColor="#031926" />
 
-                                            <Label Text="{Binding supplementtitle}" IsVisible="{Binding ChangedMed}" FontFamily="HankenGroteskBold"  FontSize="12" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Margin="10,-5,0,5" TextColor="Gray" />
+                                            <Label Text="{Binding supplementtitle}" IsVisible="{Binding DisplayNameAdded}" FontFamily="HankenGroteskBold"  FontSize="12" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Margin="10,-5,0,5" TextColor="Gray" />
 
 
                                             <Image Opacity="1" Source="medcalendericon.png" Margin="0,0,0,5" Grid.Row="2" Grid.Column="0" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="20" WidthRequest="20"/>
@@ -328,12 +341,9 @@ Padding="0">
                                             </Grid.ColumnDefinitions>
 
                                             <Label Text="{Binding ChangedMedName}" FontFamily="HankenGroteskBold"  FontSize="14" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Margin="10,0,0,10" TextColor="#031926" />
+                                            <Label Text="{Binding supplementtitle}" IsVisible="{Binding ChangedMed}" FontFamily="HankenGroteskBold"  FontSize="12" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Margin="10,-5,0,5" TextColor="Gray" />
 
-
-
-
-
-                                            <Label FontFamily="HankenGroteskRegular"  FontSize="12" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="End" HorizontalOptions="Start" VerticalTextAlignment="Center" Margin="15,0,0,10" TextColor="Gray" >
+                                            <Label FontFamily="HankenGroteskRegular"  FontSize="12" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="End" HorizontalOptions="Start" VerticalTextAlignment="Center" Margin="15,0,0,10" TextColor="Gray" >
                                                 <Label.FormattedText>
                                                     <FormattedString>
                                                         <Span Text="Started - " TextColor="Gray" FontFamily="HankenGroteskRegular" FontSize="12"/>
@@ -343,6 +353,11 @@ Padding="0">
                                                     </FormattedString>
                                                 </Label.FormattedText>
                                             </Label>
+
+
+                                            <Image Opacity="1" Source="notesicon.png" Grid.Row="2" Grid.Column="0" VerticalOptions="Start" IsVisible="{Binding ChangedNotes}" HorizontalOptions="Center" HeightRequest="20" WidthRequest="20"/>
+
+                                            <Label Text="{Binding ChangedMedNotes}" FontFamily="HankenGroteskBold"  FontSize="12" Grid.Row="2" IsVisible="{Binding ChangedNotes}" Grid.Column="1" Grid.ColumnSpan="1" Margin="0,0,0,10" TextColor="Gray" />
 
 
 

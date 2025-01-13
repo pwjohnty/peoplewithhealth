@@ -105,14 +105,28 @@ VerticalOptions="Center" />
                                                 <RowDefinition Height="Auto"/>
                                             </Grid.RowDefinitions>
 
-                                            <Label Text="{Binding MedDateTime}" TextColor="#031926" FontSize="12" FontAttributes="None" FontFamily="HankenGroteskRegular" Margin="15,0,10,10" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalOptions="Start"   Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
+                                            <Label Text="{Binding MedDateTime}"  TextColor="#031926" FontSize="12" FontAttributes="None" FontFamily="HankenGroteskRegular" Margin="15,0,10,10" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalOptions="Start"   Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
 
-                                            <Label  FontFamily="HankenGroteskBold"  Margin="10,10,0,10" Grid.Row="1" Grid.Column="0" >
+                                            <Label  FontFamily="HankenGroteskBold" IsVisible="{Binding SingleDosage}" Margin="10,10,0,10" Grid.Row="1" Grid.Column="0" >
                                                 <Label.FormattedText>
                                                     <FormattedString>
                                                         <Span Text="{Binding Dosage}" TextColor="#031926" FontSize="35" FontFamily="HankenGroteskBold" FontAttributes="Bold"/>
                                                         <Span Text=" " TextColor="#031926" FontSize="30" FontAttributes="Bold"/>
                                                         <Span Text="{Binding unit}" TextColor="Gray" FontFamily="HankenGroteskRegular" FontSize="14"   />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+
+                                            <Label  FontFamily="HankenGroteskBold" IsVisible="{Binding DoubleDosage}"  Margin="10,10,0,10" Grid.Row="1" Grid.Column="0" >
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{Binding DosageOne}" TextColor="#031926" FontSize="35" FontFamily="HankenGroteskBold" FontAttributes="Bold"/>
+                                                        <Span Text=" " TextColor="#031926" FontSize="30" FontAttributes="Bold"/>
+                                                        <Span Text="{Binding UnitOne}" TextColor="Gray" FontFamily="HankenGroteskRegular" FontSize="14"   />
+                                                        <Span Text=" " TextColor="#031926" FontSize="30" FontAttributes="Bold"/>
+                                                        <Span Text="{Binding DosageTwo}" TextColor="#031926" FontSize="35" FontFamily="HankenGroteskBold" FontAttributes="Bold"/>
+                                                        <Span Text=" " TextColor="#031926" FontSize="30" FontAttributes="Bold"/>
+                                                        <Span Text="{Binding UnitTwo}" TextColor="Gray" FontFamily="HankenGroteskRegular" FontSize="14"   />
                                                     </FormattedString>
                                                 </Label.FormattedText>
                                             </Label>

@@ -60,7 +60,17 @@
                                                 </FormattedString>
                                             </Label.FormattedText>
                                         </Label>
-                                        <Label Text="{Binding datechanged}" TextColor="#031926" FontSize="12" FontAttributes="None" FontFamily="HankenGroteskRegular" Margin="15,0,10,10" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalOptions="Start"   Grid.Row="1" Grid.Column="0" />
+                                            <Label  IsVisible="{Binding issleepduration}" FontFamily="HankenGroteskBold" Margin="15,-15,10,10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" >
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                    <Span Text="{Binding inputmethod}" TextColor="#031926" FontSize="14" FontFamily="HankenGroteskBold" FontAttributes="Bold"/>
+                                                        <Span Text=" " TextColor="#031926" FontSize="30" FontAttributes="Bold"/>
+                                                        <Span Text="{Binding datechanged}" TextColor="#031926" FontFamily="HankenGroteskRegular" FontSize="12" />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+
+                                            <Label Text="{Binding datechanged}" IsVisible="{Binding isnotsleepduration}" TextColor="#031926" FontSize="12" FontAttributes="None" FontFamily="HankenGroteskRegular" Margin="15,0,10,10" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalOptions="Start"   Grid.Row="1" Grid.Column="0" />
 
                                         <CheckBox x:Name="checkbox" Color="#031926" IsVisible="{Binding Deleteisvis}" Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" Opacity="1" VerticalOptions="Center" HorizontalOptions="Start" />
 

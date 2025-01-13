@@ -364,7 +364,7 @@ public partial class SingleDiagnosis : ContentPage
             }
             else
             {
-                await DisplayAlert("Diagnosis Information", "No Information is saved against this Diagnosis", "Close");
+                await DisplayAlert("Diagnosis Information", "No information or resources available for this Diagnosis", "Close");
 
             }
         }

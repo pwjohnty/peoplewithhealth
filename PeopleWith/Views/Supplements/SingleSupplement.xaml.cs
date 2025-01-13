@@ -78,7 +78,31 @@ public partial class SingleSupplement : ContentPage
                 }
                 else
                 {
-                    lblvalue.Text = MedSelected.schedule[0].Dosage;
+
+                    if (MedSelected.schedule[0].Dosage.Contains("|"))
+                    {
+                        SingleDosage.IsVisible = false;
+                        DoubleDosage.IsVisible = true; 
+                        lblvalue.Text = MedSelected.schedule[0].Dosage;
+
+                        var DosageSplit = MedSelected.schedule[0].Dosage.Split('|');
+                        var unitSplit =  MedSelected.unit.Split(' ');
+                        var UnitUno = unitSplit[0] + " " + unitSplit[1];
+                        var unitDos = unitSplit[2]; 
+
+                        lblvalueone.Text = DosageSplit[0];
+                        lblunitone.Text = UnitUno;
+                        lblvaluetwo.Text = DosageSplit[1];
+                        lblunittwo.Text = unitDos; 
+                    }
+                    else
+                    {
+                        SingleDosage.IsVisible = true;
+                        DoubleDosage.IsVisible = false;
+                        lblvalue.Text = MedSelected.schedule[0].Dosage;
+                    }
+
+                    
                     freqSplit = MedSelected.frequency.Split('|');
                     int Index = 0;
 
@@ -335,7 +359,7 @@ public partial class SingleSupplement : ContentPage
         try
         {
             //Add Symptom Info Here
-            await DisplayAlert("Supplement Information", "No Information is saved against this Supplement", "Close");
+            await DisplayAlert("Supplement Information", "No information or resources available for this Supplement", "Close");
         }
         catch (Exception Ex)
         {

@@ -65,6 +65,9 @@ namespace PeopleWith
         [System.Text.Json.Serialization.JsonIgnore]
         public string shortlabel { get; set; }
 
+        //[System.Text.Json.Serialization.JsonIgnore]
+        //public string shortunit { get; set; }
+
     }
 
 }

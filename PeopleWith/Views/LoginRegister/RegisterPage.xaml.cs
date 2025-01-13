@@ -433,7 +433,7 @@ public partial class RegisterPage : ContentPage
            // check if the response is successful
            if (emailresponse.IsSuccessStatusCode)
             {
-                await DisplayAlert("Email Sent", "Email Containing Confirmation Code Sent. If the email is not in your inbox. Check your Junk Mail", "Close"); 
+                await DisplayAlert("Email Sent", "An email containing your confirmation code has been sent. If the email is not in your inbox please check your junk mail. If an email is not received please contact: support@peoplewith.com", "Close"); 
 
                 //string content = await emailresponse.content.readasstringasync();
                 // debug.writeline(content); // uncomment this line if you want to debug the content
