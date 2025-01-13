@@ -46,6 +46,59 @@ public partial class QuestionnairePage : ContentPage
         }
     }
 
+    public QuestionnairePage(string questionnaireid)
+    {
+        try
+        {
+            //from notification tap
+
+            InitializeComponent();
+
+
+            //get questionnaire detais
+            getquestionnairedetails(questionnaireid);
+            
+
+
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    async void getquestionnairedetails(string questionnaireid)
+    {
+        try
+        {
+            loadingstack.IsVisible = true;
+
+            var uq = await aPICalls.GetSingleQuestionnaire(questionnaireid);
+
+
+
+            if (uq != null)
+            {
+
+                questionnairefromlist = uq[0];
+
+            
+
+                questionnairetitlelbl.Text = questionnairefromlist.title;
+
+                questionnairedeslbl.Text = questionnairefromlist.description;
+
+                //alluserquestionnaires = alluserquestionnairespassed;
+
+                populatequestionnaire();
+            }
+
+        }
+        catch (Exception Ex)
+        {
+        }
+    }
+
     public QuestionnairePage(questionnaire questionnairepassed)
     {
         try
