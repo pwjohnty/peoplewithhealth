@@ -31,14 +31,24 @@ namespace PeopleWith
         {
             try
             {
-                if(e.Request.Title == "Complete EQ5D Questionnaire")
+                if(e.Request.Title == "Complete your EQ-5D Questionnaire")
                 {
                     //get the questionnaire 
-                   // var getQuestionairesTask = await aPICalls.GetSingleQuestionnaires();
+                    // var getQuestionairesTask = await aPICalls.GetSingleQuestionnaires();
 
-                   // if(getQuestionairesTask != null)
-                   // {
-                        await MainPage.Navigation.PushAsync(new AllQuestionnaires(),false);
+                    // if(getQuestionairesTask != null)
+                    // {
+                    if (DeviceInfo.Platform == DevicePlatform.iOS)
+                    {
+                        await MainPage.Navigation.PushAsync(new QuestionnairePage("A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF"), false);
+                    }
+                    else
+                    {
+                        await MainPage.Navigation.PushAsync(new AndroidQuestionnaires("A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF"), false);
+                    }
+
+                    
+                    
                    // }
 
                     

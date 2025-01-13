@@ -2656,14 +2656,21 @@ namespace PeopleWith
             }
         }
 
+      
 
-        public async Task<ObservableCollection<questionnaire>> GetSingleQuestionnaires()
+
+        public async Task<ObservableCollection<questionnaire>> GetSingleQuestionnaire(string questionnaireid)
         {
             try
             {
+                var id = questionnaireid;
                 var url = "https://pwdevapi.peoplewith.com/api/questionnaire/";
+                //HttpClient client = new HttpClient();
+                //HttpResponseMessage responseconsent = await client.GetAsync(url);
+
+                string urlWithQuery = $"{url}?$filter=questionnaireid eq '{id}'";
                 HttpClient client = new HttpClient();
-                HttpResponseMessage responseconsent = await client.GetAsync(url);
+                HttpResponseMessage responseconsent = await client.GetAsync(urlWithQuery);
 
                 if (responseconsent.IsSuccessStatusCode)
                 {
@@ -2684,8 +2691,7 @@ namespace PeopleWith
                         else
                         {
 
-                            if (item.title.Contains("EQ-5D"))
-                            {
+                           
 
 
                                 try
@@ -2718,7 +2724,7 @@ namespace PeopleWith
                                 {
                                     //ignore it
                                 }
-                            }
+                            
 
 
                         }

@@ -52,6 +52,61 @@ public partial class AndroidQuestionnaires : ContentPage
         }
     }
 
+    public AndroidQuestionnaires(string questionnaireid)
+    {
+        try
+        {
+            InitializeComponent();
+
+            //notification tap
+           
+
+            //get questionnaire detais
+            getquestionnairedetails(questionnaireid);
+
+
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    async void getquestionnairedetails(string questionnaireid)
+    {
+        try
+        {
+            InitalLoad = true;
+ 
+            loadingstack.IsVisible = true;
+
+            var uq = await aPICalls.GetSingleQuestionnaire(questionnaireid);
+
+
+
+            if (uq != null)
+            {
+
+                questionnairefromlist = uq[0];
+
+
+
+                questionnairetitlelbl.Text = questionnairefromlist.title;
+
+                questionnairedeslbl.Text = questionnairefromlist.description;
+
+                //alluserquestionnaires = alluserquestionnairespassed;
+
+                populatequestionnaire();
+                InitalLoad = false;
+            }
+
+        }
+        catch (Exception Ex)
+        {
+        }
+    }
+
     public AndroidQuestionnaires(questionnaire questionnairepassed)
     {
         try
