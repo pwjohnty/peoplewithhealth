@@ -247,6 +247,7 @@ public partial class RegisterFinalPage : ContentPage
         }
         catch (Exception Ex)
         {
+            await DisplayAlert("Error", Ex.Source.ToString() + Ex.InnerException.ToString(), "ok");
             NotasyncMethod(Ex);
         }
     }
