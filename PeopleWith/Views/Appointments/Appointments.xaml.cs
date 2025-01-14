@@ -391,7 +391,7 @@ public partial class Appointments : ContentPage
             {
                 //Limit No. of Taps 
                 AddAppoint.IsEnabled = false;
-                await Navigation.PushAsync(new AddAppointment(AllHCPs, AllAppointments), false);
+                await Navigation.PushAsync(new AddAppointment(AllAppointments), false);
                 AddAppoint.IsEnabled = true;
             }
             else

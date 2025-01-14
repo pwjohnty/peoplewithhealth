@@ -2141,7 +2141,7 @@ public partial class MainDashboard : ContentPage
                 new dashitem { Type = "Measurements",  ContactImage = "measurementhome.png", Title = "Measurements", BackgroundColor = Color.FromArgb("#e5f0fb") },
                 new dashitem {Type = "Diagnosis",  ContactImage = "diagnosishome.png", Title = "Diagnosis", BackgroundColor = Color.FromArgb("#E6E6FA") },
                 new dashitem { Type = "Mood", ContactImage = "moodhome.png", Title = "Mood", BackgroundColor = Color.FromArgb("#FFF8DC") },
-                new dashitem { Type = "Appointments",  ContactImage = "appointhome.png", Title = "Appointments", BackgroundColor = Color.FromArgb("#ffcccb") },
+                new dashitem { Type = "Appointments",  ContactImage = "appointhome.png", Title = "Appointments", BackgroundColor = Color.FromArgb("#ffe4e1") },
                 new dashitem {Type = "HCP",  ContactImage = "hcphome.png", Title = "HCPs", BackgroundColor = Color.FromArgb("#CBC3E3") },
                 new dashitem { Type = "Questionnaires", ContactImage = "questionnairehome.png", Title = "Questionnaires", BackgroundColor = Color.FromArgb("#fff9ec") },
                 new dashitem { Type = "Allergy",  ContactImage = "allergenhome.png", Title = "Allergens", BackgroundColor = Color.FromArgb("#FFF5EE") },
@@ -2367,7 +2367,7 @@ public partial class MainDashboard : ContentPage
             }
             else if (item != null && item.Title == "Appointments")
             {
-                await Navigation.PushAsync(new Appointments(), false);
+                await Navigation.PushAsync(new AllAppointments(), false);
             }
             else if (item != null && item.Title == "HCPs")
             {
@@ -2543,7 +2543,7 @@ public partial class MainDashboard : ContentPage
             }
             else if (item != null && item.Title == "Appointments")
             {
-                await Navigation.PushAsync(new Appointments(), false);
+                await Navigation.PushAsync(new AllAppointments(), false);
             }
             else if (item != null && item.Title == "HCPs")
             {
@@ -2711,7 +2711,7 @@ public partial class MainDashboard : ContentPage
                 }
                 else if(bc == "Appointments")
                 {
-                    await Navigation.PushAsync(new Appointments(), false);
+                    await Navigation.PushAsync(new AllAppointments(), false);
                 }
                 else if (bc == "Measurements")
                 {

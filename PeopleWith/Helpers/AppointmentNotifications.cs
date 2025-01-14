@@ -54,8 +54,12 @@ namespace PeopleWith
             try
             {
                 var startdateandtime = DateTime.Parse(AddAppointment.datetime) - AddAppointment.Reminder;
-                var Time = DateTime.Parse(AddAppointment.datetime).ToString("HH:mm"); 
+                var Time = DateTime.Parse(AddAppointment.datetime).ToString("HH:mm");
                 var nottitle = "Appointment With " + AddAppointment.hcpname;
+                if (string.IsNullOrEmpty(AddAppointment.hcpname))
+                {
+                    nottitle = "Appointment";
+                }
                 var notdescription = "Locaiton: " + AddAppointment.location + " At " + Time;
 
                 var notification = new NotificationRequest

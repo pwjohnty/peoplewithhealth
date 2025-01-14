@@ -106,6 +106,16 @@ public partial class Infopopup : PopupPage
                 Boxtwo.BackgroundColor = Color.FromArgb("#CBC3E3");
                 Closebtn.BackgroundColor = Color.FromArgb("#CBC3E3");
             }
+            else if (message == "appoint")
+            {
+                appointmentinfo.IsVisible = true;
+                titlelbl.Text = "What is an Appointment?";
+                Boxone.Background = Color.FromArgb("#ffe4e1");
+                Boxone.BackgroundColor = Color.FromArgb("#ffe4e1");
+                Boxtwo.Background = Color.FromArgb("#ffe4e1");
+                Boxtwo.BackgroundColor = Color.FromArgb("#ffe4e1");
+                Closebtn.BackgroundColor = Color.FromArgb("#ffe4e1");
+            }
         }
         catch (Exception Ex)
         {

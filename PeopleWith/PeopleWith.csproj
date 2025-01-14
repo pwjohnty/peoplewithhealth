@@ -79,6 +79,7 @@
 	  <None Remove="Resources\Images\adddataicon.png" />
 	  <None Remove="Resources\Images\agreement.png" />
 	  <None Remove="Resources\Images\alarm.png" />
+	  <None Remove="Resources\Images\alarmbell.png" />
 	  <None Remove="Resources\Images\allergenhome.png" />
 	  <None Remove="Resources\Images\androidarrow.png" />
 	  <None Remove="Resources\Images\angry.png" />
@@ -121,6 +122,8 @@
 	  <None Remove="Resources\Images\happy.png" />
 	  <None Remove="Resources\Images\hcphome.png" />
 	  <None Remove="Resources\Images\healthreporticon.png" />
+	  <None Remove="Resources\Images\home.png" />
+	  <None Remove="Resources\Images\hospital.png" />
 	  <None Remove="Resources\Images\icondate.png" />
 	  <None Remove="Resources\Images\icondatepicker.png" />
 	  <None Remove="Resources\Images\icontime.png" />
@@ -152,6 +155,7 @@
 	  <None Remove="Resources\Images\pdficon.png" />
 	  <None Remove="Resources\Images\peoplewithlogoanimation.gif" />
 	  <None Remove="Resources\Images\pillicon.png" />
+	  <None Remove="Resources\Images\pin.png" />
 	  <None Remove="Resources\Images\pincode.png" />
 	  <None Remove="Resources\Images\pinicon.png" />
 	  <None Remove="Resources\Images\playbutton.png" />
@@ -299,10 +303,16 @@
 	  <MauiXaml Update="Views\Appointments\AddAppointment.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Appointments\AllAppointments.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Appointments\AppointmentFeedback.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Appointments\Appointments.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Appointments\SingleAppointment.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Biometrics\BiometricsLogin.xaml">

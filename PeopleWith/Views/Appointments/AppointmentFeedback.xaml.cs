@@ -86,89 +86,169 @@ public partial class AppointmentFeedback : ContentPage
     {
         try
         {
-            if(AppointmentPassed.feedback == null || string.IsNullOrEmpty(AppointmentPassed.attended))
-            {
-                AddFeedbackStack.IsVisible = true;
-                ChipItems = new ObservableCollection<string>
+
+            ChipItems = new ObservableCollection<string>
                 {
                    "Days",
                    "Hours",
                    "Minutes",
                 };
 
-                TimeChips.ItemsSource = ChipItems;
+            TimeChips.ItemsSource = ChipItems;
+
+            if (AppointmentPassed.feedback == null || string.IsNullOrEmpty(AppointmentPassed.attended))
+            {
+               //Add New Feedback
             }
             else
             {
-                FinalFeedbackStack.IsVisible = true;
 
-                Titlelbl.Text = "Appointment with " + AppointmentPassed.hcpname;
-                var DateTimes = DateTime.Parse(AppointmentPassed.datetime);
-                var StartDate = DateTimes.ToString("dd.MMM.yy . HH:mm");
-                if (string.IsNullOrEmpty(AppointmentPassed.expectedduration))
+                //Update Feedback
+                FeedbackAdd.Text = "Update Feedback";
+
+                //Pre-Select Attended
+                if (AppointmentPassed.attended == "No")
                 {
-                    var EndDate = DateTimes.AddHours(1);
-                    var EndDateString = EndDate.ToString("HH:mm");
-                    DateTimelbl.Text = StartDate + " - " + EndDateString;
+
+                    btnno.BorderColor = Color.FromRgba("#ffe4e1");
+                    btnno.BackgroundColor = Color.FromRgba("#ffe4e1");
+                    btnno.TextColor = Color.FromRgba("#d96783");
+                    btnyes.BorderColor = Colors.LightGray;
+                    btnyes.BackgroundColor = Colors.Transparent;
+                    btnyes.TextColor = Colors.Gray;
+                    Attended = "No";
+
+                    ActualDurationtitle.IsVisible = false;
+                    ActualDurationEntry.IsVisible = false;
+                    DoctorNoteslbl.IsVisible = false;
+                    DoctorEntryStack.IsVisible = false;
+                    AddNoteslbl.IsVisible = false;
+                    AddNotesStack.IsVisible = false;
+                    DoctorNotesinfo.IsVisible = false;
+                    AddNotesinfo.IsVisible = false;
+
                 }
                 else
                 {
-                    var split = AppointmentPassed.expectedduration.Split(' ');
-                    var GetTimeSpan = new TimeSpan(Int32.Parse(split[0]), Int32.Parse(split[2]), 0);
-                    var EndDate = DateTimes + GetTimeSpan;
-                    var EndDateString = EndDate.ToString("HH:mm");
-                    DateTimelbl.Text = StartDate + " - " + EndDateString;
-                }
+                    btnyes.BorderColor = Color.FromRgba("#ffe4e1");
+                    btnyes.BackgroundColor = Color.FromRgba("#ffe4e1");
+                    btnyes.TextColor = Color.FromRgba("#d96783");
+                    btnno.BorderColor = Colors.LightGray;
+                    btnno.BackgroundColor = Colors.Transparent;
+                    btnno.TextColor = Colors.Gray;
+                    Attended = "Yes";
 
-                locationlbl.Text = AppointmentPassed.location;
+                    ActualDurationtitle.IsVisible = true;
+                    ActualDurationEntry.IsVisible = true;
+                    DoctorNoteslbl.IsVisible = true;
+                    DoctorEntryStack.IsVisible = true;
+                    AddNoteslbl.IsVisible = true;
+                    AddNotesStack.IsVisible = true;
+                    DoctorNotesinfo.IsVisible = true;
+                    AddNotesinfo.IsVisible = true;
 
-                typelbl.Text = AppointmentPassed.type;
+                    //Pre-Select Actual Duration
+                    var SplitDuration = AppointmentPassed.feedback[0].ActualDuration;
+                    var Split = SplitDuration.Split(' ');
+                    var GetLengthTime = Split[1];
+                    TimeChips.SelectedItem = GetLengthTime;
+                    DurationEntry.Text = Split[0];
+                    Durationlbl.Text = GetLengthTime;
 
-                if (string.IsNullOrEmpty(AppointmentPassed.reminderinterval))
-                {
-                    reminderlbl.Text = "No Reminder Added";
-                }
-                else
-                {
-                    reminderlbl.Text = AppointmentPassed.reminderinterval;
-                }
+                    //Pre-Populate Doctors Notes 
 
-                if (string.IsNullOrEmpty(AppointmentPassed.reason))
-                {
-                    noteslbl.Text = "No Reason Added";
-                }
-                else
-                {
-                    noteslbl.Text = AppointmentPassed.reason;
-                }
-
-                Attendancelbl.Text = AppointmentPassed.attended;
-
-                if(AppointmentPassed.attended == "Yes")
-                {
-                    ActualDurationStack.IsVisible = true;
-                    DoctorNotesStack.IsVisible = true;
-                    AdditionalNotesStack.IsVisible = true;
-                    
-                    ActualDurationlbl.Text = AppointmentPassed.feedback[0].ActualDuration;
-                    if (String.IsNullOrEmpty(AppointmentPassed.feedback[0].DoctorsNotes))
+                    if (string.IsNullOrEmpty(AppointmentPassed.feedback[0].DoctorsNotes))
                     {
-                        DoctorsNotesbl.Text = "No Doctors Notes Added";
+                        //Do Nothing
                     }
                     else
                     {
-                        DoctorsNotesbl.Text = AppointmentPassed.feedback[0].DoctorsNotes;
+                        DoctorNotes.Text = AppointmentPassed.feedback[0].DoctorsNotes;
                     }
-                    if (String.IsNullOrEmpty(AppointmentPassed.feedback[0].AdditionalNotes))
+
+                    //Pre-Popilate Add Notes 
+                    if (string.IsNullOrEmpty(AppointmentPassed.feedback[0].AdditionalNotes))
                     {
-                        AdditionalNoteslbl.Text = "No Additional Notes Added";
+                        //Do Nothing
                     }
                     else
                     {
-                        AdditionalNoteslbl.Text = AppointmentPassed.feedback[0].AdditionalNotes;
+                        AddNotes.Text = AppointmentPassed.feedback[0].AdditionalNotes;
                     }
 
                 }
+
+             
+
+                //FinalFeedbackStack.IsVisible = true;
+
+                //Titlelbl.Text = "Appointment with " + AppointmentPassed.hcpname;
+                //var DateTimes = DateTime.Parse(AppointmentPassed.datetime);
+                //var StartDate = DateTimes.ToString("dd.MMM.yy . HH:mm");
+                //if (string.IsNullOrEmpty(AppointmentPassed.expectedduration))
+                //{
+                //    var EndDate = DateTimes.AddHours(1);
+                //    var EndDateString = EndDate.ToString("HH:mm");
+                //    DateTimelbl.Text = StartDate + " - " + EndDateString;
+                //}
+                //else
+                //{
+                //    var split = AppointmentPassed.expectedduration.Split(' ');
+                //    var GetTimeSpan = new TimeSpan(Int32.Parse(split[0]), Int32.Parse(split[2]), 0);
+                //    var EndDate = DateTimes + GetTimeSpan;
+                //    var EndDateString = EndDate.ToString("HH:mm");
+                //    DateTimelbl.Text = StartDate + " - " + EndDateString;
+                //}
+
+                //locationlbl.Text = AppointmentPassed.location;
+
+                //typelbl.Text = AppointmentPassed.type;
+
+                //if (string.IsNullOrEmpty(AppointmentPassed.reminderinterval))
+                //{
+                //    reminderlbl.Text = "No Reminder Added";
+                //}
+                //else
+                //{
+                //    reminderlbl.Text = AppointmentPassed.reminderinterval;
+                //}
+
+                //if (string.IsNullOrEmpty(AppointmentPassed.reason))
+                //{
+                //    noteslbl.Text = "No Reason Added";
+                //}
+                //else
+                //{
+                //    noteslbl.Text = AppointmentPassed.reason;
+                //}
+
+                //Attendancelbl.Text = AppointmentPassed.attended;
+
+                //if(AppointmentPassed.attended == "Yes")
+                //{
+                //    ActualDurationStack.IsVisible = true;
+                //    DoctorNotesStack.IsVisible = true;
+                //    AdditionalNotesStack.IsVisible = true;
+
+                //    ActualDurationlbl.Text = AppointmentPassed.feedback[0].ActualDuration;
+                //    if (String.IsNullOrEmpty(AppointmentPassed.feedback[0].DoctorsNotes))
+                //    {
+                //        DoctorsNotesbl.Text = "No Doctors Notes Added";
+                //    }
+                //    else
+                //    {
+                //        DoctorsNotesbl.Text = AppointmentPassed.feedback[0].DoctorsNotes;
+                //    }
+                //    if (String.IsNullOrEmpty(AppointmentPassed.feedback[0].AdditionalNotes))
+                //    {
+                //        AdditionalNoteslbl.Text = "No Additional Notes Added";
+                //    }
+                //    else
+                //    {
+                //        AdditionalNoteslbl.Text = AppointmentPassed.feedback[0].AdditionalNotes;
+                //    }
+
+                //}
                 //All Data
             }
 
@@ -184,10 +264,12 @@ public partial class AppointmentFeedback : ContentPage
     {
         try
         {
-            btnyes.BorderColor = Color.FromRgba("#ffcccb"); 
-            btnyes.BackgroundColor = Color.FromRgba("#ffcccb");
+            btnyes.BorderColor = Color.FromRgba("#ffe4e1"); 
+            btnyes.BackgroundColor = Color.FromRgba("#ffe4e1");
+            btnyes.TextColor = Color.FromRgba("#d96783");
             btnno.BorderColor = Colors.LightGray;
             btnno.BackgroundColor = Colors.Transparent;
+            btnno.TextColor = Colors.Gray; 
             Attended = "Yes";
 
             //Show All Feedback 
@@ -197,6 +279,8 @@ public partial class AppointmentFeedback : ContentPage
             DoctorEntryStack.IsVisible = true;
             AddNoteslbl.IsVisible = true;
             AddNotesStack.IsVisible = true;
+            DoctorNotesinfo.IsVisible = true;
+            AddNotesinfo.IsVisible = true;
 
         }
         catch (Exception Ex)
@@ -209,10 +293,12 @@ public partial class AppointmentFeedback : ContentPage
     {
         try
         {
-            btnno.BorderColor = Color.FromRgba("#ffcccb");
-            btnno.BackgroundColor = Color.FromRgba("#ffcccb");
+            btnno.BorderColor = Color.FromRgba("#ffe4e1");
+            btnno.BackgroundColor = Color.FromRgba("#ffe4e1");
+            btnno.TextColor = Color.FromRgba("#d96783");
             btnyes.BorderColor = Colors.LightGray;
             btnyes.BackgroundColor = Colors.Transparent;
+            btnyes.TextColor = Colors.Gray;
             Attended = "No";
 
             //hide All Feedback 
@@ -222,6 +308,8 @@ public partial class AppointmentFeedback : ContentPage
             DoctorEntryStack.IsVisible = false;
             AddNoteslbl.IsVisible = false;
             AddNotesStack.IsVisible = false;
+            DoctorNotesinfo.IsVisible = false;
+            AddNotesinfo.IsVisible = false;
 
         }
         catch (Exception Ex)
@@ -250,6 +338,15 @@ public partial class AppointmentFeedback : ContentPage
                 {
                     //No Selected only update Attended
                     AppointmentPassed.attended = "No";
+
+                    if (AppointmentPassed.feedback == null || AppointmentPassed.feedback.Count == 0)
+                    {
+                      //Do Nothings
+                    }
+                    else
+                    {
+                        AppointmentPassed.feedback.Clear();
+                    }
                 }
                 else if (Attended == "Yes")
                 {
@@ -274,6 +371,10 @@ public partial class AppointmentFeedback : ContentPage
                         if (AppointmentPassed.feedback == null || AppointmentPassed.feedback.Count == 0)
                         {
                             AppointmentPassed.feedback = new ObservableCollection<appointmentfeedback>();
+                        }
+                        else
+                        {
+                            AppointmentPassed.feedback.Clear();
                         }
 
 
@@ -314,13 +415,20 @@ public partial class AppointmentFeedback : ContentPage
 
                 await MopupService.Instance.PushAsync(new PopupPageHelper("Appointment Feedback Added") { });
                 await Task.Delay(1500);
+                await Navigation.PushAsync(new SingleAppointment(AppointmentPassed, AllAppointments));
+                var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is SingleAppointment);
+                if (pageToRemoves != null)
+                {
+
+                    Navigation.RemovePage(pageToRemoves);
+                }
+                Navigation.RemovePage(this);
                 FeedbackAdd.IsEnabled = true;
                 await MopupService.Instance.PopAllAsync(false);
 
 
-                WeakReferenceMessenger.Default.Send(new UpdateAppFeedback(AllAppointments, AppointmentPassed.id));
+                //WeakReferenceMessenger.Default.Send(new UpdateAppFeedback(AllAppointments, AppointmentPassed.id));
 
-                Navigation.RemovePage(this);
 
                 //await Navigation.PushAsync(new Appointments(AllAppointments, AllHCPs));
                 //var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is Appointments);

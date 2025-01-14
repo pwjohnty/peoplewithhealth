@@ -67,12 +67,14 @@
         
         
         <!-- Location-->
-            <Label Text="Location" FontSize="16" Margin="20,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
-            <ScrollView Orientation="Horizontal" HeightRequest="75" HorizontalScrollBarVisibility="Never">
+            <Label Text="Location" FontSize="20" Margin="20,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
+            <Label Text="Please select the Location of the Appointment you're attending" FontSize="12" Margin="20,5,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
+
+            <ScrollView Orientation="Horizontal" HeightRequest="70" HorizontalScrollBarVisibility="Never">
                 <chip:SfChipGroup ChipType="Choice" x:Name="locationChips" BackgroundColor="Transparent" SelectionChanged="locationChips_SelectionChanged" 
-                      ChipStrokeThickness="1" ShowIcon="False" ChipTextColor="Gray" VerticalOptions="Center" Margin="0,10,0,10" 
-                      ChipBackground="Transparent" SelectedChipBackground="#ffcccb" ChipStroke="LightGray" SelectedChipTextColor="#031926" 
-                      SelectionIndicatorColor="Transparent" ChipPadding="4,4,0,0" ChipTextSize="Micro" DisplayMemberPath="Description">
+                      ChipStrokeThickness="1" ShowIcon="False" ChipTextColor="Gray" VerticalOptions="Center" Margin="0,10,0,10"
+                      ChipBackground="Transparent" SelectedChipBackground="#ffe4e1" ChipStroke="LightGray" SelectedChipTextColor="#031926" 
+                      SelectionIndicatorColor="Transparent" ChipPadding="4,4,0,0" ChipTextSize="Micro" DisplayMemberPath="location">
 
                     <chip:SfChipGroup.ItemTemplate>
                         <DataTemplate>
@@ -89,10 +91,12 @@
                 </chip:SfChipGroup>
             </ScrollView>
             <!-- Appointment Type-->
-            <Label Text="Type of Appointment" FontSize="16" Margin="20,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
+            <Label Text="Type of Appointment" FontSize="20" Margin="20,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
+            <Label Text="Please select how you are attending this appointment" FontSize="12" Margin="20,5,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
+
             <chip:SfChipGroup ChipType="Choice" x:Name="TypeChips"  BackgroundColor="Transparent" SelectionChanged="TypeChips_SelectionChanged" ChipStrokeThickness="1"
-                   ShowIcon="False" ChipTextColor="Gray" VerticalOptions="Center" Margin="0,10,0,10" ChipBackground="Transparent" SelectedChipBackground="#ffcccb" ChipStroke="LightGray"
-                   SelectedChipTextColor="#031926" SelectionIndicatorColor="Transparent" ChipPadding="4,4,0,0" ChipTextSize="Micro" DisplayMemberPath="Description">
+                   ShowIcon="False" ChipTextColor="Gray" VerticalOptions="Center" Margin="0,10,0,10" ChipBackground="Transparent" SelectedChipBackground="#ffe4e1" ChipStroke="LightGray"
+                   SelectedChipTextColor="#031926" SelectionIndicatorColor="Transparent" ChipPadding="4,4,0,0" ChipTextSize="Micro" DisplayMemberPath="type">
 
                 <chip:SfChipGroup.ItemTemplate>
                     <DataTemplate>
@@ -107,11 +111,13 @@
             </chip:SfChipGroup>
 
             <!-- Select HCP-->
-            <Label Text="Select HCP" FontSize="16" Margin="20,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
-            <Grid>
+            <Label Text="Select HCP" FontSize="20" Margin="20,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
+            <Label Text="Select the Health Care Practitioner (HCP) you will be visiting during this appointment. If you're unsure, choose 'No HCP'" FontSize="12" Margin="20,5,20,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
+            <!-- old picker not used -->    
+            <Grid IsVisible="False" >
                 <picker:SfPicker x:Name="hcpPicker"  HeightRequest="120" Margin="20,0,20,0" BackgroundColor="Transparent"  SelectionChanged="HCPPicker_SelectionChanged">
                     <picker:SfPicker.SelectionView >
-                        <picker:PickerSelectionView CornerRadius="10" Padding="5,5,5,5" Background="#ffcccb" />
+                        <picker:PickerSelectionView CornerRadius="10" Padding="5,5,5,5" Background="#ffe4e1" />
                     </picker:SfPicker.SelectionView>
                     <picker:SfPicker.SelectedTextStyle>
                         <picker:PickerTextStyle TextColor="#031926" />
@@ -119,14 +125,37 @@
                 </picker:SfPicker>
             </Grid>
 
+            <!-- NEw HCP Picker -->
+
+            <ScrollView Orientation="Horizontal" HeightRequest="70" HorizontalScrollBarVisibility="Never">
+                <chip:SfChipGroup ChipType="Choice" x:Name="HcpChips" BackgroundColor="Transparent" SelectionChanged="HcpChips_SelectionChanged" 
+           ChipStrokeThickness="1" ShowIcon="False" ChipTextColor="Gray" VerticalOptions="Center" Margin="0,10,0,10" 
+           ChipBackground="Transparent" SelectedChipBackground="#ffe4e1" ChipStroke="LightGray" SelectedChipTextColor="#031926" 
+           SelectionIndicatorColor="Transparent" ChipPadding="4,4,0,0" ChipTextSize="Micro" DisplayMemberPath="Description">
+
+                    <chip:SfChipGroup.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="{Binding fullname}" FontSize="12" TextColor="#031926" FontAttributes="Bold" VerticalOptions="Center" Padding="10" Margin="0" />
+                            </StackLayout>
+                        </DataTemplate>
+                    </chip:SfChipGroup.ItemTemplate>
+
+                    <chip:SfChipGroup.ChipLayout>
+                        <FlexLayout HorizontalOptions="Start" VerticalOptions="Center" Direction="Row" Wrap="NoWrap" 
+             Margin="0,0,0,0" JustifyContent="Start" AlignContent="Start" AlignItems="Center"/>
+                    </chip:SfChipGroup.ChipLayout>
+                </chip:SfChipGroup>
+            </ScrollView>
+
             <!--Expected Duration  -->
             <!--<Label Text="Select Duration" FontFamily="HankenGroteskBold" Margin="20,10,0,0"   VerticalOptions="Center" HorizontalOptions="Start"   FontSize="16" TextColor="#031926" />-->
-            <Label Text="Enter Duration" FontFamily="HankenGroteskBold" Margin="20,10,0,0" VerticalOptions="Center" HorizontalOptions="Start" FontSize="16" TextColor="#031926" />
-            <Label Text="Enter or select the duration of your Appointment" FontFamily="HankenGroteskBold" Margin="20,5,0,0"  VerticalOptions="Center" HorizontalOptions="Start" FontSize="12" TextColor="#031926" />
+            <Label Text="Enter Duration" FontFamily="HankenGroteskBold" Margin="20,10,0,0" VerticalOptions="Center" HorizontalOptions="Start" FontSize="20" TextColor="#031926" />
+            <Label Text="Enter or select the Expected duration of your Appointment" FontFamily="HankenGroteskRegular" Margin="20,5,0,0"  VerticalOptions="Center" HorizontalOptions="Start" FontSize="12" TextColor="#031926" />
 
             <!-- New Duration Picker-->
 
-            <Frame HasShadow="False" Margin="20,10,20,10" BorderColor="Transparent"  Padding="10" CornerRadius="20"  BackgroundColor="#ffcccb" >
+            <Frame HasShadow="False" Margin="20,10,20,10" BorderColor="Transparent"  Padding="10" CornerRadius="20"  BackgroundColor="#ffe4e1" >
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -144,14 +173,14 @@
                     <inputLayout:SfTextInputLayout Grid.Row="0"  Grid.Column="1" InputViewPadding="10" ShowHint="True" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,0,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
                         <Entry FontSize="30" TextChanged="hoursentry_TextChanged" x:Name="hoursentry" Grid.Row="0" Keyboard="Numeric" Grid.Column="1" PlaceholderColor="LightGray"  FontFamily="HankenGroteskBold" HorizontalOptions="Center" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand" Placeholder="00" TextColor="#031926"/>
                     </inputLayout:SfTextInputLayout>
-                    <Label Text=":" FontFamily="HankenGroteskBold" Margin="0,0,0,0"   VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="0" Grid.Column="2"   FontSize="30" TextColor="Red" />
+                    <Label Text=":" FontFamily="HankenGroteskBold" Margin="0,0,0,0"   VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="0" Grid.Column="2"   FontSize="30" TextColor="#d96783" />
                     <inputLayout:SfTextInputLayout Grid.Row="0"  Grid.Column="3" InputViewPadding="10" ShowHint="True" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,0,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
                         <Entry FontSize="30" TextChanged="minsentry_TextChanged" x:Name="minsentry" Grid.Row="0" Keyboard="Numeric" Grid.Column="3" PlaceholderColor="LightGray" HorizontalOptions="Center" HorizontalTextAlignment="Center"  FontFamily="HankenGroteskBold" VerticalOptions="CenterAndExpand" Placeholder="00" TextColor="#031926"/>
                     </inputLayout:SfTextInputLayout>
 
 
-                    <Label Text="Hours" FontFamily="HankenGroteskBold" Margin="0,0,0,0"   VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="1" Grid.Column="1"   FontSize="12" TextColor="Red" />
-                    <Label Text="Minutes" FontFamily="HankenGroteskBold" Margin="0,0,0,0"   VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="1" Grid.Column="3"   FontSize="12" TextColor="Red" />
+                    <Label Text="Hours" FontFamily="HankenGroteskBold" Margin="0,0,0,0"   VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="1" Grid.Column="1"   FontSize="12" TextColor="#d96783" />
+                    <Label Text="Minutes" FontFamily="HankenGroteskBold" Margin="0,0,0,0"   VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="1" Grid.Column="3"   FontSize="12" TextColor="#d96783" />
 
 
 
@@ -167,10 +196,10 @@
                             <ColumnDefinition Width="25*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Button Text="+15 mins" x:Name="fifteenminsbtn" FontSize="12" Clicked="fifteenminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="0" BackgroundColor="Red" TextColor="White" />
-                        <Button Text="+30 mins" x:Name="thirtyminsbtn" FontSize="12" Clicked="thirtyminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="1" BackgroundColor="Red" TextColor="White" />
-                        <Button Text="+60 mins" x:Name="sixtyminsbtn" FontSize="12" Clicked="sixtyminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="2" BackgroundColor="Red" TextColor="White" />
-                        <Button Text="+90 mins" x:Name="ninetyminsbtn" FontSize="12" Clicked="ninetyminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="3" BackgroundColor="Red" TextColor="White" />
+                        <Button Text="+15 mins" x:Name="fifteenminsbtn" FontSize="12" Clicked="fifteenminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="0" BackgroundColor="#d96783" TextColor="White" />
+                        <Button Text="+30 mins" x:Name="thirtyminsbtn" FontSize="12" Clicked="thirtyminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="1" BackgroundColor="#d96783" TextColor="White" />
+                        <Button Text="+60 mins" x:Name="sixtyminsbtn" FontSize="12" Clicked="sixtyminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="2" BackgroundColor="#d96783" TextColor="White" />
+                        <Button Text="+90 mins" x:Name="ninetyminsbtn" FontSize="12" Clicked="ninetyminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="3" BackgroundColor="#d96783" TextColor="White" />
 
 
                     </Grid>
@@ -181,7 +210,7 @@
 
 
             <!-- Old Duration Picker -->
-            <Frame HasShadow="False" IsVisible="False" Margin="20,10,20,10" BorderColor="Transparent"  Padding="5" CornerRadius="20"  BackgroundColor="#ffcccb" >
+            <Frame HasShadow="False" IsVisible="False" Margin="20,10,20,10" BorderColor="Transparent"  Padding="5" CornerRadius="20"  BackgroundColor="#ffe4e1" >
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -192,11 +221,11 @@
                         <ColumnDefinition Width="50*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Label Text="Hours" FontFamily="HankenGroteskBold" Margin="0,0,0,0"   VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="0" Grid.Column="0"   FontSize="10" TextColor="Red" />
-                    <Label Text="Minutes" FontFamily="HankenGroteskBold" Margin="0,0,0,0"   VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="0" Grid.Column="1"   FontSize="10" TextColor="Red" />
+                    <Label Text="Hours" FontFamily="HankenGroteskBold" Margin="0,0,0,0"   VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="0" Grid.Column="0"   FontSize="10" TextColor="#d96783" />
+                    <Label Text="Minutes" FontFamily="HankenGroteskBold" Margin="0,0,0,0"   VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="0" Grid.Column="1"   FontSize="10" TextColor="#d96783" />
 
 
-                    <picker:SfTimePicker x:Name="DurationPicker"  Padding="0" Margin="0,10,0,10" ColumnDividerColor="Red" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"  HeightRequest="75"  BackgroundColor="Transparent" 
+                    <picker:SfTimePicker x:Name="DurationPicker"  Padding="0" Margin="0,10,0,10" ColumnDividerColor="#d96783" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"  HeightRequest="75"  BackgroundColor="Transparent" 
                  SelectionChanged="DurationPicker_SelectionChanged" Format="HH_mm">
                         <picker:SfTimePicker.SelectedTextStyle >
                             <picker:PickerTextStyle FontSize="30"  FontFamily="HankenGroteskBold" TextColor="#031926"/>
@@ -217,7 +246,8 @@
 
 
             <!--Appointment Reminder  -->
-            <Label x:Name="AppointRemlbl" Text="Appointment Reminder" FontFamily="HankenGroteskBold" Margin="20,10,0,0"   VerticalOptions="Center" HorizontalOptions="Start"   FontSize="16" TextColor="#031926" />
+            <Label x:Name="AppointRemlbl" Text="Appointment Reminder" FontFamily="HankenGroteskBold" Margin="20,10,0,0"   VerticalOptions="Center" HorizontalOptions="Start"   FontSize="20" TextColor="#031926" />
+            <Label Text="Choose a reminder for your appointment.'No Reminder' opts out of the Reminder" FontFamily="HankenRegular" Margin="20,5,0,0"  VerticalOptions="Center" HorizontalOptions="Start" FontSize="12" TextColor="#031926" />
 
             <ScrollView Orientation="Horizontal" HeightRequest="75" HorizontalScrollBarVisibility="Never">
                 
@@ -225,7 +255,7 @@
                 
                 <chip:SfChipGroup ChipType="Choice" x:Name="AppointmentReminder"  BackgroundColor="Transparent" SelectionChanged="AppointmentReminder_SelectionChanged" 
            ChipStrokeThickness="1" ShowIcon="False" ChipTextColor="Gray" VerticalOptions="Center" Margin="0,10,0,10" 
-           ChipBackground="Transparent" SelectedChipBackground="#ffcccb" ChipStroke="LightGray" SelectedChipTextColor="#031926" 
+           ChipBackground="Transparent" SelectedChipBackground="#ffe4e1" ChipStroke="LightGray" SelectedChipTextColor="#031926" 
            SelectionIndicatorColor="Transparent" ChipPadding="4,4,0,0" ChipTextSize="Micro" DisplayMemberPath="Description">
 
                     <chip:SfChipGroup.ItemTemplate>
@@ -247,15 +277,16 @@
 
             <!--Notes -->
 
-            <Label Text="Notes" FontFamily="HankenGroteskBold" Margin="20,10,0,0"   VerticalOptions="Center" HorizontalOptions="Start"   FontSize="16" TextColor="#031926" />
-            <StackLayout>
-                <Border Stroke="#ffcccb" StrokeThickness="1" Margin="20,10,20,0" StrokeShape="RoundRectangle 10" HeightRequest="150" Background="Transparent" HorizontalOptions="FillAndExpand">
-                <Editor  Placeholder="Add Notes" x:Name="notesentry" PlaceholderColor="LightGray" VerticalOptions="FillAndExpand" TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="FillAndExpand" />
+            <Label Text="Reason" FontFamily="HankenGroteskBold" Margin="20,10,0,0"   VerticalOptions="Center" HorizontalOptions="Start"   FontSize="20" TextColor="#031926" />
+            <Label Text="Add a short reason for this appointment, such as a check-up, vaccinations, or blood tests" FontFamily="HankenGroteskRegular" Margin="20,5,0,0"  VerticalOptions="Center" HorizontalOptions="Start" FontSize="12" TextColor="#031926" />
+            <StackLayout Margin="20,20,20,20">
+                <Border Stroke="#ffe4e1" StrokeThickness="1"  Padding="0,0,0,-10" StrokeShape="RoundRectangle 10" HeightRequest="75" Background="Transparent" HorizontalOptions="FillAndExpand">
+                    <Editor  Placeholder="Add Notes" x:Name="notesentry" Margin="10,5,10,0" PlaceholderColor="LightGray" VerticalOptions="FillAndExpand" TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="FillAndExpand" />
             </Border>
             </StackLayout>
 
             <!--Add Appointment -->
-            <Button x:Name="AppointmentAdd" Text="Add Appointment" Clicked="AppointmentAdd_Clicked" Margin="20,20,20,20" Padding="0" BackgroundColor="#ffcccb" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#031926" />
+            <Button x:Name="AppointmentAdd" Text="Add Appointment" Clicked="AppointmentAdd_Clicked" Margin="20,20,20,20" Padding="0" BackgroundColor="#ffe4e1" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#031926" />
 
          
      

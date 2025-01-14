@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PeopleWith.AllAppointments"
+             Shell.NavBarIsVisible="False" BackgroundColor="White"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add New" x:Name="AddBtn" Clicked="AddBtn_Clicked" />
+    </ContentPage.ToolbarItems>
+
+    <ScrollView VerticalScrollBarVisibility="Never">
+        <StackLayout x:Name="mainstack" VerticalOptions="FillAndExpand" BackgroundColor="Transparent">
+
+        <!-- No Data Stack-->
+        <StackLayout x:Name="nodatastack" IsVisible="False" VerticalOptions="CenterAndExpand">
+            <Image Source="adddataicon.png" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="50" WidthRequest="50"/>
+            <Label Text="Add Appointment" FontSize="20" Margin="0,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Center" />
+            <Label Text="Tap here to add an Appointment" FontSize="14" TextColor="#031926" FontFamily="HankenGroteskRegular" Margin="0,0,0,0" HorizontalOptions="Center" VerticalOptions="Center" VerticalTextAlignment="Center" />
+            <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="AddBtn_Clicked" NumberOfTapsRequired="1"/>
+            </StackLayout.GestureRecognizers>
+        </StackLayout>
+
+            <!-- Data Stack-->
+            <StackLayout x:Name="datastack">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Text="Appointments" FontSize="26" Grid.Column="0" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
+                    <Frame x:Name="AppointInfo" HasShadow="False" Padding="0" CornerRadius="15" Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,0,20,0" BorderColor="#d96783" BackgroundColor="Transparent">
+                        <Label Text="i" FontFamily="HankenGroteskBold" HorizontalOptions="Center" TextColor="#d96783" FontSize="12"  Grid.Column="1" VerticalOptions="Center" />
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
+                    </Frame.GestureRecognizers>
+                </Frame>
+
+            </Grid>
+
+                <buttons:SfSegmentedControl x:Name="segmentedControl" SelectionChanged="segmentedControl_SelectionChanged" SegmentBackground="#ffe4e1" Stroke="LightGray"  SelectedIndex="0" DisabledSegmentTextColor="Gray" CornerRadius="5"
+                Margin="8,8,8,0">
+                <buttons:SfSegmentedControl.TextStyle>
+                        <buttons:SegmentTextStyle TextColor="#d96783" FontFamily="HankenGroteskBold" FontAttributes="None" FontSize="12"/>
+                </buttons:SfSegmentedControl.TextStyle>
+                <buttons:SfSegmentedControl.SelectionIndicatorSettings>
+                    <buttons:SelectionIndicatorSettings 
+                SelectionIndicatorPlacement="Fill"
+                Background="#d96783"/>
+                </buttons:SfSegmentedControl.SelectionIndicatorSettings>
+                <buttons:SfSegmentedControl.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                            <x:String>Upcoming</x:String>
+                            <x:String>Historical</x:String>
+                        </x:Array>
+                </buttons:SfSegmentedControl.ItemsSource>
+
+            </buttons:SfSegmentedControl>
+
+            <!-- Tab Explanation -->
+            <Grid Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                    <Label x:Name="SegmentDetails" Grid.Row="0" Grid.Column="0" HorizontalTextAlignment="Center" FontFamily="HankenGroteskRegular" FontSize="14" TextColor="#d96783" />
+            </Grid>
+
+                <!-- Active Appointment Listview -->
+                <syncfusion:SfListView  x:Name="UpcomingList" IsVisible="False" Padding="0" Margin="10,10,10,50" ItemTapped="AllAppointments_ItemTapped" AutoFitMode="Height"  ItemSpacing="0"  HorizontalOptions="FillAndExpand" IsScrollingEnabled="False"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
+                <syncfusion:SfListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout>
+                                    <Frame CornerRadius="10" Margin="0,5,0,5" BackgroundColor="#ffe4e1" HasShadow="False"
+                                   BorderColor="Transparent" InputTransparent="True" Padding="0">
+                                        <Grid Margin="0,10,0,0">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="15*"/>
+                                                <ColumnDefinition Width="75*"/>
+                                                <ColumnDefinition Width="10*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Label Text="{Binding AppointWith}" FontFamily="HankenGroteskBold"  FontSize="14" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="10,0,0,0" TextColor="#031926" />
+
+                                            <Image Opacity="1" Source="hospital.png" Margin="0,0,0,5" Grid.Row="1" Grid.Column="0" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="20" WidthRequest="20"/>
+
+                                            <Label Text="{Binding locationtype}" FontFamily="HankenGroteskBold"  FontSize="12" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="1" VerticalOptions="Center" HorizontalOptions="Start" VerticalTextAlignment="Center" Margin="0,0,0,10" TextColor="#d96783" />
+
+                                            <Image Opacity="1" Source="medcalendericon.png" Grid.Row="2" Grid.Column="0" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="20" WidthRequest="20"/>
+
+                                            <Label Text="{Binding Appointmentlength}" FontFamily="HankenGroteskBold"  FontSize="12" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="1" VerticalOptions="End" HorizontalOptions="Start" VerticalTextAlignment="Center" Margin="0,0,0,10" TextColor="#d96783"/>
+
+                                            <Image Opacity="1" Source="alarmbell.png" Grid.Row="3" Grid.Column="0" VerticalOptions="Start" IsVisible="{Binding HasReason}" HorizontalOptions="Center" HeightRequest="20" WidthRequest="20"/>
+
+                                            <Label Text="{Binding reminderinterval}" FontFamily="HankenGroteskBold"  FontSize="12" Grid.Row="3" IsVisible="{Binding HasReason}" Grid.Column="1" Grid.ColumnSpan="1" Margin="0,0,0,10" TextColor="#d96783" />
+
+                                            <Image Opacity="1" Source="notesicon.png" Grid.Row="4" Grid.Column="0" VerticalOptions="Start" IsVisible="{Binding HasReason}" HorizontalOptions="Center" HeightRequest="20" WidthRequest="20"/>
+
+                                            <Label Text="{Binding reason}" FontFamily="HankenGroteskBold"  FontSize="12" Grid.Row="4" IsVisible="{Binding HasReason}" Grid.Column="1" Grid.ColumnSpan="1" Margin="0,0,0,10" TextColor="Gray" />
+                                        
+                                            <Image Source="nextdarker.png" HeightRequest="15" Margin="0,0,0,10"  Grid.Row="0" Grid.Column="3" VerticalOptions="Center" HorizontalOptions="Center" />
+
+                                        </Grid>
+                                    </Frame>
+                                </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </syncfusion:SfListView.ItemTemplate>
+            </syncfusion:SfListView>
+
+
+            <!-- Active Appointment Empty Prompt -->
+            <Label Text="No Active Appointments Added" x:Name="noActiveAppointlbl" IsVisible="False" FontSize="14" TextColor="#031926" FontFamily="HankenGroteskRegular" Margin="0,50,0,0" HorizontalOptions="Center" VerticalOptions="Center" VerticalTextAlignment="Center" />
+
+            <!-- Loading Indicator -->
+            <Grid x:Name="AppointLoading" Margin="0,150,0,0"  IsVisible="False">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                    <ActivityIndicator IsRunning="True" Grid.Row="0" Color="#d96783" HorizontalOptions="Center" VerticalOptions="Start" />
+                    <Label Text="Loading Appointments..." Grid.Row="1" TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="Center" Margin="0,5,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" />
+            </Grid>
+
+            <!-- Historical Appointment Listview -->
+            <syncfusion:SfListView  x:Name="HistoricalList" ItemTapped="HistoricalList_ItemTapped" IsVisible="False" Padding="0" Margin="10,10,10,50" AutoFitMode="Height"  ItemSpacing="0"  HorizontalOptions="FillAndExpand" IsScrollingEnabled="False"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
+                <syncfusion:SfListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout>
+                                    <Frame CornerRadius="10" Margin="0,5,0,5" BackgroundColor="#ffe4e1" HasShadow="False"
+                                 BorderColor="Transparent" InputTransparent="True" Padding="0">
+                                    <Grid Margin="0,10,0,0">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="15*"/>
+                                                <ColumnDefinition Width="75*"/>
+                                                <ColumnDefinition Width="10*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Label Text="{Binding AppointWith}" FontFamily="HankenGroteskBold"  FontSize="14" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="10,0,0,0" TextColor="#031926" />
+
+                                            <Image Opacity="1" Source="hospital.png" Margin="0,5,0,5" Grid.Row="1" Grid.Column="0" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="20" WidthRequest="20"/>
+
+                                            <Label Text="{Binding locationtype}" FontFamily="HankenGroteskBold"  FontSize="12" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="1" VerticalOptions="Center" HorizontalOptions="Start" VerticalTextAlignment="Center" Margin="0,5,0,10" TextColor="#d96783" />
+
+                                            <Image Opacity="1" Source="medcalendericon.png" Grid.Row="2" Grid.Column="0" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="20" WidthRequest="20"/>
+
+                                            <Label Text="{Binding Appointmentlength}" FontFamily="HankenGroteskBold"  FontSize="12" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="1" VerticalOptions="End" HorizontalOptions="Start" VerticalTextAlignment="Center" Margin="0,0,0,10" TextColor="#d96783"/>
+
+
+                                        </Grid>
+                                </Frame>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </syncfusion:SfListView.ItemTemplate>
+            </syncfusion:SfListView>
+                
+            <!-- Completed Appointment Empty Prompt -->
+            <Label Text="No Completed Appointments Added" x:Name="noHistoryAppointlbl" IsVisible="False" FontSize="14" TextColor="#031926" FontFamily="HankenGroteskRegular" Margin="0,50,0,0" HorizontalOptions="Center" VerticalOptions="Center" VerticalTextAlignment="Center" />
+
+
+          </StackLayout>
+       </StackLayout>
+    </ScrollView>
+</ContentPage>
