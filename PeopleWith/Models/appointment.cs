@@ -24,6 +24,22 @@ namespace PeopleWith
         public string location { get; set; }
         public string attended { get; set; }
 
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string AppointWith { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string locationtype { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string Appointmentlength { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool HasReason { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string ExpectedEnd { get; set; }
+
+
         [JsonConverter(typeof(AppointmentFeedbackConverter))]
         public ObservableCollection<appointmentfeedback> feedback { get; set; }
 
@@ -35,6 +51,8 @@ namespace PeopleWith
 
         [System.Text.Json.Serialization.JsonIgnore]
         public TimeSpan Reminder { get; set; }
+
+
     }
 
     public class appointmentfeedback

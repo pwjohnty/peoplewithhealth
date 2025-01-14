@@ -203,6 +203,22 @@
                     <Label Text="PeopleWith enables you to record your HCPs and manage your Appointments effectively." Grid.Row="2" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskRegular" />
                 </Grid>
 
+                <!-- appointments -->
+
+                <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" RowSpacing="10" x:Name="appointmentinfo" IsVisible="false">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Text="An appointment is a scheduled meeting or consultation between a patient and a healthcare provider." Grid.Row="0" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskRegular" />
+                    <Label Text="Appointments are important for receiving medical care, follow-ups, or routine check-ups." Grid.Row="1" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskRegular" />
+                    <Label Text="PeopleWith helps you track, manage, and schedule your appointments efficiently." Grid.Row="2" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskRegular" />
+                </Grid>
+
                 <BoxView x:Name="Boxtwo" BackgroundColor="LightBlue" Background="LightBlue" HeightRequest="1" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" />
 
 

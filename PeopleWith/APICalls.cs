@@ -2296,8 +2296,41 @@ namespace PeopleWith
 
                 string jsonns = System.Text.Json.JsonSerializer.Serialize<appointment>(AppointmentPassed[0]);
                 StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
+                HttpResponseMessage response;
 
-                var response = await client.PostAsync(urls, contenttts);
+                // Choose POST or PATCH based on whether the ID is null or empty
+                if (string.IsNullOrEmpty(AppointmentPassed[0].id))
+                {
+                    response = await client.PostAsync(urls, contenttts);
+                }
+                else
+                {
+                    string id = AppointmentPassed[0].id;
+                    var url = $"https://pwdevapi.peoplewith.com/api/appointment/id/{id}";
+
+                    //string json = System.Text.Json.JsonSerializer.Serialize<appointment>(AppointmentPassed[0]);
+                    //StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    response = await client.PatchAsync(url, contenttts);
+
+                    //using (var clients = new HttpClient())
+                    //{
+                    //    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    //    {
+                    //        Content = content
+                    //    };
+
+                    //    var responsse = await client.SendAsync(request);
+
+                    //    if (!responsse.IsSuccessStatusCode)
+                    //    {
+                    //        var errorResponsse = await responsse.Content.ReadAsStringAsync();
+                    //    }
+                    //}
+                    //return new ObservableCollection<appointment>(AppointmentPassed);
+                }
+
+
                 var errorResponse = await response.Content.ReadAsStringAsync();
                 if (response.IsSuccessStatusCode)
                 {
@@ -2322,6 +2355,7 @@ namespace PeopleWith
                 return new ObservableCollection<appointment>();
             }
         }
+
 
 
         //Get All User Videos

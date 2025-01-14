@@ -22,10 +22,12 @@ public partial class AddAppointment : ContentPage
     public ObservableCollection<appointment> AllAppointments = new ObservableCollection<appointment>();
     public ObservableCollection<hcp> AllHCPs = new ObservableCollection<hcp>();
     public ObservableCollection<hcp> itemstoremove = new ObservableCollection<hcp>();
+    public appointment SelectedAppointment = new appointment(); 
     public hcp SelectHCP = new hcp();
     public TimeSpan ReminderTimepsan = new TimeSpan();
     string NavFrom; 
-    AppointmentNotifications AppointmentNotif = new AppointmentNotifications(); 
+    AppointmentNotifications AppointmentNotif = new AppointmentNotifications();
+    APICalls database = new APICalls();
     public ObservableCollection<string> ReminderList { get; set; } = new ObservableCollection<string>();
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
@@ -79,26 +81,29 @@ public partial class AddAppointment : ContentPage
             AllHCPs = GetAllHCPs;
             SelectHCP = HCPSelected;
             //Add No HCP item 
-            var item = "No HCP";
-            bool Check = AllHCPs.Any(s => s.fullname.Contains(item, StringComparison.OrdinalIgnoreCase));
-            if (Check)
-            {
-                //Do Nothing 
-            }
-            else
-            {
-                var EMPTYHCP = new hcp();
-                EMPTYHCP.fullname = "No HCP";
-                EMPTYHCP.hcpid = "1";
-                AllHCPs.Add(EMPTYHCP);
-            }
-
             NavFrom = "HCPs";
 
-            //adddatepicker.Date = DateTime.Now;
-            //addtimepicker.Time = DateTime.Now.TimeOfDay;
+            GetHCPData();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
 
-            PopulateAllItems();
+    public AddAppointment(appointment AppointmentSelected, ObservableCollection<appointment> GetAllAppointments)
+    {
+        try
+        {
+            InitializeComponent();
+            AllAppointments = GetAllAppointments;
+            SelectedAppointment = AppointmentSelected;
+            NavFrom = "EditAppoint";
+
+            AppointmentAdd.Text = "Update Appointment";
+
+            GetHCPData();
+
         }
         catch (Exception Ex)
         {
@@ -107,14 +112,35 @@ public partial class AddAppointment : ContentPage
     }
 
 
-    public AddAppointment(ObservableCollection<hcp> GetAllHCPs, ObservableCollection<appointment> GetAllAppointments)
+    public AddAppointment( ObservableCollection<appointment> GetAllAppointments)
 	{
         try
         {
             InitializeComponent();
-            AllHCPs = GetAllHCPs;
             AllAppointments = GetAllAppointments;
-            //Add No HCP item 
+            NavFrom = "Appointments";
+            GetHCPData();
+           
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    private async void GetHCPData()
+    {
+        try
+        {
+
+            var getHCPsTask = database.GetUserHCP();
+
+            AllHCPs = await getHCPsTask;
+            foreach (var items in AllHCPs)
+            {
+                items.fullname = items.firstname + " " + items.surname;
+            }
+
             var item = "No HCP";
             bool Check = AllHCPs.Any(s => s.fullname.Contains(item, StringComparison.OrdinalIgnoreCase));
             if (Check)
@@ -126,19 +152,21 @@ public partial class AddAppointment : ContentPage
                 var EMPTYHCP = new hcp();
                 EMPTYHCP.fullname = "No HCP";
                 EMPTYHCP.hcpid = "1";
-                AllHCPs.Add(EMPTYHCP);
+                //Set it to be First Appearing 
+                AllHCPs.Insert(0, EMPTYHCP);
+                //AllHCPs.Add(EMPTYHCP);
             }
 
-            NavFrom = "Appointments";
-
-            //adddatepicker.Date = DateTime.Now;
-            //addtimepicker.Time = DateTime.Now.TimeOfDay;
-
             PopulateAllItems();
+
+            if(AppointmentAdd.Text == "Update Appointment")
+            {
+                PrepopulateItems(); 
+            }
         }
         catch (Exception Ex)
         {
-            NotasyncMethod(Ex);
+            NotasyncMethod(Ex); 
         }
     }
 
@@ -182,6 +210,12 @@ public partial class AddAppointment : ContentPage
 
             TypeChips.ItemsSource = Typelist;
 
+            //New Way
+
+            var sortedlist = 
+            HcpChips.ItemsSource = AllHCPs; 
+
+            //Old Way of Choosing HCP
             PickerColumn pickerColumn = new PickerColumn
             {
                 ItemsSource = AllHCPs,
@@ -204,6 +238,93 @@ public partial class AddAppointment : ContentPage
             {
                 hcpPicker.Columns[0].SelectedItem = "No HCP";
             }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    public void PrepopulateItems()
+    {
+        try
+        {
+            //Pre-Populate Date/Time
+            var GetDatetime = DateTime.Parse(SelectedAppointment.datetime);
+            adddatepicker.Date = GetDatetime.Date;
+            addtimepicker.Time = GetDatetime.TimeOfDay;
+
+            //Pre-Populate Location 
+            if (!string.IsNullOrEmpty(SelectedAppointment.location))
+            {
+
+                //locationChips.SelectedItem = SelectedAppointment.location;
+                locationChips.SelectedItem = locaitonlist.FirstOrDefault(item => item.location == SelectedAppointment.location);
+            }
+
+            //Pre-Populate Type 
+            if (!string.IsNullOrEmpty(SelectedAppointment.type))
+            {
+                TypeChips.SelectedItem = Typelist.FirstOrDefault(item => item.type == SelectedAppointment.type);
+                //TypeChips.SelectedItem = SelectedAppointment.type;
+            }
+
+            //Pre-Populate HCP
+            if (!string.IsNullOrEmpty(SelectedAppointment.hcpname))
+            {
+                //hcpPicker.Columns[0].SelectedItem = "No HCP";
+                //HcpChips.SelectedItem = "No HCP";
+                HcpChips.SelectedItem = AllHCPs.FirstOrDefault(item => item.fullname == SelectedAppointment.hcpname);
+                
+            }
+            else
+            {
+                //hcpPicker.Columns[0].SelectedItem = SelectedAppointment.hcpname;
+                //HcpChips.SelectedItem = SelectedAppointment.hcpname;
+                HcpChips.SelectedItem = AllHCPs.FirstOrDefault(item => item.fullname == "No HCP");
+            }
+
+            //Pre-Populate Duration 
+            if (!string.IsNullOrEmpty(SelectedAppointment.expectedduration))
+            {
+                var GetDuration = SelectedAppointment.expectedduration;
+                var cleanInput = GetDuration.Replace(" Hours", "").Replace(" Minutes", "").Trim();
+                var GetSplit = cleanInput.Split(' ');
+                hoursentry.Text = GetSplit[0];
+                minsentry.Text = GetSplit[1];
+            }
+
+
+            //Reminder 
+            if (!string.IsNullOrEmpty(SelectedAppointment.reminderinterval))
+            {
+                //Only No Reminder
+                if (ReminderList.Count == 1)
+                {
+                    AppointmentReminder.SelectedItem = ReminderList[0];
+                }
+                else
+                {
+                    if (ReminderList.Contains(SelectedAppointment.reminderinterval))
+                    {
+                        var index = ReminderList.IndexOf(SelectedAppointment.reminderinterval); 
+                        AppointmentReminder.SelectedItem = ReminderList[index];
+                    }
+                    else
+                    {
+                        //Not Valid Date time so set to Nothing
+
+                    }
+                }
+            }
+            else
+            {
+                //If it is null 
+                AppointmentReminder.SelectedItem = ReminderList[0];
+            }
+
+            //Reason
+            notesentry.Text = SelectedAppointment.reason;
 
         }
         catch (Exception Ex)
@@ -232,21 +353,25 @@ public partial class AddAppointment : ContentPage
             }
             else if (DiffinDate > 15 && DiffinDate < 30)
             {
+                ReminderList.Add("No Reminder");
                 ReminderList.Add("15 Minutes Before");
             }
             else if (DiffinDate > 30 && DiffinDate < 45)
             {
+                ReminderList.Add("No Reminder");
                 ReminderList.Add("15 Minutes Before");
                 ReminderList.Add("30 Minutes Before");
             }
             else if (DiffinDate > 45 && DiffinDate < 60)
             {
+                ReminderList.Add("No Reminder");
                 ReminderList.Add("15 Minutes Before");
                 ReminderList.Add("30 Minutes Before");
                 ReminderList.Add("45 Minutes Before");
             }
             else if (DiffinDate > 60 && DiffinDate <= 1440)
             {
+                ReminderList.Add("No Reminder");
                 ReminderList.Add("15 Minutes Before");
                 ReminderList.Add("30 Minutes Before");
                 ReminderList.Add("45 Minutes Before");
@@ -254,6 +379,7 @@ public partial class AddAppointment : ContentPage
             }
             else if (DiffinDate >= 1441)
             {
+                ReminderList.Add("No Reminder");
                 ReminderList.Add("15 Minutes Before");
                 ReminderList.Add("30 Minutes Before");
                 ReminderList.Add("45 Minutes Before");
@@ -264,16 +390,17 @@ public partial class AddAppointment : ContentPage
 
             if(ReminderList.Count == 1)
             {
-                AppointmentReminder.ChipBackground = Color.FromRgba("#ffcccb");
-                AppointmentReminder.ChipTextColor = Color.FromRgba("#031926");
+                AppointmentReminder.SelectedItem = ReminderList.FirstOrDefault("No Reminder");
+                //AppointmentReminder.ChipBackground = Color.FromRgba("#ffe4e1");
+                //AppointmentReminder.ChipTextColor = Color.FromRgba("#031926");
                 //AppointmentReminder.Items[0];
                 //AppointmentReminder.SelectedItem = ReminderList[0];
             }
-            else
-            {
-                AppointmentReminder.ChipBackground = Colors.Transparent;
-                AppointmentReminder.ChipTextColor = Colors.Gray;
-            }
+            //else
+            //{
+            //    AppointmentReminder.ChipBackground = Colors.Transparent;
+            //    AppointmentReminder.ChipTextColor = Colors.Gray;
+            //}
         }
         catch (Exception Ex)
         {
@@ -396,6 +523,25 @@ public partial class AddAppointment : ContentPage
         }
     }
 
+
+    private void HcpChips_SelectionChanged(object sender, Syncfusion.Maui.Core.Chips.SelectionChangedEventArgs e)
+    {
+        try
+        {
+            var appointment = e.AddedItem as hcp;
+
+            if (appointment != null)
+            {
+                SelectedHCP = appointment.hcpid;
+                SelectedHCPName = appointment.fullname;
+            }
+        }
+        catch (Exception Ex)
+        {
+            //Leave Empty
+        }
+    }
+
     async private void AppointmentAdd_Clicked(object sender, EventArgs e)
     {
         try
@@ -445,7 +591,7 @@ public partial class AddAppointment : ContentPage
                     }
                     else
                     {
-                        if (SelectedHCP == "No HCP")
+                        if (SelectedHCP == "No HCP" || SelectedHCP == "1")
                         {
                             //Dont Add
                         }
@@ -547,16 +693,22 @@ public partial class AddAppointment : ContentPage
                         }
                     }
 
+
+                    if (AppointmentAdd.Text == "Update Appointment")
+                    {
+                        NewAppointment.id = SelectedAppointment.id; 
+                    }
+
                     AppointmenttoAdd.Add(NewAppointment);
 
                     APICalls database = new APICalls();
                     AddedAppointment = await database.PostUserAppointmentAsync(AppointmenttoAdd);
-
+                                  
                     AppointmentAdd.IsEnabled = true;
                     //AllHCPs Remove (No HCP) 
                     foreach (var item in AllHCPs)
                     {
-                        if (item.fullname == "No HCP")
+                        if (item.fullname == "No HCP" || item.fullname == "1")
                         {
                             itemstoremove.Add(item);
                         }
@@ -569,19 +721,29 @@ public partial class AddAppointment : ContentPage
 
                     //Navigation From Appointments 
 
-                    if (NavFrom == "Appointments")
+                    if (NavFrom == "Appointments" || NavFrom == "EditAppoint")
                     {
 
                         foreach (var item in AddedAppointment)
                         {
                             AllAppointments.Add(item);
                         }
-                        await MopupService.Instance.PushAsync(new PopupPageHelper("Appointment Added") { });
+
+                        if (AppointmentAdd.Text == "Update Appointment")
+                        {
+                            await MopupService.Instance.PushAsync(new PopupPageHelper("Appointment Updated") { });
+                        }
+                        else
+                        {
+                            await MopupService.Instance.PushAsync(new PopupPageHelper("Appointment Added") { });
+                        }
+
+                        
                         await Task.Delay(1500);
 
                         await MopupService.Instance.PopAllAsync(false);
-                        await Navigation.PushAsync(new Appointments(AllAppointments, AllHCPs));
-                        var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is Appointments);
+                        await Navigation.PushAsync(new AllAppointments());
+                        var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is AllAppointments);
                         if (pageToRemoves != null)
                         {
 
@@ -832,4 +994,6 @@ public partial class AddAppointment : ContentPage
 
         }
     }
+
+   
 }
