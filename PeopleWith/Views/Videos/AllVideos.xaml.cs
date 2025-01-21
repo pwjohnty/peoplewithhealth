@@ -163,7 +163,26 @@ public partial class AllVideos : ContentPage
             var count = FilteredVideoCollection.Count().ToString();
             Results.Text = "Results" + " (" + count + ")";
             VideosListview.ItemsSource = FilteredVideoCollection;
-            //VideosListview.HeightRequest = FilteredVideo.Count() * 110;
+
+            if (count == "0")
+            {
+                NoResultslbl.IsVisible = true;
+                VideosListview.IsVisible = false;
+            }
+            else
+            {
+                VideosListview.IsVisible = true;
+                NoResultslbl.IsVisible = false;
+            }
+
+            //If FilterTabs item is Selected - UnSelect it 
+            //if (string.IsNullOrEmpty(searchbar.Text) || searchbar.Text == "")
+            //{
+            //    if (FilterTabs.SelectedItem != null)
+            //    {
+            //        FilterTabs.SelectedItem = null;
+            //    }
+            //}
         }
         catch (Exception Ex)
         {
@@ -182,6 +201,9 @@ public partial class AllVideos : ContentPage
                 var count = VideosList.Count().ToString();
                 Results.Text = "Results" + " (" + count + ")";
                 VideosListview.ItemsSource = VideosList;
+                VideosListview.IsVisible = true;
+                NoResultslbl.IsVisible = false;
+                searchbar.Text = string.Empty; 
                 //VideosListview.HeightRequest = AllVideosList.Count() * 110;
             }
             else
@@ -190,6 +212,9 @@ public partial class AllVideos : ContentPage
                 var count = FilteredVideo.Count().ToString();
                 Results.Text = "Results" + " (" + count + ")";
                 VideosListview.ItemsSource = FilteredVideo;
+                VideosListview.IsVisible = true;
+                NoResultslbl.IsVisible = false;
+                searchbar.Text = string.Empty;
                 //VideosListview.HeightRequest = FilteredVideo.Count() * 110;
             }
      

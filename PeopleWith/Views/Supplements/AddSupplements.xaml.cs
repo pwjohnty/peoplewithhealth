@@ -737,8 +737,21 @@ public partial class AddSupplement : ContentPage
                     var userResponsemed = JsonConvert.DeserializeObject<ApiResponseSupplement>(contentmeds);
                     var meds = userResponsemed.Value;
 
-                    allmedicationlist = meds;
+                    var MedicationstoAdd = new List<supplement>();
 
+                    foreach (var med in meds)
+                    {
+                        if (med.status == "pending")
+                        {
+                            //Do Nothing
+                        }
+                        else
+                        {
+                            MedicationstoAdd.Add(med);
+                        }
+                    }
+
+                    allmedicationlist = new ObservableCollection<supplement>(MedicationstoAdd);
 
 
 
@@ -787,18 +800,18 @@ public partial class AddSupplement : ContentPage
     {
         try
         {
-
+            Medicationslistview.IsVisible = false;
             if (string.IsNullOrEmpty(e.NewTextValue))
             {
                 FilterResults.Clear();
                 Medicationslistview.IsVisible = false;
                 MedListLoading.IsVisible = false;
-                MedListLoadlbl.IsVisible = false;
+                NoResultslbl.IsVisible = false;
             }
             else
             {
                 MedListLoading.IsVisible = true;
-                MedListLoadlbl.IsVisible = true;
+                NoResultslbl.IsVisible = false;
                 var countofcharacters = e.NewTextValue.Length;
 
                 if (countofcharacters > 2)
@@ -809,8 +822,17 @@ public partial class AddSupplement : ContentPage
                     Medicationslistview.ItemsSource = filteredmeds;
                     Medicationslistview.IsVisible = true;
 
+                    if (filteredmeds.Count() == 0)
+                    {
+                        NoResultslbl.IsVisible = true;
+                    }
+                    else
+                    {
+                        Medicationslistview.IsVisible = true;
+                        NoResultslbl.IsVisible = false;
+                    }
+
                     MedListLoading.IsVisible = false;
-                    MedListLoadlbl.IsVisible = false;
                     // Medicationslistview.HeightRequest = filteredmeds.Count * 50;
                 }
 
@@ -3569,13 +3591,27 @@ public partial class AddSupplement : ContentPage
         try
         {
             var item = e.DataItem as string;
-
-
-            newusermedication.formulation = item;
-
-            if (IsEdit)
+            if (newusermedication.formulation == item)
             {
-                SelectedMed.formulation = item;
+                //Able to unselect Optional Item 
+                newusermedication.formulation = null;
+            }
+            else if (SelectedMed.formulation == item)
+            {
+                //Able to unselect Optional Item 
+                SelectedMed.formulation = null;
+            }
+            else
+            {
+
+                if (IsEdit)
+                {
+                    SelectedMed.formulation = item;
+                }
+                else
+                {
+                    newusermedication.formulation = item;
+                }
             }
         }
         catch (Exception Ex)

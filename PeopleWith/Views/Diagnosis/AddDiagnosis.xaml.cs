@@ -73,7 +73,6 @@ public partial class AddDiagnosis : ContentPage
             //Stopwatch stopWatch = new Stopwatch();
             //stopWatch.Start();  
             Diagnosisloading.IsVisible = true;
-
             APICalls database = new APICalls();
             DiagnosisList = await database.GetAsyncDiagnosis();
             //stopWatch.Stop();
@@ -111,7 +110,6 @@ public partial class AddDiagnosis : ContentPage
 
             //Results inital count
             Results.Text = "Results" + " (" + count + ")";
-
             Diagnosisloading.IsVisible = false;
         }
         catch (Exception Ex)
@@ -168,7 +166,8 @@ public partial class AddDiagnosis : ContentPage
                 //popup.HeaderTitle = Diagnos.Title.ToString();
                 //popup.IsOpen = true;
                 //bool result = await viewModel.ShowPopupAsync();
-                bool result = await DisplayAlert(Diagtitle, "Would you like to add this Diagnosis?", "Accept", "Decline");
+                bool result = await DisplayAlert("Confirm Diagnosis", "Are you sure you want to add " + Diagtitle + "?", "Ok", "cancel");
+
 
                 if (result)
                 {
@@ -391,13 +390,17 @@ public partial class AddDiagnosis : ContentPage
                     int currentYear = DateTime.Now.Year;
                     if (date.Year >= 1900 && date.Year <= currentYear)
                     {
-                        DateEntry.TextColor = Color.FromArgb("#031926"); // Valid date
-                        validdob = true;
-                    }
-                    else
-                    {
-                        DateEntry.TextColor = Colors.Red; // Invalid date range
-                        validdob = false;
+                        if (date.Date <= DateTime.Now.Date)
+                        {
+                            DateEntry.TextColor = Color.FromArgb("#031926"); // Valid date
+                            validdob = true;
+                        }
+                        else
+                        {
+                            DateEntry.TextColor = Colors.Red; // Invalid date range
+                            validdob = false;
+                        }
+
                     }
                 }
                 else

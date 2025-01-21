@@ -4,7 +4,7 @@ namespace PeopleWith;
 
 public partial class NewPageVideoPlayer : ContentPage
 {
-
+    signupcodeinformation vidfromdash = new signupcodeinformation();
     bool fromdash;
 	public NewPageVideoPlayer()
 	{
@@ -68,13 +68,16 @@ public partial class NewPageVideoPlayer : ContentPage
 
     }
 
-    public NewPageVideoPlayer(string videolink, bool dash)
+    public NewPageVideoPlayer(signupcodeinformation vidpassed, bool dash)
     {
         try
         {
             InitializeComponent();
 
-            MediaElement.Source = videolink;
+            //MediaElement.Source = videolink;
+            vidfromdash = vidpassed;
+            var pdflink = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/" + vidfromdash.link;
+            MediaElement.Source = pdflink;
 
             fromdash = dash;
 
@@ -103,7 +106,7 @@ public partial class NewPageVideoPlayer : ContentPage
             MediaElement.HeightRequest = mediaElementHeight;
 
             MediaElement.IsVisible = true;
-            MediaElement.Source = videolink;
+            MediaElement.Source = pdflink;
             MediaElement.Play();
             //  isPlaying = true;
             //  PlayDuration.Start();

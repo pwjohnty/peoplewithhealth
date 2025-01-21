@@ -54,7 +54,6 @@ public partial class AddAllergies : ContentPage
             //Stopwatch stopWatch = new Stopwatch();
             //stopWatch.Start();  
             Allergyloading.IsVisible = true;
-
             //stopWatch.Stop();
             //TimeSpan ts = stopWatch.Elapsed;
             //await DisplayAlert("Time", ts.ToString(), "Close");
@@ -82,7 +81,6 @@ public partial class AddAllergies : ContentPage
             Results.Text = "Results" + " (" + count + ")";
 
             //AllergyListview.HeightRequest = allergies.Count() * 35; 
-
             Allergyloading.IsVisible = false;
         }
         catch (Exception Ex)
@@ -138,7 +136,7 @@ public partial class AddAllergies : ContentPage
                 //popup.HeaderTitle = Allergy.Title.ToString();
                 //popup.IsOpen = true;
                 //bool result = await viewModel.ShowPopupAsync();
-                bool result = await DisplayAlert(Allergytitle, "Would you like to add this Allergy?", "Accept", "Decline");
+                bool result = await DisplayAlert("Confirm Allergy", "Are you sure you want to add " + Allergytitle + "?", "Ok", "cancel");
 
                 if (result)
                 {

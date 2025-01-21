@@ -55,6 +55,7 @@ public partial class AddMedication : ContentPage
     string WeeklyHowManyTimes; 
     string WeeklysameDosageSelected;
     private int clickCount = 0;
+    bool PendingMed = false; 
 
     ObservableCollection<MedtimesDosages> medtimesanddosages = new ObservableCollection<MedtimesDosages>();
     ObservableCollection<usermedication> UserMedications = new ObservableCollection<usermedication>();
@@ -622,6 +623,7 @@ public partial class AddMedication : ContentPage
                 if(SelectedMed.status == "Pending")
                 {
                     IsEdit = false;
+                    PendingMed = true; 
                     newusermedication = SelectedMed;
                     mednamelbl.Text = SelectedMed.medicationtitle;
                     medname2lbl.Text = SelectedMed.medicationtitle;
@@ -739,12 +741,25 @@ public partial class AddMedication : ContentPage
                     var userResponsemed = JsonConvert.DeserializeObject<ApiResponseMedication>(contentmeds);
                     var meds = userResponsemed.Value;
 
-                    allmedicationlist = meds;
+                    var MedicationstoAdd = new List<medication>();
 
-                   
+                    foreach (var med in meds)
+                    {
+                        if (med.status == "pending")
+                        {
+                            //Do Nothing
+                        }
+                        else
+                        {
+                            MedicationstoAdd.Add(med);
+                        }
+                    }
+
+                    allmedicationlist = new ObservableCollection<medication>(MedicationstoAdd);
 
 
-                    foreach(var item in UserMedications)
+
+                    foreach (var item in UserMedications)
                     {
                        var med = allmedicationlist.Where(x => x.medicationid == item.medicationid).FirstOrDefault();
 
@@ -768,7 +783,8 @@ public partial class AddMedication : ContentPage
 
             if (IsEdit == true)
             {
-                topprogress.SegmentCount = 5; 
+                topprogress.SegmentCount = 5;
+                topprogress.Progress = 20; 
                 firststack.IsVisible = false;
                 PopulateEditMed();
             }
@@ -789,19 +805,19 @@ public partial class AddMedication : ContentPage
     {
         try
         {
-
+            Medicationslistview.IsVisible = false; 
 
             if (string.IsNullOrEmpty(e.NewTextValue))
             {
                 FilterResults.Clear();
                 Medicationslistview.IsVisible = false;
                 MedListLoading.IsVisible = false;
-                MedListLoadlbl.IsVisible = false;
+                NoResultslbl.IsVisible = false;
             }
             else
             {
                 MedListLoading.IsVisible = true;
-                MedListLoadlbl.IsVisible = true; 
+                NoResultslbl.IsVisible = false;
 
                 var countofcharacters = e.NewTextValue.Length;
 
@@ -814,7 +830,16 @@ public partial class AddMedication : ContentPage
                     Medicationslistview.IsVisible = true;
 
                     MedListLoading.IsVisible = false;
-                    MedListLoadlbl.IsVisible = false;
+
+                    if(filteredmeds.Count() == 0)
+                    {
+                        NoResultslbl.IsVisible = true; 
+                    }
+                    else
+                    {
+                        Medicationslistview.IsVisible = true;
+                        NoResultslbl.IsVisible = false; 
+                    }
                     // Medicationslistview.HeightRequest = filteredmeds.Count * 50;
                 }
          
@@ -1862,7 +1887,15 @@ public partial class AddMedication : ContentPage
                     {
                         secondstack.IsVisible = false;
                         thirdstack.IsVisible = true;
-                        topprogress.Progress = 50.01;
+                            if(PendingMed == true)
+                            {
+                                topprogress.Progress = 40;
+                            }
+                            else
+                            {
+                                topprogress.Progress = 50.01;
+                            }
+
                     }
 
                     if(newusermedication.status == "Pending")
@@ -1883,7 +1916,16 @@ public partial class AddMedication : ContentPage
 
                     thirdstack.IsVisible = false;
                     fourthstack.IsVisible = true;
-                    topprogress.Progress = 66.68;
+
+                        if (PendingMed == true)
+                        {
+                            topprogress.Progress = 60;
+                        }
+                        else
+                        {
+                            topprogress.Progress = 66.68;
+                        }
+                    
                     medfreqlistview.IsVisible = true;
 
                 }
@@ -2074,7 +2116,15 @@ public partial class AddMedication : ContentPage
                             return;
                         }
                     }
-                    topprogress.Progress = 83.35;
+                    if(PendingMed == true)
+                        {
+                            topprogress.Progress = 80;
+                        }
+                        else
+                        {
+                            topprogress.Progress = 83.35;
+                        }
+                    
                     fourthstack.IsVisible = false;
                     detailsstack.IsVisible = true;
 
@@ -3568,13 +3618,27 @@ public partial class AddMedication : ContentPage
         try
         {
             var item = e.DataItem as string;
-
-
-            newusermedication.formulation = item;
-
-            if(IsEdit)
+            if(newusermedication.formulation == item)
             {
-                SelectedMed.formulation = item;
+                //Able to unselect Optional Item 
+                newusermedication.formulation = null; 
+            }
+            else if(SelectedMed.formulation == item)
+            {
+                //Able to unselect Optional Item 
+                SelectedMed.formulation = null;
+            }
+            else
+            {
+               
+                if (IsEdit)
+                {
+                    SelectedMed.formulation = item;
+                }
+                else
+                {
+                    newusermedication.formulation = item;
+                }
             }
         }
         catch (Exception Ex)
@@ -3648,25 +3712,54 @@ public partial class AddMedication : ContentPage
                     detailsstack.IsVisible = true;
                     backbtn.Text = "Back";
                     nextbtn.IsVisible = true;
-                    topprogress.Progress = 83.35;
+                    if(PendingMed == true)
+                    {
+                        topprogress.Progress = 80;
+                    }
+                    else
+                    {
+                        topprogress.Progress = 83.35;
+                    }
+                    
                 }
                 else if (detailsstack.IsVisible == true)
                 {
                     detailsstack.IsVisible = false;
                     fourthstack.IsVisible = true;
-                    topprogress.Progress = 66.68;
+                    if (PendingMed == true)
+                    {
+                        topprogress.Progress = 60;
+                    }
+                    else
+                    {
+                        topprogress.Progress = 66.68;
+                    }
                 }
                 else if (fourthstack.IsVisible == true)
                 {
                     fourthstack.IsVisible = false;
                     thirdstack.IsVisible = true;
-                    topprogress.Progress = 50.01;
+                    if (PendingMed == true)
+                    {
+                        topprogress.Progress = 40;
+                    }
+                    else
+                    {
+                        topprogress.Progress = 50.01;
+                    }
                 }
                 else if (thirdstack.IsVisible == true)
                 {
                     thirdstack.IsVisible = false;
                     secondstack.IsVisible = true;
-                    topprogress.Progress = 33.34;
+                    if (PendingMed == true)
+                    {
+                        topprogress.Progress = 20;
+                    }
+                    else
+                    {
+                        topprogress.Progress = 33.34;
+                    }
 
                     if(newusermedication.status == "Pending")
                     {
@@ -3678,6 +3771,7 @@ public partial class AddMedication : ContentPage
                     secondstack.IsVisible = false;
                     firststack.IsVisible = true;
                     backbtn.Text = "Cancel";
+
                     topprogress.Progress = 16.67;
 
                 }

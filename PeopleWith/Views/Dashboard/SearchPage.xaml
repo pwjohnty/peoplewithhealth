@@ -46,7 +46,7 @@
 
 
                 <StackLayout HorizontalOptions="Center" IsVisible="False" x:Name="loadingstack" VerticalOptions="CenterAndExpand">
-                    <ActivityIndicator IsRunning="True" Color="#031926" HorizontalOptions="Center" VerticalOptions="Start" />
+                    <ActivityIndicator IsRunning="True" Color="Teal" HorizontalOptions="Center" VerticalOptions="Start" />
                     <Label Text="Loading Medications..." TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="Center" Margin="0,5,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" />
 
                 </StackLayout>

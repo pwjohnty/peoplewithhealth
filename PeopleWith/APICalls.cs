@@ -50,12 +50,12 @@ namespace PeopleWith
 
         //Medications 
         public const string usermedications = "https://pwdevapi.peoplewith.com/api/usermedication";
-        public const string GetMedications = "https://pwdevapi.peoplewith.com/api/medication?$select=medicationid,title";
+        public const string GetMedications = "https://pwdevapi.peoplewith.com/api/medication?$select=medicationid,title,status";
 
         //Supplements
         public const string usersupplements = "https://pwdevapi.peoplewith.com/api/usersupplement";
         public const string InsertUserSupplements = "https://pwdevapi.peoplewith.com/api/usersupplement";
-        public const string GetSupplements = "https://pwdevapi.peoplewith.com/api/supplement?$select=supplementid,title";
+        public const string GetSupplements = "https://pwdevapi.peoplewith.com/api/supplement?$select=supplementid,title,status";
 
         //User Allergies  
         public const string UserAllergies = "https://pwdevapi.peoplewith.com/api/userallergy";

@@ -1,6 +1,7 @@
 using Mopups.Services;
 using System.Collections.ObjectModel;
 using System.Text;
+using Plugin.LocalNotification;
 
 namespace PeopleWith;
 
@@ -10,7 +11,7 @@ public partial class ProfileSection : ContentPage
     public List<user> SettingsList = new List<user>();
     public List<user> PrivacyDetailsList = new List<user>();
     public ObservableCollection<user> UserData = new ObservableCollection<user>(); 
-    user AllUserData = new user(); 
+    user AllUserData = new user();
     string one;
     string two;
     //Connectivity Changed 
@@ -269,9 +270,20 @@ public partial class ProfileSection : ContentPage
             }
             else if(DeviceInfo.Current.Platform == DevicePlatform.iOS)
             {
-                var notificationService = DependencyService.Get<INotificationService>();
-                bool notificationsEnabled = await notificationService.CheckRequestNotificationPermissionAsync();
-                Notification.SettingsItem = notificationsEnabled ? "Enabled" : "Disabled";
+                //var notificationService = DependencyService.Get<INotificationService>();
+                //bool notificationsEnabled = await notificationService.CheckRequestNotificationPermissionAsync();
+                //Notification.SettingsItem = notificationsEnabled ? "Enabled" : "Disabled";
+
+                var check = await LocalNotificationCenter.Current.AreNotificationsEnabled();
+
+                if (!check)
+                {
+                    Notification.SettingsItem = "Disabled";
+                }
+                else
+                {
+                    Notification.SettingsItem = "Enabled";
+                }
 
                 //if (notificationsEnabled)
                 //{

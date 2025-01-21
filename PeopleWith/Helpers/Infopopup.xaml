@@ -3,8 +3,8 @@
                   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                   xmlns:Animations="clr-namespace:Mopups.Animations;assembly=Mopups"
                   xmlns:Mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
-                  BackgroundInputTransparent="True" 
-                  CloseWhenBackgroundIsClicked="False" BackgroundColor="LightGray"
+                  BackgroundInputTransparent="False" 
+                  CloseWhenBackgroundIsClicked="True" BackgroundColor="LightGray"
                   x:Class="PeopleWith.Infopopup">
     <Mopups:PopupPage.Animation>
         <Animations:ScaleAnimation

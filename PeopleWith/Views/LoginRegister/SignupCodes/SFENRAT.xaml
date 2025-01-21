@@ -530,7 +530,18 @@ BorderColor="LightGray">
                             </syncfusion:SfListView.SelectedItemTemplate>
                         </syncfusion:SfListView>
 
-                        <ActivityIndicator x:Name="SympAInd" IsVisible="False" IsRunning="True" Grid.Row="0" Margin="0,20,0,0" Color="#BFDBF7"  HorizontalOptions="Center" VerticalOptions="Center" />
+                        <Label x:Name="NoSymResultslbl" Text="No results matching your search" Margin="0,60,0,0" Grid.Row="0" IsVisible="False" HorizontalOptions="Center" VerticalOptions="Start" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskBold" />
+
+
+                        <Grid x:Name="SympAInd" Grid.Row="0" Margin="0,40,0,0"  IsVisible="False">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <ActivityIndicator Grid.Row="0"  HorizontalOptions="Center" VerticalOptions="Start"  IsRunning="True" Color="Orange"  />
+                            <Label Grid.Row="1" Text="Loading Medications Results..."  TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="Center" Margin="0,5,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" />
+                        </Grid>
+
 
 
 
@@ -697,7 +708,7 @@ Text="Other Medications"
  HorizontalOptions="Start" />
 
                     <Label
-Text="Please search for other medications below, Tap to Add and Remove a Medication."
+Text="Search for medications below by entering any three letters of the medication name. Tap to add or remove a medication."
 TextColor="#031926"
 FontFamily="HankenGroteskRegular"
 FontAttributes="None"
@@ -795,9 +806,17 @@ BorderColor="LightGray">
                             </syncfusion:SfListView.SelectedItemTemplate>
                         </syncfusion:SfListView>
 
-                        <ActivityIndicator x:Name="MedAInd" IsRunning="True" IsVisible="False" Grid.Row="0" Margin="0,20,0,0" Color="#BFDBF7"  HorizontalOptions="Center" VerticalOptions="Center" />
+                        <Label x:Name="NoResultslbl" Text="No results matching your search" Margin="0,60,0,0" Grid.Row="0" IsVisible="False" HorizontalOptions="Center" VerticalOptions="Start" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskBold" />
 
 
+                        <Grid x:Name="MedAInd" Grid.Row="0" Margin="0,40,0,0"  IsVisible="False">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <ActivityIndicator Grid.Row="0"  HorizontalOptions="Center" VerticalOptions="Start"  IsRunning="True" Color="Teal"  />
+                            <Label Grid.Row="1" Text="Loading Medications Results..."  TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="Center" Margin="0,5,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" />
+                        </Grid>
 
 
                     </Grid>

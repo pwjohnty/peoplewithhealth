@@ -414,20 +414,23 @@ public partial class SingleDiagnosis : ContentPage
                     int currentYear = DateTime.Now.Year;
                     if (date.Year >= 1900 && date.Year <= currentYear)
                     {
-                        DateEntry.TextColor = Color.FromArgb("#031926"); // Valid date
-                        AddBtn.IsEnabled = true;
-                        validdob = true;
+                        if (date.Date <= DateTime.Now.Date)
+                        {
+                            DateEntry.TextColor = Color.FromArgb("#031926"); // Valid date
+                            validdob = true;
+                        }
+                        else
+                        {
+                            DateEntry.TextColor = Colors.Red; // Invalid date range
+                            validdob = false;
+                        }
+
                     }
                     else
                     {
-                        DateEntry.TextColor = Colors.Red; // Invalid date range
+                        DateEntry.TextColor = Colors.Red; // Invalid date
                         validdob = false;
                     }
-                }
-                else
-                {
-                    DateEntry.TextColor = Colors.Red; // Invalid date
-                    validdob = false;
                 }
             }
             else

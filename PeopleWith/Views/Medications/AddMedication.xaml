@@ -68,7 +68,7 @@
 
 
                 <StackLayout HorizontalOptions="Center" IsVisible="False" x:Name="loadingstack" VerticalOptions="CenterAndExpand">
-                    <ActivityIndicator IsRunning="True" Color="#031926" HorizontalOptions="Center" VerticalOptions="Start" />
+                    <ActivityIndicator IsRunning="True" Color="Teal" HorizontalOptions="Center" VerticalOptions="Start" />
                     <Label Text="Loading Medications..." TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="Center" Margin="0,5,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" />
 
                 </StackLayout>
@@ -76,7 +76,7 @@
                 <StackLayout x:Name="firststack" IsVisible="False">
                     <Label Text="Add Medication" FontFamily="HankenGroteskBold" FontSize="26"  Margin="20,20,0,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" />
 
-                    <Label Text="To add a Medication type into the search bar below, then Select the Medication from the list below."  Margin="20,5,20,0" FontFamily="HankenGroteskRegular" FontSize="12"  HorizontalOptions="Center" VerticalOptions="Center" TextColor="Gray" />
+                    <Label Text="Search for medications below by entering any three letters of the medication name. Tap to add or remove a medication."  Margin="20,5,20,0" FontFamily="HankenGroteskRegular" FontSize="12"  HorizontalOptions="Center" VerticalOptions="Center" TextColor="Gray" />
 
 
                     <Grid Margin="20,10,20,0" x:Name="MainGrid">
@@ -107,14 +107,13 @@
                         </Frame>
 
 
-
                         <ActivityIndicator x:Name="medsloading" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" HorizontalOptions="Center" VerticalOptions="Start"  IsVisible="False" IsRunning="True" Color="Teal" />
 
                         <StackLayout x:Name="ListViewStack" Margin="0,20,0,0" Grid.Row="3" IsVisible="True" Grid.Column="0" Grid.RowSpan="2">
-                            <Label x:Name="Results" Margin="0,0,20,0" Grid.Row="3" Grid.Column="0"  HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskBold" />
+                            <Label x:Name="Results" Margin="0,0,20,0" Grid.Row="3" Grid.Column="0" IsVisible="False"  HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskBold" />
 
 
-                            <syncfusion:SfListView x:Name="Medicationslistview" SelectionMode="Single" ItemTapped="Medicationslistview_ItemTapped" IsVisible="False" AutoFitMode="Height" BackgroundColor="Transparent"  Grid.Row="4" Grid.Column="0" Padding="5"  Margin="0,0,0,50" ScrollBarVisibility="Never">
+                            <syncfusion:SfListView x:Name="Medicationslistview" SelectionMode="Single"  ItemTapped="Medicationslistview_ItemTapped" IsVisible="False" AutoFitMode="Height" BackgroundColor="Transparent"  Grid.Row="4" Grid.Column="0" Padding="5"  Margin="0,0,0,50" ScrollBarVisibility="Never">
                                 <syncfusion:SfListView.ItemTemplate>
                                     <DataTemplate>
                                         <ViewCell>
@@ -171,10 +170,20 @@
                                 </syncfusion:SfListView.SelectedItemTemplate>
                             </syncfusion:SfListView>
                         </StackLayout>
+
+                        <Label x:Name="NoResultslbl" Text="No results matching your search" Margin="0,60,0,0" Grid.Row="2" IsVisible="False" HorizontalOptions="Center" VerticalOptions="Start" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskBold" />
+
+                        <Grid x:Name="MedListLoading" Grid.Row="2" Margin="0,40,0,0"  IsVisible="False">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <ActivityIndicator Grid.Row="0"  HorizontalOptions="Center" VerticalOptions="Start"  IsRunning="True" Color="Teal"  />
+                            <Label Grid.Row="1" Text="Loading Medications Results..."  TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="Center" Margin="0,5,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" />
+                        </Grid>
+
                     </Grid>
 
-                    <ActivityIndicator x:Name="MedListLoading" Margin="0,0,0,0"  HorizontalOptions="Center" VerticalOptions="Start"  IsVisible="False" IsRunning="True" Color="Teal" />
-                    <Label x:Name="MedListLoadlbl" Text="Loading Medications Results..." TextColor="#031926" IsVisible="False" FontFamily="HankenGroteskRegular" HorizontalOptions="Center" Margin="0,5,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" />
 
 
                 </StackLayout>
@@ -250,7 +259,7 @@ BorderColor="Transparent">
                           Margin="0,10,10,0"
                                                          ItemTapped="medformulationslistview_ItemTapped" 
                                                 BackgroundColor="Transparent"
-                                        SelectionMode="Single"
+                                        SelectionMode="SingleDeselect"
                                            VerticalOptions="CenterAndExpand"
                                  
                                Orientation="Vertical"

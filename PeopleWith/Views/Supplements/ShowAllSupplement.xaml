@@ -89,6 +89,44 @@ VerticalOptions="Center" />
 
                 </Grid>
 
+                <syncfusion:SfListView x:Name="FilterTimeLine" Padding="0" IsVisible="False" IsEnabled="True" ItemTapped="FilterTimeLine_ItemTapped" ScrollBarVisibility="Never" HeightRequest="40"  Margin="0,10,0,0" AutoFitMode="Height" Orientation="Horizontal" BackgroundColor="Transparent" VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" SelectionMode="Single">
+                    <syncfusion:SfListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Frame CornerRadius="10" Grid.Row="0" Grid.Column="0"  Margin="5" Padding="2" BorderColor="#e5f9f4" BackgroundColor="Transparent" InputTransparent="True" HasShadow="False">
+                                        <Label Text="{Binding DisplayText}" HorizontalTextAlignment="Center" FontFamily="HankenGroteskRegular" Padding="5" FontSize="12" FontAttributes="Bold" TextColor="Gray" />
+                                    </Frame>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.ItemTemplate>
+                    <syncfusion:SfListView.SelectedItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Frame CornerRadius="10" Grid.Row="0" Grid.Column="0" Margin="5" Padding="2" BackgroundColor="#e5f9f4" HasShadow="False">
+                                        <Label Text="{Binding DisplayText}" HorizontalTextAlignment="Center" FontFamily="HankenGroteskRegular" Padding="5" FontSize="12" FontAttributes="Bold" TextColor="Teal" />
+                                    </Frame>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.SelectedItemTemplate>
+                </syncfusion:SfListView>
+
+
                 <syncfusion:SfListView x:Name="UserMedicationSchedule" ScrollBarVisibility="Never"  AllowSwiping="False" Margin="0,10,5,0" SelectionBackground="Transparent" SelectionMode="None" IsEnabled="False" AutoFitMode="Height" >
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>

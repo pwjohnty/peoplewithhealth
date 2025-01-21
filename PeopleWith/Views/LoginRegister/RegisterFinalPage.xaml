@@ -339,7 +339,7 @@ HorizontalOptions="Center" />
 
 
 
-                            <Border StrokeShape="RoundRectangle 10" IsVisible="{OnPlatform iOS=true, Android=false}" Grid.Row="1" Stroke="#BFDBF7" HeightRequest="200" Padding="2"  Margin="0,0,0,20">
+                            <Border x:Name="IOSSign" StrokeShape="RoundRectangle 10" IsVisible="{OnPlatform iOS=true, Android=false}" Grid.Row="1" Stroke="#BFDBF7" HeightRequest="200" Padding="2"  Margin="0,0,0,20">
                             <!--<SignaturePad:FreakySignaturePadView
                             x:Name="signpad" Grid.Row="1" 
                             BackgroundColor="White" StrokeCompleted="signpad_StrokeCompleted"
@@ -358,7 +358,7 @@ LineWidth="2" />
                                 HeightRequest="200" />-->
                             </Border>
 
-                            <Border StrokeShape="RoundRectangle 10" IsVisible="{OnPlatform iOS=false, Android=true}" Grid.Row="1" Stroke="#BFDBF7" HeightRequest="200" Padding="2"  Margin="0,0,0,20">
+                            <Border x:Name="AndroidSign" StrokeShape="RoundRectangle 10" IsVisible="{OnPlatform iOS=false, Android=true}" Grid.Row="1" Stroke="#BFDBF7" HeightRequest="200" Padding="2"  Margin="0,0,0,20">
              
 
                                 <signPad:SfSignaturePad 
