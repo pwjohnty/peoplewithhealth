@@ -11,14 +11,50 @@ namespace PeopleWith
     {
         public async Task RequestNotificationPermissionAsync()
         {
-            var tcs = new TaskCompletionSource<bool>();
+            //var tcs = new TaskCompletionSource<bool>();
 
-            UNUserNotificationCenter.Current.RequestAuthorization(UNAuthorizationOptions.Alert | UNAuthorizationOptions.Sound | UNAuthorizationOptions.Badge, (approved, error) =>
+            //UNUserNotificationCenter.Current.RequestAuthorization(UNAuthorizationOptions.Alert | UNAuthorizationOptions.Sound | UNAuthorizationOptions.Badge, (approved, error) =>
+            //{
+            //    tcs.SetResult(approved);
+            //});
+
+            //await tcs.Task;
+            try
             {
-                tcs.SetResult(approved);
-            });
+                var tcs = new TaskCompletionSource<bool>();
 
-            await tcs.Task;
+                UNUserNotificationCenter.Current.RequestAuthorization(
+                    UNAuthorizationOptions.Alert | UNAuthorizationOptions.Sound | UNAuthorizationOptions.Badge,
+                    (approved, error) =>
+                    {
+                        if (error != null)
+                        {
+                            tcs.SetException(new Exception(error.LocalizedDescription));
+                        }
+                        else
+                        {
+                            tcs.SetResult(approved);
+                        }
+                    });
+
+                bool isApproved = await tcs.Task;
+
+                // Optional: Notify the user of the approval status
+                await Application.Current.MainPage.DisplayAlert(
+                    "Notification Permission",
+                    isApproved ? "Permission granted!" : "Permission denied.",
+                    "OK"
+                );
+            }
+            catch (Exception ex)
+            {
+                // Display the error message in an alert
+                await Application.Current.MainPage.DisplayAlert(
+                    "Error",
+                    $"An error occurred while requesting notification permissions: {ex.Message} + {ex.StackTrace}",
+                    "OK"
+                );
+            }
         }
 
         public async Task<bool> CheckRequestNotificationPermissionAsync()
