@@ -57,6 +57,8 @@ namespace PeopleWith
         [System.Text.Json.Serialization.JsonIgnore]
         public bool pintoggled { get; set; }
 
+        public string postcode { get; set; }
+
     }
 
     public class APIUserResponse

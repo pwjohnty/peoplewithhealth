@@ -20,6 +20,7 @@ public partial class RegisterFinalPage : ContentPage
     double progressamount;
     public ObservableCollection<userresponse> userresponsepassed;
     public ObservableCollection<usermeasurement> usermeasurementpassed;
+    public ObservableCollection<userdiagnosis> userdiagnosispassed;
     public consent additonalconsent = new consent();
     ObservableCollection<usermedication> medicationstoadd = new ObservableCollection<usermedication>();
     ObservableCollection<usersymptom> symptomstoadd = new ObservableCollection<usersymptom>();
@@ -171,6 +172,50 @@ public partial class RegisterFinalPage : ContentPage
             symptomstoadd = usersymptompassed;
             medicationstoadd = usermedicationspassed;
             userdiag = userdiagpassed;
+
+            if (additonalcon != null)
+            {
+                Additonalconsentinfostack.IsVisible = true;
+                additonalconsent = additonalcon;
+
+                actitle.Text = additonalconsent.title;
+                acsubtitle.Text = additonalconsent.subtitle;
+                accontent.Text = additonalconsent.content;
+            }
+
+
+
+            topprogress.SetProgress(progress, 0);
+
+
+            //find out the amount left - only 2 pages left after this amount
+
+            progressamount = (100 - progress) / 2;
+
+            faceidstack.IsVisible = true;
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    public RegisterFinalPage(user userpass, double progress, ObservableCollection<userresponse> userresponsep, consent additonalcon, ObservableCollection<usersymptom> usersymptompassed, ObservableCollection<usermedication> usermedicationspassed, ObservableCollection<userdiagnosis> userdiagpassed, ObservableCollection<usermeasurement> usermeasurementspass)
+    {
+        try
+        {
+            InitializeComponent();
+
+            //user with SFEAT code
+
+            newuser = userpass;
+            userresponsepassed = userresponsep;
+
+            symptomstoadd = usersymptompassed;
+            medicationstoadd = usermedicationspassed;
+            //userdiag = userdiagpassed;
+            usermeasurementpassed = usermeasurementspass;
+            userdiagnosispassed = userdiagpassed;
 
             if (additonalcon != null)
             {
@@ -626,7 +671,23 @@ public partial class RegisterFinalPage : ContentPage
                         }
                     }
 
-                    if(usermeasurementpassed != null)
+                    if (userdiagnosispassed != null || userdiagnosispassed.Count != 0)
+                    {
+                        foreach (var item in userdiagnosispassed)
+                        {
+                            //add the user diagnosis
+                            var url = APICalls.InsertUserDiagnosis;
+                            string jsonn = System.Text.Json.JsonSerializer.Serialize<userdiagnosis>(item, serializerOptions);
+                            StringContent contenttt = new StringContent(jsonn, Encoding.UTF8, "application/json");
+                            response = await client.PostAsync(url, contenttt);
+
+                            if (response.IsSuccessStatusCode)
+                            {
+                            }
+                        }
+                    }
+
+                    if (usermeasurementpassed != null)
                     {
                         //add the user measurement
                         foreach (var item in usermeasurementpassed)

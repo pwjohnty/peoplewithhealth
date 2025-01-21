@@ -655,7 +655,7 @@ public partial class RegisterPage : ContentPage
                         });
 
                         //has medications and symptoms to get
-                        if(signupcodeinfo.referral == "SFEAT")
+                        if(signupcodeinfo.referral == "SFEAT" || signupcodeinfo.referral == "SFEWH")
                         {
                             getmedandsymptoms();
                         }
@@ -786,6 +786,10 @@ public partial class RegisterPage : ContentPage
                        
                        // UpdateProgress();
                         await Navigation.PushAsync(new SFENRAT(newuser, allsymptomlist, allmedicationlist, signupcodeinfo, topprogress.Progress, regquestionlist, reganswerlist, additionalconsent), false);
+                    }
+                    else if(signupcodeinfo.referral == "SFEWH")
+                    {
+                        await Navigation.PushAsync(new WH(newuser, allsymptomlist, allmedicationlist, signupcodeinfo, topprogress.Progress, regquestionlist, reganswerlist, additionalconsent), false);
                     }
 
                 }

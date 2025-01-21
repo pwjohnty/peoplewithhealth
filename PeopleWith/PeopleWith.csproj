@@ -40,13 +40,13 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios'">
-	  <CodesignKey>Apple Development: Created via API (QB732BRMZC)</CodesignKey>
+	  <CodesignKey>Apple Development: Created via API (9AF7WV24ZX)</CodesignKey>
 	  <CodesignProvision>VS: com.peoplewith.peoplewith Development</CodesignProvision>
 	  <ProvisioningType>manual</ProvisioningType>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
-	  <MtouchLink>None</MtouchLink>
+		<MtouchLink>None</MtouchLink>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -55,8 +55,8 @@
 		<MauiIcon Include="Resources\AppIcon\pwhealthicon.svg" Color="#FFFFFF" />
 
 		<!-- Splash Screen -->
-		<!--<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />-->
-		<MauiSplashScreen Include="Resources\Splash\splashpw.svg" BaseSize="128,128" Color="#FFFFFF" />
+		<!--<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" Resize="False" BaseSize="128,128" />-->
+		<MauiSplashScreen Include="Resources\Splash\splashpw.svg" Color="#FFFFFF" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -381,6 +381,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\LoginRegister\SignupCodes\SFEOB.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\LoginRegister\SignupCodes\WH.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Measurements\AddMeasurement.xaml">

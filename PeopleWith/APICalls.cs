@@ -89,6 +89,8 @@ namespace PeopleWith
 
         public const string signupcode = "https://pwdevapi.peoplewith.com/api/signupcode";
 
+        public const string postcode = "https://pwdevapi.peoplewith.com/api/postcode";
+
         //Get User Details 
         public async Task<ObservableCollection<user>> GetuserDetails()
         {
@@ -1630,7 +1632,7 @@ namespace PeopleWith
                     string contentconsent = await response.Content.ReadAsStringAsync();
                     var userResponseconsent = JsonConvert.DeserializeObject<ApiDiagnosis>(contentconsent);
                     var consent = userResponseconsent.Value;
-                    GetInfo.Diagnosisinformation = consent[0].Diagnosisinformation;
+                    GetInfo.Title = consent[0].Title;
                     return GetInfo;
 
                 }
@@ -1644,6 +1646,8 @@ namespace PeopleWith
                 return null;
             }
         }
+
+   
 
         //Post UserDiagnosis Data  
         public async Task<ObservableCollection<userdiagnosis>> PostUserDiagnosisAsync(ObservableCollection<userdiagnosis> UserDiagnosisPassed)
@@ -3249,6 +3253,24 @@ namespace PeopleWith
             catch (Exception ex)
             {
                 return;
+            }
+        }
+
+        public async Task<ObservableCollection<postcode>> GetAsyncPostcode()
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                var URl = APICalls.postcode;
+                HttpResponseMessage response = await client.GetAsync(URl);
+                string data = await response.Content.ReadAsStringAsync();
+                var userResponse = JsonConvert.DeserializeObject<ApiResponsePostcode>(data);
+                ObservableCollection<postcode> users = userResponse.Value;
+                return new ObservableCollection<postcode>(users.Take(Range.All));
+            }
+            catch (Exception ex)
+            {
+                return new ObservableCollection<postcode>();
             }
         }
 
