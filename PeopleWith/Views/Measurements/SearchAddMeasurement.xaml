@@ -52,7 +52,15 @@
                         </ScrollView>
                     </StackLayout>-->
 
-                    <ActivityIndicator x:Name="Measloading" Margin="0,40,0,0"  Grid.Row="3" Grid.Column="0" Grid.RowSpan="2" HorizontalOptions="Center" VerticalOptions="Start"  IsVisible="False" IsRunning="True" Color="#BFDBF7" />
+                    <Grid x:Name="Measloading" Grid.Row="3" Margin="0,40,0,0"  IsVisible="False">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <ActivityIndicator Grid.Row="0"  HorizontalOptions="Center" VerticalOptions="Start"  IsRunning="True" Color="#031926"  />
+                        <Label Grid.Row="1" Text="Loading Measurements Results..."  TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="Center" Margin="0,5,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" />
+                    </Grid>
+
 
                     <StackLayout x:Name="ListViewStack" Margin="0,20,0,0" Grid.Row="3" IsVisible="True" Grid.Column="0" Grid.RowSpan="2">
                         <Label x:Name="Results" Margin="0,0,20,0" Grid.Row="3" Grid.Column="0"  HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskBold" />
@@ -84,7 +92,7 @@
                     </StackLayout>
                 </Grid>
 
-                <Label x:Name="NoResultslbl" Text="No Results to matching your search" Margin="0,40,0,0" Grid.Row="4" Grid.Column="0" IsVisible="False" HorizontalOptions="Center" VerticalOptions="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskBold" />
+                <Label x:Name="NoResultslbl" Text="No results matching your search" Margin="0,40,0,0" Grid.Row="4" Grid.Column="0" IsVisible="False" HorizontalOptions="Center" VerticalOptions="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskBold" />
 
 
             </StackLayout>
@@ -92,7 +100,7 @@
        
             <StackLayout HorizontalOptions="Center" IsVisible="False" x:Name="loadingstack" VerticalOptions="CenterAndExpand">
                 <ActivityIndicator IsRunning="True" Color="#031926" HorizontalOptions="Center" VerticalOptions="Start" />
-                <Label Text="Loading Measurements..." TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="Center" Margin="0,5,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" />
+                <Label Text="Loading Measurements..." TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="Center" Margin="0,5,0,0" VerticalOptions="Start" VerticalTextAlignment="Center" />
 
             </StackLayout>
 

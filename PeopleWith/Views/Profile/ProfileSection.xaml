@@ -54,7 +54,7 @@
             <!-- Settings-->
             <Label Text="Settings"  HorizontalOptions="Start" Margin="20,10,0,0" FontFamily="HankenGroteskBold" FontSize="26" TextColor="#031926"/>
 
-            <Frame HasShadow="false" Margin="20,10,20,0" Padding="5,5,5,-2" BorderColor="#E8E8E8"  BackgroundColor="Transparent" >
+            <Frame HasShadow="false" Margin="20,10,20,0" Padding="5,5,5,-2" HeightRequest="118" BorderColor="#E8E8E8"  BackgroundColor="Transparent" >
                 <syncfusion:SfListView x:Name="Settings" SelectionBackground="Transparent" ItemTapped="Settings_ItemTapped" AutoFitMode="Height" >
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
@@ -70,7 +70,7 @@
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <Label HorizontalOptions="StartAndExpand" Text="{Binding SettingsTitle}" FontFamily="HankenGroteskRegular" HeightRequest="20" FontSize="12" VerticalOptions="Center" Grid.Row="0" Grid.Column="0" Margin="10,10,0,0" TextColor="Gray" />
+                                        <Label FontAutoScalingEnabled="False" HorizontalOptions="StartAndExpand" Text="{Binding SettingsTitle}" FontFamily="HankenGroteskRegular" HeightRequest="20" FontSize="12" VerticalOptions="Center" Grid.Row="0" Grid.Column="0" Margin="10,10,0,0" TextColor="Gray" />
                                         <Label HorizontalOptions="StartAndExpand" Text="{Binding SettingsItem}" FontFamily="HankenGroteskBold" HeightRequest="25" VerticalOptions="Center" FontSize="14" Grid.Row="1" Grid.Column="0" Margin="10,0,0,0" FontAttributes="Bold" TextColor="#031926" />
                                         <Image Source="backbutton.png" Rotation="180" Grid.Row="0" HeightRequest="10" WidthRequest="10" Grid.RowSpan="2" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="End" Margin="0,10,10,0" />
 

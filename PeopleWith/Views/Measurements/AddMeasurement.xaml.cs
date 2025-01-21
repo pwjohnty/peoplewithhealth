@@ -13,7 +13,7 @@ public partial class AddMeasurement : ContentPage
     string measurementnamestring;
     string measurementid;
     string Stonesinput;
-    string Poundsinput; 
+    string Poundsinput;
     APICalls aPICalls = new APICalls();
     bool validinput;
     int HourInput = 0;
@@ -38,7 +38,7 @@ public partial class AddMeasurement : ContentPage
     }
 
     public AddMeasurement()
-	{
+    {
         try
         {
             InitializeComponent();
@@ -83,7 +83,7 @@ public partial class AddMeasurement : ContentPage
                 inputvalue = joinstring;
 
             }
-            else if(measurementnamestring == "Sleep Duration")
+            else if (measurementnamestring == "Sleep Duration")
             {
                 //Set Hours/minutes Btn to pre-Selected 
 
@@ -95,7 +95,7 @@ public partial class AddMeasurement : ContentPage
 
                 unitentryframe.IsVisible = false;
                 SleepDurationFrame.IsVisible = true;
-                SleepQualFrame.IsVisible = true; 
+                SleepQualFrame.IsVisible = true;
 
                 //Sleep Quality List 
 
@@ -104,7 +104,7 @@ public partial class AddMeasurement : ContentPage
                 SleepQual.Add("Good");
                 SleepQual.Add("Fair");
                 SleepQual.Add("Poor");
-                SleepQualitySelect.ItemsSource = SleepQual; 
+                SleepQualitySelect.ItemsSource = SleepQual;
 
             }
             else
@@ -197,21 +197,21 @@ public partial class AddMeasurement : ContentPage
             var item = e.DataItem as string;
             inputvalue = item;
 
-            if(inputvalue == "Stones/Pounds")
+            if (inputvalue == "Stones/Pounds")
             {
                 unitentryframe.IsVisible = false;
                 StonesPoundsframe.IsVisible = true;
-                unitentry.IsEnabled = false; 
+                unitentry.IsEnabled = false;
                 stlbl.Text = "St";
-                lbslbl.Text = "lbs"; 
+                lbslbl.Text = "lbs";
             }
             else if (inputvalue == "Systolic/Diastolic")
             {
                 //Do Nothing 
             }
-            else if(inputvalue == "Hours/Minutes")
+            else if (inputvalue == "Hours/Minutes")
             {
-               //Do Nothing 
+                //Do Nothing 
             }
             else
             {
@@ -222,7 +222,7 @@ public partial class AddMeasurement : ContentPage
             }
 
             Stonesentry.Text = string.Empty;
-            Poundsentry.Text = string.Empty; 
+            Poundsentry.Text = string.Empty;
             unitentry.Text = string.Empty;
 
             SubmitBtn.BackgroundColor = Colors.Gray;
@@ -234,8 +234,6 @@ public partial class AddMeasurement : ContentPage
             NotasyncMethod(Ex);
         }
     }
-
-
 
     private void Button_Clicked(object sender, EventArgs e)
     {
@@ -255,6 +253,12 @@ public partial class AddMeasurement : ContentPage
         {
             if (e.NewTextValue.Length > 8)
             {
+                return;
+            }
+            if (e.NewTextValue.Length == 1 && e.NewTextValue == ".")
+            {
+                validinput = false;
+                unitentry.Text = string.Empty;
                 return;
             }
 
@@ -857,27 +861,73 @@ public partial class AddMeasurement : ContentPage
                             {
                                 var firstnum = valuestring[0].ToString(); // Feet
                                 var secondnum = valuestring[1].ToString(); // Inches
-                                validinput = true;
-                                SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
-                                SubmitBtn.TextColor = Colors.White;
-                            }
-                            else if (valuestring.Length == 3)
-                            {
-                                var firstnum = valuestring[0].ToString(); // Feet
-                                var inchString = valuestring.Substring(1, 2); //Inches
-                                var inches = Convert.ToInt32(inchString);
 
-                                if (inches < 12)
+                                // Convert feet and inches to integers
+                                int feet = Convert.ToInt32(firstnum);
+                                int inches = Convert.ToInt32(secondnum);
+
+                                // Convert feet and inches to total inches
+                                int totalInches = (feet * 12) + inches;
+
+                                if (totalInches < 5)
+                                {
+                                    validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
+
+                                }
+                                else if (totalInches > 108)
+                                {
+                                    validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
+                                }
+                                else
                                 {
                                     validinput = true;
                                     SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
                                     SubmitBtn.TextColor = Colors.White;
                                 }
-                                else
+                            }
+                            else if (valuestring.Length == 3)
+                            {
+                                var firstnum = valuestring[0].ToString(); // Feet
+                                var inchString = valuestring.Substring(1, 2); //Inches
+
+                                // Convert feet and inches to integers
+                                int feet = Convert.ToInt32(firstnum);
+                                int inches = Convert.ToInt32(inchString);
+
+                                //Check For Valid inches 
+                                if (inches < 0 || inches > 11)
                                 {
                                     validinput = false;
                                     SubmitBtn.BackgroundColor = Colors.Gray;
                                     SubmitBtn.TextColor = Colors.LightGray;
+                                    return;
+                                }
+
+                                // Convert feet and inches to total inches
+                                int totalInches = (feet * 12) + inches;
+
+                                if (totalInches < 5)
+                                {
+                                    validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
+
+                                }
+                                else if (totalInches > 108)
+                                {
+                                    validinput = false;
+                                    SubmitBtn.BackgroundColor = Colors.Gray;
+                                    SubmitBtn.TextColor = Colors.LightGray;
+                                }
+                                else
+                                {
+                                    validinput = true;
+                                    SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                                    SubmitBtn.TextColor = Colors.White;
                                 }
                             }
                             else
@@ -2179,7 +2229,6 @@ public partial class AddMeasurement : ContentPage
                         }
                     }
                 }
-
 
                 else if (measurementnamestring == "HbA1c")
                 {
@@ -3674,7 +3723,6 @@ public partial class AddMeasurement : ContentPage
                         }
                     }
                 }
-
                 else if (measurementnamestring == "Rheumatoid Factor Level")
                 {
                     if (inputvalue == "IU/ml")
@@ -3730,9 +3778,6 @@ public partial class AddMeasurement : ContentPage
                         }
                     }
                 }
-
-
-
                 else if (measurementnamestring == "Blood Pressure")
                 {
 
@@ -4763,30 +4808,9 @@ public partial class AddMeasurement : ContentPage
                     }
                     else if (measurementnamestring == "Weight" && inputvalue == "Stones/Pounds")
                     {
-                        if (string.IsNullOrEmpty(Stonesinput) || string.IsNullOrEmpty(Poundsinput))
-                        {
-                            Vibration.Vibrate();
-                            SubmitBtn.IsEnabled = true;
-                            return;
-                        }
 
-                        if (Int32.Parse(Stonesinput) > 100)
-                        {
-                            Vibration.Vibrate();
-                            SubmitBtn.IsEnabled = true;
-                            return;
-                        }
-                        if (Int32.Parse(Poundsinput) > 13)
-                        {
-                            Vibration.Vibrate();
-                            SubmitBtn.IsEnabled = true;
-                            return;
-                        }
-                        else
-                        {
-                            newmeasurment.value = Stonesinput + "." + Poundsinput;
-                            //newmeasurment.value = Stonesinput + "st " + Poundsinput + "lbs";
-                        }
+                        newmeasurment.value = Stonesentry.Text + "." + Poundsentry.Text;
+                        //newmeasurment.value = Stonesinput + "st " + Poundsinput + "lbs";
 
                     }
                     else if (measurementnamestring == "Height" && inputvalue == "Feet/Inches")
@@ -4798,6 +4822,9 @@ public partial class AddMeasurement : ContentPage
 
                         var feet = parts[0];
                         var inch = parts[1];
+
+                        //Max 9' 11" 
+
                         newmeasurment.value = feet + "." + inch;
                     }
                     else if (measurementnamestring == "Sleep Duration")
@@ -4813,7 +4840,7 @@ public partial class AddMeasurement : ContentPage
                         var Time = hours + "." + Mins;
                         newmeasurment.value = Time;
 
-                        if(SleepQualitySelect.SelectedItem != null)
+                        if (SleepQualitySelect.SelectedItem != null)
                         {
                             newmeasurment.inputmethod = SleepQualitySelect.SelectedItem.ToString();
                         }
@@ -4910,172 +4937,144 @@ public partial class AddMeasurement : ContentPage
         }
     }
 
-    private void sysentry_TextChanged(object sender, TextChangedEventArgs e)
+    private async void sysentry_TextChanged(object sender, TextChangedEventArgs e)
     {
         try
         {
-            if (e.NewTextValue.Length > 3)
-            {
-                return;
-            }
-            if (measurementnamestring == "Blood Pressure")
-            {
-                inputvalue = "Systolic/Diastolic";
-             
-                if (e.NewTextValue.Contains("."))
-                {
-                    var countdots = e.NewTextValue.ToCharArray().Count(x => x == '.');
-                    var convertodec = Convert.ToDouble(e.NewTextValue);
-                    if (countdots > 0)
-                    {
-                        validinput = false;
-                        SubmitBtn.BackgroundColor = Colors.Gray;
-                        SubmitBtn.TextColor = Colors.LightGray;
-                    }
-                }
-                else
-                {
-                    var convertoint = Convert.ToInt32(e.NewTextValue);
-                    if (e.NewTextValue.Length >= 1 && e.NewTextValue.Length <= 3)
-                    {
-                        if (convertoint < 40)
-                        {
-                            validinput = false;
-                            SubmitBtn.BackgroundColor = Colors.Gray;
-                            SubmitBtn.TextColor = Colors.LightGray;
-                        }
-                        else if (convertoint > 240)
-                        {
-                            validinput = false;
-                            SubmitBtn.BackgroundColor = Colors.Gray;
-                            SubmitBtn.TextColor = Colors.LightGray;
-                        }
-                        else
-                        {
-                            //bloodpresuresysnum = convertoint.ToString();
-                            if (string.IsNullOrEmpty(diaentry.Text))
-                            {
-                                validinput = false;
-                                SubmitBtn.BackgroundColor = Colors.Gray;
-                                SubmitBtn.TextColor = Colors.LightGray;
-                            }
-                            else
-                            {
-                                var convertdia = Convert.ToInt32(diaentry.Text);
-                                if (convertdia >= 40 && convertdia <= 140)
-                                {
-                                    validinput = true;
-                                    SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
-                                    SubmitBtn.TextColor = Colors.White;
-                                    SubmitBtn.TextColor = Colors.White;
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        validinput = false;
-                        SubmitBtn.BackgroundColor = Colors.Gray;
-                        SubmitBtn.TextColor = Colors.LightGray;
-                    }
-                }
-            }
+            ChcekBloodPressure(sender, e, "Sys");
         }
         catch (Exception Ex)
         {
-            validinput = false;
-            SubmitBtn.BackgroundColor = Colors.Gray;
-            SubmitBtn.TextColor = Colors.LightGray;
             NotasyncMethod(Ex);
         }
     }
 
-    private void diaentry_TextChanged(object sender, TextChangedEventArgs e)
+    private async void diaentry_TextChanged(object sender, TextChangedEventArgs e)
     {
         try
         {
-            if (e.NewTextValue.Length > 3)
-            {
-                return;
-            }
-            if (string.IsNullOrEmpty(e.NewTextValue))
+            ChcekBloodPressure(sender, e, "Diag");
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+   }
+
+    private void ChcekBloodPressure(object sender, TextChangedEventArgs e, string entryType)
+    {
+        try
+        {
+            string inputValue = e.NewTextValue;
+
+            if (string.IsNullOrEmpty(inputValue))
             {
                 validinput = false;
                 SubmitBtn.BackgroundColor = Colors.Gray;
                 SubmitBtn.TextColor = Colors.LightGray;
-              
+                return;
+            }
+
+            if (inputValue.Length > 3)
+            {
+                if (entryType == "Sys")
+                {
+                    sysentry.Text = inputValue.Substring(0, 3);
+                    return; 
+                }
+                else
+                {
+                    diaentry.Text = inputValue.Substring(0, 3);
+                    return;
+                }
+            }
+
+            //Remove '.' Not Needed as there are two Entries
+            if (inputValue.Contains("."))
+            {
+                inputValue = inputValue.Replace(".", "");
+            }
+
+            if (entryType == "Sys")
+            {
+                sysentry.Text = inputValue;
             }
             else
             {
-                if (measurementnamestring == "Blood Pressure")
+                diaentry.Text = inputValue;
+            }
+
+            int inputInt = Convert.ToInt32(inputValue);
+
+            if (entryType == "Sys")
+            {
+                if (inputInt < 40 || inputInt > 240)
                 {
-                    inputvalue = "Systolic/Diastolic";
-                   
-                    if (e.NewTextValue.Contains("."))
+                    validinput = false;
+                    SubmitBtn.BackgroundColor = Colors.Gray;
+                    SubmitBtn.TextColor = Colors.LightGray;
+                    return;
+                }
+
+                if (string.IsNullOrEmpty(diaentry.Text))
+                {
+                    validinput = false;
+                    SubmitBtn.BackgroundColor = Colors.Gray;
+                    SubmitBtn.TextColor = Colors.LightGray;
+                }
+                else
+                {
+                    int poundsValue = Convert.ToInt32(diaentry.Text);
+                    if (poundsValue >= 20 && poundsValue <= 180)
                     {
-                        var countdots = e.NewTextValue.ToCharArray().Count(x => x == '.');
-                        var convertodec = Convert.ToDouble(e.NewTextValue);
-                        if (countdots > 0)
-                        {
-                            validinput = false;
-                            SubmitBtn.BackgroundColor = Colors.Gray;
-                            SubmitBtn.TextColor = Colors.LightGray;
-                        }
+                        validinput = true;
+                        SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                        SubmitBtn.TextColor = Colors.White;
                     }
                     else
                     {
-                        var convertoint = Convert.ToInt32(e.NewTextValue);
-                        if (e.NewTextValue.Length >= 1 && e.NewTextValue.Length <= 3)
-                        {
-                            if (convertoint < 40)
-                            {
-                                validinput = false;
-                                SubmitBtn.BackgroundColor = Colors.Gray;
-                                SubmitBtn.TextColor = Colors.LightGray;
-                            }
-                            else if (convertoint > 140)
-                            {
-                                validinput = false;
-                                SubmitBtn.BackgroundColor = Colors.Gray;
-                                SubmitBtn.TextColor = Colors.LightGray;
-                            }
-                            else
-                            {
-                               // bloodpresuredianum = convertoint.ToString();
-                                if (string.IsNullOrEmpty(sysentry.Text))
-                                {
-                                    validinput = false;
-                                    SubmitBtn.BackgroundColor = Colors.Gray;
-                                    SubmitBtn.TextColor = Colors.LightGray;
-                                }
-                                else
-                                {
-                                    var convertdia = Convert.ToInt32(sysentry.Text);
-                                    if (convertdia >= 40 && convertdia <= 240)
-                                    {
-                                        validinput = true;
-                                        SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
-                                        SubmitBtn.TextColor = Colors.White;
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            validinput = false;
-                            SubmitBtn.BackgroundColor = Colors.Gray;
-                            SubmitBtn.TextColor = Colors.LightGray;
-                        }
+                        validinput = false;
+                        SubmitBtn.BackgroundColor = Colors.Gray;
+                        SubmitBtn.TextColor = Colors.LightGray;
+                    }
+                }
+            }
+            else if (entryType == "Diag")
+            {
+                if (inputInt < 20 || inputInt > 180)
+                {
+                    validinput = false;
+                    SubmitBtn.BackgroundColor = Colors.Gray;
+                    SubmitBtn.TextColor = Colors.LightGray;
+                    return;
+                }
+
+                if (string.IsNullOrEmpty(sysentry.Text))
+                {
+                    validinput = false;
+                    SubmitBtn.BackgroundColor = Colors.Gray;
+                    SubmitBtn.TextColor = Colors.LightGray;
+                }
+                else
+                {
+                    int stonesValue = Convert.ToInt32(sysentry.Text);
+                    if (stonesValue >= 40 && stonesValue <= 240)
+                    {
+                        validinput = true;
+                        SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                        SubmitBtn.TextColor = Colors.White;
+                    }
+                    else
+                    {
+                        validinput = false;
+                        SubmitBtn.BackgroundColor = Colors.Gray;
+                        SubmitBtn.TextColor = Colors.LightGray;
                     }
                 }
             }
         }
         catch (Exception Ex)
         {
-            SubmitBtn.BackgroundColor = Colors.Gray;
-            SubmitBtn.TextColor = Colors.LightGray;
-            //hideallstack.IsVisible = false;
-            //errorstack.IsVisible = true;
             NotasyncMethod(Ex);
         }
     }
@@ -5084,82 +5083,7 @@ public partial class AddMeasurement : ContentPage
     {
         try
         {
-            Stonesinput = e.NewTextValue;
-            if (e.NewTextValue.Length > 3)
-            {
-                return;
-            }
-            if (string.IsNullOrEmpty(e.NewTextValue))
-            {
-                validinput = false;
-                SubmitBtn.BackgroundColor = Colors.Gray;
-                SubmitBtn.TextColor = Colors.LightGray;
-
-            }
-            else
-            {
-                if (measurementnamestring == "Weight")
-                {
-                    inputvalue = "Stones/Pounds";
-
-                    if (e.NewTextValue.Contains("."))
-                    {
-                        var countdots = e.NewTextValue.ToCharArray().Count(x => x == '.');
-                        var convertodec = Convert.ToDouble(e.NewTextValue);
-                        if (countdots > 0)
-                        {
-                            validinput = false;
-                            SubmitBtn.BackgroundColor = Colors.Gray;
-                            SubmitBtn.TextColor = Colors.LightGray;
-                        }
-                    }
-                    else
-                    {
-                        var convertoint = Convert.ToInt32(e.NewTextValue);
-                        if (e.NewTextValue.Length >= 1 && e.NewTextValue.Length <= 3)
-                        {
-                            if (convertoint < 0)
-                            {
-                                validinput = false;
-                                SubmitBtn.BackgroundColor = Colors.Gray;
-                                SubmitBtn.TextColor = Colors.LightGray;
-                            }
-                            else if (convertoint > 100)
-                            {
-                                validinput = false;
-                                SubmitBtn.BackgroundColor = Colors.Gray;
-                                SubmitBtn.TextColor = Colors.LightGray;
-                            }
-                            else
-                            {
-                                // bloodpresuredianum = convertoint.ToString();
-                                if (string.IsNullOrEmpty(Poundsentry.Text))
-                                {
-                                    validinput = false;
-                                    SubmitBtn.BackgroundColor = Colors.Gray;
-                                    SubmitBtn.TextColor = Colors.LightGray;
-                                }
-                                else
-                                {
-                                    var convertdia = Convert.ToInt32(Poundsentry.Text);
-                                    if (convertdia >= 0 && convertdia <= 13)
-                                    {
-                                        validinput = true;
-                                        SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
-                                        SubmitBtn.TextColor = Colors.White;
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            validinput = false;
-                            SubmitBtn.BackgroundColor = Colors.Gray;
-                            SubmitBtn.TextColor = Colors.LightGray;
-                        }
-                    }
-                }
-            }
+            ChcekFeetInches(sender, e, "Stones");
         }
         catch (Exception Ex)
         {
@@ -5171,79 +5095,138 @@ public partial class AddMeasurement : ContentPage
     {
         try
         {
-            Poundsinput = e.NewTextValue;
-            if (e.NewTextValue.Length > 3)
-            {
-                return;
-            }
-            if (string.IsNullOrEmpty(e.NewTextValue))
+            ChcekFeetInches(sender, e, "Pounds");
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+    private void ChcekFeetInches(object sender, TextChangedEventArgs e, string entryType)
+    {
+        try
+        {
+            string inputValue = e.NewTextValue;
+
+            //if (inputValue.Length == 1 && inputValue == ".")
+            //{
+            //    if(entryType == "Stones")
+            //    {
+            //        Stonesentry.Text = string.Empty; 
+            //    }
+            //    else
+            //    {
+            //        Poundsentry.Text = string.Empty; 
+            //    }
+            //    validinput = false;
+            //    SubmitBtn.BackgroundColor = Colors.Gray;
+            //    SubmitBtn.TextColor = Colors.LightGray;
+            //    return;
+            //}
+
+            if (string.IsNullOrEmpty(inputValue))
             {
                 validinput = false;
                 SubmitBtn.BackgroundColor = Colors.Gray;
                 SubmitBtn.TextColor = Colors.LightGray;
+                return;
+            }
 
+            //Max length is 50 st 13lbs they can exceed that but input = invalid
+            if (inputValue.Length > 2)
+            {
+                if (entryType == "Stones")
+                {
+                    Stonesentry.Text = inputValue.Substring(0,2);
+                    return;
+                }
+                else
+                {
+                    Poundsentry.Text = inputValue.Substring(0,2);
+                    return;
+                }
+            }
+
+            //Remove '.' Not Needed as there are two Entries
+            if (inputValue.Contains("."))
+            {
+                inputValue = inputValue.Replace(".", "");
+            }
+
+            if (entryType == "Stones")
+            {
+                Stonesentry.Text = inputValue;
             }
             else
             {
-                if (measurementnamestring == "Weight")
-                {
-                    inputvalue = "Stones/Pounds";
+                Poundsentry.Text = inputValue;
+            }
 
-                    if (e.NewTextValue.Contains("."))
+            int inputInt = Convert.ToInt32(inputValue);
+
+            if (entryType == "Stones")
+            {
+                if (inputInt < 0 || inputInt > 50)
+                {
+                    validinput = false;
+                    SubmitBtn.BackgroundColor = Colors.Gray;
+                    SubmitBtn.TextColor = Colors.LightGray;
+                    return;
+                }
+
+                if (string.IsNullOrEmpty(Poundsentry.Text))
+                {
+                    validinput = false;
+                    SubmitBtn.BackgroundColor = Colors.Gray;
+                    SubmitBtn.TextColor = Colors.LightGray;
+                }
+                else
+                {
+                    int poundsValue = Convert.ToInt32(Poundsentry.Text);
+                    if (poundsValue >= 0 && poundsValue <= 13)
                     {
-                        var countdots = e.NewTextValue.ToCharArray().Count(x => x == '.');
-                        var convertodec = Convert.ToDouble(e.NewTextValue);
-                        if (countdots > 0)
-                        {
-                            validinput = false;
-                            SubmitBtn.BackgroundColor = Colors.Gray;
-                            SubmitBtn.TextColor = Colors.LightGray;
-                        }
+                        validinput = true;
+                        SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                        SubmitBtn.TextColor = Colors.White;
                     }
                     else
                     {
-                        var convertoint = Convert.ToInt32(e.NewTextValue);
-                        if (e.NewTextValue.Length >= 1 && e.NewTextValue.Length <= 2)
-                        {
-                            if (convertoint < 0)
-                            {
-                                validinput = false;
-                                SubmitBtn.BackgroundColor = Colors.Gray;
-                                SubmitBtn.TextColor = Colors.LightGray;
-                            }
-                            else if (convertoint > 13)
-                            {
-                                validinput = false;
-                                SubmitBtn.BackgroundColor = Colors.Gray;
-                                SubmitBtn.TextColor = Colors.LightGray;
-                            }
-                            else
-                            {
-                                // bloodpresuredianum = convertoint.ToString();
-                                if (string.IsNullOrEmpty(Stonesentry.Text))
-                                {
-                                    validinput = false;
-                                    SubmitBtn.BackgroundColor = Colors.Gray;
-                                    SubmitBtn.TextColor = Colors.LightGray;
-                                }
-                                else
-                                {
-                                    var convertdia = Convert.ToInt32(Stonesentry.Text);
-                                    if (convertdia >= 0 && convertdia <= 100)
-                                    {
-                                        validinput = true;
-                                        SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
-                                        SubmitBtn.TextColor = Colors.White;
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            validinput = false;
-                            SubmitBtn.BackgroundColor = Colors.Gray;
-                            SubmitBtn.TextColor = Colors.LightGray;
-                        }
+                        validinput = false;
+                        SubmitBtn.BackgroundColor = Colors.Gray;
+                        SubmitBtn.TextColor = Colors.LightGray;
+                    }
+                }
+            }
+            else if (entryType == "Pounds")
+            {
+                if (inputInt < 0 || inputInt > 13)
+                {
+                    validinput = false;
+                    SubmitBtn.BackgroundColor = Colors.Gray;
+                    SubmitBtn.TextColor = Colors.LightGray;
+                    return;
+                }
+
+                if (string.IsNullOrEmpty(Stonesentry.Text))
+                {
+                    validinput = false;
+                    SubmitBtn.BackgroundColor = Colors.Gray;
+                    SubmitBtn.TextColor = Colors.LightGray;
+                }
+                else
+                {
+                    int stonesValue = Convert.ToInt32(Stonesentry.Text);
+                    if (stonesValue >= 0 && stonesValue <= 50)
+                    {
+                        validinput = true;
+                        SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+                        SubmitBtn.TextColor = Colors.White;
+                    }
+                    else
+                    {
+                        validinput = false;
+                        SubmitBtn.BackgroundColor = Colors.Gray;
+                        SubmitBtn.TextColor = Colors.LightGray;
                     }
                 }
             }
@@ -5253,7 +5236,6 @@ public partial class AddMeasurement : ContentPage
             NotasyncMethod(Ex);
         }
     }
-
 
     private void hoursentry_TextChanged(object sender, TextChangedEventArgs e)
     {

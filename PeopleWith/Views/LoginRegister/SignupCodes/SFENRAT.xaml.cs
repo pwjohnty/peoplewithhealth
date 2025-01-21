@@ -41,6 +41,7 @@ public partial class SFENRAT : ContentPage
     string CommandPassed;
     ObservableCollection<answer> GetAnswers = new ObservableCollection<answer>(); 
     ObservableCollection<answer> GetCommPref = new ObservableCollection<answer>();
+    public ObservableCollection<medication> MedFilteredItems = new ObservableCollection<medication>();
 
     List<string> commprefaddedlist = new List<string>();
 
@@ -283,11 +284,21 @@ public partial class SFENRAT : ContentPage
                     int currentYear = DateTime.Now.Year;
                     if (date.Year >= 1900 && date.Year <= currentYear)
                     {
-                        dateEntry.TextColor = Color.FromArgb("#031926"); // Valid date
-                        validdob = true;
+                        var BirthDateTime = DateTime.Parse(newuser.dateofbirth);
+                        if (date.Date >= BirthDateTime.Date && date.Date <= DateTime.Now.Date)
+                        {
+                            dateEntry.TextColor = Color.FromArgb("#031926"); // Valid date
+                            validdob = true;
+                        }
+                        else
+                        {
+                            dateEntry.TextColor = Colors.Red; // Invalid date range
+                            validdob = false;
+                            ageentry.Text = string.Empty;
+                        }
 
-                   
                     }
+
                     else
                     {
                         dateEntry.TextColor = Colors.Red; // Invalid date range
@@ -431,6 +442,7 @@ public partial class SFENRAT : ContentPage
     {
         try
         {
+
             //symptom search entry
             SympAInd.IsVisible = true;
 
@@ -440,6 +452,7 @@ public partial class SFENRAT : ContentPage
                 additionlsymlist.IsVisible = false;
                 searchsymsentry.IsEnabled = false;
                 searchsymsentry.IsEnabled = true;
+                NoSymResultslbl.IsVisible = false;
 
             }
             else
@@ -449,7 +462,8 @@ public partial class SFENRAT : ContentPage
                 if (count == 0)
                 {
                     additionlsymlist.IsVisible = false;
-        
+                    NoSymResultslbl.IsVisible = true;
+
                 }
                 else
                 {
@@ -458,7 +472,8 @@ public partial class SFENRAT : ContentPage
                     additionlsymlist.ItemsSource = collectionone;
                     additionlsymlist.HeightRequest = count * 60;
                     additionlsymlist.IsVisible = true;
-         
+                    NoSymResultslbl.IsVisible = false;
+
                 }
 
                 SympAInd.IsVisible = false;
@@ -577,16 +592,23 @@ public partial class SFENRAT : ContentPage
                 {
                     // Check if the date is between 1900 and today's year
                     int currentYear = DateTime.Now.Year;
+
                     if (date.Year >= 1900 && date.Year <= currentYear)
                     {
-                        dateofsurgeryEntry.TextColor = Color.FromArgb("#031926"); // Valid date
-                        validdobsurgery = true;
+                        var BirthDateTime = DateTime.Parse(newuser.dateofbirth);
+                        if (date.Date >= BirthDateTime.Date && date.Date <= DateTime.Now.Date)
+                        {
+                            dateofsurgeryEntry.TextColor = Color.FromArgb("#031926"); // Valid date
+                            validdobsurgery = true;
+                        }
+                        else
+                        {
+                            dateofsurgeryEntry.TextColor = Colors.Red; // Invalid date range
+                            validdobsurgery = false;
+                        }
+
                     }
-                    else
-                    {
-                        dateofsurgeryEntry.TextColor = Colors.Red; // Invalid date range
-                        validdobsurgery = false;
-                    }
+
                 }
                 else
                 {
@@ -1030,38 +1052,48 @@ public partial class SFENRAT : ContentPage
     {
         try
         {
-            //medication search entry
+            //Updated to Sort List not Loading in Properly 
             MedAInd.IsVisible = true;
+            additionlmedlist.IsVisible = false;
+
             if (string.IsNullOrEmpty(e.NewTextValue))
             {
-                MedAInd.IsVisible = false; 
+                MedFilteredItems.Clear();
                 additionlmedlist.IsVisible = false;
-                searchmedentry.IsEnabled = false;
-                searchmedentry.IsEnabled = true;
-
+                MedAInd.IsVisible = false;
+                NoResultslbl.IsVisible = false;
             }
             else
             {
-                
-                var collectionone = allmedicationlist.Where(x => x.title.ToLowerInvariant().StartsWith(e.NewTextValue.ToLowerInvariant()));
-                var count = collectionone.Count();
-                if (count == 0)
+                MedAInd.IsVisible = true;
+                NoResultslbl.IsVisible = false;
+
+                var countofcharacters = e.NewTextValue.Length;
+
+                if (countofcharacters > 2)
                 {
-                    additionlmedlist.IsVisible = false;
-                 
-                }
-                else
-                {
-                    // emptyframe.IsVisible = false;
-                    // resultsframe.IsVisible = true;
-                    additionlmedlist.ItemsSource = collectionone;
-                    additionlmedlist.HeightRequest = count * 60;
+                    var Characters = e.NewTextValue;
+                    var filteredmeds = new ObservableCollection<medication>(allmedicationlist.Where(s => s.title.Contains(Characters, StringComparison.OrdinalIgnoreCase))).OrderBy(m => m.title);
+
+                    additionlmedlist.ItemsSource = filteredmeds;
                     additionlmedlist.IsVisible = true;
 
-                }
-                MedAInd.IsVisible = false;
-            }
+                    MedAInd.IsVisible = false;
 
+                    if (filteredmeds.Count() == 0)
+                    {
+                        NoResultslbl.IsVisible = true;
+                    }
+                    else
+                    {
+                        additionlmedlist.IsVisible = true;
+                        additionlmedlist.HeightRequest = filteredmeds.Count() * 60;
+                        NoResultslbl.IsVisible = false;
+                    }
+
+                }
+
+            }
         }
         catch (Exception Ex)
         {

@@ -1057,19 +1057,23 @@ public partial class RegisterPage : ContentPage
                     int currentYear = DateTime.Now.Year;
                     if (date.Year >= 1900 && date.Year <= currentYear)
                     {
-                        dateEntry.TextColor = Color.FromArgb("#031926"); // Valid date
-                        validdob = true;
+                        if (date.Date <= DateTime.Now.Date)
+                        {
+                            dateEntry.TextColor = Color.FromArgb("#031926"); // Valid date
+                            validdob = true;
+                        }
+                        else
+                        {
+                            dateEntry.TextColor = Colors.Red; // Invalid date range
+                            validdob = false;
+                        }
+
                     }
                     else
                     {
-                        dateEntry.TextColor = Colors.Red; // Invalid date range
+                        dateEntry.TextColor = Colors.Red; // Invalid date
                         validdob = false;
                     }
-                }
-                else
-                {
-                    dateEntry.TextColor = Colors.Red; // Invalid date
-                    validdob = false;
                 }
             }
             else

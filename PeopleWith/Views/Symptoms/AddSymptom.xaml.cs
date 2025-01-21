@@ -111,12 +111,22 @@ public partial class AddSymptom : ContentPage
             //Results inital count
             Results.Text = "Results" + " (" + count + ")";
             FilterResults = userSymptoms;
+
+
             //Add Classiciation Filters 
             var distinctSymptoms = userSymptoms
                 .GroupBy(s => s.classification)
                 .Select(g => g.First())
                 .ToList().OrderBy(g => g.classification);
+
             FilterTabsList = new ObservableCollection<symptom>(distinctSymptoms);
+
+            // Insert "All" at the beginning of the list
+            var AddAll = new symptom
+            {
+                classification = "All"
+            };
+            FilterTabsList.Insert(0, AddAll);
             FilterTabs.ItemsSource = FilterTabsList;
             FilterTabs.DisplayMemberPath = "classification";
             Filterstack.IsVisible = true;
@@ -291,6 +301,14 @@ public partial class AddSymptom : ContentPage
                 NoResultslbl.IsVisible = false;
             }
 
+            ////If FilterTabs item is Selected - UnSelect it 
+            //if(string.IsNullOrEmpty(searchbar.Text) || searchbar.Text == "")
+            //{
+            //    if (FilterTabs.SelectedItem != null)
+            //    {
+            //        FilterTabs.SelectedItem = null;
+            //    }
+            //}
         }
         catch (Exception Ex)
         {
@@ -331,10 +349,28 @@ public partial class AddSymptom : ContentPage
         {
             var tappedFrame = sender as SfChip;
             var item = tappedFrame.Text;
-            var filteredSymptoms = new ObservableCollection<symptom>(FilterResults.Where(s => s.classification.Contains(item, StringComparison.OrdinalIgnoreCase))).OrderBy(m => m.title);
-            var count = filteredSymptoms.Count().ToString();
-            Results.Text = "Results" + " (" + count + ")";
-            SymptomsListview.ItemsSource = filteredSymptoms;
+
+            if (item == "All")
+            {
+                var count = FilterResults.Count().ToString();
+                Results.Text = "Results" + " (" + count + ")";
+                SymptomsListview.ItemsSource = FilterResults;
+                SymptomsListview.IsVisible = true;
+                NoResultslbl.IsVisible = false;
+                searchbar.Text = String.Empty;
+            }
+            else
+            {
+                var filteredSymptoms = new ObservableCollection<symptom>(FilterResults.Where(s => s.classification.Contains(item, StringComparison.OrdinalIgnoreCase))).OrderBy(m => m.title);
+                var count = filteredSymptoms.Count().ToString();
+                Results.Text = "Results" + " (" + count + ")";
+                SymptomsListview.ItemsSource = filteredSymptoms;
+                SymptomsListview.IsVisible = true;
+                NoResultslbl.IsVisible = false;
+                searchbar.Text = String.Empty;
+
+            }
+
         }
         catch(Exception Ex)
         {

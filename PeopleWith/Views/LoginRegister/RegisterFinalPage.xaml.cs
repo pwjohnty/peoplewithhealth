@@ -331,7 +331,7 @@ public partial class RegisterFinalPage : ContentPage
                     }
                     else
                     {
-                        if (nextbtn.BackgroundColor == Colors.LightGray)
+                        if (nextbtn.BackgroundColor != Color.FromArgb("#031926"))
                         {
                             if (tccheckbox.IsChecked == false)
                             {
@@ -340,17 +340,25 @@ public partial class RegisterFinalPage : ContentPage
                                 nextbtn.IsEnabled = true;
                                 return;
                             }
-                            else
-                            {
-                                if (SignPadhaddata == false)
-                                {
-                                    await DisplayAlert("Signature Missing", "Please sign the signature pad", "OK");
-                                    nextbtn.IsEnabled = true;
-                                    return;
-                                }
 
+                            if (SignPadhaddata == false)
+                            {
+                                Vibration.Vibrate();
+                                if(DeviceInfo.Current.Platform == DevicePlatform.Android)
+                                {
+                                    AndroidSign.Stroke = Colors.Red;
+                                }
+                                else if (DeviceInfo.Current.Platform == DevicePlatform.iOS)
+                                {
+                                    IOSSign.Stroke = Colors.Red;
+                                }
+                                
+                                nextbtn.IsEnabled = true;
+                                return;
                             }
 
+                            HandleTCframe();
+                            nextbtn.IsEnabled = true;
                         }
                         else
                         {
@@ -847,29 +855,33 @@ public partial class RegisterFinalPage : ContentPage
         {
            var check = e.Value;
 
-           
-            if(additonalconsent.signaturepad == false)
+            if (check)
             {
-                if (check)
+                //SignaturePad Not required
+                if (additonalconsent.signaturepad == false)
                 {
+                    tcframe.BorderColor = Color.FromRgba("#BFDBF7");
                     nextbtn.BackgroundColor = Color.FromArgb("#031926");
                 }
                 else
                 {
-                    nextbtn.BackgroundColor = Colors.LightGray;
-                    tcframe.BorderColor = Color.FromRgba("#BFDBF7");
+                    if (SignPadhaddata == true)
+                    {
+                        tcframe.BorderColor = Color.FromRgba("#BFDBF7");
+                        nextbtn.BackgroundColor = Color.FromArgb("#031926");
+                    }
+                    else
+                    {
+                        tcframe.BorderColor = Color.FromRgba("#BFDBF7");
+                        nextbtn.BackgroundColor = Colors.LightGray;
+                    }
                 }
-
-                tcerror.IsVisible = false;
-                tcframe.BorderColor = Color.FromRgba("#BFDBF7");
             }
-            else 
+            else
             {
-             //   signaturePadStack.IsVisible = true;
-              //  ConsentBoxesStack.IsVisible = false;
-                tcerror.IsVisible = false;
+                nextbtn.BackgroundColor = Colors.LightGray;
             }
-            
+
         }
         catch( Exception ex )
         {
@@ -1012,31 +1024,6 @@ public partial class RegisterFinalPage : ContentPage
     //    }
     //}
 
-    async private void signpad_DrawCompleted(object sender, EventArgs e)
-    {
-        try
-        {
-            var signatureStream = await signpad.GetStreamAsync(Syncfusion.Maui.Core.ImageFileFormat.Jpeg);
-            bool isSignatureBlank = signatureStream.Length == 0;
-
-            if (!isSignatureBlank)
-            {
-                SignPadhaddata = true;
-                nextbtn.BackgroundColor = Color.FromArgb("#031926");
-            }
-            else
-            {
-                SignPadhaddata = false;
-                nextbtn.BackgroundColor = Colors.LightGray;
-            }
-
-        }
-        catch (Exception Ex)
-        {
-            //Leave Empty
-        }
-    }
-
     async private void Button_Clicked(object sender, EventArgs e)
     {
         try
@@ -1045,8 +1032,15 @@ public partial class RegisterFinalPage : ContentPage
             NetworkAccess accessType = Connectivity.Current.NetworkAccess;
             if (accessType == NetworkAccess.Internet)
             {
-                drawingpad.Clear();
-                //signpad.Clear();
+                if(DeviceInfo.Current.Platform == DevicePlatform.Android)
+                {
+                    signpad.Clear(); 
+                }
+                else if (DeviceInfo.Current.Platform == DevicePlatform.iOS)
+                {
+                    drawingpad.Clear();
+                }
+
                 nextbtn.BackgroundColor = Colors.LightGray;
                 SignPadhaddata = false;
             }
@@ -1062,6 +1056,42 @@ public partial class RegisterFinalPage : ContentPage
         }
     }
 
+    async private void signpad_DrawCompleted(object sender, EventArgs e)
+    {
+        try
+        {
+            var signatureStream = await signpad.GetStreamAsync(Syncfusion.Maui.Core.ImageFileFormat.Jpeg);
+            bool isSignatureBlank = signatureStream.Length == 0;
+
+
+            if (!isSignatureBlank)
+            {
+
+                SignPadhaddata = true;
+                AndroidSign.Stroke = Color.FromArgb("#BFDBF7");
+
+                if (tccheckbox.IsChecked == true)
+                {
+                    nextbtn.BackgroundColor = Color.FromArgb("#031926");
+                }
+                else
+                {
+                    nextbtn.BackgroundColor = Colors.LightGray;
+                }
+            }
+            else
+            {
+                SignPadhaddata = false;
+                nextbtn.BackgroundColor = Colors.LightGray;
+            }
+
+        }
+        catch (Exception Ex)
+        {
+            //Leave Empty
+        }
+    }
+
     private async void DrawingView_DrawingLineCompleted(object sender, CommunityToolkit.Maui.Core.DrawingLineCompletedEventArgs e)
     {
         try
@@ -1072,10 +1102,21 @@ public partial class RegisterFinalPage : ContentPage
                     Microsoft.Maui.Graphics.Colors.Transparent, cts.Token));
             bool isSignatureBlank = drawingStream.Length == 0;
 
+
             if (!isSignatureBlank)
             {
+
                 SignPadhaddata = true;
-                nextbtn.BackgroundColor = Color.FromArgb("#031926");
+                IOSSign.Stroke = Color.FromArgb("#BFDBF7");
+
+                if (tccheckbox.IsChecked == true)
+                {
+                    nextbtn.BackgroundColor = Color.FromArgb("#031926");
+                }
+                else
+                {
+                    nextbtn.BackgroundColor = Colors.LightGray;
+                }
             }
             else
             {

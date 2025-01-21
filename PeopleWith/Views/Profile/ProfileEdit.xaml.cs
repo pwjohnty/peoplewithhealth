@@ -834,8 +834,17 @@ public partial class ProfileEdit : ContentPage
                     int currentYear = DateTime.Now.Year;
                     if (date.Year >= 1900 && date.Year <= currentYear)
                     {
-                        DateofBirthEntry.TextColor = Color.FromArgb("#031926"); // Valid date
-                        validdob = true;
+                        if(date.Date <= DateTime.Now.Date)
+                        {
+                            DateofBirthEntry.TextColor = Color.FromArgb("#031926"); // Valid date
+                            validdob = true;
+                        }
+                        else
+                        {
+                            DateofBirthEntry.TextColor = Colors.Red; // Invalid date range
+                            validdob = false;
+                        }
+
                     }
                     else
                     {

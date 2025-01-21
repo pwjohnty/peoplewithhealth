@@ -106,7 +106,7 @@ public partial class MainDashboard : ContentPage
     {
         base.OnAppearing();
         getuserfeedbackdata();
-        checknotificationsEnabled(); 
+        //checknotificationsEnabled(); 
     }
 
     async void checksignupinfo()
@@ -2004,7 +2004,7 @@ public partial class MainDashboard : ContentPage
             {
 
                 var asRequiredMeds = AllUserMedications
-       .Where(x => x.frequency.Contains("As Required"))
+       .Where(x => x.frequency != null && x.frequency.Contains("As Required"))
        .ToList();
 
                 var randomm = new Random();
@@ -2448,8 +2448,9 @@ public partial class MainDashboard : ContentPage
                 // launchvid.URL = item.Filename;
                 // await Navigation.PushAsync(new AllVideos(), false);
 
-               // var vid = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/DiagnosisFirstAdd.mp4";
-                await Navigation.PushAsync(new VideoPlayer(item));
+                // var vid = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/DiagnosisFirstAdd.mp4";
+                bool FromDash = true; 
+                await Navigation.PushAsync(new NewPageVideoPlayer(item, FromDash));
             }
             else if(item.type == "image")
             {

@@ -1,22 +1,36 @@
 using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Mvvm.Messaging;
+using Maui.FreakyControls.Extensions;
+using Syncfusion.Maui.DataSource.Extensions;
 using System.Collections.ObjectModel;
+using System.Globalization;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace PeopleWith;
 
 public partial class ShowAllMedication : ContentPage
 {
 	usermedication MedSelected = new usermedication();
-	ObservableCollection<usermedication> MedicationList = new ObservableCollection<usermedication>();
+	ObservableCollection<usermedication> MedicationList  = new ObservableCollection<usermedication>();
     ObservableCollection<usermedication> TakenMedicationList = new ObservableCollection<usermedication>();
     ObservableCollection<usermedication> NotTakenMedicationList = new ObservableCollection<usermedication>();
     ObservableCollection<usermedication> NotRecordedMedicationList = new ObservableCollection<usermedication>();
     ObservableCollection<usermedication> MedicationNotRecordedList = new ObservableCollection<usermedication>();
+    ObservableCollection<usermedication> UpdateFilterDates = new ObservableCollection<usermedication>();
+    ObservableCollection<usermedication> FilteredMedList = new ObservableCollection<usermedication>();
+    public ObservableCollection<TimelineItem> TimelineItems { get; set; } = new ObservableCollection<TimelineItem>();
+    public string SelectedFrame = String.Empty;
     Color SetColour;
+    private const int PageSize = 20;
+    private int currentPage = 0;
+    public ICommand LoadMoreCommand { get; }
+    public bool IsLazyLoading { get; set; }
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
+
 
     async public void NotasyncMethod(Exception Ex)
     {
@@ -31,6 +45,14 @@ public partial class ShowAllMedication : ContentPage
         }
     }
 
+    public class TimelineItem
+    {
+        public string DisplayText { get; set; }
+        public string DateRange { get; set; }
+        public DateTime Order { get; set; }
+        public string type { get; set; }
+    }
+
 
     public ShowAllMedication(usermedication SelectedMed)
 	{
@@ -41,6 +63,29 @@ public partial class ShowAllMedication : ContentPage
 			MedicationName.Text = MedSelected.medicationtitle;
 
             PopulateListView();
+
+            UpdateFilterDates = MedicationList; 
+            CalculateTimeLine();
+            //LoadMoreCommand = new Command(async () => await LoadMoreItems());
+            //LoadInitialData();
+
+
+            var Freq = MedSelected.frequency.Split('|');
+
+            //As Required Medication 
+            if (Freq[0] == "As Required")
+            {
+
+            }
+            else
+            {
+                if (MedicationList.Count == 0)
+                {
+                    nodatastack.IsVisible = true;
+                    datastack.IsVisible = false;
+                }
+
+            }
 
             //Update Page From Schedule 
             WeakReferenceMessenger.Default.Register<UpdateShowAllMeds>(this, (r, m) =>
@@ -59,6 +104,27 @@ public partial class ShowAllMedication : ContentPage
                         MedSelected.feedback.Add(item);
                     }
                     PopulateListView();
+                    UpdateFilterDates = MedicationList;
+                    CalculateTimeLine();
+                    //LoadInitialData();
+                    //LoadMoreCommand = new Command(async () => await LoadMoreItems());
+                    var Freq = MedSelected.frequency.Split('|');
+
+                    //As Required Medication 
+                    if (Freq[0] == "As Required")
+                    { 
+
+                    }
+                    else
+                    {
+                        if (MedicationList.Count == 0)
+                        {
+                            nodatastack.IsVisible = true;
+                            datastack.IsVisible = false;
+                        }
+
+                    }
+                       
                 }
 
             });
@@ -70,7 +136,187 @@ public partial class ShowAllMedication : ContentPage
         }
     }
 
-    async private void PopulateListView()
+
+    //Calculate TimelineListview 
+    private void CalculateTimeLine()
+    {
+        try
+        {
+            var typestring = string.Empty; 
+            TimelineItems.Clear();
+            if (UpdateFilterDates.Count == 0)
+            {
+                return;
+            }
+            else
+            {
+                var Max = UpdateFilterDates.Max(x => DateTime.Parse(x.MedDateTime));
+                var Min = UpdateFilterDates.Min(x => DateTime.Parse(x.MedDateTime));
+                var Totaldays = (Max.Date - Min.Date).TotalDays;
+               
+
+                if (Totaldays <= 7)
+                {
+                    typestring = "Day"; 
+                    FilterTimeLine.IsVisible = false;
+                    foreach (var date in UpdateFilterDates.OrderBy(d => DateTime.Parse(d.MedDateTime)))
+                    {
+                        var DateTimes = DateTime.Parse(date.MedDateTime);
+                        TimelineItems.Add(new TimelineItem
+                        {
+                            DisplayText = DateTimes.ToString("dd/MM/yy"),
+                            DateRange = DateTimes.ToString("dd/MM/yy"),
+                            Order = DateTimes, 
+                            type = "Day"
+                        });
+                    }
+                }
+                else if (Totaldays > 7 && Totaldays < 30)
+                {
+                    typestring = "Week";
+                    FilterTimeLine.IsVisible = true;
+                    var groupedByWeek = UpdateFilterDates
+    .OrderBy(d => DateTime.Parse(d.MedDateTime))
+    .GroupBy(d => CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(DateTime.Parse(d.MedDateTime), CalendarWeekRule.FirstDay, DayOfWeek.Monday));
+
+                    foreach (var group in groupedByWeek)
+                    {
+                        var firstDate = group.First();
+                        var lastDate = group.Last();
+                        var Datefirst = DateTime.Parse(firstDate.MedDateTime);
+                        var Datelast = DateTime.Parse(lastDate.MedDateTime);
+                        TimelineItems.Add(new TimelineItem
+                        {
+                            DisplayText = $"Week of " + Datefirst.ToString("dd MMM yy"),
+                            DateRange = Datefirst.ToString("dd/MM/yy") + "|" + Datelast.ToString("dd/MM/yy"),
+                            Order = Datefirst,
+                            type = "Week"
+                        });
+                    }
+
+                }
+                else
+                {
+
+                    typestring = "Month";
+                    FilterTimeLine.IsVisible = true;
+
+                    // More than 30 days: Show months
+                    var groupedByMonth = UpdateFilterDates
+      .OrderBy(d => DateTime.Parse(d.MedDateTime))
+      .GroupBy(d => new { Year = DateTime.Parse(d.MedDateTime).Year, Month = DateTime.Parse(d.MedDateTime).Month });
+
+
+                    foreach (var group in groupedByMonth)
+                    {
+                        var firstDate = group.First();
+                        var Datefirst = DateTime.Parse(firstDate.MedDateTime);
+                        TimelineItems.Add(new TimelineItem
+                        {
+                            DisplayText = Datefirst.ToString("MMMM yyyy"),
+                            DateRange = $"{Datefirst:MMMM yyyy}",
+                            Order = Datefirst,
+                            type = "Month"
+                        });
+                    }
+                }
+
+               
+
+                FilterTimeLine.ItemsSource = TimelineItems.OrderByDescending(d => d.Order);
+                var GetTimelineFirst = TimelineItems.OrderByDescending(d => d.Order).First().Order;
+                FilteredMedList.Clear();
+                //Set items Source on load 
+                if(typestring == "Day")
+                {
+                    //FilteredMedList = UpdateFilterDates;
+                    FilteredMedList = UpdateFilterDates.OrderByDescending(d => DateTime.Parse(d.MedDateTime)).ToObservable();
+                }
+                else if (typestring == "Week")
+                {
+                    var GetinitalDateRange = TimelineItems.OrderByDescending(d => d.Order).First().DateRange;
+                    var splititem = GetinitalDateRange.Split('|');
+                    var InitalDate = splititem[0];
+                    var LastDate = splititem[1];
+                    var StartDate = DateTime.Parse(InitalDate);
+                    var EndDate = DateTime.Parse(LastDate);
+                    var filteredMedList = UpdateFilterDates
+          .Where(x =>
+          {
+              var medDate = DateTime.Parse(x.MedDateTime).Date;
+              return medDate >= StartDate.Date && medDate <= EndDate.Date;
+          })
+          .ToObservable();
+
+                    FilteredMedList = filteredMedList;
+                    FilterTimeLine.SelectedItem = TimelineItems.OrderByDescending(d => d.Order).FirstOrDefault();
+                }
+                else if (typestring == "Month")
+                {
+
+                    FilteredMedList = UpdateFilterDates.Where(x => DateTime.Parse(x.MedDateTime).ToString("MMMM yyyy") == GetTimelineFirst.ToString("MMMM yyyy")).ToObservable();
+                    FilterTimeLine.SelectedItem = TimelineItems.FirstOrDefault(item => item.DisplayText == GetTimelineFirst.ToString("MMMM yyyy"));
+                }
+                UserMedicationSchedule.ItemsSource = FilteredMedList;
+                UserMedicationSchedule.HeightRequest = FilteredMedList.Count * 120;
+              
+
+            }
+
+
+        }
+        catch(Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+
+    //Incrementally Load ListviewData
+
+    //private void LoadInitialData()
+    //{
+    //    LoadBatch(0, PageSize);
+    //}
+
+    //private async Task LoadMoreItems()
+    //{
+    //    if (IsLazyLoading) return;
+
+    //    IsLazyLoading = true;
+
+    //    try
+    //    {
+    //        await Task.Delay(300); // Simulate a delay for smoother UI
+
+    //        // Calculate the next batch to load
+    //        int startIndex = currentPage * PageSize;
+    //        if (startIndex < MedicationList.Count)
+    //        {
+    //            LoadBatch(startIndex, PageSize);
+    //            currentPage++;
+    //        }
+    //    }
+    //    finally
+    //    {
+    //        IsLazyLoading = false;
+    //    }
+    //}
+
+
+    //private void LoadBatch(int startIndex, int batchSize)
+    //{
+    //    // Add items from MedicationList to PagedMedicationList
+    //    int endIndex = Math.Min(startIndex + batchSize, MedicationList.Count);
+    //    for (int i = startIndex; i < endIndex; i++)
+    //    {
+    //        PagedMedicationList.Add(MedicationList[i]);
+    //    }
+    //    UserMedicationSchedule.ItemsSource = PagedMedicationList;
+    //}
+
+
+async private void PopulateListView()
 	{
 		try
 		{
@@ -123,10 +369,10 @@ public partial class ShowAllMedication : ContentPage
 						}
 
 
-				    var sortedlist = MedicationList.OrderBy(t => t.MedDateTime);
-					UserMedicationSchedule.ItemsSource = sortedlist;
+				    // var sortedlist = MedicationList.OrderBy(t => t.MedDateTime);
+					//UserMedicationSchedule.ItemsSource = sortedlist;
                         //Filtered List 
-                        TakenMedicationList = MedicationList.Where(s => s.Action.Equals("Taken", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservableCollection();
+                        TakenMedicationList = MedicationList.Where(s => s.Action.Equals("Taken", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservable();
 
                     }
 				}
@@ -281,13 +527,18 @@ public partial class ShowAllMedication : ContentPage
 
 
                     var sortedList = MedicationList.OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToList();
-                    UserMedicationSchedule.ItemsSource = sortedList;
-                    UserMedicationSchedule.HeightRequest = sortedList.Count * 120;
+                    MedicationList.Clear(); 
+                    foreach(var items in sortedList)
+                    {
+                        MedicationList.Add(items);
+                    }
+                    //UserMedicationSchedule.ItemsSource = sortedList;
+                    //UserMedicationSchedule.HeightRequest = sortedList.Count * 120;
 
                     //Filtered List 
-                    TakenMedicationList = MedicationList.Where(s => s.Action.Equals("Taken", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservableCollection();
-                    NotTakenMedicationList = MedicationList.Where(s => s.Action.Equals("Not Taken", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservableCollection();
-                    NotRecordedMedicationList = MedicationList.Where(s => s.Action.Equals("Not Recorded", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservableCollection();
+                    TakenMedicationList = MedicationList.Where(s => s.Action.Equals("Taken", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservable();
+                    NotTakenMedicationList = MedicationList.Where(s => s.Action.Equals("Not Taken", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservable();
+                    NotRecordedMedicationList = MedicationList.Where(s => s.Action.Equals("Not Recorded", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservable();
 
                 }
                 else if (Freq[0] == "Weekly" || Freq[0] == "Weekly ")
@@ -436,14 +687,14 @@ public partial class ShowAllMedication : ContentPage
                     }
                     else
                     {
-                        var sortedList = MedicationList.OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToList();
-                        UserMedicationSchedule.ItemsSource = sortedList;
-                        UserMedicationSchedule.HeightRequest = sortedList.Count * 120;
+                        //var sortedList = MedicationList.OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToList();
+                        //UserMedicationSchedule.ItemsSource = sortedList;
+                        //UserMedicationSchedule.HeightRequest = sortedList.Count * 120;
 
                         //Filtered List 
-                        TakenMedicationList = MedicationList.Where(s => s.Action.Equals("Taken", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservableCollection();
-                        NotTakenMedicationList = MedicationList.Where(s => s.Action.Equals("Not Taken", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservableCollection();
-                        NotRecordedMedicationList = MedicationList.Where(s => s.Action.Equals("Not Recorded", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservableCollection();
+                        TakenMedicationList = MedicationList.Where(s => s.Action.Equals("Taken", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservable();
+                        NotTakenMedicationList = MedicationList.Where(s => s.Action.Equals("Not Taken", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservable();
+                        NotRecordedMedicationList = MedicationList.Where(s => s.Action.Equals("Not Recorded", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservable();
                     }
                 }
                 else if (Freq[0] == "Days Interval")
@@ -566,14 +817,14 @@ public partial class ShowAllMedication : ContentPage
                     }
                     else
                     {
-                        var sortedList = MedicationList.OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToList();
-                        UserMedicationSchedule.ItemsSource = sortedList;
-                        UserMedicationSchedule.HeightRequest = sortedList.Count * 120;
+                        //var sortedList = MedicationList.OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToList();
+                        //UserMedicationSchedule.ItemsSource = sortedList;
+                        //UserMedicationSchedule.HeightRequest = sortedList.Count * 120;
 
                         //Filtered List 
-                        TakenMedicationList = MedicationList.Where(s => s.Action.Equals("Taken", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservableCollection();
-                        NotTakenMedicationList = MedicationList.Where(s => s.Action.Equals("Not Taken", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservableCollection();
-                        NotRecordedMedicationList = MedicationList.Where(s => s.Action.Equals("Not Recorded", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservableCollection();
+                        TakenMedicationList = MedicationList.Where(s => s.Action.Equals("Taken", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservable();
+                        NotTakenMedicationList = MedicationList.Where(s => s.Action.Equals("Not Taken", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservable();
+                        NotRecordedMedicationList = MedicationList.Where(s => s.Action.Equals("Not Recorded", StringComparison.OrdinalIgnoreCase)).OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToObservable();
 
                     }
                 }  
@@ -630,10 +881,25 @@ public partial class ShowAllMedication : ContentPage
                 UserMedicationSchedule.IsVisible = true;
                 noFilterstack.IsVisible = false;
 
-                //var sortedList = MedicationList.OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToList();
-                UserMedicationSchedule.ItemsSource = MedicationList;
-                UserMedicationSchedule.HeightRequest = MedicationList.Count * 120;
-               
+                NoDatalbl.Text = "No Records Have been added yet";
+                if (MedicationList.Count > 0)
+                {
+                    UserMedicationSchedule.IsVisible = true;
+                    noFilterstack.IsVisible = false;
+                    FilterTimeLine.IsVisible = true;
+
+                    UpdateFilterDates = MedicationList; 
+                    CalculateTimeLine();
+
+                }
+                else
+                {
+                    FilterTimeLine.IsVisible = false;
+                    UserMedicationSchedule.IsVisible = false;
+                    noFilterstack.IsVisible = true;
+
+                }
+              
             }
             else if (parameter == "Taken")
             {
@@ -646,13 +912,15 @@ public partial class ShowAllMedication : ContentPage
                 {
                     UserMedicationSchedule.IsVisible = true;
                     noFilterstack.IsVisible = false;
+                    FilterTimeLine.IsVisible = true;
 
-                    //var sortedList = TakenMedicationList.OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToList();
-                    UserMedicationSchedule.ItemsSource = TakenMedicationList;
-                    UserMedicationSchedule.HeightRequest = TakenMedicationList.Count * 120;
+                    UpdateFilterDates = TakenMedicationList;
+                    CalculateTimeLine();
+;
                 }
                 else
                 {
+                    FilterTimeLine.IsVisible = false; 
                     UserMedicationSchedule.IsVisible = false;
                     noFilterstack.IsVisible = true;
                 }
@@ -670,15 +938,17 @@ public partial class ShowAllMedication : ContentPage
                     {
                         UserMedicationSchedule.IsVisible = true;
                         noFilterstack.IsVisible = false;
+                        FilterTimeLine.IsVisible = true;
 
-                        //var sortedList = NotTakenMedicationList.OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToList();
-                        UserMedicationSchedule.ItemsSource = NotTakenMedicationList;
-                        UserMedicationSchedule.HeightRequest = NotTakenMedicationList.Count * 120;
+                        UpdateFilterDates = NotTakenMedicationList;
+                        CalculateTimeLine();
+
                     }
                     else
                     {
                         UserMedicationSchedule.IsVisible = false;
                         noFilterstack.IsVisible = true;
+                        FilterTimeLine.IsVisible = false;
                     }
                 }
             }
@@ -688,21 +958,22 @@ public partial class ShowAllMedication : ContentPage
                 {
                     NotRecordedFrame.Opacity = 0.2;
                     //Only Show NotRecorded Items 
-                    NoDatalbl.Text = "No Records Contain Not Recorded";
+                    UpdateFilterDates = NotRecordedMedicationList;
 
                     if (NotRecordedMedicationList.Count > 0)
                     {
                         UserMedicationSchedule.IsVisible = true;
                         noFilterstack.IsVisible = false;
+                        FilterTimeLine.IsVisible = true;
 
-                        //var sortedList = NotRecordedMedicationList.OrderByDescending(m => DateTime.Parse(m.MedDateTime)).ToList();
-                        UserMedicationSchedule.ItemsSource = NotRecordedMedicationList;
-                        UserMedicationSchedule.HeightRequest = NotRecordedMedicationList.Count * 120;
+                        UpdateFilterDates = NotRecordedMedicationList;
+                        CalculateTimeLine();
                     }
                     else
                     {
                         UserMedicationSchedule.IsVisible = false;
                         noFilterstack.IsVisible = true;
+                        FilterTimeLine.IsVisible = false;
                     }
                 }
             }
@@ -711,5 +982,127 @@ public partial class ShowAllMedication : ContentPage
         {
             NotasyncMethod(Ex);
         }
+    }
+
+    private void FilterMedicationSchedule(TimelineItem item, string lblTxt)
+    {
+        try
+        {
+            FilteredMedList.Clear();
+
+            if (item.type == "Day")
+            {
+                FilteredMedList = UpdateFilterDates;
+                FilterTimeLine.IsVisible = false; 
+            }
+            else if (item.type == "Week")
+            {
+                var splititem = item.DateRange.Split('|');
+                var InitalDate = splititem[0];
+                var LastDate = splititem[1];
+                var StartDate = DateTime.Parse(InitalDate);
+                var EndDate = DateTime.Parse(LastDate);
+                var filteredMedList = UpdateFilterDates
+      .Where(x =>
+      {
+          var medDate = DateTime.Parse(x.MedDateTime).Date; 
+          return medDate >= StartDate.Date && medDate <= EndDate.Date; 
+      })
+      .ToObservable();
+
+                FilteredMedList = filteredMedList;
+            }
+            else if (item.type == "Month")
+            {
+                FilteredMedList = UpdateFilterDates.Where(x => DateTime.Parse(x.MedDateTime).ToString("MMMM yyyy") == item.DisplayText).ToObservable();
+            }
+
+            if (FilteredMedList.Count > 0)
+            {
+
+                UserMedicationSchedule.IsVisible = true;
+                noFilterstack.IsVisible = false;
+                UserMedicationSchedule.ItemsSource = FilteredMedList;
+                UserMedicationSchedule.HeightRequest = FilteredMedList.Count * 120;
+            }
+            else
+            {
+                NoDatalbl.Text = lblTxt;
+                UserMedicationSchedule.IsVisible = false;
+                noFilterstack.IsVisible = true;
+            }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+
+        }     
+    }
+
+    private void FilterTimeLine_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
+    {
+        try
+        {
+            //Check Which Frame is Selected 
+            var getitem = e.DataItem as TimelineItem;
+            var selectedItem = getitem.DisplayText;
+
+            if (AllFrame.Opacity == 0.2)
+            {
+                SelectedFrame = "All";
+            }
+            else if (TakenFrame.Opacity == 0.2)
+            {
+                SelectedFrame = "Taken";
+            }
+            else
+            {
+                if (NotTakenFrame.IsEnabled != false)
+                {
+                    if (NotTakenFrame.Opacity == 0.2)
+                    {
+                        SelectedFrame = "NotTaken";
+                    }
+
+                }
+                if (NotTakenFrame.IsEnabled != false)
+                {
+                    if (NotRecordedFrame.Opacity == 0.2)
+                    {
+                        SelectedFrame = "NotRecorded";
+                    }
+                }
+            }
+
+            if (SelectedFrame == "All")
+            {
+                UpdateFilterDates = MedicationList;
+                var lblTxt = "No Records Have been added yet";
+                FilterMedicationSchedule(getitem, lblTxt);
+            }
+            else if (SelectedFrame == "Taken")
+            {
+                UpdateFilterDates = TakenMedicationList;
+                var lblTxt = "No Records Contain Taken";
+                FilterMedicationSchedule(getitem, lblTxt);
+            }
+            else if (SelectedFrame == "NotTaken")
+            {
+                UpdateFilterDates = NotTakenMedicationList;
+                var lblTxt = "No Records Contain Not Taken";
+                FilterMedicationSchedule(getitem, lblTxt);
+            }
+            else if (SelectedFrame == "NotRecorded")
+            {
+                UpdateFilterDates = NotRecordedMedicationList;
+                var lblTxt = "No Records Contain Not Recorded";
+                FilterMedicationSchedule(getitem, lblTxt);
+            }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex); 
+        }
+     
     }
 }

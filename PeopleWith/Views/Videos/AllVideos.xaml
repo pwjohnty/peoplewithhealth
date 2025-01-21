@@ -78,11 +78,13 @@
                         </Grid.ColumnDefinitions>
                         <Image Source="searchgray.png" HorizontalOptions="Center" HeightRequest="15" BackgroundColor="Transparent" WidthRequest="15"  Grid.Row="0" Grid.Column="0"  />
                         <Entry Grid.Row="0" Grid.Column="1" FontFamily="HankenGroteskRegular" IsTextPredictionEnabled="False" IsSpellCheckEnabled="False"  x:Name="searchbar"  ClearButtonVisibility="Never" InputTransparent="False"  TextChanged="searchbar_TextChanged" Placeholder="Search Videos"   BackgroundColor="Transparent" Background="Transparent" HeightRequest="60"  TextColor="#031926"/>
-                        <Image Source="filtergray.png" HeightRequest="15" BackgroundColor="Transparent" WidthRequest="15"  Grid.Row="0" Grid.Column="2"  >
-                            <Image.GestureRecognizers>
+                        <Frame HasShadow="False" BackgroundColor="Transparent" BorderColor="Transparent"  Grid.Row="0" Grid.Column="3">
+
+                            <Image Source="filtergray.png" HeightRequest="15" BackgroundColor="Transparent" WidthRequest="15"  Grid.Row="0" Grid.Column="2"  />
+                            <Frame.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
-                            </Image.GestureRecognizers>
-                        </Image>
+                            </Frame.GestureRecognizers>
+                        </Frame>
                     </Grid>
                 </Frame>
          
@@ -177,6 +179,8 @@
                 </syncfusion:SfListView>
 
             </Grid>
+            <Label x:Name="NoResultslbl" Text="No results matching your search" Margin="0,40,0,0" Grid.Row="4" Grid.Column="0" IsVisible="False" HorizontalOptions="Center" VerticalOptions="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskBold" />
+
 
             <Grid x:Name="VidsLoading" Margin="0,150,0,0"  IsVisible="False">
                 <Grid.RowDefinitions>
