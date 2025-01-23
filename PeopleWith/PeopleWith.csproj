@@ -40,7 +40,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios'">
-	  <CodesignKey>Apple Development: Created via API (9AF7WV24ZX)</CodesignKey>
+	  <CodesignKey>Apple Development: Created via API (QB732BRMZC)</CodesignKey>
 	  <CodesignProvision>VS: com.peoplewith.peoplewith Development</CodesignProvision>
 	  <ProvisioningType>manual</ProvisioningType>
 	</PropertyGroup>
@@ -56,7 +56,15 @@
 
 		<!-- Splash Screen -->
 		<!--<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" Resize="False" BaseSize="128,128" />-->
-		<MauiSplashScreen Include="Resources\Splash\splashpw.svg" Color="#FFFFFF" />
+		<!--<MauiSplashScreen Include="Resources\Splash\splashpw.svg" Color="#FFFFFF" />-->
+
+		<MauiSplashScreen Condition="'$(TargetFramework)'=='net8.0-android'"
+						 Include="Resources\Splash\splashpw.svg"
+						 Color="#FFFFFF"  />
+
+		<MauiSplashScreen Condition="'$(TargetFramework)'=='net8.0-ios'"
+                          Include="Resources\Splash\splashpw.svg"
+                          Color="#FFFFFF" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />

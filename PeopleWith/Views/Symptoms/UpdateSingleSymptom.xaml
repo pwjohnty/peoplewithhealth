@@ -241,10 +241,10 @@ HorizontalOptions="FillAndExpand">
                             <ColumnDefinition Width="25*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Button Text="+15 mins" FontSize="12" Clicked="Button_Clicked_1" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="0" BackgroundColor="Orange" TextColor="White" />
-                        <Button Text="+30 mins" FontSize="12" Clicked="Button_Clicked_2" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="1" BackgroundColor="Orange" TextColor="White" />
-                        <Button Text="+60 mins" FontSize="12" Clicked="Button_Clicked_3" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="2" BackgroundColor="Orange" TextColor="White" />
-                        <Button Text="+90 mins" FontSize="12" Clicked="Button_Clicked_4" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="3" BackgroundColor="Orange" TextColor="White" />
+                        <Button Text="+15 mins" FontSize="12" Padding="0" Clicked="Button_Clicked_1" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="0" BackgroundColor="Orange" TextColor="White" />
+                        <Button Text="+30 mins" FontSize="12" Padding="0" Clicked="Button_Clicked_2" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="1" BackgroundColor="Orange" TextColor="White" />
+                        <Button Text="+60 mins" FontSize="12" Padding="0" Clicked="Button_Clicked_3" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="2" BackgroundColor="Orange" TextColor="White" />
+                        <Button Text="+90 mins" FontSize="12" Padding="0" Clicked="Button_Clicked_4" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="3" BackgroundColor="Orange" TextColor="White" />
                         
 
                     </Grid>

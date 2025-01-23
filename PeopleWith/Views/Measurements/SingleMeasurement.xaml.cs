@@ -559,9 +559,9 @@ public partial class SingleMeasurement : ContentPage
                             dateconverted = g.dateconverted,
                             numconverted = g.numconverted,
                             unit = g.unit,
-                            value = g.value
+                            value = g.value + "\n" + g.dateconverted.ToString("dd/MM/yy")
                         }
-                    ));
+                    ).OrderBy(d=> d.dateconverted));
 
                     // Calculate min/max values based on the grouped data
                     double maxvalue = (double)GroupedSleepData.Max(g => g.numconverted) + 60;
@@ -887,10 +887,13 @@ public partial class SingleMeasurement : ContentPage
                 }
                 if(usermeasurementpassed.unit == "Hours/Minutes")
                 {
-                    lblvalue.Text = GroupedSleepData[0].value;
-                    lblunit.Text = GroupedSleepData[0].unit;
 
-                    var convertdate = GroupedSleepData[0].dateconverted;
+                    int count = GroupedSleepData.Count - 1; 
+                    var getvalue = GroupedSleepData[count].value.Split('\n');
+                    lblvalue.Text = getvalue[0];
+                    lblunit.Text = GroupedSleepData[count].unit;
+
+                    var convertdate = GroupedSleepData[count].dateconverted;
 
                     datelbl.Text = convertdate.ToString("dd MMMM yyyy");
                 }

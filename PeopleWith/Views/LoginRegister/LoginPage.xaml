@@ -37,6 +37,7 @@ HorizontalOptions="Start" />
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             
             <inputLayout:SfTextInputLayout Grid.Row="0" InputViewPadding="10" ShowHint="True" x:Name="emailhelper" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,20,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
@@ -92,7 +93,12 @@ HorizontalOptions="Start" />
 
             </Grid>
 
-            <Button Grid.Row="5" x:Name="Signin" Text="Sign in" Clicked="Signin_Clicked" Margin="0,20,0,0" Padding="0" BackgroundColor="#E5F0FB" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#031926" />
+            <Button Grid.Row="5" x:Name="Signin"  Text="Sign in" Clicked="Signin_Clicked" Margin="0,20,0,0" Padding="0" BackgroundColor="#E5F0FB" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#031926" />
+            <Frame HasShadow="False" Grid.Row="5" IsVisible="False" x:Name="Signinload" BorderColor="Transparent" BackgroundColor="#E5F0FB" Background="#E5F0FB" Margin="0,20,0,0" Padding="0">
+                <Grid>
+                    <ActivityIndicator IsRunning="True" HorizontalOptions="Center" HeightRequest="42"  VerticalOptions="Center" Color="#031926" Background="Transparent" />
+                </Grid>
+            </Frame>
 
         </Grid>
         

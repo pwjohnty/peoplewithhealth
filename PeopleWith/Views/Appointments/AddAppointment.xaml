@@ -70,20 +70,11 @@
             <Label Text="Location" FontSize="20" Margin="20,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
             <Label Text="Please select the Location of the Appointment you're attending" FontSize="12" Margin="20,5,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
 
-            <ScrollView Orientation="Horizontal" HeightRequest="70" HorizontalScrollBarVisibility="Never">
-                <chip:SfChipGroup ChipType="Choice" x:Name="locationChips" BackgroundColor="Transparent" SelectionChanged="locationChips_SelectionChanged" 
-                      ChipStrokeThickness="1" ShowIcon="False" ChipTextColor="Gray" VerticalOptions="Center" Margin="0,10,0,10"
-                      ChipBackground="Transparent" SelectedChipBackground="#ffe4e1" ChipStroke="LightGray" SelectedChipTextColor="#031926" 
-                      SelectionIndicatorColor="Transparent" ChipPadding="4,4,0,0" ChipTextSize="Micro" DisplayMemberPath="location">
-
-                    <chip:SfChipGroup.ItemTemplate>
-                        <DataTemplate>
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="{Binding location}" FontSize="12" TextColor="#031926" FontAttributes="Bold" VerticalOptions="Center" Padding="10" Margin="0" />
-                            </StackLayout>
-                        </DataTemplate>
-                    </chip:SfChipGroup.ItemTemplate>
-
+            <ScrollView Orientation="Horizontal" HeightRequest="60" HorizontalScrollBarVisibility="Never">
+                <chip:SfChipGroup ChipType="Choice" ChipFontFamily="HankenGroteskBold" x:Name="locationChips" BackgroundColor="Transparent" SelectionChanged="locationChips_SelectionChanged" 
+                      ChipStrokeThickness="1" ShowIcon="False" ChipTextColor="Gray" VerticalOptions="Center" Margin="15,10,10,10"
+                      ChipBackground="Transparent" SelectedChipBackground="#ffe4e1" ChipStroke="LightGray" SelectedChipTextColor="#d96783" 
+                      SelectionIndicatorColor="Transparent" ChipPadding="3,0,0,0" ChipTextSize="12" DisplayMemberPath="location">
                     <chip:SfChipGroup.ChipLayout>
                         <FlexLayout HorizontalOptions="Start" VerticalOptions="Center" Direction="Row" Wrap="NoWrap" 
                         Margin="0,0,0,0" JustifyContent="Start" AlignContent="Start" AlignItems="Center"/>
@@ -94,17 +85,9 @@
             <Label Text="Type of Appointment" FontSize="20" Margin="20,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
             <Label Text="Please select how you are attending this appointment" FontSize="12" Margin="20,5,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
 
-            <chip:SfChipGroup ChipType="Choice" x:Name="TypeChips"  BackgroundColor="Transparent" SelectionChanged="TypeChips_SelectionChanged" ChipStrokeThickness="1"
-                   ShowIcon="False" ChipTextColor="Gray" VerticalOptions="Center" Margin="0,10,0,10" ChipBackground="Transparent" SelectedChipBackground="#ffe4e1" ChipStroke="LightGray"
-                   SelectedChipTextColor="#031926" SelectionIndicatorColor="Transparent" ChipPadding="4,4,0,0" ChipTextSize="Micro" DisplayMemberPath="type">
-
-                <chip:SfChipGroup.ItemTemplate>
-                    <DataTemplate>
-                        <StackLayout Orientation="Horizontal">
-                            <Label Text="{Binding type}" FontSize="12" TextColor="#031926" FontAttributes="Bold" VerticalOptions="Center" Padding="10" Margin="0" />
-                        </StackLayout>
-                    </DataTemplate>
-                </chip:SfChipGroup.ItemTemplate>
+            <chip:SfChipGroup ChipType="Choice" HeightRequest="40" ChipFontFamily="HankenGroteskBold" x:Name="TypeChips" BackgroundColor="Transparent" SelectionChanged="TypeChips_SelectionChanged" ChipStrokeThickness="1"
+                   ShowIcon="False" ChipTextColor="Gray" VerticalOptions="Center" Margin="15,10,10,10" ChipBackground="Transparent" SelectedChipBackground="#ffe4e1" ChipStroke="LightGray"
+                   SelectedChipTextColor="#d96783" SelectionIndicatorColor="Transparent" ChipPadding="3,0,0,0" ChipTextSize="12" DisplayMemberPath="type">
                 <chip:SfChipGroup.ChipLayout>
                     <FlexLayout HorizontalOptions="Start" VerticalOptions="Center" 	Direction="Row" Wrap="Wrap"  Margin="0,0,0,0" JustifyContent="Start" AlignContent="Start" AlignItems="Center"/>
                 </chip:SfChipGroup.ChipLayout>
@@ -127,20 +110,11 @@
 
             <!-- NEw HCP Picker -->
 
-            <ScrollView Orientation="Horizontal" HeightRequest="70" HorizontalScrollBarVisibility="Never">
-                <chip:SfChipGroup ChipType="Choice" x:Name="HcpChips" BackgroundColor="Transparent" SelectionChanged="HcpChips_SelectionChanged" 
-           ChipStrokeThickness="1" ShowIcon="False" ChipTextColor="Gray" VerticalOptions="Center" Margin="0,10,0,10" 
-           ChipBackground="Transparent" SelectedChipBackground="#ffe4e1" ChipStroke="LightGray" SelectedChipTextColor="#031926" 
-           SelectionIndicatorColor="Transparent" ChipPadding="4,4,0,0" ChipTextSize="Micro" DisplayMemberPath="Description">
-
-                    <chip:SfChipGroup.ItemTemplate>
-                        <DataTemplate>
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="{Binding fullname}" FontSize="12" TextColor="#031926" FontAttributes="Bold" VerticalOptions="Center" Padding="10" Margin="0" />
-                            </StackLayout>
-                        </DataTemplate>
-                    </chip:SfChipGroup.ItemTemplate>
-
+            <ScrollView Orientation="Horizontal" HeightRequest="60" HorizontalScrollBarVisibility="Never">
+                <chip:SfChipGroup ChipType="Choice" ChipFontFamily="HankenGroteskBold" x:Name="HcpChips" BackgroundColor="Transparent" SelectionChanged="HcpChips_SelectionChanged" 
+           ChipStrokeThickness="1" ShowIcon="False" ChipTextColor="Gray" VerticalOptions="Center" Margin="15,10,10,10" 
+           ChipBackground="Transparent" SelectedChipBackground="#ffe4e1" ChipStroke="LightGray" SelectedChipTextColor="#d96783" 
+           SelectionIndicatorColor="Transparent" ChipPadding="3,0,0,0" ChipTextSize="12" DisplayMemberPath="fullname">
                     <chip:SfChipGroup.ChipLayout>
                         <FlexLayout HorizontalOptions="Start" VerticalOptions="Center" Direction="Row" Wrap="NoWrap" 
              Margin="0,0,0,0" JustifyContent="Start" AlignContent="Start" AlignItems="Center"/>
@@ -196,10 +170,10 @@
                             <ColumnDefinition Width="25*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Button Text="+15 mins" x:Name="fifteenminsbtn" FontSize="12" Clicked="fifteenminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="0" BackgroundColor="#d96783" TextColor="White" />
-                        <Button Text="+30 mins" x:Name="thirtyminsbtn" FontSize="12" Clicked="thirtyminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="1" BackgroundColor="#d96783" TextColor="White" />
-                        <Button Text="+60 mins" x:Name="sixtyminsbtn" FontSize="12" Clicked="sixtyminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="2" BackgroundColor="#d96783" TextColor="White" />
-                        <Button Text="+90 mins" x:Name="ninetyminsbtn" FontSize="12" Clicked="ninetyminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="3" BackgroundColor="#d96783" TextColor="White" />
+                        <Button Text="+15 mins" x:Name="fifteenminsbtn" Padding="0" FontSize="12" Clicked="fifteenminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="0" BackgroundColor="#d96783" TextColor="White" />
+                        <Button Text="+30 mins" x:Name="thirtyminsbtn" Padding="0" FontSize="12" Clicked="thirtyminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="1" BackgroundColor="#d96783" TextColor="White" />
+                        <Button Text="+60 mins" x:Name="sixtyminsbtn" Padding="0" FontSize="12" Clicked="sixtyminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="2" BackgroundColor="#d96783" TextColor="White" />
+                        <Button Text="+90 mins" x:Name="ninetyminsbtn" Padding="0" FontSize="12" Clicked="ninetyminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="3" BackgroundColor="#d96783" TextColor="White" />
 
 
                     </Grid>
@@ -247,24 +221,13 @@
 
             <!--Appointment Reminder  -->
             <Label x:Name="AppointRemlbl" Text="Appointment Reminder" FontFamily="HankenGroteskBold" Margin="20,10,0,0"   VerticalOptions="Center" HorizontalOptions="Start"   FontSize="20" TextColor="#031926" />
-            <Label Text="Choose a reminder for your appointment.'No Reminder' opts out of the Reminder" FontFamily="HankenRegular" Margin="20,5,0,0"  VerticalOptions="Center" HorizontalOptions="Start" FontSize="12" TextColor="#031926" />
+            <Label Text="Choose a reminder for your appointment. 'No Reminder' opts out of the Reminder" FontFamily="HankenGroteskRegular" Margin="20,5,0,0"  VerticalOptions="Center" HorizontalOptions="Start" FontSize="12" TextColor="#031926" />
 
-            <ScrollView Orientation="Horizontal" HeightRequest="75" HorizontalScrollBarVisibility="Never">
-                
-                
-                
-                <chip:SfChipGroup ChipType="Choice" x:Name="AppointmentReminder"  BackgroundColor="Transparent" SelectionChanged="AppointmentReminder_SelectionChanged" 
-           ChipStrokeThickness="1" ShowIcon="False" ChipTextColor="Gray" VerticalOptions="Center" Margin="0,10,0,10" 
-           ChipBackground="Transparent" SelectedChipBackground="#ffe4e1" ChipStroke="LightGray" SelectedChipTextColor="#031926" 
-           SelectionIndicatorColor="Transparent" ChipPadding="4,4,0,0" ChipTextSize="Micro" DisplayMemberPath="Description">
-
-                    <chip:SfChipGroup.ItemTemplate>
-                        <DataTemplate>
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="{Binding .}" FontSize="12" TextColor="#031926" FontAttributes="Bold" VerticalOptions="Center" Padding="10" Margin="0" />
-                            </StackLayout>
-                        </DataTemplate>
-                    </chip:SfChipGroup.ItemTemplate>
+            <ScrollView Orientation="Horizontal" HeightRequest="60" HorizontalScrollBarVisibility="Never">
+                <chip:SfChipGroup ChipType="Choice" ChipFontFamily="HankenGroteskBold" x:Name="AppointmentReminder"  BackgroundColor="Transparent" SelectionChanged="AppointmentReminder_SelectionChanged" 
+           ChipStrokeThickness="1" ShowIcon="False" ChipTextColor="Gray" VerticalOptions="Center" Margin="15,10,10,10" 
+           ChipBackground="Transparent" SelectedChipBackground="#ffe4e1" ChipStroke="LightGray" SelectedChipTextColor="#d96783" 
+           SelectionIndicatorColor="Transparent" ChipPadding="3,0,0,0" ChipTextSize="12" DisplayMemberPath="{Binding .}">
 
                     <chip:SfChipGroup.ChipLayout>
                         <FlexLayout HorizontalOptions="Start" VerticalOptions="Center" Direction="Row" Wrap="NoWrap" 
@@ -279,9 +242,9 @@
 
             <Label Text="Reason" FontFamily="HankenGroteskBold" Margin="20,10,0,0"   VerticalOptions="Center" HorizontalOptions="Start"   FontSize="20" TextColor="#031926" />
             <Label Text="Add a short reason for this appointment, such as a check-up, vaccinations, or blood tests" FontFamily="HankenGroteskRegular" Margin="20,5,0,0"  VerticalOptions="Center" HorizontalOptions="Start" FontSize="12" TextColor="#031926" />
-            <StackLayout Margin="20,20,20,20">
+            <StackLayout Margin="20,10,20,20">
                 <Border Stroke="#ffe4e1" StrokeThickness="1"  Padding="0,0,0,-10" StrokeShape="RoundRectangle 10" HeightRequest="75" Background="Transparent" HorizontalOptions="FillAndExpand">
-                    <Editor  Placeholder="Add Notes" x:Name="notesentry" Margin="10,5,10,0" PlaceholderColor="LightGray" VerticalOptions="FillAndExpand" TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="FillAndExpand" />
+                    <Editor  Placeholder="Add Reason" x:Name="notesentry" Margin="5,5,5,0" PlaceholderColor="LightGray" VerticalOptions="FillAndExpand" TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="FillAndExpand" />
             </Border>
             </StackLayout>
 

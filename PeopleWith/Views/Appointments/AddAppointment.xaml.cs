@@ -84,6 +84,8 @@ public partial class AddAppointment : ContentPage
             NavFrom = "HCPs";
 
             GetHCPData();
+
+
         }
         catch (Exception Ex)
         {
@@ -120,7 +122,8 @@ public partial class AddAppointment : ContentPage
             AllAppointments = GetAllAppointments;
             NavFrom = "Appointments";
             GetHCPData();
-           
+
+
         }
         catch (Exception Ex)
         {
@@ -159,7 +162,13 @@ public partial class AddAppointment : ContentPage
 
             PopulateAllItems();
 
-            if(AppointmentAdd.Text == "Update Appointment")
+
+            if (ReminderList.Count == 1)
+            {
+                AppointmentReminder.SelectedItem = ReminderList.FirstOrDefault("No Reminder");
+            }
+
+            if (AppointmentAdd.Text == "Update Appointment")
             {
                 PrepopulateItems(); 
             }
@@ -344,6 +353,7 @@ public partial class AddAppointment : ContentPage
             var CurrentDateTime = DateTime.Now;
 
             //Calcute TimeSpan Between 
+            AppointmentReminder.SelectedItem = null; 
             ReminderList.Clear();
             double DiffinDate = (SelectedDateTime - CurrentDateTime).TotalMinutes;
             if (DiffinDate < 15)
@@ -388,14 +398,11 @@ public partial class AddAppointment : ContentPage
             }
             AppointmentReminder.ItemsSource = ReminderList;
 
-            if(ReminderList.Count == 1)
+            if (ReminderList.Count == 1)
             {
-                AppointmentReminder.SelectedItem = ReminderList.FirstOrDefault("No Reminder");
-                //AppointmentReminder.ChipBackground = Color.FromRgba("#ffe4e1");
-                //AppointmentReminder.ChipTextColor = Color.FromRgba("#031926");
-                //AppointmentReminder.Items[0];
-                //AppointmentReminder.SelectedItem = ReminderList[0];
+                AppointmentReminder.SelectedItem = ReminderList[0];
             }
+           
             //else
             //{
             //    AppointmentReminder.ChipBackground = Colors.Transparent;

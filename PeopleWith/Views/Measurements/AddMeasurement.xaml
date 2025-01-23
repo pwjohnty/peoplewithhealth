@@ -54,7 +54,7 @@
 
             <Label Text="Measurement Reading" FontSize="20" Margin="0,0,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
 
-        <Label Text="Please enter the amount, reading or volume of the measurement by tapping on the box below:" FontSize="12" Margin="0,0,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
+            <Label Text="Please enter the amount, duration, reading or volume of the measurement by tapping on the box below:" FontSize="12" Margin="0,0,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
 
         <Frame CornerRadius="10" Margin="0,10,0,0" x:Name="unitentryframe"  InputTransparent="False" Padding="0"  HeightRequest="70"  BackgroundColor="#e5f0fb"  HasShadow="False" BorderColor="Transparent">
             <Grid HorizontalOptions="FillAndExpand" Margin="0,10,0,0" BackgroundColor="Transparent">
@@ -94,7 +94,7 @@
            
         </Frame>
 
-        <Frame HasShadow="False" x:Name="SleepDurationFrame" IsVisible="False"  InputTransparent="False" Margin="20,10,20,10" BorderColor="Transparent"  Padding="10" CornerRadius="20"  BackgroundColor="#e5f0fb" >
+        <Frame HasShadow="False" x:Name="SleepDurationFrame" IsVisible="False"  InputTransparent="False" Margin="0,10,00,10" BorderColor="Transparent"  Padding="10" CornerRadius="20"  BackgroundColor="#e5f0fb" >
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -135,10 +135,10 @@
                         <ColumnDefinition Width="25*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button Text="+15 mins" x:Name="Fiffteenminsbtn" FontSize="12" Clicked="Fiffteenminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="0" BackgroundColor="#BFDBF7" TextColor="#031926" />
-                    <Button Text="+30 mins" x:Name="Thirtyminsbtn" FontSize="12" Clicked="Thirtyminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="1" BackgroundColor="#BFDBF7" TextColor="#031926" />
-                    <Button Text="+60 mins" x:Name="Sixtyminsbtn" FontSize="12" Clicked="Sixtyminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="2" BackgroundColor="#BFDBF7" TextColor="#031926" />
-                    <Button Text="+90 mins" x:Name="Ninetyminsbtn" FontSize="12" Clicked="Ninetyminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="3" BackgroundColor="#BFDBF7" TextColor="#031926" />
+                    <Button Text="+15 mins" Padding="0" x:Name="Fiffteenminsbtn" FontSize="12" Clicked="Fiffteenminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="0" BackgroundColor="#BFDBF7" TextColor="#031926" />
+                    <Button Text="+30 mins" Padding="0" x:Name="Thirtyminsbtn" FontSize="12" Clicked="Thirtyminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="1" BackgroundColor="#BFDBF7" TextColor="#031926" />
+                    <Button Text="+60 mins" Padding="0" x:Name="Sixtyminsbtn" FontSize="12" Clicked="Sixtyminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="2" BackgroundColor="#BFDBF7" TextColor="#031926" />
+                    <Button Text="+90 mins" Padding="0" x:Name="Ninetyminsbtn" FontSize="12" Clicked="Ninetyminsbtn_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="3" BackgroundColor="#BFDBF7" TextColor="#031926" />
 
 
                 </Grid>

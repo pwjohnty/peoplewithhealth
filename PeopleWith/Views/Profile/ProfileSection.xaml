@@ -21,7 +21,7 @@
             </Grid>
 
             <!-- Health Details-->
-            <Frame HasShadow="false" Margin="20,10,20,0" BorderColor="#E8E8E8" Padding="5,5,5,-2" BackgroundColor="Transparent" >
+            <Frame HasShadow="false" Margin="20,10,20,0" BorderColor="#E8E8E8" Padding="5,0,5,-2" BackgroundColor="Transparent" >
                 <syncfusion:SfListView x:Name="UserDetails"  SelectionBackground="Transparent" ItemTapped="UserDetails_ItemTapped" AutoFitMode="Height" >
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate >
@@ -54,7 +54,7 @@
             <!-- Settings-->
             <Label Text="Settings"  HorizontalOptions="Start" Margin="20,10,0,0" FontFamily="HankenGroteskBold" FontSize="26" TextColor="#031926"/>
 
-            <Frame HasShadow="false" Margin="20,10,20,0" Padding="5,5,5,-2" HeightRequest="118" BorderColor="#E8E8E8"  BackgroundColor="Transparent" >
+            <Frame HasShadow="false" Margin="20,10,20,0" Padding="5,0,5,-2" HeightRequest="112" BorderColor="#E8E8E8"  BackgroundColor="Transparent" >
                 <syncfusion:SfListView x:Name="Settings" SelectionBackground="Transparent" ItemTapped="Settings_ItemTapped" AutoFitMode="Height" >
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
@@ -86,7 +86,7 @@
 
             <!-- Email Response -->
 
-            <Frame x:Name="ImproveSection" CornerRadius="10"  Margin="20,20,20,5"  BackgroundColor="#009fe3" HasShadow="False" HeightRequest="100" BorderColor="#009fe3" Padding="0">
+            <Frame x:Name="ImproveSection"  InputTransparent="False" CornerRadius="10"  Margin="20,20,20,5"  BackgroundColor="#009fe3" HasShadow="False" HeightRequest="100" BorderColor="#009fe3" Padding="0">
                 <StackLayout >
                     <Label HorizontalOptions="Center" FontFamily="HankenGroteskBold" Text="Want to help us improve?" FontSize="20" FontAttributes="Bold" VerticalOptions="Start" Margin="0,10,0,0" TextColor="White" />
                     <Label HorizontalOptions="Center"  FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" Text="If you find any issues or want to recommend any improvements click here to contact us" FontSize="15" FontAttributes="None" VerticalOptions="Start" Margin="10,0,10,0" TextColor="White" />
@@ -109,7 +109,7 @@
             <!--Privacy List -->
             <Label Text="Privacy"  HorizontalOptions="Start" Margin="20,10,0,0" FontFamily="HankenGroteskBold" FontSize="26" TextColor="#031926"/>
 
-            <Frame HasShadow="false" Margin="20,10,20,0" Padding="5,5,5,-2" BorderColor="#E8E8E8"  BackgroundColor="Transparent" >
+            <Frame HasShadow="false" Margin="20,10,20,0" Padding="5,0,5,-2" BorderColor="#E8E8E8"  BackgroundColor="Transparent" >
                 <syncfusion:SfListView x:Name="PrivacyList" SelectionBackground="Transparent" ItemTapped="PrivacyList_ItemTapped" AutoFitMode="Height" >
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>

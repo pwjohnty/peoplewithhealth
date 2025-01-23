@@ -1239,6 +1239,7 @@ public partial class MainSchedule : ContentPage
 
                 if (getitem != null)
                 {
+                    getitem.Buttonenabled = false; 
                     MedsFeedbackRemove.Clear();
 
                     if (getitem.Type == "Medication")
@@ -1333,7 +1334,8 @@ public partial class MainSchedule : ContentPage
                     Updateitem.Buttonntop = 0.2;
 
                     }
-           
+                getitem.Buttonenabled = true;
+
             }
             else
             {
@@ -1363,6 +1365,7 @@ public partial class MainSchedule : ContentPage
                 var getitem = ScheduleList.Where(x => x.Feedbackid == label.FeedbackID).FirstOrDefault();
                 if (getitem != null)
                 {
+                    getitem.Buttonenabled = false;
                     MedsFeedbackRemove.Clear();
 
                     if (getitem.Type == "Medication")
@@ -1456,6 +1459,8 @@ public partial class MainSchedule : ContentPage
                     var Updateitem = ScheduleList.Where(x => x.Feedbackid == label.FeedbackID).FirstOrDefault();
                     Updateitem.Buttonop = 0.2;
                 }
+
+                getitem.Buttonenabled = true;
             }
             else
             {
