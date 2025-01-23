@@ -1462,6 +1462,23 @@ public partial class WH : ContentPage
 
             UpdateProgress();
 
+            if(newuser.signupcodeid.Contains("A1"))
+            {
+                newuser.registrycondition = "WHA1";
+            }
+            else if (newuser.signupcodeid.Contains("A2"))
+            {
+                newuser.registrycondition = "WHA2";
+            }
+            else if (newuser.signupcodeid.Contains("A3"))
+            {
+                newuser.registrycondition = "WHA3";
+            }
+            else if (newuser.signupcodeid.Contains("A4"))
+            {
+                newuser.registrycondition = "WHA4";
+            }
+
             await Navigation.PushAsync(new RegisterFinalPage(newuser, topprogress.Progress, userresponselist, additonalconsent, symptomstoadd, medicationstoadd, adduserdiagnosis, addusermeasurements), false);
 
 
