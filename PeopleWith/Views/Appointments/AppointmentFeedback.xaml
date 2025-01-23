@@ -27,23 +27,15 @@
                 <Grid Margin="20,15,0,0" x:Name="ActualDurationtitle">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="1.2*"/> 
+                    <ColumnDefinition Width="1.4*"/> 
                 </Grid.ColumnDefinitions>
           
             <Label Text="Actual Duration" Grid.Column="0" FontSize="20"  TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" VerticalOptions="Center" HorizontalOptions="Start" />
-                    <chip:SfChipGroup Grid.Column="1" ChipType="Choice" HeightRequest="40" x:Name="TimeChips"
+                    <chip:SfChipGroup Grid.Column="1" ChipFontFamily="HankenGroteskBold"  ChipType="Choice" HeightRequest="40" x:Name="TimeChips"
                   BackgroundColor="Transparent" SelectionChanged="TimeChips_SelectionChanged" ChipStrokeThickness="1"
                   ShowIcon="False" ChipTextColor="Gray" ChipBackground="Transparent" SelectedChipBackground="#ffe4e1"
                   ChipStroke="Gray" SelectedChipTextColor="#d96783" SelectionIndicatorColor="Transparent"
-                  ChipPadding="2,5,2,5" ChipTextSize="Micro" DisplayMemberPath="Description" VerticalOptions="Center" Margin="0,-10,0,0">
-                        <chip:SfChipGroup.ItemTemplate>
-                            <DataTemplate>
-                                <StackLayout Orientation="Horizontal" Padding="5" Spacing="5" VerticalOptions="Center">
-                                    <Label Text="{Binding .}" FontSize="14" TextColor="#031926" FontFamily="HankenGroteskBold" 
-                       VerticalOptions="Center" Padding="2,0,2,0" Margin="0" />
-                                </StackLayout>
-                            </DataTemplate>
-                        </chip:SfChipGroup.ItemTemplate>
+                  ChipPadding="2,2,0,0"  ChipTextSize="12" DisplayMemberPath="{Binding .}" VerticalOptions="Center" Margin="0">
                         <chip:SfChipGroup.ChipLayout>
                             <FlexLayout HorizontalOptions="Start" VerticalOptions="Start" Direction="Row" Wrap="Wrap"
                     JustifyContent="Start" AlignContent="Start" AlignItems="Center" Margin="0" />
@@ -56,8 +48,8 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Entry x:Name="DurationEntry" Placeholder="Duration" ReturnType="Done" PlaceholderColor="LightGrey" Margin="0,10,0,0" FontFamily="HankenGroteskBold"  Keyboard="Numeric" HorizontalTextAlignment="End" HorizontalOptions="End"   Grid.Column="0"  VerticalOptions="Center"  TextColor="#031926" FontSize="26" />
-                    <Label x:Name="Durationlbl" FontSize="16" Margin="20,10,0,0" TextColor="#d96783" FontFamily="HankenGroteskBold" FontAttributes="Bold" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalOptions="Start"  Grid.Column="1" />
+                    <Entry x:Name="DurationEntry" Placeholder="Duration" TextChanged="DurationEntry_TextChanged" ReturnType="Done" PlaceholderColor="LightGrey" Margin="0,10,0,0" FontFamily="HankenGroteskBold"  Keyboard="Numeric" HorizontalTextAlignment="End" HorizontalOptions="End"   Grid.Column="0"  VerticalOptions="Center"  TextColor="#031926" FontSize="26" />
+                    <Label x:Name="Durationlbl" FontSize="16" Margin="20,15,0,0" TextColor="#d96783" FontFamily="HankenGroteskBold" FontAttributes="Bold" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalOptions="Start"  Grid.Column="1" />
 
             </Grid>
 

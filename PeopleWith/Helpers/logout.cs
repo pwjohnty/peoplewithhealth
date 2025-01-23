@@ -33,7 +33,7 @@ namespace PeopleWith
             }
         }
 
-        public void ClearUserInfo()
+        public async void ClearUserInfo()
         {
             try
             {
@@ -57,6 +57,7 @@ namespace PeopleWith
                 Preferences.Set("validationcode", string.Empty);
                 Preferences.Set("token", string.Empty);
 
+                await Task.Delay(300);
                 Application.Current.MainPage = new NavigationPage(new MainPage());
             }
             catch (Exception ex)

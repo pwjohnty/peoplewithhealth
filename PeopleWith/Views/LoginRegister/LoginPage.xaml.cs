@@ -228,6 +228,9 @@ public partial class LoginPage : ContentPage
 
             //check if email is in the db
 
+            Signinload.IsVisible = true;
+            Signin.IsVisible = false; 
+
             var serializerOptions = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -248,6 +251,8 @@ public partial class LoginPage : ContentPage
                 {
                     emailhelper.ErrorText = "Email does not Exist";
                     emailhelper.HasError = true;
+                    Signinload.IsVisible = false;
+                    Signin.IsVisible = true;
                     Vibration.Vibrate();
                     emailentry.Focus();
                     return;
@@ -257,11 +262,15 @@ public partial class LoginPage : ContentPage
                     if (users[0].deleted == true)
                     {
                         await DisplayAlert("Account Deleted", "Your account has been deleted", "OK");
+                        Signinload.IsVisible = false;
+                        Signin.IsVisible = true;
                         return; 
                     }
                     else if (users[0].registrationstatus == "Onboarding")
                     {
                         await DisplayAlert("Account Onboarding", "Please use your email to continue registering", "OK");
+                        Signinload.IsVisible = false;
+                        Signin.IsVisible = true;
                         return;
                     }
 
@@ -280,6 +289,8 @@ public partial class LoginPage : ContentPage
                     {
                         passhelper.ErrorText = "Password Incorrect, Try Again";
                         passhelper.HasError = true;
+                        Signinload.IsVisible = false;
+                        Signin.IsVisible = true;
                         Vibration.Vibrate();
                         firstpasswordentry.Focus();
                         return;
@@ -329,12 +340,14 @@ public partial class LoginPage : ContentPage
 
                 //Add Push Notification Tags
                 var setnotificationloginbool = true;
-
+                await Task.Delay(2000); 
                 Application.Current.MainPage = new NavigationPage(new MainDashboard(setnotificationloginbool));
 
             }
             else
             {
+                Signinload.IsVisible = false;
+                Signin.IsVisible = true;
                 return; 
             }
         }

@@ -463,4 +463,20 @@ public partial class AppointmentFeedback : ContentPage
             //Leave Empty
         }
     }
+
+    private void DurationEntry_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        try
+        {
+            if (e.NewTextValue.Contains("."))
+            {
+                var NewValue = e.NewTextValue;
+                DurationEntry.Text = NewValue.Replace(".", "");
+            }
+        }
+        catch (Exception Ex)
+        {
+            //leave Empty
+        }
+    }
 }

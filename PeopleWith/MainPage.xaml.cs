@@ -1,5 +1,6 @@
 ﻿//using AndroidX.Activity;
 using System.Collections.ObjectModel;
+using System.Runtime.CompilerServices;
 
 namespace PeopleWith
 {
@@ -15,7 +16,25 @@ namespace PeopleWith
            // checkuser();
             // Checkifappisupdated();
             checkifuserisloggedin();
+            checkwifion(); 
+        }
 
+        private async void checkwifion()
+        {
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+
+            if (accessType == NetworkAccess.Internet)
+            {
+               //Do Nothing 
+            }
+            else
+            {
+                var currentPage = Application.Current.MainPage.Navigation.NavigationStack.LastOrDefault();
+                if (!(currentPage is NoInternetPage))
+                {
+                    await Application.Current.MainPage.Navigation.PushAsync(new NoInternetPage());
+                }
+            }
         }
 
         async void checkifuserisloggedin()

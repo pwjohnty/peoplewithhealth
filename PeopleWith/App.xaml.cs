@@ -60,6 +60,23 @@ namespace PeopleWith
             }
         }
 
+        protected override void OnResume()
+        {
+            base.OnResume();
+            var currentPage = MainPage.Navigation.NavigationStack.LastOrDefault();
+            if (currentPage.ToString() == "PeopleWith.ProfileSection")
+            {
+               MessagingCenter.Send<App>(this, "CallMethodOnPage");
+            }
+
+            if (currentPage.ToString() == "PeopleWith.MainDashboard")
+            {
+                MessagingCenter.Send<App>(this, "CallNotifications");
+            }
+
+
+        }
+
 
 
         private async void OnConnectivityChanged(object sender, bool isConnected)

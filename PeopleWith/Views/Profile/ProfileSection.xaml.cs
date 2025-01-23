@@ -14,6 +14,7 @@ public partial class ProfileSection : ContentPage
     user AllUserData = new user();
     string one;
     string two;
+    private bool settingsOpened = false;
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
@@ -31,6 +32,22 @@ public partial class ProfileSection : ContentPage
             //Dunno 
         }
     }
+
+
+    //protected override async void OnAppearing()
+    //{
+    //    try
+    //    {
+    //        base.OnAppearing();
+    //        //Check if Notifications has been updated
+    //        GetSettings();
+
+    //    }
+    //    catch (Exception Ex)
+    //    {
+    //        NotasyncMethod(Ex);
+    //    }
+    //}
 
 
     //public ProfileSection()
@@ -82,6 +99,10 @@ public partial class ProfileSection : ContentPage
             GetSettings();
             GetPrivacyDetails();
 
+            MessagingCenter.Subscribe<App>(this, "CallMethodOnPage", (sender) => {
+                GetSettings();
+            });
+
         }
         catch (Exception Ex)
         {
@@ -94,7 +115,8 @@ public partial class ProfileSection : ContentPage
         try
         {
             InitializeComponent();
-            AllUserData = AllUserDetails; 
+            AllUserData = AllUserDetails;
+
             //Icon and user's Name 
             var FirstName = Helpers.Settings.FirstName;
             var Surname = Helpers.Settings.Surname;
@@ -130,6 +152,10 @@ public partial class ProfileSection : ContentPage
             GetHealthDetails();
             GetSettings();
             GetPrivacyDetails();
+
+            MessagingCenter.Subscribe<App>(this, "CallMethodOnPage", (sender) => {
+                GetSettings();
+            });
 
         }
         catch (Exception Ex)
@@ -241,6 +267,9 @@ public partial class ProfileSection : ContentPage
     {
         try
         {
+            Settings.ItemsSource = null;
+            SettingsList.Clear();
+
             //Password
             var Password = new user();
             Password.SettingsTitle = "Reset Password";
@@ -401,11 +430,15 @@ public partial class ProfileSection : ContentPage
                     }
                     else
                     {
+
+
+                        // Open phone settings
                         AppInfo.ShowSettingsUI();
+                        //GetSettings(); 
 
                         //if (DeviceInfo.Platform == DevicePlatform.Android)
                         //{
-                           
+
                         //    //await Permissions.RequestAsync<Permissions.PostNotifications>();
                         //    //if(That didnt work Do this) - Needs changed to open Notifications page- Then same for android 
                         //    var context = Android.App.Application.Context;

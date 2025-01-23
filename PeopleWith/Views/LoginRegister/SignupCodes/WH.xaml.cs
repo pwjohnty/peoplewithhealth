@@ -1112,15 +1112,15 @@ public partial class WH : ContentPage
                 }
             }
 
-
-            if(string.IsNullOrEmpty(exerciseonetext.Text))
+            //Also checks Value is between 1 and 1440 (1 day) 
+            if(string.IsNullOrEmpty(exerciseonetext.Text) || Int32.Parse(exerciseonetext.Text) < 1 || Int32.Parse(exerciseonetext.Text) > 1440)
             {
                 exerciseonetext.Focus();
                 Vibration.Vibrate();
                 return;
             }
-
-            if (string.IsNullOrEmpty(exercisetwotext.Text))
+            //Also checks Value is between 1 and 7 (Total No. of days in a week ) 
+            if (string.IsNullOrEmpty(exercisetwotext.Text) || Int32.Parse(exercisetwotext.Text) < 1 || Int32.Parse(exercisetwotext.Text) > 7)
             {
                 exercisetwotext.Focus();
                 Vibration.Vibrate();
@@ -1589,37 +1589,42 @@ public partial class WH : ContentPage
         try
         {
             //symptom search entry
-            SympAInd.IsVisible = true;
 
             if (string.IsNullOrEmpty(e.NewTextValue))
             {
-                SympAInd.IsVisible = false;
+                Symloading.IsVisible = false;
                 additionlsymlist.IsVisible = false;
                 searchsymsentry.IsEnabled = false;
                 searchsymsentry.IsEnabled = true;
+                NoResultslbl.IsVisible = false; 
 
             }
             else
             {
-                var collectionone = allsymptomlist.Where(x => x.title.ToLowerInvariant().StartsWith(e.NewTextValue.ToLowerInvariant()));
-                var count = collectionone.Count();
-                if (count == 0)
+                Symloading.IsVisible = true;
+                additionlsymlist.IsVisible = false;
+                NoResultslbl.IsVisible = false;
+                var countofcharacters = e.NewTextValue.Length;
+
+                if (countofcharacters > 2)
                 {
-                    additionlsymlist.IsVisible = false;
+                    var collectionone = allsymptomlist.Where(x => x.title.ToLowerInvariant().StartsWith(e.NewTextValue.ToLowerInvariant()));
+                    var count = collectionone.Count();
+                    Symloading.IsVisible = false;
+                    if (count == 0)
+                    {
+                        additionlsymlist.IsVisible = false;
+                        NoResultslbl.IsVisible = true; 
+                    }
+                    else
+                    {
+                        additionlsymlist.ItemsSource = collectionone;
+                        additionlsymlist.HeightRequest = count * 60;
+                        additionlsymlist.IsVisible = true;
+                        NoResultslbl.IsVisible = false; 
 
-                }
-                else
-                {
-                    // emptyframe.IsVisible = false;
-                    // resultsframe.IsVisible = true;
-                    additionlsymlist.ItemsSource = collectionone;
-                    additionlsymlist.HeightRequest = count * 60;
-                    additionlsymlist.IsVisible = true;
-
-                }
-
-                SympAInd.IsVisible = false;
-
+                    }
+                }           
             }
 
         }
@@ -1674,38 +1679,44 @@ public partial class WH : ContentPage
     {
         try
         {
-            //medication search entry
-            MedAInd.IsVisible = true;
+
             if (string.IsNullOrEmpty(e.NewTextValue))
             {
-                MedAInd.IsVisible = false;
                 additionlmedlist.IsVisible = false;
                 searchmedentry.IsEnabled = false;
                 searchmedentry.IsEnabled = true;
+                Medsloading.IsVisible = false;
+                NoResultslbl2.IsVisible = false;
 
             }
             else
             {
 
-                var collectionone = allmedicationlist.Where(x => x.title.ToLowerInvariant().StartsWith(e.NewTextValue.ToLowerInvariant()));
-                var count = collectionone.Count();
-                if (count == 0)
-                {
-                    additionlmedlist.IsVisible = false;
+                Medsloading.IsVisible = true;
+                additionlmedlist.IsVisible = false;
+                NoResultslbl2.IsVisible = false;
+                var countofcharacters = e.NewTextValue.Length;
 
-                }
-                else
+                if (countofcharacters > 2)
                 {
-                    // emptyframe.IsVisible = false;
-                    // resultsframe.IsVisible = true;
-                    additionlmedlist.ItemsSource = collectionone;
-                    additionlmedlist.HeightRequest = count * 60;
-                    additionlmedlist.IsVisible = true;
+                    var collectionone = allmedicationlist.Where(x => x.title.ToLowerInvariant().StartsWith(e.NewTextValue.ToLowerInvariant()));
+                    var count = collectionone.Count();
+                    Medsloading.IsVisible = false;
+                    if (count == 0)
+                    {
+                        additionlmedlist.IsVisible = false;
+                        NoResultslbl2.IsVisible = true;
+                    }
+                    else
+                    {
+                        additionlmedlist.ItemsSource = collectionone;
+                        additionlmedlist.HeightRequest = count * 60;
+                        additionlmedlist.IsVisible = true;
+                        NoResultslbl2.IsVisible = false;
 
-                }
-                MedAInd.IsVisible = false;
+                    }
+                }          
             }
-
         }
         catch (Exception Ex)
         {
@@ -1760,18 +1771,23 @@ public partial class WH : ContentPage
     {
         try
         {
-
+            PostCodeLoading.IsVisible = true;
+            postcodelist.IsVisible = false; 
             if (string.IsNullOrEmpty(e.NewTextValue))
             {
                // FilterResults.Clear();
                 postcodelist.IsVisible = false;
+                PostCodeLoading.IsVisible = false;
+                NoResultslblPost.IsVisible = false; 
             }
             else
             {
                 var countofcharacters = e.NewTextValue.Length;
 
-                if (countofcharacters > 0)
+                if (countofcharacters > 1)
                 {
+                    PostCodeLoading.IsVisible = false;
+                    NoResultslblPost.IsVisible = false; 
                     var Characters = e.NewTextValue;
                   //  var filteredmeds = new ObservableCollection<postcode>(Allpostcodes.Where(s => s.postcodebrick.Contains(Characters, StringComparison.OrdinalIgnoreCase))).OrderBy(m => m.postcodebrick);
 
@@ -1781,9 +1797,39 @@ public partial class WH : ContentPage
                         .OrderBy(m => m.postcodebrick));
 
                     postcodelist.ItemsSource = filteredmeds;
-                    postcodelist.IsVisible = true;
-                    postcodelist.HeightRequest = filteredmeds.Count * 20;
-                   // allvideolist.HeightRequest = 70 * filteredmeds.Count();
+                    PostCodeLoading.IsVisible = false;                 
+                    postcodelist.IsVisible = false; 
+
+                    if (filteredmeds.Count() == 0)
+                    {
+                        NoResultslblPost.IsVisible = true; 
+                    }
+                    else
+                    {
+                        postcodelist.IsVisible = true;
+                        NoResultslblPost.IsVisible = false;
+
+                        double GetHeight = Convert.ToDouble(filteredmeds.Count() / 4.0);
+                        if (GetHeight.ToString().Contains("."))
+                        {
+                            var GetInt = GetHeight.ToString().Split('.');
+                            int SetInt = Int32.Parse(GetInt[0]);
+                            if (SetInt == 0)
+                            {
+                                postcodelist.HeightRequest = 65;
+                            }
+                            else
+                            {
+                                postcodelist.HeightRequest = (SetInt * 65) + 65;
+                            }
+
+                        }
+                        else
+                        {
+                            postcodelist.HeightRequest = (GetHeight * 65) + 65;
+                        }
+                    }
+                    // allvideolist.HeightRequest = 70 * filteredmeds.Count();
                 }
 
             }
@@ -1805,11 +1851,11 @@ public partial class WH : ContentPage
 
             if (item != null)
             {
-
+                var NewItem = new ObservableCollection<postcode>();
+                NewItem.Add(item); 
                 postcodetext.Text = item.postcodebrick;
-
-                postcodelist.HeightRequest = 70;
-
+                postcodelist.ItemsSource = NewItem; 
+                postcodelist.HeightRequest = 65;
             }
 
 
@@ -2159,5 +2205,22 @@ public partial class WH : ContentPage
         {
             NotasyncMethod(Ex);
         }
+    }
+
+    private void postcodelist_SizeChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            var viewCell = sender as View;
+            if (viewCell != null)
+            {
+                double itemHeight = viewCell.Height;
+                //postcodelist.HeightRequest = itemHeight; 
+            }
+        }
+        catch (Exception Ex)
+        {
+            //Ignore
+        }     
     }
 }

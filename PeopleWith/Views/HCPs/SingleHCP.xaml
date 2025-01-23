@@ -204,8 +204,8 @@
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <Label HorizontalOptions="StartAndExpand" Text="{Binding ContactTitle}" FontFamily="HankenGroteskRegular" HeightRequest="20" FontSize="10" VerticalOptions="Center" Grid.Row="0" Grid.Column="0" Margin="10,10,0,0" TextColor="#9F2B68" />
-                                        <Label HorizontalOptions="StartAndExpand" Text="{Binding ContactItem}" FontFamily="HankenGroteskBold" HeightRequest="30" VerticalOptions="Center" FontSize="12" Grid.Row="1" Grid.Column="0" Margin="10,0,0,0" FontAttributes="Bold" TextColor="#031926" />
+                                        <Label HorizontalOptions="StartAndExpand" Text="{Binding ContactTitle}" FontFamily="HankenGroteskRegular" HeightRequest="20" FontSize="10" VerticalOptions="Center" Grid.Row="0" Grid.Column="0" Margin="15,10,0,0" TextColor="#9F2B68" />
+                                        <Label HorizontalOptions="StartAndExpand" Text="{Binding ContactItem}" FontFamily="HankenGroteskBold" HeightRequest="30" VerticalOptions="Center" FontSize="12" Grid.Row="1" Grid.Column="0" Margin="15,0,0,0" FontAttributes="Bold" TextColor="#031926" />
 
                                         <BoxView HeightRequest="1" Color="#CBC3E3" BackgroundColor="#CBC3E3"  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="1" Margin="10,0,10,0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
 

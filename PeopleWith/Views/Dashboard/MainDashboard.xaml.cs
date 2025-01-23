@@ -71,6 +71,10 @@ public partial class MainDashboard : ContentPage
 
             checksignupinfo();
 
+            MessagingCenter.Subscribe<App>(this, "CallNotifications", (sender) => {
+                checknotifications(); 
+            });
+
         }
         catch (Exception Ex)
         {
@@ -99,6 +103,9 @@ public partial class MainDashboard : ContentPage
 
         checksignupinfo();
 
+        MessagingCenter.Subscribe<App>(this, "CallNotifications", (sender) => {
+            checknotifications(); 
+        });
         //lbl.Text = firstName;
     }
 
@@ -2875,11 +2882,37 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
-            //turn on notifications button
 
-            await LocalNotificationCenter.Current.RequestNotificationPermission();
 
-            checknotifications();
+            if (DeviceInfo.Platform == DevicePlatform.Android)
+            {
+                // Request and capture the permission status on Android
+                PermissionStatus status = await Permissions.CheckStatusAsync<Permissions.PostNotifications>();
+
+                if (status == PermissionStatus.Denied)
+                {
+                    AppInfo.ShowSettingsUI();
+                }
+                else
+                {
+                    await LocalNotificationCenter.Current.RequestNotificationPermission();
+                    checknotifications();
+
+                }
+            }
+            else
+            {
+
+                    await LocalNotificationCenter.Current.RequestNotificationPermission();
+
+                    checknotifications();
+
+
+
+
+            }
+
+
 
         }
         catch(Exception ex)
