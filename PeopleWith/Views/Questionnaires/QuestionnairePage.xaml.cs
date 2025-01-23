@@ -20,6 +20,8 @@ public partial class QuestionnairePage : ContentPage
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
+    userfeedback userfeedbacklistpassed = new userfeedback();
+    bool fromdash;
 
     async public void NotasyncMethod(Exception Ex)
     {
@@ -45,6 +47,32 @@ public partial class QuestionnairePage : ContentPage
             NotasyncMethod(Ex);
         }
     }
+
+    public QuestionnairePage(string questionnaireid, userfeedback userfeedbacklist)
+    {
+        try
+        {
+            //from dash
+
+            InitializeComponent();
+
+            fromdash = true;
+
+            userfeedbacklistpassed = userfeedbacklist;
+
+            //get questionnaire detais
+            getquestionnairedetails(questionnaireid);
+
+
+
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+
 
     public QuestionnairePage(string questionnaireid)
     {
@@ -809,6 +837,34 @@ public partial class QuestionnairePage : ContentPage
 
                 submitbtn.IsEnabled = true;
 
+                if(fromdash)
+                {
+
+                    var newfd = new feedbackdata();
+
+                    newfd.datetime = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+                    newfd.action = "Completed Questionnaire";
+                    newfd.label = newitem.questionnairename;
+
+                    //add questionnaire details in feedback data
+
+                    if (userfeedbacklistpassed.initialquestionnairefeedbacklist == null)
+                    {
+                        userfeedbacklistpassed.initialquestionnairefeedbacklist = new ObservableCollection<feedbackdata>();
+                    }
+
+                    userfeedbacklistpassed.initialquestionnairefeedbacklist.Add(newfd);
+
+                    string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.initialquestionnairefeedbacklist);
+                    userfeedbacklistpassed.initialquestionnairefeedback = newsymJson;
+
+
+                    await aPICalls.UserfeedbackUpdateQuestionnaireData(userfeedbacklistpassed);
+
+
+
+                }
+
                 //   alluserquestionnaires.Add(newitem);
 
                 await Navigation.PushAsync(new AllQuestionnaires(), false);
@@ -856,24 +912,27 @@ public partial class QuestionnairePage : ContentPage
 
             var getitem = questionnairefromlist.questionanswerjsonlist.Where(x => x.questionid == item.questionid).FirstOrDefault();
 
+            if (getitem != null)
 
-            if (!string.IsNullOrEmpty(e.NewTextValue))
             {
-              
-                getitem.Bordercolor = Colors.White;
-                getitem.Isrequired = false;
-                getitem.Hasanswered = true;
 
-                getitem.selectedtextvalue = e.NewTextValue;
+                if (!string.IsNullOrEmpty(e.NewTextValue))
+                {
 
+                    getitem.Bordercolor = Colors.White;
+                    getitem.Isrequired = false;
+                    getitem.Hasanswered = true;
+
+                    getitem.selectedtextvalue = e.NewTextValue;
+
+                }
+                else
+                {
+                    getitem.Hasanswered = false;
+
+                    getitem.selectedtextvalue = string.Empty;
+                }
             }
-            else
-            {
-                getitem.Hasanswered = false;
-
-                getitem.selectedtextvalue = string.Empty;
-            }
-
         }
         catch (Exception Ex)
         {
@@ -891,28 +950,31 @@ public partial class QuestionnairePage : ContentPage
 
             var getitem = questionnairefromlist.questionanswerjsonlist.Where(x => x.questionid == item.questionid).FirstOrDefault();
 
-
-            if (!string.IsNullOrEmpty(e.NewTextValue))
+            if (getitem != null)
             {
-                
-                getitem.Bordercolor = Colors.White;
-                getitem.Isrequired = false;
-                getitem.Answerednumericentryone = true;
 
-                getitem.doubleentryone = e.NewTextValue.ToString();
-
-                if (getitem.Answerednumericentryone == true && getitem.Answerednumericentrytwo == true)
+                if (!string.IsNullOrEmpty(e.NewTextValue))
                 {
-                    getitem.Hasanswered = true;
+
+                    getitem.Bordercolor = Colors.White;
+                    getitem.Isrequired = false;
+                    getitem.Answerednumericentryone = true;
+
+                    getitem.doubleentryone = e.NewTextValue.ToString();
+
+                    if (getitem.Answerednumericentryone == true && getitem.Answerednumericentrytwo == true)
+                    {
+                        getitem.Hasanswered = true;
+                    }
+
+
                 }
-
-
-            }
-            else
-            {
-                getitem.Answerednumericentryone = false;
-                getitem.Hasanswered = false;
-                getitem.doubleentryone = string.Empty;
+                else
+                {
+                    getitem.Answerednumericentryone = false;
+                    getitem.Hasanswered = false;
+                    getitem.doubleentryone = string.Empty;
+                }
             }
         }
         catch (Exception Ex)
@@ -931,27 +993,30 @@ public partial class QuestionnairePage : ContentPage
 
             var getitem = questionnairefromlist.questionanswerjsonlist.Where(x => x.questionid == item.questionid).FirstOrDefault();
 
-
-            if (!string.IsNullOrEmpty(e.NewTextValue))
+            if (getitem != null)
             {
 
-                getitem.Bordercolor = Colors.White;
-                getitem.Isrequired = false;
-                getitem.Answerednumericentrytwo = true;
-                getitem.doubleentrytwo = e.NewTextValue.ToString();
-
-                if (getitem.Answerednumericentryone == true && getitem.Answerednumericentrytwo == true)
+                if (!string.IsNullOrEmpty(e.NewTextValue))
                 {
-                    getitem.Hasanswered = true;
+
+                    getitem.Bordercolor = Colors.White;
+                    getitem.Isrequired = false;
+                    getitem.Answerednumericentrytwo = true;
+                    getitem.doubleentrytwo = e.NewTextValue.ToString();
+
+                    if (getitem.Answerednumericentryone == true && getitem.Answerednumericentrytwo == true)
+                    {
+                        getitem.Hasanswered = true;
+                    }
+
+
                 }
-
-
-            }
-            else
-            {
-                getitem.Answerednumericentrytwo = false;
-                getitem.Hasanswered = false;
-                getitem.doubleentrytwo = string.Empty;
+                else
+                {
+                    getitem.Answerednumericentrytwo = false;
+                    getitem.Hasanswered = false;
+                    getitem.doubleentrytwo = string.Empty;
+                }
             }
         }
         catch (Exception Ex)
@@ -969,21 +1034,24 @@ public partial class QuestionnairePage : ContentPage
 
             var getitem = questionnairefromlist.questionanswerjsonlist.Where(x => x.questionid == item.questionid).FirstOrDefault();
 
-
-            if (!string.IsNullOrEmpty(e.NewTextValue))
+            if (getitem != null)
             {
 
-                getitem.Bordercolor = Colors.White;
-                getitem.Isrequired = false;
-                getitem.Hasanswered = true;
+                if (!string.IsNullOrEmpty(e.NewTextValue))
+                {
 
-                getitem.selectedtextvalue = e.NewTextValue;
+                    getitem.Bordercolor = Colors.White;
+                    getitem.Isrequired = false;
+                    getitem.Hasanswered = true;
+
+                    getitem.selectedtextvalue = e.NewTextValue;
 
 
-            }
-            else
-            {
-                getitem.Hasanswered = false;
+                }
+                else
+                {
+                    getitem.Hasanswered = false;
+                }
             }
 
         }
@@ -1002,7 +1070,11 @@ public partial class QuestionnairePage : ContentPage
 
             var getitem = questionnairefromlist.questionanswerjsonlist.Where(x => x.questionid == item.questionid).FirstOrDefault();
 
-            getitem.selectedtextvalue = e.NewValue.ToString();
+           
+           
+
+                getitem.selectedtextvalue = e.NewValue.ToString();
+            
 
             //if (!string.IsNullOrEmpty(e.NewValue))
             // {

@@ -25,6 +25,8 @@ namespace PeopleWith
         public string measurementfeedback { get; set; }
         public string moodfeedback { get; set; }
 
+        public string initialquestionnairefeedback { get; set; }
+
         [System.Text.Json.Serialization.JsonIgnore]
         public ObservableCollection<feedbackdata> symptomfeedbacklist { get; set; }
 
@@ -41,6 +43,10 @@ namespace PeopleWith
         [System.Text.Json.Serialization.JsonIgnore]
         public ObservableCollection<feedbackdata> moodfeedbacklist { get; set; }
 
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public ObservableCollection<feedbackdata> initialquestionnairefeedbacklist { get; set; }
+        
 
     }
 

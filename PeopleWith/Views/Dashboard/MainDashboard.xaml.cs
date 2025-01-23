@@ -305,6 +305,7 @@ public partial class MainDashboard : ContentPage
 
             // Set the randomized list as the ItemsSource
             activitylist.ItemsSource = randomizedList;
+            
 
             listloader.IsVisible = false;
             activitylist.IsVisible = true;
@@ -966,7 +967,49 @@ public partial class MainDashboard : ContentPage
             }
 
 
-           // dailytaskinfolist.ItemsSource = dailytasklist;
+            // dailytaskinfolist.ItemsSource = dailytasklist;
+
+            //check if the questionnaire prompt is needed
+
+            var signup = Helpers.Settings.SignUp;
+             
+            if(signup.Contains("SFEWH"))
+            {
+
+                if (userfeedbacklist[0].initialquestionnairefeedbacklist != null)
+                {
+                    //check dates
+
+
+
+                }
+                else
+                {
+                    completequestionnaireborder.IsVisible = true;
+
+
+                    if(signup.Contains("SFEWHA1"))
+                    {
+                        questionnaireinfotext.Text = "Complete Diabetes Questionnaire";
+                    }
+                    else if (signup.Contains("SFEWHA2"))
+                    {
+                        questionnaireinfotext.Text = "Complete Breast Cancer Questionnaire";
+                    }
+                    else if (signup.Contains("SFEWHA3"))
+                    {
+                        questionnaireinfotext.Text = "Complete SF36 Questionnaire";
+                    }
+                    else if (signup.Contains("SFEWHA4"))
+                    {
+                        questionnaireinfotext.Text = "Complete SF36 Questionnaire";
+                    }
+
+                }
+
+
+            }
+
 
 
         }
@@ -2910,6 +2953,84 @@ public partial class MainDashboard : ContentPage
 
 
 
+            }
+
+
+
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
+    private async void TapGestureRecognizer_Tapped_6(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            //womans health questionnaire tapped
+            var signup = Helpers.Settings.SignUp;
+
+            if (signup.Contains("SFEWHA1"))
+            {
+                if (DeviceInfo.Current.Platform == DevicePlatform.Android)
+                {
+                    await Navigation.PushAsync(new AndroidQuestionnaires("73D47262-1B2C-4451-A4FC-978582D77FE0", userfeedbacklist[0]), false);
+                }
+                else
+                {
+
+                    // await Navigation.PushAsync(new QuestionnairePage("A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF"), false);
+                    //await Navigation.PushAsync(new AndroidQuestionnaires(item), false);
+                    await Navigation.PushAsync(new AndroidQuestionnaires("73D47262-1B2C-4451-A4FC-978582D77FE0", userfeedbacklist[0]), false);
+                }
+               
+            }
+            else if (signup.Contains("SFEWHA2"))
+            {
+                if (DeviceInfo.Current.Platform == DevicePlatform.Android)
+                {
+                    await Navigation.PushAsync(new AndroidQuestionnaires("F7FB770B-286F-4300-814D-E76AACB6DACF", userfeedbacklist[0]), false);
+                }
+                else
+                {
+
+                    // await Navigation.PushAsync(new QuestionnairePage("A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF"), false);
+                    //await Navigation.PushAsync(new AndroidQuestionnaires(item), false);
+                    await Navigation.PushAsync(new QuestionnairePage("F7FB770B-286F-4300-814D-E76AACB6DACF", userfeedbacklist[0]), false);
+                }
+
+               
+            }
+            else if (signup.Contains("SFEWHA3"))
+            {
+                if (DeviceInfo.Current.Platform == DevicePlatform.Android)
+                {
+                    await Navigation.PushAsync(new AndroidQuestionnaires("DC6A9FD7-242B-4299-9672-D745669FEAF0", userfeedbacklist[0]), false);
+                }
+                else
+                {
+
+                    // await Navigation.PushAsync(new QuestionnairePage("A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF"), false);
+                    //await Navigation.PushAsync(new AndroidQuestionnaires(item), false);
+                    await Navigation.PushAsync(new QuestionnairePage("DC6A9FD7-242B-4299-9672-D745669FEAF0", userfeedbacklist[0]), false);
+                }
+
+               
+            }
+            else if (signup.Contains("SFEWHA4"))
+            {
+                if (DeviceInfo.Current.Platform == DevicePlatform.Android)
+                {
+                    await Navigation.PushAsync(new AndroidQuestionnaires("DC6A9FD7-242B-4299-9672-D745669FEAF0", userfeedbacklist[0]), false);
+                }
+                else
+                {
+
+                    // await Navigation.PushAsync(new QuestionnairePage("A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF"), false);
+                    //await Navigation.PushAsync(new AndroidQuestionnaires(item), false);
+                    await Navigation.PushAsync(new QuestionnairePage("DC6A9FD7-242B-4299-9672-D745669FEAF0" , userfeedbacklist[0]), false);
+                }
             }
 
 

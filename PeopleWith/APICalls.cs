@@ -3001,6 +3001,22 @@ namespace PeopleWith
                             }
                         }
 
+                        if (!string.IsNullOrEmpty(item.initialquestionnairefeedback))
+                        {
+
+                            try
+                            {
+                                // Attempt to deserialize as an array
+                                item.initialquestionnairefeedbacklist = JsonConvert.DeserializeObject<ObservableCollection<feedbackdata>>(item.initialquestionnairefeedback);
+                            }
+                            catch (JsonSerializationException)
+                            {
+                                // If the JSON is a single object, deserialize it as such and wrap it in a collection
+                                var singleItem = JsonConvert.DeserializeObject<feedbackdata>(item.initialquestionnairefeedback);
+                                item.initialquestionnairefeedbacklist = new ObservableCollection<feedbackdata> { singleItem };
+                            }
+                        }
+
 
 
                         newcollection.Add(item);
@@ -3196,6 +3212,40 @@ namespace PeopleWith
                 var url = $"https://pwdevapi.peoplewith.com/api/userfeedback/id/{id}";
                 var feedbacks = Updatefeedback.moodfeedback;
                 string json = System.Text.Json.JsonSerializer.Serialize(new { moodfeedback = feedbacks });
+                //string json = System.Text.Json.JsonSerializer.Serialize(new { feedback = feedbacks }, serializerOptions);
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                using (var client = new HttpClient())
+                {
+                    //works with patch
+                    //var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+                    var response = await client.SendAsync(request);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Successfully updated feedback");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        public async Task UserfeedbackUpdateQuestionnaireData(userfeedback Updatefeedback)
+        {
+            try
+            {
+                var id = Updatefeedback.id;
+                var url = $"https://pwdevapi.peoplewith.com/api/userfeedback/id/{id}";
+                var feedbacks = Updatefeedback.initialquestionnairefeedback;
+                string json = System.Text.Json.JsonSerializer.Serialize(new { initialquestionnairefeedback = feedbacks });
                 //string json = System.Text.Json.JsonSerializer.Serialize(new { feedback = feedbacks }, serializerOptions);
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
                 using (var client = new HttpClient())
