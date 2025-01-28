@@ -40,32 +40,32 @@
                     </Grid>
             </Frame>
 
-            <!-- Appointments with HCP-->
-            <StackLayout>
+
 
                 <!-- Appointments Empty Stack -->
-                <StackLayout x:Name="NoAppointmentsStack" IsVisible="False" Margin="10,0,10,0">
+            <StackLayout x:Name="NoAppointmentsStack" IsVisible="False" Margin="10,0,10,0">
 
-                    <Frame  Margin="10,10,10,0" x:Name="NoAppointFrame" BorderColor="Transparent" CornerRadius="10" BackgroundColor="#CBC3E3" HasShadow="false" Padding="10" >
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
+                <Frame  Margin="10,10,10,0" x:Name="NoAppointFrame" BorderColor="Transparent" CornerRadius="10" BackgroundColor="#CBC3E3" HasShadow="false" Padding="10" >
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
 
-                            <Label Text="No Appointments Recorded" FontFamily="HankenGroteskBold" TextColor="#9F2B68" HorizontalOptions="Center"  FontAttributes="Bold" FontSize="12" Grid.Row="0"/>
-                            <Label Text="Tap to Add Appointment" FontFamily="HankenGroteskBold" HorizontalOptions="Center" VerticalOptions="Center" TextColor="#9F2B68" FontAttributes="Bold" FontSize="12" Grid.Row="1"  />
+                        <Label x:Name="Appointlblone" FontFamily="HankenGroteskBold" TextColor="#9F2B68" HorizontalOptions="Center"  FontAttributes="Bold" FontSize="12" Grid.Row="0"/>
+                        <Label x:Name="Appointlbltwo" FontFamily="HankenGroteskBold" HorizontalOptions="Center" VerticalOptions="Center" TextColor="#9F2B68" FontAttributes="Bold" FontSize="12" Grid.Row="1"  />
 
-                        </Grid>
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
-                        </Frame.GestureRecognizers>
-                    </Frame>
+                    </Grid>
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                    </Frame.GestureRecognizers>
+                </Frame>
 
-                </StackLayout>
+            </StackLayout>
 
-                <!-- Appointment Listview-->
-                <StackLayout x:Name="AppointmentsListviewStack" VerticalOptions="FillAndExpand" Margin="0">
+
+            <!-- Appointment Listview-->
+                <StackLayout x:Name="AppointmentsListviewStack" IsVisible="False" VerticalOptions="FillAndExpand" Margin="0">
 
                     <Label Text="Upcoming Appointments" x:Name="Upcominglbl" IsVisible="False" TextDecorations="Underline" Margin="20,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="20" />
                     <syncfusion:SfListView x:Name="UpcomingListview" IsVisible="False" AutoFitMode="DynamicHeight" ItemTapped="AppointmentsListview_ItemTapped" SelectionBackground="Transparent"
@@ -122,7 +122,7 @@
                             </DataTemplate>
                         </syncfusion:SfListView.ItemTemplate>
                     </syncfusion:SfListView>
-                </StackLayout>
+             
 
 
                    <!-- Historical Appointemnt --> 
@@ -183,12 +183,11 @@
                 </syncfusion:SfListView>
             </StackLayout>
 
-
             <!-- Contact Details -->
             <Label Text="Contact Details"  FontSize="20" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
         
         <!-- Appointments Assocaited with Doc-->
-            <Frame HasShadow="false" Margin="10,5,10,0" BorderColor="#CBC3E3" Padding="-2" BackgroundColor="Transparent" >
+            <Frame HasShadow="false" Margin="20,5,20,0" BorderColor="#CBC3E3" Padding="-2" BackgroundColor="Transparent" >
                 <syncfusion:SfListView x:Name="HCPContactDetails" SelectionBackground="Transparent" AutoFitMode="Height" >
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
@@ -216,11 +215,21 @@
                     </syncfusion:SfListView.ItemTemplate>
                 </syncfusion:SfListView>
             </Frame>
-        
-       
 
 
-                <!-- Delete HCP Button -->
+            <Label Text="Appointments" x:Name="showalllbl1" IsVisible="True" FontSize="20" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
+
+            <Label x:Name="showalllbl2" IsVisible="True" FontSize="12" Margin="20,5,0,0" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
+
+
+            <Button BackgroundColor="#CBC3E3" Clicked="showallbtn_Clicked" HorizontalOptions="FillAndExpand" TextColor="#9F2B68" FontAttributes="None" x:Name="showallbtn"  Margin="20,20,20,60" FontFamily="HankenGroteskBold"  />
+
+
+
+
+
+
+            <!-- Delete HCP Button -->
             <Button  Text="Delete HCP" x:Name="Deletebtn" Clicked="Button_Clicked" FontSize="14" Margin="20,40,20,5" FontFamily="HankenGroteskBold" BackgroundColor="#ffe5e5" TextColor="Red" CornerRadius="10" />
             <Label HorizontalTextAlignment="Center" Text="If your HCP is deleted you will lose all relevant information." Margin="20,0,20,20"  FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="DarkGray"  />
 

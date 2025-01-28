@@ -1,4 +1,5 @@
-﻿using Mopups.Services;
+﻿using Android.Telephony;
+using Mopups.Services;
 using Newtonsoft.Json;
 using PINView.Maui;
 using System.Collections.ObjectModel;
@@ -14,6 +15,7 @@ public partial class ProfileEdit : ContentPage
 
 {
     user AllUserData = new user();
+    user newuser = new user();
     public List<string> genlist = new List<string>();
     public List<string> ethnicitylist = new List<string>();
     HttpClient client = new HttpClient();
@@ -1332,18 +1334,6 @@ public partial class ProfileEdit : ContentPage
         }
     }
 
-   //async private void emailconfigpin_PINEntryCompleted(object sender, PINView.Maui.Helpers.PINCompletedEventArgs e)
-   // {
-   //     try
-   //     {
-   //         handleConfirmcode();
-   //     }
-   //     catch (Exception Ex)
-   //     {
-
-   //     }
-   // }
-
     private void emailconfigpin_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         try
@@ -1655,7 +1645,175 @@ public partial class ProfileEdit : ContentPage
     {
         try
         {
-            await Navigation.PushAsync(new ForgottenPassword(), false);
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                await Navigation.PushAsync(new ForgottenPassword(), false);
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    private void emailconfigpin_PropertyChanged_1(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        try
+        {
+            incorrectpincodelbl.IsVisible = false; 
+        }
+        catch (Exception Ex)
+        {
+
+        }
+    }
+
+    private async void emailconfigpin_PINEntryCompleted(object sender, PINView.Maui.Helpers.PINCompletedEventArgs e)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(emailconfigpin.PINValue))
+            {
+                // incorrectcodelbl.IsVisible = true;
+                emailconfigpin.Focus();
+                Vibration.Vibrate();
+                return;
+            }
+
+            if (emailconfigpin.PINValue == newuser.validationcode)
+            {
+                ForgotPinStack.IsVisible = false;
+                PinCodeStack.IsVisible = true;
+                PrivacyStacklbl.Text = "Enter New Pin";
+                PrivacyUpdate.IsVisible = true;
+                PrivacyUpdate.Text = "Update Pin";
+            }
+            else
+            {
+                incorrectpincodelbl.IsVisible = true;
+                Vibration.Vibrate();
+                await Task.Delay(3000);
+                incorrectpincodelbl.IsVisible = false;
+                return;
+            }
+        }
+        catch (Exception Ex)
+        {
+
+        }
+    }
+
+    private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        //Pincode Stack 'Forgot PinCode' 
+        try
+        {
+
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Update Validation Code
+                UpdateValidationCode();
+
+                PrivacyStacklbl.Text = "Email Verification";
+                CurrentPinCodeStack.IsVisible = false;
+                ForgotPinStack.IsVisible = true;
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
+           
+        }
+        catch (Exception Ex)
+        {
+
+        }
+    }
+
+
+    async void UpdateValidationCode ()
+    {
+        try
+        {
+            //Generate New Validation Code 
+
+            var randomnum = new Random();
+            var num = randomnum.Next(10000, 99999);
+            newuser.userid = Helpers.Settings.UserKey;
+            newuser.validationcode = num.ToString();
+            newuser.email = AllUserData.email;
+
+            var serializerOptionss = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = true
+            };
+
+            var urll = $"https://pwdevapi.peoplewith.com/api/user/userid/{newuser.userid}";
+            string jsonn = System.Text.Json.JsonSerializer.Serialize(new { validationcode = newuser.validationcode });
+
+            StringContent contenttt = new StringContent(jsonn, Encoding.UTF8, "application/json");
+            HttpResponseMessage responsee1 = null;
+
+            responsee1 = await client.PatchAsync(urll, contenttt);
+
+
+            if (responsee1.IsSuccessStatusCode)
+            {
+                string responseBody = await responsee1.Content.ReadAsStringAsync();
+                var userResponseconsent = JsonConvert.DeserializeObject<APIUserResponse>(responseBody);
+                var consent = userResponseconsent.Value[0];
+
+                newuser = consent;
+            }
+
+
+            //email generate
+            StringContent mail_content = new StringContent(newuser.email, System.Text.Encoding.UTF8, "application/json");
+
+            var emailresponse = await client.PostAsync("https://peoplewithwebapp.azurewebsites.net/hub/email-validation.php?uid=" + newuser.email, mail_content);
+
+            // check if the response is successful
+            if (emailresponse.IsSuccessStatusCode)
+            {
+                await DisplayAlert("Email Sent", "An email containing your confirmation code has been sent. If the email is not in your inbox please check your junk mail. If an email is not received please contact: support@peoplewith.com", "Close");
+            }
+
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    private void TapGestureRecognizer_Tapped_1(object sender, TappedEventArgs e)
+    {
+        //Resend Code for RestPin 'Forgotten Pin'
+        try
+        {
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Update Validation Code
+                UpdateValidationCode();
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
+            
         }
         catch (Exception Ex)
         {

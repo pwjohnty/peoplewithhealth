@@ -188,10 +188,10 @@ HorizontalOptions="FillAndExpand">
                                                         <ColumnDefinition Width="20*"/>
                                                     </Grid.ColumnDefinitions>
 
-                                                    <local:ExtendedEntry IDValue="{Binding answerid}" TextChanged="ExtendedEntry_TextChanged" questionid="{Binding questionid}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" Grid.Row="0" Grid.Column="0"/>
+                                                <local:ExtendedEntry IDValue="{Binding answerid}" TextColor="#031926" TextChanged="ExtendedEntry_TextChanged" questionid="{Binding questionid}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" Grid.Row="0" Grid.Column="0"/>
                                                     <Label Text="Months" FontFamily="HankenGroteskBold" VerticalOptions="Center" Grid.Row="0" Grid.Column="1"  FontSize="10"  Margin="10,0,0,0" TextColor="#031926" />
 
-                                                    <local:ExtendedEntry IDValue="{Binding answerid}" TextChanged="ExtendedEntry_TextChanged_1" questionid="{Binding questionid}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" Grid.Row="0" Grid.Column="2"/>
+                                                <local:ExtendedEntry IDValue="{Binding answerid}" TextColor="#031926" TextChanged="ExtendedEntry_TextChanged_1" questionid="{Binding questionid}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" Grid.Row="0" Grid.Column="2"/>
                                                     <Label Text="Years" FontFamily="HankenGroteskBold" VerticalOptions="Center" Grid.Row="0" Grid.Column="3"  FontSize="10"  Margin="10,0,0,0" TextColor="#031926" />
 
 
@@ -203,7 +203,7 @@ HorizontalOptions="FillAndExpand">
 StrokeThickness="1" Margin="10,5,10,5" IsVisible="{Binding Numericentry}"
 StrokeShape="RoundRectangle 10,10,10,10"
 HorizontalOptions="FillAndExpand">
-                                            <local:ExtendedEntry IDValue="{Binding answerid}" Text="{Binding numericentrytext}" questionid="{Binding questionid}" TextChanged="ExtendedEntry_TextChanged_2" Keyboard="Numeric" IsVisible="{Binding Numericentry}" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" HorizontalOptions="FillAndExpand"/>
+                                            <local:ExtendedEntry IDValue="{Binding answerid}" TextColor="#031926" Text="{Binding numericentrytext}" questionid="{Binding questionid}" TextChanged="ExtendedEntry_TextChanged_2" Keyboard="Numeric" IsVisible="{Binding Numericentry}" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" HorizontalOptions="FillAndExpand"/>
 
 
                                             </Border>
@@ -257,7 +257,7 @@ HorizontalOptions="FillAndExpand">
                 </CollectionView>
             </ScrollView>
           
-                <ScrollView x:Name="CompletedQuestionView" IsVisible="False" Orientation="Vertical" VerticalScrollBarVisibility="Never">
+                <ScrollView x:Name="CompletedQuestionView" IsVisible="False" Orientation="Vertical" InputTransparent="False" VerticalScrollBarVisibility="Never">
                 <CollectionView  x:Name="completedquestionnaire" SizeChanged="completedquestionnaire_SizeChanged" MaximumHeightRequest="680" IsVisible="False" SelectionMode="None"  BackgroundColor="#f5f5f5"  VerticalScrollBarVisibility="Never" VerticalOptions="FillAndExpand"  Margin="10,0,10,20"  HorizontalOptions="FillAndExpand" >
                     <!-- ListView Header -->
                     <CollectionView.Header>
@@ -385,9 +385,9 @@ HorizontalOptions="FillAndExpand">
 
                                             <Border Stroke="#f1f1f1"
 StrokeThickness="1" Margin="10,5,10,5" IsVisible="{Binding Addfreetext}"
-StrokeShape="RoundRectangle 10,10,10,10" Opacity="{Binding Addfreetextopacity}"
+StrokeShape="RoundRectangle 10,10,10,10" Opacity="1"
 HorizontalOptions="FillAndExpand">
-                                                <local:ExtendedEditor Opacity="{Binding Addfreetextopacity}" IsEnabled="False" Text="{Binding freetextentry}" TextChanged="ExtendedEditor_TextChanged" questionid="{Binding questionid}"  BackgroundColor="Transparent" Margin="10,0,10,0" AutoSize="TextChanges" IDValue="{Binding answerid}" HeightRequest="100" IsVisible="{Binding Addfreetext}" TextColor="Gray" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Add text here...." />
+                                            <local:ExtendedEditor Opacity="1" IsEnabled="False" Text="{Binding freetextentry}" TextChanged="ExtendedEditor_TextChanged" questionid="{Binding questionid}"  BackgroundColor="Transparent" Margin="10,0,10,0" AutoSize="TextChanges" IDValue="{Binding answerid}" HeightRequest="100" IsVisible="{Binding Addfreetext}" TextColor="#031926" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Add text here...." />
                                             </Border>
 
 
@@ -407,10 +407,10 @@ HorizontalOptions="FillAndExpand">
                                                         <ColumnDefinition Width="20*"/>
                                                     </Grid.ColumnDefinitions>
 
-                                                    <local:ExtendedEntry Text="{Binding doubleentry1}" IDValue="{Binding answerid}" TextChanged="ExtendedEntry_TextChanged" questionid="{Binding questionid}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" Grid.Row="0" Grid.Column="0"/>
+                                                <local:ExtendedEntry Text="{Binding doubleentry1}" TextColor="#031926" IDValue="{Binding answerid}" TextChanged="ExtendedEntry_TextChanged" questionid="{Binding questionid}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" Grid.Row="0" Grid.Column="0"/>
                                                     <Label Text="Months" FontFamily="HankenGroteskBold" VerticalOptions="Center" Grid.Row="0" Grid.Column="1"  FontSize="10"  Margin="10,0,0,0" TextColor="#031926" />
 
-                                                    <local:ExtendedEntry Text="{Binding doubleentry2}" IDValue="{Binding answerid}" TextChanged="ExtendedEntry_TextChanged_1" questionid="{Binding questionid}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" Grid.Row="0" Grid.Column="2"/>
+                                                <local:ExtendedEntry Text="{Binding doubleentry2}" TextColor="#031926" IDValue="{Binding answerid}" TextChanged="ExtendedEntry_TextChanged_1" questionid="{Binding questionid}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" Grid.Row="0" Grid.Column="2"/>
                                                     <Label Text="Years" FontFamily="HankenGroteskBold" VerticalOptions="Center" Grid.Row="0" Grid.Column="3"  FontSize="10"  Margin="10,0,0,0" TextColor="#031926" />
 
 
@@ -422,7 +422,7 @@ HorizontalOptions="FillAndExpand">
 StrokeThickness="1" Margin="10,5,10,5" IsVisible="{Binding Numericentry}"
 StrokeShape="RoundRectangle 10,10,10,10"
 HorizontalOptions="FillAndExpand">
-                                                <local:ExtendedEntry IDValue="{Binding answerid}"  IsEnabled="False" Text="{Binding numericentrytext}" questionid="{Binding questionid}" TextChanged="ExtendedEntry_TextChanged_2" Keyboard="Numeric" IsVisible="{Binding Numericentry}" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" HorizontalOptions="FillAndExpand"/>
+                                            <local:ExtendedEntry IDValue="{Binding answerid}" TextColor="#031926" IsEnabled="False" Text="{Binding numericentrytext}" questionid="{Binding questionid}" TextChanged="ExtendedEntry_TextChanged_2" Keyboard="Numeric" IsVisible="{Binding Numericentry}" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" HorizontalOptions="FillAndExpand"/>
 
 
                                             </Border>

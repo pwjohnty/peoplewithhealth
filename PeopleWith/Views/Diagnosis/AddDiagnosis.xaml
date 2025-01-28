@@ -33,7 +33,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>
                     <RowDefinition Height="45"/>
-                    <RowDefinition Height="800"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
 
@@ -70,7 +70,7 @@
                     <Label x:Name="Results" Margin="5,0,0,0" Grid.Row="1" Grid.Column="0"  HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskBold" />
 
 
-                    <syncfusion:SfListView x:Name="DiagnosisListview" ItemTapped="DiagnosisListview_ItemTapped" ItemSize="40" Grid.Row="2" Grid.Column="0" Margin="0,10,0,50" ScrollBarVisibility="Never">
+                    <syncfusion:SfListView x:Name="DiagnosisListview" ItemTapped="DiagnosisListview_ItemTapped" AutoFitMode="Height" Grid.Row="2" Grid.Column="0" Margin="0,10,0,50" ScrollBarVisibility="Never">
                         <syncfusion:SfListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
@@ -112,6 +112,16 @@
                                 </Frame>
                             </DataTemplate>
                         </syncfusion:SfListView.SelectedItemTemplate>
+                        <syncfusion:SfListView.FooterTemplate>
+                            <DataTemplate>
+                                <Grid BackgroundColor="Transparent" HeightRequest="300">
+                                    <Label LineBreakMode="NoWrap"
+         Margin="10,0,0,0"  FontAttributes="Bold"
+         FontSize="18" TextColor="White" HorizontalOptions="Center"
+         VerticalOptions="Center"/>
+                                </Grid>
+                            </DataTemplate>
+                        </syncfusion:SfListView.FooterTemplate>
                     </syncfusion:SfListView>
                 </StackLayout>
 
@@ -153,9 +163,9 @@ FontFamily="HankenGroteskBold"
 FontAttributes="None" VerticalOptions="Center" 
 Margin="10,0,0,0" Grid.Row="0" Grid.Column="0"
 FontSize="12"
-HorizontalOptions="Start" />
+HorizontalOptions="End" />
 
-                    <CheckBox Grid.Row="0" Grid.Column="1" x:Name="diagdatecheckbox" CheckedChanged="diagdatecheckbox_CheckedChanged" VerticalOptions="Center" Color="#031926" HorizontalOptions="End"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" x:Name="diagdatecheckbox" CheckedChanged="diagdatecheckbox_CheckedChanged" VerticalOptions="Center" Color="#031926" HorizontalOptions="Start"/>
                 </Grid>
 
 

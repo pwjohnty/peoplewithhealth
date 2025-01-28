@@ -142,9 +142,9 @@ FontFamily="HankenGroteskBold"
 FontAttributes="None" VerticalOptions="Center" 
 Margin="10,0,0,0" Grid.Row="0" Grid.Column="0"
 FontSize="12"
-HorizontalOptions="Start" />
+HorizontalOptions="End" />
 
-                    <CheckBox Grid.Row="0" Grid.Column="1" x:Name="diagdatecheckbox" CheckedChanged="diagdatecheckbox_CheckedChanged" VerticalOptions="Center" Color="#031926" HorizontalOptions="End"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" x:Name="diagdatecheckbox" CheckedChanged="diagdatecheckbox_CheckedChanged" VerticalOptions="Center" Color="#031926" HorizontalOptions="Start"/>
                 </Grid>
             </Grid>
             <Label x:Name="EntryError" IsVisible="False" Margin="25,0,25,0"  FontFamily="HankenGroteskRegualar" HorizontalOptions="Center" HorizontalTextAlignment="Center" FontSize="12" TextColor="Red" />
