@@ -126,7 +126,7 @@
 
 
 
-                            <Border  BackgroundColor="#ff3232" InputTransparent="False" x:Name="completequestionnaireborder" IsVisible="False" StrokeShape="RoundRectangle 10" StrokeThickness="2" Stroke="Red"  Padding="0" Margin="20,5,20,5">
+                            <Frame  BackgroundColor="#ff3232" InputTransparent="False" x:Name="completequestionnaireborder" IsVisible="False" CornerRadius="10" BorderColor="Red"  Padding="0" Margin="20,5,20,5">
                                                     <Grid>
                                                         <Grid.RowDefinitions>
                                                             <!--<RowDefinition>
@@ -161,7 +161,7 @@ Aspect="AspectFit" Grid.Row="0" Grid.Column="0"
                                         <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_6"/>
                                     </Grid.GestureRecognizers>
                                                     </Grid>
-                                                </Border>
+                                                </Frame>
                                          
 
 

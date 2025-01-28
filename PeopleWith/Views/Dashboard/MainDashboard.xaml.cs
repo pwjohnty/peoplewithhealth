@@ -1009,6 +1009,29 @@ public partial class MainDashboard : ContentPage
 
 
             }
+            else if (signup.Contains("SFEAT"))
+            {
+
+                if (userfeedbacklist[0].initialquestionnairefeedbacklist != null)
+                {
+                    //check dates
+
+
+
+                }
+                else
+                {
+                    completequestionnaireborder.IsVisible = true;
+
+
+                   
+                     questionnaireinfotext.Text = "Complete EQ-5D 5L General Health Questionnaire";
+                
+
+                }
+
+
+            }
 
 
 
@@ -2500,7 +2523,7 @@ public partial class MainDashboard : ContentPage
 
                 // var vid = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/DiagnosisFirstAdd.mp4";
                 bool FromDash = true; 
-                await Navigation.PushAsync(new NewPageVideoPlayer(item, FromDash));
+                await Navigation.PushAsync(new NewPageVideoPlayer(item, FromDash), false);
             }
             else if(item.type == "image")
             {
@@ -2984,7 +3007,7 @@ public partial class MainDashboard : ContentPage
                     //await Navigation.PushAsync(new AndroidQuestionnaires(item), false);
                     await Navigation.PushAsync(new AndroidQuestionnaires("73D47262-1B2C-4451-A4FC-978582D77FE0", userfeedbacklist[0]), false);
                 }
-               
+
             }
             else if (signup.Contains("SFEWHA2"))
             {
@@ -2997,10 +3020,10 @@ public partial class MainDashboard : ContentPage
 
                     // await Navigation.PushAsync(new QuestionnairePage("A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF"), false);
                     //await Navigation.PushAsync(new AndroidQuestionnaires(item), false);
-                    await Navigation.PushAsync(new QuestionnairePage("F7FB770B-286F-4300-814D-E76AACB6DACF", userfeedbacklist[0]), false);
+                    await Navigation.PushAsync(new AndroidQuestionnaires("F7FB770B-286F-4300-814D-E76AACB6DACF", userfeedbacklist[0]), false);
                 }
 
-               
+
             }
             else if (signup.Contains("SFEWHA3"))
             {
@@ -3013,10 +3036,10 @@ public partial class MainDashboard : ContentPage
 
                     // await Navigation.PushAsync(new QuestionnairePage("A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF"), false);
                     //await Navigation.PushAsync(new AndroidQuestionnaires(item), false);
-                    await Navigation.PushAsync(new QuestionnairePage("DC6A9FD7-242B-4299-9672-D745669FEAF0", userfeedbacklist[0]), false);
+                    await Navigation.PushAsync(new AndroidQuestionnaires("DC6A9FD7-242B-4299-9672-D745669FEAF0", userfeedbacklist[0]), false);
                 }
 
-               
+
             }
             else if (signup.Contains("SFEWHA4"))
             {
@@ -3029,11 +3052,14 @@ public partial class MainDashboard : ContentPage
 
                     // await Navigation.PushAsync(new QuestionnairePage("A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF"), false);
                     //await Navigation.PushAsync(new AndroidQuestionnaires(item), false);
-                    await Navigation.PushAsync(new QuestionnairePage("DC6A9FD7-242B-4299-9672-D745669FEAF0" , userfeedbacklist[0]), false);
+                    await Navigation.PushAsync(new AndroidQuestionnaires("DC6A9FD7-242B-4299-9672-D745669FEAF0", userfeedbacklist[0]), false);
                 }
             }
-
-
+            else if (signup.Contains("SFEAT"))
+            {
+                await Navigation.PushAsync(new AndroidQuestionnaires("A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF", userfeedbacklist[0]), false);
+            }
+        
 
         }
         catch(Exception ex)

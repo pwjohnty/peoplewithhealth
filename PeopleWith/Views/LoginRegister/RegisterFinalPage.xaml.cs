@@ -20,7 +20,7 @@ public partial class RegisterFinalPage : ContentPage
     double progressamount;
     public ObservableCollection<userresponse> userresponsepassed;
     public ObservableCollection<usermeasurement> usermeasurementpassed;
-    public ObservableCollection<userdiagnosis> userdiagnosispassed;
+    public ObservableCollection<userdiagnosis> userdiagnosispassed = new ObservableCollection<userdiagnosis>();
     public consent additonalconsent = new consent();
     ObservableCollection<usermedication> medicationstoadd = new ObservableCollection<usermedication>();
     ObservableCollection<usersymptom> symptomstoadd = new ObservableCollection<usersymptom>();

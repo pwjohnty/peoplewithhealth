@@ -539,12 +539,16 @@ public partial class SFENRAT : ContentPage
                 ageentry.Text = string.Empty;
                 dateEntry.Opacity = 0.3;
                 ageentry.Opacity = 0.3;
+                datelbl.Opacity = 0.3;
+                agelbl.Opacity = 0.3;
             }
             else
             {
                 dateEntry.IsEnabled = true;
                 dateEntry.Opacity = 1;
                 ageentry.Opacity = 0.3;
+                datelbl.Opacity = 1;
+                agelbl.Opacity = 1;
             }
         }
         catch(Exception ex)
