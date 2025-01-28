@@ -105,7 +105,7 @@
                     </Grid>
                 </Frame>-->
 
-                <Label Text="How are you Feeling?" FontFamily="HankenGroteskBold" Margin="20,10,0,0"  VerticalOptions="Center" HorizontalOptions="Start"   FontSize="16" TextColor="#031926" />
+                <Label Text="How are you Feeling?" x:Name="howlbl" FontFamily="HankenGroteskBold" Margin="20,10,0,0"  VerticalOptions="Center" HorizontalOptions="Start"   FontSize="16" TextColor="#031926" />
 
                 <!-- Emoji Picker -->
                 <Grid>
@@ -158,14 +158,14 @@
 
 
                 <Label Text="Add Notes" FontFamily="HankenGroteskBold" Margin="20,10,0,0"  VerticalOptions="Center" HorizontalOptions="Start"   FontSize="16" TextColor="#031926" />
-                <Frame  BorderColor="#E6E6E6" BackgroundColor="Transparent" HasShadow="False" CornerRadius="10" Padding="-11" Margin="10,5,10,0">
+                <Frame  BorderColor="#E6E6E6" BackgroundColor="Transparent" HasShadow="False" CornerRadius="10" Padding="-11" Margin="20,5,20,0">
                     <ScrollView Orientation="Vertical" HorizontalScrollBarVisibility="Never">
-                        <Editor x:Name="Notes" HeightRequest="80" TextColor="#031926" FontFamily="HankenGroteskRegular" BackgroundColor="Transparent"  HorizontalTextAlignment="Start"  Margin="20,5,5,0"  />
+                        <Editor x:Name="Notes" HeightRequest="80" TextColor="#031926" FontFamily="HankenGroteskRegular" BackgroundColor="Transparent"  HorizontalTextAlignment="Start"  Margin="20,10,5,10"  />
                     </ScrollView>
                 </Frame>
 
 
-                <Button x:Name="AddMoodBtn" Text="Add Mood" FontFamily="HankenGroteskBold" Clicked="AddMoodBtn_Clicked" BackgroundColor="#FFF8DC" TextColor="#B8860B" Margin="20,10,20,0" HorizontalOptions="Center" WidthRequest="300" HeightRequest="40"  />
+                <Button x:Name="AddMoodBtn" Text="Add Mood" FontFamily="HankenGroteskBold" Clicked="AddMoodBtn_Clicked" BackgroundColor="#FFF8DC" TextColor="#B8860B" Margin="20,20,20,0" HorizontalOptions="FillAndExpand"    />
             </StackLayout>
 
             <!--<StackLayout x:Name="SuccessScreen" VerticalOptions="Center" HorizontalOptions="Center" IsVisible="False">

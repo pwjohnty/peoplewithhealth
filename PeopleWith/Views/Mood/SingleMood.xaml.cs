@@ -54,7 +54,7 @@ public partial class SingleMood : ContentPage
             }
 
 
-            AllMoodView.ItemsSource = samemoods;
+            AllMoodView.ItemsSource = samemoods.OrderByDescending(f => DateTime.Parse(f.datetime));
 
         }
         catch (Exception Ex)
@@ -174,7 +174,7 @@ public partial class SingleMood : ContentPage
         {
 
             AddDataBtn.IsEnabled = false;
-            await Navigation.PushAsync(new AddMood(AlluserMoods, "Add", userfeedbacklistpassed));
+            await Navigation.PushAsync(new AddMood(AlluserMoods, "Add", userfeedbacklistpassed, MoodPassed[0].title));
             AddDataBtn.IsEnabled = true;
 
         }

@@ -11,7 +11,6 @@
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
 	<key>NSUserTrackingUsageDescription</key>
@@ -48,10 +47,8 @@
 	<key>UIUserInterfaceStyle</key>
 	<string>Light</string>
 	<key>CFBundleShortVersionString</key>
-	<string>11.1.14</string>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>remote-notification</string>
-	</array>
+	<string>12.1.7</string>
+	<key>CFBundleVersion</key>
+	<string>12.1</string>
 </dict>
 </plist>

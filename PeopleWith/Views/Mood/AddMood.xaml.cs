@@ -219,6 +219,97 @@ public partial class AddMood : ContentPage
         }
     }
 
+    public AddMood(ObservableCollection<usermood> MoodsPassed, string AddEdit, userfeedback userfeedbacklist, string moodfromsingleview)
+    {
+        try
+        {
+            InitializeComponent();
+            GetMoodlist = new moodlist();
+            AllMoods = GetMoodlist.GetList();
+            AlluserMoods = MoodsPassed;
+            EditAdd = AddEdit;
+            userfeedbacklistpassed = userfeedbacklist;
+
+            MoodListview.ItemsSource = AllMoods;
+
+           // var mood = AllMoods.Where(x => x.Text == moodfromsingleview).FirstOrDefault();
+
+            SelectedMood = moodfromsingleview;
+
+            howlbl.IsVisible = false;
+            MoodListview.IsVisible = false;
+
+            if (EditAdd == "Add")
+            {
+                adddatepicker.Date = DateTime.Now;
+                addtimepicker.Time = DateTime.Now.TimeOfDay;
+            }
+            else
+            {
+                foreach (var item in AlluserMoods)
+                {
+                    if (item.id == AddEdit)
+                    {
+
+                        var GetDateTime = DateTime.Parse(item.datetime);
+                        adddatepicker.Date = GetDateTime;
+                        addtimepicker.Time = GetDateTime.TimeOfDay;
+                        //Datelbl.Text = GetDateTime.ToString("dd MMM");
+                        //Timelbl.Text = GetDateTime.ToString("HH:mm");
+
+                        //ViewModel.SelectedDate = GetDateTime.ToString("dd/MM/yyyy");
+                        var gettime = GetDateTime.ToString("HH:mm:ss");
+                        //ViewModel.SelectedTime = TimeSpan.Parse(gettime);
+
+                        //Schedulepopup.BindingContext = ViewModel;
+                        //Timepopup.BindingContext = ViewModel;
+
+                        var selected = item.title;
+
+                        foreach (var x in AllMoods)
+                        {
+                            if (x.Text == selected)
+                            {
+                                MoodListview.SelectedItem = x;
+
+                            }
+                        }
+
+                        for (int i = 0; i < AllMoods.Count; i++)
+                        {
+
+                            if (AllMoods[i].Text == selected)
+                            {
+                                Selectedindex = i;
+                                MoodListview.ItemsLayout.ScrollToRowIndex(Selectedindex, true);
+                            }
+
+                        }
+
+
+                        if (string.IsNullOrEmpty(item.notes))
+                        {
+
+                        }
+                        else
+                        {
+                            Notes.Text = item.notes;
+
+                        }
+
+                        AddMoodBtn.Text = "Update Mood";
+
+                    }
+                }
+            }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+
 
 
     private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
