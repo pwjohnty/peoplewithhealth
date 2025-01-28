@@ -142,7 +142,12 @@ public partial class AllMood : ContentPage
 
                 EmptyStack.IsVisible = false;
                 MoodOverview.IsVisible = true;
-                AllMoodView.ItemsSource = AllMoods.OrderByDescending(f => DateTime.Parse(f.datetime)).ToList();
+                AllMoodView.ItemsSource = AllMoods
+    .GroupBy(m => m.title  ) 
+    .Select(g => g.OrderByDescending(f => DateTime.Parse(f.datetime)).First()) 
+    .OrderByDescending(f => DateTime.Parse(f.datetime)) 
+    .ToList();
+                //AllMoodView.ItemsSource = AllMoods.OrderByDescending(f => DateTime.Parse(f.datetime)).ToList();
                 AllMoodView.HeightRequest = AllMoods.Count * 80;
             }
             else

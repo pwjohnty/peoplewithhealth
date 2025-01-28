@@ -7,14 +7,14 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem x:Name="EditBtn" Text="Edit"  Clicked="EditBtn_Clicked"  />
     </ContentPage.ToolbarItems>
-    <VerticalStackLayout>
+    <ScrollView VerticalScrollBarVisibility="Never">
         <StackLayout x:Name="MoodSingle">
             <Frame HasShadow="False" CornerRadius="10"  InputTransparent="True" Padding="5" BorderColor="Transparent" BackgroundColor="#FFF8DC"  Margin="20,20,20,5">
                 <Grid >
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="35"/>
-                        <RowDefinition Height="25"/>
-                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
 
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
@@ -30,6 +30,11 @@
 
                 </Grid>
             </Frame>
+            
+
+            <Button BackgroundColor="#B8860B" x:Name="AddDataBtn" Clicked="AddDataBtn_Clicked" HorizontalOptions="FillAndExpand" TextColor="White"  FontAttributes="None" Margin="20,20,20,0" FontFamily="HankenGroteskBold" Text="Add Data" />
+
+
 
             <StackLayout x:Name="SymptomInsights" Margin="20,10,20,0" IsVisible="True">
 
@@ -46,6 +51,7 @@
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="25"/>
                                             <RowDefinition Height="25"/>
+                                            <RowDefinition Height="Auto"/>
 
                                         </Grid.RowDefinitions>
                                         <Grid.ColumnDefinitions>
@@ -57,8 +63,10 @@
                                         <Image Source="{Binding source}" Margin="0,0,0,0"  HeightRequest="35" WidthRequest="35" VerticalOptions="Center" Grid.Row="0" Grid.Column="0"  Grid.RowSpan="2"  />
                                         <Label Text="{Binding title}" Margin="10,0,0,0" FontFamily="HankenGroteskBold"  FontSize="14" VerticalOptions="End" HorizontalOptions="Start" Grid.Row="0" Grid.Column="1"  TextColor="#B8860B" />
                                         <Label Text="{Binding datetime}" FontFamily="HankenGroteskBold" VerticalOptions="Start" Margin="10,0,0,0" HorizontalOptions="Start" FontSize="12" Grid.Row="1" Grid.Column="1"  TextColor="DarkGray" />
+                                        <Label Text="{Binding notes}" FontFamily="HankenGroteskRegular" VerticalOptions="Start" Margin="10,0,0,0" HorizontalOptions="Start" FontSize="12" Grid.Row="2" Grid.Column="1"  TextColor="#031926" />
 
-                                     
+
+
                                     </Grid>
                                 </Frame>
 
@@ -68,9 +76,7 @@
                 </syncfusion:SfListView>
 
 
-                <Button BackgroundColor="#B8860B" x:Name="AddDataBtn" Clicked="AddDataBtn_Clicked" HorizontalOptions="FillAndExpand" TextColor="White"  FontAttributes="None" Margin="0,20,0,10" FontFamily="HankenGroteskBold" Text="Add Data" />
-
-              
+               
 
 
     
@@ -118,5 +124,5 @@
 
         </StackLayout>-->
 
-    </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
