@@ -393,7 +393,7 @@ HorizontalOptions="Center" />-->
 
                     <Image Source="peoplewithlogoanimation.gif" IsVisible="False" x:Name="imganimation" BackgroundColor="Transparent" HeightRequest="100" Aspect="AspectFit" IsAnimationPlaying="True"/>
 
-                    <WebView x:Name="webLogo" IsVisible="False" BackgroundColor="Transparent" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HeightRequest="100">
+                    <WebView x:Name="webLogo" IsVisible="False" BackgroundColor="Transparent" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" HeightRequest="120">
 
 
                         <WebView.Source>

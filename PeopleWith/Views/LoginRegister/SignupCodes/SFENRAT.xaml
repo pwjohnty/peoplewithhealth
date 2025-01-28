@@ -185,7 +185,7 @@ HorizontalOptions="Start" />
 
                     <Label
 Text="Date of Diagnosis"
- FontSize="15"
+ FontSize="15" x:Name="datelbl"
  Margin="0,20,0,0"
  TextColor="#031926"
  FontFamily="HankenGroteskBold"
@@ -221,7 +221,7 @@ HorizontalOptions="Start" />
 
                     <Label
 Text="Age at Diagnosis"
- FontSize="15"
+ FontSize="15" x:Name="agelbl"
  Margin="0,10,0,0"
  TextColor="#031926"
  FontFamily="HankenGroteskBold"
