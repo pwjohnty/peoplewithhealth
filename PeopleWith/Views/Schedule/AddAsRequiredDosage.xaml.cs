@@ -83,22 +83,46 @@ public partial class AddAsRequiredDosage : ContentPage
             newitem = itempassed;
             usermed = usermedpassed;
 
+            adddatepicker.Date = DateTime.Now;
+            adddatepicker.MaximumDate = DateTime.Now;
             addtimepicker.Time = DateTime.Now.TimeOfDay;
 
             if (itempassed.Type == "Medication")
             {
                 unitentryframe.BackgroundColor = Color.FromArgb("#e5f9f4");
+                unitentryframeDD.BackgroundColor = Color.FromArgb("#e5f9f4");
                 SubmitBtn.BackgroundColor = Colors.Teal;
 
             }
             else
             {
                 unitentryframe.BackgroundColor = Color.FromArgb("#f9f4e5");
+                unitentryframeDD.BackgroundColor = Color.FromArgb("#f9f4e5");
                 SubmitBtn.BackgroundColor = Color.FromArgb("#ac5735");
             }
 
             lblentryunit.Text = newitem.dosageunit;
-            itemname.Text = newitem.Name;
+            itemname.Text = newitem.DisplayName;
+            if (!string.IsNullOrEmpty(newitem.Name))
+            {
+                Nameitem.Text = newitem.Name;
+                Nameitem.IsVisible = true;
+            }
+
+            if(newitem.dosageunit.Contains(" "))
+            {
+                newitem.DoubleDosage = true; 
+            }
+
+            if (newitem.DoubleDosage == true)
+            {
+                unitentryframe.IsVisible = false;
+                unitentryframeDD.IsVisible = true;
+
+                var SplitUnit = newitem.dosageunit.Split(' ');
+                lblUnitOne.Text = SplitUnit[0] + " " + SplitUnit[1];
+                lblUnittwo.Text =  SplitUnit[2];
+            }
         }
         catch (Exception Ex)
         {
@@ -115,23 +139,47 @@ public partial class AddAsRequiredDosage : ContentPage
             newitem = itempassed;
             usersupp = usersupppassed;
 
+            adddatepicker.Date = DateTime.Now;
+            adddatepicker.MaximumDate = DateTime.Now;
             addtimepicker.Time = DateTime.Now.TimeOfDay;
 
             if (itempassed.Type == "Medication")
             {
                 unitentryframe.BackgroundColor = Color.FromArgb("#e5f9f4");
+                unitentryframeDD.BackgroundColor = Color.FromArgb("#e5f9f4");
                 SubmitBtn.BackgroundColor = Colors.Teal;
 
             }
             else
             {
                 unitentryframe.BackgroundColor = Color.FromArgb("#f9f4e5");
+                unitentryframeDD.BackgroundColor = Color.FromArgb("#f9f4e5");
                 SubmitBtn.BackgroundColor = Color.FromArgb("#ac5735");
             }
 
-
             lblentryunit.Text = newitem.dosageunit;
-            itemname.Text = newitem.Name;
+            itemname.Text = newitem.DisplayName;
+            if (!string.IsNullOrEmpty(newitem.Name))
+            {
+                Nameitem.Text = newitem.Name;
+                Nameitem.IsVisible = true; 
+            }
+
+            if (newitem.dosageunit.Contains(" "))
+            {
+                newitem.DoubleDosage = true;
+            }
+
+            if(newitem.DoubleDosage == true)
+            {
+                unitentryframe.IsVisible = false;
+                unitentryframeDD.IsVisible = true;
+
+                var SplitUnit = newitem.dosageunit.Split(' ');
+                lblUnitOne.Text = SplitUnit[0];
+                lblUnittwo.Text = SplitUnit[1] + " " + SplitUnit[2]; 
+
+            }
         }
         catch (Exception Ex)
         {
@@ -149,60 +197,99 @@ public partial class AddAsRequiredDosage : ContentPage
             {
                 //Limit No. of Taps 
                 SubmitBtn.IsEnabled = false;
-                if (string.IsNullOrEmpty(unitentry.Text))
+
+                if (newitem.DoubleDosage == true)
                 {
-                    unitentry.Focus();
-                    Vibration.Vibrate();
+                    if (string.IsNullOrEmpty(unitentryOne.Text) || string.IsNullOrEmpty(unitentrytwo.Text))
+                    {
+                        if (string.IsNullOrEmpty(unitentryOne.Text))
+                        {
+                            unitentryOne.Focus(); 
+                        }
+                        else if (string.IsNullOrEmpty(unitentrytwo.Text))
+                        {
+                            unitentrytwo.Focus(); 
+                        }
+                        SubmitBtn.IsEnabled = true;
+                        Vibration.Vibrate();
+                        return; 
+                    }
                 }
                 else
                 {
-                    if (newitem.Type == "Medication")
+                    if (string.IsNullOrEmpty(unitentry.Text))
                     {
-
-                        var newfeedback = new MedSuppFeedback();
-                        Random random = new Random();
-                        int randomNumber = random.Next(100000, 100000001);
-
-                        newfeedback.id = randomNumber.ToString();
-                        newfeedback.Recorded = unitentry.Text;
-
-
-                        var dt = adddatepicker.Date + addtimepicker.Time;
-                        newfeedback.datetime = dt.ToString("HH:mm, dd/MM/yyyy");
-
-                        if (usermed.feedback == null || !usermed.feedback.Any())
-                        {
-                            //feedback is null initalize before hand 
-                            usermed.feedback = new ObservableCollection<MedSuppFeedback>();
-                        }
-
-                        usermed.feedback.Add(newfeedback);
-                        await aPICalls.UpdateMedicationFeedbackAsync(usermed);
-
-
+                        unitentry.Focus();
+                        SubmitBtn.IsEnabled = true;
+                        Vibration.Vibrate();
+                        return; 
                     }
-                    else
-                    {
-                        var newfeedback = new MedSuppFeedback();
-                        Random random = new Random();
-                        int randomNumber = random.Next(100000, 100000001);
+                }
 
-                        newfeedback.id = randomNumber.ToString();
-                        newfeedback.Recorded = unitentry.Text;
+                  
 
-
-                        var dt = adddatepicker.Date + addtimepicker.Time;
-                        newfeedback.datetime = dt.ToString("HH:mm, dd/MM/yyyy");
-
-                        if (usersupp.feedback == null || !usersupp.feedback.Any())
+                        if (newitem.Type == "Medication")
                         {
-                            //feedback is null initalize before hand 
-                            usersupp.feedback = new ObservableCollection<MedSuppFeedback>();
-                        }
 
-                        usersupp.feedback.Add(newfeedback);
-                        await aPICalls.UpdateSupplementFeedbackAsync(usersupp);
-                    }
+                            var newfeedback = new MedSuppFeedback();
+                            Random random = new Random();
+                            int randomNumber = random.Next(100000, 100000001);
+
+                            newfeedback.id = randomNumber.ToString();
+                            if(newitem.DoubleDosage == true)
+                            {
+                                newfeedback.Recorded = unitentryOne.Text + "|" + unitentrytwo.Text;
+                            }
+                            else
+                            {
+                                newfeedback.Recorded = unitentry.Text;
+                            }
+                            
+                            var dt = adddatepicker.Date + addtimepicker.Time;
+                            newfeedback.datetime = dt.ToString("HH:mm, dd/MM/yyyy");
+
+                            if (usermed.feedback == null || !usermed.feedback.Any())
+                            {
+                                //feedback is null initalize before hand 
+                                usermed.feedback = new ObservableCollection<MedSuppFeedback>();
+                            }
+
+                            usermed.feedback.Add(newfeedback);
+                            await aPICalls.UpdateMedicationFeedbackAsync(usermed);
+
+
+                        }
+                        else
+                        {
+                            var newfeedback = new MedSuppFeedback();
+                            Random random = new Random();
+                            int randomNumber = random.Next(100000, 100000001);
+
+                            newfeedback.id = randomNumber.ToString();
+                            if (newitem.DoubleDosage == true)
+                            {
+                                newfeedback.Recorded = unitentryOne.Text + "|" + unitentrytwo.Text;
+                            }
+                            else
+                            {
+                                newfeedback.Recorded = unitentry.Text;
+                            }
+
+                            var dt = adddatepicker.Date + addtimepicker.Time;
+                            newfeedback.datetime = dt.ToString("HH:mm, dd/MM/yyyy");
+
+                            if (usersupp.feedback == null || !usersupp.feedback.Any())
+                            {
+                                //feedback is null initalize before hand 
+                                usersupp.feedback = new ObservableCollection<MedSuppFeedback>();
+                            }
+
+                            usersupp.feedback.Add(newfeedback);
+                            await aPICalls.UpdateSupplementFeedbackAsync(usersupp);
+                        }
+                    
+
+                
 
                     SubmitBtn.IsEnabled = true;
                     var type = newitem.Type + " Feedback Updated";
@@ -255,7 +342,7 @@ public partial class AddAsRequiredDosage : ContentPage
                     }
 
                 }
-            }
+            
             else
             {
                 var isConnected = accessType == NetworkAccess.Internet;

@@ -1,5 +1,4 @@
-﻿using Android.Telephony;
-using Mopups.Services;
+﻿using Mopups.Services;
 using Newtonsoft.Json;
 using PINView.Maui;
 using System.Collections.ObjectModel;

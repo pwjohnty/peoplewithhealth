@@ -135,7 +135,7 @@ Padding="0">
                                             <Label Text="{Binding Times}" Margin="0,0,20,0" FontFamily="HankenGroteskBold" HeightRequest="30" FontSize="14" Grid.Row="0" Grid.Column="1" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" HorizontalOptions="Center"  TextColor="#031926" />
                                             <Label Text="{Binding Type}" Margin="0,0,20,0" FontFamily="HankenGroteskBold" HeightRequest="30" FontSize="13" Grid.Row="0" Grid.Column="2" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" HorizontalOptions="Center"  TextColor="#031926" />
 
-                                            <BoxView HeightRequest="1" Color="Teal" BackgroundColor="Teal" Grid.Row="1" Grid.ColumnSpan="3"/>
+                                            <BoxView HeightRequest="1" Color="#ac5735" BackgroundColor="#ac5735" Grid.Row="1" Grid.ColumnSpan="3"/>
 
                                         </Grid>
 

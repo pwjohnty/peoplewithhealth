@@ -506,13 +506,14 @@ public partial class MainSchedule : ContentPage
 
                                     }
 
-                                    newitem.Dosage = medtimes.Recorded + " " + item.unit;
+                                    newitem.Dosage = medtimes.Recorded;
+                                    newitem.dosageunit = item.unit;
                                     newitem.time = "00:00";
                                     newitem.Buttonop = 1;
                                     newitem.Buttonntop = 0;
                                     newitem.AsReqlblVis = true;
 
-                                    ScheduleList.Add(newitem);
+                                    //ScheduleList.Add(newitem);
                                 }
                             }
                         }
@@ -1119,7 +1120,23 @@ public partial class MainSchedule : ContentPage
                         Medtime.time = "As Required";
                         Medtime.Type = "Medication";
                         Medtime.ListBackgroundColor = Color.FromArgb("#e5f9f4");
-                        AsRequiredList.Add(Medtime);
+                        if (!String.IsNullOrEmpty(item.enddate))
+                        {
+                            var CheckDate = DateTime.Parse(item.enddate); 
+                            if(DateTime.Now.Date <= CheckDate)
+                            {
+                                AsRequiredList.Add(Medtime);
+                            }
+                            else
+                            {
+                                //Don't Add
+                            }
+                        }
+                        else
+                        {
+                            AsRequiredList.Add(Medtime);
+                        }
+                        
                     }
                 }
                 else 

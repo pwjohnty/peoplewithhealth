@@ -6,6 +6,7 @@
     <StackLayout VerticalOptions="FillAndExpand" Margin="20,0,20,0" HorizontalOptions="FillAndExpand">
 
         <Label x:Name="itemname" FontSize="26" Margin="0,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
+        <Label x:Name="Nameitem" IsVisible="False" FontSize="20" Margin="0,5,0,0" TextColor="Gray" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
 
 
 
@@ -30,6 +31,28 @@
                 </Grid.ColumnDefinitions>
                 <Entry FontSize="30" x:Name="unitentry" Placeholder="Add Dosage" Keyboard="Numeric" Grid.ColumnSpan="1" Grid.Column="0" FontFamily="HankenGroteskRegular" TextColor="#031926" HorizontalTextAlignment="Center" Grid.Row="0" />
                 <Label x:Name="lblentryunit" Grid.Row="0" Grid.Column="1" FontSize="14" Margin="0,0,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" HorizontalTextAlignment="Center" FontAttributes="None" HorizontalOptions="Center" VerticalOptions="Center"  />
+
+            </Grid>
+        </Frame>
+
+
+        <Frame CornerRadius="10" Margin="0,10,0,0" x:Name="unitentryframeDD" IsVisible="False" InputTransparent="False" Padding="0"  HeightRequest="70"  BackgroundColor="#e5f0fb"  HasShadow="False" BorderColor="Transparent">
+            <Grid HorizontalOptions="FillAndExpand" Margin="0,10,0,0" BackgroundColor="Transparent">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="35*"/>
+                    <ColumnDefinition Width="15*"/>
+                    <ColumnDefinition Width="35*"/>
+                    <ColumnDefinition Width="15*"/>
+                </Grid.ColumnDefinitions>
+                <Entry FontSize="30" x:Name="unitentryOne" Placeholder="Add" Keyboard="Numeric" Grid.ColumnSpan="1" Grid.Column="0" FontFamily="HankenGroteskRegular" TextColor="#031926" HorizontalTextAlignment="Center" Grid.Row="0" />
+                <Label x:Name="lblUnitOne" Grid.Row="0" Grid.Column="1" FontSize="14" Margin="0,0,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" HorizontalTextAlignment="Center" FontAttributes="None" HorizontalOptions="Center" VerticalOptions="Center"  />
+                <Entry FontSize="30" x:Name="unitentrytwo" Placeholder="Dosage" Keyboard="Numeric" Grid.ColumnSpan="1" Grid.Column="2" FontFamily="HankenGroteskRegular" TextColor="#031926" HorizontalTextAlignment="Center" Grid.Row="0" />
+                <Label x:Name="lblUnittwo" Grid.Row="0" Grid.Column="3" FontSize="14" Margin="0,0,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" HorizontalTextAlignment="Center" FontAttributes="None" HorizontalOptions="Center" VerticalOptions="Center"  />
+
 
             </Grid>
         </Frame>

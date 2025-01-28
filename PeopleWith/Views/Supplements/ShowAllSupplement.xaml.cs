@@ -358,6 +358,29 @@ public partial class ShowAllSupplement : ContentPage
                             item.unit = MedSelected.unit;
                         }
 
+                        foreach (var item in MedicationList)
+                        {
+
+                            if (item.Dosage.Contains("|"))
+                            {
+                                var DosageSplit = item.Dosage.Split('|');
+                                item.DosageOne = DosageSplit[0];
+                                item.DosageTwo = DosageSplit[1];
+
+                                var UnitSplit = item.unit.Split(' ');
+                                item.UnitOne = UnitSplit[0] + " " + UnitSplit[1];
+                                item.UnitTwo = UnitSplit[2];
+
+                                item.DoubleDosage = true;
+                                item.SingleDosage = false;
+                            }
+                            else
+                            {
+                                item.DoubleDosage = false;
+                                item.SingleDosage = true;
+                            }
+                        }
+
 
                         // var sortedlist = MedicationList.OrderBy(t => t.MedDateTime);
                         //UserMedicationSchedule.ItemsSource = sortedlist;
@@ -495,6 +518,7 @@ public partial class ShowAllSupplement : ContentPage
 
                     foreach (var item in MedicationList)
                     {
+                       
                         if (item.Dosage.Contains("|"))
                         {
                             var DosageSplit = item.Dosage.Split('|');
