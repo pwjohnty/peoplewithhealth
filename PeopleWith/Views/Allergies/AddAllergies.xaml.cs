@@ -73,9 +73,12 @@ public partial class AddAllergies : ContentPage
             }
 
             FilterResults = allergies;
-
             AllergyListview.ItemsSource = allergies.OrderBy(s => s.Title);
             var count = allergies.Count.ToString();
+
+            AllergyListview.IsVisible = false;
+            AllergyListview.IsVisible = true;
+            //AllergyListview.HeightRequest = allergies.Count * 40;
 
             //Results inital count
             Results.Text = "Results" + " (" + count + ")";
@@ -199,5 +202,22 @@ public partial class AddAllergies : ContentPage
             NotasyncMethod(Ex);
         }
 
+    }
+
+    private void AllergyListview_SizeChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            var viewCell = sender as View;
+            if (viewCell != null)
+            {
+                double itemHeight = viewCell.Height;
+                //AllergyListview.HeightRequest = itemHeight; 
+            }
+        }
+        catch(Exception Ex)
+        {
+
+        }
     }
 }

@@ -92,6 +92,18 @@ FontAttributes="None" x:Name="asrequiredbtn"
 Margin="20,10,20,10" Clicked="asrequiredbtn_Clicked"
 FontFamily="HankenGroteskBold"
 Text="As Required Medications/Supplements" />
+            
+            
+            
+            
+            <!-- No Data Stack -->
+            <StackLayout x:Name="nodatastack" IsVisible="False" Margin="0,20,0,0" VerticalOptions="StartAndExpand">
+                <Image Source="adddataicon.png" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="50" WidthRequest="50"/>
+                <Label Text="Nothing Due Today" FontSize="20" Margin="0,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Center" />
+            </StackLayout>
+
+
+            
 
             <Grid x:Name="SchedLoading" Margin="0,150,0,0"  IsVisible="False">
                 <Grid.RowDefinitions>
@@ -105,10 +117,10 @@ Text="As Required Medications/Supplements" />
             </Grid>
 
 
-            <syncfusion:SfListView x:Name="mainschedulelistview" 
+            <syncfusion:SfListView x:Name="mainschedulelistview" IsVisible="False"
                                AutoFitMode="Height" Margin="0,0,10,10"
                                GroupHeaderSize="20" BackgroundColor="Transparent"
-                                        SelectionMode="None"
+                                        SelectionMode="None" 
                                            VerticalOptions="StartAndExpand"
                                  
                                Orientation="Vertical"
@@ -254,15 +266,8 @@ Text="As Required Medications/Supplements" />
 
             </syncfusion:SfListView>
 
-
-
-            <!-- No Data Stack -->
-            <StackLayout x:Name="nodatastack" IsVisible="False" Margin="0,20,0,0" VerticalOptions="StartAndExpand">
-                <Image Source="adddataicon.png" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="50" WidthRequest="50"/>
-                <Label Text="Nothing Due Today" FontSize="20" Margin="0,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Center" />
-            </StackLayout>
-
         </StackLayout>
+
 
 
 

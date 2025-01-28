@@ -141,7 +141,17 @@ public partial class AddAppointment : ContentPage
             AllHCPs = await getHCPsTask;
             foreach (var items in AllHCPs)
             {
-                items.fullname = items.firstname + " " + items.surname;
+                if (!string.IsNullOrEmpty(items.firstname) || !string.IsNullOrEmpty(items.surname))
+                {
+                    var nameParts = new List<string> { items.role };
+                    if (!string.IsNullOrEmpty(items.firstname))
+                        nameParts.Add(items.firstname);
+                    if (!string.IsNullOrEmpty(items.surname))
+                        nameParts.Add(items.surname);
+
+                    items.fullname = string.Join(" ", nameParts);
+                }
+
             }
 
             var item = "No HCP";
@@ -240,12 +250,19 @@ public partial class AddAppointment : ContentPage
 
             if(NavFrom == "HCPs")
             {
-                var hcpname = SelectHCP.fullname; 
-                hcpPicker.Columns[0].SelectedItem = hcpname;
+                var Gethcpid = SelectHCP.hcpid;
+                for (int i = 0; i < AllHCPs.Count; i++)
+                {
+                    if (AllHCPs[i].hcpid == Gethcpid)
+                    {
+                        HcpChips.SelectedItem = AllHCPs[i]; 
+                    }
+                }
+                
             }
             else
             {
-                hcpPicker.Columns[0].SelectedItem = "No HCP";
+                //hcpPicker.Columns[0].SelectedItem = "No HCP";
             }
         }
         catch (Exception Ex)

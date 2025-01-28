@@ -98,7 +98,7 @@
                         <ColumnDefinition Width="90*"/>
                         <ColumnDefinition Width="10*"/>
                     </Grid.ColumnDefinitions>
-                    <Label Text="Mood Information" Margin="0,0,0,0" Grid.Column="0" FontFamily="HankenGroteskBold"  FontSize="16" VerticalOptions="Center" TextColor="#031926" />
+                    <Label Text="Information and Resources" Margin="0,0,0,0" Grid.Column="0" FontFamily="HankenGroteskBold"  FontSize="16" VerticalOptions="Center" TextColor="#031926" />
                     <Image  Source="backbutton.png" Grid.Column="1" Rotation="180" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="15" WidthRequest="15" />
                 </Grid>
                 <Frame.GestureRecognizers>

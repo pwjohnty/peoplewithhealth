@@ -17,7 +17,7 @@
             <Label x:Name="HealthDetailslbl" HorizontalOptions="StartAndExpand" Margin="20,20,0,0" FontFamily="HankenGroteskBold" FontSize="25" TextColor="#031926"/>
             
             <!-- Name-->
-            <Grid x:Name="NameStack" Margin="10,0,10,0" ColumnSpacing="10" IsVisible="False">
+            <Grid x:Name="NameStack" Margin="20,0,20,0" ColumnSpacing="10" IsVisible="False">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
@@ -36,7 +36,7 @@
             </Grid>
             
             <!-- Email-->
-            <Grid x:Name="EmailStack" Margin="10,0,10,0" IsVisible="False">
+            <Grid x:Name="EmailStack" Margin="20,0,20,0" IsVisible="False">
                 <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
@@ -202,10 +202,10 @@
   
             <StackLayout x:Name="SettingsStack" IsVisible="False">
 
-                <Label x:Name="SettingsStacklbl" HorizontalOptions="StartAndExpand" Margin="20,0,0,0" FontFamily="HankenGroteskBold" FontSize="25" TextColor="#031926"/>
+                <Label x:Name="SettingsStacklbl" HorizontalOptions="StartAndExpand" Margin="20,20,0,0" FontFamily="HankenGroteskBold" FontSize="25" TextColor="#031926"/>
 
                 <!-- Reset Password-->
-                <Grid x:Name="EmailConfirmStack" Margin="10,0,10,0" IsVisible="False">
+                <Grid x:Name="EmailConfirmStack" Margin="20,0,20,0" IsVisible="False">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -236,7 +236,7 @@
 
 
                 </Grid>
-                <Grid x:Name="PasswordStack" Margin="10,0,10,0" IsVisible="False">
+                <Grid x:Name="PasswordStack" Margin="20,0,20,0" IsVisible="False">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -295,7 +295,7 @@
                 </Grid>
                 
                 <!--Notifications [Needs Added] -->
-                <Grid x:Name="NotificationsStack" Margin="10,0,10,0" IsVisible="False">
+                <Grid x:Name="NotificationsStack" Margin="20,0,20,0" IsVisible="False">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -311,7 +311,7 @@
 
                            
                 <!-- Sign-up Code-->                                          
-                <Grid x:Name="SignupcodeStack" Margin="10,0,10,0" IsVisible="False">
+                <Grid x:Name="SignupcodeStack" Margin="20,0,20,0" IsVisible="False">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
@@ -345,11 +345,12 @@
                
             <!-- Privacy -->
             <StackLayout x:Name="PrivacyStack" IsVisible="False">
-            <Label x:Name="PrivacyStacklbl" HorizontalOptions="StartAndExpand" Margin="20,0,0,0" FontFamily="HankenGroteskBold" FontSize="25" TextColor="#031926"/>
+            <Label x:Name="PrivacyStacklbl" HorizontalOptions="StartAndExpand" Margin="20,20,0,0" FontFamily="HankenGroteskBold" FontSize="25" TextColor="#031926"/>
                 
             <!-- Pin code-->
-                <Grid x:Name="CurrentPinCodeStack" Margin="10,0,10,0" IsVisible="False">
+                <Grid x:Name="CurrentPinCodeStack" Margin="20,0,20,0" IsVisible="False">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -363,8 +364,75 @@
                     <pinview:PINView Grid.Row="1" BoxBackgroundColor="Transparent" Margin="0,20,0,0" x:Name="CurrentPin" BoxShape="RoundCorner" AutoDismissKeyboard="True" PINEntryCompleted="CurrentPin_PINEntryCompleted"
                     PINLength="4" HorizontalOptions="Center" IsPassword="True" PropertyChanged="CurrentPin_PropertyChanged" BoxBorderColor="LightGray" Color="#031926" />
 
-                    <Label Grid.Row="2" Text="Invalid Code" TextColor="Red" FontFamily="HankenGroteskRegular" FontAttributes="None" Margin="0,10,0,0" x:Name="CurrentPinErrorlbl" FontSize="15" IsVisible="False"
+                    <Label Grid.Row="2" TextColor="#7393B3" FontFamily="HankenGroteskRegular" FontAttributes="Bold" FontSize="12" Text="Forgotten Passcode?" Margin="0,10,60,10" VerticalOptions="Center" HorizontalOptions="End" >
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+
+                    <Label Grid.Row="3" Text="Invalid Code" TextColor="Red" FontFamily="HankenGroteskRegular" FontAttributes="None" Margin="0,10,0,0" x:Name="CurrentPinErrorlbl" FontSize="15" IsVisible="False"
                      HorizontalOptions="Center" />
+
+                </Grid>
+
+
+                <Grid x:Name="ForgotPinStack" Margin="20,0,20,0" IsVisible="False">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+Text="Please enter the code sent to your email"
+TextColor="#031926" Grid.Row="0" Grid.Column="0"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,0,0,0"
+FontSize="15"
+HorizontalOptions="Start" />
+
+
+
+
+
+
+
+                        <pinview:PINView Grid.Row="1" Grid.Column="0"
+   BoxBackgroundColor="Transparent" Margin="0,20,0,0" x:Name="emailconfigpin"
+   BoxShape="RoundCorner" AutoDismissKeyboard="True" PropertyChanged="emailconfigpin_PropertyChanged_1"
+   PINLength="5" HorizontalOptions="Center" PINEntryCompleted="emailconfigpin_PINEntryCompleted"
+  BoxBorderColor="LightGray"
+   Color="#031926" />
+
+
+
+                        <Label Grid.Row="2" Grid.Column="0"
+Text="Invalid Code"
+TextColor="Red"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,20,0,0" x:Name="incorrectpincodelbl"
+FontSize="15" IsVisible="False"
+HorizontalOptions="Center" />
+
+                    <Label
+Text="Resend Code" Grid.Row="3" Grid.Column="0"
+TextColor="#0096FF"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,20,0,0" x:Name="ResendCode"
+FontSize="15" IsVisible="True"
+HorizontalOptions="Center" >
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1" NumberOfTapsRequired="1"/>
+                        </Label.GestureRecognizers>
+                    </Label>
 
                 </Grid>
                 

@@ -415,7 +415,7 @@ public partial class AddHCPs : ContentPage
                 }
                 if (!string.IsNullOrEmpty(SurNameEntry.Text))
                 {
-                    NEWHCP.firstname = SurNameEntry.Text;
+                    NEWHCP.surname = SurNameEntry.Text;
                 }
                 else
                 {

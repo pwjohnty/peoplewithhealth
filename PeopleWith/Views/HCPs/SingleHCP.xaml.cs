@@ -198,10 +198,16 @@ public partial class SingleHCP : ContentPage
                     HistoricalListview.ItemsSource = HistoricalAppointments.OrderBy(X => X.datetimeConverted);
                 }
 
+                showalllbl2.Text = "Tap to view all Appointments With this HCP";
+                showallbtn.Text = "View Appointments";
+
             }
             else
             {
-                NoAppointmentsStack.IsVisible = true; 
+
+                showalllbl2.Text = "Tap to add an appointment with this HCP";
+                showallbtn.Text = "Add Appointment";
+                //NoAppointmentsStack.IsVisible = true; 
             }
            
         }
@@ -349,6 +355,39 @@ public partial class SingleHCP : ContentPage
                 NoAppointFrame.IsEnabled = false;
                 await Navigation.PushAsync(new AddAppointment(HCPSelected, AllUserHCPs), false);
                 NoAppointFrame.IsEnabled = true;
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    private async void showallbtn_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                //Limit No. of Taps 
+                showallbtn.IsEnabled = false;
+                if(showallbtn.Text == "Add Appointment")
+                {
+                    await Navigation.PushAsync(new AddAppointment(HCPSelected, AllUserHCPs), false);
+                }
+                else
+                {
+                    await Navigation.PushAsync(new AllAppointments(), false); 
+                }
+               
+                showallbtn.IsEnabled = true;
             }
             else
             {
