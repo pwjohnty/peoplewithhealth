@@ -27,7 +27,11 @@ namespace PeopleWith
                 .UseSegmentedControl()
                 //.UseSkiaSharp()
 #if ANDROID
-                .ConfigureMauiHandlers(handlers => handlers.AddHandler<Microsoft.Maui.Controls.Entry, PINView.Maui.Platforms.Android.Handlers.EntryHandler>())
+                .ConfigureMauiHandlers(handlers => 
+{
+    handlers.AddHandler<Microsoft.Maui.Controls.Entry, PINView.Maui.Platforms.Android.Handlers.EntryHandler>();
+    handlers.AddHandler<Microsoft.Maui.Controls.Editor, Microsoft.Maui.Handlers.EditorHandler>(); // Add the EditorHandler
+})
 #endif
                 .ConfigureFonts(fonts =>
                 {
@@ -78,6 +82,15 @@ namespace PeopleWith
             handler.PlatformView.BackgroundColor = UIKit.UIColor.Clear;
             handler.PlatformView.Layer.BorderWidth = 0;
             handler.PlatformView.BorderStyle = UIKit.UITextBorderStyle.None;
+#endif
+            });
+
+            // Remove underline on Editor (Android)
+            Microsoft.Maui.Handlers.EditorHandler.Mapper.AppendToMapping("Borderless", (handler, view) =>
+            {
+#if ANDROID
+    handler.PlatformView.SetBackgroundColor(Android.Graphics.Color.Transparent);
+    handler.PlatformView.Background = null;  // Remove any potential default background (if needed)
 #endif
             });
 

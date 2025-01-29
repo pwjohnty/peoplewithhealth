@@ -160,7 +160,7 @@
                 <Label Text="Add Notes" FontFamily="HankenGroteskBold" Margin="20,10,0,0"  VerticalOptions="Center" HorizontalOptions="Start"   FontSize="16" TextColor="#031926" />
                 <Frame  BorderColor="#E6E6E6" BackgroundColor="Transparent" HasShadow="False" CornerRadius="10" Padding="-11" Margin="20,5,20,0">
                     <ScrollView Orientation="Vertical" HorizontalScrollBarVisibility="Never">
-                        <Editor x:Name="Notes" HeightRequest="80" TextColor="#031926" FontFamily="HankenGroteskRegular" BackgroundColor="Transparent"  HorizontalTextAlignment="Start"  Margin="20,10,5,10"  />
+                        <Editor x:Name="Notes" HeightRequest="80" TextColor="#031926" FontFamily="HankenGroteskRegular"  BackgroundColor="Transparent"  HorizontalTextAlignment="Start"  Margin="20,10,5,10"  />
                     </ScrollView>
                 </Frame>
 

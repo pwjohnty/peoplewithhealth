@@ -572,8 +572,16 @@ FontSize="8" />
                        <On Platform="Android" Value="150" />
                    </OnPlatform>
                </chart:SfCartesianChart.HeightRequest>
-               <chart:SfCartesianChart.XAxes>
-                                            <chart:CategoryAxis EdgeLabelsDrawingMode="Center"  ShowMajorGridLines="False">
+
+                                    <chart:SfCartesianChart.Resources>
+                                        <DataTemplate x:Key="labelTemplate">
+                                            <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"  Padding="0">
+                                                <Label Text="{Binding Item.Count}" FontFamily="HankenGroteskBold" TextColor="Black" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </chart:SfCartesianChart.Resources>
+                                    <chart:SfCartesianChart.XAxes>
+                                            <chart:CategoryAxis EdgeLabelsDrawingMode="Center" ShowMajorGridLines="False">
                                                 <chart:CategoryAxis.LabelStyle>
                                                     <chart:ChartAxisLabelStyle FontSize="8" FontFamily="HankenGroteskRegular" TextColor="#031926"/>
                                                 </chart:CategoryAxis.LabelStyle>
@@ -587,12 +595,16 @@ FontSize="8" />
                                             </chart:NumericalAxis>
                </chart:SfCartesianChart.YAxes>
                <chart:SfCartesianChart.Series>
-                                            <chart:ColumnSeries x:Name="symptomprogresschart"  EnableTooltip="True" XBindingPath="datetime" YBindingPath="Count" ShowTrackballLabel="True" ShowDataLabels="False" Width="0.5" EnableAnimation="False" StrokeWidth="1" CornerRadius="2" Fill="Orange">
-                       <!--<chart:ColumnSeries.MarkerSettings>
+                                        <chart:ColumnSeries x:Name="symptomprogresschart"   LabelTemplate="{StaticResource labelTemplate}"  EnableTooltip="false" XBindingPath="datetime" YBindingPath="Count" ShowTrackballLabel="True" ShowDataLabels="True" Width="0.5" EnableAnimation="False" StrokeWidth="1" CornerRadius="2" Fill="Orange">
+                                            <!--<chart:ColumnSeries.MarkerSettings>
                            <chart:ChartMarkerSettings Type="Circle" StrokeWidth="2" Stroke="Orange"  Height="8" Width="8"  Fill="#fff7ea" />
                        </chart:ColumnSeries.MarkerSettings>-->
-                   </chart:ColumnSeries>
-               </chart:SfCartesianChart.Series>
+                                            
+                                            <chart:ColumnSeries.DataLabelSettings>
+                                                <chart:CartesianDataLabelSettings  BarAlignment="Top" LabelPlacement="Outer" UseSeriesPalette="False"/>
+                                            </chart:ColumnSeries.DataLabelSettings>
+                                        </chart:ColumnSeries>
+                                    </chart:SfCartesianChart.Series>
                                             <chart:SfCartesianChart.GestureRecognizers>
                                                 <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_4" NumberOfTapsRequired="1"/>
                                             </chart:SfCartesianChart.GestureRecognizers>

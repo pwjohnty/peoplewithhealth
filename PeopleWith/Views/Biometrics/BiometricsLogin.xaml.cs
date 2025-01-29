@@ -121,6 +121,7 @@ public partial class BiometricsLogin : ContentPage
                     PinKeyPad.IsVisible = false;
                     ForgotPassword.IsVisible = false;
                     await Task.Delay(2000);
+                //Application.Current.MainPage = new MainDashboard();
                 Application.Current.MainPage = new NavigationPage(new MainDashboard());
             }
             else

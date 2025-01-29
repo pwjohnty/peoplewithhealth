@@ -828,7 +828,17 @@ public partial class RegisterFinalPage : ContentPage
 
                 await Task.Delay(3000);
                 Application.Current.MainPage = new NavigationPage(new MainDashboard());
-                
+
+                //Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                //Task.Run(async () =>
+                //{
+                //    await Task.Delay(3000); 
+                //     MainThread.BeginInvokeOnMainThread(async () =>
+                //    {
+                //        Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                //    });
+                //});
+
 
             }
             else
