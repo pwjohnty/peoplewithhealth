@@ -113,6 +113,7 @@ public partial class MainDashboard : ContentPage
     {
         base.OnAppearing();
         getuserfeedbackdata();
+
         //checknotificationsEnabled(); 
     }
 
@@ -643,6 +644,8 @@ public partial class MainDashboard : ContentPage
                 int maxCount = lastSevenDaysData.Max(data => data.Count) + 1;
                 chartnumaxis.Maximum = maxCount;
                 // Bind the data to your chart
+
+                
                 symptomprogresschart.ItemsSource = lastSevenDaysData;
             }
             else

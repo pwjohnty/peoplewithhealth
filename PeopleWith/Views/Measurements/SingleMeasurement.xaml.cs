@@ -575,23 +575,30 @@ public partial class SingleMeasurement : ContentPage
                     datachart.XAxes.Clear();
                     datachart.YAxes.Clear();
 
+                    CategoryAxis primaryAxis = new CategoryAxis();
+                    primaryAxis.LabelStyle.TextColor = Colors.Transparent;
+                    primaryAxis.ShowMajorGridLines = false;
+                    primaryAxis.AxisLineStyle.Stroke = Colors.Transparent;
+                    primaryAxis.MajorTickStyle.Stroke = Colors.Transparent;
+                    datachart.XAxes.Add(primaryAxis);
+
                     // Configure X-Axis
-                    CategoryAxis xAxis = new CategoryAxis
-                    {
-                        LabelStyle = new ChartAxisLabelStyle
-                        {
-                            TextColor = Colors.Transparent,
-                            FontSize = 10
-                        },
-                        AxisLineStyle = new ChartLineStyle
-                        {
-                            Stroke = Colors.Transparent,
-                            StrokeWidth = 0
-                        },
-                        ShowMajorGridLines = false,
-                        EdgeLabelsDrawingMode = EdgeLabelsDrawingMode.Shift
-                    };
-                    datachart.XAxes.Add(xAxis);
+                    //CategoryAxis xAxis = new CategoryAxis
+                    //{
+                    //    LabelStyle = new ChartAxisLabelStyle
+                    //    {
+                    //        TextColor = Colors.Transparent,
+                    //        FontSize = 10
+                    //    },
+                    //    AxisLineStyle = new ChartLineStyle
+                    //    {
+                    //        Stroke = Colors.Transparent,
+                    //        StrokeWidth = 0
+                    //    },
+                    //    ShowMajorGridLines = false,
+                    //    EdgeLabelsDrawingMode = EdgeLabelsDrawingMode.Shift
+                    //};
+                    //datachart.XAxes.Add(xAxis);
 
                     // Configure Y-Axis
                     NumericalAxis yAxis = new NumericalAxis
@@ -614,10 +621,33 @@ public partial class SingleMeasurement : ContentPage
                     };
                     selection.SelectionChanged += OnSelectionChanged;
 
+                    if(GroupedSleepData.Count < 7)
+                    {
+                        //DateTime max = (DateTime)GroupedSleepData.Max(g => g.dateconverted);
+                        DateTime min = (DateTime)GroupedSleepData.Min(g => g.dateconverted);
+                        int GetCount = 7 - GroupedSleepData.Count;
+
+                        for (int i = GetCount; i > 0; i--)
+                        {
+                            DateTime AddDays = min.AddDays(-i);
+                            GroupedSleepData.Add(new usermeasurement
+                            {
+                                dateconverted = AddDays,
+                                //numconverted = existingEntry.numconverted,
+                                //unit = existingEntry.unit,
+                                //value = existingEntry.value + "\n" + existingEntry.dateconverted.ToString("dd/MM/yy")
+                            });
+                        }
+
+                        GroupedSleepData = new ObservableCollection<usermeasurement>(GroupedSleepData.OrderBy(b => b.dateconverted));
+
+
+                    }
+
                     // Configure the Column Series
                     ColumnSeries columnSeries = new ColumnSeries
                     {
-                        ItemsSource = GroupedSleepData,
+                        ItemsSource = GroupedSleepData.OrderBy(d => d.dateconverted),
                         XBindingPath = "dateconverted", 
                         YBindingPath = "numconverted", 
                         Width = 0.4,
@@ -681,13 +711,27 @@ public partial class SingleMeasurement : ContentPage
                     chartMarker.Height = 8;
                     chartMarker.Width = 8;
 
-                    ChartZoomPanBehavior zooming = new ChartZoomPanBehavior()
+                    if (usermeasurementpassed.unit == "Feet/Inches" || usermeasurementpassed.unit == "Stones/Pounds")
                     {
-                        EnablePinchZooming = true
-                    };
+                       
+                        ChartZoomPanBehavior zoomPanBehavior = new ChartZoomPanBehavior
+                        {
+                            EnablePanning = true, // Enable horizontal scrolling
+                            EnablePinchZooming = false // Disable pinch-to-zoom
+                        };
+                        datachart.ZoomPanBehavior = zoomPanBehavior;
+                    }
+                    else
+                    {
+                        ChartZoomPanBehavior zooming = new ChartZoomPanBehavior()
+                        {
+                            EnablePinchZooming = true
+                        };
 
-                    datachart.ZoomPanBehavior = zooming;
+                        datachart.ZoomPanBehavior = zooming;
+                    }
 
+                    
                     CategoryAxis primaryAxis = new CategoryAxis();
                     primaryAxis.LabelStyle.TextColor = Colors.Transparent;
                     primaryAxis.ShowMajorGridLines = false;
@@ -888,7 +932,7 @@ public partial class SingleMeasurement : ContentPage
                 if(usermeasurementpassed.unit == "Hours/Minutes")
                 {
 
-                    int count = GroupedSleepData.Count - 1; 
+                    int count = GroupedSleepData.OrderBy(d => d.dateconverted).Count() - 1;
                     var getvalue = GroupedSleepData[count].value.Split('\n');
                     lblvalue.Text = getvalue[0];
                     lblunit.Text = GroupedSleepData[count].unit;

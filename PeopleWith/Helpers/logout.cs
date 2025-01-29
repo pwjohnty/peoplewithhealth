@@ -59,6 +59,10 @@ namespace PeopleWith
 
                 await Task.Delay(300);
                 Application.Current.MainPage = new NavigationPage(new MainPage());
+
+
+                //Application.Current.MainPage = new NavigationPage(new MainPage());
+
             }
             catch (Exception ex)
             {
