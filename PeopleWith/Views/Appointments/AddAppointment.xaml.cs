@@ -599,6 +599,7 @@ public partial class AddAppointment : ContentPage
                     //var datetime = DateTime.Parse(SelectedDate + " " + SelectedTime);
                     NewAppointment.datetime = dateandtime;
 
+                    NewAppointment.datetimeConverted = DateTime.Parse(NewAppointment.datetime);
                     //Get Location 
                     NewAppointment.location = SelectedLocation;
 

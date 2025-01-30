@@ -55,12 +55,16 @@ namespace PeopleWith
             {
                 var startdateandtime = DateTime.Parse(AddAppointment.datetime) - AddAppointment.Reminder;
                 var Time = DateTime.Parse(AddAppointment.datetime).ToString("HH:mm");
-                var nottitle = "Appointment With " + AddAppointment.hcpname;
+                var nottitle = "Appointment Reminder";
+                var notdescription = string.Empty; 
                 if (string.IsNullOrEmpty(AddAppointment.hcpname))
                 {
-                    nottitle = "Appointment";
+                    notdescription = AddAppointment.datetimeConverted.ToString("dd/MM/yy, HH:mm") + " at " + AddAppointment.location + " (" + AddAppointment.type + ")";
                 }
-                var notdescription = "Locaiton: " + AddAppointment.location + " At " + Time;
+                else
+                {
+                    notdescription = AddAppointment.hcpname + " - " + AddAppointment.datetimeConverted.ToString("dd/MM/yy, HH:mm") + " at " + AddAppointment.location + " (" + AddAppointment.type + ")";
+                }
 
                 var notification = new NotificationRequest
                 {
@@ -76,10 +80,14 @@ namespace PeopleWith
                     }
                 };
 
-                if (NotificationsEnabled == true)
+
+                var check = await LocalNotificationCenter.Current.AreNotificationsEnabled();
+
+                if (check)
                 {
                     await LocalNotificationCenter.Current.Show(notification);
                 }
+
                 return null; 
             }
             catch (Exception Ex)
