@@ -1789,7 +1789,8 @@ public partial class WH : ContentPage
         try
         {
             PostCodeLoading.IsVisible = true;
-            postcodelist.IsVisible = false; 
+            postcodelist.IsVisible = false;
+            NoResultslblPost.IsVisible = false;
             if (string.IsNullOrEmpty(e.NewTextValue))
             {
                // FilterResults.Clear();
