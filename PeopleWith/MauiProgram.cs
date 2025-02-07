@@ -9,7 +9,8 @@ using Plugin.Maui.Biometric;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 using CommunityToolkit.Maui;
 using Maui.FreakyControls.Extensions;
-using Microsoft.Maui.Handlers;
+using Microsoft.Maui.Controls.Hosting;
+using Microsoft.Maui.Hosting;
 
 namespace PeopleWith
 {

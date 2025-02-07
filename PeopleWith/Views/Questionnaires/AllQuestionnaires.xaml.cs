@@ -43,7 +43,28 @@ public partial class AllQuestionnaires : ContentPage
         }
 	}
 
-	async void getquestionnaires()
+    private void NovoConsentData()
+    {
+        try
+        {
+            if (!String.IsNullOrEmpty(Helpers.Settings.SignUp))
+            {
+                var signup = Helpers.Settings.SignUp;
+                if (signup.Contains("SAX"))
+                { //All Novo SignupCodes 
+                    NovoConsent.IsVisible = true;
+                    NovoContentlbl.Text = Preferences.Default.Get("NovoContent", String.Empty);
+                    NovoExitidlbl.Text = Preferences.Default.Get("NovoExitid", String.Empty);
+                }
+            }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    async void getquestionnaires()
 	{
 		try
 		{
@@ -83,7 +104,7 @@ public partial class AllQuestionnaires : ContentPage
             Alluserquestionnaires.ItemsSource = userQuestionnaires;
 
             QuesLoading.IsVisible = false;
-
+            NovoConsentData();
         }
         catch (Exception Ex)
         {

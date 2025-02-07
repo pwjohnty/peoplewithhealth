@@ -525,7 +525,9 @@ public partial class RegisterPage : ContentPage
                 //continue to gender
                 signupcodeframe.IsVisible = false;
                 genderframe.IsVisible = true;
-                
+                nosignupbtn.BorderColor = Colors.Transparent;
+                nosignupbtn.BackgroundColor = Color.FromArgb("#BFDBF7");
+                nosignupbtn.TextColor = Color.FromArgb("#031926");
                 UpdateProgress();
             }
             else
@@ -554,16 +556,20 @@ public partial class RegisterPage : ContentPage
                         signupcodetext.Focus();
                         nextbtn.IsVisible = true;
                         nextbtnloader.IsVisible = false;
+                        nosignupbtn.BorderColor = Colors.Red;
+                        nosignupbtn.TextColor = Colors.Red;
                         return;
                        // UpdateProgress();
                     }
                     else
                     {
 
+                        nosignupbtn.BorderColor = Colors.LightGray;
+
                         //check if they have any questions and anwers
 
-                        
-                            var urll = APICalls.Checksignupregquestions + "%27" + users[0].referral + "%27";
+
+                        var urll = APICalls.Checksignupregquestions + "%27" + users[0].referral + "%27";
 
                             HttpResponseMessage responsee = await client.GetAsync(urll);
 

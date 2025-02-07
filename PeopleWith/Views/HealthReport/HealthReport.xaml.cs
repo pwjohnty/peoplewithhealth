@@ -53,6 +53,35 @@ public partial class HealthReport : ContentPage
         }   
     }
 
+    private async void NovoConsentData()
+    {
+        try
+        {
+            if (!String.IsNullOrEmpty(Helpers.Settings.SignUp))
+            {
+                var signup = Helpers.Settings.SignUp;
+                if (signup.Contains("SAX"))
+                { //All Novo SignupCodes 
+                    NovoConsent.IsVisible = true;
+                    NovoContentlbl.Text = Preferences.Default.Get("NovoContent", String.Empty);
+                    NovoExitidlbl.Text = Preferences.Default.Get("NovoExitid", String.Empty);
+
+                    // Hide NovoConsent after 5 Seconds 
+                    Task.Run(async () =>
+                    {
+                        await Task.Delay(5000);
+                        NovoConsent.IsVisible = false;
+                    });
+
+                }
+            }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
     private void Button_Clicked(object sender, EventArgs e)
     {
         try
@@ -87,6 +116,7 @@ public partial class HealthReport : ContentPage
         {
             LoadingStack.IsVisible = false;
             HealthReportStack.IsVisible = true;
+            NovoConsentData();
         }
         catch (Exception Ex)
         {

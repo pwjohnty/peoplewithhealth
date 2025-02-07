@@ -55,6 +55,29 @@ public partial class AllAppointments : ContentPage
 
             AppointLoading.IsVisible = false;
             SegmentDetails.IsVisible = true;
+
+            NovoConsentData();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    private void NovoConsentData()
+    {
+        try
+        {
+            if (!String.IsNullOrEmpty(Helpers.Settings.SignUp))
+            {
+                var signup = Helpers.Settings.SignUp;
+                if (signup.Contains("SAX"))
+                { //All Novo SignupCodes 
+                    NovoConsent.IsVisible = true;
+                    NovoContentlbl.Text = Preferences.Default.Get("NovoContent", String.Empty);
+                    NovoExitidlbl.Text = Preferences.Default.Get("NovoExitid", String.Empty);
+                }
+            }
         }
         catch (Exception Ex)
         {
@@ -68,7 +91,7 @@ public partial class AllAppointments : ContentPage
         {
             foreach(var item in AppointmentsData)
             {
-                if(item.hcpname == "No HCP")
+                if(item.hcpname == "No HCP" || string.IsNullOrEmpty(item.hcpname))
                 {
                     item.AppointWith = "Scheduled Appointment"; 
                 }
@@ -157,13 +180,15 @@ public partial class AllAppointments : ContentPage
             if(sortedList.Count == 0 && sortedListtwo.Count == 0)
             {
                 nodatastack.IsVisible = true;
-                datastack.IsVisible = false; 
+                datastack.IsVisible = false;
+                //NovoConsent.Margin = new Thickness(20, 300, 20, 10);
             }
             else if (sortedList.Count == 0)
             {
                 UpcomingList.IsVisible = true;
                 noActiveAppointlbl.IsVisible = true;
                 SegmentDetails.Text = "Appointments you have currently scheduled";
+                //NovoConsent.Margin = new Thickness(20, 300, 20, 10);
             }
             else
             {
@@ -175,6 +200,7 @@ public partial class AllAppointments : ContentPage
                 SegmentDetails.Text = "Appointments you have currently scheduled";
 
                 UpcomingList.IsVisible = true;
+                //NovoConsent.Margin = new Thickness(20, 0, 20, 10);
             }
 
             UpcomingList.ItemsSource = UpcomingAppointments;

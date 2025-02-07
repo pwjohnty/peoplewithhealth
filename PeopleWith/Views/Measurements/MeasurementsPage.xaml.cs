@@ -81,6 +81,27 @@ public partial class MeasurementsPage : ContentPage
         //});
     }
 
+    private void NovoConsentData()
+    {
+        try
+        {
+            if (!String.IsNullOrEmpty(Helpers.Settings.SignUp))
+            {
+                var signup = Helpers.Settings.SignUp;
+                if (signup.Contains("SAX"))
+                { //All Novo SignupCodes 
+                    NovoConsent.IsVisible = true;
+                    NovoContentlbl.Text = Preferences.Default.Get("NovoContent", String.Empty);
+                    NovoExitidlbl.Text = Preferences.Default.Get("NovoExitid", String.Empty);
+                }
+            }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
     public MeasurementsPage(userfeedback userfeedbacklist)
     {
         try
@@ -213,6 +234,8 @@ public partial class MeasurementsPage : ContentPage
                 nodatastack.IsVisible = true;
                 datastack.IsVisible = false;
                 MeasLoading.IsVisible = false;
+                NovoConsentData();
+                //NovoConsent.Margin = new Thickness(20, 0, 20, 10);
                 return;
             }
 
@@ -358,7 +381,10 @@ public partial class MeasurementsPage : ContentPage
                 //measurementlist.ItemsSource = ordermeasurementlist;
                 //measurementlist.HeightRequest = ordermeasurementlist.Count * 57;
             }
-            MeasLoading.IsVisible = false; 
+            MeasLoading.IsVisible = false;
+            //NovoConsent.Margin = new Thickness(20, 300, 20, 10);
+
+            NovoConsentData();
             //await MopupService.Instance.PopAllAsync(false);
         }
 		catch(Exception Ex)

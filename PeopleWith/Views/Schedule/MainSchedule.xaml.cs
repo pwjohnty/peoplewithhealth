@@ -5,6 +5,7 @@ using Syncfusion.Maui.ListView;
 using System.Collections.ObjectModel;
 using Mopups.Services;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.Azure;
 
 namespace PeopleWith;
 
@@ -147,6 +148,21 @@ public partial class MainSchedule : ContentPage
         {
             SchedLoading.IsVisible = true; 
             AllUserMedications = await aPICalls.GetUserMedicationsAsync();
+            ObservableCollection<usermedication> RemovePending = new ObservableCollection<usermedication>();
+
+            //Remove Pending Medications. If not Added not Needed in Schedule
+            foreach (var item in AllUserMedications)
+            {
+                if(item.status == "Pending")
+                {
+                    RemovePending.Add(item); 
+                }
+            }
+
+            foreach (var item in RemovePending)
+            {
+                AllUserMedications.Remove(item); 
+            }
 
             AllUserSupplements = await aPICalls.GetUserSupplementsAsync();
             SchedLoading.IsVisible = false; 

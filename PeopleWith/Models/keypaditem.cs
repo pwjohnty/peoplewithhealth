@@ -109,6 +109,9 @@ namespace PeopleWith
 
                 if (result.Status == BiometricResponseStatus.Success)
                 {
+                    PinValue = "////";
+                    OnPropertyChanged(nameof(PinValue));
+
                     Permission = false;
                     Success = true; 
                     await Task.Delay(2000);

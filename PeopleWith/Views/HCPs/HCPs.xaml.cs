@@ -54,6 +54,27 @@ public partial class HCPs : ContentPage
         }
     }
 
+    private void NovoConsentData()
+    {
+        try
+        {
+            if (!String.IsNullOrEmpty(Helpers.Settings.SignUp))
+            {
+                var signup = Helpers.Settings.SignUp;
+                if (signup.Contains("SAX"))
+                { //All Novo SignupCodes 
+                    NovoConsent.IsVisible = true;
+                    NovoContentlbl.Text = Preferences.Default.Get("NovoContent", String.Empty);
+                    NovoExitidlbl.Text = Preferences.Default.Get("NovoExitid", String.Empty);
+                }
+            }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
     async private void GetAllHCPS()
     {
         try
@@ -84,14 +105,17 @@ public partial class HCPs : ContentPage
             {
                 HCPListViewGrid.IsVisible = true;
                 EmptyStack.IsVisible = false;
-                HCPListView.ItemsSource = AllUserHCPs; 
+                HCPListView.ItemsSource = AllUserHCPs;
+                //NovoConsent.Margin = new Thickness(20, 0, 20, 10);
             }
             else
             {
                 HCPListViewGrid.IsVisible = false;
                 EmptyStack.IsVisible = true;
+                //NovoConsent.Margin = new Thickness(20, 300, 20, 10);
             }
-            HcpLoading.IsVisible = false; 
+            HcpLoading.IsVisible = false;
+            NovoConsentData();
         }
         catch (Exception Ex)
         {

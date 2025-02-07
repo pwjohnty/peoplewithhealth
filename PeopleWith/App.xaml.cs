@@ -38,20 +38,19 @@ namespace PeopleWith
 
                     // if(getQuestionairesTask != null)
                     // {
+                    Application.Current.MainPage = new NavigationPage(new MainDashboard());
+
                     if (DeviceInfo.Platform == DevicePlatform.iOS)
                     {
-                        await MainPage.Navigation.PushAsync(new QuestionnairePage("A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF"), false);
+                        await (Application.Current.MainPage as NavigationPage)?.Navigation.PushAsync(new QuestionnairePage("A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF"), false);
                     }
                     else
                     {
-                        await MainPage.Navigation.PushAsync(new AndroidQuestionnaires("A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF"), false);
+                        await (Application.Current.MainPage as NavigationPage)?.Navigation.PushAsync(new AndroidQuestionnaires("A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF"), false);
                     }
+                    // }
 
-                    
-                    
-                   // }
 
-                    
                 }
             }
             catch (Exception ex)
@@ -62,19 +61,32 @@ namespace PeopleWith
 
         protected override void OnResume()
         {
-            base.OnResume();
-            var currentPage = MainPage.Navigation.NavigationStack.LastOrDefault();
-            if (currentPage.ToString() == "PeopleWith.ProfileSection")
+            try
             {
-               MessagingCenter.Send<App>(this, "CallMethodOnPage");
-            }
+                base.OnResume();
 
-            if (currentPage.ToString() == "PeopleWith.MainDashboard")
+                // Ensure MainPage and Navigation are not null
+                if (MainPage?.Navigation?.NavigationStack == null)
+                    return;
+
+                // Get the current page
+                var currentPage = MainPage.Navigation.NavigationStack.LastOrDefault();
+                if (currentPage == null)  return;
+
+                // Check the type of the current page and send appropriate messages
+                if (currentPage.GetType().Name == "ProfileSection")
+                {
+                    MessagingCenter.Send<App>(this, "CallMethodOnPage");
+                }
+                else if (currentPage.GetType().Name == "MainDashboard")
+                {
+                    MessagingCenter.Send<App>(this, "CallNotifications");
+                }
+            }
+            catch (Exception Ex)
             {
-                MessagingCenter.Send<App>(this, "CallNotifications");
+
             }
-
-
         }
 
 

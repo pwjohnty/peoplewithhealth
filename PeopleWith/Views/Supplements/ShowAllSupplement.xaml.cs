@@ -246,6 +246,8 @@ public partial class ShowAllSupplement : ContentPage
 
                     FilteredMedList = UpdateFilterDates.Where(x => DateTime.Parse(x.MedDateTime).ToString("MMMM yyyy") == GetTimelineFirst.ToString("MMMM yyyy")).ToObservable();
                     FilterTimeLine.SelectedItem = TimelineItems.FirstOrDefault(item => item.DisplayText == GetTimelineFirst.ToString("MMMM yyyy"));
+                    FilteredMedList = new ObservableCollection<usersupplement>(FilteredMedList.OrderByDescending(d => DateTime.Parse(d.MedDateTime)));
+
                 }
                 UserMedicationSchedule.ItemsSource = FilteredMedList;
                 UserMedicationSchedule.HeightRequest = FilteredMedList.Count * 120;

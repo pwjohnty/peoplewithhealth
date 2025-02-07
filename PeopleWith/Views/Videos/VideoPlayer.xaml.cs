@@ -191,14 +191,14 @@ public partial class VideoPlayer : ContentPage
                 var pdflink = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/" + vidfromdash.link;
                 string imgPath = pdflink + ".mp4";
 
-                await Navigation.PushAsync(new NewPageVideoPlayer(pdflink), false);
+                await Navigation.PushAsync(new NewPageVideoPlayer(pdflink, vidfromdash.VideoID), false);
                 return;
             }
             else
             {
 
 
-                await Navigation.PushAsync(new NewPageVideoPlayer(SelectedVideo.filename), false);
+                await Navigation.PushAsync(new NewPageVideoPlayer(SelectedVideo.filename, SelectedVideo.videoid), false);
                 return;
             }
 

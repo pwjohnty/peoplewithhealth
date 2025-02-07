@@ -8,8 +8,9 @@
         <ToolbarItem Clicked="ToolbarItem_Clicked" x:Name="AddBtn" Text="Add HCP" />
     </ContentPage.ToolbarItems>
     <ScrollView Orientation="Vertical" >
-        <VerticalStackLayout>
+        <StackLayout>
 
+            <StackLayout>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -24,9 +25,10 @@
                 </Frame>
 
             </Grid>
-
+           
+         
             <!-- HCP Main ListView -->
-
+            <StackLayout>
                 <Grid x:Name="HCPListViewGrid" IsVisible="False" >
                     <syncfusion:SfListView  x:Name="HCPListView" Padding="0" Margin="10,5,10,50" AutoFitMode="Height"  ItemSpacing="0"  HorizontalOptions="FillAndExpand" ItemTapped="HCPListView_ItemTapped" IsScrollingEnabled="False"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
                         <syncfusion:SfListView.ItemTemplate>
@@ -56,7 +58,7 @@
                                                 </FormattedString>
                                             </Label.FormattedText>
                                         </Label>
-                                        <Label Text="{Binding locationname}" Margin="10,5,0,10" VerticalOptions="Center" HorizontalOptions="Start" VerticalTextAlignment="Center" TextColor="#031926" FontSize="25" FontFamily="HankenGroteskBold" FontAttributes="Bold"   Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" />
+                                        <Label Text="{Binding locationname}" Margin="10,5,0,10" VerticalOptions="Center" HorizontalOptions="Start" VerticalTextAlignment="Center" TextColor="#031926" FontSize="20" FontFamily="HankenGroteskBold" FontAttributes="Bold"   Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" />
 
                                        
 
@@ -70,18 +72,20 @@
                         </syncfusion:SfListView.ItemTemplate>
                     </syncfusion:SfListView>
                 </Grid>
-
-            <Grid x:Name="HcpLoading" Margin="0,150,0,0"  IsVisible="False">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <ActivityIndicator IsRunning="True" Grid.Row="0" Color="#9F2B68" HorizontalOptions="Center" VerticalOptions="Start" />
-                <Label Text="Loading HCP's..." Grid.Row="1" TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="Center" Margin="0,5,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" />
+            </StackLayout>
+            </StackLayout>
 
 
-            </Grid>
-
+            <StackLayout>
+                <Grid x:Name="HcpLoading" Margin="0,150,0,0"  IsVisible="False">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <ActivityIndicator IsRunning="True" Grid.Row="0" Color="#9F2B68" HorizontalOptions="Center" VerticalOptions="Start" />
+                    <Label Text="Loading HCP's..." Grid.Row="1" TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="Center" Margin="0,5,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" />
+                </Grid>
+            </StackLayout>
 
             <!--Empty Stack for No HCPS -->
             <StackLayout x:Name="EmptyStack" Margin="0,150,0,0" IsVisible="False" VerticalOptions="CenterAndExpand">
@@ -93,7 +97,17 @@
                 </StackLayout.GestureRecognizers>
             </StackLayout>
 
-        </VerticalStackLayout>
+
+            <Grid x:Name="NovoConsent" Margin="20,0,20,10" VerticalOptions="EndAndExpand" IsVisible="False">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Label x:Name="NovoContentlbl"  Margin="0,0,0,0" FontFamily="HankenGroteskBold" HorizontalOptions="Center"  FontSize="8" VerticalOptions="Center" Grid.Row="0" Grid.Column="0" TextColor="#031926" />
+                <Label x:Name="NovoExitidlbl"  FontFamily="HankenGroteskBold" VerticalOptions="Start" Margin="0,5,0,0" HorizontalOptions="Center" FontSize="8" Grid.Row="1" Grid.Column="0"  TextColor="#031926"/>
+            </Grid>
+
+        </StackLayout>
         
         
     </ScrollView>
