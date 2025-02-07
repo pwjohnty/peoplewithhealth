@@ -17,7 +17,7 @@ namespace PeopleWith.Helpers
                 {
                     // Get the value or return true if the value is null
                     bool? value = Preferences.Get(nameof(biometrics), true);
-                    return value ?? true; 
+                    return value ?? true;
                 }
                 else
                 {
@@ -28,7 +28,7 @@ namespace PeopleWith.Helpers
             {
                 if (value.HasValue)
                 {
-                    Preferences.Set(nameof(biometrics), value.Value); 
+                    Preferences.Set(nameof(biometrics), value.Value);
                 }
                 else
                 {
@@ -391,6 +391,106 @@ namespace PeopleWith.Helpers
             get => Preferences.Get(DeviceIDKey, DeviceIDDefault);
             set => Preferences.Set(DeviceIDKey, value);
         }
+
+        //NovoConsent Page Accepted 
+
+        //private const string NovoMedsKey = "novomeds";
+        //private static readonly string NovoMedsDefault = string.Empty;
+        //public static string NovoMeds
+        //{
+        //    get => Preferences.Get(NovoMedsKey, NovoMedsDefault);
+        //    set => Preferences.Set(NovoMedsKey, value);
+        //}
+
+        //private const string NovoSymsKey = "novosyms";
+        //private static readonly string NovoSymsDefault = string.Empty;
+        //public static string NovoSyms
+        //{
+        //    get => Preferences.Get(NovoSymsKey, NovoSymsDefault);
+        //    set => Preferences.Set(NovoSymsKey, value);
+        //}
+
+        //private const string NovoSuppsKey = "Novosupps";
+        //private static readonly string NovoSuppsDefault = string.Empty;
+        //public static string NovoSupps
+        //{
+        //    get => Preferences.Get(NovoSuppsKey, NovoSuppsDefault);
+        //    set => Preferences.Set(NovoSuppsKey, value);
+        //}
+
+        //private const string NovoMeasKey = "Novomeas";
+        //private static readonly string NovoMeasDefault = string.Empty;
+        //public static string NovoMeas
+        //{
+        //    get => Preferences.Get(NovoMeasKey, NovoMeasDefault);
+        //    set => Preferences.Set(NovoMeasKey, value);
+        //}
+
+        //private const string NovoDiagKey = "Novodiag";
+        //private static readonly string NovoDiagDefault = string.Empty;
+        //public static string NovoDiag
+        //{
+        //    get => Preferences.Get(NovoDiagKey, NovoDiagDefault);
+        //    set => Preferences.Set(NovoDiagKey, value);
+        //}
+
+        //private const string NovoMoodKey = "Novomood";
+        //private static readonly string NovoMoodDefault = string.Empty;
+        //public static string NovoMood
+        //{
+        //    get => Preferences.Get(NovoMoodKey, NovoMoodDefault);
+        //    set => Preferences.Set(NovoMoodKey, value);
+        //}
+
+        //private const string NovoApptsKey = "Novoappts";
+        //private static readonly string NovoApptsDefault = string.Empty;
+        //public static string NovoAppts
+        //{
+        //    get => Preferences.Get(NovoApptsKey, NovoApptsDefault);
+        //    set => Preferences.Set(NovoApptsKey, value);
+        //}
+
+        //private const string NovoHCPsKey = "Novohcps";
+        //private static readonly string NovoHCPsDefault = string.Empty;
+        //public static string NovoHCPs
+        //{
+        //    get => Preferences.Get(NovoHCPsKey, NovoHCPsDefault);
+        //    set => Preferences.Set(NovoHCPsKey, value);
+        //}
+
+
+        //private const string NovoQuesKey = "Novoques";
+        //private static readonly string NovoQuesDefault = string.Empty;
+        //public static string NovoQues
+        //{
+        //    get => Preferences.Get(NovoQuesKey, NovoQuesDefault);
+        //    set => Preferences.Set(NovoQuesKey, value);
+        //}
+
+        //private const string NovoAllergKey = "Novoallerg";
+        //private static readonly string NovoAllergDefault = string.Empty;
+        //public static string NovoAllerg
+        //{
+        //    get => Preferences.Get(NovoAllergKey, NovoAllergDefault);
+        //    set => Preferences.Set(NovoAllergKey, value);
+        //}
+
+        //private const string NovoHlthRptKey = "NovohlthRpt";
+        //private static readonly string NovoHlthRptDefault = string.Empty;
+        //public static string NovoHlthRpt
+        //{
+        //    get => Preferences.Get(NovoHlthRptKey, NovoHlthRptDefault);
+        //    set => Preferences.Set(NovoHlthRptKey, value);
+        //}
+
+        //private const string NovoSchedKey = "Novosched";
+        //private static readonly string NovoSchedDefault = string.Empty;
+        //public static string NovoSched
+        //{
+        //    get => Preferences.Get(NovoSchedKey, NovoSchedDefault);
+        //    set => Preferences.Set(NovoSchedKey, value);
+        //}
+
 
     }
 }

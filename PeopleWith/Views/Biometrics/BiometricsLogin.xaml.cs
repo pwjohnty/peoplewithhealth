@@ -116,7 +116,7 @@ public partial class BiometricsLogin : ContentPage
 
             if (result.Status == BiometricResponseStatus.Success)
             {
-                  LoadingInd.IsVisible = true;
+                    LoadingInd.IsVisible = true;
                     Loadinglbl.IsVisible = true; 
                     PinKeyPad.IsVisible = false;
                     ForgotPassword.IsVisible = false;
@@ -140,43 +140,49 @@ public partial class BiometricsLogin : ContentPage
     {
         try
         {
-            var GetPin = Helpers.Settings.PinCode;
-            if (GetPin.Contains(","))
+            var GetPin = Helpers.Settings.PinCode;         
+            if (e.PIN == "////")
             {
-                var GetPinSplit = GetPin.Split(','); 
-                if (GetPinSplit[1] == e.PIN)
-                {
-                    LoadingInd.IsVisible = true;
-                    Loadinglbl.IsVisible = true; 
-                    PinKeyPad.IsVisible = false;
-                    ForgotPassword.IsVisible = false;
-                    await Task.Delay(2000);
-                    Application.Current.MainPage = new NavigationPage(new MainDashboard());
-                }
-                else
-                {
-                    Pincode.PINValue = null;
-                    Vibration.Vibrate();
-                }
+                return; 
             }
             else
             {
-                if (Helpers.Settings.PinCode == e.PIN)
+                if (GetPin.Contains(","))
                 {
-                    LoadingInd.IsVisible = true;
-                    Loadinglbl.IsVisible = true;
-                    PinKeyPad.IsVisible = false;
-                    ForgotPassword.IsVisible = false;
-                    await Task.Delay(2000);
-                    Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                    var GetPinSplit = GetPin.Split(',');
+                    if (GetPinSplit[1] == e.PIN)
+                    {
+                        LoadingInd.IsVisible = true;
+                        Loadinglbl.IsVisible = true;
+                        PinKeyPad.IsVisible = false;
+                        ForgotPassword.IsVisible = false;
+                        await Task.Delay(2000);
+                        Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                    }
+                    else
+                    {
+                        Pincode.PINValue = null;
+                        Vibration.Vibrate();
+                    }
                 }
                 else
                 {
-                    Pincode.PINValue = null;
-                    Vibration.Vibrate();
+                    if (Helpers.Settings.PinCode == e.PIN)
+                    {
+                        LoadingInd.IsVisible = true;
+                        Loadinglbl.IsVisible = true;
+                        PinKeyPad.IsVisible = false;
+                        ForgotPassword.IsVisible = false;
+                        await Task.Delay(2000);
+                        Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                    }
+                    else
+                    {
+                        Pincode.PINValue = null;
+                        Vibration.Vibrate();
+                    }
                 }
-            }
-           
+            }          
         }
         catch (Exception Ex)
         {

@@ -56,7 +56,66 @@
 
             <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
 
-                <StackLayout x:Name="heightandweightframe" Margin="20,0,20,0">
+                <StackLayout x:Name="hwframe"  Margin="20,0,20,0"  VerticalOptions="FillAndExpand">
+
+                    <Label
+
+ FontSize="26"
+ Margin="0,0,0,0" Text="Height and Weight"
+ TextColor="#031926"
+ FontFamily="HankenGroteskBold"
+ FontAttributes="Bold"
+ HorizontalOptions="Start" />
+
+                    <Label
+
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="0,0,0,0" Text="Please use the sliders to adjust your height and weight."
+FontSize="15"
+HorizontalOptions="Start" />
+
+                    <Label Text="Height (cm)"
+              FontSize="12"   TextColor="#031926" Margin="0,40,0,0"
+FontFamily="HankenGroteskBold" HorizontalTextAlignment="Center"
+              HorizontalOptions="Start" />
+
+
+                    <Label x:Name="heightlbl"
+              FontSize="26"   TextColor="#031926"
+FontFamily="HankenGroteskBold" Margin="0,20,0,10"
+              HorizontalOptions="Center" />
+
+                    <Slider Minimum="30"
+                Maximum="300" ValueChanged="heightslider_ValueChanged"
+                x:Name="heightslider" />
+
+                    <Label Text="Weight (kg)"
+              FontSize="12"   TextColor="#031926" Margin="0,60,0,0"
+FontFamily="HankenGroteskBold" HorizontalTextAlignment="Center"
+              HorizontalOptions="Start" />
+
+
+                    <Label x:Name="weightlbl"
+              FontSize="26"   TextColor="#031926"
+FontFamily="HankenGroteskBold" Margin="0,20,0,10"
+              HorizontalOptions="Center" />
+
+                    <Slider Minimum="10" 
+                Maximum="300" ValueChanged="weightslider_ValueChanged"
+                x:Name="weightslider" />
+
+
+
+
+
+
+
+                </StackLayout>
+
+                <!-- Old Height/Weight Stack-->
+                <StackLayout x:Name="heightandweightframe" IsVisible="False" Margin="20,0,20,0">
 
                     <Label
  Text="Height and Weight"

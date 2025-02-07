@@ -12,27 +12,14 @@
     <ScrollView VerticalScrollBarVisibility="Never">
         <StackLayout x:Name="mainstack" VerticalOptions="FillAndExpand" BackgroundColor="Transparent">
 
-        <!-- No Data Stack-->
-        <StackLayout x:Name="nodatastack" IsVisible="False" VerticalOptions="CenterAndExpand">
-            <Image Source="adddataicon.png" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="50" WidthRequest="50"/>
-            <Label Text="Add Appointment" FontSize="20" Margin="0,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Center" />
-            <Label Text="Tap here to add an Appointment" FontSize="14" TextColor="#031926" FontFamily="HankenGroteskRegular" Margin="0,0,0,0" HorizontalOptions="Center" VerticalOptions="Center" VerticalTextAlignment="Center" />
-            <StackLayout.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="AddBtn_Clicked" NumberOfTapsRequired="1"/>
-            </StackLayout.GestureRecognizers>
-        </StackLayout>
-
-            <!-- Data Stack-->
-            <StackLayout x:Name="datastack">
-
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Text="Appointments" FontSize="26" Grid.Column="0" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
-                    <Frame x:Name="AppointInfo" HasShadow="False" Padding="0" CornerRadius="15" Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,0,20,0" BorderColor="#d96783" BackgroundColor="Transparent">
-                        <Label Text="i" FontFamily="HankenGroteskBold" HorizontalOptions="Center" TextColor="#d96783" FontSize="12"  Grid.Column="1" VerticalOptions="Center" />
+                <Frame x:Name="AppointInfo" HasShadow="False" Padding="0" CornerRadius="15" Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,0,20,0" BorderColor="#d96783" BackgroundColor="Transparent">
+                    <Label Text="i" FontFamily="HankenGroteskBold" HorizontalOptions="Center" TextColor="#d96783" FontSize="12"  Grid.Column="1" VerticalOptions="Center" />
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
                     </Frame.GestureRecognizers>
@@ -40,6 +27,10 @@
 
             </Grid>
 
+            <!-- Data Stack-->
+            <StackLayout x:Name="datastack">
+
+          
                 <buttons:SfSegmentedControl x:Name="segmentedControl" SelectionChanged="segmentedControl_SelectionChanged" SegmentBackground="#ffe4e1" Stroke="LightGray"  SelectedIndex="0" DisabledSegmentTextColor="Gray" CornerRadius="5"
                 Margin="8,8,8,0">
                 <buttons:SfSegmentedControl.TextStyle>
@@ -180,6 +171,26 @@
 
 
           </StackLayout>
-       </StackLayout>
+
+            <!-- No Data Stack-->
+            <StackLayout x:Name="nodatastack" Margin="0,150,0,0" IsVisible="False" VerticalOptions="CenterAndExpand">
+                <Image Source="adddataicon.png" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="50" WidthRequest="50"/>
+                <Label Text="Add Appointment" FontSize="20" Margin="0,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Center" />
+                <Label Text="Tap here to add an Appointment" FontSize="14" TextColor="#031926" FontFamily="HankenGroteskRegular" Margin="0,0,0,0" HorizontalOptions="Center" VerticalOptions="Center" VerticalTextAlignment="Center" />
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="AddBtn_Clicked" NumberOfTapsRequired="1"/>
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+
+
+            <Grid x:Name="NovoConsent" Margin="20,0,20,10" VerticalOptions="EndAndExpand" IsVisible="False">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Label x:Name="NovoContentlbl"  Margin="0,0,0,0" FontFamily="HankenGroteskBold" HorizontalOptions="Center"  FontSize="8" VerticalOptions="Center" Grid.Row="0" Grid.Column="0" TextColor="#031926" />
+                <Label x:Name="NovoExitidlbl"  FontFamily="HankenGroteskBold" VerticalOptions="Start" Margin="0,5,0,0" HorizontalOptions="Center" FontSize="8" Grid.Row="1" Grid.Column="0"  TextColor="#031926"/>
+            </Grid>
+        </StackLayout>
     </ScrollView>
 </ContentPage>

@@ -102,7 +102,26 @@ public partial class AllSupplements : ContentPage
         }
     }
 
-
+    private void NovoConsentData()
+    {
+        try
+        {
+            if (!String.IsNullOrEmpty(Helpers.Settings.SignUp))
+            {
+                var signup = Helpers.Settings.SignUp;
+                if (signup.Contains("SAX"))
+                { //All Novo SignupCodes 
+                    NovoConsent.IsVisible = true;
+                    NovoContentlbl.Text = Preferences.Default.Get("NovoContent", String.Empty);
+                    NovoExitidlbl.Text = Preferences.Default.Get("NovoExitid", String.Empty);
+                }
+            }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
     async void getusermedications()
     {
         try
@@ -120,7 +139,7 @@ public partial class AllSupplements : ContentPage
             AllUserMedications = await getMedicationsTask;
 
             WorkOutNextDue();
-            MedsLoading.IsVisible = false;
+           
 
         }
         catch (Exception Ex)
@@ -734,7 +753,7 @@ public partial class AllSupplements : ContentPage
             var sortedbyname2 = CompletedMedications.OrderBy(x => x.ChangedMedName).ToList();
             var sortedbyname3 = AsRequiredMedications.OrderBy(x => x.ChangedMedName).ToList();
 
-
+            NovoConsentData();
             //Active Medications List 
             if (sortedbyname.Count == 0 && sortedbyname2.Count == 0 && sortedbyname3.Count == 0)
             {
@@ -742,6 +761,7 @@ public partial class AllSupplements : ContentPage
                 datastack.IsVisible = false;
                 await Task.Delay(2000);
                 //await MopupService.Instance.PopAllAsync(false);
+                //NovoConsent.Margin = new Thickness(20, 300, 20, 10);
             }
             else if (sortedbyname.Count == 0)
             {
@@ -749,6 +769,7 @@ public partial class AllSupplements : ContentPage
                 AllUserMedsList.IsVisible = false;
                 await Task.Delay(2000);
                 //await MopupService.Instance.PopAllAsync(false);
+                //NovoConsent.Margin = new Thickness(20, 300, 20, 10);
             }
             else
             {
@@ -759,7 +780,7 @@ public partial class AllSupplements : ContentPage
                 AllUserMedsList.ItemsSource = AllUserMedications;
                 //Set Segmentlbl
                 SegmentDetails.Text = "Supplements you have currently scheduled";
-
+                //NovoConsent.Margin = new Thickness(20, 0, 20, 10);
                 //await MopupService.Instance.PopAllAsync(false);
             }
 
@@ -770,7 +791,9 @@ public partial class AllSupplements : ContentPage
 
             //check and update any completed meds in the db
             CheckCompletedMedications();
+            
 
+            MedsLoading.IsVisible = false;
         }
         catch (Exception Ex)
         {

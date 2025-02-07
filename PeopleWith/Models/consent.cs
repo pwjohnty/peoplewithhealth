@@ -28,6 +28,9 @@ namespace PeopleWith
         public bool additionalconsent { get; set; }
 
         public bool signaturepad { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string exitid { get; set; }
     }
 
     public class ApiResponseConsent

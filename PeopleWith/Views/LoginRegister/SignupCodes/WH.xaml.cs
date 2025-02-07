@@ -711,7 +711,7 @@ public partial class WH : ContentPage
 
             postcodeframe.IsVisible = false;
             hwframe.IsVisible = true;
-            heightslider.Value = 160;
+            heightslider.Value = 100;
             weightslider.Value = 70;
             skipbtn.IsVisible = false;
 

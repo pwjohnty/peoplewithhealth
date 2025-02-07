@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Mopups:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                  xmlns:Animations="clr-namespace:Mopups.Animations;assembly=Mopups"
+                  xmlns:Mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+                  BackgroundInputTransparent="True" BackgroundImageSource="pwregbackgroundlight.png"
+                  CloseWhenBackgroundIsClicked="False" BackgroundColor="LightGray" 
+                  x:Class="PeopleWith.NovoConsentScreen">
+    <Mopups:PopupPage.Animation>
+        <Animations:ScaleAnimation
+            PositionIn="Center"
+            PositionOut="Center"
+            DurationIn="200"
+            DurationOut="200"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="False"/>
+    </Mopups:PopupPage.Animation>
+    <VerticalStackLayout Margin="20,20,20,20" VerticalOptions="CenterAndExpand" BackgroundColor="Transparent">
+        <Image Source="dataprivacy.png" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="120" />
+        <Label x:Name="title" FontSize="20" TextColor="#031926" FontFamily="HankenGroteskBold" HorizontalOptions="Center" HorizontalTextAlignment="Center" Margin="0,10,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" />
+        <Label x:Name="body" FontSize="14" TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="Center"  Margin="10,10,10,0" VerticalOptions="Center"  />
+        <Label x:Name="Subtext" FontSize="12" TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="Center"  Margin="10,10,10,0" VerticalOptions="Center" />
+
+        <Button BackgroundColor="#BFDBF7" x:Name="Agree" HorizontalOptions="FillAndExpand" TextColor="#031926" Clicked="Agree_Clicked" FontAttributes="None"  Margin="20,20,20,0"  FontFamily="HankenGroteskBold"   Text="I Agree" />
+        <Button BackgroundColor="#D1D5DB" x:Name="Disagree" HorizontalOptions="FillAndExpand" TextColor="#031926" Clicked="Disagree_Clicked" FontAttributes="None"  Margin="20,10,20,0"  FontFamily="HankenGroteskBold"   Text="I Do Not Agree" />
+
+        <Label x:Name="exitid" FontSize="8" TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="Center" HorizontalTextAlignment="Center" Margin="0,10,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" />
+     
+    </VerticalStackLayout>
+</Mopups:PopupPage>

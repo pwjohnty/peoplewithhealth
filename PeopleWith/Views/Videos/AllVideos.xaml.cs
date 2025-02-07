@@ -10,7 +10,8 @@ public partial class AllVideos : ContentPage
     public ObservableCollection<videos> VideosList = new ObservableCollection<videos>();
     public ObservableCollection<videos> FilterListData = new ObservableCollection<videos>();
     //public ObservableCollection<videoengage> VideoEngagement = new ObservableCollection<videoengage>();
-    videoengage SelectedVideoEngage = new videoengage(); 
+    videoengage SelectedVideoEngage = new videoengage();
+    private bool FilterTabClicked = false; 
     APICalls aPICalls = new APICalls();
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
@@ -36,6 +37,7 @@ public partial class AllVideos : ContentPage
         {
             InitializeComponent();
             GetAllVideo();
+           
         }
         catch(Exception Ex)
         {
@@ -93,7 +95,9 @@ public partial class AllVideos : ContentPage
             FilterTabs.ItemsSource = FilterListData;
             FilterTabs.DisplayMemberPath = "category";
             //FilterTabs.SelectedItem;
-            VidsLoading.IsVisible = false; 
+            VidsLoading.IsVisible = false;
+
+            FilterTabs.SelectedItem = FilterListData[0];
         }
         catch (Exception Ex)
         {
@@ -148,6 +152,9 @@ public partial class AllVideos : ContentPage
     {
         try
         {
+
+            if (FilterTabClicked) return;
+
             var Characters = searchbar.Text.ToString();
 
             string CleanString(string input)
@@ -176,13 +183,17 @@ public partial class AllVideos : ContentPage
             }
 
             //If FilterTabs item is Selected - UnSelect it 
-            //if (string.IsNullOrEmpty(searchbar.Text) || searchbar.Text == "")
-            //{
-            //    if (FilterTabs.SelectedItem != null)
-            //    {
-            //        FilterTabs.SelectedItem = null;
-            //    }
-            //}
+            if (string.IsNullOrEmpty(searchbar.Text) || searchbar.Text == "")
+            {               
+                 FilterTabs.SelectedItem = FilterListData[0];               
+            }
+            else
+            {
+                if (FilterTabs.SelectedItem != null)
+                {
+                    FilterTabs.SelectedItem = null;
+                }
+            }
         }
         catch (Exception Ex)
         {
@@ -194,6 +205,8 @@ public partial class AllVideos : ContentPage
     {
         try
         {
+            FilterTabClicked = true;
+            VideosListview.IsVisible = false;
             var tappedFrame = sender as SfChip;
             var item = tappedFrame.Text;
             if(item == "All")
@@ -203,22 +216,47 @@ public partial class AllVideos : ContentPage
                 VideosListview.ItemsSource = VideosList;
                 VideosListview.IsVisible = true;
                 NoResultslbl.IsVisible = false;
-                searchbar.Text = string.Empty; 
                 //VideosListview.HeightRequest = AllVideosList.Count() * 110;
             }
             else
             {
-                var FilteredVideo = new ObservableCollection<videos>(AllVideosList.Where(s => s.category.Contains(item, StringComparison.OrdinalIgnoreCase))).OrderBy(m => m.title);
+                var SignupCode = Helpers.Settings.SignUp;
+                ObservableCollection<videos> FilteredVideo;
+
+                if (item == "Saxenda®" || item == "Parkinson's Diease" || item == "Asthma" || item == "PeopleWith SfE")
+                {
+                    FilteredVideo = new ObservableCollection<videos>(
+                        AllVideosList
+                            .Where(s => s.referral?.Contains(SignupCode, StringComparison.OrdinalIgnoreCase) == true)
+                            .OrderBy(m => m.title)
+                    );
+                }
+                else
+                {
+                    FilteredVideo = new ObservableCollection<videos>(
+                        AllVideosList
+                            .Where(s => s.category?.Contains(item, StringComparison.OrdinalIgnoreCase) == true)
+                            .OrderBy(m => m.title)
+                    );
+                }
+
                 var count = FilteredVideo.Count().ToString();
                 Results.Text = "Results" + " (" + count + ")";
+                VideosListview.ItemsSource = null; 
                 VideosListview.ItemsSource = FilteredVideo;
                 VideosListview.IsVisible = true;
                 NoResultslbl.IsVisible = false;
-                searchbar.Text = string.Empty;
                 //VideosListview.HeightRequest = FilteredVideo.Count() * 110;
             }
-     
-           
+
+            searchbar.Text = string.Empty;
+
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                FilterTabClicked = false;
+            });
+
+
         }
         catch (Exception Ex)
         {
@@ -232,12 +270,12 @@ public partial class AllVideos : ContentPage
         {
             if(Filterstack.IsVisible == true)
             {
-                VideosListview.MaximumHeightRequest = 585;
+                //VideosListview.MaximumHeightRequest = 585;
                 Filterstack.IsVisible = false;
             }
             else
             {
-                VideosListview.MaximumHeightRequest = 535; 
+                //VideosListview.MaximumHeightRequest = 535; 
                 Filterstack.IsVisible = true;
             }
         }

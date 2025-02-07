@@ -29,6 +29,7 @@ namespace PeopleWith
         public const string Checksignupregquestions = "https://pwdevapi.peoplewith.com/api/question?$filter=signupcodereferral%20eq%20";
         public const string Checksignupreganswers = "https://pwdevapi.peoplewith.com/api/answer?$filter=signupcodereferral%20eq%20";
         public const string CheckConsentforsignupcode = "https://pwdevapi.peoplewith.com/api/consent?$filter=signupcodeid%20eq%20";
+        public const string CheckConsent = "https://pwdevapi.peoplewith.com/api/consent";
 
         //User
         public const string InsertUser = "https://pwdevapi.peoplewith.com/api/user/";
@@ -121,6 +122,41 @@ namespace PeopleWith
                 return null;
             }
         }
+
+
+        public async Task<consent> GetConsentAsync()
+        {
+            try
+            {
+                var signupcode = Helpers.Settings.SignUp; 
+                string urlWithQuery = $"{CheckConsent}?$filter=signupcodeid eq '{signupcode}'";
+
+                HttpClient client = new HttpClient();
+                HttpResponseMessage responseconsent = await client.GetAsync(urlWithQuery);
+
+                if (responseconsent.IsSuccessStatusCode)
+                {
+                    string content = await responseconsent.Content.ReadAsStringAsync();
+                    var apiResponse = JsonConvert.DeserializeObject<ApiResponseConsent>(content);
+                    var consentItem = apiResponse?.Value
+                        .FirstOrDefault(c => c.area.Equals("All", StringComparison.OrdinalIgnoreCase));
+
+                    return consentItem;
+
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
+
 
         //Update User Details 
 
@@ -3088,6 +3124,7 @@ namespace PeopleWith
                     // Add Feedback Converter
                     //  var settings = new JsonSerializerSettings();
                     //  settings.Converters.Add(new AppointmentFeedbackConverter());
+                   
                     var userResponseconsent = JsonConvert.DeserializeObject<ApiResponseSignUpCode>(contentconsent);
                     var consent = userResponseconsent.Value;
 
@@ -3097,6 +3134,12 @@ namespace PeopleWith
                     foreach (var item in consent)
                     {
 
+                        //string EncodeTrademark(string input)
+                        //{
+                        //    return input?.Replace("®", "\\u00AE");  // Replace "®" with Unicode escape sequence
+                        //}
+
+                        //string cleanedJson = EncodeTrademark(item.signupcodeinformation);
                         //item.moodfeedbacklist = JsonConvert.DeserializeObject<ObservableCollection<feedbackdata>>(item.moodfeedback);
 
                         try

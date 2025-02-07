@@ -46,6 +46,9 @@ public partial class NOVO : ContentPage
         {
             InitializeComponent();
             heightinput = "Ft";
+
+            heightslider.Value = 100;
+            weightslider.Value = 70;
         }
         catch (Exception Ex)
         {
@@ -74,6 +77,9 @@ public partial class NOVO : ContentPage
 
 
             extidlbl.Text = signupcodepassed.externalidentifier;
+
+            heightslider.Value = 100;
+            weightslider.Value = 70;
         }
         catch (Exception Ex)
         {
@@ -438,7 +444,7 @@ public partial class NOVO : ContentPage
                 var Command = (sender) as Button;
                 CommandPassed = Command.CommandParameter.ToString();
 
-                if (heightandweightframe.IsVisible == true)
+                if (hwframe.IsVisible == true)
                 {
                     Handleheightandweightframe();
                     nextbtn.IsEnabled = true;
@@ -500,70 +506,102 @@ public partial class NOVO : ContentPage
 
             //check height
 
-            if(string.IsNullOrEmpty(heightinputlbl.Text))
+            if (string.IsNullOrEmpty(heightlbl.Text) && string.IsNullOrEmpty(weightlbl.Text))
             {
-                heighterrorlbl.IsVisible = true;
                 Vibration.Vibrate();
                 return;
-
             }
 
-            if (string.IsNullOrEmpty(weightinputlbl.Text))
-            {
-                weighterrorlbl.IsVisible = true;
-                Vibration.Vibrate();
-                return;
+            //add height, weight as measurment and calulate bmi and add it as a measurement
 
-            }
+            int wholeNumberValue = (int)Math.Round(weightslider.Value);
+            int wholeNumberValueheight = (int)Math.Round(heightslider.Value);
 
-            //add the measurements
+            double weight = wholeNumberValue; // User input for weight in kg
+            double height = wholeNumberValueheight; // User input for height in cm
 
-            heightmeasurement.measurementid = "AF1907F7-ECB3-43F1-A53D-5BF88D2D31F7";
-            heightmeasurement.measurementname = "Height";
-            heightmeasurement.status = "Active";
-            heightmeasurement.userid = userpassed.userid;
+            double heightMeters = height / 100; // Convert cm to meters
+            double bmi = weight / (heightMeters * heightMeters);
+            var bmitotal = Math.Round(bmi, 2);
+
+            //add height
+            var umheight = new usermeasurement();
+            umheight.measurementid = "AF1907F7-ECB3-43F1-A53D-5BF88D2D31F7";
+            umheight.measurementname = "Height";
+            umheight.value = height.ToString();
+            umheight.unit = "cm";
+            umheight.userid = userpassed.userid;
+            umheight.inputdatetime = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+            usermeasurementlist.Add(umheight);
+
+            //add weight
+            var umweight = new usermeasurement();
+            umweight.measurementid = "08404437-A3AC-4887-BEBC-01D72CBFF17D";
+            umweight.measurementname = "Weight";
+            umweight.value = weight.ToString();
+            umweight.unit = "Kg";
+            umweight.userid = userpassed.userid;
+            umweight.inputdatetime = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+            usermeasurementlist.Add(umweight);
+
+            //add bmi
+            var umbmi = new usermeasurement();
+            umbmi.measurementid = "D1913657-D2FD-4174-9E30-CD20B57BE9A6";
+            umbmi.measurementname = "BMI";
+            umbmi.value = bmitotal.ToString();
+            umbmi.unit = "BMI";
+            umbmi.userid = userpassed.userid;
+            umbmi.inputdatetime = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+            usermeasurementlist.Add(umbmi);
+
+            //Odl add measurements code 
+
+            //heightmeasurement.measurementid = "AF1907F7-ECB3-43F1-A53D-5BF88D2D31F7";
+            //heightmeasurement.measurementname = "Height";
+            //heightmeasurement.status = "Active";
+            //heightmeasurement.userid = userpassed.userid;
 
 
-            if (heightinput == "Ft")
-            {
-                var ftin = heightinputlbl.Text.Split(' ');
+            //if (heightinput == "Ft")
+            //{
+            //    var ftin = heightinputlbl.Text.Split(' ');
 
-                var ftnum = new String(ftin[0].Where(Char.IsDigit).ToArray());
-                var innum = new String(ftin[1].Where(Char.IsDigit).ToArray());
-                heightmeasurement.unit = "Feet and Inches";
-                heightmeasurement.value = ftnum + "." + innum;
-            }
-            else
-            {
-                var getcm = heightinputlbl.Text.Split(' ');
-                heightmeasurement.unit = "cm";
-                heightmeasurement.value = getcm[0];
-            }
+            //    var ftnum = new String(ftin[0].Where(Char.IsDigit).ToArray());
+            //    var innum = new String(ftin[1].Where(Char.IsDigit).ToArray());
+            //    heightmeasurement.unit = "Feet and Inches";
+            //    heightmeasurement.value = ftnum + "." + innum;
+            //}
+            //else
+            //{
+            //    var getcm = heightinputlbl.Text.Split(' ');
+            //    heightmeasurement.unit = "cm";
+            //    heightmeasurement.value = getcm[0];
+            //}
 
-            usermeasurementlist.Add(heightmeasurement);
+            //usermeasurementlist.Add(heightmeasurement);
 
-            weightmeasurement.measurementid = "08404437-A3AC-4887-BEBC-01D72CBFF17D";
-            weightmeasurement.measurementname = "Weight";
-            weightmeasurement.status = "Active";
-            weightmeasurement.userid = userpassed.userid;
+            //weightmeasurement.measurementid = "08404437-A3AC-4887-BEBC-01D72CBFF17D";
+            //weightmeasurement.measurementname = "Weight";
+            //weightmeasurement.status = "Active";
+            //weightmeasurement.userid = userpassed.userid;
 
-            if (weightinput == "Kg")
-            {
-                var getkg = weightinputlbl.Text.Split(' ');
-                weightmeasurement.value = getkg[0];
-                weightmeasurement.unit = "kg";
-            }
-            else
-            {
-                var getstlbs = weightinputlbl.Text.Split(' ');
+            //if (weightinput == "Kg")
+            //{
+            //    var getkg = weightinputlbl.Text.Split(' ');
+            //    weightmeasurement.value = getkg[0];
+            //    weightmeasurement.unit = "kg";
+            //}
+            //else
+            //{
+            //    var getstlbs = weightinputlbl.Text.Split(' ');
 
-                var stonenum = new String(getstlbs[0].Where(Char.IsDigit).ToArray());
-                var lbsnum = new String(getstlbs[1].Where(Char.IsDigit).ToArray());
-                weightmeasurement.value = stonenum + "." + lbsnum;
-                weightmeasurement.unit = "Stones and Pounds";
-            }
+            //    var stonenum = new String(getstlbs[0].Where(Char.IsDigit).ToArray());
+            //    var lbsnum = new String(getstlbs[1].Where(Char.IsDigit).ToArray());
+            //    weightmeasurement.value = stonenum + "." + lbsnum;
+            //    weightmeasurement.unit = "Stones and Pounds";
+            //}
 
-            usermeasurementlist.Add(weightmeasurement);
+            //usermeasurementlist.Add(weightmeasurement);
 
 
 
@@ -582,7 +620,7 @@ public partial class NOVO : ContentPage
 
                     countylist.ItemsSource = getanswers;
 
-                    heightandweightframe.IsVisible = false;
+                    hwframe.IsVisible = false;
                     countyframe.IsVisible = true;
                     skipbtn.IsVisible = false;
 
@@ -603,7 +641,7 @@ public partial class NOVO : ContentPage
 
                     uselist.ItemsSource = getanswers;
 
-                    heightandweightframe.IsVisible = false;
+                    hwframe.IsVisible = false;
                     useframe.IsVisible = true;
                     skipbtn.IsVisible = true;
 
@@ -820,7 +858,7 @@ public partial class NOVO : ContentPage
                 }
                 else
                 {
-                    heightandweightframe.IsVisible = true;
+                    hwframe.IsVisible = true;
 
                 }
 
@@ -829,11 +867,11 @@ public partial class NOVO : ContentPage
             else if(countyframe.IsVisible == true)
             {
                 countyframe.IsVisible = false;
-                heightandweightframe.IsVisible = true;
+                hwframe.IsVisible = true;
 
                 BackProgress();
             }
-            else if(heightandweightframe.IsVisible == true)
+            else if(hwframe.IsVisible == true)
             {
 
                 //remove the progress from previous page
@@ -860,6 +898,32 @@ public partial class NOVO : ContentPage
         catch (Exception Ex)
         {
             NotasyncMethod(Ex);
+        }
+    }
+
+    private void heightslider_ValueChanged(object sender, ValueChangedEventArgs e)
+    {
+        try
+        {
+            double sliderValue = heightslider.Value;
+            int wholeNumberValue = (int)Math.Round(sliderValue);
+            heightlbl.Text = $"{wholeNumberValue} cm";
+        }
+        catch (Exception ex)
+        {
+        }
+    }
+
+    private void weightslider_ValueChanged(object sender, ValueChangedEventArgs e)
+    {
+        try
+        {
+            double sliderValue = weightslider.Value;
+            int wholeNumberValue = (int)Math.Round(sliderValue);
+            weightlbl.Text = $"{wholeNumberValue} kg";
+        }
+        catch (Exception ex)
+        {
         }
     }
 }

@@ -60,7 +60,7 @@
 
 		<MauiSplashScreen Condition="'$(TargetFramework)'=='net8.0-android'" Include="Resources\Splash\splashpw.svg" Color="#FFFFFF" />
 
-		<MauiSplashScreen Condition="'$(TargetFramework)'=='net8.0-ios'" Include="Resources\Splash\splashpw.svg" Color="#FFFFFF" />
+		<MauiSplashScreen Condition="'$(TargetFramework)'=='net8.0-ios'" BaseSize="128,128" Include="Resources\Splash\splashpw.svg" Color="#FFFFFF" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -106,6 +106,7 @@
 	  <None Remove="Resources\Images\dashiconactive.png" />
 	  <None Remove="Resources\Images\dashiconinactive.png" />
 	  <None Remove="Resources\Images\dashsearch.png" />
+	  <None Remove="Resources\Images\dataprivacy.png" />
 	  <None Remove="Resources\Images\delete.png" />
 	  <None Remove="Resources\Images\deleteicon.png" />
 	  <None Remove="Resources\Images\depressed.png" />
@@ -197,6 +198,7 @@
 	  <None Remove="Resources\Images\symptomshome.png" />
 	  <None Remove="Resources\Images\syncicon.png" />
 	  <None Remove="Resources\Images\tired.png" />
+	  <None Remove="Resources\Images\truthaboutweightjune23app.png" />
 	  <None Remove="Resources\Images\uparrow.png" />
 	  <None Remove="Resources\Images\update.png" />
 	  <None Remove="Resources\Images\updateicon.png" />
@@ -287,6 +289,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Helpers\Infopopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Helpers\NovoConsentScreen.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Helpers\PopupPageHelper.xaml">

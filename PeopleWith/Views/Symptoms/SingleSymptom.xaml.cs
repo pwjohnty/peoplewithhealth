@@ -334,8 +334,8 @@ public partial class SingleSymptom : ContentPage
             }
 
             // Add a min and max date so the chart looks better
-            var mindate = DateTime.Parse(FeedbackList.Min(x => x.timestamp));
-            var maxdate = DateTime.Parse(FeedbackList.Max(x => x.timestamp));
+            var mindate = FeedbackList.Min(x => DateTime.Parse(x.timestamp));
+            var maxdate = FeedbackList.Max(x => DateTime.Parse(x.timestamp));
             var minuserSymptom = new symptomfeedback();
             var maxuserSymptom = new symptomfeedback();
             minuserSymptom.timestamp = mindate.AddDays(-1).ToString("dd/MM/yyyy HH:mm");

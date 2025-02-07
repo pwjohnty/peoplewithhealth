@@ -50,7 +50,28 @@ public partial class AllDiagnosis : ContentPage
             initalload = false;
             DiagnosisList = AllDiagnosis;
             GetAllUserDiagnosis();
-      
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+
+    private void NovoConsentData()
+    {
+        try
+        {
+            if (!String.IsNullOrEmpty(Helpers.Settings.SignUp))
+            {
+                var signup = Helpers.Settings.SignUp;
+                if (signup.Contains("SAX"))
+                { //All Novo SignupCodes 
+                    NovoConsent.IsVisible = true;
+                    NovoContentlbl.Text = Preferences.Default.Get("NovoContent", String.Empty);
+                    NovoExitidlbl.Text = Preferences.Default.Get("NovoExitid", String.Empty);
+                }
+            }
         }
         catch (Exception Ex)
         {
@@ -133,16 +154,18 @@ public partial class AllDiagnosis : ContentPage
                 AllDiagnosisView.ItemsSource = DiagnosisList;
                 EmptyStack.IsVisible = false;
                 DiagnosisOverview.IsVisible = true;
+                //NovoConsent.Margin = new Thickness(20, 0, 20, 10);
             }
             else
             {
                 EmptyStack.IsVisible = true;
                 DiagnosisOverview.IsVisible = false;
+                //NovoConsent.Margin = new Thickness(20, 300, 20, 10);
             }
 
-            DiagLoading.IsVisible = false; 
+            DiagLoading.IsVisible = false;
             //await MopupService.Instance.PopAllAsync(false);
-
+            NovoConsentData();
         }
         catch (Exception Ex)
         {

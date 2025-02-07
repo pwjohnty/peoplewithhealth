@@ -11,6 +11,7 @@ using static System.Net.WebRequestMethods;
 using Syncfusion.Maui.Core.Internals;
 using Plugin.LocalNotification;
 using CommunityToolkit.Maui.Views;
+using Microsoft.Maui.Storage;
 
 namespace PeopleWith;
 
@@ -787,6 +788,25 @@ public partial class RegisterFinalPage : ContentPage
                 Preferences.Default.Set("notifications", newuser.pushnotifications);
                 Preferences.Default.Set("usermigrated", newuser.usermigrated.ToString());
 
+                if(newuser.referral != null || !string.IsNullOrEmpty(newuser.referral))
+                {
+                    if(newuser.referral == "NOVO")
+                    {
+                        Preferences.Default.Set("NovoMeds", true);
+                        Preferences.Default.Set("NovoSyms", true);
+                        Preferences.Default.Set("NovoSupps", true);
+                        Preferences.Default.Set("NovoMeas", true);
+                        Preferences.Default.Set("NovoDiag", true);
+                        Preferences.Default.Set("NovoMood", true);
+                        Preferences.Default.Set("NovoAppt", true);
+                        Preferences.Default.Set("NovoHcp", true);
+                        Preferences.Default.Set("NovoQues", true);
+                        Preferences.Default.Set("NovoAllerg", true);
+                        Preferences.Default.Set("NovoHeRep", true);
+                        Preferences.Default.Set("NovoSched", true);
+                    }
+                }
+
 
 
                 //add the userfeedback column
@@ -810,16 +830,18 @@ public partial class RegisterFinalPage : ContentPage
                             BadgeNumber = 0,
                             Schedule = new NotificationRequestSchedule
                             {
-                                NotifyTime = DateTime.Now.AddMinutes(1),
+                                NotifyTime = DateTime.Now.AddDays(1),
                                 RepeatType = NotificationRepeat.No,
                                 NotifyRepeatInterval = null
                             }
 
-
-
                         };
 
                         LocalNotificationCenter.Current.Show(notification);
+
+                        //Save NotificationiD to local Storage
+                        Preferences.Set("NsatNotID", notification.NotificationId.ToString());
+                        
                     }
                 }
 
@@ -827,7 +849,12 @@ public partial class RegisterFinalPage : ContentPage
                 // Preferences.Default.Set("validationcode", newuser.validationcode);
 
                 await Task.Delay(3000);
-                Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                });
+
+                //Application.Current.MainPage = new NavigationPage(new MainDashboard());
 
                 //Application.Current.MainPage = new NavigationPage(new MainDashboard());
                 //Task.Run(async () =>

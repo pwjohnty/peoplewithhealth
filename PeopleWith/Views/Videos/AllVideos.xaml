@@ -141,6 +141,19 @@
 
                </Grid>-->
 
+
+
+            <Grid x:Name="VidsLoading" Margin="0,150,0,0"  IsVisible="False">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <ActivityIndicator IsRunning="True" Grid.Row="0" Color="Gray" HorizontalOptions="Center" VerticalOptions="Start" />
+                <Label Text="Loading Videos..." Grid.Row="1" TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="Center" Margin="0,5,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" />
+
+
+            </Grid>
+            
             <Grid Margin="0,10,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -151,10 +164,11 @@
                 </Grid.ColumnDefinitions>
                 <Label x:Name="Results" Margin="0,0,20,0" Grid.Row="0" Grid.Column="0"  HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskBold" />
 
-                <syncfusion:SfListView x:Name="VideosListview" ItemSpacing="2.5" Margin="0,5,0,0" MaximumHeightRequest="535" SelectionBackground="Transparent" ItemTapped="VideosListview_ItemTapped" ItemSize="110" Grid.Row="1" Grid.Column="0" ScrollBarVisibility="Never">
+                <syncfusion:SfListView x:Name="VideosListview" Margin="0,5,0,0" AutoFitMode="Height" CachingStrategy="RecycleTemplate" SelectionBackground="Transparent" ItemTapped="VideosListview_ItemTapped"  Grid.Row="1" Grid.Column="0" ScrollBarVisibility="Never">
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
+                                <Border Stroke="#FAFAFA" StrokeThickness="1" Margin="0,2.5,0,2.5" Padding="5" StrokeShape="RoundRectangle 10"  Background="Transparent" HorizontalOptions="FillAndExpand">
 
                                     <Grid>
                                         <Grid.RowDefinitions>
@@ -173,25 +187,27 @@
                                         <Label Text="{Binding subtitleshort}" Margin="5,0,0,0" Grid.Row="1" Grid.Column="1" HeightRequest="55" HorizontalOptions="Start" VerticalOptions="Start" TextColor="DarkGray" FontSize="12" FontFamily="HankenGroteskBold" />
                                         <Label Text="{Binding dateandlength}" Margin="5,0,0,0" Grid.Row="2" Grid.Column="1" HeightRequest="20" HorizontalOptions="Start" VerticalOptions="Start" TextColor="DarkGray" FontSize="12" FontFamily="HankenGroteskRegular" />
                                     </Grid>
+                                </Border>
                             </ViewCell>
                         </DataTemplate>
                     </syncfusion:SfListView.ItemTemplate>
+                    <syncfusion:SfListView.FooterTemplate>
+                        <DataTemplate>
+                            <Grid BackgroundColor="Transparent" HeightRequest="300">
+                                <Label LineBreakMode="NoWrap"
+Margin="10,0,0,0"  FontAttributes="Bold"
+FontSize="18" TextColor="White" HorizontalOptions="Center"
+VerticalOptions="Center"/>
+                            </Grid>
+                        </DataTemplate>
+                    </syncfusion:SfListView.FooterTemplate>
                 </syncfusion:SfListView>
 
             </Grid>
             <Label x:Name="NoResultslbl" Text="No results matching your search" Margin="0,40,0,0" Grid.Row="4" Grid.Column="0" IsVisible="False" HorizontalOptions="Center" VerticalOptions="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskBold" />
 
 
-            <Grid x:Name="VidsLoading" Margin="0,150,0,0"  IsVisible="False">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <ActivityIndicator IsRunning="True" Grid.Row="0" Color="Gray" HorizontalOptions="Center" VerticalOptions="Start" />
-                <Label Text="Loading Videos..." Grid.Row="1" TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="Center" Margin="0,5,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" />
-
-
-            </Grid>
+           
 
         </StackLayout>
     </VerticalStackLayout>

@@ -636,6 +636,29 @@ public partial class ProfileSection : ContentPage
 
                     if (Success == true)
                     {
+
+                        //Remove The Following Novo Preferences if Neccesary 
+                        if (!String.IsNullOrEmpty(Helpers.Settings.SignUp))
+                        {
+                            var signup = Helpers.Settings.SignUp;
+                            if (signup.Contains("SAX"))
+                            {   //Remove the Following 
+                                Preferences.Default.Remove("NovoMeds");
+                                Preferences.Default.Remove("NovoSyms");
+                                Preferences.Default.Remove("NovoSupps");
+                                Preferences.Default.Remove("NovoMeas");
+                                Preferences.Default.Remove("NovoDiag");
+                                Preferences.Default.Remove("NovoMood");
+                                Preferences.Default.Remove("NovoAppt");
+                                Preferences.Default.Remove("NovoHcp");
+                                Preferences.Default.Remove("NovoQues");
+                                Preferences.Default.Remove("NovoAllerg"); 
+                                Preferences.Default.Remove("NovoHeRep");
+                                Preferences.Default.Remove("NovoSched");
+                            }
+                        }
+                       
+
                         await MopupService.Instance.PushAsync(new PopupPageHelper("Account Deleted") { });
                         await Task.Delay(1500);
                         //Logout of Account 
