@@ -293,7 +293,7 @@ public partial class RegisterFinalPage : ContentPage
         }
         catch (Exception Ex)
         {
-            await DisplayAlert("Error", Ex.Source.ToString() + Ex.InnerException.ToString(), "ok");
+            await DisplayAlert("Error", Ex.Source.ToString() + Ex.InnerException.ToString(), "OK");
             NotasyncMethod(Ex);
         }
     }
@@ -804,6 +804,9 @@ public partial class RegisterFinalPage : ContentPage
                         Preferences.Default.Set("NovoAllerg", true);
                         Preferences.Default.Set("NovoHeRep", true);
                         Preferences.Default.Set("NovoSched", true);
+                        Preferences.Default.Set("NovoFood", true);
+                        Preferences.Default.Set("NovoDiet", true);
+                        Preferences.Default.Set("NovoInvest", true);
                     }
                 }
 

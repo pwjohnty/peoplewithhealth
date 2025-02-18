@@ -116,6 +116,27 @@ public partial class Infopopup : PopupPage
                 Boxtwo.BackgroundColor = Color.FromArgb("#ffe4e1");
                 Closebtn.BackgroundColor = Color.FromArgb("#ffe4e1");
             }
+            else if (message == "diet")
+            {
+                Dietinfo.IsVisible = true;
+                titlelbl.Text = "What is a Diet?";
+                Boxone.Background = Color.FromArgb("#E8EFD8");
+                Boxone.BackgroundColor = Color.FromArgb("#E8EFD8");
+                Boxtwo.Background = Color.FromArgb("#E8EFD8");
+                Boxtwo.BackgroundColor = Color.FromArgb("#E8EFD8");
+                Closebtn.BackgroundColor = Color.FromArgb("#E8EFD8");
+            }
+
+            else if (message == "Invest")
+            {
+                InvestigationInfo.IsVisible = true;
+                titlelbl.Text = "What is an Investigation?";
+                Boxone.Background = Color.FromArgb("#F5E6E8");
+                Boxone.BackgroundColor = Color.FromArgb("#F5E6E8");
+                Boxtwo.Background = Color.FromArgb("#F5E6E8");
+                Boxtwo.BackgroundColor = Color.FromArgb("#F5E6E8");
+                Closebtn.BackgroundColor = Color.FromArgb("#F5E6E8");
+            }
         }
         catch (Exception Ex)
         {

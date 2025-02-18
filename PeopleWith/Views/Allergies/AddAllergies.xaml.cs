@@ -139,7 +139,7 @@ public partial class AddAllergies : ContentPage
                 //popup.HeaderTitle = Allergy.Title.ToString();
                 //popup.IsOpen = true;
                 //bool result = await viewModel.ShowPopupAsync();
-                bool result = await DisplayAlert("Confirm Allergy", "Are you sure you want to add " + Allergytitle + "?", "Ok", "cancel");
+                bool result = await DisplayAlert("Confirm Allergy", "Are you sure you want to add " + Allergytitle + "?", "Ok", "Cancel");
 
                 if (result)
                 {

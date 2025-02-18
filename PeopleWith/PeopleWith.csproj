@@ -112,6 +112,7 @@
 	  <None Remove="Resources\Images\depressed.png" />
 	  <None Remove="Resources\Images\diagnosishome.png" />
 	  <None Remove="Resources\Images\diagnosisicon2022.png" />
+	  <None Remove="Resources\Images\diethome.png" />
 	  <None Remove="Resources\Images\doctor.png" />
 	  <None Remove="Resources\Images\downarrow.png" />
 	  <None Remove="Resources\Images\emotional.png" />
@@ -119,10 +120,13 @@
 	  <None Remove="Resources\Images\erroricon.png" />
 	  <None Remove="Resources\Images\excited.png" />
 	  <None Remove="Resources\Images\faceid.png" />
+	  <None Remove="Resources\Images\filterchargray.png" />
+	  <None Remove="Resources\Images\filterdarkblue.png" />
 	  <None Remove="Resources\Images\filtergray.png" />
 	  <None Remove="Resources\Images\filterorange.png" />
 	  <None Remove="Resources\Images\finger.png" />
 	  <None Remove="Resources\Images\fingerprint.png" />
+	  <None Remove="Resources\Images\fooddiaryhome.png" />
 	  <None Remove="Resources\Images\grateful.png" />
 	  <None Remove="Resources\Images\happy.png" />
 	  <None Remove="Resources\Images\hcphome.png" />
@@ -135,6 +139,7 @@
 	  <None Remove="Resources\Images\icontimepicker.png" />
 	  <None Remove="Resources\Images\imageicon.png" />
 	  <None Remove="Resources\Images\insight.png" />
+	  <None Remove="Resources\Images\Investhome.png" />
 	  <None Remove="Resources\Images\iosback.png" />
 	  <None Remove="Resources\Images\laughing.png" />
 	  <None Remove="Resources\Images\link.png" />
@@ -179,6 +184,8 @@
 	  <None Remove="Resources\Images\search.png" />
 	  <None Remove="Resources\Images\searchbaricon.png" />
 	  <None Remove="Resources\Images\searchbrown.png" />
+	  <None Remove="Resources\Images\searchchargray.png" />
+	  <None Remove="Resources\Images\searchdarkblue.png" />
 	  <None Remove="Resources\Images\searchgray.png" />
 	  <None Remove="Resources\Images\searchicon.png" />
 	  <None Remove="Resources\Images\searchorange.png" />
@@ -279,6 +286,9 @@
 	  <Compile Update="Views\Allergies\AllergyInfo.xaml.cs">
 	    <DependentUpon>AllergyInfo.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\Diet\DietInfo.xaml.cs">
+	    <DependentUpon>DietInfo.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -351,6 +361,24 @@
 	  <MauiXaml Update="Views\Diagnosis\SingleDiagnosis.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Diet\AddDiet.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Diet\AddFoodDiary.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Diet\AllDiet.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Diet\AllFoodDiary.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Diet\DietInfo.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Diet\SingleDiet.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\HCPs\AddHCPs.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -376,6 +404,18 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\HelpPages\UpdatePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Investigations\AddInvestigations.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Investigations\AllInvestigations.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Investigations\InvestInfo.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Investigations\SingleInvestigations.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\LoginRegister\ForgottenPassword.xaml">

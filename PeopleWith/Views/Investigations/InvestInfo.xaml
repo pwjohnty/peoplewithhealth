@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
+             x:Class="PeopleWith.InvestInfo" BackgroundColor="White" NavigationPage.HasNavigationBar="True">
+    <StackLayout VerticalOptions="FillAndExpand" Margin="20,0,20,0" HorizontalOptions="FillAndExpand">
+
+        <StackLayout x:Name="MainStack">
+            <Label x:Name="titlelbl" FontSize="20" Margin="0,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
+
+            <Label x:Name="Bodylbl" FontSize="16" Margin="0,10,0,0" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
+
+
+            <Border StrokeShape="RoundRectangle 10"  BackgroundColor="Transparent" Stroke="#E8EFD8"  Padding="10"   Margin="0,10,0,0">
+                <Grid Margin="0,0,0,0" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="15*"/>
+                        <ColumnDefinition Width="80*"/>
+                        <ColumnDefinition Width="5*"/>
+                    </Grid.ColumnDefinitions>
+                    <Image Source="link.png" HeightRequest="40" WidthRequest="40" Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" HorizontalOptions="Center" Margin="0,0,0,0" VerticalOptions="Center"/>
+                    <Label x:Name="typelbl" FontSize="12" FontAttributes="None"  Margin="10,0,0,0" VerticalOptions="Center" HorizontalOptions="Start" VerticalTextAlignment="Center" TextColor="Gray" FontFamily="HankenGroteskRegular"  Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" />
+                    <Label x:Name="titelbl" FontSize="14" FontAttributes="Bold" Margin="10,0,0,10" VerticalOptions="Center" HorizontalOptions="Start" VerticalTextAlignment="Center" TextColor="Black"  FontFamily="HankenGroteskBold"   Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="1" Padding="0,0,0,0"/>
+                    <Image Source="nextdarker.png" HeightRequest="15" WidthRequest="15" Grid.Row="0" Grid.RowSpan="3" Grid.Column="2"  VerticalOptions="Center" HorizontalOptions="CenterAndExpand" Margin="0,0,0,0" />
+                </Grid>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1" />
+                </Border.GestureRecognizers>
+            </Border>
+        </StackLayout>
+        <StackLayout VerticalOptions="CenterAndExpand">
+            <Grid x:Name="Investloading" IsVisible="False">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <ActivityIndicator Grid.Row="0" HorizontalOptions="Center" VerticalOptions="Start" IsRunning="True" Color="#404040" />
+                <Label Grid.Row="1" Text="Loading Investigation Information..."  TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="Center" Margin="0,5,0,0" VerticalOptions="Start" VerticalTextAlignment="Start" />
+            </Grid>
+        </StackLayout>
+    </StackLayout>
+</ContentPage>

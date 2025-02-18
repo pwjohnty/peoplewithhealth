@@ -92,6 +92,16 @@ namespace PeopleWith
 
         public const string postcode = "https://pwdevapi.peoplewith.com/api/postcode";
 
+        //Diet 
+        public const string GetDiet = "https://pwdevapi.peoplewith.com/api/diet";
+        public const string GetUserDiet = "https://pwdevapi.peoplewith.com/api/userdiet";
+
+        //Investigation 
+        public const string GetInvestigation = "https://pwdevapi.peoplewith.com/api/investigation";
+        public const string GetUserInvestigation = "https://pwdevapi.peoplewith.com/api/userinvestigation";
+
+
+
         //Get User Details 
         public async Task<ObservableCollection<user>> GetuserDetails()
         {
@@ -128,7 +138,7 @@ namespace PeopleWith
         {
             try
             {
-                var signupcode = Helpers.Settings.SignUp; 
+                var signupcode = Helpers.Settings.SignUp;
                 string urlWithQuery = $"{CheckConsent}?$filter=signupcodeid eq '{signupcode}'";
 
                 HttpClient client = new HttpClient();
@@ -194,7 +204,7 @@ namespace PeopleWith
         {
             try
             {
-                var id = Getinfo.measurementid; 
+                var id = Getinfo.measurementid;
                 var url = $"https://pwdevapi.peoplewith.com/api/measurement/measurementid/{id}";
                 HttpClient client = new HttpClient();
                 HttpResponseMessage responseconsent = await client.GetAsync(url);
@@ -204,7 +214,7 @@ namespace PeopleWith
                     string contentconsent = await responseconsent.Content.ReadAsStringAsync();
                     var userResponseconsent = JsonConvert.DeserializeObject<ApiResponseMeasurement>(contentconsent);
                     var consent = userResponseconsent.Value;
-                    Getinfo.measurementinformation = consent[0].measurementinformation; 
+                    Getinfo.measurementinformation = consent[0].measurementinformation;
                     return Getinfo;
 
                 }
@@ -855,9 +865,9 @@ namespace PeopleWith
                                 newUserSymptom.schedule.Add(feedback);
                                 var dosage = feedback.Dosage;
                                 var Updatetime = DateTime.Parse(feedback.time).ToString("HH:mm");
-                                feedback.time = Updatetime; 
+                                feedback.time = Updatetime;
                                 var time = feedback.time;
-                              
+
                                 List<string> days = new List<string>();
 
                                 var getfreq = newUserSymptom.frequency.Split('|');
@@ -1339,54 +1349,54 @@ namespace PeopleWith
 
                             int Index = 0;
 
-                                foreach (var feedback in feedbackSymptoms)
+                            foreach (var feedback in feedbackSymptoms)
+                            {
+                                newUserSymptom.schedule.Add(feedback);
+                                var dosage = feedback.Dosage;
+                                var Updatetime = DateTime.Parse(feedback.time).ToString("HH:mm");
+                                feedback.time = Updatetime;
+                                var time = feedback.time;
+                                List<string> days = new List<string>();
+
+                                var getfreq = newUserSymptom.frequency.Split('|');
+
+                                //weekly Days
+                                if (getfreq[1].Contains(","))
                                 {
-                                    newUserSymptom.schedule.Add(feedback);
-                                    var dosage = feedback.Dosage;
-                                    var Updatetime = DateTime.Parse(feedback.time).ToString("HH:mm");
-                                    feedback.time = Updatetime;
-                                    var time = feedback.time;
-                                    List<string> days = new List<string>();
+                                    days = getfreq[1].Split(',').ToList();
+                                    int GetCount = feedbackSymptoms.Count() / days.Count;
+                                    var duplicatedDays = Enumerable.Repeat(days, GetCount).SelectMany(x => x).ToList();
+                                    var uniqueDays = duplicatedDays.Distinct().ToList();
+                                    days = uniqueDays.SelectMany(day => duplicatedDays.Where(d => d == day)).ToList();
+                                }
 
-                                    var getfreq = newUserSymptom.frequency.Split('|');
-
-                                    //weekly Days
+                                //Daily
+                                if (getfreq[0] == "Daily" || getfreq[0] == "Days Interval")
+                                {
+                                    var DosageTime = time + "|" + dosage;
+                                    newUserSymptom.TimeDosage.Add(DosageTime);
+                                }
+                                //Weekly
+                                else if (getfreq[0] == "Weekly" || getfreq[0] == "Weekly ")
+                                {
+                                    string DosageTime = String.Empty;
                                     if (getfreq[1].Contains(","))
                                     {
-                                        days = getfreq[1].Split(',').ToList();
-                                        int GetCount = feedbackSymptoms.Count() / days.Count;
-                                        var duplicatedDays = Enumerable.Repeat(days, GetCount).SelectMany(x => x).ToList();
-                                        var uniqueDays = duplicatedDays.Distinct().ToList();
-                                        days = uniqueDays.SelectMany(day => duplicatedDays.Where(d => d == day)).ToList();
-                                    }
+                                        DosageTime = time + "|" + dosage + "|" + days[Index];
 
-                                    //Daily
-                                    if (getfreq[0] == "Daily" || getfreq[0] == "Days Interval")
+                                    }
+                                    else
                                     {
-                                        var DosageTime = time + "|" + dosage;
-                                        newUserSymptom.TimeDosage.Add(DosageTime);
-                                    }
-                                    //Weekly
-                                    else if (getfreq[0] == "Weekly" || getfreq[0] == "Weekly ")
-                                    {
-                                        string DosageTime = String.Empty;
-                                        if (getfreq[1].Contains(","))
-                                        {
-                                            DosageTime = time + "|" + dosage + "|" + days[Index];
-
-                                        }
-                                        else
-                                        {
-                                            var day = getfreq[1];
-                                            DosageTime = time + "|" + dosage + "|" + day;
-                                        }
-
-                                        newUserSymptom.TimeDosage.Add(DosageTime);
-                                        Index = Index + 1;
+                                        var day = getfreq[1];
+                                        DosageTime = time + "|" + dosage + "|" + day;
                                     }
 
+                                    newUserSymptom.TimeDosage.Add(DosageTime);
+                                    Index = Index + 1;
                                 }
-                            
+
+                            }
+
                         }
 
                         if (rawSymptom.feedback == null)
@@ -1683,7 +1693,7 @@ namespace PeopleWith
             }
         }
 
-   
+
 
         //Post UserDiagnosis Data  
         public async Task<ObservableCollection<userdiagnosis>> PostUserDiagnosisAsync(ObservableCollection<userdiagnosis> UserDiagnosisPassed)
@@ -2479,14 +2489,14 @@ namespace PeopleWith
                         {
                             itemstoremove.Add(item);
                         }
-                        else if(!string.IsNullOrEmpty(item.referral))
+                        else if (!string.IsNullOrEmpty(item.referral))
                         {
                             if (Helpers.Settings.SignUp != item.referral)
                             {
                                 itemstoremove.Add(item);
                             }
                         }
-                        
+
 
                         item.dateandlength = item.dateadded + " " + "Length: " + item.lenght;
                         item.thumbnail = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/" + item.thumbnail;
@@ -2528,7 +2538,7 @@ namespace PeopleWith
             {
                 ObservableCollection<videos> itemstoremove = new ObservableCollection<videos>();
                 //var urls = APICalls.Videos;
-               // var signupcode = Helpers.Settings.SignUp;
+                // var signupcode = Helpers.Settings.SignUp;
                 var signupcode = Helpers.Settings.SignUp;
                 string urlWithQuery = $"{Videos}?$filter=referral eq '{signupcode}'";
                 HttpClient client = new HttpClient();
@@ -2670,25 +2680,25 @@ namespace PeopleWith
                         if (item.deleted == true)
                         {
                             //Ignore
-                       
+
                         }
                         else
                         {
-                        
 
 
 
-                                try
-                                {
-                                    // Attempt to deserialize as an array
-                                    item.questionanswerjsonlist = JsonConvert.DeserializeObject<ObservableCollection<questionanswerinfo>>(item.questionanswerjson);
-                                }
-                                catch (JsonSerializationException)
-                                {
-                                    // If the JSON is a single object, deserialize it as such and wrap it in a collection
-                                    var singleItem = JsonConvert.DeserializeObject<questionanswerinfo>(item.questionanswerjson);
-                                    item.questionanswerjsonlist = new ObservableCollection<questionanswerinfo> { singleItem };
-                                }
+
+                            try
+                            {
+                                // Attempt to deserialize as an array
+                                item.questionanswerjsonlist = JsonConvert.DeserializeObject<ObservableCollection<questionanswerinfo>>(item.questionanswerjson);
+                            }
+                            catch (JsonSerializationException)
+                            {
+                                // If the JSON is a single object, deserialize it as such and wrap it in a collection
+                                var singleItem = JsonConvert.DeserializeObject<questionanswerinfo>(item.questionanswerjson);
+                                item.questionanswerjsonlist = new ObservableCollection<questionanswerinfo> { singleItem };
+                            }
 
                             var usersignupcode = Helpers.Settings.SignUp;
 
@@ -2696,11 +2706,11 @@ namespace PeopleWith
                             {
                                 newcollection.Add(item);
                             }
-                            else if(string.IsNullOrEmpty(Helpers.Settings.SignUp))
+                            else if (string.IsNullOrEmpty(Helpers.Settings.SignUp))
                             {
                                 //ignore it
                             }
-                            else if(item.signupcodeid.Contains(usersignupcode))
+                            else if (item.signupcodeid.Contains(usersignupcode))
                             {
                                 newcollection.Add(item);
                             }
@@ -2730,7 +2740,7 @@ namespace PeopleWith
             }
         }
 
-      
+
 
 
         public async Task<ObservableCollection<questionnaire>> GetSingleQuestionnaire(string questionnaireid)
@@ -2765,40 +2775,40 @@ namespace PeopleWith
                         else
                         {
 
-                           
 
 
-                                try
-                                {
-                                    // Attempt to deserialize as an array
-                                    item.questionanswerjsonlist = JsonConvert.DeserializeObject<ObservableCollection<questionanswerinfo>>(item.questionanswerjson);
-                                }
-                                catch (JsonSerializationException)
-                                {
-                                    // If the JSON is a single object, deserialize it as such and wrap it in a collection
-                                    var singleItem = JsonConvert.DeserializeObject<questionanswerinfo>(item.questionanswerjson);
-                                    item.questionanswerjsonlist = new ObservableCollection<questionanswerinfo> { singleItem };
-                                }
 
-                                var usersignupcode = Helpers.Settings.SignUp;
+                            try
+                            {
+                                // Attempt to deserialize as an array
+                                item.questionanswerjsonlist = JsonConvert.DeserializeObject<ObservableCollection<questionanswerinfo>>(item.questionanswerjson);
+                            }
+                            catch (JsonSerializationException)
+                            {
+                                // If the JSON is a single object, deserialize it as such and wrap it in a collection
+                                var singleItem = JsonConvert.DeserializeObject<questionanswerinfo>(item.questionanswerjson);
+                                item.questionanswerjsonlist = new ObservableCollection<questionanswerinfo> { singleItem };
+                            }
 
-                                if (string.IsNullOrEmpty(item.signupcodeid))
-                                {
-                                    newcollection.Add(item);
-                                }
-                                else if (string.IsNullOrEmpty(Helpers.Settings.SignUp))
-                                {
-                                    //ignore it
-                                }
-                                else if (item.signupcodeid.Contains(usersignupcode))
-                                {
-                                    newcollection.Add(item);
-                                }
-                                else
-                                {
-                                    //ignore it
-                                }
-                            
+                            var usersignupcode = Helpers.Settings.SignUp;
+
+                            if (string.IsNullOrEmpty(item.signupcodeid))
+                            {
+                                newcollection.Add(item);
+                            }
+                            else if (string.IsNullOrEmpty(Helpers.Settings.SignUp))
+                            {
+                                //ignore it
+                            }
+                            else if (item.signupcodeid.Contains(usersignupcode))
+                            {
+                                newcollection.Add(item);
+                            }
+                            else
+                            {
+                                //ignore it
+                            }
+
 
 
                         }
@@ -2832,7 +2842,7 @@ namespace PeopleWith
                 StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
                 var response = await client.PostAsync(url, contenttts);
                 var errorResponse = await response.Content.ReadAsStringAsync();
-                
+
                 if (response.IsSuccessStatusCode)
                 {
                     // Read the response content as a string
@@ -2875,8 +2885,8 @@ namespace PeopleWith
                 {
                     string contentconsent = await responseconsent.Content.ReadAsStringAsync();
                     // Add Feedback Converter
-                  //  var settings = new JsonSerializerSettings();
-                  //  settings.Converters.Add(new AppointmentFeedbackConverter());
+                    //  var settings = new JsonSerializerSettings();
+                    //  settings.Converters.Add(new AppointmentFeedbackConverter());
                     var userResponseconsent = JsonConvert.DeserializeObject<ApiResponseUserQuestionnaire>(contentconsent);
                     var consent = userResponseconsent.Value;
 
@@ -2887,7 +2897,7 @@ namespace PeopleWith
                     {
                         if (item.deleted == true)
                         {
-                            
+
                         }
                         else
                         {
@@ -2907,7 +2917,7 @@ namespace PeopleWith
                         newcollection.Add(item);
                     }
 
-              
+
 
                     return new ObservableCollection<userquestionnaire>(newcollection);
 
@@ -2988,9 +2998,9 @@ namespace PeopleWith
                             try
                             {
                                 // Attempt to deserialize as an array
-                                if(item.symptomfeedback == "[]")
+                                if (item.symptomfeedback == "[]")
                                 {
-                                    
+
                                 }
                                 else
                                 {
@@ -3010,8 +3020,18 @@ namespace PeopleWith
                         {
                             try
                             {
+
                                 // Attempt to deserialize as an array
-                                item.measurementfeedbacklist = JsonConvert.DeserializeObject<ObservableCollection<feedbackdata>>(item.measurementfeedback);
+                                if (item.measurementfeedback == "[]")
+                                {
+
+                                }
+                                else
+                                {
+                                    // Attempt to deserialize as an array
+                                    item.measurementfeedbacklist = JsonConvert.DeserializeObject<ObservableCollection<feedbackdata>>(item.measurementfeedback);
+                                }
+
                             }
                             catch (JsonSerializationException)
                             {
@@ -3027,7 +3047,17 @@ namespace PeopleWith
                             try
                             {
                                 // Attempt to deserialize as an array
-                                item.moodfeedbacklist = JsonConvert.DeserializeObject<ObservableCollection<feedbackdata>>(item.moodfeedback);
+                                if (item.moodfeedback == "[]")
+                                {
+
+                                }
+                                else
+                                {
+                                    // Attempt to deserialize as an array
+                                    item.moodfeedbacklist = JsonConvert.DeserializeObject<ObservableCollection<feedbackdata>>(item.moodfeedback);
+                                }
+                                // Attempt to deserialize as an array
+                               
                             }
                             catch (JsonSerializationException)
                             {
@@ -3043,7 +3073,16 @@ namespace PeopleWith
                             try
                             {
                                 // Attempt to deserialize as an array
-                                item.initialquestionnairefeedbacklist = JsonConvert.DeserializeObject<ObservableCollection<feedbackdata>>(item.initialquestionnairefeedback);
+                                if (item.initialquestionnairefeedback == "[]")
+                                {
+
+                                }
+                                else
+                                {
+                                    // Attempt to deserialize as an array
+                                    item.initialquestionnairefeedbacklist = JsonConvert.DeserializeObject<ObservableCollection<feedbackdata>>(item.initialquestionnairefeedback);
+                                }
+                                
                             }
                             catch (JsonSerializationException)
                             {
@@ -3090,12 +3129,12 @@ namespace PeopleWith
 
                 foreach (var item in users)
                 {
-                    if(item.deleted == true)
+                    if (item.deleted == true)
                     {
-                        itemstoremove.Add(item); 
+                        itemstoremove.Add(item);
                     }
                 }
-                foreach(var item in itemstoremove)
+                foreach (var item in itemstoremove)
                 {
                     users.Remove(item);
                 }
@@ -3124,7 +3163,7 @@ namespace PeopleWith
                     // Add Feedback Converter
                     //  var settings = new JsonSerializerSettings();
                     //  settings.Converters.Add(new AppointmentFeedbackConverter());
-                   
+
                     var userResponseconsent = JsonConvert.DeserializeObject<ApiResponseSignUpCode>(contentconsent);
                     var consent = userResponseconsent.Value;
 
@@ -3155,7 +3194,7 @@ namespace PeopleWith
                             item.signupcodeinfolist = new ObservableCollection<signupcodeinformation> { singleItem };
                         }
 
-                     
+
 
                         newcollection.Add(item);
                     }
@@ -3402,6 +3441,620 @@ namespace PeopleWith
         }
 
 
-    }
 
+        //Get Diet Information
+
+        public async Task<ObservableCollection<diet>> GetDietDetails()
+        {
+            try
+            {
+                var USERID = Helpers.Settings.UserKey;
+                var URl = APICalls.GetDiet;
+                //string urlWithQuery = $"{GetDiet}?$filter=userid eq '{USERID}'";
+                HttpClient client = new HttpClient();
+                HttpResponseMessage responseconsent = await client.GetAsync(URl);
+
+                if (responseconsent.IsSuccessStatusCode)
+                {
+                    string contentconsent = await responseconsent.Content.ReadAsStringAsync();
+                    var userResponseconsent = JsonConvert.DeserializeObject<APIDietResponse>(contentconsent);
+                    var consent = userResponseconsent.Value;
+
+                    var newcollection = new ObservableCollection<diet>();
+
+                    //Remove All Deleted Items 
+                    foreach (var item in consent)
+                    {
+                        if (item.deleted == true)
+                        {
+
+                        }
+                        else
+                        {
+                            var GetString = item.grouping;
+                            if (!String.IsNullOrEmpty(GetString))
+                            {
+                                if(GetString.Contains("Diets"))
+                                {
+                                    GetString = GetString.Replace(" Diets", ""); 
+                                }
+
+                                if(GetString.Contains("and"))
+                                {
+                                    GetString = GetString.Replace(" and ", "/");
+                                }
+
+                                if (GetString.Contains("Nutrition"))
+                                {
+                                    GetString = GetString.Replace(" Nutrition", "");
+                                }
+
+                                item.ShortGroup = GetString;
+                            }
+                            newcollection.Add(item);
+                        }
+                    }
+
+                    return new ObservableCollection<diet>(newcollection);
+
+                }
+                else
+                {
+
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
+        public async Task<ObservableCollection<userdiet>> GetUserDietAsync()
+        {
+            try
+            {
+                var USERID = Helpers.Settings.UserKey;
+                var URl = APICalls.GetUserDiet;
+                string urlWithQuery = $"{URl}?$filter=userid eq '{USERID}'";
+                HttpClient client = new HttpClient();
+                HttpResponseMessage response = await client.GetAsync(urlWithQuery);
+                string data = await response.Content.ReadAsStringAsync();
+
+                // Deserialize the response into a generic structure
+                var rawResponse = JsonConvert.DeserializeObject<SingleUserDiet>(data);
+                var UserDietList = new List<userdiet>();
+
+                if (rawResponse?.Value != null)
+                {
+                    foreach (var rawUserdiet in rawResponse.Value)
+                    {
+                        var NewUserDiet = new userdiet
+                        {
+                            id = rawUserdiet.id,
+                            createdAt = rawUserdiet.createdAt,
+                            userid = rawUserdiet.userid,
+                            dietid = rawUserdiet.dietid,
+                            diettitle = rawUserdiet.diettitle,
+                            deleted = rawUserdiet.deleted,
+                            datestarted = rawUserdiet.datestarted,
+                            dateended = rawUserdiet.dateended,
+                            notes = new ObservableCollection<userNotesFeedback>()
+                        };
+
+                        // Deserialize notes only if not null or empty
+                        if (!string.IsNullOrEmpty(rawUserdiet.notes))
+                        {
+                            var feedbackUserDiet = JsonConvert.DeserializeObject<List<userNotesFeedback>>(rawUserdiet.notes);
+
+                            if (feedbackUserDiet != null)
+                            {
+                                foreach (var feedback in feedbackUserDiet)
+                                {
+                                    if (feedback.deleted != "deleted")
+                                    {
+                                        NewUserDiet.notes.Add(feedback);
+                                    }
+                                }
+                            }
+                        }
+
+                        // Always add NewUserDiet, even if notes are null or empty
+                        UserDietList.Add(NewUserDiet);
+                    }
+                }
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    string errorcontent = await response.Content.ReadAsStringAsync();
+                    var s = errorcontent;
+                    return new ObservableCollection<userdiet>();  
+                }
+
+                string content = await response.Content.ReadAsStringAsync();
+                var userResponse = JsonConvert.DeserializeObject<APIUserDietResponse>(content);
+
+                var filteredDiets = UserDietList?.Where(item => !item.deleted).ToList() ?? new List<userdiet>();
+
+                return new ObservableCollection<userdiet>(filteredDiets);
+
+            }
+            catch (Exception ex)
+            {
+                return new ObservableCollection<userdiet>();
+            }
+        }
+
+
+        public async Task<userdiet> PostUserDiet(userdiet userdietpassed)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                var url = APICalls.GetUserDiet;
+                string jsonns = System.Text.Json.JsonSerializer.Serialize<userdiet>(userdietpassed);
+                StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync(url, contenttts);
+                var errorResponse = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    // Read the response content as a string
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    var jsonResponse = JObject.Parse(responseContent);
+
+                    var id = jsonResponse["value"]?[0]?["id"]?.ToString();
+
+                    userdietpassed.id = id;
+                    // Return the inserted item
+                    return userdietpassed;
+
+                }
+                else
+                {
+                    string errorcontent = await response.Content.ReadAsStringAsync();
+                    var s = errorcontent;
+                    return null;
+                }
+                // return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
+        //Add Diet Notes 
+
+        public async Task AddDietNotesAsymc(userdiet Updatefeedback)
+        {
+            try
+            {
+                var id = Updatefeedback.id;
+                var url = $"https://pwdevapi.peoplewith.com/api/userdiet/id/{id}";
+                var feedbacks = Updatefeedback.notes;
+                string json = System.Text.Json.JsonSerializer.Serialize(new { notes = feedbacks });
+                //string json = System.Text.Json.JsonSerializer.Serialize(new { feedback = feedbacks }, serializerOptions);
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                using (var client = new HttpClient())
+                {
+                    //works with patch
+                    //var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+                    var response = await client.SendAsync(request);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Successfully updated feedback");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+
+        //Update User Diet
+        public async Task UpdateUserDiet(userdiet Updatefeedback)
+        {
+            try
+            {
+
+                var id = Updatefeedback.id;
+                var url = $"https://pwdevapi.peoplewith.com/api/userdiet/id/{id}";
+                var feedbacks = Updatefeedback;
+
+                //Change the following   
+                string json = System.Text.Json.JsonSerializer.Serialize(new
+                {
+                    datestarted = feedbacks.datestarted,
+                    dateended = feedbacks.dateended,
+                    notes = feedbacks.notes
+                });
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                using (var client = new HttpClient())
+                {
+
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+
+                    var response = await client.SendAsync(request);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Successfully updated userDiet");
+                    }
+                }
+            }
+
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+
+        //Delete UserDiet  
+        public async Task DeleteUserDiet(userdiet Updatefeedback)
+        {
+            try
+            {
+                string id = Updatefeedback.id;
+                var url = $"https://pwdevapi.peoplewith.com/api/userdiet/id/{id}";
+
+                string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = Updatefeedback.deleted });
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                using (var client = new HttpClient())
+                {
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+
+                    var response = await client.SendAsync(request);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                }
+
+                return;
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+        }
+
+
+        //Get Investigation Information
+        public async Task<ObservableCollection<investigation>> GetInvestigationDetails()
+        {
+            try
+            {
+                var USERID = Helpers.Settings.UserKey;
+                var URl = APICalls.GetInvestigation;
+                HttpClient client = new HttpClient();
+                HttpResponseMessage responseconsent = await client.GetAsync(URl);
+
+                if (responseconsent.IsSuccessStatusCode)
+                {
+                    string contentconsent = await responseconsent.Content.ReadAsStringAsync();
+                    var userResponseconsent = JsonConvert.DeserializeObject<APInvestigationResponse>(contentconsent);
+                    var consent = userResponseconsent.Value;
+
+                    var newcollection = new ObservableCollection<investigation>();
+
+                    //Remove All Deleted Items 
+                    foreach (var item in consent)
+                    {
+                        if (item.deleted == true)
+                        {
+
+                        }
+                        else
+                        {
+                            //Shorten Filter Tabs for long winded items
+                            var GetString = item.grouping;
+                            if (!String.IsNullOrEmpty(GetString))
+                            {
+
+                                if (GetString.Contains("and"))
+                                {
+                                    GetString = GetString.Replace(" and ", "/");
+                                }
+
+                                item.ShortGroup = GetString;
+                            }
+                            else
+                            {
+                                item.ShortGroup = "Other";
+                            }
+                            newcollection.Add(item);
+                        }
+                    }
+
+                    return new ObservableCollection<investigation>(newcollection);
+
+                }
+                else
+                {
+
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+        }
+
+            //GetUserInvestigation  
+            public async Task<ObservableCollection<userinvestigation>> GetUserInvestigationAsync()
+            {
+                try
+                {
+                    var USERID = Helpers.Settings.UserKey;
+                    var URl = APICalls.GetUserInvestigation;
+                    string urlWithQuery = $"{URl}?$filter=userid eq '{USERID}'";
+                    HttpClient client = new HttpClient();
+                    HttpResponseMessage response = await client.GetAsync(urlWithQuery);
+                    string data = await response.Content.ReadAsStringAsync();
+
+                    // Deserialize the response into a generic structure
+                    var rawResponse = JsonConvert.DeserializeObject<SingleUserINvestigation>(data);
+                    var UserInvestList = new List<userinvestigation>();
+
+                    if (rawResponse?.Value != null)
+                    {
+                        foreach (var rawUserInvest in rawResponse.Value)
+                        {
+                            var NewUserInvest = new userinvestigation
+                            {
+                                id = rawUserInvest.id,
+                                createdAt = rawUserInvest.createdAt,
+                                userid = rawUserInvest.userid,
+                                deleted = rawUserInvest.deleted,
+                                investigationid = rawUserInvest.investigationid,
+                                investigationname = rawUserInvest.investigationname,
+                                value = rawUserInvest.value,
+                                status = rawUserInvest.status,
+                                investigationdate = rawUserInvest.investigationdate,
+                                investigationdocument = rawUserInvest.investigationdocument,
+                                investigationimage = rawUserInvest.investigationimage,
+                                notes = new ObservableCollection<notesuserfeedback>()
+                            };
+
+                            // Deserialize notes only if not null or empty
+                            if (!string.IsNullOrEmpty(rawUserInvest.notes))
+                            {
+                                var feedbackUserInvest = JsonConvert.DeserializeObject<List<notesuserfeedback>>(rawUserInvest.notes);
+
+                                if (feedbackUserInvest != null)
+                                {
+                                    foreach (var feedback in feedbackUserInvest)
+                                    {
+                                        if (feedback.deleted != "deleted")
+                                        {
+                                            NewUserInvest.notes.Add(feedback);
+                                        }
+                                    }
+                                }
+                            }
+
+                        // Always add NewUserDiet, even if notes are null or empty
+                        UserInvestList.Add(NewUserInvest);
+                        }
+                    }
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        string errorcontent = await response.Content.ReadAsStringAsync();
+                        var s = errorcontent;
+                        return new ObservableCollection<userinvestigation>();
+                    }
+
+                    string content = await response.Content.ReadAsStringAsync();
+                    var userResponse = JsonConvert.DeserializeObject<APIUserInvestigationResponse>(content);
+
+                    var filteredDiets = UserInvestList?.Where(item => !item.deleted).ToList() ?? new List<userinvestigation>();
+
+                foreach(var item in filteredDiets)
+                {
+                    if (!string.IsNullOrEmpty(item.investigationdate))
+                    {
+                        var splititem = item.investigationdate.Split(' ');
+                        item.datewotime = splititem[0];
+                    }
+                }
+
+                    return new ObservableCollection<userinvestigation>(filteredDiets);
+
+                }
+                catch (Exception ex)
+                {
+                    return new ObservableCollection<userinvestigation>();
+                }
+            }
+
+
+        //Post UserInvestigation
+        public async Task<userinvestigation> PostUserInvestigation(userinvestigation userInvestpassed)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                var url = APICalls.GetUserInvestigation;
+                string jsonns = System.Text.Json.JsonSerializer.Serialize<userinvestigation>(userInvestpassed);
+                StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync(url, contenttts);
+                var errorResponse = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    // Read the response content as a string
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    var jsonResponse = JObject.Parse(responseContent);
+
+                    var id = jsonResponse["value"]?[0]?["id"]?.ToString();
+
+                    userInvestpassed.id = id;
+                    // Return the inserted item
+                    return userInvestpassed;
+
+                }
+                else
+                {
+                    string errorcontent = await response.Content.ReadAsStringAsync();
+                    var s = errorcontent;
+                    return null;
+                }
+                // return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
+        //Add Investigation Notes 
+        public async Task AddInvestigationNotesAsync(userinvestigation Updatefeedback)
+        {
+            try
+            {
+                var id = Updatefeedback.id;
+                var url = $"https://pwdevapi.peoplewith.com/api/userinvestigation/id/{id}";
+                var feedbacks = Updatefeedback.notes;
+                string json = System.Text.Json.JsonSerializer.Serialize(new { notes = feedbacks });
+                //string json = System.Text.Json.JsonSerializer.Serialize(new { feedback = feedbacks }, serializerOptions);
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                using (var client = new HttpClient())
+                {
+                    //works with patch
+                    //var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+                    var response = await client.SendAsync(request);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Successfully updated feedback");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+
+        //Update User Investigation
+        public async Task UpdateUserInvestigation(userinvestigation Updatefeedback)
+        {
+            try
+            {
+
+                var id = Updatefeedback.id;
+                var url = $"https://pwdevapi.peoplewith.com/api/userinvestigation/id/{id}";
+                var feedbacks = Updatefeedback;
+
+                //Change the following  (To be defined)  
+                string json = System.Text.Json.JsonSerializer.Serialize(new
+                {
+                    investigationdate = feedbacks.investigationdate,
+                    notes = feedbacks.notes
+                });
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                using (var client = new HttpClient())
+                {
+
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+
+                    var response = await client.SendAsync(request);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Successfully updated userDiet");
+                    }
+                }
+            }
+
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        //Delete UserInvestigation 
+        public async Task DeleteUserInvestigation(userinvestigation Updatefeedback)
+        {
+            try
+            {
+                string id = Updatefeedback.id;
+                var url = $"https://pwdevapi.peoplewith.com/api/userinvestigation/id/{id}";
+
+                string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = Updatefeedback.deleted });
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                using (var client = new HttpClient())
+                {
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+
+                    var response = await client.SendAsync(request);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                }
+
+                return;
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+        }
+
+
+
+    }
 }
