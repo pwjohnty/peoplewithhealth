@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:chart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"
-              xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
              x:Class="PeopleWith.SingleMood"  xmlns:local="clr-namespace:PeopleWith" NavigationPage.IconColor="#031926"  BackgroundColor="White">
     <ContentPage.ToolbarItems>
         <ToolbarItem x:Name="EditBtn" Text="Edit"  Clicked="EditBtn_Clicked"  />

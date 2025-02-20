@@ -959,7 +959,7 @@ public partial class MainDashboard : ContentPage
 
                     var DateTimeNOW = DateTime.Now.ToString("dd/MM/yy");
                     var Weekago = DateTime.Now.AddDays(-7).ToString("dd/MM/yy");
-                    var Timeline = DateTimeNOW + " - " + Weekago;
+                    var Timeline = Weekago + " - " + DateTimeNOW;
                     MoodTimelinelbl.Text = Timeline;
                     moodchart.ItemsSource = mooddata;
 
@@ -983,7 +983,7 @@ public partial class MainDashboard : ContentPage
 
                     var DateTimeNOW = DateTime.Now.ToString("dd/MM/yy");
                     var Weekago = DateTime.Now.AddDays(-7).ToString("dd/MM/yy");
-                    var Timeline = DateTimeNOW + " - " + Weekago;
+                    var Timeline = Weekago + " - " + DateTimeNOW;
                     MoodTimelinelbl.Text = Timeline;
 
                     TotalCountlbl.Text = "0";
@@ -2336,6 +2336,9 @@ public partial class MainDashboard : ContentPage
                 new dashitem { Type = "Measurements",  ContactImage = "measurementhome.png", Title = "Measurements", BackgroundColor = Color.FromArgb("#e5f0fb") },
                 new dashitem {Type = "Diagnosis",  ContactImage = "diagnosishome.png", Title = "Diagnosis", BackgroundColor = Color.FromArgb("#E6E6FA") },
                 new dashitem { Type = "Mood", ContactImage = "moodhome.png", Title = "Mood", BackgroundColor = Color.FromArgb("#FFF8DC") },
+                new dashitem { Type = "Diet", ContactImage ="diethome.png", Title = "Diet", BackgroundColor = Color.FromArgb("#e8efd8") },
+                new dashitem { Type = "Investigations", ContactImage ="investhome.png", Title = "Investigations", BackgroundColor = Color.FromArgb("#F5E6E8") },
+                //new dashitem { Type = "Food Diary", ContactImage ="fooddiaryhome.png", Title = "Food Diary", BackgroundColor = Color.FromArgb("#ECE5C1") },
                 new dashitem { Type = "Appointments",  ContactImage = "appointhome.png", Title = "Appointments", BackgroundColor = Color.FromArgb("#ffe4e1") },
                 new dashitem {Type = "HCP",  ContactImage = "hcphome.png", Title = "HCPs", BackgroundColor = Color.FromArgb("#CBC3E3") },
                 new dashitem { Type = "Questionnaires", ContactImage = "questionnairehome.png", Title = "Questionnaires", BackgroundColor = Color.FromArgb("#fff9ec") },
@@ -2708,6 +2711,48 @@ public partial class MainDashboard : ContentPage
                 }
                 
             }
+            else if (item != null && item.Title == "Food Diary")
+            {
+                string Area = item.Title;
+                bool Check = Preferences.Default.Get("NovoFood", false);
+                if (Check)
+                {
+                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                }
+                else
+                {
+                    await Navigation.PushAsync(new AllFoodDiary(), false);
+                }
+
+            }
+            else if (item != null && item.Title == "Diet")
+            {
+                string Area = item.Title;
+                bool Check = Preferences.Default.Get("NovoDiet", false);
+                if (Check)
+                {
+                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                }
+                else
+                {
+                    await Navigation.PushAsync(new AllDiet(), false);
+                }
+
+            }
+            else if (item != null && item.Title == "Investigations")
+            {
+                string Area = item.Title;
+                bool Check = Preferences.Default.Get("NovoInvest", false);
+                if (Check)
+                {
+                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                }
+                else
+                {
+                    await Navigation.PushAsync(new AllInvestigations(), false);
+                }
+
+            }
 
         }
         catch(Exception Ex)
@@ -3019,6 +3064,49 @@ public partial class MainDashboard : ContentPage
             else if (item != null && item.Title == "Profile")
             {
                 await Navigation.PushAsync(new ProfileSection(), false);
+            }
+            else if (item != null && item.Title == "Food Diary")
+            {
+                string Area = item.Title;
+                bool Check = Preferences.Default.Get("NovoFood", false);
+                if (Check)
+                {
+                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                }
+                else
+                {
+                    await Navigation.PushAsync(new AllFoodDiary(), false);
+                }
+
+            }
+            else if (item != null && item.Title == "Diet")
+            {
+                string Area = item.Title;
+                bool Check = Preferences.Default.Get("NovoDiet", false);
+                if (Check)
+                {
+                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                }
+                else
+                {
+                    await Navigation.PushAsync(new AllDiet(), false);
+                }
+
+            }
+
+            else if (item != null && item.Title == "Investigations")
+            {
+                string Area = item.Title;
+                bool Check = Preferences.Default.Get("NovoInvest", false);
+                if (Check)
+                {
+                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                }
+                else
+                {
+                    await Navigation.PushAsync(new AllInvestigations(), false);
+                }
+
             }
 
         }

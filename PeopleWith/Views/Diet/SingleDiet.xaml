@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
+             x:Class="PeopleWith.SingleDiet" NavigationPage.IconColor="#031926"  BackgroundColor="White">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem x:Name="EditBtn" Text="Edit"  Clicked="EditBtn_Clicked"  />
+    </ContentPage.ToolbarItems>
+    <ScrollView VerticalScrollBarVisibility="Never">
+    <StackLayout >
+            <Frame HasShadow="False" CornerRadius="10"  InputTransparent="True" Padding="5" BorderColor="Transparent" BackgroundColor="#E8EFD8"  Margin="20,20,20,5">
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50*"/>
+                    <ColumnDefinition Width="50*"/>
+                    </Grid.ColumnDefinitions>
+
+                <Label x:Name="Dietitle" Margin="10,0,0,0" FontFamily="HankenGroteskBold"  FontSize="20" VerticalOptions="End" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"  TextColor="#031926" />
+                
+                    <Label  FontFamily="HankenGroteskBold" HorizontalTextAlignment="Start"  Margin="10,10,0,0" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Date Started: " TextColor="Gray" FontSize="12" FontFamily="HankenGroteskRegular" />
+                                <Span x:Name="lblStart" TextColor="#031926" FontSize="12" FontFamily="HankenGroteskBold" />
+                                <Span Text="   " TextColor="#031926" FontSize="12" FontFamily="HankenGroteskBold" />
+                                <Span Text="Date End: " TextColor="Gray"  FontSize="12" FontFamily="HankenGroteskRegular"/>
+                                <Span x:Name="lblEnd" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="12"  />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </Grid>
+        </Frame>
+
+
+            <Button BackgroundColor="#404040" x:Name="AddDataBtn" Clicked="AddDataBtn_Clicked" HorizontalOptions="FillAndExpand" TextColor="White"  FontAttributes="None" Margin="20,20,20,0" FontFamily="HankenGroteskBold" Text="Add Notes" />
+
+
+
+        <StackLayout x:Name="DietNotesInsights" Margin="20,10,20,0" >
+
+            <Label Text="Diet Notes" Margin="0,20,0,10" FontFamily="HankenGroteskBold"  FontSize="20" VerticalOptions="Center" TextColor="#031926" />
+
+                <syncfusion:SfListView  x:Name="AllDietNotes" ItemTapped="AllDietNotes_ItemTapped" Padding="0" Margin="0,0,0,0" AutoFitMode="Height" ItemSpacing="0" BackgroundColor="Transparent" HorizontalOptions="FillAndExpand" IsScrollingEnabled="False"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
+                    <syncfusion:SfListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Frame HasShadow="False" CornerRadius="10"  InputTransparent="True" Padding="5" BorderColor="Transparent" Opacity="1" BackgroundColor="#E8EFD8"  Margin="10,0,10,5">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="25"/>
+                                            <RowDefinition Height="Auto"/>
+
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label Text="{Binding datetime}" FontFamily="HankenGroteskBold" VerticalOptions="Start" Margin="10,0,0,0" HorizontalOptions="Start" FontSize="12" Grid.Row="0"  TextColor="DarkGray" />
+                                        <Label Text="{Binding notes}" FontFamily="HankenGroteskRegular" VerticalOptions="Start" Margin="10,0,0,0" HorizontalOptions="Start" FontSize="12" Grid.Row="1" TextColor="#031926" />
+
+
+
+                                    </Grid>
+                                </Frame>
+
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.ItemTemplate>
+                </syncfusion:SfListView>
+
+            </StackLayout>
+
+        <Label Text="Details" Margin="20,20,0,0" FontFamily="HankenGroteskBold"  FontSize="20" VerticalOptions="Center" TextColor="#031926" />
+        <Frame HasShadow="False" BorderColor="#E5E5E5" BackgroundColor="Transparent" Margin="10,10,10,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="90*"/>
+                    <ColumnDefinition Width="10*"/>
+                </Grid.ColumnDefinitions>
+                <Label Text="Information and Resources" Margin="0,0,0,0" Grid.Column="0" FontFamily="HankenGroteskBold"  FontSize="16" VerticalOptions="Center" TextColor="#031926" />
+                <Image  Source="backbutton.png" Grid.Column="1" Rotation="180" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="15" WidthRequest="15" />
+            </Grid>
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
+            </Frame.GestureRecognizers>
+        </Frame>
+
+        <Button x:Name="Deletebtn" Margin="20,50,20,0" FontSize="14" TextColor="Red" BackgroundColor="#ffe5e5" FontFamily="HankenGroteskBold" CornerRadius="10" Text="Delete Diet" Clicked="Deletebtn_Clicked" />
+        <Label HorizontalTextAlignment="Start" Text="If this Diet is deleted, you will lose all of your Diet Data" Margin="20,5,20,20" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="DarkGray"  />
+
+    </StackLayout>
+
+    </ScrollView>
+</ContentPage>

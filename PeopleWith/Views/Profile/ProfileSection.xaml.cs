@@ -655,6 +655,9 @@ public partial class ProfileSection : ContentPage
                                 Preferences.Default.Remove("NovoAllerg"); 
                                 Preferences.Default.Remove("NovoHeRep");
                                 Preferences.Default.Remove("NovoSched");
+                                Preferences.Default.Remove("NovoFood");
+                                Preferences.Default.Remove("NovoDiet");
+                                Preferences.Default.Remove("NovoInvest");
                             }
                         }
                        

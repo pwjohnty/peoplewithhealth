@@ -529,7 +529,7 @@ HorizontalOptions="Start" />
              >
                             <syncfusion:SfListView.HeightRequest>
                                 <OnPlatform x:TypeArguments="x:Double">
-                                    <On Platform="Android" Value="2200" />
+                                    <On Platform="Android" Value="2000" />
                                     <On Platform="iOS" Value="2000" />
                                 </OnPlatform>
                             </syncfusion:SfListView.HeightRequest>

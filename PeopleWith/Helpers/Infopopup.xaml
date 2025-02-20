@@ -219,11 +219,46 @@
                     <Label Text="PeopleWith helps you track, manage, and schedule your appointments efficiently." Grid.Row="2" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskRegular" />
                 </Grid>
 
+                <!-- Diet -->
+                <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" RowSpacing="10" x:Name="Dietinfo" IsVisible="false">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Text="A healthy diet is essential for maintaining overall well-being, providing the necessary nutrients for optimal body function." Grid.Row="0" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskRegular" />
+                    <Label Text="A balanced diet can help prevent various health conditions and improve energy levels, digestion, and immune function." Grid.Row="1" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskRegular" />
+                    <Label Text="PeopleWith enables you to track your diet and manage your nutritional intake effectively." Grid.Row="2" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskRegular" />
+                </Grid>
+
+
+                <!-- Investigations -->
+                <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" RowSpacing="10" x:Name="InvestigationInfo" IsVisible="false">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Text="Medical investigations play a crucial role in diagnosing and understanding health conditions by analyzing the human body." Grid.Row="0" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskRegular" />
+                    <Label Text="These include MRI scans, CT scans, X-rays, blood tests, and other diagnostic procedures performed in hospitals." Grid.Row="1" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskRegular" />
+                    <Label Text="PeopleWith enables you to track and manage your medical investigations for better health insights and care." Grid.Row="2" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskRegular" />
+                </Grid>
+
+
                 <BoxView x:Name="Boxtwo" BackgroundColor="LightBlue" Background="LightBlue" HeightRequest="1" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" />
 
 
                 <Button BackgroundColor="#e5f0fb" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" HorizontalOptions="FillAndExpand" TextColor="#031926" Clicked="Closebtn_Clicked" FontAttributes="None" x:Name="Closebtn" Margin="0,10,0,20" FontFamily="HankenGroteskRegular" Text="Close" />
 
+            
+            
+            
             <!--<Image Source="backbutton.png" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="End" Margin="0,0,0,6" HorizontalOptions="Start" HeightRequest="20" WidthRequest="20">
                 <Image.GestureRecognizers>
                     <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>

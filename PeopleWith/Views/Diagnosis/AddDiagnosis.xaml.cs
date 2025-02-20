@@ -166,7 +166,7 @@ public partial class AddDiagnosis : ContentPage
                 //popup.HeaderTitle = Diagnos.Title.ToString();
                 //popup.IsOpen = true;
                 //bool result = await viewModel.ShowPopupAsync();
-                bool result = await DisplayAlert("Confirm Diagnosis", "Are you sure you want to add " + Diagtitle + "?", "Ok", "cancel");
+                bool result = await DisplayAlert("Confirm Diagnosis", "Are you sure you want to add " + Diagtitle + "?", "Ok", "Cancel");
 
 
                 if (result)

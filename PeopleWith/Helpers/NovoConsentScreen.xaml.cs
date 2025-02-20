@@ -95,6 +95,24 @@ public partial class NovoConsentScreen : PopupPage
             Preferences.Default.Set("NovoSched", false);
             await Navigation.PushAsync(new MainSchedule(), false);
         }
+        else if (GetArea == "Food Diary")
+        {
+            Preferences.Default.Set("NovoFood", false);
+            //Change When added
+            //await Navigation.PushAsync(new MainSchedule(), false);
+        }
+        else if (GetArea == "Diet")
+        {
+            Preferences.Default.Set("NovoDiet", false);
+            await Navigation.PushAsync(new AllDiet(), false);
+        }
+        else if (GetArea == "NovoInvest")
+        {
+            Preferences.Default.Set("NovoInvest", false);
+            await Navigation.PushAsync(new AllInvestigations(), false);
+        }
+
+        
         await MopupService.Instance.RemovePageAsync(this);
     }
 
