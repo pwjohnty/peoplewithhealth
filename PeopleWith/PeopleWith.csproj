@@ -40,7 +40,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios'">
-	  <CodesignKey>Apple Development: Created via API (QB732BRMZC)</CodesignKey>
+	  <CodesignKey>Apple Development: Created via API (9AF7WV24ZX)</CodesignKey>
 	  <CodesignProvision>PeopleWith Development - Oct 2022</CodesignProvision>
 	  <ProvisioningType>manual</ProvisioningType>
 	</PropertyGroup>
@@ -52,15 +52,15 @@
 	<ItemGroup>
 		<!-- App Icon -->
 		<!--<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />-->
-		<MauiIcon Include="Resources\AppIcon\pwhealthicon.svg" Color="#FFFFFF" />
+		<MauiIcon Include="Resources\AppIcon\pwhealthicon.svg" ForegroundScale="0.75" Color="#FFFFFF" />
 
 		<!-- Splash Screen -->
-		<!--<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" Resize="False" BaseSize="128,128" />-->
+		<!--<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" Resize="False" ForegroundScale="0.75" BaseSize="128,128" />-->
 		<!--<MauiSplashScreen Include="Resources\Splash\splashpw.svg" Color="#FFFFFF" />-->
 
 		<MauiSplashScreen Condition="'$(TargetFramework)'=='net8.0-android'" Include="Resources\Splash\splashpw.svg" Color="#FFFFFF" />
 
-		<MauiSplashScreen Condition="'$(TargetFramework)'=='net8.0-ios'" BaseSize="128,128" Include="Resources\Splash\splashpw.svg" Color="#FFFFFF" />
+		<MauiSplashScreen Condition="'$(TargetFramework)'=='net8.0-ios'" Include="Resources\Splash\splashpw.svg" Color="#FFFFFF" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -459,7 +459,13 @@
 	  <MauiXaml Update="Views\Questionnaires\AndroidQuestionnaires.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Questionnaires\DashQuestionnaire.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Questionnaires\QuestionnairePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Questionnaires\SingleQuestion.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Schedule\AddAsRequiredDosage.xaml">

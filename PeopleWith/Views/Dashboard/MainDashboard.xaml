@@ -1278,6 +1278,168 @@ HorizontalOptions="Center" />
                 </tabView:SfTabItem.Content>
             </tabView:SfTabItem>
 
+            <tabView:SfTabItem x:Name="additionalquestionstab" IsVisible="False" Header="Questions" ImageSource="quesinactive.png" FontFamily="HankenGroteskRegular" FontSize="12" TextColor="#b3babd">
+                <tabView:SfTabItem.Content>
+                    <ScrollView VerticalScrollBarVisibility="Never">
+
+                        <StackLayout BackgroundColor="Transparent" Margin="0,20,0,0">
+
+
+                            <Label Text="Additonal Questions" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="26" Margin="20,10,20,0" HorizontalOptions="Start" />
+
+                            <Label Text="We capture additional questions based on your medical history, treatment details, and menstrual cycle. Please complete the following sections." TextColor="#031926" FontFamily="HankenGroteskRegular" FontSize="14" Margin="20,10,20,0" HorizontalOptions="Start" />
+
+
+                            <Image  HeightRequest="80" BackgroundColor="Transparent" Margin="0,20,0,0" HorizontalOptions="FillAndExpand" Source="listblue.png"/>
+
+
+                            <Frame  BackgroundColor="Transparent" InputTransparent="False" CornerRadius="10" BorderColor="#b3babd"  Padding="0" Margin="20,10,20,5">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <!--<RowDefinition>
+                             <RowDefinition.Height>
+                                 <OnPlatform x:TypeArguments="GridLength" Android="90" iOS="90"/>
+                             </RowDefinition.Height>
+                         </RowDefinition>-->
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90*"/>
+                                        <ColumnDefinition Width="10*"/>
+                                    </Grid.ColumnDefinitions>
+
+
+
+                                    <Label VerticalOptions="Start" Text="Medical History" HorizontalOptions="Start" HorizontalTextAlignment="Start" FontSize="18"  Margin="10,10,10,0"  TextColor="#031926" FontFamily="HankenGroteskBold"   Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="0"/>
+                                    <Label VerticalOptions="Start" HorizontalOptions="Start" IsVisible="True" HorizontalTextAlignment="Start" Text="Please complete the questionnaire related to the your medical history" FontSize="12"  Margin="10,0,10,10"  TextColor="#031926" FontFamily="HankenGroteskRegular"   Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1"/>
+
+                                    <Image Source="nextdarker.png" HeightRequest="15" WidthRequest="15" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"  VerticalOptions="Center" HorizontalOptions="CenterAndExpand" Margin="0,0,0,0" />
+
+
+                                    <!--<Frame CornerRadius="10" VerticalOptions="Start" BackgroundColor="White" BorderColor="White"   HorizontalOptions="FillAndExpand" HeightRequest="80" Margin="0,0,0,0" Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1"  Padding="0" HasShadow="False"  IsClippedToBounds="True" >
+<StackLayout>
+    </StackLayout>
+</Frame>-->
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_8"/>
+                                    </Grid.GestureRecognizers>
+                                </Grid>
+                            </Frame>
+
+                            <Frame  BackgroundColor="Transparent" InputTransparent="False" CornerRadius="10" BorderColor="#b3babd"  Padding="0" Margin="20,10,20,5">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <!--<RowDefinition>
+                             <RowDefinition.Height>
+                                 <OnPlatform x:TypeArguments="GridLength" Android="90" iOS="90"/>
+                             </RowDefinition.Height>
+                         </RowDefinition>-->
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90*"/>
+                                        <ColumnDefinition Width="10*"/>
+                                    </Grid.ColumnDefinitions>
+
+
+
+                                    <Label VerticalOptions="Start" Text="Treatment Information" HorizontalOptions="Start" HorizontalTextAlignment="Start" FontSize="18"  Margin="10,10,10,0"  TextColor="#031926" FontFamily="HankenGroteskBold"   Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="0"/>
+                                    <Label VerticalOptions="Start" HorizontalOptions="Start" IsVisible="True" HorizontalTextAlignment="Start" Text="Please complete the questionnaire related to the your treatment information" FontSize="12"  Margin="10,0,10,10"  TextColor="#031926" FontFamily="HankenGroteskRegular"   Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1"/>
+
+                                    <Image Source="nextdarker.png" HeightRequest="15" WidthRequest="15" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"  VerticalOptions="Center" HorizontalOptions="CenterAndExpand" Margin="0,0,0,0" />
+
+
+                                    <!--<Frame CornerRadius="10" VerticalOptions="Start" BackgroundColor="White" BorderColor="White"   HorizontalOptions="FillAndExpand" HeightRequest="80" Margin="0,0,0,0" Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1"  Padding="0" HasShadow="False"  IsClippedToBounds="True" >
+<StackLayout>
+    </StackLayout>
+</Frame>-->
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_10"/>
+                                    </Grid.GestureRecognizers>
+                                </Grid>
+                            </Frame>
+
+
+                            <Frame  BackgroundColor="Transparent" InputTransparent="False" CornerRadius="10" BorderColor="#b3babd"  Padding="0" Margin="20,10,20,5">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <!--<RowDefinition>
+                             <RowDefinition.Height>
+                                 <OnPlatform x:TypeArguments="GridLength" Android="90" iOS="90"/>
+                             </RowDefinition.Height>
+                         </RowDefinition>-->
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90*"/>
+                                        <ColumnDefinition Width="10*"/>
+                                    </Grid.ColumnDefinitions>
+
+
+
+                                    <Label VerticalOptions="Start" Text="Menstrual Cycle" HorizontalOptions="Start" HorizontalTextAlignment="Start" FontSize="18"  Margin="10,10,10,0"  TextColor="#031926" FontFamily="HankenGroteskBold"   Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="0"/>
+                                    <Label VerticalOptions="Start" HorizontalOptions="Start" IsVisible="True" HorizontalTextAlignment="Start" Text="Please complete the questionnaire related to the your menstrual cycle" FontSize="12"  Margin="10,0,10,10"  TextColor="#031926" FontFamily="HankenGroteskRegular"   Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1"/>
+
+                                    <Image Source="nextdarker.png" HeightRequest="15" WidthRequest="15" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"  VerticalOptions="Center" HorizontalOptions="CenterAndExpand" Margin="0,0,0,0" />
+
+                                    <!--<Frame CornerRadius="10" VerticalOptions="Start" BackgroundColor="White" BorderColor="White"   HorizontalOptions="FillAndExpand" HeightRequest="80" Margin="0,0,0,0" Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1"  Padding="0" HasShadow="False"  IsClippedToBounds="True" >
+<StackLayout>
+    </StackLayout>
+</Frame>-->
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_9"/>
+                                    </Grid.GestureRecognizers>
+                                </Grid>
+                            </Frame>
+
+
+                            <Frame  BackgroundColor="Transparent" InputTransparent="False" CornerRadius="10" BorderColor="#b3babd"  Padding="0" Margin="20,10,20,5">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <!--<RowDefinition>
+                             <RowDefinition.Height>
+                                 <OnPlatform x:TypeArguments="GridLength" Android="90" iOS="90"/>
+                             </RowDefinition.Height>
+                         </RowDefinition>-->
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90*"/>
+                                        <ColumnDefinition Width="10*"/>
+                                    </Grid.ColumnDefinitions>
+
+
+
+                                    <Label VerticalOptions="Start" Text="View Previous Responses" HorizontalOptions="Start" HorizontalTextAlignment="Start" FontSize="12"  Margin="10,10,10,10"  TextColor="#031926" FontFamily="HankenGroteskBold"   Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="0"/>
+                               
+                                    <Image Source="nextdarker.png" HeightRequest="15" WidthRequest="15" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"  VerticalOptions="Center" HorizontalOptions="CenterAndExpand" Margin="0,0,0,0" />
+
+                                    <!--<Frame CornerRadius="10" VerticalOptions="Start" BackgroundColor="White" BorderColor="White"   HorizontalOptions="FillAndExpand" HeightRequest="80" Margin="0,0,0,0" Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1"  Padding="0" HasShadow="False"  IsClippedToBounds="True" >
+<StackLayout>
+    </StackLayout>
+</Frame>-->
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_11"/>
+                                    </Grid.GestureRecognizers>
+                                </Grid>
+                            </Frame>
+
+
+
+                        </StackLayout>
+
+
+
+                    </ScrollView>
+
+                </tabView:SfTabItem.Content>
+            </tabView:SfTabItem>
+
+
             <tabView:SfTabItem x:Name="profiletab" Header="Browse" FontFamily="HankenGroteskRegular" ImageSource="dashbrowseinactive.png" FontSize="12" TextColor="#b3babd" >
                 <tabView:SfTabItem.Content>
                     <ScrollView VerticalScrollBarVisibility="Never">

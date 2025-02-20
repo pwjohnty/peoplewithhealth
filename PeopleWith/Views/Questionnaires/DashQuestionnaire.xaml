@@ -1,0 +1,1899 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PeopleWith.DashQuestionnaire" BackgroundColor="#f5f5f5" 
+                  HideSoftInputOnTapped="True"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
+     xmlns:local="clr-namespace:PeopleWith"
+             >
+    <ScrollView>
+    <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+
+            <StackLayout x:Name="loadingstack" VerticalOptions="CenterAndExpand" IsVisible="True">
+                <ActivityIndicator IsRunning="True"/>
+                <Label Text="Uploading Responses..." IsVisible="False" x:Name="loadinglbl" HorizontalOptions="Center" Margin="0,0,0,0" TextColor="Black" FontSize="12" FontAttributes="Bold"></Label>
+            </StackLayout>
+
+
+            <Label x:Name="titlelbl" IsVisible="False" FontFamily="HankenGroteskBold"  FontSize="26" Margin="20,20,0,0" TextColor="#031926" />
+
+            <Label Text="All data inputs are optional" IsVisible="False" x:Name="sublabel" FontFamily="HankenGroteskRegular"  FontSize="12" Margin="20,0,0,0" TextColor="#031926" />
+
+
+            <StackLayout IsVisible="False" x:Name="mcstack">
+            <Border Stroke="White"
+StrokeThickness="1" Margin="20,20,20,5" Background="White"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                <StackLayout Margin="0,10,0,10" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
+                  
+
+                    <Label x:Name="q1lbl" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,0,0,0" TextColor="#031926" />
+
+                    <Label x:Name="q1directions"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+
+                
+                        <buttons:SfRadioGroup Orientation="Horizontal" x:Name="q1answers" IsVisible="False" Margin="10,0,10,0" HorizontalOptions="Start">
+                  
+
+
+
+
+                                        
+
+                                                <local:ExtendedRadioButton 
+                                                      
+                                                        FontSize="12" x:Name="mc1ssyes"
+                                                        BackgroundColor="Transparent"
+                                                        TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                                        Margin="0,5,5,5" CheckedChanged="ExtendedRadioButton_CheckedChanged_1"
+                                                        Content="Yes" >
+
+
+                                                </local:ExtendedRadioButton>
+
+                                                <local:ExtendedRadioButton 
+                      
+                        FontSize="12" x:Name="mc1ssno"
+                        BackgroundColor="Transparent" CheckedChanged="ExtendedRadioButton_CheckedChanged"
+                        TextColor="#031926" FontFamily="HankenGroteskRegular"
+                        Margin="0,5,5,5"
+                        Content="No" >
+
+
+                                                </local:ExtendedRadioButton>
+
+                              
+                        </buttons:SfRadioGroup>
+               
+
+
+
+                    <Label x:Name="q1nolbl" IsVisible="False"  FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
+
+                    <Label x:Name="qno1directions" IsVisible="False"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+                    <buttons:SfRadioGroup Orientation="Horizontal" x:Name="q1noanswers" IsVisible="False"  Margin="10,0,10,0" HorizontalOptions="Start">
+
+
+
+
+
+
+
+                        <local:ExtendedRadioButton 
+                              
+                                FontSize="12" x:Name="mcno1yesss"
+                                BackgroundColor="Transparent"
+                                TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                Margin="0,5,5,5" 
+                                Content="Yes" >
+
+
+                        </local:ExtendedRadioButton>
+
+                        <local:ExtendedRadioButton 
+                      
+FontSize="12"
+BackgroundColor="Transparent"  x:Name="mcno1noss"
+TextColor="#031926" FontFamily="HankenGroteskRegular"
+Margin="0,5,5,5"
+Content="No" >
+
+
+                        </local:ExtendedRadioButton>
+
+
+                    </buttons:SfRadioGroup>
+
+
+                    <Label x:Name="q1yeslbl1" IsVisible="False"  FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
+
+                    <Label x:Name="q1yesdirections1" IsVisible="False"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+                    <buttons:SfRadioGroup>
+                        <CollectionView x:Name="q1yes1answers" IsVisible="False" >
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Vertical" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Stroke="#f1f1f1"
+StrokeThickness="1" Margin="10,5,10,5"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                                        <local:ExtendedRadioButton 
+                              
+                                FontSize="12"
+                                BackgroundColor="Transparent" CheckedChanged="ExtendedRadioButton_CheckedChanged_27"
+                                TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                Margin="0,5,5,5" 
+                                Content="{Binding .}" 
+                                            GroupName="RadioGroup1" >
+
+
+                                        </local:ExtendedRadioButton>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </buttons:SfRadioGroup>
+                  
+
+                    <Label x:Name="q1yeslbl2" IsVisible="False"  FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
+
+                    <Label x:Name="q1yesdirections2" IsVisible="False"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+                    <buttons:SfRadioGroup>
+                        <CollectionView x:Name="q1yes2answers" IsVisible="False" >
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Vertical" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Stroke="#f1f1f1"
+StrokeThickness="1" Margin="10,5,10,5"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                                        <local:ExtendedCheckbox CornerRadius="5"
+                                               
+                                               FontSize="12" 
+                                               CheckedColor="#031926" StateChanged="ExtendedCheckbox_StateChanged_8"
+                                               TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                               Margin="0,0,5,0"
+                                               Text="{Binding .}" />
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </buttons:SfRadioGroup>
+
+
+
+                </StackLayout>
+
+            </Border>
+
+
+
+                <Border Stroke="White"
+StrokeThickness="1" Margin="20,10,20,5" Background="White"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                    <StackLayout Margin="0,10,0,10" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
+
+
+                        <Label x:Name="q2lbl" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,0,0,0" TextColor="#031926" />
+
+                        <Label x:Name="q2directions"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+                        <buttons:SfRadioGroup Orientation="Horizontal" x:Name="q2answers" IsVisible="False" Margin="10,0,10,0" HorizontalOptions="Start">
+
+
+
+
+
+
+
+                            <local:ExtendedRadioButton 
+                                  
+                                    FontSize="12" x:Name="ssmcq2yes"
+                                    BackgroundColor="Transparent" CheckedChanged="ExtendedRadioButton_CheckedChanged_2"
+                                    TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                    Margin="0,5,5,5"
+                                    Content="Yes" >
+
+
+                            </local:ExtendedRadioButton>
+
+                            <local:ExtendedRadioButton 
+  
+    FontSize="12" x:Name="ssmcq2no"
+    BackgroundColor="Transparent" CheckedChanged="ExtendedRadioButton_CheckedChanged_3"
+    TextColor="#031926" FontFamily="HankenGroteskRegular"
+    Margin="0,5,5,5"
+    Content="No" >
+
+
+                            </local:ExtendedRadioButton>
+
+
+                            <local:ExtendedRadioButton 
+  
+    FontSize="12" x:Name="ssmcq2other"
+    BackgroundColor="Transparent" CheckedChanged="ExtendedRadioButton_CheckedChanged_4"
+    TextColor="#031926" FontFamily="HankenGroteskRegular"
+    Margin="0,5,5,5"
+    Content="Other (Specify)" >
+
+
+                            </local:ExtendedRadioButton>
+
+
+                        </buttons:SfRadioGroup>
+
+
+                        <Label x:Name="q2lblyes" IsVisible="False" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
+
+                        <Label x:Name="q2directionsyes" IsVisible="False"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+          
+                        <buttons:SfRadioGroup>
+                            <CollectionView x:Name="q2bothanswers" IsVisible="False" >
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Stroke="#f1f1f1"
+StrokeThickness="1" Margin="10,5,10,5"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                                            <local:ExtendedRadioButton 
+                              
+                                FontSize="12"
+                                BackgroundColor="Transparent"
+                                TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                Margin="0,5,5,5" CheckedChanged="ExtendedRadioButton_CheckedChanged_5"
+                                Content="{Binding .}" 
+                                            GroupName="RadioGroup1" >
+
+
+                                            </local:ExtendedRadioButton>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </buttons:SfRadioGroup>
+
+                        <Border Stroke="#f1f1f1"  x:Name="q2othertextborder" IsVisible="False"
+StrokeThickness="1" Margin="10,5,10,5" BackgroundColor="Transparent"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                            <local:ExtendedEditor x:Name="q2othertext" BackgroundColor="Transparent" Margin="10,0,10,0" AutoSize="TextChanges" HeightRequest="100" IsVisible="False" TextColor="#031926" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Add text here...." />
+                        </Border>
+                    </StackLayout>
+                </Border>
+
+
+
+                <Border Stroke="White"
+StrokeThickness="1" Margin="20,10,20,5" Background="White"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                    <StackLayout Margin="0,10,0,10" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
+
+
+                        <Label x:Name="q3lbl" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,0,0,0" TextColor="#031926" />
+
+                        <Label x:Name="q3directions"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+                        <buttons:SfRadioGroup Orientation="Horizontal" x:Name="q3answers" IsVisible="False" Margin="10,0,10,0" HorizontalOptions="Start">
+
+
+
+
+
+
+
+                            <local:ExtendedRadioButton 
+                                  
+                                    FontSize="12" x:Name="mc3ssyes"
+                                    BackgroundColor="Transparent" 
+                                    TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                    Margin="0,5,5,5" CheckedChanged="ExtendedRadioButton_CheckedChanged_6"
+                                    Content="Yes" >
+
+
+                            </local:ExtendedRadioButton>
+
+                            <local:ExtendedRadioButton 
+  
+    FontSize="12" x:Name="mc3ssno"
+    BackgroundColor="Transparent" CheckedChanged="ExtendedRadioButton_CheckedChanged_7"
+    TextColor="#031926" FontFamily="HankenGroteskRegular"
+    Margin="0,5,5,5"
+    Content="No" >
+
+
+                            </local:ExtendedRadioButton>
+
+
+         
+
+
+                        </buttons:SfRadioGroup>
+
+                        <Label x:Name="q3lblyes" IsVisible="False" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
+
+                        <Label x:Name="q3directionsyes" IsVisible="False"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+                        <buttons:SfRadioGroup Orientation="Horizontal" x:Name="q3answersyes" IsVisible="False" Margin="10,0,10,0" HorizontalOptions="Start">
+
+
+
+
+
+
+
+                            <local:ExtendedRadioButton 
+                                  
+                                    FontSize="12" x:Name="mc3ssyes1"
+                                    BackgroundColor="Transparent" 
+                                    TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                    Margin="0,5,5,5"
+                                    Content="Yes" >
+
+
+                            </local:ExtendedRadioButton>
+
+                            <local:ExtendedRadioButton 
+  
+    FontSize="12" x:Name="mc3ssno1"
+    BackgroundColor="Transparent" 
+    TextColor="#031926" FontFamily="HankenGroteskRegular"
+    Margin="0,5,5,5"
+    Content="No" >
+
+
+                            </local:ExtendedRadioButton>
+
+
+
+
+
+                        </buttons:SfRadioGroup>
+
+
+                        <Label x:Name="q3lblno1" IsVisible="False" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
+
+                        <Label x:Name="q3directionsno1" IsVisible="False"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+                        <buttons:SfRadioGroup>
+                            <CollectionView x:Name="q3answersno1" IsVisible="False" >
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Stroke="#f1f1f1"
+StrokeThickness="1" Margin="10,5,10,5"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                                            <local:ExtendedRadioButton 
+                              
+                                FontSize="12"
+                                BackgroundColor="Transparent"
+                                TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                Margin="0,5,5,5" CheckedChanged="ExtendedRadioButton_CheckedChanged_28"
+                                Content="{Binding .}" 
+                                            GroupName="RadioGroup2" >
+
+
+                                            </local:ExtendedRadioButton>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </buttons:SfRadioGroup>
+
+                        <Label x:Name="q3lblno2" IsVisible="False" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
+
+                        <Label x:Name="q3directionsno2" IsVisible="False"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+                        <buttons:SfRadioGroup>
+                            <CollectionView x:Name="q3answersno2" IsVisible="False" >
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Stroke="#f1f1f1"
+StrokeThickness="1" Margin="10,5,10,5"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                                            <local:ExtendedRadioButton 
+                              
+                                FontSize="12"
+                                BackgroundColor="Transparent"
+                                TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                Margin="0,5,5,5" CheckedChanged="ExtendedRadioButton_CheckedChanged_29"
+                                Content="{Binding .}" 
+                                            GroupName="RadioGroup3" >
+
+
+                                            </local:ExtendedRadioButton>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </buttons:SfRadioGroup>
+
+
+                        <Label x:Name="q3lblno3" IsVisible="False" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
+
+                        <Label x:Name="q3directionsno3" IsVisible="False"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+                        <buttons:SfRadioGroup>
+                            <CollectionView x:Name="q3answersno3" IsVisible="False" >
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Stroke="#f1f1f1"
+StrokeThickness="1" Margin="10,5,10,5"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                                            <local:ExtendedRadioButton 
+                              
+                                FontSize="12"
+                                BackgroundColor="Transparent" CheckedChanged="ExtendedRadioButton_CheckedChanged_30"
+                                TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                Margin="0,5,5,5" 
+                                Content="{Binding .}" 
+                                            GroupName="RadioGroup3" >
+
+
+                                            </local:ExtendedRadioButton>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </buttons:SfRadioGroup>
+
+                        <Label x:Name="q3lblno4" IsVisible="False" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
+
+                        <Label x:Name="q3directionsno4" IsVisible="False"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+                        <buttons:SfRadioGroup>
+                            <CollectionView x:Name="q3answersno4" IsVisible="False" >
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Stroke="#f1f1f1"
+StrokeThickness="1" Margin="10,5,10,5"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                                            <local:ExtendedRadioButton 
+                              
+                                FontSize="12"
+                                BackgroundColor="Transparent" CheckedChanged="ExtendedRadioButton_CheckedChanged_8"
+                                TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                Margin="0,5,5,5" 
+                                Content="{Binding .}" 
+                                            GroupName="RadioGroup4" >
+
+
+                                            </local:ExtendedRadioButton>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </buttons:SfRadioGroup>
+
+                        <Label x:Name="q3lblno5" IsVisible="False" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
+
+                        <Label x:Name="q3directionsno5" IsVisible="False"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+                        <buttons:SfRadioGroup>
+                            <CollectionView x:Name="q3answersno5" IsVisible="False" >
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Stroke="#f1f1f1"
+StrokeThickness="1" Margin="10,5,10,5"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                                            <local:ExtendedRadioButton 
+                              
+                                FontSize="12"
+                                BackgroundColor="Transparent" CheckedChanged="ExtendedRadioButton_CheckedChanged_9"
+                                TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                Margin="0,5,5,5" 
+                                Content="{Binding .}" 
+                                            GroupName="RadioGroup5" >
+
+
+                                            </local:ExtendedRadioButton>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </buttons:SfRadioGroup>
+
+                        <Label x:Name="q3lblno6" IsVisible="False" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
+
+                        <Label x:Name="q3directionsno6" IsVisible="False"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+                        <buttons:SfRadioGroup>
+                            <CollectionView x:Name="q3answersno6" IsVisible="False" >
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Stroke="#f1f1f1"
+StrokeThickness="1" Margin="10,5,10,5"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                                            <local:ExtendedRadioButton 
+                              
+                                FontSize="12"
+                                BackgroundColor="Transparent"
+                                TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                Margin="0,5,5,5" CheckedChanged="ExtendedRadioButton_CheckedChanged_31"
+                                Content="{Binding .}" 
+                                            GroupName="RadioGroup6" >
+
+
+                                            </local:ExtendedRadioButton>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </buttons:SfRadioGroup>
+
+
+
+
+                    </StackLayout>
+                </Border>
+
+
+                <Border Stroke="White"
+StrokeThickness="1" Margin="20,10,20,5" Background="White"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                    <StackLayout Margin="0,10,0,10" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
+
+
+                        <Label x:Name="q4lbl" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,0,0,0" TextColor="#031926" />
+
+                        <Label x:Name="q4directions"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+                        <Border Stroke="#f1f1f1"  x:Name="q4entrytextborder" IsVisible="False"
+StrokeThickness="1" Margin="10,5,10,5" BackgroundColor="Transparent"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                            <local:ExtendedEntry Keyboard="Telephone" x:Name="q4entrytext" BackgroundColor="Transparent" Margin="10,0,10,0" IsVisible="False" TextColor="#031926" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Age at last menstural cycle" />
+                        </Border>
+
+
+                    </StackLayout>
+                </Border>
+
+
+
+                <Border Stroke="White"
+StrokeThickness="1" Margin="20,10,20,5" Background="White"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                    <StackLayout Margin="0,10,0,10" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
+
+
+                        <Label x:Name="q5lbl" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,0,0,0" TextColor="#031926" />
+
+                        <Label x:Name="q5directions"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+                        <DatePicker x:Name="datePicker" IsVisible="False"
+            Format="dd/MM/yyyy" Margin="10,0,10,0"
+            />
+                    </StackLayout>
+                </Border>
+
+
+            </StackLayout>
+        
+        
+        
+        
+        
+        
+        
+        
+
+            <StackLayout IsVisible="False" x:Name="treatmentstack">
+
+                <Border Stroke="White"
+StrokeThickness="1" Margin="20,20,20,5" Background="White"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                    <StackLayout Margin="0,10,0,10" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
+
+
+                        <Label x:Name="t1lbl" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,0,0,0" TextColor="#031926" />
+
+                        <Label x:Name="t1directions"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+                        <buttons:SfRadioGroup>
+                            <CollectionView x:Name="t1answers" IsVisible="False" >
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Stroke="#f1f1f1"
+StrokeThickness="1" Margin="10,5,10,5"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                                            <local:ExtendedCheckbox CornerRadius="5"
+                                               
+                                               FontSize="12" 
+                                               CheckedColor="#031926" StateChanged="ExtendedCheckbox_StateChanged"
+                                               TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                               Margin="0,0,5,0"
+                                               Text="{Binding .}" />
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </buttons:SfRadioGroup>
+
+
+                        <Border Stroke="#f1f1f1"  x:Name="t1textborder" IsVisible="False"
+StrokeThickness="1" Margin="10,5,10,5" BackgroundColor="Transparent"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                            <local:ExtendedEditor x:Name="t1textentry" BackgroundColor="Transparent" Margin="10,0,10,0" AutoSize="TextChanges" HeightRequest="100" IsVisible="False" TextColor="#031926" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Add text here...." />
+                        </Border>
+
+
+
+
+
+
+                    </StackLayout>
+                </Border>
+
+
+                <Border Stroke="White"
+StrokeThickness="1" Margin="20,20,20,5" Background="White"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                    <StackLayout Margin="0,10,0,10" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
+
+                        <Label x:Name="t2lbl" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,0,0,0" TextColor="#031926" />
+
+                        <Label x:Name="t2directions"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+                        <buttons:SfRadioGroup>
+                            <CollectionView x:Name="t2answers" IsVisible="False" >
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Stroke="#f1f1f1"
+StrokeThickness="1" Margin="10,5,10,5"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                                            <local:ExtendedCheckbox CornerRadius="5"
+                                               
+                                               FontSize="12" 
+                                               CheckedColor="#031926" StateChanged="ExtendedCheckbox_StateChanged_1"
+                                               TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                               Margin="0,0,5,0"
+                                               Text="{Binding .}" />
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </buttons:SfRadioGroup>
+
+
+                        <Border Stroke="#f1f1f1"  x:Name="t2textborder" IsVisible="False"
+StrokeThickness="1" Margin="10,5,10,5" BackgroundColor="Transparent"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                            <local:ExtendedEditor x:Name="t2textentry" BackgroundColor="Transparent" Margin="10,0,10,0" AutoSize="TextChanges" HeightRequest="100" IsVisible="False" TextColor="#031926" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Add text here...." />
+                        </Border>
+
+                    </StackLayout>
+                </Border>
+
+
+                <Border Stroke="White"
+StrokeThickness="1" Margin="20,20,20,5" Background="White"
+StrokeShape="RoundRectangle 10,10,10,10" x:Name="tq3border" IsVisible="False"
+HorizontalOptions="FillAndExpand">
+                    <StackLayout Margin="0,10,0,10" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
+
+                        <Label x:Name="t3lbl" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,0,0,0" TextColor="#031926" />
+
+                        <Label x:Name="t3directions"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+                        <buttons:SfRadioGroup>
+                            <CollectionView x:Name="t3answers" IsVisible="False" >
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Stroke="#f1f1f1"
+StrokeThickness="1" Margin="10,5,10,5"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                                            <local:ExtendedCheckbox CornerRadius="5"
+                                               
+                                               FontSize="12" 
+                                               CheckedColor="#031926" StateChanged="ExtendedCheckbox_StateChanged_2"
+                                               TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                               Margin="0,0,5,0"
+                                               Text="{Binding .}" />
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </buttons:SfRadioGroup>
+
+
+                        <Border Stroke="#f1f1f1"  x:Name="t3textborder" IsVisible="False"
+StrokeThickness="1" Margin="10,5,10,5" BackgroundColor="Transparent"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                            <local:ExtendedEditor x:Name="t3textentry" BackgroundColor="Transparent" Margin="10,0,10,0" AutoSize="TextChanges" HeightRequest="100" IsVisible="False" TextColor="#031926" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Add text here...." />
+                        </Border>
+
+                    </StackLayout>
+                </Border>
+
+                <Border Stroke="White"
+StrokeThickness="1" Margin="20,20,20,5" Background="White"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                    <StackLayout Margin="0,10,0,10" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
+
+                        <Label x:Name="t4lbl" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,0,0,0" TextColor="#031926" />
+
+                        <Label x:Name="t4directions"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+                        <buttons:SfRadioGroup Orientation="Horizontal" x:Name="t4answers" IsVisible="False" Margin="10,0,10,0" HorizontalOptions="Start">
+
+
+
+
+
+
+
+                            <local:ExtendedRadioButton 
+                              
+                                FontSize="12"
+                                BackgroundColor="Transparent" 
+                                TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                Margin="0,5,5,5" CheckedChanged="ExtendedRadioButton_CheckedChanged_12"
+                                Content="Yes" >
+
+
+                            </local:ExtendedRadioButton>
+
+                            <local:ExtendedRadioButton 
+  
+FontSize="12"
+BackgroundColor="Transparent" 
+TextColor="#031926" FontFamily="HankenGroteskRegular"
+Margin="0,5,5,5" CheckedChanged="ExtendedRadioButton_CheckedChanged_11"
+Content="No" >
+
+
+                            </local:ExtendedRadioButton>
+
+
+                            <local:ExtendedRadioButton 
+  
+FontSize="12"
+BackgroundColor="Transparent" 
+TextColor="#031926" FontFamily="HankenGroteskRegular"
+Margin="0,5,5,5" CheckedChanged="ExtendedRadioButton_CheckedChanged_10"
+Content="Other (Specify)" >
+
+
+                            </local:ExtendedRadioButton>
+
+
+                        </buttons:SfRadioGroup>
+
+
+                        <Border Stroke="#f1f1f1"  x:Name="t4textborder" IsVisible="False"
+StrokeThickness="1" Margin="10,5,10,5" BackgroundColor="Transparent"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                            <local:ExtendedEditor x:Name="t4textentry" BackgroundColor="Transparent" Margin="10,0,10,0" AutoSize="TextChanges" HeightRequest="100" IsVisible="False" TextColor="#031926" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Add text here...." />
+                        </Border>
+
+                    </StackLayout>
+                </Border>
+
+                <Border Stroke="White" x:Name="t4yes" IsVisible="False"
+StrokeThickness="1" Margin="20,20,20,5" Background="White"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                    <StackLayout Margin="0,10,0,10" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
+
+                        <Label x:Name="t4lblyes" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,0,0,0" TextColor="#031926" />
+
+                        <Label x:Name="t4directionsyes"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+                        <buttons:SfRadioGroup>
+                            <CollectionView x:Name="t4answersyes">
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Stroke="#f1f1f1"
+StrokeThickness="1" Margin="10,5,10,5"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                                            <local:ExtendedCheckbox CornerRadius="5"
+                                               
+                                               FontSize="12" 
+                                               CheckedColor="#031926" StateChanged="ExtendedCheckbox_StateChanged_3"
+                                               TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                               Margin="0,0,5,0"
+                                               Text="{Binding .}" />
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </buttons:SfRadioGroup>
+
+
+                        <Border Stroke="#f1f1f1"  x:Name="t4textborderyes" IsVisible="False"
+StrokeThickness="1" Margin="10,5,10,5" BackgroundColor="Transparent"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                            <local:ExtendedEditor x:Name="t4textentryyes" BackgroundColor="Transparent" Margin="10,0,10,0" AutoSize="TextChanges" HeightRequest="100" IsVisible="False" TextColor="#031926" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Add text here...." />
+                        </Border>
+
+                    </StackLayout>
+                </Border>
+
+
+                <Border Stroke="White"
+StrokeThickness="1" Margin="20,20,20,5" Background="White"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                    <StackLayout Margin="0,10,0,10" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
+
+                        <Label x:Name="t5lbl" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,0,0,0" TextColor="#031926" />
+
+                        <Label x:Name="t5directions"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+                        <buttons:SfRadioGroup Orientation="Horizontal" x:Name="t5answers" IsVisible="False" Margin="10,0,10,0" HorizontalOptions="Start">
+
+
+
+
+
+
+
+                            <local:ExtendedRadioButton 
+                              
+                                FontSize="12"
+                                BackgroundColor="Transparent" 
+                                TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                Margin="0,5,5,5" CheckedChanged="ExtendedRadioButton_CheckedChanged_13"
+                                Content="Yes" >
+
+
+                            </local:ExtendedRadioButton>
+
+                            <local:ExtendedRadioButton 
+  
+FontSize="12"
+BackgroundColor="Transparent" 
+TextColor="#031926" FontFamily="HankenGroteskRegular"
+Margin="0,5,5,5" CheckedChanged="ExtendedRadioButton_CheckedChanged_14"
+Content="No" >
+
+
+                            </local:ExtendedRadioButton>
+
+
+
+
+                        </buttons:SfRadioGroup>
+
+
+
+                        <Label x:Name="t5lblyes" IsVisible="False" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
+
+                        <Label x:Name="t5directionsyes" IsVisible="False" FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+                        <Border Stroke="#f1f1f1"  x:Name="t5textborderyes" IsVisible="False"
+StrokeThickness="1" Margin="10,5,10,5" BackgroundColor="Transparent"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                            <local:ExtendedEditor x:Name="t5yesentry" BackgroundColor="Transparent" Margin="10,0,10,0" AutoSize="TextChanges" HeightRequest="100" IsVisible="False" TextColor="#031926" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Add text here...." />
+                        </Border>
+
+
+                    </StackLayout>
+                </Border>
+
+
+                <Border Stroke="White"
+StrokeThickness="1" Margin="20,20,20,5" Background="White"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                    <StackLayout Margin="0,10,0,10" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
+
+                        <Label x:Name="t6lbl" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,0,0,0" TextColor="#031926" />
+
+                        <Label x:Name="t6directions"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+
+                        <buttons:SfRadioGroup>
+                            <CollectionView x:Name="t6answersyes" IsVisible="False" >
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Stroke="#f1f1f1"
+StrokeThickness="1" Margin="10,5,10,5"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                                            <local:ExtendedRadioButton 
+                              
+                                FontSize="12"
+                                BackgroundColor="Transparent" CheckedChanged="ExtendedRadioButton_CheckedChanged_15"
+                                TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                Margin="0,5,5,5" 
+                                Content="{Binding .}" 
+                                            GroupName="t6" >
+
+
+                                            </local:ExtendedRadioButton>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </buttons:SfRadioGroup>
+
+
+
+
+                        <Border Stroke="#f1f1f1"  x:Name="t6textborderyes" IsVisible="False"
+StrokeThickness="1" Margin="10,5,10,5" BackgroundColor="Transparent"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                            <local:ExtendedEditor x:Name="t6yesentry" BackgroundColor="Transparent" Margin="10,0,10,0" AutoSize="TextChanges" HeightRequest="100" IsVisible="False" TextColor="#031926" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Add text here...." />
+                        </Border>
+
+
+                    </StackLayout>
+                </Border>
+
+
+                <Border Stroke="White"
+StrokeThickness="1" Margin="20,20,20,5" Background="White"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                    <StackLayout Margin="0,10,0,10" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
+
+                        <Label x:Name="t7lbl" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,0,0,0" TextColor="#031926" />
+
+                        <Label x:Name="t7directions"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+
+                     
+
+
+
+                        <Border Stroke="#f1f1f1"  x:Name="t7textborder" 
+StrokeThickness="1" Margin="10,5,10,5" BackgroundColor="Transparent"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                            <local:ExtendedEditor x:Name="t7entry" BackgroundColor="Transparent" Margin="10,0,10,0" AutoSize="TextChanges" HeightRequest="100" TextColor="#031926" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Add text here...." />
+                        </Border>
+
+
+                    </StackLayout>
+                </Border>
+
+
+                <Border Stroke="White"
+StrokeThickness="1" Margin="20,20,20,5" Background="White"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                    <StackLayout Margin="0,10,0,10" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
+
+                        <Label x:Name="t8lbl" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,0,0,0" TextColor="#031926" />
+
+                        <Label x:Name="t8directions"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+
+                        <buttons:SfRadioGroup>
+                            <CollectionView x:Name="t8answers" IsVisible="False" >
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Stroke="#f1f1f1"
+StrokeThickness="1" Margin="10,5,10,5"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                                            <local:ExtendedRadioButton 
+                              
+                                FontSize="12"
+                                BackgroundColor="Transparent" CheckedChanged="ExtendedRadioButton_CheckedChanged_16"
+                                TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                Margin="0,5,5,5" 
+                                Content="{Binding .}" 
+                                            GroupName="t6" >
+
+
+                                            </local:ExtendedRadioButton>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </buttons:SfRadioGroup>
+
+
+
+
+                        <Label x:Name="t8lblyes1" IsVisible="False" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
+
+                        <Label x:Name="t8directionsyes1" IsVisible="False" FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+                        <buttons:SfRadioGroup>
+                            <CollectionView x:Name="t8answersyes1" IsVisible="False" >
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Stroke="#f1f1f1"
+StrokeThickness="1" Margin="10,5,10,5"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                                            <local:ExtendedRadioButton 
+                              
+                                FontSize="12"
+                                BackgroundColor="Transparent" 
+                                TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                Margin="0,5,5,5" CheckedChanged="ExtendedRadioButton_CheckedChanged_17"
+                                Content="{Binding .}" 
+                                            GroupName="t6yes1" >
+
+
+                                            </local:ExtendedRadioButton>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </buttons:SfRadioGroup>
+
+
+                        <Border Stroke="#f1f1f1"  x:Name="t8textborderyes" IsVisible="False"
+StrokeThickness="1" Margin="10,5,10,5" BackgroundColor="Transparent"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                            <local:ExtendedEditor x:Name="t8yesentry" BackgroundColor="Transparent" Margin="10,0,10,0" AutoSize="TextChanges" HeightRequest="100" IsVisible="False" TextColor="#031926" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Add text here...." />
+                        </Border>
+
+
+
+                        <Label x:Name="t8lblyes2" IsVisible="False" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
+
+                        <Label x:Name="t8directionsyes2" IsVisible="False" FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+                        <buttons:SfRadioGroup>
+                            <CollectionView x:Name="t8answersyes2" IsVisible="False" >
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Stroke="#f1f1f1"
+StrokeThickness="1" Margin="10,5,10,5"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                                            <local:ExtendedCheckbox CornerRadius="5"
+                                               
+                                               FontSize="12" 
+                                               CheckedColor="#031926" StateChanged="ExtendedCheckbox_StateChanged_4"
+                                               TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                               Margin="0,0,5,0"
+                                               Text="{Binding .}" />
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </buttons:SfRadioGroup>
+
+
+                        <Border Stroke="#f1f1f1"  x:Name="t8textborder2" IsVisible="False"
+StrokeThickness="1" Margin="10,5,10,5" BackgroundColor="Transparent"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                            <local:ExtendedEditor x:Name="t8textentry2" BackgroundColor="Transparent" Margin="10,0,10,0" AutoSize="TextChanges" HeightRequest="100" IsVisible="False" TextColor="#031926" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Add text here...." />
+                        </Border>
+
+
+
+
+                    </StackLayout>
+                </Border>
+
+
+
+                <Border Stroke="White"
+StrokeThickness="1" Margin="20,20,20,5" Background="White"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                    <StackLayout Margin="0,10,0,10" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
+
+                        <Label x:Name="t9lbl" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,0,0,0" TextColor="#031926" />
+
+                        <Label x:Name="t9directions"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+
+
+
+
+
+                        <Border Stroke="#f1f1f1"  x:Name="t9textborder" 
+StrokeThickness="1" Margin="10,5,10,5" BackgroundColor="Transparent"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                            <local:ExtendedEditor x:Name="t9entry" BackgroundColor="Transparent" Margin="10,0,10,0" AutoSize="TextChanges" HeightRequest="100" TextColor="#031926" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Add text here...." />
+                        </Border>
+
+
+                    </StackLayout>
+                </Border>
+
+
+                <Border Stroke="White"
+StrokeThickness="1" Margin="20,20,20,5" Background="White"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                    <StackLayout Margin="0,10,0,10" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
+
+                        <Label x:Name="t10lbl" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,0,0,0" TextColor="#031926" />
+
+                        <Label x:Name="t10directions"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+
+                        <buttons:SfRadioGroup>
+                            <CollectionView x:Name="t10answers" IsVisible="False" >
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Stroke="#f1f1f1"
+StrokeThickness="1" Margin="10,5,10,5"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                                            <local:ExtendedRadioButton 
+                              
+                                FontSize="12"
+                                BackgroundColor="Transparent" CheckedChanged="ExtendedRadioButton_CheckedChanged_18"
+                                TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                Margin="0,5,5,5" 
+                                Content="{Binding .}" 
+                                            GroupName="t10" >
+
+
+                                            </local:ExtendedRadioButton>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </buttons:SfRadioGroup>
+
+
+
+
+                        <Label x:Name="t10lblyes1" IsVisible="False" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
+
+                        <Label x:Name="t10directionsyes1" IsVisible="False" FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+                        <buttons:SfRadioGroup>
+                            <CollectionView x:Name="t10answersyes1" IsVisible="False" >
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Stroke="#f1f1f1"
+StrokeThickness="1" Margin="10,5,10,5"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                                            <local:ExtendedRadioButton 
+                              
+FontSize="12"
+BackgroundColor="Transparent" CheckedChanged="ExtendedRadioButton_CheckedChanged_32"
+TextColor="#031926" FontFamily="HankenGroteskRegular"
+Margin="0,5,5,5" 
+Content="{Binding .}" 
+            GroupName="t101" >
+
+
+                                            </local:ExtendedRadioButton>
+                                            <!--<local:ExtendedCheckbox CornerRadius="5"
+                                               
+                                               FontSize="12" 
+                                               CheckedColor="#031926" StateChanged="ExtendedCheckbox_StateChanged_5"
+                                               TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                               Margin="0,0,5,0"
+                                               Text="{Binding .}" />-->
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </buttons:SfRadioGroup>
+
+
+                        <Label x:Name="t10lblyes2" IsVisible="False" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,10,0" TextColor="#031926" />
+
+                        <Label x:Name="t10directionsyes2" IsVisible="False"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+                        <Border Stroke="#f1f1f1"  x:Name="t10textborderyes2" IsVisible="False"
+StrokeThickness="1" Margin="10,5,10,5" BackgroundColor="Transparent"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                            <local:ExtendedEntry x:Name="t10yesentry2" BackgroundColor="Transparent" Margin="10,10,10,10"  Keyboard="Numeric" IsVisible="False" TextColor="#031926" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Enter Amount" />
+                        </Border>
+
+
+
+                        <Border Stroke="#f1f1f1"  x:Name="t10textborderyes" IsVisible="False"
+StrokeThickness="1" Margin="10,5,10,5" BackgroundColor="Transparent"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                            <local:ExtendedEditor x:Name="t10yesentry" BackgroundColor="Transparent" Margin="10,0,10,0" AutoSize="TextChanges" HeightRequest="100" IsVisible="False" TextColor="#031926" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Add text here...." />
+                        </Border>
+
+
+
+
+                    </StackLayout>
+                </Border>
+                
+                
+
+
+                <Border Stroke="White"
+StrokeThickness="1" Margin="20,20,20,5" Background="White"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                    <StackLayout Margin="0,10,0,10" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
+
+                        <Label x:Name="t11lbl" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,0,0,0" TextColor="#031926" />
+
+                        <Label x:Name="t11directions"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+
+                        <buttons:SfRadioGroup>
+                            <CollectionView x:Name="t11answers" IsVisible="False" >
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Stroke="#f1f1f1"
+StrokeThickness="1" Margin="10,5,10,5"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                                            <local:ExtendedRadioButton 
+                              
+                                FontSize="12"
+                                BackgroundColor="Transparent" CheckedChanged="ExtendedRadioButton_CheckedChanged_19"
+                                TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                Margin="0,5,5,5" 
+                                Content="{Binding .}" 
+                                            GroupName="t11" >
+
+
+                                            </local:ExtendedRadioButton>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </buttons:SfRadioGroup>
+
+
+
+                        <Label x:Name="t11lblyes1" IsVisible="False" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
+
+                        <Label x:Name="t11directionsyes1" IsVisible="False" FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+                        <Border Stroke="#f1f1f1"  x:Name="t11textborderyes" IsVisible="False"
+StrokeThickness="1" Margin="10,5,10,5" BackgroundColor="Transparent"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                            <local:ExtendedEditor x:Name="t11yesentry" BackgroundColor="Transparent" Margin="10,0,10,0" AutoSize="TextChanges" HeightRequest="100" IsVisible="False" TextColor="#031926" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Add text here...." />
+                        </Border>
+
+
+
+                        <Label x:Name="t11lblyes2" IsVisible="False" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
+
+                        <Label x:Name="t11directionsyes2" IsVisible="False" FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+                        <buttons:SfRadioGroup>
+                            <CollectionView x:Name="t11answersyes2" IsVisible="False" >
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Stroke="#f1f1f1"
+StrokeThickness="1" Margin="10,5,10,5"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                                            <local:ExtendedRadioButton 
+                              
+                                FontSize="12"
+                                BackgroundColor="Transparent" CheckedChanged="ExtendedRadioButton_CheckedChanged_20"
+                                TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                Margin="0,5,5,5" 
+                                Content="{Binding .}" 
+                                            GroupName="t11yes2" >
+
+
+                                            </local:ExtendedRadioButton>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </buttons:SfRadioGroup>
+
+
+                        <Border Stroke="#f1f1f1"  x:Name="t11textborderyes2" IsVisible="False"
+StrokeThickness="1" Margin="10,5,10,5" BackgroundColor="Transparent"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                            <local:ExtendedEditor x:Name="t11yesentry2" BackgroundColor="Transparent" Margin="10,0,10,0" AutoSize="TextChanges" HeightRequest="100" IsVisible="False" TextColor="#031926" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Add text here...." />
+                        </Border>
+
+
+                    </StackLayout>
+                </Border>
+
+
+                <Border Stroke="White"
+StrokeThickness="1" Margin="20,20,20,5" Background="White"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                    <StackLayout Margin="0,10,0,10" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
+
+                        <Label x:Name="t12lbl" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,0,0,0" TextColor="#031926" />
+
+                        <Label x:Name="t12directions"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+
+                        <buttons:SfRadioGroup>
+                            <CollectionView x:Name="t12answers" IsVisible="False" >
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Stroke="#f1f1f1"
+StrokeThickness="1" Margin="10,5,10,5"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                                            <local:ExtendedRadioButton 
+                              
+                                FontSize="12"
+                                BackgroundColor="Transparent" CheckedChanged="ExtendedRadioButton_CheckedChanged_21"
+                                TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                Margin="0,5,5,5" 
+                                Content="{Binding .}" 
+                                            GroupName="t12" >
+
+
+                                            </local:ExtendedRadioButton>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </buttons:SfRadioGroup>
+
+
+
+                        <Label x:Name="t12lblyes1" IsVisible="False" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
+
+                        <Label x:Name="t12directionsyes1" IsVisible="False" FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+                        <buttons:SfRadioGroup>
+                            <CollectionView x:Name="t12answersyes1" IsVisible="False" >
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Stroke="#f1f1f1"
+StrokeThickness="1" Margin="10,5,10,5"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                                            <local:ExtendedRadioButton 
+                              
+                                FontSize="12"
+                                BackgroundColor="Transparent" CheckedChanged="ExtendedRadioButton_CheckedChanged_22"
+                                TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                Margin="0,5,5,5" 
+                                Content="{Binding .}" 
+                                            GroupName="t12yes1" >
+
+
+                                            </local:ExtendedRadioButton>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </buttons:SfRadioGroup>
+
+
+                        <Border Stroke="#f1f1f1"  x:Name="t12textborderyes" IsVisible="False"
+StrokeThickness="1" Margin="10,5,10,5" BackgroundColor="Transparent"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                            <local:ExtendedEditor x:Name="t12yesentry" BackgroundColor="Transparent" Margin="10,0,10,0" AutoSize="TextChanges" HeightRequest="100" IsVisible="False" TextColor="#031926" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Add text here...." />
+                        </Border>
+
+
+
+                        <Label x:Name="t12lblyes2" IsVisible="False" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
+
+                        <Label x:Name="t12directionsyes2" IsVisible="False" FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+                        <buttons:SfRadioGroup>
+                            <CollectionView x:Name="t12answersyes2" IsVisible="False" >
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Stroke="#f1f1f1"
+StrokeThickness="1" Margin="10,5,10,5"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                                            <local:ExtendedRadioButton 
+                              
+                                FontSize="12"
+                                BackgroundColor="Transparent" 
+                                TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                Margin="0,5,5,5" CheckedChanged="ExtendedRadioButton_CheckedChanged_23"
+                                Content="{Binding .}" 
+                                            GroupName="t12yes2" >
+
+
+                                            </local:ExtendedRadioButton>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </buttons:SfRadioGroup>
+
+
+                        <Border Stroke="#f1f1f1"  x:Name="t12textborderyes2" IsVisible="False"
+StrokeThickness="1" Margin="10,5,10,5" BackgroundColor="Transparent"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                            <local:ExtendedEditor x:Name="t12yesentry2" BackgroundColor="Transparent" Margin="10,0,10,0" AutoSize="TextChanges" HeightRequest="100" IsVisible="False" TextColor="#031926" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Add text here...." />
+                        </Border>
+
+
+                    </StackLayout>
+                </Border>
+
+
+                <Border Stroke="White"
+StrokeThickness="1" Margin="20,20,20,5" Background="White"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                    <StackLayout Margin="0,10,0,10" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
+
+                        <Label x:Name="t13lbl" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,0,0,0" TextColor="#031926" />
+
+                        <Label x:Name="t13directions"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+
+                        <buttons:SfRadioGroup>
+                            <CollectionView x:Name="t13answers" IsVisible="False" >
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Stroke="#f1f1f1"
+StrokeThickness="1" Margin="10,5,10,5"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                                            <local:ExtendedRadioButton 
+                              
+                                FontSize="12"
+                                BackgroundColor="Transparent" CheckedChanged="ExtendedRadioButton_CheckedChanged_24"
+                                TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                Margin="0,5,5,5" 
+                                Content="{Binding .}" 
+                                            GroupName="t13" >
+
+
+                                            </local:ExtendedRadioButton>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </buttons:SfRadioGroup>
+
+
+
+                        <Label x:Name="t13lblyes1" IsVisible="False" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
+
+                        <Label x:Name="t13directionsyes1" IsVisible="False" FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+                        <buttons:SfRadioGroup>
+                            <CollectionView x:Name="t13answersyes1" IsVisible="False" >
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Stroke="#f1f1f1"
+StrokeThickness="1" Margin="10,5,10,5"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                                            <local:ExtendedRadioButton 
+                              
+                                FontSize="12"
+                                BackgroundColor="Transparent" CheckedChanged="ExtendedRadioButton_CheckedChanged_25"
+                                TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                Margin="0,5,5,5" 
+                                Content="{Binding .}" 
+                                            GroupName="t13yes1" >
+
+
+                                            </local:ExtendedRadioButton>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </buttons:SfRadioGroup>
+
+
+                        <Border Stroke="#f1f1f1"  x:Name="t13textborderyes" IsVisible="False"
+StrokeThickness="1" Margin="10,5,10,5" BackgroundColor="Transparent"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                            <local:ExtendedEditor x:Name="t13yesentry" BackgroundColor="Transparent" Margin="10,0,10,0" AutoSize="TextChanges" HeightRequest="100" IsVisible="False" TextColor="#031926" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Add text here...." />
+                        </Border>
+
+
+
+                        <Label x:Name="t13lblyes2" IsVisible="False" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
+
+                        <Label x:Name="t13directionsyes2" IsVisible="False" FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+                        <buttons:SfRadioGroup>
+                            <CollectionView x:Name="t13answersyes2" IsVisible="False" >
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Stroke="#f1f1f1"
+StrokeThickness="1" Margin="10,5,10,5"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                                            <local:ExtendedRadioButton 
+                              
+                                FontSize="12"
+                                BackgroundColor="Transparent" 
+                                TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                Margin="0,5,5,5" CheckedChanged="ExtendedRadioButton_CheckedChanged_26"
+                                Content="{Binding .}" 
+                                            GroupName="t13yes2" >
+
+
+                                            </local:ExtendedRadioButton>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </buttons:SfRadioGroup>
+
+
+                        <Border Stroke="#f1f1f1"  x:Name="t13textborderyes2" IsVisible="False"
+StrokeThickness="1" Margin="10,5,10,5" BackgroundColor="Transparent"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                            <local:ExtendedEditor x:Name="t13yesentry2" BackgroundColor="Transparent" Margin="10,0,10,0" AutoSize="TextChanges" HeightRequest="100" IsVisible="False" TextColor="#031926" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Add text here...." />
+                        </Border>
+
+
+                    </StackLayout>
+                </Border>
+
+            </StackLayout>
+
+
+
+
+            <StackLayout IsVisible="False" x:Name="familyhistorystack">
+
+                <Border Stroke="White"
+StrokeThickness="1" Margin="20,20,20,5" Background="White"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                    <StackLayout Margin="0,10,0,10" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
+
+
+                        <Label x:Name="f1lbl" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,0,0,0" TextColor="#031926" />
+
+                        <Label x:Name="f1directions"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+                        <buttons:SfRadioGroup>
+                            <CollectionView x:Name="f1answers" IsVisible="False" >
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Stroke="#f1f1f1"
+StrokeThickness="1" Margin="10,5,10,5"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                                            <local:ExtendedCheckbox CornerRadius="5"
+                                               
+                                               FontSize="12" 
+                                               CheckedColor="#031926" StateChanged="ExtendedCheckbox_StateChanged_6"
+                                               TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                               Margin="0,0,5,0"
+                                               Text="{Binding .}" />
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </buttons:SfRadioGroup>
+
+
+                        <Border Stroke="#f1f1f1"  x:Name="f1textborder" IsVisible="False"
+StrokeThickness="1" Margin="10,5,10,5" BackgroundColor="Transparent"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                            <local:ExtendedEditor x:Name="f1textentry" BackgroundColor="Transparent" Margin="10,0,10,0" AutoSize="TextChanges" HeightRequest="100" IsVisible="False" TextColor="#031926" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Add text here...." />
+                        </Border>
+
+
+
+
+
+
+                    </StackLayout>
+                </Border>
+
+
+                <Border Stroke="White"
+StrokeThickness="1" Margin="20,20,20,5" Background="White"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                    <StackLayout Margin="0,10,0,10" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
+
+
+                        <Label x:Name="f2lbl" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,0,0,0" TextColor="#031926" />
+
+                        <Label x:Name="f2directions"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+                        <buttons:SfRadioGroup>
+                            <CollectionView x:Name="f2answers" IsVisible="False" >
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Stroke="#f1f1f1"
+StrokeThickness="1" Margin="10,5,10,5"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                                            <local:ExtendedCheckbox CornerRadius="5"
+                                               
+                                               FontSize="12" 
+                                               CheckedColor="#031926" StateChanged="ExtendedCheckbox_StateChanged_7"
+                                               TextColor="#031926" FontFamily="HankenGroteskRegular"
+                                               Margin="0,0,5,0"
+                                               Text="{Binding .}" />
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </buttons:SfRadioGroup>
+
+
+                        <Border Stroke="#f1f1f1"  x:Name="f2textborder" IsVisible="False"
+StrokeThickness="1" Margin="10,5,10,5" BackgroundColor="Transparent"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                            <local:ExtendedEditor x:Name="f2textentry" BackgroundColor="Transparent" Margin="10,0,10,0" AutoSize="TextChanges" HeightRequest="100" IsVisible="False" TextColor="#031926" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Add text here...." />
+                        </Border>
+
+
+
+
+
+
+                    </StackLayout>
+                </Border>
+
+
+
+                <Border Stroke="White"
+StrokeThickness="1" Margin="20,20,20,5" Background="White"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                    <StackLayout Margin="0,10,0,10" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
+
+
+                        <Label x:Name="f3lbl" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,0,0,0" TextColor="#031926" />
+
+                        <Label x:Name="f3directions"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+
+
+                        <Border Stroke="#f1f1f1"  x:Name="f3textborder"
+StrokeThickness="1" Margin="10,5,10,5" BackgroundColor="Transparent"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+
+                            <local:ExtendedEditor x:Name="f3textentry" BackgroundColor="Transparent" Margin="10,0,10,0" AutoSize="TextChanges" HeightRequest="100" TextColor="#031926" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Add text here...." />
+                        </Border>
+
+
+
+
+
+
+                    </StackLayout>
+                </Border>
+
+
+            </StackLayout>
+
+            <Button Text="Submit" Margin="20,20,20,0" Clicked="submitbtn_Clicked" x:Name="submitbtn" IsVisible="False" BackgroundColor="#009fe3" TextColor="White"/>
+
+
+            <StackLayout IsVisible="False" x:Name="previousstack">
+
+
+                <ListView  x:Name="previouslist" SelectionMode="None" BackgroundColor="#f5f5f5" SeparatorVisibility="None" SeparatorColor="#031926" VerticalScrollBarVisibility="Never" VerticalOptions="FillAndExpand" HasUnevenRows="True" Margin="10,20,10,20"  HorizontalOptions="FillAndExpand" >
+                    <!-- ListView Header -->
+            
+
+                  
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Border Stroke="White"
+StrokeThickness="1" Margin="10,0,10,5" Background="White"
+StrokeShape="RoundRectangle 10,10,10,10"
+HorizontalOptions="FillAndExpand">
+                                    <StackLayout Margin="0,10,0,10" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
+
+
+                                        <Label Text="{Binding score}" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,0,0,0" TextColor="#031926" />
+
+                                        <Label Text="{Binding answerid}"  FontFamily="HankenGroteskRegular"  FontSize="14" Margin="10,5,0,0" TextColor="Gray" />
+
+                                        <Label Text="{Binding responsedate}"  FontFamily="HankenGroteskBold" HorizontalOptions="End"  FontSize="8" Margin="10,5,20,0" TextColor="#009fe3" />
+
+
+
+
+
+                                    </StackLayout>
+                                </Border>
+
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+
+
+
+
+            </StackLayout>
+
+
+
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

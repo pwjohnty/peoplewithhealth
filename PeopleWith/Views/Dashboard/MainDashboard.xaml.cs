@@ -5,9 +5,11 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using CommunityToolkit.Maui.Views;
 using Microsoft.Azure.NotificationHubs;
 using Mopups.Services;
 using Plugin.LocalNotification;
+using Syncfusion.Maui.Charts;
 
 namespace PeopleWith;
 
@@ -115,7 +117,7 @@ public partial class MainDashboard : ContentPage
         base.OnAppearing();
         getuserfeedbackdata();
         //testNotification();
-
+        
         //Check Prefernces saves?
 
         //string retrievedId = Preferences.Get("NsatNotID", string.Empty);
@@ -1079,6 +1081,9 @@ public partial class MainDashboard : ContentPage
              
             if(signup.Contains("SFEWH"))
             {
+
+                additionalquestionstab.IsVisible = true;
+
 
                 if (userfeedbacklist[0].initialquestionnairefeedbacklist != null)
                 {
@@ -2495,45 +2500,74 @@ public partial class MainDashboard : ContentPage
                 hometab.ImageSource = ImageSource.FromFile("dashiconactive.png");
                 infotab.ImageSource = ImageSource.FromFile("dashexploreinactive.png");
                 profiletab.ImageSource = ImageSource.FromFile("dashbrowseinactive.png");
+                additionalquestionstab.ImageSource = ImageSource.FromFile("quesinactive.png");
 
                 hometab.TextColor = Color.FromArgb("#031926");
                 infotab.TextColor = Color.FromArgb("#b3babd");
                 profiletab.TextColor = Color.FromArgb("#b3babd");
+                additionalquestionstab.TextColor = Color.FromArgb("#b3babd");
+                
 
                 hometab.FontFamily = "HankenGroteskBold";
                 infotab.FontFamily = "HankenGroteskRegular";
                 profiletab.FontFamily = "HankenGroteskRegular";
+                additionalquestionstab.FontFamily = "HankenGroteskRegular";
             }
             else if (e.TabItem.Header == "Explore")
             {
                 hometab.ImageSource = ImageSource.FromFile("dashiconinactive.png");
                 infotab.ImageSource = ImageSource.FromFile("dashexploreactive.png");
                 profiletab.ImageSource = ImageSource.FromFile("dashbrowseinactive.png");
+                additionalquestionstab.ImageSource = ImageSource.FromFile("quesinactive.png");
 
                 infotab.TextColor = Color.FromArgb("#031926");
                 hometab.TextColor = Color.FromArgb("#b3babd");
                 profiletab.TextColor = Color.FromArgb("#b3babd");
+                additionalquestionstab.TextColor = Color.FromArgb("#b3babd");
 
                 infotab.FontFamily = "HankenGroteskBold";
                 hometab.FontFamily = "HankenGroteskRegular";
                 profiletab.FontFamily = "HankenGroteskRegular";
+                additionalquestionstab.FontFamily = "HankenGroteskRegular";
             }
             else if (e.TabItem.Header == "Browse")
             {
                 hometab.ImageSource = ImageSource.FromFile("dashiconinactive.png");
                 infotab.ImageSource = ImageSource.FromFile("dashexploreinactive.png");
                 profiletab.ImageSource = ImageSource.FromFile("dashbrowseactive.png");
+                additionalquestionstab.ImageSource = ImageSource.FromFile("quesinactive.png");
 
                 profiletab.TextColor = Color.FromArgb("#031926");
                 infotab.TextColor = Color.FromArgb("#b3babd");
                 hometab.TextColor = Color.FromArgb("#b3babd");
+                additionalquestionstab.TextColor = Color.FromArgb("#b3babd");
 
 
                 profiletab.FontFamily = "HankenGroteskBold";
                 hometab.FontFamily = "HankenGroteskRegular";
                 infotab.FontFamily = "HankenGroteskRegular";
+                additionalquestionstab.FontFamily = "HankenGroteskRegular";
 
 
+            }
+            else if(e.TabItem.Header == "Questions")
+            {
+                profiletab.TextColor = Color.FromArgb("#b3babd");
+                infotab.TextColor = Color.FromArgb("#b3babd");
+                hometab.TextColor = Color.FromArgb("#b3babd");
+                additionalquestionstab.TextColor = Color.FromArgb("#031926");
+
+
+                profiletab.FontFamily = "HankenGroteskRegular";
+                hometab.FontFamily = "HankenGroteskRegular";
+                infotab.FontFamily = "HankenGroteskRegular";
+                additionalquestionstab.FontFamily = "HankenGroteskBold";
+
+
+                hometab.ImageSource = ImageSource.FromFile("dashiconinactive.png");
+                infotab.ImageSource = ImageSource.FromFile("dashexploreinactive.png");
+                profiletab.ImageSource = ImageSource.FromFile("dashbrowseinactive.png");
+                additionalquestionstab.ImageSource = ImageSource.FromFile("questactive.png");
             }
  
         }
@@ -3643,6 +3677,57 @@ public partial class MainDashboard : ContentPage
             await Navigation.PushAsync(new NewPageVideoPlayer(Getitem, FromDash), false);
         }
         catch (Exception Ex)
+        {
+
+        }
+    }
+
+    private async void TapGestureRecognizer_Tapped_8(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            await Navigation.PushAsync(new DashQuestionnaire("Medical History"),false);
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
+    private async  void TapGestureRecognizer_Tapped_9(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            await Navigation.PushAsync(new DashQuestionnaire("Menstural Cycle"), false);
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
+    private async void TapGestureRecognizer_Tapped_10(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            await Navigation.PushAsync(new DashQuestionnaire("Treatment"), false);
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
+    private async void TapGestureRecognizer_Tapped_11(object sender, TappedEventArgs e)
+    {
+        try
+        {
+
+            await Navigation.PushAsync(new DashQuestionnaire("Previous Responses", "list"), false);
+
+
+        }
+        catch(Exception ex)
         {
 
         }

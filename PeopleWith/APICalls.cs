@@ -92,6 +92,8 @@ namespace PeopleWith
 
         public const string postcode = "https://pwdevapi.peoplewith.com/api/postcode";
 
+        public const string registrydatainputs = "https://pwdevapi.peoplewith.com/api/registryDataInputs";
+
         //Get User Details 
         public async Task<ObservableCollection<user>> GetuserDetails()
         {
@@ -3400,6 +3402,96 @@ namespace PeopleWith
                 return new ObservableCollection<postcode>();
             }
         }
+
+        public async Task<ObservableCollection<registryDataInputs>> GetWHfromregistrydatainput(string signupcode)
+        {
+            try
+            {
+
+
+                ObservableCollection<registryDataInputs> itemstoremove = new ObservableCollection<registryDataInputs>();
+                var userid = Helpers.Settings.UserKey;
+                string urlWithQuery = $"{registrydatainputs}?$filter=dataInputs eq '{signupcode}'";
+                HttpClient client = new HttpClient();
+                HttpResponseMessage responseconsent = await client.GetAsync(urlWithQuery);
+
+                if (responseconsent.IsSuccessStatusCode)
+                {
+                    string contentconsent = await responseconsent.Content.ReadAsStringAsync();
+                    var userResponseconsent = JsonConvert.DeserializeObject<ApiResponseregistyDataInputs>(contentconsent);
+                    var consent = userResponseconsent.Value;
+
+                    // var questionAnswers = JsonConvert.DeserializeObject<ObservableCollection<questionanswerinfo>>();
+                    var newcollection = new ObservableCollection<questionnaire>();
+
+                    //Remove All Deleted Items 
+                    //foreach (var item in consent)
+                    //{
+                    //    if (item.deleted == true)
+                    //    {
+                    //        itemstoremove.Add(item);
+                    //    }
+                    //}
+
+                    //foreach (var item in itemstoremove)
+                    //{
+                    //    consent.Remove(item);
+                    //}
+
+                    return new ObservableCollection<registryDataInputs>(consent);
+
+                }
+                else
+                {
+                    string errorcontent = await responseconsent.Content.ReadAsStringAsync();
+                    var s = errorcontent;
+                    return null;
+                }
+
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+                return new ObservableCollection<registryDataInputs>();
+            }
+
+        }
+
+
+        public class GetRegInputs
+        {
+            public ObservableCollection<registryDataInputs> Value { get; set; }
+        }
+
+
+        public async Task<ObservableCollection<userresponse>> GetUserResponses(string USERID)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                string urlWithQuery = $"{InsertUserResponse}?$filter=userid eq '{USERID}'";
+                HttpResponseMessage response = await client.GetAsync(urlWithQuery);
+                string data = await response.Content.ReadAsStringAsync();
+                var userResponse = JsonConvert.DeserializeObject<ApiResponseUserResponse>(data);
+                ObservableCollection<userresponse> users = userResponse.Value;
+                foreach (var item in userResponse.Value)
+                {
+                
+
+                }
+
+                return new ObservableCollection<userresponse>(users.Take(Range.All));
+            }
+            catch (Exception ex)
+            {
+                return new ObservableCollection<userresponse>();
+            }
+
+        }
+
 
 
     }
