@@ -330,6 +330,16 @@ public partial class NewPageVideoPlayer : ContentPage
         }
     }
 
+    //protected override void OnDisappearing()
+    //{
+    //    base.OnDisappearing();
+
+    //    if (MediaElement != null)
+    //    {
+    //       // MediaElement.Stop();
+    //    }
+    //}
+
     private void ContentPage_Unloaded(object sender, EventArgs e)
     {
         try
