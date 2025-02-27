@@ -100,7 +100,7 @@ namespace PeopleWith
         public const string GetInvestigation = "https://pwapi.peoplewith.com/api/investigation";
         public const string GetUserInvestigation = "https://pwapi.peoplewith.com/api/userinvestigation";
 
-        public const string registrydatainputs = "https://pwdevapi.peoplewith.com/api/registryDataInputs";
+        public const string registrydatainputs = "https://pwapi.peoplewith.com/api/registryDataInputs";
 
         //Exercise
         public const string GetExercise = "https://pwapi.peoplewith.com/api/exercise";
@@ -3488,8 +3488,8 @@ namespace PeopleWith
                 ObservableCollection<registryDataInputs> itemstoremove = new ObservableCollection<registryDataInputs>();
                 var userid = Helpers.Settings.UserKey;
                 string urlWithQuery = $"{registrydatainputs}?$filter=dataInputs eq '{signupcode}'";
-                HttpClient client = new HttpClient();
-                HttpResponseMessage responseconsent = await client.GetAsync(urlWithQuery);
+                ConfigureClient();
+                HttpResponseMessage responseconsent = await Client.GetAsync(urlWithQuery);
 
                 if (responseconsent.IsSuccessStatusCode)
                 {
@@ -3547,9 +3547,9 @@ namespace PeopleWith
         {
             try
             {
-                HttpClient client = new HttpClient();
+                ConfigureClient();
                 string urlWithQuery = $"{InsertUserResponse}?$filter=userid eq '{USERID}'";
-                HttpResponseMessage response = await client.GetAsync(urlWithQuery);
+                HttpResponseMessage response = await Client.GetAsync(urlWithQuery);
                 string data = await response.Content.ReadAsStringAsync();
                 var userResponse = JsonConvert.DeserializeObject<ApiResponseUserResponse>(data);
                 ObservableCollection<userresponse> users = userResponse.Value;
