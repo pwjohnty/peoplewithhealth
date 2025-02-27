@@ -81,35 +81,82 @@
                         </x:Array>
                     </buttons:SfSegmentedControl.ItemsSource>
                 </buttons:SfSegmentedControl>
-                <chart:SfCartesianChart Grid.Row="2" Grid.Column="0" HeightRequest="475" Margin="0,100,0,50" BackgroundColor="Transparent"  x:Name="SymptomProgChart">
+                <chart:SfCartesianChart Grid.Row="2" Grid.Column="0"
+                        HeightRequest="475" Margin="0,100,0,50"
+                        BackgroundColor="Transparent" x:Name="SymptomProgChart"
+                        BindingContext="{Binding Name}">
 
-                    <chart:SfCartesianChart.Legend >
-                        <chart:ChartLegend Placement="Bottom" BindingContext="{Binding Name}"/>
+                    <!-- Chart Legend -->
+                    <chart:SfCartesianChart.Legend>
+                        <chart:ChartLegend Placement="Bottom"/>
                     </chart:SfCartesianChart.Legend>
+
+                    <!-- X-Axis -->
                     <chart:SfCartesianChart.XAxes>
-                        <chart:CategoryAxis  LabelRotation="0" LabelPlacement="OnTicks"  IsVisible="True" ShowMajorGridLines="False" >
-                            <chart:CategoryAxis.LabelStyle>
-                                <chart:ChartAxisLabelStyle FontSize="8" FontFamily="HankenGroteskRegular" TextColor="#031926"/>
-                            </chart:CategoryAxis.LabelStyle>
-                        </chart:CategoryAxis>
+                        <chart:DateTimeAxis LabelRotation="0" PlotOffsetEnd="10" PlotOffsetStart="10"
+                            LabelsPosition="Outside" 
+                            EdgeLabelsDrawingMode="Fit" EdgeLabelsVisibilityMode="AlwaysVisible" IntervalType="Auto"
+                            ShowMajorGridLines="False" EnableAutoIntervalOnZooming="True" 
+                            IsVisible="True">
+
+                            <chart:DateTimeAxis.LabelStyle>
+                                <chart:ChartAxisLabelStyle FontSize="8" 
+                                           FontFamily="HankenGroteskRegular"
+                                           TextColor="#031926"/>
+                            </chart:DateTimeAxis.LabelStyle>
+
+
+                        </chart:DateTimeAxis>
                     </chart:SfCartesianChart.XAxes>
-                    <chart:SfCartesianChart.YAxes >
-                        <chart:NumericalAxis Minimum="0" Maximum="100" ShowMajorGridLines="True" Interval="10" EdgeLabelsDrawingMode="Fit" ShowMinorGridLines="False">
-                            <chart:NumericalAxis.MajorGridLineStyle>
-                                <chart:ChartLineStyle StrokeDashArray="{StaticResource dashArray}" Stroke="LightGray" StrokeWidth="1"/>
-                            </chart:NumericalAxis.MajorGridLineStyle>
+
+                    <!-- Y-Axis -->
+                    <chart:SfCartesianChart.YAxes>
+                        <chart:NumericalAxis Minimum="0"
+                             Maximum="100"
+                             Interval="10"
+                             ShowMajorGridLines="True"
+                             ShowMinorGridLines="False"
+                             EdgeLabelsDrawingMode="Center"
+                             LabelCreated="NumericalAxis_LabelCreated">
+
+                            <!-- Major Grid Lines -->
+                            <!--<chart:NumericalAxis.MajorGridLineStyle>
+                                <chart:ChartLineStyle StrokeDashArray="{StaticResource dashArray}"
+                                      Stroke="LightGray"
+                                      StrokeWidth="1"/>
+                            </chart:NumericalAxis.MajorGridLineStyle>-->
+
                         </chart:NumericalAxis>
                     </chart:SfCartesianChart.YAxes>
+
+                    <!-- Chart Series (Spline Series) -->
                     <chart:SfCartesianChart.Series>
-                        <chart:SplineSeries ItemsSource="{Binding .}"  EnableTooltip="True"  XBindingPath="timestamp" YBindingPath="intensity" ShowTrackballLabel="True" ShowMarkers="True" ShowDataLabels="False" EnableAnimation="True" StrokeWidth="2" Fill="#FFC000">
+                        <chart:SplineSeries 
+                            EnableTooltip="True"
+                            ShowTrackballLabel="True"
+                            ShowMarkers="True"
+                            ShowDataLabels="False"
+                            EnableAnimation="True"
+                            StrokeWidth="2"
+                            Fill="#FFC000">
+
+                            <!-- Marker Settings -->
                             <chart:SplineSeries.MarkerSettings>
-                                <chart:ChartMarkerSettings Type="Circle"  StrokeWidth="0" Height="10" Width="10"  Fill="#FFC000" />
+                                <chart:ChartMarkerSettings Type="Circle"
+                                           StrokeWidth="0"
+                                           Height="10"
+                                           Width="10"
+                                           Fill="#FFC000"/>
                             </chart:SplineSeries.MarkerSettings>
+
                         </chart:SplineSeries>
                     </chart:SfCartesianChart.Series>
+
+                    <!-- Zoom & Pan Behavior -->
                     <chart:SfCartesianChart.ZoomPanBehavior>
                         <chart:ChartZoomPanBehavior EnablePinchZooming="True" ZoomMode="X"/>
                     </chart:SfCartesianChart.ZoomPanBehavior>
+
                 </chart:SfCartesianChart>
             </Grid>
 

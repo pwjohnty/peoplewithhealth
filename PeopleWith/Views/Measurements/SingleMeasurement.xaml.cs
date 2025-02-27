@@ -566,6 +566,10 @@ public partial class SingleMeasurement : ContentPage
                     // Calculate min/max values based on the grouped data
                     double maxvalue = (double)GroupedSleepData.Max(g => g.numconverted) + 60;
                     double minvalue = (double)GroupedSleepData.Min(g => g.numconverted) - 60;
+                    if(minvalue < 1)
+                    {
+                        minvalue = 0;
+                    }
 
                     // Sort the list by date
                     orderlistbydate = new ObservableCollection<usermeasurement>(usermeasurementchartlist.OrderBy(x => DateTime.Parse(x.inputdatetime)).ToList());
@@ -1136,7 +1140,7 @@ public partial class SingleMeasurement : ContentPage
                 showallbtn.IsEnabled = false;
                 //show all button clicked
                 var usermeasurementalldatalist = new ObservableCollection<usermeasurement>(usermeasurementlistpassed.Where(x => x.measurementid == usermeasurementpassed.measurementid));
-                await Navigation.PushAsync(new ShowAllData(usermeasurementalldatalist, usermeasurementlistpassed, measurementlist), false);
+                await Navigation.PushAsync(new ShowAllData(usermeasurementalldatalist, usermeasurementlistpassed, measurementlist, userfeedbacklistpassed), false);
                 showallbtn.IsEnabled = true;
             }
             else
@@ -1199,9 +1203,36 @@ public partial class SingleMeasurement : ContentPage
 
                     await database.DeleteUserMeasurements(deleeteusermeasurementlistpassed);
 
+                    //Remove All items From UserMeasurement Feedback 
+
+                    if (userfeedbacklistpassed.measurementfeedbacklist == null)
+                    {
+                        userfeedbacklistpassed.measurementfeedbacklist = new ObservableCollection<feedbackdata>();
+                    }
+
+                    foreach (var x in userfeedbacklistpassed.measurementfeedbacklist)
+                    {
+                        if (x.id != null)
+                        {
+                            for (int i = 0; i < deleeteusermeasurementlistpassed.Count; i++)
+                            {
+                                if (x.id == deleeteusermeasurementlistpassed[i].id)
+                                {
+                                    x.action = "deleted";
+                                }
+                            }
+                        }
+                    }
+
+                    string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.measurementfeedbacklist);
+                    userfeedbacklistpassed.measurementfeedback = newsymJson;
+
+                    await database.UserfeedbackUpdateMeasurementData(userfeedbacklistpassed);
+
                     Deltebtn.IsEnabled = true;
 
-                    await Navigation.PushAsync(new MeasurementsPage());
+                    //userfeedbacklistpassed Comes from Dashboard so needs to be linked back to Measurements page
+                    await Navigation.PushAsync(new MeasurementsPage(usermeasurementlistpassed, measurementlist, userfeedbacklistpassed));
                     var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(p => p is MeasurementsPage);
                     if (pageToRemoves != null)
                     {

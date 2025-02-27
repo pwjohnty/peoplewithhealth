@@ -53,6 +53,17 @@ public partial class CompareSymptoms : ContentPage
             AllUserSymptoms = AllSymptoms;
             ChipItems = new ObservableCollection<ChipItem>();
             BindingContext = new ChipItems();
+
+            foreach (var item in AllUserSymptoms)
+            {
+                foreach (var x in item.feedback)
+                {
+                    var Datetime = DateTime.Parse(x.timestamp).ToString("dd/MM/yy HH:mm");
+                    x.formattedDateTime = Datetime;
+                    x.DateTimeFormat = DateTime.Parse(x.timestamp);
+                }
+            }
+
             if (AllUserSymptoms.Count == 1)
             {
                 //Dont Need All for one item
@@ -131,10 +142,11 @@ public partial class CompareSymptoms : ContentPage
                         var filteredFeedback = item.feedback
                                           .Where(f => DateTime.Parse(f.timestamp) >= startDate && DateTime.Parse(f.timestamp) <= endDate)
                                           .OrderBy(f => DateTime.Parse(f.timestamp));
+
                         LineSeries series = new LineSeries
                         {
-                            ItemsSource = filteredFeedback.ToList(),
-                            XBindingPath = "timestamp",
+                            ItemsSource = filteredFeedback.ToList().OrderBy(x => x.DateTimeFormat),
+                            XBindingPath = "DateTimeFormat",
                             YBindingPath = "intensity",
                             Label = item.symptomtitle,
                             EnableTooltip = true,
@@ -158,8 +170,8 @@ public partial class CompareSymptoms : ContentPage
                                           .OrderBy(f => DateTime.Parse(f.timestamp));
                         LineSeries series = new LineSeries
                         {
-                            ItemsSource = filteredFeedback.ToList(),
-                            XBindingPath = "timestamp",
+                            ItemsSource = filteredFeedback.ToList().OrderBy(x => x.DateTimeFormat),
+                            XBindingPath = "DateTimeFormat",
                             YBindingPath = "intensity",
                             Label = item.symptomtitle,
                             EnableTooltip = true,
@@ -246,6 +258,7 @@ public partial class CompareSymptoms : ContentPage
             if (getitem.Text == "All")
             {
                 ConfigureChart(isAllTime: true);
+
             }
             else
             {
@@ -300,8 +313,8 @@ public partial class CompareSymptoms : ContentPage
                         var filteredFeedback = item.feedback.OrderBy(f => DateTime.Parse(f.timestamp));
                         LineSeries series = new LineSeries
                         {
-                            ItemsSource = filteredFeedback.ToList(),
-                            XBindingPath = "timestamp",
+                            ItemsSource = filteredFeedback.ToList().OrderBy(x => x.DateTimeFormat),
+                            XBindingPath = "DateTimeFormat",
                             YBindingPath = "intensity",
                             //Fill = Color.FromArgb("#FFC000"),
                             Label = item.symptomtitle,
@@ -348,4 +361,23 @@ public partial class CompareSymptoms : ContentPage
         }
 
     }
+
+    private void NumericalAxis_LabelCreated(object sender, ChartAxisLabelEventArgs e)
+    {
+
+        if (sender is NumericalAxis axis)
+        {
+            if (e.Label == "0")
+            {
+                // Solid line for Y=0 (No dash)
+                axis.MajorGridLineStyle.StrokeDashArray = null;
+            }
+            else
+            {
+                // Dashed lines for all other Y-values
+                axis.MajorGridLineStyle.StrokeDashArray = new DoubleCollection { 5, 5 };
+            }
+        }
+    }
+
 }

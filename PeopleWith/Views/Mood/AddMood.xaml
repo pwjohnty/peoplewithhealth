@@ -8,7 +8,7 @@
     <ScrollView>
         <VerticalStackLayout x:Name="Mainstack">
             <StackLayout>
-                <Label Text="Add Mood" FontFamily="HankenGroteskBold" Margin="20,10,0,0"  VerticalOptions="Center" HorizontalOptions="Start"   FontSize="25" TextColor="#031926" />
+                <Label Text="Add Mood" x:Name="AddTitle"  FontFamily="HankenGroteskBold" Margin="20,10,0,0"  VerticalOptions="Center" HorizontalOptions="Start"   FontSize="25" TextColor="#031926" />
 
                 <!-- DateTime Pickers-->
 
@@ -166,6 +166,10 @@
 
 
                 <Button x:Name="AddMoodBtn" Text="Add Mood" FontFamily="HankenGroteskBold" Clicked="AddMoodBtn_Clicked" BackgroundColor="#FFF8DC" TextColor="#B8860B" Margin="20,20,20,0" HorizontalOptions="FillAndExpand"    />
+
+                <Button x:Name="Deletebtn" IsVisible="False" Margin="20,50,20,0" FontSize="14" TextColor="Red" BackgroundColor="#ffe5e5" FontFamily="HankenGroteskBold" CornerRadius="10" Text="Delete Mood" Clicked="Deletebtn_Clicked" />
+                <Label x:Name="Deletelbl" HorizontalTextAlignment="Start" IsVisible="False" Text="If this Mood is deleted, it cannot be retrieved" Margin="20,5,20,20" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="DarkGray"  />
+
             </StackLayout>
 
             <!--<StackLayout x:Name="SuccessScreen" VerticalOptions="Center" HorizontalOptions="Center" IsVisible="False">

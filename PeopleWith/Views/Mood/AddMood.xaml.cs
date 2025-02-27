@@ -16,6 +16,7 @@ public partial class AddMood : ContentPage
     public ObservableCollection<usermood> MoodtoAdd = new ObservableCollection<usermood>();
     public ObservableCollection<usermood> AddedMood = new ObservableCollection<usermood>();
     public ObservableCollection<usermood> MoodtoUpdate = new ObservableCollection<usermood>();
+    usermood MoodPassed = new usermood(); 
     public ObservableCollection<moodlist> AllMoods { get; set; }
     userfeedback userfeedbacklistpassed = new userfeedback();
     public moodlist GetMoodlist { get; set; }
@@ -52,6 +53,37 @@ public partial class AddMood : ContentPage
         }  
     }
 
+    public AddMood(usermood PassMood, userfeedback userfeedbacklist)
+    {
+        try
+        {
+            InitializeComponent();
+            MoodPassed = PassMood;
+            userfeedbacklistpassed = userfeedbacklist;
+            howlbl.IsVisible = false;
+            MoodListview.IsVisible = false;
+
+            if (!String.IsNullOrEmpty(MoodPassed.notes))
+            {
+                Notes.Text = MoodPassed.notes;
+            }
+
+            var GetDateTime = DateTime.Parse(MoodPassed.datetime);
+            adddatepicker.Date = GetDateTime;
+            addtimepicker.Time = GetDateTime.TimeOfDay;
+            AddMoodBtn.Text = "Update Mood";
+
+            AddTitle.Text = MoodPassed.title;
+
+            Deletebtn.IsVisible = true;
+            Deletelbl.IsVisible = true;
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
     public AddMood(ObservableCollection<usermood> MoodsPassed, string AddEdit)
     {
         try
@@ -60,6 +92,14 @@ public partial class AddMood : ContentPage
             GetMoodlist = new moodlist();
             AllMoods = GetMoodlist.GetList();
             AlluserMoods = MoodsPassed;
+
+            foreach(var item in AlluserMoods)
+            {
+                if(item.id == AddEdit)
+                {
+                    MoodPassed = item; 
+                }
+            }
             EditAdd = AddEdit;
 
             MoodListview.ItemsSource = AllMoods;
@@ -353,6 +393,7 @@ public partial class AddMood : ContentPage
                 var Userid = Helpers.Settings.UserKey;
                 SelectedDate = adddatepicker.Date.ToString("dd/MM/yyyy");
                 SelectedTime = addtimepicker.Time.ToString(@"hh\:mm");
+                MoodtoUpdate.Clear();
                 //Update DB Call 
                 APICalls database = new APICalls();
                 if (EditAdd == "Add")
@@ -385,7 +426,7 @@ public partial class AddMood : ContentPage
                     NewMood.notes = Notes.Text;
 
                     MoodtoAdd.Add(NewMood);
-                    AddedMood = await database.PostUserMoodAsync(MoodtoAdd);
+                    var AddedMood = await database.PostUserMoodAsync(MoodtoAdd);
 
                     await MopupService.Instance.PushAsync(new PopupPageHelper("Mood Added") { });
                     await Task.Delay(1500);
@@ -396,6 +437,7 @@ public partial class AddMood : ContentPage
                     }
 
                     var newsym = new feedbackdata();
+                    newsym.id = AddedMood[0].id;
                     newsym.value = NewMood.notes;
                     newsym.datetime = NewMood.datetime;
                     newsym.action = "update";
@@ -418,46 +460,132 @@ public partial class AddMood : ContentPage
                 }
                 else
                 {
-                    foreach (var item in AlluserMoods)
+                    if(AddMoodBtn.Text == "Update Mood")
                     {
-                        if (item.id == EditAdd)
+                        //Update Single Mood 
+                        var UpdateDateTime = SelectedDate + " " + SelectedTime;
+                        MoodPassed.datetime = UpdateDateTime;
+
+                        if (string.IsNullOrEmpty(Notes.Text))
                         {
-                            if (string.IsNullOrEmpty(SelectedDate) || SelectedDate == null)
+                            MoodPassed.notes = null; 
+
+                        }
+                        else
+                        {
+                            MoodPassed.notes = Notes.Text; 
+                        }
+                        if (!string.IsNullOrEmpty(SelectedMood))
+                        {
+                            MoodPassed.title = SelectedMood;
+                        }
+                       
+
+                        MoodtoUpdate.Add(MoodPassed);
+                        await database.PutMoodAsync(MoodtoUpdate);
+
+                        await MopupService.Instance.PushAsync(new PopupPageHelper("Mood Updated") { });
+                        await Task.Delay(1500);
+
+                        //Update UserMoodFeedback
+                       foreach(var item in userfeedbacklistpassed.moodfeedbacklist)
+                        {
+                            if(item.id != null)
                             {
-                                var GetDate = DateTime.Parse(item.datetime);
-                                SelectedDate = GetDate.ToString("dd/MM/yyyy");
+                                if(item.id == MoodPassed.id)
+                                {
+                                    if (string.IsNullOrEmpty(Notes.Text))
+                                    {
+                                        item.value = null;
+                                       
+                                    }
+                                    else
+                                    {
+                                        item.value = Notes.Text;
+                                    }
+                                    
+                                    item.datetime = MoodPassed.datetime;
+                                }
                             }
+                        }
 
-                            if (string.IsNullOrEmpty(SelectedTime) || SelectedTime == null)
+                        string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.moodfeedbacklist);
+                        userfeedbacklistpassed.moodfeedback = newsymJson;
+
+                        await database.UserfeedbackUpdateMoodData(userfeedbacklistpassed);
+
+                    }
+                    else
+                    {
+                        //Edit Mood
+
+                        foreach (var item in AlluserMoods)
+                        {
+                            if (item.id == EditAdd)
                             {
-                                var GetTime = DateTime.Parse(item.datetime);
-                                SelectedTime = GetTime.ToString("HH:mm:ss");
+                                if (string.IsNullOrEmpty(SelectedDate) || SelectedDate == null)
+                                {
+                                    var GetDate = DateTime.Parse(item.datetime);
+                                    SelectedDate = GetDate.ToString("dd/MM/yyyy");
+                                }
+
+                                if (string.IsNullOrEmpty(SelectedTime) || SelectedTime == null)
+                                {
+                                    var GetTime = DateTime.Parse(item.datetime);
+                                    SelectedTime = GetTime.ToString("HH:mm:ss");
+                                }
+
+                                if (string.IsNullOrEmpty(SelectedMood) || SelectedMood == null)
+                                {
+                                    SelectedMood = item.title;
+                                }
+
+
+                                item.datetime = SelectedDate + " " + SelectedTime;
+                                item.title = SelectedMood;
+                                if (Notes.Text == null)
+                                {
+                                    item.notes = null;
+                                }
+                                else
+                                {
+                                    item.notes = Notes.Text;
+                                }
+                                item.source = SelectedMood.ToLower() + ".png";
+                                MoodtoUpdate.Add(item);
+                                await database.PutMoodAsync(MoodtoUpdate);
+
+                                await MopupService.Instance.PushAsync(new PopupPageHelper("Mood Updated") { });
+                                await Task.Delay(1500);
+
+                                foreach (var x in userfeedbacklistpassed.moodfeedbacklist)
+                                {
+                                    if (x.id != null)
+                                    {
+                                        if (x.id == MoodPassed.id)
+                                        {
+                                            if (string.IsNullOrEmpty(Notes.Text))
+                                            {
+                                                x.value = null;
+
+                                            }
+                                            else
+                                            {
+                                                x.value = Notes.Text;
+                                            }
+
+                                            x.datetime = MoodPassed.datetime;
+                                        }
+                                    }
+                                }
+
+                                string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.moodfeedbacklist);
+                                userfeedbacklistpassed.moodfeedback = newsymJson;
+
+                                await database.UserfeedbackUpdateMoodData(userfeedbacklistpassed);
+
+
                             }
-
-                            if (string.IsNullOrEmpty(SelectedMood) || SelectedMood == null)
-                            {
-                                SelectedMood = item.title;
-                            }
-
-
-                            item.datetime = SelectedDate + " " + SelectedTime;
-                            item.title = SelectedMood;
-                            if (Notes.Text == null)
-                            {
-                                item.notes = null;
-                            }
-                            else
-                            {
-                                item.notes = Notes.Text;
-                            }
-                            item.source = SelectedMood.ToLower() + ".png";
-                            MoodtoUpdate.Add(item);
-                            await database.PutMoodAsync(MoodtoUpdate);
-
-                            await MopupService.Instance.PushAsync(new PopupPageHelper("Mood Updated") { });
-                            await Task.Delay(1500);
-
-
                         }
                     }
                 }
@@ -465,7 +593,7 @@ public partial class AddMood : ContentPage
                 AddMoodBtn.IsEnabled = true;
 
                 //Push Through new Added Data
-                await Navigation.PushAsync(new AllMood(AlluserMoods, userfeedbacklistpassed));
+                await Navigation.PushAsync(new AllMood(userfeedbacklistpassed));
 
                 var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is AllMood);
                 var pageToRemove = Navigation.NavigationStack.FirstOrDefault(x => x is SingleMood);
@@ -569,6 +697,92 @@ public partial class AddMood : ContentPage
             var Mood = e.DataItem as moodlist;
             SelectedMood = Mood.Text;
         }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    private async void Deletebtn_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                Deletebtn.IsEnabled = false;
+                bool Delete = await DisplayAlert("Delete Mood", "Are you sure you would like the delete this Mood? Once deleted it cannot be retrieved", "Delete", "Cancel");
+                if (Delete == true)
+                {
+
+                    MoodPassed.deleted = true;
+
+                    APICalls database = new APICalls();
+                    await database.DeleteUserMood(MoodPassed);
+                    await MopupService.Instance.PushAsync(new PopupPageHelper("Mood Deleted") { });
+                    await Task.Delay(1500);
+
+                    foreach (var item in AlluserMoods)
+                    {
+                        if (item.id == MoodPassed.id)
+                        {
+                            item.deleted = true;
+                        }
+                    }
+
+                    foreach (var item in userfeedbacklistpassed.moodfeedbacklist)
+                    {
+                        if (item.id != null)
+                        {
+                            if (item.id == MoodPassed.id)
+                            {
+                                item.action = "deleted";
+                            }
+                        }
+                    }
+
+                    string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.moodfeedbacklist);
+                    userfeedbacklistpassed.moodfeedback = newsymJson;
+
+                    await database.UserfeedbackUpdateMoodData(userfeedbacklistpassed);
+
+                    await MopupService.Instance.PopAllAsync(false);
+                    //Not There any more 
+                    await Navigation.PushAsync(new AllMood(userfeedbacklistpassed));
+
+                    var pageToRemove = Navigation.NavigationStack.FirstOrDefault(x => x is AllMood);
+
+                    var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is SingleMood);
+
+                    if (pageToRemove != null)
+                    {
+                        Navigation.RemovePage(pageToRemove);
+                    }
+                    if (pageToRemoves != null)
+                    {
+                        Navigation.RemovePage(pageToRemoves);
+                    }
+                    Navigation.RemovePage(this);
+
+                    Deletebtn.IsEnabled = true;
+                    return;
+                }
+                else
+                {
+                    Deletebtn.IsEnabled = true;
+                    return;
+                }
+
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
+        }
+
         catch (Exception Ex)
         {
             NotasyncMethod(Ex);

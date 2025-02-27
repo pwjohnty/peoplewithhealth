@@ -115,20 +115,18 @@ public partial class SingleMood : ContentPage
                 bool Delete = await DisplayAlert("Delete Mood", "Are you sure you would like the delete this Mood? Once deleted it cannot be retrieved", "Delete", "Cancel");
                 if (Delete == true)
                 {
+                    var PassedMood = MoodPassed[0];
+                    PassedMood.deleted = true; 
 
-                    foreach (var item in MoodPassed)
-                    {
-                        item.deleted = true;
-                    }
 
                     APICalls database = new APICalls();
-                    await database.DeleteUserMood(MoodPassed);
+                    await database.DeleteUserMood(PassedMood);
                     await MopupService.Instance.PushAsync(new PopupPageHelper("Mood Deleted") { });
                     await Task.Delay(1500);
 
                     foreach (var item in AlluserMoods)
                     {
-                        if (item.id == MoodPassed[0].id)
+                        if (item.id == PassedMood.id)
                         {
                             item.deleted = true;
                         }
@@ -181,6 +179,19 @@ public partial class SingleMood : ContentPage
         catch(Exception ex)
         {
 
+        }
+    }
+
+    private async void AllMoodView_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
+    {
+        try
+        {
+            var selecteditem = e.DataItem as usermood;
+            await Navigation.PushAsync(new AddMood(selecteditem, userfeedbacklistpassed), false);
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
         }
     }
 }

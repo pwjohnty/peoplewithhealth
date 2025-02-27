@@ -145,7 +145,7 @@ public partial class MeasurementsPage : ContentPage
         //});
     }
 
-    public MeasurementsPage(ObservableCollection<usermeasurement> updatedusermeasurements, ObservableCollection<measurement> updatedmeasurements)
+    public MeasurementsPage(ObservableCollection<usermeasurement> updatedusermeasurements, ObservableCollection<measurement> updatedmeasurements, userfeedback userfeedbacklist)
     {
         try
         {
@@ -156,6 +156,7 @@ public partial class MeasurementsPage : ContentPage
             UserMeasurements = updatedusermeasurements;
             Measurements = updatedmeasurements;
             hasusermeasurements = true;
+            userfeedbacklistpassed = userfeedbacklist;
 
             getusermeasurements();
         }

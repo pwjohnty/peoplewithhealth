@@ -18,88 +18,116 @@ namespace PeopleWith
     public class APICalls
     {
         //add the names of the api followed with the url connection
-        public const string Checkuseremail = "https://pwdevapi.peoplewith.com/api/user?$filter=email%20eq%20";
-        public const string CheckuserPassword = "https://pwdevapi.peoplewith.com/api/user?$filter=password%20eq%20";
+        public const string Checkuseremail = "https://pwapi.peoplewith.com/api/user?$filter=email%20eq%20";
+        public const string CheckuserPassword = "https://pwapi.peoplewith.com/api/user?$filter=password%20eq%20";
 
         //Crash
-        public const string AddCrash = "https://pwdevapi.peoplewith.com/api/crashlog";
+        public const string AddCrash = "https://pwapi.peoplewith.com/api/crashlog";
 
         //Sign-Up Code
-        public const string CheckSignUpCode = "https://pwdevapi.peoplewith.com/api/signupcode?$filter=signupcodeid%20eq%20";
-        public const string Checksignupregquestions = "https://pwdevapi.peoplewith.com/api/question?$filter=signupcodereferral%20eq%20";
-        public const string Checksignupreganswers = "https://pwdevapi.peoplewith.com/api/answer?$filter=signupcodereferral%20eq%20";
-        public const string CheckConsentforsignupcode = "https://pwdevapi.peoplewith.com/api/consent?$filter=signupcodeid%20eq%20";
-        public const string CheckConsent = "https://pwdevapi.peoplewith.com/api/consent";
+        public const string CheckSignUpCode = "https://pwapi.peoplewith.com/api/signupcode?$filter=signupcodeid%20eq%20";
+        public const string Checksignupregquestions = "https://pwapi.peoplewith.com/api/question?$filter=signupcodereferral%20eq%20";
+        public const string Checksignupreganswers = "https://pwapi.peoplewith.com/api/answer?$filter=signupcodereferral%20eq%20";
+        public const string CheckConsentforsignupcode = "https://pwapi.peoplewith.com/api/consent?$filter=signupcodeid%20eq%20";
+        public const string CheckConsent = "https://pwapi.peoplewith.com/api/consent";
 
         //User
-        public const string InsertUser = "https://pwdevapi.peoplewith.com/api/user/";
-        public const string InsertUserResponse = "https://pwdevapi.peoplewith.com/api/userresponse/";
-        public const string InsertUserSymptoms = "https://pwdevapi.peoplewith.com/api/usersymptom/";
-        public const string InsertUserMedications = "https://pwdevapi.peoplewith.com/api/usermedication/";
-        public const string InsertUserDiagnosis = "https://pwdevapi.peoplewith.com/api/userdiagnosis/";
-        public const string InsertUserMeasurements = "https://pwdevapi.peoplewith.com/api/usermeasurement/";
-        public const string usersymptoms = "https://pwdevapi.peoplewith.com/api/usersymptom";
+        public const string InsertUser = "https://pwapi.peoplewith.com/api/user/";
+        public const string InsertUserResponse = "https://pwapi.peoplewith.com/api/userresponse/";
+        public const string InsertUserSymptoms = "https://pwapi.peoplewith.com/api/usersymptom/";
+        public const string InsertUserMedications = "https://pwapi.peoplewith.com/api/usermedication/";
+        public const string InsertUserDiagnosis = "https://pwapi.peoplewith.com/api/userdiagnosis/";
+        public const string InsertUserMeasurements = "https://pwapi.peoplewith.com/api/usermeasurement/";
+        public const string usersymptoms = "https://pwapi.peoplewith.com/api/usersymptom";
         //CrashLog  
-        public const string CrashLog = "https://pwdevapi.peoplewith.com/api/crashlog";
+        public const string CrashLog = "https://pwapi.peoplewith.com/api/crashlog";
 
         //Allergies  
-        public const string Allergies = "https://pwdevapi.peoplewith.com/api/allergy";
+        public const string Allergies = "https://pwapi.peoplewith.com/api/allergy";
 
 
         //Symptoms
-        public const string GetSymptoms = "https://pwdevapi.peoplewith.com/api/symptom?$select=symptomid,title";
+        public const string GetSymptoms = "https://pwapi.peoplewith.com/api/symptom?$select=symptomid,title";
 
         //Medications 
-        public const string usermedications = "https://pwdevapi.peoplewith.com/api/usermedication";
-        public const string GetMedications = "https://pwdevapi.peoplewith.com/api/medication?$select=medicationid,title,status";
+        public const string usermedications = "https://pwapi.peoplewith.com/api/usermedication";
+        public const string GetMedications = "https://pwapi.peoplewith.com/api/medication?$select=medicationid,title,status";
 
         //Supplements
-        public const string usersupplements = "https://pwdevapi.peoplewith.com/api/usersupplement";
-        public const string InsertUserSupplements = "https://pwdevapi.peoplewith.com/api/usersupplement";
-        public const string GetSupplements = "https://pwdevapi.peoplewith.com/api/supplement?$select=supplementid,title,status";
+        public const string usersupplements = "https://pwapi.peoplewith.com/api/usersupplement";
+        public const string InsertUserSupplements = "https://pwapi.peoplewith.com/api/usersupplement";
+        public const string GetSupplements = "https://pwapi.peoplewith.com/api/supplement?$select=supplementid,title,status";
 
         //User Allergies  
-        public const string UserAllergies = "https://pwdevapi.peoplewith.com/api/userallergy";
+        public const string UserAllergies = "https://pwapi.peoplewith.com/api/userallergy";
 
         //Diagnosis 
-        public const string Diagnosis = "https://pwdevapi.peoplewith.com/api/diagnosis";
+        public const string Diagnosis = "https://pwapi.peoplewith.com/api/diagnosis";
 
         //UserDiagnosis 
-        public const string UserDiagnosis = "https://pwdevapi.peoplewith.com/api/userdiagnosis";
+        public const string UserDiagnosis = "https://pwapi.peoplewith.com/api/userdiagnosis";
         // Mood  
-        public const string UserMood = "https://pwdevapi.peoplewith.com/api/usermood";
+        public const string UserMood = "https://pwapi.peoplewith.com/api/usermood";
 
         //HCPS
-        public const string UserHCPs = "https://pwdevapi.peoplewith.com/api/hcp";
+        public const string UserHCPs = "https://pwapi.peoplewith.com/api/hcp";
 
         //Appointment
-        public const string Appointments = "https://pwdevapi.peoplewith.com/api/appointment";
+        public const string Appointments = "https://pwapi.peoplewith.com/api/appointment";
 
         //Videos 
-        public const string Videos = "https://pwdevapi.peoplewith.com/api/video";
+        public const string Videos = "https://pwapi.peoplewith.com/api/video";
         //Videos engagement
-        public const string VideosEngage = "https://pwdevapi.peoplewith.com/api/videoengagementdata";
+        public const string VideosEngage = "https://pwapi.peoplewith.com/api/videoengagementdata";
         //User Consent 
-        public const string UserConsent = "https://pwdevapi.peoplewith.com/api/userconsent";
+        public const string UserConsent = "https://pwapi.peoplewith.com/api/userconsent";
 
-        public const string UserQuestionnaires = "https://pwdevapi.peoplewith.com/api/userquestionnaire";
+        public const string UserQuestionnaires = "https://pwapi.peoplewith.com/api/userquestionnaire";
 
-        public const string UserFeedback = "https://pwdevapi.peoplewith.com/api/userfeedback";
+        public const string UserFeedback = "https://pwapi.peoplewith.com/api/userfeedback";
 
-        public const string PrivPolicy = "https://pwdevapi.peoplewith.com/api/privacypolicy";
+        public const string PrivPolicy = "https://pwapi.peoplewith.com/api/privacypolicy";
 
-        public const string signupcode = "https://pwdevapi.peoplewith.com/api/signupcode";
+        public const string signupcode = "https://pwapi.peoplewith.com/api/signupcode";
 
-        public const string postcode = "https://pwdevapi.peoplewith.com/api/postcode";
+        public const string postcode = "https://pwapi.peoplewith.com/api/postcode";
 
         //Diet 
-        public const string GetDiet = "https://pwdevapi.peoplewith.com/api/diet";
-        public const string GetUserDiet = "https://pwdevapi.peoplewith.com/api/userdiet";
+        public const string GetDiet = "https://pwapi.peoplewith.com/api/diet";
+        public const string GetUserDiet = "https://pwapi.peoplewith.com/api/userdiet";
 
         //Investigation 
-        public const string GetInvestigation = "https://pwdevapi.peoplewith.com/api/investigation";
-        public const string GetUserInvestigation = "https://pwdevapi.peoplewith.com/api/userinvestigation";
+        public const string GetInvestigation = "https://pwapi.peoplewith.com/api/investigation";
+        public const string GetUserInvestigation = "https://pwapi.peoplewith.com/api/userinvestigation";
 
+        //Exercise
+        public const string GetExercise = "https://pwapi.peoplewith.com/api/exercise";
+        //public const string GetUserInvestigation = "https://pwapi.peoplewith.com/api/userinvestigation";
+
+        //Actiivty 
+        public const string GetActivity = "https://pwapi.peoplewith.com/api/dailyactivity";
+        public const string GetUserActivity = "https://pwapi.peoplewith.com/api/userdailyactivity";
+
+
+        //Authentication Test
+        public const string GetAuth = "https://pwapicontainer.thankfulground-b43b4106.ukwest.azurecontainerapps.io/api/registryConfig";
+
+        public HttpClient Client = new HttpClient();
+        
+
+        private void ConfigureClient()
+        {
+            try
+            {
+                Client = new HttpClient();
+                Client.DefaultRequestHeaders.Add("X-MS-CLIENT-PRINCIPAL", "eyAgCiAgImlkZW50aXR5UHJvdmlkZXIiOiAidGVzdCIsCiAgInVzZXJJZCI6ICIxMjM0NSIsCiAgInVzZXJEZXRhaWxzIjogImpvaG5AY29udG9zby5jb20iLAogICJ1c2VyUm9sZXMiOiBbIjFFMzNDMEFDLTMzOTMtNEMzNC04MzRBLURFNUZEQkNCQjNDQyJdCn0=");
+                Client.DefaultRequestHeaders.Add("X-MS-API-ROLE", "1E33C0AC-3393-4C34-834A-DE5FDBCBB3CC");
+            }
+            catch (Exception Ex)
+            {
+                //Empty
+            }
+        }
 
 
         //Get User Details 
@@ -108,9 +136,9 @@ namespace PeopleWith
             try
             {
                 var USERID = Helpers.Settings.UserKey;
-                var url = $"https://pwdevapi.peoplewith.com/api/user/userid/{USERID}";
-                HttpClient client = new HttpClient();
-                HttpResponseMessage responseconsent = await client.GetAsync(url);
+                var url = $"https://pwapi.peoplewith.com/api/user/userid/{USERID}";
+                ConfigureClient(); 
+                HttpResponseMessage responseconsent = await Client.GetAsync(url);
 
                 if (responseconsent.IsSuccessStatusCode)
                 {
@@ -141,8 +169,8 @@ namespace PeopleWith
                 var signupcode = Helpers.Settings.SignUp;
                 string urlWithQuery = $"{CheckConsent}?$filter=signupcodeid eq '{signupcode}'";
 
-                HttpClient client = new HttpClient();
-                HttpResponseMessage responseconsent = await client.GetAsync(urlWithQuery);
+                ConfigureClient();
+                HttpResponseMessage responseconsent = await Client.GetAsync(urlWithQuery);
 
                 if (responseconsent.IsSuccessStatusCode)
                 {
@@ -175,9 +203,9 @@ namespace PeopleWith
         {
             try
             {
-                var url = "https://pwdevapi.peoplewith.com/api/measurement?$select=measurementid,measurementname,units";
-                HttpClient client = new HttpClient();
-                HttpResponseMessage responseconsent = await client.GetAsync(url);
+                var url = "https://pwapi.peoplewith.com/api/measurement?$select=measurementid,measurementname,units";
+                ConfigureClient();
+                HttpResponseMessage responseconsent = await Client.GetAsync(url);
 
                 if (responseconsent.IsSuccessStatusCode)
                 {
@@ -205,9 +233,9 @@ namespace PeopleWith
             try
             {
                 var id = Getinfo.measurementid;
-                var url = $"https://pwdevapi.peoplewith.com/api/measurement/measurementid/{id}";
-                HttpClient client = new HttpClient();
-                HttpResponseMessage responseconsent = await client.GetAsync(url);
+                var url = $"https://pwapi.peoplewith.com/api/measurement/measurementid/{id}";
+                ConfigureClient();
+                HttpResponseMessage responseconsent = await Client.GetAsync(url);
 
                 if (responseconsent.IsSuccessStatusCode)
                 {
@@ -237,9 +265,9 @@ namespace PeopleWith
                 ObservableCollection<usermeasurement> itemstoremove = new ObservableCollection<usermeasurement>();
                 string userid = Preferences.Default.Get("userid", "Unknown");
 
-                var url = "https://pwdevapi.peoplewith.com/api/usermeasurement?$filter=userid%20eq%20" + "%27" + userid + "%27";
-                HttpClient client = new HttpClient();
-                HttpResponseMessage responseconsent = await client.GetAsync(url);
+                var url = "https://pwapi.peoplewith.com/api/usermeasurement?$filter=userid%20eq%20" + "%27" + userid + "%27";
+                ConfigureClient();
+                HttpResponseMessage responseconsent = await Client.GetAsync(url);
 
                 if (responseconsent.IsSuccessStatusCode)
                 {
@@ -278,11 +306,11 @@ namespace PeopleWith
         {
             try
             {
-                HttpClient client = new HttpClient();
+                ConfigureClient();
                 var url = APICalls.InsertUserMeasurements;
                 string jsonn = System.Text.Json.JsonSerializer.Serialize<usermeasurement>(item);
                 StringContent contenttt = new StringContent(jsonn, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await client.PostAsync(url, contenttt);
+                HttpResponseMessage response = await Client.PostAsync(url, contenttt);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -320,10 +348,10 @@ namespace PeopleWith
             {
                 for (int i = 0; i < deletelistpassed.Count; i++)
                 {
-                    var url = $"https://pwdevapi.peoplewith.com/api/usermeasurement/id/{deletelistpassed[i].id}";
+                    var url = $"https://pwapi.peoplewith.com/api/usermeasurement/id/{deletelistpassed[i].id}";
                     string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = deletelistpassed[i].deleted });
                     StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+                    ConfigureClient();
                     using (var client = new HttpClient())
                     {
                         var request = new HttpRequestMessage(HttpMethod.Patch, url)
@@ -331,7 +359,7 @@ namespace PeopleWith
                             Content = content
                         };
 
-                        var response = await client.SendAsync(request);
+                        var response = await Client.SendAsync(request);
 
                         if (!response.IsSuccessStatusCode)
                         {
@@ -353,11 +381,11 @@ namespace PeopleWith
             try
             {
                 string id = Updatefeedback[0].id;
-                var url = $"https://pwdevapi.peoplewith.com/api/usersymptom/id/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/usersymptom/id/{id}";
 
                 string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = Updatefeedback[0].deleted });
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     var request = new HttpRequestMessage(HttpMethod.Patch, url)
@@ -365,7 +393,7 @@ namespace PeopleWith
                         Content = content
                     };
 
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
 
                     if (!response.IsSuccessStatusCode)
                     {
@@ -394,12 +422,12 @@ namespace PeopleWith
             {
 
 
-                HttpClient client = new HttpClient();
+                ConfigureClient();
                 string userid = Preferences.Default.Get("userid", "Unknown");
-                //var url = $"https://pwdevapi.peoplewith.com/api/usersymptom/userid/{USERID}";
+                //var url = $"https://pwapi.peoplewith.com/api/usersymptom/userid/{USERID}";
                 string urlWithQuery = $"{usersymptoms}?$filter=userid eq '{userid}'";
                 //string urlWithQuery = $"{usersymptoms}?$filter=userid eq '{USERID}'&$select=id,userid,symptomid,feedback,symptomtitle";
-                HttpResponseMessage response = await client.GetAsync(urlWithQuery);
+                HttpResponseMessage response = await Client.GetAsync(urlWithQuery);
                 string data = await response.Content.ReadAsStringAsync();
                 // Deserialize the response into a generic structure
                 var rawResponse = JsonConvert.DeserializeObject<SingleUserSymptom>(data);
@@ -449,9 +477,9 @@ namespace PeopleWith
             {
                 string userid = Preferences.Default.Get("userid", "Unknown");
 
-                var url = "https://pwdevapi.peoplewith.com/api/usersymptom?$filter=userid%20eq%20" + "%27" + userid + "%27";
-                HttpClient client = new HttpClient();
-                HttpResponseMessage responseconsent = await client.GetAsync(url);
+                var url = "https://pwapi.peoplewith.com/api/usersymptom?$filter=userid%20eq%20" + "%27" + userid + "%27";
+                ConfigureClient();
+                HttpResponseMessage responseconsent = await Client.GetAsync(url);
 
                 if (responseconsent.IsSuccessStatusCode)
                 {
@@ -480,9 +508,9 @@ namespace PeopleWith
         {
             try
             {
-                var url = "https://pwdevapi.peoplewith.com/api/symptom?$select=symptomid,title,status,classification";
-                HttpClient client = new HttpClient();
-                HttpResponseMessage response = await client.GetAsync(url);
+                var url = "https://pwapi.peoplewith.com/api/symptom?$select=symptomid,title,status,classification";
+                ConfigureClient();
+                HttpResponseMessage response = await Client.GetAsync(url);
                 string data = await response.Content.ReadAsStringAsync();
                 var userResponse = JsonConvert.DeserializeObject<ApiResponseSymptom>(data);
                 ObservableCollection<symptom> users = userResponse.Value;
@@ -498,11 +526,11 @@ namespace PeopleWith
         {
             try
             {
-                HttpClient client = new HttpClient();
-                var url = "https://pwdevapi.peoplewith.com/api/usersymptom";
+                ConfigureClient();
+                var url = "https://pwapi.peoplewith.com/api/usersymptom";
                 string jsonns = System.Text.Json.JsonSerializer.Serialize<usersymptom>(usersymptomsPassed);
                 StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
-                var response = await client.PostAsync(url, contenttts);
+                var response = await Client.PostAsync(url, contenttts);
                 var errorResponse = await response.Content.ReadAsStringAsync();
                 if (response.IsSuccessStatusCode)
                 {
@@ -539,11 +567,12 @@ namespace PeopleWith
             try
             {
                 var id = Updatefeedback[0].id;
-                var url = $"https://pwdevapi.peoplewith.com/api/usersymptom/id/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/usersymptom/id/{id}";
                 var feedbacks = Updatefeedback[0].feedback;
                 string json = System.Text.Json.JsonSerializer.Serialize(new { feedback = feedbacks });
                 //string json = System.Text.Json.JsonSerializer.Serialize(new { feedback = feedbacks }, serializerOptions);
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     //works with patch
@@ -552,7 +581,7 @@ namespace PeopleWith
                     {
                         Content = content
                     };
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
                     if (!response.IsSuccessStatusCode)
                     {
                         var errorResponse = await response.Content.ReadAsStringAsync();
@@ -577,17 +606,18 @@ namespace PeopleWith
                 for (int i = 0; i < Updatefeedback.Count; i++)
                 {
                     var id = Updatefeedback[i].id;
-                    var url = $"https://pwdevapi.peoplewith.com/api/usersymptom/id/{id}";
+                    var url = $"https://pwapi.peoplewith.com/api/usersymptom/id/{id}";
                     var feedbacks = Updatefeedback[i].feedback;
                     string json = System.Text.Json.JsonSerializer.Serialize(new { feedback = feedbacks });
                     StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                    ConfigureClient();
                     using (var client = new HttpClient())
                     {
                         var request = new HttpRequestMessage(HttpMethod.Patch, url)
                         {
                             Content = content
                         };
-                        var response = await client.SendAsync(request);
+                        var response = await Client.SendAsync(request);
                         if (!response.IsSuccessStatusCode)
                         {
                             var errorResponse = await response.Content.ReadAsStringAsync();
@@ -612,9 +642,9 @@ namespace PeopleWith
             try
             {
 
-                var URl = "https://pwdevapi.peoplewith.com/api/interventiontrigger?$select=title,category,type";
-                HttpClient client = new HttpClient();
-                HttpResponseMessage response = await client.GetAsync(URl);
+                var URl = "https://pwapi.peoplewith.com/api/interventiontrigger?$select=title,category,type";
+                ConfigureClient();
+                HttpResponseMessage response = await Client.GetAsync(URl);
                 string data = await response.Content.ReadAsStringAsync();
                 var userResponse = JsonConvert.DeserializeObject<ApiInterventionTrigger>(data);
                 ObservableCollection<interventiontrigger> users = userResponse.Value;
@@ -631,9 +661,9 @@ namespace PeopleWith
         {
             try
             {
-                var url = "https://pwdevapi.peoplewith.com/api/preparation/";
-                HttpClient client = new HttpClient();
-                HttpResponseMessage responseconsent = await client.GetAsync(url);
+                var url = "https://pwapi.peoplewith.com/api/preparation/";
+                ConfigureClient();
+                HttpResponseMessage responseconsent = await Client.GetAsync(url);
 
                 if (responseconsent.IsSuccessStatusCode)
                 {
@@ -664,8 +694,8 @@ namespace PeopleWith
         {
             try
             {
-                HttpClient client = new HttpClient();
-                var url = "https://pwdevapi.peoplewith.com/api/usermedication";
+                ConfigureClient();
+                var url = "https://pwapi.peoplewith.com/api/usermedication";
                 string jsonns = System.Text.Json.JsonSerializer.Serialize<usermedication>(usermedpassed);
                 StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
                 HttpResponseMessage response;
@@ -673,11 +703,11 @@ namespace PeopleWith
                 // Choose POST or PATCH based on whether the ID is null or empty
                 if (string.IsNullOrEmpty(usermedpassed.id))
                 {
-                    response = await client.PostAsync(url, contenttts);
+                    response = await Client.PostAsync(url, contenttts);
                 }
                 else
                 {
-                    response = await client.PatchAsync(url, contenttts);
+                    response = await Client.PatchAsync(url, contenttts);
                 }
 
                 var errorResponse = await response.Content.ReadAsStringAsync();
@@ -715,8 +745,8 @@ namespace PeopleWith
         {
             try
             {
-                HttpClient client = new HttpClient();
-                var url = "https://pwdevapi.peoplewith.com/api/usersupplement";
+                ConfigureClient();
+                var url = "https://pwapi.peoplewith.com/api/usersupplement";
                 string jsonns = System.Text.Json.JsonSerializer.Serialize<usersupplement>(usermedpassed);
                 StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
                 HttpResponseMessage response;
@@ -724,11 +754,11 @@ namespace PeopleWith
                 // Choose POST or PATCH based on whether the ID is null or empty
                 if (string.IsNullOrEmpty(usermedpassed.id))
                 {
-                    response = await client.PostAsync(url, contenttts);
+                    response = await Client.PostAsync(url, contenttts);
                 }
                 else
                 {
-                    response = await client.PatchAsync(url, contenttts);
+                    response = await Client.PatchAsync(url, contenttts);
                 }
 
                 var errorResponse = await response.Content.ReadAsStringAsync();
@@ -767,12 +797,13 @@ namespace PeopleWith
             {
                 // HttpClient client = new HttpClient();
                 var id = usermedpassed.id;
-                var url = $"https://pwdevapi.peoplewith.com/api/usermedication/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/usermedication/{id}";
                 string jsonns = System.Text.Json.JsonSerializer.Serialize<usermedication>(usermedpassed);
                 StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
                 HttpResponseMessage response;
 
                 StringContent content = new StringContent(jsonns, Encoding.UTF8, "application/json");
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     //works with patch
@@ -781,7 +812,7 @@ namespace PeopleWith
                     {
                         Content = content
                     };
-                    var responsee = await client.SendAsync(request);
+                    var responsee = await Client.SendAsync(request);
                     if (!responsee.IsSuccessStatusCode)
                     {
                         var errorResponse = await responsee.Content.ReadAsStringAsync();
@@ -815,12 +846,12 @@ namespace PeopleWith
         {
             try
             {
-                HttpClient client = new HttpClient();
+                ConfigureClient();
                 string userid = Preferences.Default.Get("userid", "Unknown");
-                //var url = $"https://pwdevapi.peoplewith.com/api/usermedication/userid/{USERID}";
+                //var url = $"https://pwapi.peoplewith.com/api/usermedication/userid/{USERID}";
                 string urlWithQuery = $"{usermedications}?$filter=userid eq '{userid}'";
                 //string urlWithQuery = $"{usersymptoms}?$filter=userid eq '{USERID}'&$select=id,userid,symptomid,feedback,symptomtitle";
-                HttpResponseMessage response = await client.GetAsync(urlWithQuery);
+                HttpResponseMessage response = await Client.GetAsync(urlWithQuery);
                 string data = await response.Content.ReadAsStringAsync();
                 // Deserialize the response into a generic structure
                 var rawResponse = JsonConvert.DeserializeObject<SingleUserMedication>(data);
@@ -954,11 +985,11 @@ namespace PeopleWith
             try
             {
                 string id = Updatefeedback.id;
-                var url = $"https://pwdevapi.peoplewith.com/api/usermedication/id/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/usermedication/id/{id}";
 
                 string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = Updatefeedback.deleted });
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     var request = new HttpRequestMessage(HttpMethod.Patch, url)
@@ -966,7 +997,7 @@ namespace PeopleWith
                         Content = content
                     };
 
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
 
                     if (!response.IsSuccessStatusCode)
                     {
@@ -988,11 +1019,11 @@ namespace PeopleWith
             try
             {
                 string id = Updatefeedback.id;
-                var url = $"https://pwdevapi.peoplewith.com/api/usersupplement/id/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/usersupplement/id/{id}";
 
                 string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = Updatefeedback.deleted });
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     var request = new HttpRequestMessage(HttpMethod.Patch, url)
@@ -1000,7 +1031,7 @@ namespace PeopleWith
                         Content = content
                     };
 
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
 
                     if (!response.IsSuccessStatusCode)
                     {
@@ -1022,7 +1053,7 @@ namespace PeopleWith
             try
             {
                 string id = Updatefeedback.id;
-                var url = $"https://pwdevapi.peoplewith.com/api/usermedication/id/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/usermedication/id/{id}";
 
                 var payload = new
                 {
@@ -1041,7 +1072,7 @@ namespace PeopleWith
                 // Serialize the object into JSON
                 string json = System.Text.Json.JsonSerializer.Serialize(payload);
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     var request = new HttpRequestMessage(HttpMethod.Patch, url)
@@ -1049,7 +1080,7 @@ namespace PeopleWith
                         Content = content
                     };
 
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
 
                     if (!response.IsSuccessStatusCode)
                     {
@@ -1070,7 +1101,7 @@ namespace PeopleWith
             try
             {
                 string id = Updatefeedback.id;
-                var url = $"https://pwdevapi.peoplewith.com/api/usersupplement/id/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/usersupplement/id/{id}";
 
                 var payload = new
                 {
@@ -1089,7 +1120,7 @@ namespace PeopleWith
                 // Serialize the object into JSON
                 string json = System.Text.Json.JsonSerializer.Serialize(payload);
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     var request = new HttpRequestMessage(HttpMethod.Patch, url)
@@ -1097,7 +1128,7 @@ namespace PeopleWith
                         Content = content
                     };
 
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
 
                     if (!response.IsSuccessStatusCode)
                     {
@@ -1118,7 +1149,7 @@ namespace PeopleWith
             try
             {
                 string id = updatedmed.id;
-                var url = $"https://pwdevapi.peoplewith.com/api/usermedication/id/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/usermedication/id/{id}";
 
                 var payload = new
                 {
@@ -1128,7 +1159,7 @@ namespace PeopleWith
                 // Serialize the object into JSON
                 string json = System.Text.Json.JsonSerializer.Serialize(payload);
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     var request = new HttpRequestMessage(HttpMethod.Patch, url)
@@ -1136,7 +1167,7 @@ namespace PeopleWith
                         Content = content
                     };
 
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
 
                     if (!response.IsSuccessStatusCode)
                     {
@@ -1157,7 +1188,7 @@ namespace PeopleWith
             try
             {
                 string id = updatedmed.id;
-                var url = $"https://pwdevapi.peoplewith.com/api/usersupplement/id/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/usersupplement/id/{id}";
 
                 var payload = new
                 {
@@ -1168,7 +1199,7 @@ namespace PeopleWith
                 // Serialize the object into JSON
                 string json = System.Text.Json.JsonSerializer.Serialize(payload);
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     var request = new HttpRequestMessage(HttpMethod.Patch, url)
@@ -1176,7 +1207,7 @@ namespace PeopleWith
                         Content = content
                     };
 
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
 
                     if (!response.IsSuccessStatusCode)
                     {
@@ -1198,7 +1229,7 @@ namespace PeopleWith
         //    try
         //    {
         //        string id = Updatefeedback.id;
-        //        var url = $"https://pwdevapi.peoplewith.com/api/usermedication/id/{id}";
+        //        var url = $"https://pwapi.peoplewith.com/api/usermedication/id/{id}";
 
         //        string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = Updatefeedback.deleted });
         //        StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -1233,11 +1264,12 @@ namespace PeopleWith
             try
             {
                 var id = Updatefeedback.id;
-                var url = $"https://pwdevapi.peoplewith.com/api/usermedication/id/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/usermedication/id/{id}";
                 var feedbacks = Updatefeedback.feedback;
                 string json = System.Text.Json.JsonSerializer.Serialize(new { feedback = feedbacks });
                 //string json = System.Text.Json.JsonSerializer.Serialize(new { feedback = feedbacks }, serializerOptions);
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     //works with patch
@@ -1246,7 +1278,7 @@ namespace PeopleWith
                     {
                         Content = content
                     };
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
                     if (!response.IsSuccessStatusCode)
                     {
                         var errorResponse = await response.Content.ReadAsStringAsync();
@@ -1267,11 +1299,12 @@ namespace PeopleWith
             try
             {
                 var id = Updatefeedback.id;
-                var url = $"https://pwdevapi.peoplewith.com/api/usersupplement/id/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/usersupplement/id/{id}";
                 var feedbacks = Updatefeedback.feedback;
                 string json = System.Text.Json.JsonSerializer.Serialize(new { feedback = feedbacks });
                 //string json = System.Text.Json.JsonSerializer.Serialize(new { feedback = feedbacks }, serializerOptions);
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     //works with patch
@@ -1280,7 +1313,7 @@ namespace PeopleWith
                     {
                         Content = content
                     };
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
                     if (!response.IsSuccessStatusCode)
                     {
                         var errorResponse = await response.Content.ReadAsStringAsync();
@@ -1303,12 +1336,12 @@ namespace PeopleWith
         {
             try
             {
-                HttpClient client = new HttpClient();
+                ConfigureClient();
                 string userid = Preferences.Default.Get("userid", "Unknown");
-                //var url = $"https://pwdevapi.peoplewith.com/api/usersupplement/userid/{USERID}";
+                //var url = $"https://pwapi.peoplewith.com/api/usersupplement/userid/{USERID}";
                 string urlWithQuery = $"{usersupplements}?$filter=userid eq '{userid}'";
                 //string urlWithQuery = $"{usersymptoms}?$filter=userid eq '{USERID}'&$select=id,userid,symptomid,feedback,symptomtitle";
-                HttpResponseMessage response = await client.GetAsync(urlWithQuery);
+                HttpResponseMessage response = await Client.GetAsync(urlWithQuery);
                 string data = await response.Content.ReadAsStringAsync();
                 // Deserialize the response into a generic structure
                 var rawResponse = JsonConvert.DeserializeObject<SingleUserSupplement>(data);
@@ -1443,11 +1476,11 @@ namespace PeopleWith
         {
             try
             {
-                HttpClient client = new HttpClient();
+                ConfigureClient();
                 var url = APICalls.CrashLog;
                 string jsonn = System.Text.Json.JsonSerializer.Serialize<crashlog>(item);
                 StringContent contenttt = new StringContent(jsonn, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await client.PostAsync(url, contenttt);
+                HttpResponseMessage response = await Client.PostAsync(url, contenttt);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -1477,9 +1510,9 @@ namespace PeopleWith
         {
             try
             {
-                HttpClient client = new HttpClient();
+                ConfigureClient();
                 var URl = APICalls.Allergies;
-                HttpResponseMessage response = await client.GetAsync(URl);
+                HttpResponseMessage response = await Client.GetAsync(URl);
                 string data = await response.Content.ReadAsStringAsync();
                 var userResponse = JsonConvert.DeserializeObject<ApiAllergies>(data);
                 ObservableCollection<allergies> users = userResponse.Value;
@@ -1498,11 +1531,11 @@ namespace PeopleWith
             try
             {
                 var id = GetInfo.Allergyid;
-                HttpClient client = new HttpClient();
+                ConfigureClient();
 
-                var URl = $"https://pwdevapi.peoplewith.com/api/allergy/allergyid/{id}";
+                var URl = $"https://pwapi.peoplewith.com/api/allergy/allergyid/{id}";
 
-                HttpResponseMessage response = await client.GetAsync(URl);
+                HttpResponseMessage response = await Client.GetAsync(URl);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -1531,11 +1564,11 @@ namespace PeopleWith
         {
             try
             {
-                HttpClient client = new HttpClient();
+                ConfigureClient();
                 var urls = APICalls.UserAllergies;
                 string jsonns = System.Text.Json.JsonSerializer.Serialize<userallergies>(AllergyPassed[0]);
                 StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
-                var response = await client.PostAsync(urls, contenttts);
+                var response = await Client.PostAsync(urls, contenttts);
                 var errorResponse = await response.Content.ReadAsStringAsync();
                 if (response.IsSuccessStatusCode)
                 {
@@ -1574,9 +1607,9 @@ namespace PeopleWith
         {
             try
             {
-                HttpClient client = new HttpClient();
+                ConfigureClient();
                 string urlWithQuery = $"{UserAllergies}?$filter=userid eq '{USERID}'";
-                HttpResponseMessage response = await client.GetAsync(urlWithQuery);
+                HttpResponseMessage response = await Client.GetAsync(urlWithQuery);
                 string data = await response.Content.ReadAsStringAsync();
                 var userResponse = JsonConvert.DeserializeObject<GetUserAllergies>(data);
                 ObservableCollection<userallergies> users = userResponse.Value;
@@ -1605,10 +1638,10 @@ namespace PeopleWith
             try
             {
                 string id = Updatefeedback[0].id;
-                var url = $"https://pwdevapi.peoplewith.com/api/userallergy/id/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/userallergy/id/{id}";
                 string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = Updatefeedback[0].deleted });
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     var request = new HttpRequestMessage(HttpMethod.Patch, url)
@@ -1616,7 +1649,7 @@ namespace PeopleWith
                         Content = content
                     };
 
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
 
                     if (!response.IsSuccessStatusCode)
                     {
@@ -1641,9 +1674,9 @@ namespace PeopleWith
         {
             try
             {
-                HttpClient client = new HttpClient();
-                var URl = "https://pwdevapi.peoplewith.com/api/diagnosis";
-                HttpResponseMessage response = await client.GetAsync(URl);
+                ConfigureClient();
+                var URl = "https://pwapi.peoplewith.com/api/diagnosis";
+                HttpResponseMessage response = await Client.GetAsync(URl);
                 string data = await response.Content.ReadAsStringAsync();
                 var userResponse = JsonConvert.DeserializeObject<ApiDiagnosis>(data);
                 ObservableCollection<diagnosis> users = userResponse.Value;
@@ -1666,12 +1699,12 @@ namespace PeopleWith
             try
             {
                 var id = GetInfo.Diagnosisid;
-                HttpClient client = new HttpClient();
+                ConfigureClient();
 
                 // Use string id interpolation to insert Diagid
-                var URl = $"https://pwdevapi.peoplewith.com/api/diagnosis/diagnosisid/{id}";
+                var URl = $"https://pwapi.peoplewith.com/api/diagnosis/diagnosisid/{id}";
 
-                HttpResponseMessage response = await client.GetAsync(URl);
+                HttpResponseMessage response = await Client.GetAsync(URl);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -1700,11 +1733,11 @@ namespace PeopleWith
         {
             try
             {
-                HttpClient client = new HttpClient();
+                ConfigureClient();
                 var urls = APICalls.UserDiagnosis;
                 string jsonns = System.Text.Json.JsonSerializer.Serialize<userdiagnosis>(UserDiagnosisPassed[0]);
                 StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
-                var response = await client.PostAsync(urls, contenttts);
+                var response = await Client.PostAsync(urls, contenttts);
                 var errorResponse = await response.Content.ReadAsStringAsync();
                 if (response.IsSuccessStatusCode)
                 {
@@ -1741,9 +1774,9 @@ namespace PeopleWith
         {
             try
             {
-                HttpClient client = new HttpClient();
+                ConfigureClient();
                 string urlWithQuery = $"{UserDiagnosis}?$filter=userid eq '{USERID}'";
-                HttpResponseMessage response = await client.GetAsync(urlWithQuery);
+                HttpResponseMessage response = await Client.GetAsync(urlWithQuery);
                 string data = await response.Content.ReadAsStringAsync();
                 var userResponse = JsonConvert.DeserializeObject<GetUserDiagnosis>(data);
                 ObservableCollection<userdiagnosis> users = userResponse.Value;
@@ -1764,10 +1797,10 @@ namespace PeopleWith
             try
             {
                 string id = Updatefeedback[0].id;
-                var url = $"https://pwdevapi.peoplewith.com/api/userdiagnosis/id/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/userdiagnosis/id/{id}";
                 string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = Updatefeedback[0].deleted });
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     var request = new HttpRequestMessage(HttpMethod.Patch, url)
@@ -1775,7 +1808,7 @@ namespace PeopleWith
                         Content = content
                     };
 
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
 
                     if (!response.IsSuccessStatusCode)
                     {
@@ -1797,13 +1830,13 @@ namespace PeopleWith
             {
 
                 var id = Updatefeedback[0].id;
-                var url = $"https://pwdevapi.peoplewith.com/api/userdiagnosis/id/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/userdiagnosis/id/{id}";
                 var feedbacks = Updatefeedback[0].dateofdiagnosis;
 
                 string json = System.Text.Json.JsonSerializer.Serialize(new { dateofdiagnosis = feedbacks });
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
-
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     var request = new HttpRequestMessage(HttpMethod.Patch, url)
@@ -1811,7 +1844,7 @@ namespace PeopleWith
                         Content = content
                     };
 
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
 
                     if (!response.IsSuccessStatusCode)
                     {
@@ -1917,9 +1950,9 @@ namespace PeopleWith
         {
             try
             {
-                HttpClient client = new HttpClient();
+                ConfigureClient();
                 string urlWithQuery = $"{UserMood}?$filter=userid eq '{USERID}'";
-                HttpResponseMessage response = await client.GetAsync(urlWithQuery);
+                HttpResponseMessage response = await Client.GetAsync(urlWithQuery);
                 string data = await response.Content.ReadAsStringAsync();
                 var userResponse = JsonConvert.DeserializeObject<GetUserMood>(data);
                 ObservableCollection<usermood> users = userResponse.Value;
@@ -1932,8 +1965,8 @@ namespace PeopleWith
                     }
 
                 }
-
-                return new ObservableCollection<usermood>(users.Take(Range.All));
+                var FilterMood = users?.Where(item => !item.deleted).ToList() ?? new List<usermood>();
+                return new ObservableCollection<usermood>(FilterMood);
             }
             catch (Exception ex)
             {
@@ -1948,11 +1981,11 @@ namespace PeopleWith
         {
             try
             {
-                HttpClient client = new HttpClient();
+                ConfigureClient();
                 var urls = APICalls.UserMood;
                 string jsonns = System.Text.Json.JsonSerializer.Serialize<usermood>(MoodPassed[0]);
                 StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
-                var response = await client.PostAsync(urls, contenttts);
+                var response = await Client.PostAsync(urls, contenttts);
                 var errorResponse = await response.Content.ReadAsStringAsync();
                 if (response.IsSuccessStatusCode)
                 {
@@ -1988,15 +2021,15 @@ namespace PeopleWith
 
         //Delete UserMood Data 
 
-        public async Task DeleteUserMood(ObservableCollection<usermood> Updatefeedback)
+        public async Task DeleteUserMood(usermood Updatefeedback)
         {
             try
             {
-                string id = Updatefeedback[0].id;
-                var url = $"https://pwdevapi.peoplewith.com/api/usermood/id/{id}";
-                string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = Updatefeedback[0].deleted });
+                string id = Updatefeedback.id;
+                var url = $"https://pwapi.peoplewith.com/api/usermood/id/{id}";
+                string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = Updatefeedback.deleted });
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     var request = new HttpRequestMessage(HttpMethod.Patch, url)
@@ -2004,7 +2037,7 @@ namespace PeopleWith
                         Content = content
                     };
 
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
 
                     if (!response.IsSuccessStatusCode)
                     {
@@ -2028,7 +2061,7 @@ namespace PeopleWith
             {
 
                 var id = Updatefeedback[0].id;
-                var url = $"https://pwdevapi.peoplewith.com/api/usermood/id/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/usermood/id/{id}";
                 var feedbacks = Updatefeedback[0];
 
                 //Change the following   
@@ -2039,7 +2072,7 @@ namespace PeopleWith
                     notes = feedbacks.notes
                 });
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
 
@@ -2048,7 +2081,7 @@ namespace PeopleWith
                         Content = content
                     };
 
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
 
                     if (!response.IsSuccessStatusCode)
                     {
@@ -2076,8 +2109,8 @@ namespace PeopleWith
                 ObservableCollection<hcp> itemstoremove = new ObservableCollection<hcp>();
                 var userid = Helpers.Settings.UserKey;
                 string urlWithQuery = $"{UserHCPs}?$filter=userid eq '{userid}'";
-                HttpClient client = new HttpClient();
-                HttpResponseMessage responseconsent = await client.GetAsync(urlWithQuery);
+                ConfigureClient();
+                HttpResponseMessage responseconsent = await Client.GetAsync(urlWithQuery);
 
                 if (responseconsent.IsSuccessStatusCode)
                 {
@@ -2119,11 +2152,11 @@ namespace PeopleWith
         {
             try
             {
-                HttpClient client = new HttpClient();
+                ConfigureClient();
                 var urls = APICalls.UserHCPs;
                 string jsonns = System.Text.Json.JsonSerializer.Serialize<hcp>(HCPPassed[0]);
                 StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
-                var response = await client.PostAsync(urls, contenttts);
+                var response = await Client.PostAsync(urls, contenttts);
                 var errorResponse = await response.Content.ReadAsStringAsync();
                 if (response.IsSuccessStatusCode)
                 {
@@ -2155,10 +2188,10 @@ namespace PeopleWith
             try
             {
                 string id = Updatefeedback.hcpid;
-                var url = $"https://pwdevapi.peoplewith.com/api/hcp/hcpid/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/hcp/hcpid/{id}";
                 string json = System.Text.Json.JsonSerializer.Serialize(Updatefeedback);
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     var request = new HttpRequestMessage(HttpMethod.Patch, url)
@@ -2166,7 +2199,7 @@ namespace PeopleWith
                         Content = content
                     };
 
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
 
                     if (!response.IsSuccessStatusCode)
                     {
@@ -2190,10 +2223,10 @@ namespace PeopleWith
             try
             {
                 string id = Updatefeedback.hcpid;
-                var url = $"https://pwdevapi.peoplewith.com/api/hcp/hcpid/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/hcp/hcpid/{id}";
                 string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = Updatefeedback.deleted });
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     var request = new HttpRequestMessage(HttpMethod.Patch, url)
@@ -2201,7 +2234,7 @@ namespace PeopleWith
                         Content = content
                     };
 
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
 
                     if (!response.IsSuccessStatusCode)
                     {
@@ -2226,8 +2259,8 @@ namespace PeopleWith
                 ObservableCollection<appointment> itemstoremove = new ObservableCollection<appointment>();
                 var userid = Helpers.Settings.UserKey;
                 string urlWithQuery = $"{Appointments}?$filter=userid eq '{userid}'";
-                HttpClient client = new HttpClient();
-                HttpResponseMessage responseconsent = await client.GetAsync(urlWithQuery);
+                ConfigureClient();
+                HttpResponseMessage responseconsent = await Client.GetAsync(urlWithQuery);
 
                 if (responseconsent.IsSuccessStatusCode)
                 {
@@ -2276,11 +2309,11 @@ namespace PeopleWith
             try
             {
                 string id = Updatefeedback.id;
-                var url = $"https://pwdevapi.peoplewith.com/api/appointment/id/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/appointment/id/{id}";
 
                 string json = System.Text.Json.JsonSerializer.Serialize(Updatefeedback);
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     var request = new HttpRequestMessage(HttpMethod.Patch, url)
@@ -2288,7 +2321,7 @@ namespace PeopleWith
                         Content = content
                     };
 
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
 
                     if (!response.IsSuccessStatusCode)
                     {
@@ -2310,10 +2343,10 @@ namespace PeopleWith
             try
             {
                 string id = Updatefeedback.id;
-                var url = $"https://pwdevapi.peoplewith.com/api/appointment/id/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/appointment/id/{id}";
                 string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = Updatefeedback.deleted });
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     var request = new HttpRequestMessage(HttpMethod.Patch, url)
@@ -2321,7 +2354,7 @@ namespace PeopleWith
                         Content = content
                     };
 
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
 
                     if (!response.IsSuccessStatusCode)
                     {
@@ -2341,7 +2374,7 @@ namespace PeopleWith
         {
             try
             {
-                HttpClient client = new HttpClient();
+                ConfigureClient();
                 var urls = APICalls.Appointments;
 
                 string jsonns = System.Text.Json.JsonSerializer.Serialize<appointment>(AppointmentPassed[0]);
@@ -2351,17 +2384,17 @@ namespace PeopleWith
                 // Choose POST or PATCH based on whether the ID is null or empty
                 if (string.IsNullOrEmpty(AppointmentPassed[0].id))
                 {
-                    response = await client.PostAsync(urls, contenttts);
+                    response = await Client.PostAsync(urls, contenttts);
                 }
                 else
                 {
                     string id = AppointmentPassed[0].id;
-                    var url = $"https://pwdevapi.peoplewith.com/api/appointment/id/{id}";
+                    var url = $"https://pwapi.peoplewith.com/api/appointment/id/{id}";
 
                     //string json = System.Text.Json.JsonSerializer.Serialize<appointment>(AppointmentPassed[0]);
                     //StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                    response = await client.PatchAsync(url, contenttts);
+                    response = await Client.PatchAsync(url, contenttts);
 
                     //using (var clients = new HttpClient())
                     //{
@@ -2415,8 +2448,8 @@ namespace PeopleWith
             {
                 ObservableCollection<videos> itemstoremove = new ObservableCollection<videos>();
                 var urls = APICalls.Videos;
-                HttpClient client = new HttpClient();
-                HttpResponseMessage responseconsent = await client.GetAsync(urls);
+                ConfigureClient();
+                HttpResponseMessage responseconsent = await Client.GetAsync(urls);
 
                 if (responseconsent.IsSuccessStatusCode)
                 {
@@ -2473,8 +2506,8 @@ namespace PeopleWith
             {
                 ObservableCollection<videos> itemstoremove = new ObservableCollection<videos>();
                 var urls = APICalls.Videos;
-                HttpClient client = new HttpClient();
-                HttpResponseMessage responseconsent = await client.GetAsync(urls);
+                ConfigureClient();
+                HttpResponseMessage responseconsent = await Client.GetAsync(urls);
 
                 if (responseconsent.IsSuccessStatusCode)
                 {
@@ -2541,8 +2574,8 @@ namespace PeopleWith
                 // var signupcode = Helpers.Settings.SignUp;
                 var signupcode = Helpers.Settings.SignUp;
                 string urlWithQuery = $"{Videos}?$filter=referral eq '{signupcode}'";
-                HttpClient client = new HttpClient();
-                HttpResponseMessage responseconsent = await client.GetAsync(urlWithQuery);
+                ConfigureClient();
+                HttpResponseMessage responseconsent = await Client.GetAsync(urlWithQuery);
 
                 if (responseconsent.IsSuccessStatusCode)
                 {
@@ -2597,11 +2630,11 @@ namespace PeopleWith
         {
             try
             {
-                HttpClient client = new HttpClient();
+                ConfigureClient();
                 var url = APICalls.VideosEngage;
                 string jsonns = System.Text.Json.JsonSerializer.Serialize<videoengage>(PassedEngagement);
                 StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
-                var response = await client.PostAsync(url, contenttts);
+                var response = await Client.PostAsync(url, contenttts);
                 var errorResponse = await response.Content.ReadAsStringAsync();
                 if (response.IsSuccessStatusCode)
                 {
@@ -2629,11 +2662,11 @@ namespace PeopleWith
         {
             try
             {
-                HttpClient client = new HttpClient();
+                ConfigureClient();
                 var url = APICalls.UserConsent;
                 string jsonns = System.Text.Json.JsonSerializer.Serialize<userconsent>(ConsentPassed);
                 StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
-                var response = await client.PostAsync(url, contenttts);
+                var response = await Client.PostAsync(url, contenttts);
                 var errorResponse = await response.Content.ReadAsStringAsync();
                 if (response.IsSuccessStatusCode)
                 {
@@ -2662,9 +2695,9 @@ namespace PeopleWith
         {
             try
             {
-                var url = "https://pwdevapi.peoplewith.com/api/questionnaire/";
-                HttpClient client = new HttpClient();
-                HttpResponseMessage responseconsent = await client.GetAsync(url);
+                var url = "https://pwapi.peoplewith.com/api/questionnaire/";
+                ConfigureClient();
+                HttpResponseMessage responseconsent = await Client.GetAsync(url);
 
                 if (responseconsent.IsSuccessStatusCode)
                 {
@@ -2748,13 +2781,13 @@ namespace PeopleWith
             try
             {
                 var id = questionnaireid;
-                var url = "https://pwdevapi.peoplewith.com/api/questionnaire/";
+                var url = "https://pwapi.peoplewith.com/api/questionnaire/";
                 //HttpClient client = new HttpClient();
                 //HttpResponseMessage responseconsent = await client.GetAsync(url);
 
                 string urlWithQuery = $"{url}?$filter=questionnaireid eq '{id}'";
-                HttpClient client = new HttpClient();
-                HttpResponseMessage responseconsent = await client.GetAsync(urlWithQuery);
+                ConfigureClient();
+                HttpResponseMessage responseconsent = await Client.GetAsync(urlWithQuery);
 
                 if (responseconsent.IsSuccessStatusCode)
                 {
@@ -2836,11 +2869,11 @@ namespace PeopleWith
         {
             try
             {
-                HttpClient client = new HttpClient();
-                var url = "https://pwdevapi.peoplewith.com/api/userquestionnaire";
+                ConfigureClient();
+                var url = "https://pwapi.peoplewith.com/api/userquestionnaire";
                 string jsonns = System.Text.Json.JsonSerializer.Serialize<userquestionnaire>(userquestionnairepassed);
                 StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
-                var response = await client.PostAsync(url, contenttts);
+                var response = await Client.PostAsync(url, contenttts);
                 var errorResponse = await response.Content.ReadAsStringAsync();
 
                 if (response.IsSuccessStatusCode)
@@ -2878,8 +2911,8 @@ namespace PeopleWith
                 ObservableCollection<userquestionnaire> itemstoremove = new ObservableCollection<userquestionnaire>();
                 var userid = Helpers.Settings.UserKey;
                 string urlWithQuery = $"{UserQuestionnaires}?$filter=userid eq '{userid}'";
-                HttpClient client = new HttpClient();
-                HttpResponseMessage responseconsent = await client.GetAsync(urlWithQuery);
+                ConfigureClient();
+                HttpResponseMessage responseconsent = await Client.GetAsync(urlWithQuery);
 
                 if (responseconsent.IsSuccessStatusCode)
                 {
@@ -2944,8 +2977,8 @@ namespace PeopleWith
                 ObservableCollection<userfeedback> itemstoremove = new ObservableCollection<userfeedback>();
                 var userid = Helpers.Settings.UserKey;
                 string urlWithQuery = $"{UserFeedback}?$filter=userid eq '{userid}'";
-                HttpClient client = new HttpClient();
-                HttpResponseMessage responseconsent = await client.GetAsync(urlWithQuery);
+                ConfigureClient();
+                HttpResponseMessage responseconsent = await Client.GetAsync(urlWithQuery);
 
                 if (responseconsent.IsSuccessStatusCode)
                 {
@@ -2986,7 +3019,7 @@ namespace PeopleWith
                         //    item.supplementfeedbacklist = JsonConvert.DeserializeObject<ObservableCollection<feedbackdata>>(item.supplementfeedback);
                         //}
                         //catch (JsonSerializationException)
-                        //{
+                        //{x 
                         //    // If the JSON is a single object, deserialize it as such and wrap it in a collection
                         //    var singleItem = JsonConvert.DeserializeObject<feedbackdata>(item.supplementfeedback);
                         //    item.supplementfeedbacklist = new ObservableCollection<feedbackdata> { singleItem };
@@ -3118,9 +3151,9 @@ namespace PeopleWith
         {
             try
             {
-                HttpClient client = new HttpClient();
+                ConfigureClient();
                 var URl = APICalls.PrivPolicy;
-                HttpResponseMessage response = await client.GetAsync(URl);
+                HttpResponseMessage response = await Client.GetAsync(URl);
                 string data = await response.Content.ReadAsStringAsync();
                 var userResponse = JsonConvert.DeserializeObject<ApiPrivPolicy>(data);
                 ObservableCollection<privacypolicy> users = userResponse.Value;
@@ -3154,8 +3187,8 @@ namespace PeopleWith
                 ObservableCollection<signupcode> itemstoremove = new ObservableCollection<signupcode>();
                 var userid = Helpers.Settings.SignUp;
                 string urlWithQuery = $"{signupcode}?$filter=signupcodeid eq '{signupcodepassed}'";
-                HttpClient client = new HttpClient();
-                HttpResponseMessage responseconsent = await client.GetAsync(urlWithQuery);
+                ConfigureClient();
+                HttpResponseMessage responseconsent = await Client.GetAsync(urlWithQuery);
 
                 if (responseconsent.IsSuccessStatusCode)
                 {
@@ -3223,11 +3256,12 @@ namespace PeopleWith
             try
             {
                 var id = Updatefeedback.id;
-                var url = $"https://pwdevapi.peoplewith.com/api/userfeedback/id/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/userfeedback/id/{id}";
                 var feedbacks = Updatefeedback.symptomfeedback;
                 string json = System.Text.Json.JsonSerializer.Serialize(new { symptomfeedback = feedbacks });
                 //string json = System.Text.Json.JsonSerializer.Serialize(new { feedback = feedbacks }, serializerOptions);
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     //works with patch
@@ -3236,7 +3270,7 @@ namespace PeopleWith
                     {
                         Content = content
                     };
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
                     if (!response.IsSuccessStatusCode)
                     {
                         var errorResponse = await response.Content.ReadAsStringAsync();
@@ -3257,11 +3291,12 @@ namespace PeopleWith
             try
             {
                 var id = Updatefeedback.id;
-                var url = $"https://pwdevapi.peoplewith.com/api/userfeedback/id/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/userfeedback/id/{id}";
                 var feedbacks = Updatefeedback.measurementfeedback;
                 string json = System.Text.Json.JsonSerializer.Serialize(new { measurementfeedback = feedbacks });
                 //string json = System.Text.Json.JsonSerializer.Serialize(new { feedback = feedbacks }, serializerOptions);
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     //works with patch
@@ -3270,7 +3305,7 @@ namespace PeopleWith
                     {
                         Content = content
                     };
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
                     if (!response.IsSuccessStatusCode)
                     {
                         var errorResponse = await response.Content.ReadAsStringAsync();
@@ -3291,11 +3326,12 @@ namespace PeopleWith
             try
             {
                 var id = Updatefeedback.id;
-                var url = $"https://pwdevapi.peoplewith.com/api/userfeedback/id/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/userfeedback/id/{id}";
                 var feedbacks = Updatefeedback.moodfeedback;
                 string json = System.Text.Json.JsonSerializer.Serialize(new { moodfeedback = feedbacks });
                 //string json = System.Text.Json.JsonSerializer.Serialize(new { feedback = feedbacks }, serializerOptions);
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     //works with patch
@@ -3304,7 +3340,7 @@ namespace PeopleWith
                     {
                         Content = content
                     };
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
                     if (!response.IsSuccessStatusCode)
                     {
                         var errorResponse = await response.Content.ReadAsStringAsync();
@@ -3325,11 +3361,12 @@ namespace PeopleWith
             try
             {
                 var id = Updatefeedback.id;
-                var url = $"https://pwdevapi.peoplewith.com/api/userfeedback/id/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/userfeedback/id/{id}";
                 var feedbacks = Updatefeedback.initialquestionnairefeedback;
                 string json = System.Text.Json.JsonSerializer.Serialize(new { initialquestionnairefeedback = feedbacks });
                 //string json = System.Text.Json.JsonSerializer.Serialize(new { feedback = feedbacks }, serializerOptions);
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     //works with patch
@@ -3338,7 +3375,7 @@ namespace PeopleWith
                     {
                         Content = content
                     };
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
                     if (!response.IsSuccessStatusCode)
                     {
                         var errorResponse = await response.Content.ReadAsStringAsync();
@@ -3357,11 +3394,11 @@ namespace PeopleWith
         {
             try
             {
-                HttpClient client = new HttpClient();
+                ConfigureClient();
                 var url = APICalls.UserFeedback;
                 string jsonn = System.Text.Json.JsonSerializer.Serialize<userfeedback>(item);
                 StringContent contenttt = new StringContent(jsonn, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await client.PostAsync(url, contenttt);
+                HttpResponseMessage response = await Client.PostAsync(url, contenttt);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -3385,7 +3422,7 @@ namespace PeopleWith
             try
             {
                 string id = updateduserdetails.userid;
-                var url = $"https://pwdevapi.peoplewith.com/api/user/userid/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/user/userid/{id}";
 
                 var payload = new
                 {
@@ -3398,7 +3435,7 @@ namespace PeopleWith
                 // Serialize the object into JSON
                 string json = System.Text.Json.JsonSerializer.Serialize(payload);
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     var request = new HttpRequestMessage(HttpMethod.Patch, url)
@@ -3406,7 +3443,7 @@ namespace PeopleWith
                         Content = content
                     };
 
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
 
                     if (!response.IsSuccessStatusCode)
                     {
@@ -3426,9 +3463,9 @@ namespace PeopleWith
         {
             try
             {
-                HttpClient client = new HttpClient();
+                ConfigureClient();
                 var URl = APICalls.postcode;
-                HttpResponseMessage response = await client.GetAsync(URl);
+                HttpResponseMessage response = await Client.GetAsync(URl);
                 string data = await response.Content.ReadAsStringAsync();
                 var userResponse = JsonConvert.DeserializeObject<ApiResponsePostcode>(data);
                 ObservableCollection<postcode> users = userResponse.Value;
@@ -3451,8 +3488,8 @@ namespace PeopleWith
                 var USERID = Helpers.Settings.UserKey;
                 var URl = APICalls.GetDiet;
                 //string urlWithQuery = $"{GetDiet}?$filter=userid eq '{USERID}'";
-                HttpClient client = new HttpClient();
-                HttpResponseMessage responseconsent = await client.GetAsync(URl);
+                ConfigureClient();
+                HttpResponseMessage responseconsent = await Client.GetAsync(URl);
 
                 if (responseconsent.IsSuccessStatusCode)
                 {
@@ -3518,8 +3555,8 @@ namespace PeopleWith
                 var USERID = Helpers.Settings.UserKey;
                 var URl = APICalls.GetUserDiet;
                 string urlWithQuery = $"{URl}?$filter=userid eq '{USERID}'";
-                HttpClient client = new HttpClient();
-                HttpResponseMessage response = await client.GetAsync(urlWithQuery);
+                ConfigureClient();
+                HttpResponseMessage response = await Client.GetAsync(urlWithQuery);
                 string data = await response.Content.ReadAsStringAsync();
 
                 // Deserialize the response into a generic structure
@@ -3591,11 +3628,11 @@ namespace PeopleWith
         {
             try
             {
-                HttpClient client = new HttpClient();
+                ConfigureClient();
                 var url = APICalls.GetUserDiet;
                 string jsonns = System.Text.Json.JsonSerializer.Serialize<userdiet>(userdietpassed);
                 StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
-                var response = await client.PostAsync(url, contenttts);
+                var response = await Client.PostAsync(url, contenttts);
                 var errorResponse = await response.Content.ReadAsStringAsync();
 
                 if (response.IsSuccessStatusCode)
@@ -3634,11 +3671,12 @@ namespace PeopleWith
             try
             {
                 var id = Updatefeedback.id;
-                var url = $"https://pwdevapi.peoplewith.com/api/userdiet/id/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/userdiet/id/{id}";
                 var feedbacks = Updatefeedback.notes;
                 string json = System.Text.Json.JsonSerializer.Serialize(new { notes = feedbacks });
                 //string json = System.Text.Json.JsonSerializer.Serialize(new { feedback = feedbacks }, serializerOptions);
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     //works with patch
@@ -3647,7 +3685,7 @@ namespace PeopleWith
                     {
                         Content = content
                     };
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
                     if (!response.IsSuccessStatusCode)
                     {
                         var errorResponse = await response.Content.ReadAsStringAsync();
@@ -3671,7 +3709,7 @@ namespace PeopleWith
             {
 
                 var id = Updatefeedback.id;
-                var url = $"https://pwdevapi.peoplewith.com/api/userdiet/id/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/userdiet/id/{id}";
                 var feedbacks = Updatefeedback;
 
                 //Change the following   
@@ -3682,7 +3720,7 @@ namespace PeopleWith
                     notes = feedbacks.notes
                 });
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
 
@@ -3691,7 +3729,7 @@ namespace PeopleWith
                         Content = content
                     };
 
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
 
                     if (!response.IsSuccessStatusCode)
                     {
@@ -3717,11 +3755,11 @@ namespace PeopleWith
             try
             {
                 string id = Updatefeedback.id;
-                var url = $"https://pwdevapi.peoplewith.com/api/userdiet/id/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/userdiet/id/{id}";
 
                 string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = Updatefeedback.deleted });
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     var request = new HttpRequestMessage(HttpMethod.Patch, url)
@@ -3729,7 +3767,7 @@ namespace PeopleWith
                         Content = content
                     };
 
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
 
                     if (!response.IsSuccessStatusCode)
                     {
@@ -3753,8 +3791,8 @@ namespace PeopleWith
             {
                 var USERID = Helpers.Settings.UserKey;
                 var URl = APICalls.GetInvestigation;
-                HttpClient client = new HttpClient();
-                HttpResponseMessage responseconsent = await client.GetAsync(URl);
+                ConfigureClient();
+                HttpResponseMessage responseconsent = await Client.GetAsync(URl);
 
                 if (responseconsent.IsSuccessStatusCode)
                 {
@@ -3817,8 +3855,8 @@ namespace PeopleWith
                     var USERID = Helpers.Settings.UserKey;
                     var URl = APICalls.GetUserInvestigation;
                     string urlWithQuery = $"{URl}?$filter=userid eq '{USERID}'";
-                    HttpClient client = new HttpClient();
-                    HttpResponseMessage response = await client.GetAsync(urlWithQuery);
+                    ConfigureClient();
+                    HttpResponseMessage response = await Client.GetAsync(urlWithQuery);
                     string data = await response.Content.ReadAsStringAsync();
 
                     // Deserialize the response into a generic structure
@@ -3903,11 +3941,11 @@ namespace PeopleWith
         {
             try
             {
-                HttpClient client = new HttpClient();
+                ConfigureClient();
                 var url = APICalls.GetUserInvestigation;
                 string jsonns = System.Text.Json.JsonSerializer.Serialize<userinvestigation>(userInvestpassed);
                 StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
-                var response = await client.PostAsync(url, contenttts);
+                var response = await Client.PostAsync(url, contenttts);
                 var errorResponse = await response.Content.ReadAsStringAsync();
 
                 if (response.IsSuccessStatusCode)
@@ -3945,11 +3983,12 @@ namespace PeopleWith
             try
             {
                 var id = Updatefeedback.id;
-                var url = $"https://pwdevapi.peoplewith.com/api/userinvestigation/id/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/userinvestigation/id/{id}";
                 var feedbacks = Updatefeedback.notes;
                 string json = System.Text.Json.JsonSerializer.Serialize(new { notes = feedbacks });
                 //string json = System.Text.Json.JsonSerializer.Serialize(new { feedback = feedbacks }, serializerOptions);
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     //works with patch
@@ -3958,7 +3997,7 @@ namespace PeopleWith
                     {
                         Content = content
                     };
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
                     if (!response.IsSuccessStatusCode)
                     {
                         var errorResponse = await response.Content.ReadAsStringAsync();
@@ -3982,7 +4021,7 @@ namespace PeopleWith
             {
 
                 var id = Updatefeedback.id;
-                var url = $"https://pwdevapi.peoplewith.com/api/userinvestigation/id/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/userinvestigation/id/{id}";
                 var feedbacks = Updatefeedback;
 
                 //Change the following  (To be defined)  
@@ -3992,7 +4031,7 @@ namespace PeopleWith
                     notes = feedbacks.notes
                 });
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
 
@@ -4001,7 +4040,7 @@ namespace PeopleWith
                         Content = content
                     };
 
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
 
                     if (!response.IsSuccessStatusCode)
                     {
@@ -4026,11 +4065,11 @@ namespace PeopleWith
             try
             {
                 string id = Updatefeedback.id;
-                var url = $"https://pwdevapi.peoplewith.com/api/userinvestigation/id/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/userinvestigation/id/{id}";
 
                 string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = Updatefeedback.deleted });
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     var request = new HttpRequestMessage(HttpMethod.Patch, url)
@@ -4038,7 +4077,7 @@ namespace PeopleWith
                         Content = content
                     };
 
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
 
                     if (!response.IsSuccessStatusCode)
                     {
@@ -4053,6 +4092,296 @@ namespace PeopleWith
                 return;
             }
         }
+
+
+        // Get Daily Activity information
+        public async Task<ObservableCollection<dailyactivity>> GetActivityDetails()
+        {
+            try
+            {
+                var USERID = Helpers.Settings.UserKey;
+                var URl = APICalls.GetActivity;
+                ConfigureClient();
+                HttpResponseMessage responseconsent = await Client.GetAsync(URl);
+
+                if (responseconsent.IsSuccessStatusCode)
+                {
+                    string contentconsent = await responseconsent.Content.ReadAsStringAsync();
+                    var userResponseconsent = JsonConvert.DeserializeObject<APIActivityResponse>(contentconsent);
+                    var consent = userResponseconsent.Value;
+
+                    var newcollection = new ObservableCollection<dailyactivity>();
+
+                    //Remove All Deleted Items 
+                    foreach (var item in consent)
+                    {
+                        if (item.deleted == true)
+                        {
+
+                        }
+                        else
+                        {
+                            var GetString = item.grouping;
+                            if (!String.IsNullOrEmpty(GetString))
+                            {
+                                if (GetString.Contains("Basic"))
+                                {
+                                    GetString = GetString.Replace("Basic ", "");
+                                }
+
+                                if (GetString.Contains("&"))
+                                {
+                                    GetString = GetString.Replace(" & ", "/");
+                                }
+
+                                item.ShortGroup = GetString;
+                            }
+                            newcollection.Add(item);
+                        }
+                    }
+
+                    return new ObservableCollection<dailyactivity>(newcollection);
+
+                }
+                else
+                {
+
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
+        //Post userdailyActivity
+        public async Task<userdailyactivity> PostUserActiivty(userdailyactivity ActivityPassed)
+        {
+            try
+            {
+                ConfigureClient();
+                var url = APICalls.GetUserActivity;
+                string jsonns = System.Text.Json.JsonSerializer.Serialize<userdailyactivity>(ActivityPassed);
+                StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
+                var response = await Client.PostAsync(url, contenttts);
+                var errorResponse = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    // Read the response content as a string
+                    string responseContent = await response.Content.ReadAsStringAsync();
+
+                    var jsonResponse = JObject.Parse(responseContent);
+
+                    var id = jsonResponse["value"]?[0]?["id"]?.ToString();
+
+                    ActivityPassed.id = id;
+                    // Return the inserted item
+                    return ActivityPassed;
+
+                }
+                else
+                {
+                    string errorcontent = await response.Content.ReadAsStringAsync();
+                    var s = errorcontent;
+                    return null;
+                }
+                // return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
+
+        public async Task<ObservableCollection<userdailyactivity>> GetUserActivityAsync()
+        {
+            try
+            {
+                var userId = Helpers.Settings.UserKey;
+                string urlWithQuery = $"{GetUserActivity}?$filter=userid eq '{userId}'";
+
+                ConfigureClient();
+                HttpResponseMessage response = await Client.GetAsync(urlWithQuery);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return null;
+                }
+
+                string content = await response.Content.ReadAsStringAsync();
+                var userResponse = JsonConvert.DeserializeObject<ApiResponseUserActivity>(content);
+                var consent = userResponse?.Value ?? new ObservableCollection<userdailyactivity>();
+
+                var newCollection = new ObservableCollection<userdailyactivity>();
+
+                foreach (var item in consent)
+                {
+                    // Deserialize `activityfrequency`
+                    if (!string.IsNullOrEmpty(item.activityfrequency))
+                    {
+                        try
+                        {
+                            if (item.activityfrequency != "[]")
+                            {
+                                item.activityfrequencylist = JsonConvert.DeserializeObject<ObservableCollection<activefrequency>>(item.activityfrequency);
+                            }
+                        }
+                        catch (JsonSerializationException)
+                        {
+                            var singleItem = JsonConvert.DeserializeObject<activefrequency>(item.activityfrequency);
+                            item.activityfrequencylist = new ObservableCollection<activefrequency> { singleItem };
+                        }
+                    }
+
+                    // Deserialize `notes`
+                    if (!string.IsNullOrEmpty(item.notes))
+                    {
+                        try
+                        {
+                            if (item.notes != "[]")
+                            {
+                                item.noteslist = JsonConvert.DeserializeObject<ObservableCollection<activenotes>>(item.notes);
+                            }
+                        }
+                        catch (JsonSerializationException)
+                        {
+                            var singleItem = JsonConvert.DeserializeObject<activenotes>(item.notes);
+                            item.noteslist = new ObservableCollection<activenotes> { singleItem };
+                        }
+                    }
+
+                    // Deserialize `activitysymptoms`
+                    if (!string.IsNullOrEmpty(item.activitysymptoms))
+                    {
+                        try
+                        {
+                            if (item.activitysymptoms != "[]")
+                            {
+                                item.activitysymptomslist = JsonConvert.DeserializeObject<ObservableCollection<activesymptoms>>(item.activitysymptoms);
+                            }
+                        }
+                        catch (JsonSerializationException)
+                        {
+                            var singleItem = JsonConvert.DeserializeObject<activesymptoms>(item.activitysymptoms);
+                            item.activitysymptomslist = new ObservableCollection<activesymptoms> { singleItem };
+                        }
+                    }
+
+                    newCollection.Add(item);
+                }
+
+                return newCollection;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching user activity: {ex.Message}");
+                return null;
+            }
+        }
+
+
+
+
+
+
+        // ( Come Back Too) 
+        // Get Exercise information
+        public async Task<ObservableCollection<exercise>> GetExerciseDetails()
+        {
+            try
+            {
+                var USERID = Helpers.Settings.UserKey;
+                var URl = APICalls.GetExercise;
+                ConfigureClient();
+                HttpResponseMessage responseconsent = await Client.GetAsync(URl);
+
+                if (responseconsent.IsSuccessStatusCode)
+                {
+                    string contentconsent = await responseconsent.Content.ReadAsStringAsync();
+                    var userResponseconsent = JsonConvert.DeserializeObject<APIExerciseResponse>(contentconsent);
+                    var consent = userResponseconsent.Value;
+
+                    var newcollection = new ObservableCollection<exercise>();
+
+                    //Remove All Deleted Items 
+                    foreach (var item in consent)
+                    {
+                        if (item.deleted == true)
+                        {
+
+                        }
+                        else
+                        {
+                            var GetString = item.grouping;
+                            if (!String.IsNullOrEmpty(GetString))
+                            {
+                                if (GetString.Contains("Basic"))
+                                {
+                                    GetString = GetString.Replace("Basic ", "");
+                                }
+
+                                if (GetString.Contains("&"))
+                                {
+                                    GetString = GetString.Replace(" & ", "/");
+                                }
+
+                                item.ShortGroup = GetString;
+                            }
+                            newcollection.Add(item);
+                        }
+                    }
+
+                    return new ObservableCollection<exercise>(newcollection);
+
+                }
+                else
+                {
+
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        //Used to Test HttpClient Auth
+        //public async Task<ObservableCollection<registryconfig>> GetAuthTest()
+        //{
+        //    try
+        //    {
+        //        var url = APICalls.GetAuth;
+        //        HttpClient client = new HttpClient();
+        //        client.DefaultRequestHeaders.Add("X-MS-CLIENT-PRINCIPAL", "eyAgCiAgImlkZW50aXR5UHJvdmlkZXIiOiAidGVzdCIsCiAgInVzZXJJZCI6ICIxMjM0NSIsCiAgInVzZXJEZXRhaWxzIjogImpvaG5AY29udG9zby5jb20iLAogICJ1c2VyUm9sZXMiOiBbIjFFMzNDMEFDLTMzOTMtNEMzNC04MzRBLURFNUZEQkNCQjNDQyJdCn0=");
+        //        client.DefaultRequestHeaders.Add("X-MS-API-ROLE", "1E33C0AC-3393-4C34-834A-DE5FDBCBB3CC");
+        //        HttpResponseMessage responseconsent = await client.GetAsync(url);
+
+        //        if (responseconsent.IsSuccessStatusCode)
+        //        {
+        //            string contentconsent = await responseconsent.Content.ReadAsStringAsync();
+        //            var userResponseconsent = JsonConvert.DeserializeObject<ApiRegConfig>(contentconsent);
+        //            var consent = userResponseconsent.Value;
+
+        //            return new ObservableCollection<registryconfig>(consent);
+
+        //        }
+        //        else
+        //        {
+
+        //            return null;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return null;
+        //    }
+        //}
 
 
 

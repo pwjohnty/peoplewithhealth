@@ -13,6 +13,7 @@ public partial class DietInfo : ContentPage
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
+    public HttpClient Client = new HttpClient();
     async public void NotasyncMethod(Exception Ex)
     {
         try
@@ -34,19 +35,33 @@ public partial class DietInfo : ContentPage
            
     }
 
+    private void ConfigureClient()
+    {
+        try
+        {
+            Client = new HttpClient();
+            Client.DefaultRequestHeaders.Add("X-MS-CLIENT-PRINCIPAL", "eyAgCiAgImlkZW50aXR5UHJvdmlkZXIiOiAidGVzdCIsCiAgInVzZXJJZCI6ICIxMjM0NSIsCiAgInVzZXJEZXRhaWxzIjogImpvaG5AY29udG9zby5jb20iLAogICJ1c2VyUm9sZXMiOiBbIjFFMzNDMEFDLTMzOTMtNEMzNC04MzRBLURFNUZEQkNCQjNDQyJdCn0=");
+            Client.DefaultRequestHeaders.Add("X-MS-API-ROLE", "1E33C0AC-3393-4C34-834A-DE5FDBCBB3CC");
+        }
+        catch (Exception Ex)
+        {
+            //Empty
+        }
+    }
+
     async private void GetInfo()
     {
         try
         {
 
             Dietloading.IsVisible = true;
-            MainStack.IsVisible = false; 
+            MainStack.IsVisible = false;
             //Get Diet Info 
-            HttpClient client = new HttpClient();
+            ConfigureClient();
             //Chnage back to this 
             var id = DietPassed.dietid;
-            var url = $"https://pwdevapi.peoplewith.com/api/diet/dietid/{id}";
-            HttpResponseMessage responseconsent = await client.GetAsync(url);
+            var url = $"https://pwapi.peoplewith.com/api/diet/dietid/{id}";
+            HttpResponseMessage responseconsent = await Client.GetAsync(url);
 
             if (responseconsent.IsSuccessStatusCode)
             {

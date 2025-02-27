@@ -24,6 +24,9 @@ namespace PeopleWith
         [System.Text.Json.Serialization.JsonIgnore]
         public string VideoID { get; set; }
 
+        [System.Text.Json.Serialization.JsonIgnore]
+        public int Padding { get; set; }
+
         //private string DecodeTrademark(string input)
         //{
         //    return input?.Replace("\\u00AE", "®");

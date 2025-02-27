@@ -11,12 +11,6 @@
     <StackLayout VerticalOptions="FillAndExpand" Margin="20,0,20,0" HorizontalOptions="FillAndExpand">
 
         <Label x:Name="measurementname" FontSize="26" Margin="0,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
-
-
-
-  
-
-
         <Label Text="Select Unit" FontSize="20" Margin="0,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
         <Label Text="Please select the unit of measurement from the options" FontSize="12" Margin="0,0,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
 
@@ -66,7 +60,7 @@
                     <ColumnDefinition Width="70*"/>
                     <ColumnDefinition Width="30*"/>
                 </Grid.ColumnDefinitions>
-                <Entry FontSize="30" x:Name="unitentry" IsEnabled="False"  TextChanged="unitentry_TextChanged" Keyboard="Numeric" Grid.ColumnSpan="1" Grid.Column="0" FontFamily="HankenGroteskRegular" TextColor="#031926" HorizontalTextAlignment="Center" Grid.Row="0" />
+                <Entry FontSize="30" x:Name="unitentry" IsEnabled="False"  TextChanged="unitentry_TextChanged" ReturnType="Done" Keyboard="Numeric" Grid.ColumnSpan="1" Grid.Column="0" FontFamily="HankenGroteskRegular" TextColor="#031926" HorizontalTextAlignment="Center" Grid.Row="0" />
                 <Label x:Name="lblentryunit" Grid.Row="0" Grid.Column="1" FontSize="14" Margin="0,0,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" HorizontalTextAlignment="Center" FontAttributes="None" HorizontalOptions="Center" VerticalOptions="Center"  />
 
             </Grid>

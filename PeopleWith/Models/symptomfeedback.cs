@@ -25,6 +25,10 @@ namespace PeopleWith
      
         [System.Text.Json.Serialization.JsonIgnore]
         public string formattedDateTime { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public DateTime DateTimeFormat { get; set; }
+
         [System.Text.Json.Serialization.JsonIgnore]
         public bool TriggerBool { get; set; }
         [System.Text.Json.Serialization.JsonIgnore]

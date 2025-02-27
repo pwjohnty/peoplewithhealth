@@ -4876,6 +4876,7 @@ public partial class AddMeasurement : ContentPage
                     }
 
                     var newsym = new feedbackdata();
+                    newsym.id = newmeasurment.id;
                     newsym.value = newmeasurment.value;
                     newsym.datetime = newmeasurment.inputdatetime;
                     newsym.action = "update";
@@ -4900,7 +4901,7 @@ public partial class AddMeasurement : ContentPage
 
                     await MopupService.Instance.PushAsync(new PopupPageHelper("Measurement Added") { });
                     await Task.Delay(1500);
-                    await Navigation.PushAsync(new MeasurementsPage(usermeasurementlistpassed, measurementlist), false);
+                    await Navigation.PushAsync(new MeasurementsPage(usermeasurementlistpassed, measurementlist, userfeedbacklistpassed), false);
 
                     await MopupService.Instance.PopAllAsync(false);
 

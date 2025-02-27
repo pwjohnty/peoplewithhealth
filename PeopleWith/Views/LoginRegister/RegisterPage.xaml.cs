@@ -21,7 +21,7 @@ public partial class RegisterPage : ContentPage
 {
     user newuser = new user();
     bool nosignupcodebtn;
-    HttpClient client = new HttpClient();
+    public HttpClient Client = new HttpClient();
     public List<string> genlist = new List<string>();
     public List<string> ethnicitylist = new List<string>();
     bool isEditing;
@@ -53,6 +53,20 @@ public partial class RegisterPage : ContentPage
         catch (Exception ex)
         {
             //Dunno 
+        }
+    }
+
+    private void ConfigureClient()
+    {
+        try
+        {
+            Client = new HttpClient();
+            Client.DefaultRequestHeaders.Add("X-MS-CLIENT-PRINCIPAL", "eyAgCiAgImlkZW50aXR5UHJvdmlkZXIiOiAidGVzdCIsCiAgInVzZXJJZCI6ICIxMjM0NSIsCiAgInVzZXJEZXRhaWxzIjogImpvaG5AY29udG9zby5jb20iLAogICJ1c2VyUm9sZXMiOiBbIjFFMzNDMEFDLTMzOTMtNEMzNC04MzRBLURFNUZEQkNCQjNDQyJdCn0=");
+            Client.DefaultRequestHeaders.Add("X-MS-API-ROLE", "1E33C0AC-3393-4C34-834A-DE5FDBCBB3CC");
+        }
+        catch (Exception Ex)
+        {
+            //Empty
         }
     }
 
@@ -302,8 +316,8 @@ public partial class RegisterPage : ContentPage
             };
 
             var url = APICalls.Checkuseremail + "%27" + emailentry.Text + "%27";
-
-            HttpResponseMessage response = await client.GetAsync(url);
+            ConfigureClient();
+            HttpResponseMessage response = await Client.GetAsync(url);
 
             if (response.IsSuccessStatusCode)
             {
@@ -382,13 +396,13 @@ public partial class RegisterPage : ContentPage
                     WriteIndented = true
                 };
 
-                var urll = $"https://pwdevapi.peoplewith.com/api/user/userid/{newuser.userid}";
+                var urll = $"https://pwapi.peoplewith.com/api/user/userid/{newuser.userid}";
                 string jsonn = System.Text.Json.JsonSerializer.Serialize(new { password = newuser.password, validationcode = newuser.validationcode});
 
                 StringContent contenttt = new StringContent(jsonn, Encoding.UTF8, "application/json");
                 HttpResponseMessage responsee1 = null;
 
-                responsee1 = await client.PatchAsync(urll, contenttt);
+                responsee1 = await Client.PatchAsync(urll, contenttt);
 
 
                 if (responsee1.IsSuccessStatusCode)
@@ -407,12 +421,12 @@ public partial class RegisterPage : ContentPage
 
 
 
-                Uri uri = new Uri(string.Format("https://pwdevapi.peoplewith.com/api/user", string.Empty));
+                Uri uri = new Uri(string.Format("https://pwapi.peoplewith.com/api/user", string.Empty));
                 string json = System.Text.Json.JsonSerializer.Serialize<user>(newuser, serializerOptions);
                 StringContent contentt = new StringContent(json, Encoding.UTF8, "application/json");
                 HttpResponseMessage responsee = null;
 
-                response = await client.PostAsync(uri, contentt);
+                response = await Client.PostAsync(uri, contentt);
 
 
                 if (response.IsSuccessStatusCode)
@@ -428,7 +442,7 @@ public partial class RegisterPage : ContentPage
             //email generate
             StringContent mail_content = new StringContent(newuser.email, System.Text.Encoding.UTF8, "application/json");
 
-            var emailresponse = await client.PostAsync("https://peoplewithwebapp.azurewebsites.net/hub/email-validation.php?uid=" + newuser.email, mail_content);
+            var emailresponse = await Client.PostAsync("https://peoplewithwebapp.azurewebsites.net/hub/email-validation.php?uid=" + newuser.email, mail_content);
 
            // check if the response is successful
            if (emailresponse.IsSuccessStatusCode)
@@ -539,8 +553,8 @@ public partial class RegisterPage : ContentPage
 
 
                 var url = APICalls.CheckSignUpCode + "%27" + signupcodetext.Text + "%27";
-
-                HttpResponseMessage response = await client.GetAsync(url);
+                ConfigureClient();
+                HttpResponseMessage response = await Client.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -571,7 +585,7 @@ public partial class RegisterPage : ContentPage
 
                         var urll = APICalls.Checksignupregquestions + "%27" + users[0].referral + "%27";
 
-                            HttpResponseMessage responsee = await client.GetAsync(urll);
+                            HttpResponseMessage responsee = await Client.GetAsync(urll);
 
                             if (responsee.IsSuccessStatusCode)
                             {
@@ -597,7 +611,7 @@ public partial class RegisterPage : ContentPage
 
                                 var urlanswers = APICalls.Checksignupreganswers + "%27" + users[0].referral + "%27";
 
-                                HttpResponseMessage responseeanswers = await client.GetAsync(urlanswers);
+                                HttpResponseMessage responseeanswers = await Client.GetAsync(urlanswers);
 
                                 if (responseeanswers.IsSuccessStatusCode)
                                 {
@@ -617,7 +631,7 @@ public partial class RegisterPage : ContentPage
                         {
                             var urlconsent = APICalls.CheckConsentforsignupcode + "%27" + users[0].signupcodeid + "%27";
 
-                            HttpResponseMessage responseconsent = await client.GetAsync(urlconsent);
+                            HttpResponseMessage responseconsent = await Client.GetAsync(urlconsent);
 
                             if (responseconsent.IsSuccessStatusCode)
                             {
@@ -1744,8 +1758,8 @@ public partial class RegisterPage : ContentPage
         {
             //get all the symptoms
             var urlsymptom = APICalls.GetSymptoms;
-
-            HttpResponseMessage responseconsent = await client.GetAsync(urlsymptom);
+            ConfigureClient();
+            HttpResponseMessage responseconsent = await Client.GetAsync(urlsymptom);
 
             if (responseconsent.IsSuccessStatusCode)
             {
@@ -1763,7 +1777,7 @@ public partial class RegisterPage : ContentPage
             //get all the symptoms
             var urlmedications = APICalls.GetMedications;
 
-            HttpResponseMessage responsemeds = await client.GetAsync(urlmedications);
+            HttpResponseMessage responsemeds = await Client.GetAsync(urlmedications);
 
             if (responsemeds.IsSuccessStatusCode)
             {
@@ -1888,13 +1902,13 @@ public partial class RegisterPage : ContentPage
             WriteIndented = true
         };
 
-        var url = $"https://pwdevapi.peoplewith.com/api/user/userid/{newuser.userid}";
+        var url = $"https://pwapi.peoplewith.com/api/user/userid/{newuser.userid}";
         string json = System.Text.Json.JsonSerializer.Serialize(new { validationcode = num});
 
         StringContent contentt = new StringContent(json, Encoding.UTF8, "application/json");
         HttpResponseMessage responsee = null;
-
-        responsee = await client.PatchAsync(url, contentt);
+        ConfigureClient();
+        responsee = await Client.PatchAsync(url, contentt);
 
 
         if (responsee.IsSuccessStatusCode)
@@ -1909,7 +1923,7 @@ public partial class RegisterPage : ContentPage
         //email generate
         StringContent mail_content = new StringContent(newuser.email, System.Text.Encoding.UTF8, "application/json");
 
-        var emailresponse = await client.PostAsync("https://peoplewithwebapp.azurewebsites.net/hub/email-validation.php?uid=" + newuser.email, mail_content);
+        var emailresponse = await Client.PostAsync("https://peoplewithwebapp.azurewebsites.net/hub/email-validation.php?uid=" + newuser.email, mail_content);
 
         // check if the response is successful
         if (emailresponse.IsSuccessStatusCode)

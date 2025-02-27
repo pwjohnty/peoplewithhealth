@@ -13,6 +13,7 @@ public partial class ShowAllData : ContentPage
 
     ObservableCollection<usermeasurement> allusermeasurements = new ObservableCollection<usermeasurement>();
     ObservableCollection<measurement> allmeasurementlist = new ObservableCollection<measurement>();
+    userfeedback userfeedbacklistpassed = new userfeedback();
     bool Result; 
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
@@ -72,7 +73,7 @@ public partial class ShowAllData : ContentPage
         }
     }
 
-    public ShowAllData(ObservableCollection<usermeasurement> usermeasurementlistp, ObservableCollection<usermeasurement> allusermeasurementsp, ObservableCollection<measurement> allmeasurementlistpassed)
+    public ShowAllData(ObservableCollection<usermeasurement> usermeasurementlistp, ObservableCollection<usermeasurement> allusermeasurementsp, ObservableCollection<measurement> allmeasurementlistpassed, userfeedback userfeedbacklist)
     {
         try
         {
@@ -84,6 +85,7 @@ public partial class ShowAllData : ContentPage
 
             allusermeasurements = allusermeasurementsp;
             allmeasurementlist = allmeasurementlistpassed;
+            userfeedbacklistpassed = userfeedbacklist;
 
             foreach (var item in usermeasurementlistpassed)
             {
@@ -125,7 +127,7 @@ public partial class ShowAllData : ContentPage
             usermeasurementlistpassed = new ObservableCollection<usermeasurement>(usermeasurementlistpassed.OrderByDescending(x => DateTime.Parse(x.inputdatetime)));
 
             usermeasurementlist.ItemsSource = usermeasurementlistpassed;
-            usermeasurementlist.HeightRequest = usermeasurementlistpassed.Count * 100;
+            //usermeasurementlist.HeightRequest = usermeasurementlistpassed.Count * 100;
         }
         catch (Exception Ex)
         {
@@ -274,21 +276,39 @@ public partial class ShowAllData : ContentPage
             //delete the items
             if (deleeteusermeasurementlistpassed.Count > 0)
             {
+
+                //Delete items from User Measurment
                 await aPICalls.DeleteUserMeasurements(deleeteusermeasurementlistpassed);
-                
-                //update the single view
-               
 
-                //update the main measurements page
-                // Create a wrapper instance containing both collections
-              //  var collectionsWrapper = new CollectionsMessage<usermeasurement, measurement>(allusermeasurements, allmeasurementlist);
+                //update UserMeasurement Feedback 
 
-                // Send a ValueChangedMessage containing the wrapper
-               // WeakReferenceMessenger.Default.Send(new ValueChangedMessage<CollectionsMessage<usermeasurement>>(allusermeasurements));
+                if (userfeedbacklistpassed.measurementfeedbacklist == null)
+                {
+                    userfeedbacklistpassed.measurementfeedbacklist = new ObservableCollection<feedbackdata>();
+                }
+
+                foreach (var x in userfeedbacklistpassed.measurementfeedbacklist)
+                {
+                    if (x.id != null)
+                    {
+                        for (int i = 0; i < deleeteusermeasurementlistpassed.Count; i++)
+                        {
+                            if (x.id == deleeteusermeasurementlistpassed[i].id)
+                            {
+                                x.action = "deleted";
+                            }
+                        }
+                    }
+                }
+
+                string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.measurementfeedbacklist);
+                userfeedbacklistpassed.measurementfeedback = newsymJson;
+
+                await aPICalls.UserfeedbackUpdateMeasurementData(userfeedbacklistpassed);
 
             }
 
-         
+
 
             //if (usermeasurementlistpassed.Count == 0)
             //{
@@ -296,13 +316,13 @@ public partial class ShowAllData : ContentPage
             //    nodatastack.IsVisible = true;
             //    this.ToolbarItems.Clear();
 
-              
+
 
             //}
             //else
             //{
-                //add the edit button back 
-                this.ToolbarItems.Clear();
+            //add the edit button back 
+            this.ToolbarItems.Clear();
                 ToolbarItem item = new ToolbarItem
                 {
                     Text = "Edit"
@@ -319,8 +339,9 @@ public partial class ShowAllData : ContentPage
                     items.Deleteisvis = false;
                 }
 
-            //Navigate Back to AllSymptoms
-            await Navigation.PushAsync(new MeasurementsPage());
+
+            //userfeedbacklistpassed Comes from Dashboard so needs to be linked back to Measurements page
+            await Navigation.PushAsync(new MeasurementsPage(allusermeasurements, allmeasurementlist, userfeedbacklistpassed));
             var pageToRemove = Navigation.NavigationStack.FirstOrDefault(x => x is MeasurementsPage);
             var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is SingleMeasurement);
 

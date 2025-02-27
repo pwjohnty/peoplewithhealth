@@ -15,6 +15,7 @@ public partial class ProfileSection : ContentPage
     string one;
     string two;
     private bool settingsOpened = false;
+    public HttpClient Client = new HttpClient();
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
@@ -30,6 +31,20 @@ public partial class ProfileSection : ContentPage
         catch (Exception ex)
         {
             //Dunno 
+        }
+    }
+
+    private void ConfigureClient()
+    {
+        try
+        {
+            Client = new HttpClient();
+            Client.DefaultRequestHeaders.Add("X-MS-CLIENT-PRINCIPAL", "eyAgCiAgImlkZW50aXR5UHJvdmlkZXIiOiAidGVzdCIsCiAgInVzZXJJZCI6ICIxMjM0NSIsCiAgInVzZXJEZXRhaWxzIjogImpvaG5AY29udG9zby5jb20iLAogICJ1c2VyUm9sZXMiOiBbIjFFMzNDMEFDLTMzOTMtNEMzNC04MzRBLURFNUZEQkNCQjNDQyJdCn0=");
+            Client.DefaultRequestHeaders.Add("X-MS-API-ROLE", "1E33C0AC-3393-4C34-834A-DE5FDBCBB3CC");
+        }
+        catch (Exception Ex)
+        {
+            //Empty
         }
     }
 
@@ -609,11 +624,11 @@ public partial class ProfileSection : ContentPage
                     bool delete = true;
                     bool Success = false;
                     string id = Helpers.Settings.UserKey;
-                    var url = $"https://pwdevapi.peoplewith.com/api/user/userid/{id}";
+                    var url = $"https://pwapi.peoplewith.com/api/user/userid/{id}";
 
                     string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = delete });
                     StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+                    ConfigureClient();
                     using (var client = new HttpClient())
                     {
                         var request = new HttpRequestMessage(HttpMethod.Patch, url)
@@ -621,7 +636,7 @@ public partial class ProfileSection : ContentPage
                             Content = content
                         };
 
-                        var response = await client.SendAsync(request);
+                        var response = await Client.SendAsync(request);
 
                         if (!response.IsSuccessStatusCode)
                         {
@@ -658,6 +673,8 @@ public partial class ProfileSection : ContentPage
                                 Preferences.Default.Remove("NovoFood");
                                 Preferences.Default.Remove("NovoDiet");
                                 Preferences.Default.Remove("NovoInvest");
+                                Preferences.Default.Remove("NovoActivity");
+                                
                             }
                         }
                        
