@@ -9,6 +9,7 @@ public partial class InvestInfo : ContentPage
     Information infoSource = new Information();
     userinvestigation InvestPassed = new userinvestigation();
     investigation investinformation = new investigation();
+    public HttpClient Client = new HttpClient();
 
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
@@ -23,6 +24,20 @@ public partial class InvestInfo : ContentPage
         catch (Exception ex)
         {
             //Dunno 
+        }
+    }
+
+    private void ConfigureClient()
+    {
+        try
+        {
+            Client = new HttpClient();
+            Client.DefaultRequestHeaders.Add("X-MS-CLIENT-PRINCIPAL", "eyAgCiAgImlkZW50aXR5UHJvdmlkZXIiOiAidGVzdCIsCiAgInVzZXJJZCI6ICIxMjM0NSIsCiAgInVzZXJEZXRhaWxzIjogImpvaG5AY29udG9zby5jb20iLAogICJ1c2VyUm9sZXMiOiBbIjFFMzNDMEFDLTMzOTMtNEMzNC04MzRBLURFNUZEQkNCQjNDQyJdCn0=");
+            Client.DefaultRequestHeaders.Add("X-MS-API-ROLE", "1E33C0AC-3393-4C34-834A-DE5FDBCBB3CC");
+        }
+        catch (Exception Ex)
+        {
+            //Empty
         }
     }
     public InvestInfo(userinvestigation InvestInfopassed)
@@ -41,11 +56,11 @@ public partial class InvestInfo : ContentPage
             Investloading.IsVisible = true;
             MainStack.IsVisible = false;
             //Get Diet Info 
-            HttpClient client = new HttpClient();
+            ConfigureClient();
 
             var id = InvestPassed.investigationid;
-            var url = $"https://pwdevapi.peoplewith.com/api/investigation/investigationid/{id}";
-            HttpResponseMessage responseconsent = await client.GetAsync(url);
+            var url = $"https://pwapi.peoplewith.com/api/investigation/investigationid/{id}";
+            HttpResponseMessage responseconsent = await Client.GetAsync(url);
 
             if (responseconsent.IsSuccessStatusCode)
             {

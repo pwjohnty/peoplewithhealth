@@ -19,7 +19,8 @@ public partial class AddSymptom : ContentPage
     public ObservableCollection<usersymptom> SymptomsPassed = new ObservableCollection<usersymptom>();
     public ObservableCollection<usersymptom> UpdatedAllUserSymptoms = new ObservableCollection<usersymptom>();
     public ObservableCollection<symptom> AlreadyAdded = new ObservableCollection<symptom>();
-  // private PopupViewModel viewModel;
+    private bool FilterTabClicked = false;
+    // private PopupViewModel viewModel;
     string previous;
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
@@ -284,6 +285,8 @@ public partial class AddSymptom : ContentPage
     {
         try
         {
+            if (FilterTabClicked) return;
+
             var Characters = searchbar.Text.ToString();
             var filteredSymptoms = new ObservableCollection<symptom>(FilterResults.Where(s => s.title.Contains(Characters, StringComparison.OrdinalIgnoreCase))).OrderBy(m => m.title);
             SymptomsListview.ItemsSource = filteredSymptoms;
@@ -301,14 +304,18 @@ public partial class AddSymptom : ContentPage
                 NoResultslbl.IsVisible = false;
             }
 
-            ////If FilterTabs item is Selected - UnSelect it 
-            //if(string.IsNullOrEmpty(searchbar.Text) || searchbar.Text == "")
-            //{
-            //    if (FilterTabs.SelectedItem != null)
-            //    {
-            //        FilterTabs.SelectedItem = null;
-            //    }
-            //}
+            //If FilterTabs item is Selected - UnSelect it 
+            if (string.IsNullOrEmpty(searchbar.Text) || searchbar.Text == "")
+            {
+                FilterTabs.SelectedItem = FilterTabsList[0];
+            }
+            else
+            {
+                if (FilterTabs.SelectedItem != null)
+                {
+                    FilterTabs.SelectedItem = null;
+                }
+            }
         }
         catch (Exception Ex)
         {
@@ -349,6 +356,8 @@ public partial class AddSymptom : ContentPage
         {
             var tappedFrame = sender as SfChip;
             var item = tappedFrame.Text;
+            FilterTabClicked = true;
+
 
             if (item == "All")
             {
@@ -370,6 +379,11 @@ public partial class AddSymptom : ContentPage
                 searchbar.Text = String.Empty;
 
             }
+
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                FilterTabClicked = false;
+            });
 
         }
         catch(Exception Ex)

@@ -31,7 +31,7 @@
 
 
 
-            <syncfusion:SfListView x:Name="usermeasurementlist" ItemTapped="usermeasurementlist_ItemTapped" ScrollBarVisibility="Never"  AllowSwiping="False" Margin="0,10,1,0" SelectionBackground="Transparent" SelectionMode="Multiple" IsEnabled="False" AutoFitMode="Height" >
+            <syncfusion:SfListView x:Name="usermeasurementlist" ItemTapped="usermeasurementlist_ItemTapped" ScrollBarVisibility="Never" CachingStrategy="RecycleTemplate"  AllowSwiping="False" Margin="0,10,1,0" SelectionBackground="Transparent" SelectionMode="Multiple" IsEnabled="False" AutoFitMode="Height" >
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>

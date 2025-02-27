@@ -213,6 +213,19 @@ public partial class MainDashboard : ContentPage
 
                     item.type = item.type.ToUpper();
 
+                    if (signupcodecollection[0].referral == "NOVO")
+                    {
+                        item.Padding = 8;
+                    }
+                    else if (signupcodecollection[0].referral == "SFEWH")
+                    {
+                        item.Padding = 10;
+                    }
+                    else if (signupcodecollection[0].referral == "SFEAT")
+                    {
+                        item.Padding = 7;
+                    }
+
                 }
 
                 infolist.ItemsSource = signupcodecollection[0].signupcodeinfolist;
@@ -245,9 +258,6 @@ public partial class MainDashboard : ContentPage
                     Preferences.Default.Set("NovoExitid", NovoConsent.exitid);
                     Preferences.Default.Set("NovoContent", CleanString);
                 }
-                
-
-
 
             }
             else
@@ -737,6 +747,7 @@ public partial class MainDashboard : ContentPage
 
 
                 var filteredmeasurements = userfeedbacklist[0].measurementfeedbacklist
+                    .Where(x => x.action != "deleted") // Remove Deleted items
         .OrderByDescending(x => DateTime.Parse(x.datetime))
     .GroupBy(x => x.label)
     .Select(g => g.First())  // Select only the first item in each group
@@ -824,18 +835,18 @@ public partial class MainDashboard : ContentPage
                 }
 
 
-                if (filteredmeasurements.Count > 1)
+                if (filteredmeasurements.Count > 0)
                 {
-                   // var takefivemeasurements = filteredmeasurements.Take(1).ToList();
+                    // var takefivemeasurements = filteredmeasurements.Take(1).ToList();
 
-                   // measurementdetaillist.ItemsSource = takefivemeasurements;
-                   // measurementdetaillist.HeightRequest = 152 * takefivemeasurements.Count;
+                    // measurementdetaillist.ItemsSource = takefivemeasurements;
+                    // measurementdetaillist.HeightRequest = 152 * takefivemeasurements.Count;
+                    measlbl.IsVisible = true;
+                    measlblsub.IsVisible = true; 
+                    measurementnochartdetaillist.IsVisible = true;
 
                     if (filteredmeasurements.Count > 5)
                     {
-
-                       
-
                         // Take the next four items for measurementnochartdetaillist
                         var nextFourMeasurements = filteredmeasurements.Skip(1).Take(5).ToList();
 
@@ -858,14 +869,12 @@ public partial class MainDashboard : ContentPage
                 }
                 else
                 {
-                  //  measurementdetaillist.ItemsSource = filteredmeasurements;
-                  //  measurementdetaillist.HeightRequest = 152 * filteredmeasurements.Count;
+                    measlbl.IsVisible = false;
+                    measlblsub.IsVisible = false;
+                    measurementnochartdetaillist.IsVisible = false;
+                    //  measurementdetaillist.ItemsSource = filteredmeasurements;
+                    //  measurementdetaillist.HeightRequest = 152 * filteredmeasurements.Count;
                 }
-
-                measlbl.IsVisible = true;
-               // measurementdetaillist.IsVisible = true;
-                measurementnochartdetaillist.IsVisible = true;
-                nomeasurementdataframe.IsVisible = false;
 
                 var random = new Random();
                 var selectedMeasurement = userfeedbacklist[0].measurementfeedbacklist[random.Next(userfeedbacklist[0].measurementfeedbacklist.Count)];
@@ -933,7 +942,7 @@ public partial class MainDashboard : ContentPage
                 var sevenDaysAgo = DateTime.Now.AddDays(-7);
 
                 var filteredMoods = userfeedbacklist[0].moodfeedbacklist
-                    .Where(x => DateTime.Parse(x.datetime).Date >= sevenDaysAgo.Date) // Filter last 7 days
+                    .Where(x => DateTime.Parse(x.datetime).Date >= sevenDaysAgo.Date && x.action != "deleted") // Filter last 7 days
                     .OrderByDescending(x => DateTime.Parse(x.datetime))
                     .GroupBy(x => x.label)
                     .Select(g => g.First())  // Select only the first item in each group
@@ -944,7 +953,7 @@ public partial class MainDashboard : ContentPage
                 foreach (var item in filteredMoods)
                 {
                     var countForDay = userfeedbacklist[0].moodfeedbacklist
-                        .Where(x => x.label == item.label && DateTime.Parse(x.datetime) >= sevenDaysAgo) // Apply date filter again
+                        .Where(x => x.label == item.label && DateTime.Parse(x.datetime) >= sevenDaysAgo && x.action != "deleted") // Apply date filter again
                         .Count();
 
                     mooddata.Add(new feedbackdata
@@ -2343,6 +2352,8 @@ public partial class MainDashboard : ContentPage
                 new dashitem { Type = "Mood", ContactImage = "moodhome.png", Title = "Mood", BackgroundColor = Color.FromArgb("#FFF8DC") },
                 new dashitem { Type = "Diet", ContactImage ="diethome.png", Title = "Diet", BackgroundColor = Color.FromArgb("#e8efd8") },
                 new dashitem { Type = "Investigations", ContactImage ="investhome.png", Title = "Investigations", BackgroundColor = Color.FromArgb("#F5E6E8") },
+                //new dashitem { Type = "Activity", ContactImage ="activityhome.png", Title = "Daily Activity", BackgroundColor = Color.FromArgb("#fce9d9") },
+                //new dashitem { Type = "Exercise", ContactImage ="investhome.png", Title = "Exercise/Activity", BackgroundColor = Color.FromArgb("#FDBA74") },
                 //new dashitem { Type = "Food Diary", ContactImage ="fooddiaryhome.png", Title = "Food Diary", BackgroundColor = Color.FromArgb("#ECE5C1") },
                 new dashitem { Type = "Appointments",  ContactImage = "appointhome.png", Title = "Appointments", BackgroundColor = Color.FromArgb("#ffe4e1") },
                 new dashitem {Type = "HCP",  ContactImage = "hcphome.png", Title = "HCPs", BackgroundColor = Color.FromArgb("#CBC3E3") },
@@ -2787,9 +2798,26 @@ public partial class MainDashboard : ContentPage
                 }
 
             }
+            else if (item != null && item.Title == "Daily Activity")
+            {
+                string Area = item.Title;
+                bool Check = Preferences.Default.Get("NovoActivity", false);
+                if (Check)
+                {
+                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                }
+                else
+                {
+                    await Navigation.PushAsync(new AllDailyActivity(), false);
+                }
+
+            }
+
+
+
 
         }
-        catch(Exception Ex)
+        catch (Exception Ex)
         {
             NotasyncMethod(Ex);
             //await Navigation.PushAsync(new ErrorPage()) ,false);  
@@ -3139,6 +3167,21 @@ public partial class MainDashboard : ContentPage
                 else
                 {
                     await Navigation.PushAsync(new AllInvestigations(), false);
+                }
+
+            }
+
+            else if (item != null && item.Title == "Daily Activity")
+            {
+                string Area = item.Title;
+                bool Check = Preferences.Default.Get("NovoActivity", false);
+                if (Check)
+                {
+                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                }
+                else
+                {
+                    await Navigation.PushAsync(new AllDailyActivity(), false);
                 }
 
             }

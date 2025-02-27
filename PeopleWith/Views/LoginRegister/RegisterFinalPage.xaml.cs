@@ -25,7 +25,7 @@ public partial class RegisterFinalPage : ContentPage
     public consent additonalconsent = new consent();
     ObservableCollection<usermedication> medicationstoadd = new ObservableCollection<usermedication>();
     ObservableCollection<usersymptom> symptomstoadd = new ObservableCollection<usersymptom>();
-    HttpClient client = new HttpClient();
+    public HttpClient Client = new HttpClient();
     userdiagnosis userdiag;
     bool SignPadhaddata = false;
     //Connectivity Changed 
@@ -47,6 +47,19 @@ public partial class RegisterFinalPage : ContentPage
         }
     }
 
+    private void ConfigureClient()
+    {
+        try
+        {
+            Client = new HttpClient();
+            Client.DefaultRequestHeaders.Add("X-MS-CLIENT-PRINCIPAL", "eyAgCiAgImlkZW50aXR5UHJvdmlkZXIiOiAidGVzdCIsCiAgInVzZXJJZCI6ICIxMjM0NSIsCiAgInVzZXJEZXRhaWxzIjogImpvaG5AY29udG9zby5jb20iLAogICJ1c2VyUm9sZXMiOiBbIjFFMzNDMEFDLTMzOTMtNEMzNC04MzRBLURFNUZEQkNCQjNDQyJdCn0=");
+            Client.DefaultRequestHeaders.Add("X-MS-API-ROLE", "1E33C0AC-3393-4C34-834A-DE5FDBCBB3CC");
+        }
+        catch (Exception Ex)
+        {
+            //Empty
+        }
+    }
 
     public RegisterFinalPage()
 	{
@@ -564,10 +577,11 @@ public partial class RegisterFinalPage : ContentPage
                   //  WriteIndented = true
                 };
 
-                var urll = $"https://pwdevapi.peoplewith.com/api/user/userid/{newuser.userid}";
+                var urll = $"https://pwapi.peoplewith.com/api/user/userid/{newuser.userid}";
                 string json = System.Text.Json.JsonSerializer.Serialize<user>(newuser, serializerOptions);
                 StringContent contentt = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await client.PatchAsync(urll, contentt);
+                ConfigureClient();
+                var response = await Client.PatchAsync(urll, contentt);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -584,11 +598,11 @@ public partial class RegisterFinalPage : ContentPage
                         for (int i = 0; i < userresponsepassed.Count; i++)
                         {
                             userresponsepassed[i].id = "123";
-                            Uri uri = new Uri(string.Format("https://pwdevapi.peoplewith.com/api/userresponse", string.Empty));
+                            Uri uri = new Uri(string.Format("https://pwapi.peoplewith.com/api/userresponse", string.Empty));
                             // var url = APICalls.InsertUserResponse;
                             string jsonn = System.Text.Json.JsonSerializer.Serialize<userresponse>(userresponsepassed[i], serializerOptions);
                             StringContent contenttt = new StringContent(jsonn, Encoding.UTF8, "application/json");
-                            response = await client.PostAsync(uri, contenttt);
+                            response = await Client.PostAsync(uri, contenttt);
 
                             if (response.IsSuccessStatusCode)
                             {
@@ -619,7 +633,7 @@ public partial class RegisterFinalPage : ContentPage
                             var urls = APICalls.InsertUserSymptoms;
                             string jsonns = System.Text.Json.JsonSerializer.Serialize<usersymptom>(item, serializerOptions);
                             StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
-                            response = await client.PostAsync(urls, contenttts);
+                            response = await Client.PostAsync(urls, contenttts);
 
                             if (response.IsSuccessStatusCode)
                             {
@@ -659,7 +673,7 @@ public partial class RegisterFinalPage : ContentPage
                             var url = APICalls.InsertUserMedications;
                             string jsonn = System.Text.Json.JsonSerializer.Serialize<usermedication>(item, serializerOptions);
                             StringContent contenttt = new StringContent(jsonn, Encoding.UTF8, "application/json");
-                            response = await client.PostAsync(url, contenttt);
+                            response = await Client.PostAsync(url, contenttt);
 
                             if (response.IsSuccessStatusCode)
                             {
@@ -673,7 +687,7 @@ public partial class RegisterFinalPage : ContentPage
                         var url = APICalls.InsertUserDiagnosis;
                         string jsonn = System.Text.Json.JsonSerializer.Serialize<userdiagnosis>(userdiag, serializerOptions);
                         StringContent contenttt = new StringContent(jsonn, Encoding.UTF8, "application/json");
-                        response = await client.PostAsync(url, contenttt);
+                        response = await Client.PostAsync(url, contenttt);
 
                         if (response.IsSuccessStatusCode)
                         {
@@ -688,7 +702,7 @@ public partial class RegisterFinalPage : ContentPage
                             var url = APICalls.InsertUserDiagnosis;
                             string jsonn = System.Text.Json.JsonSerializer.Serialize<userdiagnosis>(item, serializerOptions);
                             StringContent contenttt = new StringContent(jsonn, Encoding.UTF8, "application/json");
-                            response = await client.PostAsync(url, contenttt);
+                            response = await Client.PostAsync(url, contenttt);
 
                             if (response.IsSuccessStatusCode)
                             {
@@ -704,7 +718,7 @@ public partial class RegisterFinalPage : ContentPage
                             var url = APICalls.InsertUserMeasurements;
                             string jsonn = System.Text.Json.JsonSerializer.Serialize<usermeasurement>(item, serializerOptions);
                             StringContent contenttt = new StringContent(jsonn, Encoding.UTF8, "application/json");
-                            response = await client.PostAsync(url, contenttt);
+                            response = await Client.PostAsync(url, contenttt);
 
                             if (response.IsSuccessStatusCode)
                             {
@@ -807,6 +821,7 @@ public partial class RegisterFinalPage : ContentPage
                         Preferences.Default.Set("NovoFood", true);
                         Preferences.Default.Set("NovoDiet", true);
                         Preferences.Default.Set("NovoInvest", true);
+                        Preferences.Default.Set("NovoActivity", true);
                     }
                 }
 

@@ -17,7 +17,7 @@ public partial class ProfileEdit : ContentPage
     user newuser = new user();
     public List<string> genlist = new List<string>();
     public List<string> ethnicitylist = new List<string>();
-    HttpClient client = new HttpClient();
+    public HttpClient Client = new HttpClient();
     string ItemTitle;
     string SelectedList;
     bool isEditing;
@@ -43,6 +43,19 @@ public partial class ProfileEdit : ContentPage
         }
     }
 
+    private void ConfigureClient()
+    {
+        try
+        {
+            Client = new HttpClient();
+            Client.DefaultRequestHeaders.Add("X-MS-CLIENT-PRINCIPAL", "eyAgCiAgImlkZW50aXR5UHJvdmlkZXIiOiAidGVzdCIsCiAgInVzZXJJZCI6ICIxMjM0NSIsCiAgInVzZXJEZXRhaWxzIjogImpvaG5AY29udG9zby5jb20iLAogICJ1c2VyUm9sZXMiOiBbIjFFMzNDMEFDLTMzOTMtNEMzNC04MzRBLURFNUZEQkNCQjNDQyJdCn0=");
+            Client.DefaultRequestHeaders.Add("X-MS-API-ROLE", "1E33C0AC-3393-4C34-834A-DE5FDBCBB3CC");
+        }
+        catch (Exception Ex)
+        {
+            //Empty
+        }
+    }
 
     public ProfileEdit(string SelectedItem, string Selected, user AllUserDetails)
     {
@@ -364,11 +377,11 @@ public partial class ProfileEdit : ContentPage
             int randomNumber = random.Next(10000, 100000);
             ValidationCode = randomNumber.ToString();
             string id = Helpers.Settings.UserKey;
-            var url = $"https://pwdevapi.peoplewith.com/api/user/userid/{id}";
+            var url = $"https://pwapi.peoplewith.com/api/user/userid/{id}";
 
             string json = System.Text.Json.JsonSerializer.Serialize(new { validationcode = ValidationCode });
             StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+            ConfigureClient();
             using (var client = new HttpClient())
             {
                 var request = new HttpRequestMessage(HttpMethod.Patch, url)
@@ -376,7 +389,7 @@ public partial class ProfileEdit : ContentPage
                     Content = content
                 };
 
-                var response = await client.SendAsync(request);
+                var response = await Client.SendAsync(request);
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -406,11 +419,11 @@ public partial class ProfileEdit : ContentPage
             if (!String.IsNullOrEmpty(FirstName))
             {
                 string id = Helpers.Settings.UserKey;
-                var url = $"https://pwdevapi.peoplewith.com/api/user/userid/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/user/userid/{id}";
 
                 string json = System.Text.Json.JsonSerializer.Serialize(new { firstname = FirstName });
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     var request = new HttpRequestMessage(HttpMethod.Patch, url)
@@ -418,7 +431,7 @@ public partial class ProfileEdit : ContentPage
                         Content = content
                     };
 
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
 
                     if (!response.IsSuccessStatusCode)
                     {
@@ -435,11 +448,11 @@ public partial class ProfileEdit : ContentPage
             if (!String.IsNullOrEmpty(SecondName))
             {
                 string id = Helpers.Settings.UserKey;
-                var url = $"https://pwdevapi.peoplewith.com/api/user/userid/{id}";
+                var url = $"https://pwapi.peoplewith.com/api/user/userid/{id}";
 
                 string json = System.Text.Json.JsonSerializer.Serialize(new { surname = SecondName });
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     var request = new HttpRequestMessage(HttpMethod.Patch, url)
@@ -447,7 +460,7 @@ public partial class ProfileEdit : ContentPage
                         Content = content
                     };
 
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
 
                     if (!response.IsSuccessStatusCode)
                     {
@@ -529,8 +542,8 @@ public partial class ProfileEdit : ContentPage
             };
 
             var url = APICalls.Checkuseremail + "%27" + EmailEntry.Text + "%27";
-
-            HttpResponseMessage response = await client.GetAsync(url);
+            ConfigureClient();
+            HttpResponseMessage response = await Client.GetAsync(url);
 
             if (response.IsSuccessStatusCode)
             {
@@ -553,11 +566,11 @@ public partial class ProfileEdit : ContentPage
             bool EmailChanged = false;
             string Email = EmailEntry.Text;
             string id = Helpers.Settings.UserKey;
-            var URL = $"https://pwdevapi.peoplewith.com/api/user/userid/{id}";
+            var URL = $"https://pwapi.peoplewith.com/api/user/userid/{id}";
 
             string json = System.Text.Json.JsonSerializer.Serialize(new { email = Email });
             StringContent contents = new StringContent(json, Encoding.UTF8, "application/json");
-
+            ConfigureClient();
             using (var client = new HttpClient())
             {
                 var request = new HttpRequestMessage(HttpMethod.Patch, URL)
@@ -565,7 +578,7 @@ public partial class ProfileEdit : ContentPage
                     Content = contents
                 };
 
-                var responses = await client.SendAsync(request);
+                var responses = await Client.SendAsync(request);
 
                 if (!responses.IsSuccessStatusCode)
                 {
@@ -613,11 +626,11 @@ public partial class ProfileEdit : ContentPage
                 bool DateofBirth = false;
                 string DOB = DateofBirthEntry.Text;
                 string id = Helpers.Settings.UserKey;
-                var URL = $"https://pwdevapi.peoplewith.com/api/user/userid/{id}";
+                var URL = $"https://pwapi.peoplewith.com/api/user/userid/{id}";
 
                 string json = System.Text.Json.JsonSerializer.Serialize(new { dateofbirth = DOB });
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     var request = new HttpRequestMessage(HttpMethod.Patch, URL)
@@ -625,7 +638,7 @@ public partial class ProfileEdit : ContentPage
                         Content = content
                     };
 
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
 
                     if (!response.IsSuccessStatusCode)
                     {
@@ -673,11 +686,11 @@ public partial class ProfileEdit : ContentPage
             bool GenderChanged = false;
             string Gender = genderlist.SelectedItem.ToString();
             string id = Helpers.Settings.UserKey;
-            var URL = $"https://pwdevapi.peoplewith.com/api/user/userid/{id}";
+            var URL = $"https://pwapi.peoplewith.com/api/user/userid/{id}";
 
             string json = System.Text.Json.JsonSerializer.Serialize(new { gender = Gender });
             StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+            ConfigureClient();
             using (var client = new HttpClient())
             {
                 var request = new HttpRequestMessage(HttpMethod.Patch, URL)
@@ -685,7 +698,7 @@ public partial class ProfileEdit : ContentPage
                     Content = content
                 };
 
-                var response = await client.SendAsync(request);
+                var response = await Client.SendAsync(request);
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -731,11 +744,11 @@ public partial class ProfileEdit : ContentPage
             bool EthnicityChanged = false;
             string Ethnicity = ethlist.SelectedItem.ToString();
             string id = Helpers.Settings.UserKey;
-            var URL = $"https://pwdevapi.peoplewith.com/api/user/userid/{id}";
+            var URL = $"https://pwapi.peoplewith.com/api/user/userid/{id}";
 
             string json = System.Text.Json.JsonSerializer.Serialize(new { ethnicity = Ethnicity });
             StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+            ConfigureClient();
             using (var client = new HttpClient())
             {
                 var request = new HttpRequestMessage(HttpMethod.Patch, URL)
@@ -743,7 +756,7 @@ public partial class ProfileEdit : ContentPage
                     Content = content
                 };
 
-                var response = await client.SendAsync(request);
+                var response = await Client.SendAsync(request);
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -1162,11 +1175,11 @@ public partial class ProfileEdit : ContentPage
                 //Reset Pasword 
                 bool passwordSuccess = false; 
                 string id = Helpers.Settings.UserKey;
-                var URL = $"https://pwdevapi.peoplewith.com/api/user/userid/{id}";
+                var URL = $"https://pwapi.peoplewith.com/api/user/userid/{id}";
 
                 string json = System.Text.Json.JsonSerializer.Serialize(new { password = Password });
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+                ConfigureClient();
                 using (var client = new HttpClient())
                 {
                     var request = new HttpRequestMessage(HttpMethod.Patch, URL)
@@ -1174,7 +1187,7 @@ public partial class ProfileEdit : ContentPage
                         Content = content
                     };
 
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
 
                     if (!response.IsSuccessStatusCode)
                     {
@@ -1230,8 +1243,8 @@ public partial class ProfileEdit : ContentPage
             //Check if signup code valid 
 
             var url = APICalls.CheckSignUpCode + "%27" + signupcodetext.Text + "%27";
-
-            HttpResponseMessage response = await client.GetAsync(url);
+            ConfigureClient();
+            HttpResponseMessage response = await Client.GetAsync(url);
 
             if (response.IsSuccessStatusCode)
             {
@@ -1254,8 +1267,8 @@ public partial class ProfileEdit : ContentPage
 
 
                     var urll = APICalls.Checksignupregquestions + "%27" + users[0].referral + "%27";
-
-                    HttpResponseMessage responsee = await client.GetAsync(urll);
+                    ConfigureClient();
+                    HttpResponseMessage responsee = await Client.GetAsync(urll);
 
                     if (responsee.IsSuccessStatusCode)
                     {
@@ -1281,7 +1294,7 @@ public partial class ProfileEdit : ContentPage
 
                             var urlanswers = APICalls.Checksignupreganswers + "%27" + users[0].referral + "%27";
 
-                            HttpResponseMessage responseeanswers = await client.GetAsync(urlanswers);
+                            HttpResponseMessage responseeanswers = await Client.GetAsync(urlanswers);
 
                             if (responseeanswers.IsSuccessStatusCode)
                             {
@@ -1297,7 +1310,7 @@ public partial class ProfileEdit : ContentPage
                     {
                         var urlconsent = APICalls.CheckConsentforsignupcode + "%27" + users[0].signupcodeid + "%27";
 
-                        HttpResponseMessage responseconsent = await client.GetAsync(urlconsent);
+                        HttpResponseMessage responseconsent = await Client.GetAsync(urlconsent);
 
                         if (responseconsent.IsSuccessStatusCode)
                         {
@@ -1381,11 +1394,11 @@ public partial class ProfileEdit : ContentPage
 
                 string PinCode = string.Join("On,",codepin.PINValue);
                 string id = Helpers.Settings.UserKey;
-                var URL = $"https://pwdevapi.peoplewith.com/api/user/userid/{id}";
+                var URL = $"https://pwapi.peoplewith.com/api/user/userid/{id}";
 
                 string json = System.Text.Json.JsonSerializer.Serialize(new { userpin = PinCode });
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+                ConfigureClient(); 
                 using (var client = new HttpClient())
                 {
                     var request = new HttpRequestMessage(HttpMethod.Patch, URL)
@@ -1393,7 +1406,7 @@ public partial class ProfileEdit : ContentPage
                         Content = content
                     };
 
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
 
                     if (!response.IsSuccessStatusCode)
                     {
@@ -1561,7 +1574,7 @@ public partial class ProfileEdit : ContentPage
                 PinOnOff = "On,";
             }
                 string id = Helpers.Settings.UserKey;
-                var URL = $"https://pwdevapi.peoplewith.com/api/user/userid/{id}";
+                var URL = $"https://pwapi.peoplewith.com/api/user/userid/{id}";
                 if (AllUserData.userpin.Contains(","))
                 {
                     var split = AllUserData.userpin.Split(',');
@@ -1574,7 +1587,7 @@ public partial class ProfileEdit : ContentPage
                 
                 string json = System.Text.Json.JsonSerializer.Serialize(new { userpin = UserPinjoin });
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+                ConfigureClient(); 
                 using (var client = new HttpClient())
                 {
                     var request = new HttpRequestMessage(HttpMethod.Patch, URL)
@@ -1582,7 +1595,7 @@ public partial class ProfileEdit : ContentPage
                         Content = content
                     };
 
-                    var response = await client.SendAsync(request);
+                    var response = await Client.SendAsync(request);
 
                     if (!response.IsSuccessStatusCode)
                     {
@@ -1607,7 +1620,7 @@ public partial class ProfileEdit : ContentPage
         {
             bool BiometicsBool = e.Value; 
             string id = Helpers.Settings.UserKey;
-            var URL = $"https://pwdevapi.peoplewith.com/api/user/userid/{id}";
+            var URL = $"https://pwapi.peoplewith.com/api/user/userid/{id}";
 
             var options = new JsonSerializerOptions
             {
@@ -1615,7 +1628,7 @@ public partial class ProfileEdit : ContentPage
             };
             string json = System.Text.Json.JsonSerializer.Serialize(new { biometrics = BiometicsBool });
             StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-
+            ConfigureClient(); 
             using (var client = new HttpClient())
             {
                 var request = new HttpRequestMessage(HttpMethod.Patch, URL)
@@ -1623,7 +1636,7 @@ public partial class ProfileEdit : ContentPage
                     Content = content
                 };
 
-                var response = await client.SendAsync(request);
+                var response = await Client.SendAsync(request);
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -1758,13 +1771,13 @@ public partial class ProfileEdit : ContentPage
                 WriteIndented = true
             };
 
-            var urll = $"https://pwdevapi.peoplewith.com/api/user/userid/{newuser.userid}";
+            var urll = $"https://pwapi.peoplewith.com/api/user/userid/{newuser.userid}";
             string jsonn = System.Text.Json.JsonSerializer.Serialize(new { validationcode = newuser.validationcode });
 
             StringContent contenttt = new StringContent(jsonn, Encoding.UTF8, "application/json");
             HttpResponseMessage responsee1 = null;
-
-            responsee1 = await client.PatchAsync(urll, contenttt);
+            ConfigureClient(); 
+            responsee1 = await Client.PatchAsync(urll, contenttt);
 
 
             if (responsee1.IsSuccessStatusCode)
@@ -1780,7 +1793,7 @@ public partial class ProfileEdit : ContentPage
             //email generate
             StringContent mail_content = new StringContent(newuser.email, System.Text.Encoding.UTF8, "application/json");
 
-            var emailresponse = await client.PostAsync("https://peoplewithwebapp.azurewebsites.net/hub/email-validation.php?uid=" + newuser.email, mail_content);
+            var emailresponse = await Client.PostAsync("https://peoplewithwebapp.azurewebsites.net/hub/email-validation.php?uid=" + newuser.email, mail_content);
 
             // check if the response is successful
             if (emailresponse.IsSuccessStatusCode)

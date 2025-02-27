@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PeopleWith.Helpers.Calendarpopup"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Calendar;assembly=Syncfusion.Maui.Calendar" 
+             BackgroundColor="White">
+    <Grid RowDefinitions="Auto, *">
+
+        <!-- Header with Calendar Icon -->
+        <StackLayout Orientation="Horizontal" Padding="20">
+            <Label Text="{Binding SelectedDate, StringFormat='{0:dd MMM yyyy}'}"
+                   FontSize="24" TextColor="White" FontAttributes="Bold"/>
+            <ImageButton Source="calendar_icon.png"
+                         HeightRequest="30" WidthRequest="30"
+                         Command="{Binding ShowCalendarPopupCommand}"/>
+        </StackLayout>
+
+        <!-- Calendar Popup Overlay -->
+        <Frame x:Name="CalendarPopup"
+               IsVisible="{Binding IsCalendarPopupVisible}"
+               BackgroundColor="Black"
+               CornerRadius="10"
+               Padding="15"
+               HorizontalOptions="Center"
+               VerticalOptions="Center"
+               WidthRequest="320"
+               HeightRequest="400"
+               Opacity="0.9">
+
+            <VerticalStackLayout>
+                <Label Text="Select Date" TextColor="#FF6B6B" FontSize="18"/>
+
+                <syncfusion:SfCalendar x:Name="Calendar"
+                                       View="Month"
+                                       ShowActionButtons="True"
+                                       SelectedDate="{Binding SelectedDate, Mode=TwoWay}" />
+
+                <!-- Buttons -->
+                <HorizontalStackLayout HorizontalOptions="End" Spacing="10">
+                    <Button Text="Cancel" BackgroundColor="Transparent" TextColor="White"
+                            Command="{Binding HideCalendarPopupCommand}"/>
+                    <Button Text="OK" BackgroundColor="#FF6B6B" TextColor="White"
+                            Command="{Binding ConfirmDateCommand}"/>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </Frame>
+
+    </Grid>
+</ContentPage>

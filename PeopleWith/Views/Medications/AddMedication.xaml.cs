@@ -16,7 +16,7 @@ namespace PeopleWith;
 
 public partial class AddMedication : ContentPage
 {
-    HttpClient client = new HttpClient();
+    public HttpClient Client = new HttpClient();
     ObservableCollection<medication> allmedicationlist = new ObservableCollection<medication>();
     ObservableCollection<medication> FilterResults = new ObservableCollection<medication>();
     usermedication newusermedication = new usermedication();
@@ -74,6 +74,20 @@ public partial class AddMedication : ContentPage
         catch (Exception ex)
         {
             //Dunno 
+        }
+    }
+
+    private void ConfigureClient()
+    {
+        try
+        {
+            Client = new HttpClient();
+            Client.DefaultRequestHeaders.Add("X-MS-CLIENT-PRINCIPAL", "eyAgCiAgImlkZW50aXR5UHJvdmlkZXIiOiAidGVzdCIsCiAgInVzZXJJZCI6ICIxMjM0NSIsCiAgInVzZXJEZXRhaWxzIjogImpvaG5AY29udG9zby5jb20iLAogICJ1c2VyUm9sZXMiOiBbIjFFMzNDMEFDLTMzOTMtNEMzNC04MzRBLURFNUZEQkNCQjNDQyJdCn0=");
+            Client.DefaultRequestHeaders.Add("X-MS-API-ROLE", "1E33C0AC-3393-4C34-834A-DE5FDBCBB3CC");
+        }
+        catch (Exception Ex)
+        {
+            //Empty
         }
     }
 
@@ -732,8 +746,8 @@ public partial class AddMedication : ContentPage
                 backbtn.IsVisible = false;
 
                 var urlmedications = APICalls.GetMedications;
-
-                HttpResponseMessage responsemeds = await client.GetAsync(urlmedications);
+                ConfigureClient();
+                HttpResponseMessage responsemeds = await Client.GetAsync(urlmedications);
 
                 if (responsemeds.IsSuccessStatusCode)
                 {

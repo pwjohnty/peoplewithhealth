@@ -173,7 +173,7 @@
           </StackLayout>
 
             <!-- No Data Stack-->
-            <StackLayout x:Name="nodatastack" Margin="0,150,0,0" IsVisible="False" VerticalOptions="CenterAndExpand">
+            <StackLayout x:Name="nodatastack" IsVisible="False" VerticalOptions="CenterAndExpand">
                 <Image Source="adddataicon.png" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="50" WidthRequest="50"/>
                 <Label Text="Add Appointment" FontSize="20" Margin="0,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Center" />
                 <Label Text="Tap here to add an Appointment" FontSize="14" TextColor="#031926" FontFamily="HankenGroteskRegular" Margin="0,0,0,0" HorizontalOptions="Center" VerticalOptions="Center" VerticalTextAlignment="Center" />

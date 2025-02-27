@@ -5,7 +5,7 @@
              xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
              x:Class="PeopleWith.SingleMood"  xmlns:local="clr-namespace:PeopleWith" NavigationPage.IconColor="#031926"  BackgroundColor="White">
     <ContentPage.ToolbarItems>
-        <ToolbarItem x:Name="EditBtn" Text="Edit"  Clicked="EditBtn_Clicked"  />
+        <ToolbarItem x:Name="EditBtn" IsEnabled="False" Text=""  Clicked="EditBtn_Clicked"  />
     </ContentPage.ToolbarItems>
     <ScrollView VerticalScrollBarVisibility="Never">
         <StackLayout x:Name="MoodSingle">
@@ -38,11 +38,10 @@
 
             <StackLayout x:Name="SymptomInsights" Margin="20,10,20,0" IsVisible="True">
 
-                <Label Text="Mood Timeline" Margin="10,20,0,10" FontFamily="HankenGroteskBold"  FontSize="20" VerticalOptions="Center" TextColor="#031926" />
+                <Label Text="Mood Timeline" Margin="0,20,0,0" FontFamily="HankenGroteskBold"  FontSize="20" VerticalOptions="Center" TextColor="#031926" />
+                <Label  FontFamily="HankenGroteskRegular" TextColor="Gray" Text="Tap on a note below to edit or delete it as needed." FontSize="14" HorizontalTextAlignment="Start"  Margin="0,0,0,0" />
 
-
-
-                <syncfusion:SfListView  x:Name="AllMoodView" Padding="0" Margin="0,0,0,0" AutoFitMode="Height" ItemSpacing="0" BackgroundColor="Transparent" HorizontalOptions="FillAndExpand" IsScrollingEnabled="False"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
+                <syncfusion:SfListView  x:Name="AllMoodView" Padding="0" Margin="0,5,0,0" ItemTapped="AllMoodView_ItemTapped" AutoFitMode="Height" ItemSpacing="0" BackgroundColor="Transparent" HorizontalOptions="FillAndExpand" IsScrollingEnabled="False"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
@@ -92,7 +91,7 @@
             </StackLayout>
 
             <Label Text="Details" Margin="20,20,0,0" FontFamily="HankenGroteskBold"  FontSize="20" VerticalOptions="Center" TextColor="#031926" />
-            <Frame HasShadow="False" BorderColor="#E5E5E5" BackgroundColor="Transparent" Margin="10,10,10,0">
+            <Frame HasShadow="False" BorderColor="#E5E5E5" BackgroundColor="Transparent" Margin="10,10,10,50">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="90*"/>
@@ -106,8 +105,8 @@
                 </Frame.GestureRecognizers>
             </Frame>
 
-            <Button x:Name="Deletebtn" Margin="20,50,20,0" FontSize="14" TextColor="Red" BackgroundColor="#ffe5e5" FontFamily="HankenGroteskBold" CornerRadius="10" Text="Delete Mood" Clicked="Deletebtn_Clicked" />
-            <Label HorizontalTextAlignment="Start" Text="If this Mood is deleted, you will lose all of your Mood Data" Margin="20,0,20,20" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="DarkGray"  />
+            <Button x:Name="Deletebtn" IsVisible="False" Margin="20,50,20,0" FontSize="14" TextColor="Red" BackgroundColor="#ffe5e5" FontFamily="HankenGroteskBold" CornerRadius="10" Text="Delete Mood" Clicked="Deletebtn_Clicked" />
+            <Label HorizontalTextAlignment="Start" IsVisible="False" Text="If this Mood is deleted, you will lose all of your Mood Data" Margin="20,0,20,20" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="DarkGray"  />
 
         </StackLayout>
 

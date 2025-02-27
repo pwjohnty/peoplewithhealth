@@ -11,6 +11,14 @@ using CommunityToolkit.Maui;
 using Maui.FreakyControls.Extensions;
 using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Hosting;
+using Microsoft.Maui;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Handlers;
+
+#if IOS
+using UIKit;
+using CoreGraphics;
+#endif
 
 namespace PeopleWith
 {
@@ -26,6 +34,7 @@ namespace PeopleWith
                 .UseMauiApp<App>()
                 .UseLocalNotification()
                 .UseSegmentedControl()
+              
                 //.UseSkiaSharp()
 #if ANDROID
                 .ConfigureMauiHandlers(handlers => 
@@ -86,6 +95,7 @@ namespace PeopleWith
 #endif
             });
 
+
             // Remove underline on Editor (Android)
             Microsoft.Maui.Handlers.EditorHandler.Mapper.AppendToMapping("Borderless", (handler, view) =>
             {
@@ -101,6 +111,10 @@ namespace PeopleWith
 
             // Use with Dependency Injection
             builder.Services.AddSingleton<IBiometric>(BiometricAuthenticationService.Default);
+
+            //Add IOS Done to Numeric Keybaord
+            EntryHandler.AddDone();
+
             return builder.Build();
         }
     }

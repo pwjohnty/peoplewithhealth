@@ -80,6 +80,7 @@
 	  <None Remove="Resources\Fonts\HankenGrotesk-Light.ttf" />
 	  <None Remove="Resources\Fonts\HankenGrotesk-Regular.ttf" />
 	  <None Remove="Resources\Fonts\HankenGrotesk-SemiBold.ttf" />
+	  <None Remove="Resources\Images\activityhome.png" />
 	  <None Remove="Resources\Images\adddataicon.png" />
 	  <None Remove="Resources\Images\agreement.png" />
 	  <None Remove="Resources\Images\alarm.png" />
@@ -119,6 +120,7 @@
 	  <None Remove="Resources\Images\equal.png" />
 	  <None Remove="Resources\Images\erroricon.png" />
 	  <None Remove="Resources\Images\excited.png" />
+	  <None Remove="Resources\Images\exercisehome.png" />
 	  <None Remove="Resources\Images\faceid.png" />
 	  <None Remove="Resources\Images\filterchargray.png" />
 	  <None Remove="Resources\Images\filterdarkblue.png" />
@@ -247,6 +249,7 @@
 		<PackageReference Include="Syncfusion.Maui.Charts" Version="25.2.5" />
 		<PackageReference Include="Syncfusion.Maui.Core" Version="25.2.5" />
 		<PackageReference Include="Syncfusion.Maui.Gauges" Version="25.1.35" />
+		<PackageReference Include="Syncfusion.Maui.Inputs" Version="25.2.5" />
 		<PackageReference Include="Syncfusion.Maui.ListView" Version="25.2.5" />
 		<PackageReference Include="Syncfusion.Maui.PdfViewer" Version="25.2.5" />
 		<PackageReference Include="Syncfusion.Maui.Picker" Version="25.2.5" />
@@ -292,6 +295,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Helpers\Calendarpopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Helpers\GettingReady.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -340,6 +346,12 @@
 	  <MauiXaml Update="Views\CrashTest\CrashTests.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\DailyActivity\AddDailyActivity.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\DailyActivity\AllDailyActivity.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Dashboard\MainDashboard.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -377,6 +389,12 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Diet\SingleDiet.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Exercise\AddExercise.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Exercise\AllExercise.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\HCPs\AddHCPs.xaml">

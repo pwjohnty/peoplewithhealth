@@ -10,7 +10,7 @@ namespace PeopleWith;
 
 public partial class ForgottenPassword : ContentPage
 {
-    HttpClient client = new HttpClient();
+    public HttpClient Client = new HttpClient();
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
@@ -26,6 +26,19 @@ public partial class ForgottenPassword : ContentPage
         catch (Exception ex)
         {
             //Dunno 
+        }
+    }
+    private void ConfigureClient()
+    {
+        try
+        {
+            Client = new HttpClient();
+            Client.DefaultRequestHeaders.Add("X-MS-CLIENT-PRINCIPAL", "eyAgCiAgImlkZW50aXR5UHJvdmlkZXIiOiAidGVzdCIsCiAgInVzZXJJZCI6ICIxMjM0NSIsCiAgInVzZXJEZXRhaWxzIjogImpvaG5AY29udG9zby5jb20iLAogICJ1c2VyUm9sZXMiOiBbIjFFMzNDMEFDLTMzOTMtNEMzNC04MzRBLURFNUZEQkNCQjNDQyJdCn0=");
+            Client.DefaultRequestHeaders.Add("X-MS-API-ROLE", "1E33C0AC-3393-4C34-834A-DE5FDBCBB3CC");
+        }
+        catch (Exception Ex)
+        {
+            //Empty
         }
     }
 
@@ -135,7 +148,9 @@ public partial class ForgottenPassword : ContentPage
 
         var url = APICalls.Checkuseremail + "%27" + emailentry.Text + "%27";
 
-        HttpResponseMessage response = await client.GetAsync(url);
+        ConfigureClient(); 
+
+        HttpResponseMessage response = await Client.GetAsync(url);
 
         if (response.IsSuccessStatusCode)
         {

@@ -222,48 +222,53 @@ public partial class AddDiagnosis : ContentPage
             {
                 if (validdob == false)
                 {
-                    DateEntry.Focus();
-                    EntryError.IsVisible = true;
-                    EntryError.Text = "Diagnosis Date is Not a Valid Date, Enter a Valid Date";
-                    await Task.Delay(5000);
-                    EntryError.Text = null;
-                    EntryError.IsVisible = false;
-                    return; 
+                    if (DOB.Date > DateTime.Now.Date)
+                    {
+                        DateEntry.Focus();
+                        DOBHelper.ErrorText = "Diagnosis Date is Greater than today's Date, Enter a Valid Date";
+                        DOBHelper.HasError = true;
+                        await Task.Delay(5000);
+                        DOBHelper.HasError = false;
+                        return;
+                    }
+                    if (DOB.Date < DateTime.Now.Date.AddYears(-150))
+                    {
+                        DateEntry.Focus();
+                        DOBHelper.ErrorText = "Diagnosis Date is not possible, Enter a Valid Date";
+                        DOBHelper.HasError = true;
+                        await Task.Delay(5000);
+                        DOBHelper.HasError = false;
+                        return;
+                    }
 
                 }
-                if (DOB.Date <= DateTime.Now.Date)
+                else
                 {
-                    DateOBirth = DOB; 
-                    HandleDiagnosisAdd(); 
-                }
-                else if (DOB.Date > DateTime.Now.Date)
-                {
-                    DateEntry.Focus();
-                    EntryError.IsVisible = true;
-                    EntryError.Text = "Diagnosis Date is Greater than today's Date, Enter a Valid Date";
-                    await Task.Delay(5000);
-                    EntryError.Text = null;
-                    EntryError.IsVisible = false;
-
+                    //Valid DOB
+                    if (DOB.Date <= DateTime.Now.Date)
+                    {
+                        DateOBirth = DOB;
+                        HandleDiagnosisAdd();
+                    }
                 }
             }
             else
             {
-                if(diagdatecheckbox.IsChecked == true)
+                if (diagdatecheckbox.IsChecked == true)
                 {
+                    //Unknown Added
                     HandleDiagnosisAdd();
                 }
                 else
                 {
                     DateEntry.Focus();
-                    EntryError.IsVisible = true;
-                    EntryError.Text = "Diagnosis Date is Not a Valid Date, Enter a Valid Date";
+                    DOBHelper.ErrorText = "Diagnosis Date is Not a Valid Date, Enter a Valid Date";
+                    DOBHelper.HasError = true;
                     await Task.Delay(5000);
-                    EntryError.Text = null;
-                    EntryError.IsVisible = false;
+                    DOBHelper.HasError = false;
                 }
+             }
             }
-        }
         catch (Exception Ex)
         {
             NotasyncMethod(Ex);

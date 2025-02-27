@@ -185,6 +185,10 @@ public partial class AllSymptoms : ContentPage
                     if (item.feedback.Count > 1)
                     {
                         var count = allIntensities.Count - 2;
+                        if(count == -1)
+                        {
+                            count = 0;
+                        }
                         allIntensities[count].ToString();
                         previous = allIntensities[count].ToString();
                     }

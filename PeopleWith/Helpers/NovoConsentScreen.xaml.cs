@@ -106,13 +106,18 @@ public partial class NovoConsentScreen : PopupPage
             Preferences.Default.Set("NovoDiet", false);
             await Navigation.PushAsync(new AllDiet(), false);
         }
-        else if (GetArea == "NovoInvest")
+        else if (GetArea == "Investigations")
         {
             Preferences.Default.Set("NovoInvest", false);
             await Navigation.PushAsync(new AllInvestigations(), false);
         }
+        else if (GetArea == "Daily Activity")
+        {
+            Preferences.Default.Set("NovoActivity", false);
+            await Navigation.PushAsync(new AllDailyActivity(), false);
+        }
 
-        
+
         await MopupService.Instance.RemovePageAsync(this);
     }
 
