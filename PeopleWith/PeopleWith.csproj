@@ -40,7 +40,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios'">
-	  <CodesignKey>Apple Development: Created via API (QB732BRMZC)</CodesignKey>
+	  <CodesignKey>Apple Development: Created via API (9AF7WV24ZX)</CodesignKey>
 	  <CodesignProvision>VS: com.peoplewith.peoplewith Development</CodesignProvision>
 	  <ProvisioningType>automatic</ProvisioningType>
 	</PropertyGroup>
@@ -61,7 +61,7 @@
 
 		<MauiSplashScreen Condition="'$(TargetFramework)'=='net8.0-android'" Include="Resources\Splash\splashpw.svg" Color="#FFFFFF" />
 
-		<MauiSplashScreen Condition="'$(TargetFramework)'=='net8.0-ios'" BaseSize="128,128" Include="Resources\Splash\splashpw.svg" Color="#FFFFFF" />
+		<MauiSplashScreen Condition="'$(TargetFramework)'=='net8.0-ios'" BaseSize="200,200"  Include="Resources\Splash\splashpw.svg" Color="#FFFFFF" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -282,7 +282,7 @@
 		<PackageReference Include="Plugin.LocalNotification" Version="11.1.0" />
 		<PackageReference Include="Plugin.Maui.Biometric" Version="0.0.2" />
 		<PackageReference Include="Plugin.Maui.SegmentedControl" Version="1.0.8" />
-		<PackageReference Include="Sentry.Maui" Version="5.2.0" />
+		<PackageReference Include="Sentry.Maui" Version="5.4.0" />
 		<PackageReference Include="Syncfusion.Maui.Buttons" Version="25.2.5" />
 		<PackageReference Include="Syncfusion.Maui.Calendar" Version="25.2.5" />
 		<PackageReference Include="Syncfusion.Maui.Carousel" Version="25.2.5" />
