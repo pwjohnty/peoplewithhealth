@@ -40,6 +40,8 @@ namespace PeopleWith
 
         public string medicationquestions { get; set; }
 
+        public string groupscheduleid { get; set; }
+
         [System.Text.Json.Serialization.JsonIgnore]
         public List<string> TimeDosage { get; set; } = new List<string>();
 

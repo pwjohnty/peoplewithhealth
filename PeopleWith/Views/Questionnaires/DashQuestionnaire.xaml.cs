@@ -157,7 +157,12 @@ public partial class DashQuestionnaire : ContentPage
             }
 
 
-            correctresponses = new ObservableCollection<userresponse>(correctresponses.OrderByDescending(x => DateTime.Parse(x.responsedate)));
+            correctresponses = new ObservableCollection<userresponse>(
+     correctresponses
+         .OrderByDescending(x => DateTime.Parse(x.responsedate)) // Order by date first
+         .GroupBy(x => x.userquestionnaireid) // Group by userquestionnaireid
+         .SelectMany(group => group) // Flatten the grouped result back into a list
+ );
 
             loadingstack.IsVisible = false;
             previousstack.IsVisible = true;
@@ -411,8 +416,8 @@ public partial class DashQuestionnaire : ContentPage
             }
 
 
-            submitbtn.IsVisible = true;
-          
+            // submitbtn.IsVisible = true;
+            nextbtn.IsVisible = true;
 
         }
         catch (Exception ex)
@@ -2138,6 +2143,9 @@ public partial class DashQuestionnaire : ContentPage
         try
         {
             submitbtn.IsEnabled = false;
+            NavigationPage.SetHasNavigationBar(this, false);
+
+            prevbtn.IsVisible = false;
 
             titlelbl.IsVisible = false;
             sublabel.IsVisible = false;
@@ -3185,6 +3193,249 @@ public partial class DashQuestionnaire : ContentPage
 
     }
         catch (Exception ex)
+        {
+
+        }
+    }
+
+    private void nextbtn_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+
+            if (mcstack.IsVisible)
+            {
+
+                if (mcsection1.IsVisible)
+                {
+                    mcsection1.IsVisible = false;
+                    mcsection2.IsVisible = true;
+                    prevbtn.IsVisible = true;
+
+                }
+                else if (mcsection2.IsVisible)
+                {
+                    mcsection2.IsVisible = false;
+                    mcsection3.IsVisible = true;
+                  //  nextbtn.IsVisible = false;
+                    //submitbtn.IsVisible = true;
+                }
+                else if(mcsection3.IsVisible)
+                {
+                    mcsection3.IsVisible = false;
+                    mcsection4.IsVisible = true;
+                }
+                else if(mcsection4.IsVisible)
+                {
+                    mcsection4.IsVisible = false;
+                    mcsection5.IsVisible = true;
+                    nextbtn.IsVisible = false;
+                    submitbtn.IsVisible = true;
+                }
+               
+
+
+            }
+            else if (treatmentstack.IsVisible)
+            {
+          
+                if(tsection1.IsVisible)
+                {
+                    prevbtn.IsVisible = true;
+                    tsection1.IsVisible = false;
+                    tsection2.IsVisible = true;
+                }
+                else if (tsection2.IsVisible)
+                {
+
+                    tsection2.IsVisible = false;
+                    tsection3.IsVisible = true;
+                }
+                else if(tsection3.IsVisible)
+                {
+                    tsection3.IsVisible = false;
+                    tsection4.IsVisible = true;
+                }
+                else if (tsection4.IsVisible)
+                {
+                    tsection4.IsVisible = false;
+                    tsection5.IsVisible = true;
+                }
+                else if (tsection5.IsVisible)
+                {
+                    tsection5.IsVisible = false;
+                    tsection6.IsVisible = true;
+                }
+                else if (tsection6.IsVisible)
+                {
+                    tsection6.IsVisible = false;
+                    tsection7.IsVisible = true;
+                }
+                else if (tsection7.IsVisible)
+                {
+                    tsection7.IsVisible = false;
+                    tsection8.IsVisible = true;
+                }
+                else if (tsection8.IsVisible)
+                {
+                    tsection8.IsVisible = false;
+                    tsection9.IsVisible = true;
+                }
+                else if (tsection9.IsVisible)
+                {
+                    tsection9.IsVisible = false;
+                    tsection10.IsVisible = true;
+                }
+                else if (tsection10.IsVisible)
+                {
+                    tsection10.IsVisible = false;
+                    tsection11.IsVisible = true;
+                    nextbtn.IsVisible = false;
+                    submitbtn.IsVisible = true;
+                }
+
+            }
+            else if (familyhistorystack.IsVisible)
+            {
+
+                if (fhsection1.IsVisible)
+                {
+                    fhsection1.IsVisible = false;
+                    fhsection2.IsVisible = true;
+                    prevbtn.IsVisible = true;
+
+                }
+                else if(fhsection2.IsVisible)
+                {
+                    fhsection2.IsVisible = false;
+                    fhsection3.IsVisible = true;
+                    nextbtn.IsVisible = false;
+                    submitbtn.IsVisible = true;
+                }
+             
+            }
+
+
+
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
+    private void prevbtn_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+
+            if (mcstack.IsVisible)
+            {
+                if(mcsection5.IsVisible)
+                {
+                    submitbtn.IsVisible = false;
+                    mcsection5.IsVisible = false;
+                    mcsection4.IsVisible = true;
+                    nextbtn.IsVisible = true;
+                }
+                else if(mcsection4.IsVisible)
+                {
+                    mcsection4.IsVisible = false;
+                    mcsection3.IsVisible = true;
+                }
+                else if(mcsection3.IsVisible)
+                {
+                    mcsection3.IsVisible = false;
+                    mcsection2.IsVisible = true;
+
+                }
+                else if(mcsection2.IsVisible)
+                {
+                    mcsection2.IsVisible = false;
+                    mcsection1.IsVisible = true;
+                    prevbtn.IsVisible = false;
+                }
+
+            }
+            else if(treatmentstack.IsVisible)
+            {
+                if (tsection11.IsVisible)
+                {
+                    tsection11.IsVisible = false;
+                    tsection10.IsVisible = true;
+                    nextbtn.IsVisible = true;
+                    submitbtn.IsVisible = false;
+                }
+                else if (tsection10.IsVisible)
+                {
+                    tsection10.IsVisible = false;
+                    tsection9.IsVisible = true;
+                }
+                else if (tsection9.IsVisible)
+                {
+                    tsection9.IsVisible = false;
+                    tsection8.IsVisible = true;
+                }
+                else if (tsection8.IsVisible)
+                {
+                    tsection8.IsVisible = false;
+                    tsection7.IsVisible = true;
+                }
+                else if (tsection7.IsVisible)
+                {
+                    tsection7.IsVisible = false;
+                    tsection6.IsVisible = true;
+                }
+                else if (tsection6.IsVisible)
+                {
+                    tsection6.IsVisible = false;
+                    tsection5.IsVisible = true;
+                }
+                else if (tsection5.IsVisible)
+                {
+                    tsection5.IsVisible = false;
+                    tsection4.IsVisible = true;
+                }
+                else if (tsection4.IsVisible)
+                {
+                    tsection4.IsVisible = false;
+                    tsection3.IsVisible = true;
+                }
+                else if (tsection3.IsVisible)
+                {
+                    tsection3.IsVisible = false;
+                    tsection2.IsVisible = true;
+                }
+                else if (tsection2.IsVisible)
+                {
+                    tsection2.IsVisible = false;
+                    tsection1.IsVisible = true;
+                    prevbtn.IsVisible = false;
+
+                }
+            }
+            else if(familyhistorystack.IsVisible)
+            {
+                if (fhsection3.IsVisible)
+                {
+                    fhsection3.IsVisible = false;
+                    fhsection2.IsVisible = true;
+                    prevbtn.IsVisible = true;
+                    nextbtn.IsVisible = true;
+                    submitbtn.IsVisible = false;
+
+                }
+                else if (fhsection2.IsVisible)
+                {
+                    fhsection2.IsVisible = false;
+                    fhsection1.IsVisible = true;
+                    nextbtn.IsVisible = true;
+                    prevbtn.IsVisible = false;
+                }
+            }
+
+        }
+        catch(Exception ex)
         {
 
         }

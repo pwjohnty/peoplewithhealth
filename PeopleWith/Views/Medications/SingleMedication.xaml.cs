@@ -155,8 +155,11 @@ public partial class SingleMedication : ContentPage
                 }
                 else
                 {
+                  
+
                     foreach (var item in Schedule)
                     {
+
                         item.Times = MedSelected.frequency;
                     }
                 }
@@ -195,7 +198,12 @@ public partial class SingleMedication : ContentPage
                 lblEnd.Text = MedSelected.enddate;
             }
 
-           
+
+            if (Schedule.Count != 0)
+            {
+                Schedule = new ObservableCollection<MedtimesDosages>(Schedule.Where(item => item.active != "false"));
+            }
+
             ScheduleTimes.ItemsSource = Schedule; 
 
         }

@@ -57,6 +57,15 @@ namespace PeopleWith
         public string dosageunit { get; set; }
 
 
+        public string active { get; set; }
+
+        public string dateadded { get; set; }
+        public string frequency { get; set; }
+
+        public string groupscheduleid { get; set; }
+
+        public string TimeDosage { get; set; }
+       
         private string day;
 
         [System.Text.Json.Serialization.JsonIgnore]

@@ -60,7 +60,7 @@
 
 		<MauiSplashScreen Condition="'$(TargetFramework)'=='net8.0-android'" Include="Resources\Splash\splashpw.svg" Color="#FFFFFF" />
 
-		<MauiSplashScreen Condition="'$(TargetFramework)'=='net8.0-ios'" Include="Resources\Splash\splashpw.svg" Color="#FFFFFF" />
+		<MauiSplashScreen Condition="'$(TargetFramework)'=='net8.0-ios'" BaseSize="128,128" Include="Resources\Splash\splashpw.svg" Color="#FFFFFF" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />

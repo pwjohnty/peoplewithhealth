@@ -3838,14 +3838,25 @@ public partial class AddMedication : ContentPage
             var daycount = 0;
             var mednottitle = "Medication Reminder";
 
-            //used for daily and days interval notifications
-            foreach(var item in selectedDosages)
-            {
-                //add an id so we can cancel it at anytime
-                Random random = new Random();
-                int randomNumber = random.Next(100000, 100000001);
+                Random randomgroup = new Random();
+                int randomNumberforscheduleid = randomgroup.Next(10000, 100000001);
 
-                item.id = randomNumber;
+                newusermedication.groupscheduleid = randomNumberforscheduleid.ToString();
+                //used for daily and days interval notifications
+                foreach (var item in selectedDosages)
+            {
+                    //add an id so we can cancel it at anytime
+           
+                 
+                        Random random = new Random();
+                        int randomNumber = random.Next(100000, 100000001);
+
+                        item.id = randomNumber;
+
+                    item.active = "true";
+                    item.dateadded = DateTime.Now.ToString("g");
+                    item.groupscheduleid = randomNumberforscheduleid.ToString();
+                //    item.frequency = newusermedication.frequency;
 
                 item.time = item.timeconverted.ToString(@"hh\:mm");
 
@@ -4082,8 +4093,34 @@ public partial class AddMedication : ContentPage
                 newusermedication.frequency = "As Required" + "|" + "0";
             }
 
+            foreach(var item in selectedDosages)
+                {
+                    item.frequency = newusermedication.frequency;
+                }
+
             // Convert list to ObservableCollection
             ObservableCollection<MedtimesDosages> observableItemList = new ObservableCollection<MedtimesDosages>(selectedDosages);
+
+
+                if(IsEdit)
+                {
+                   foreach(var item in newusermedication.schedule)
+                    {
+                        item.active = "false";
+                        item.dateadded = DateTime.Now.ToString("g");
+                        item.TimeDosage = string.Join(", ", newusermedication.TimeDosage);
+                        // item.frequency = newusermedication.frequency;
+                        observableItemList.Add(item);
+                    }
+
+                   // Random randomgroup1 = new Random();
+                   // int randomNumberforscheduleid1 = randomgroup.Next(10000, 100000001);
+
+                    newusermedication.groupscheduleid = randomNumberforscheduleid.ToString();
+
+                }
+
+
 
             newusermedication.schedule = observableItemList;
 

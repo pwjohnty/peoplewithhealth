@@ -3781,8 +3781,13 @@ public partial class AddSupplement : ContentPage
             var daycount = 0;
             var mednottitle = "Supplement Reminder";
 
-            //used for daily and days interval notifications
-            foreach (var item in selectedDosages)
+                Random randomgroup = new Random();
+                int randomNumberforscheduleid = randomgroup.Next(10000, 100000001);
+
+                newusermedication.groupscheduleid = randomNumberforscheduleid.ToString();
+
+                //used for daily and days interval notifications
+                foreach (var item in selectedDosages)
             {
                 //add an id so we can cancel it at anytime
                 Random random = new Random();
@@ -3791,9 +3796,12 @@ public partial class AddSupplement : ContentPage
                 item.id = randomNumber;
 
                 item.time = item.timeconverted.ToString(@"hh\:mm");
+                    item.dateadded = DateTime.Now.ToString("g");
+                    item.groupscheduleid = randomNumberforscheduleid.ToString();
+                    item.active = "true";
 
 
-                if (freqstring == "Daily")
+                    if (freqstring == "Daily")
                 {
                     if (string.IsNullOrEmpty(newusermedication.enddate))
                     {
@@ -4025,10 +4033,36 @@ public partial class AddSupplement : ContentPage
                 newusermedication.frequency = "As Required" + "|" + "0";
             }
 
-            // Convert list to ObservableCollection
-            ObservableCollection<MedtimesDosages> observableItemList = new ObservableCollection<MedtimesDosages>(selectedDosages);
 
-            newusermedication.schedule = observableItemList;
+                foreach (var item in selectedDosages)
+                {
+                    item.frequency = newusermedication.frequency;
+                }
+
+                // Convert list to ObservableCollection
+                ObservableCollection<MedtimesDosages> observableItemList = new ObservableCollection<MedtimesDosages>(selectedDosages);
+
+
+                if (IsEdit)
+                {
+                    foreach (var item in newusermedication.schedule)
+                    {
+                        item.active = "false";
+                        item.dateadded = DateTime.Now.ToString("g");
+                        item.TimeDosage = string.Join(", ", newusermedication.TimeDosage);
+                        // item.frequency = newusermedication.frequency;
+                        observableItemList.Add(item);
+                    }
+
+                    // Random randomgroup1 = new Random();
+                    // int randomNumberforscheduleid1 = randomgroup.Next(10000, 100000001);
+
+                    newusermedication.groupscheduleid = randomNumberforscheduleid.ToString();
+
+                }
+
+
+                newusermedication.schedule = observableItemList;
 
             APICalls database = new APICalls();
             //insert to db

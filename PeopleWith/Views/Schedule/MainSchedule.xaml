@@ -20,7 +20,7 @@
 
                             <Grid VerticalOptions="Start" Margin="10,10,10,0">
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/> 
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
@@ -118,7 +118,7 @@ Text="As Required Medications/Supplements" />
 
 
             <syncfusion:SfListView x:Name="mainschedulelistview" IsVisible="False"
-                               AutoFitMode="Height" Margin="0,0,10,10"
+                               AutoFitMode="Height" Margin="0,0,10,10" ScrollBarVisibility="Never"
                                GroupHeaderSize="20" BackgroundColor="Transparent"
                                         SelectionMode="None" 
                                            VerticalOptions="StartAndExpand"
@@ -158,12 +158,12 @@ Text="As Required Medications/Supplements" />
                                             <ColumnDefinition Width="10*"/>
                                             <ColumnDefinition Width="10*"/>
                                         </Grid.ColumnDefinitions>
-                                        <Label Text="{Binding DisplayName}" FontSize="16" Grid.Row="0" Margin="20,0,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
-                                        <Label Text="{Binding Name}" IsVisible="{Binding DisplayNameAdded}" FontFamily="HankenGroteskBold"  FontSize="12" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Margin="20,0,0,0" TextColor="Gray" />
+                                        <Label Text="{Binding DisplayName}" FontSize="14" Grid.Row="0" Margin="10,0,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
+                                        <Label Text="{Binding Name}" IsVisible="{Binding DisplayNameAdded}" FontFamily="HankenGroteskBold"  FontSize="12" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Margin="10,0,0,0" TextColor="Gray" />
 
 
 
-                                        <Label FontSize="14" Grid.Row="{Binding RowNum}" Grid.Column="0" IsVisible="{Binding NormalDosage}" Margin="20,0,0,0" VerticalOptions="Start" TextColor="Teal" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start">
+                                        <Label FontSize="14" Grid.Row="{Binding RowNum}" Grid.Column="0" IsVisible="{Binding NormalDosage}" Margin="10,0,0,0" VerticalOptions="Start" TextColor="Teal" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start">
                                             <Label.FormattedText>
                                                 <FormattedString>
                                                     <Span Text="{Binding Dosage}" TextColor="Teal" FontFamily="HankenGroteskBold" />
@@ -177,13 +177,13 @@ Text="As Required Medications/Supplements" />
                                         <Label FontSize="14" Grid.Row="{Binding RowNum}" Grid.Column="0" Text="{Binding DoubleDosagetxt}" Margin="20,0,0,0" IsVisible="{Binding DoubleDosage}" VerticalOptions="Start" TextColor="Teal" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start"/>
 
 
-                                        <local:ExtendedImage  Grid.Row="0" Grid.Column="1" IsEnabled="{Binding Buttonenabled}" IsVisible="{Binding AsReqHidelbl}" Grid.RowSpan="{Binding RowSpan}"  Source="scheduletick.png" Opacity="{Binding Buttonop}" Margin="0,0,10,0" FeedbackID="{Binding Feedbackid}" UsermedID="{Binding Usermedid}"  HeightRequest="40" WidthRequest="40" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                                        <local:ExtendedImage  Grid.Row="0" Grid.Column="1" IsEnabled="{Binding Buttonenabled}" IsVisible="{Binding AsReqHidelbl}" Grid.RowSpan="{Binding RowSpan}"  Source="check.png" Opacity="{Binding Buttonop}" Margin="0,0,10,0" FeedbackID="{Binding Feedbackid}" UsermedID="{Binding Usermedid}"  HeightRequest="40" WidthRequest="40" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
                                             <local:ExtendedImage.GestureRecognizers>
                                                 <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
                                             </local:ExtendedImage.GestureRecognizers>
                                         </local:ExtendedImage>
 
-                                        <local:ExtendedImage Grid.Row="0" Grid.Column="2" IsEnabled="{Binding Buttonenabled}" IsVisible="{Binding AsReqHidelbl}" Grid.RowSpan="{Binding RowSpan}"   Source="schedulex.png" Opacity="{Binding Buttonntop}" Margin="0,0,5,0" FeedbackID="{Binding Feedbackid}" UsermedID="{Binding Usermedid}" HeightRequest="38" WidthRequest="38" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                                        <local:ExtendedImage Grid.Row="0" Grid.Column="2" IsEnabled="{Binding Buttonenabled}" IsVisible="{Binding AsReqHidelbl}" Grid.RowSpan="{Binding RowSpan}"   Source="remove.png" Opacity="{Binding Buttonntop}" Margin="0,0,5,0" FeedbackID="{Binding Feedbackid}" UsermedID="{Binding Usermedid}" HeightRequest="38" WidthRequest="38" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
                                             <local:ExtendedImage.GestureRecognizers>
                                                 <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1"/>
                                             </local:ExtendedImage.GestureRecognizers>

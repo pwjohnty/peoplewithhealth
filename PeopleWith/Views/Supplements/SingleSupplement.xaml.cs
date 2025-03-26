@@ -199,6 +199,11 @@ public partial class SingleSupplement : ContentPage
             }
 
 
+            if (Schedule.Count != 0)
+            {
+                Schedule = new ObservableCollection<MedtimesDosages>(Schedule.Where(item => item.active != "false"));
+            }
+
             ScheduleTimes.ItemsSource = Schedule;
 
         }
