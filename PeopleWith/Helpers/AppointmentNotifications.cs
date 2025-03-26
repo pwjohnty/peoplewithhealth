@@ -23,7 +23,8 @@ namespace PeopleWith
         {
             try
             {
-                await crashHandler.CrashDetectedSend(Ex);
+                await crashHandler.SentryCrashDetected(Ex);
+                //SentrySdk.ConfigureScope(scope =>
                 //await Navigation.PushAsync(new ErrorPage("Dashboard"), false);
             }
             catch (Exception ex)

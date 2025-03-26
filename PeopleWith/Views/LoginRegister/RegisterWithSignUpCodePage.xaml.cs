@@ -16,7 +16,7 @@ public partial class RegisterWithSignUpCodePage : ContentPage
     {
         try
         {
-            await crashHandler.CrashDetectedSend(Ex);
+            await crashHandler.SentryCrashDetected(Ex);
             await Navigation.PushAsync(new ErrorPage("Login"), false);
         }
         catch (Exception ex)

@@ -137,6 +137,17 @@ public partial class Infopopup : PopupPage
                 Boxtwo.BackgroundColor = Color.FromArgb("#F5E6E8");
                 Closebtn.BackgroundColor = Color.FromArgb("#F5E6E8");
             }
+
+            else if (message == "activity")
+            {
+                DailyActivityInfo.IsVisible = true;
+                titlelbl.Text = "What is an Activity?";
+                Boxone.Background = Color.FromArgb("#fce9d9");
+                Boxone.BackgroundColor = Color.FromArgb("#fce9d9");
+                Boxtwo.Background = Color.FromArgb("#fce9d9");
+                Boxtwo.BackgroundColor = Color.FromArgb("#fce9d9");
+                Closebtn.BackgroundColor = Color.FromArgb("#fce9d9");
+            }
         }
         catch (Exception Ex)
         {

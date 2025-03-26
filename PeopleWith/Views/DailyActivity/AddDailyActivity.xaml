@@ -10,9 +10,9 @@
              HideSoftInputOnTapped="True" NavigationPage.HasNavigationBar="False"
              x:Class="PeopleWith.AddDailyActivity" BackgroundColor="White" >
     <ScrollView>
-        <VerticalStackLayout x:Name="Mainstack">
+        <!--<VerticalStackLayout x:Name="Mainstack">
            
-            <!-- Navigation Stack && Progress Bar-->
+            --><!-- Navigation Stack && Progress Bar--><!--
 
                 <Grid Grid.Row="0" Margin="0,10,0,0">
                     <Grid.ColumnDefinitions>
@@ -34,7 +34,7 @@
 
                 </Grid>
                 
-            <!-- Add Daily Activity Stack -->
+            --><!-- Add Daily Activity Stack --><!--
                 
             <StackLayout x:Name="TitleStack">
 
@@ -60,11 +60,11 @@
                                 <ColumnDefinition Width="80*"/>
                                 <ColumnDefinition Width="15*"/>
                             </Grid.ColumnDefinitions>
-                            <Image Source="searchchargray.png" HorizontalOptions="Center" HeightRequest="15" BackgroundColor="Transparent" WidthRequest="15"  Grid.Row="0" Grid.Column="0"  />
+                            <Image Source="searchred.png" HorizontalOptions="Center" HeightRequest="15" BackgroundColor="Transparent" WidthRequest="15"  Grid.Row="0" Grid.Column="0"  />
                             <Entry Grid.Row="0" Grid.Column="1" FontFamily="HankenGroteskRegular" IsTextPredictionEnabled="False" IsSpellCheckEnabled="False" x:Name="searchbar"  ClearButtonVisibility="Never" InputTransparent="False"  TextChanged="searchbar_TextChanged"
-                                   Placeholder="Search Daily Activities"  BackgroundColor="Transparent" Background="Transparent" HeightRequest="60"  TextColor="#77212E"/>
+                                   Placeholder="Search Daily Activities"  BackgroundColor="Transparent" Background="Transparent" HeightRequest="60"  TextColor="#991B1B"/>
                             <Frame x:Name="FilterTap" HasShadow="False" BackgroundColor="Transparent" BorderColor="Transparent"  Grid.Row="0" Grid.Column="3">
-                                <Image Source="filterchargray.png" HeightRequest="15" BackgroundColor="Transparent" WidthRequest="15"  Grid.Row="0" Grid.Column="3"  />
+                                <Image Source="filterred.png" HeightRequest="15" BackgroundColor="Transparent" WidthRequest="15"  Grid.Row="0" Grid.Column="3"  />
                                 <Frame.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="FilterHideTapped" NumberOfTapsRequired="1"/>
                                 </Frame.GestureRecognizers>
@@ -78,7 +78,7 @@
                         <Label Text="Filters" Margin="0,0,0,5" Grid.Row="1" Grid.Column="0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" FontSize="12" FontFamily="HankenGroteskBold" />
 
                         <ScrollView Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Margin="0,0,0,0"  HorizontalScrollBarVisibility="Never">
-                            <chip:SfChipGroup ChipFontFamily="HankenGroteskRegular" ChipType="Choice" SelectionIndicatorColor="Transparent" ChipClicked="FilterTabs_ChipClicked" x:Name="FilterTabs"  Grid.Row="2" Grid.Column="0" SelectedChipBackground="#77212E" ChipStroke="Transparent" ChipPadding="0" ChipTextSize="12" SelectedChipTextColor="White" ShowIcon="False" ChipTextColor="#77212E" ChipBackground="#fce9d9"/>
+                            <chip:SfChipGroup ChipFontFamily="HankenGroteskRegular" ChipType="Choice" SelectionIndicatorColor="Transparent" ChipClicked="FilterTabs_ChipClicked" x:Name="FilterTabs"  Grid.Row="2" Grid.Column="0" SelectedChipBackground="#991B1B" ChipStroke="Transparent" ChipPadding="0" ChipTextSize="12" SelectedChipTextColor="White" ShowIcon="False" ChipTextColor="#991B1B" ChipBackground="#fce9d9"/>
                         </ScrollView>
                     </StackLayout>
 
@@ -87,7 +87,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <ActivityIndicator Grid.Row="0" HorizontalOptions="Center" VerticalOptions="Start" IsRunning="True" Color="#77212E" />
+                        <ActivityIndicator Grid.Row="0" HorizontalOptions="Center" VerticalOptions="Start" IsRunning="True" Color="#991B1B" />
                         <Label Grid.Row="1" Text="Loading Daily Activity Results..."  TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="Center" Margin="0,5,0,0" VerticalOptions="Start" VerticalTextAlignment="Start" />
                     </Grid>
 
@@ -133,7 +133,7 @@
                                                 <ColumnDefinition Width="*"/>
                                             </Grid.ColumnDefinitions>
 
-                                            <Label Text="{Binding activitytitle}" FontFamily="HankenGroteskBold" Margin="5,0,0,0" Grid.Row="0" Grid.Column="0" Padding="0" HorizontalOptions="Start"  VerticalOptions="Start" TextColor="#77212E" FontSize="14" FontAttributes="None" />
+                                            <Label Text="{Binding activitytitle}" FontFamily="HankenGroteskBold" Margin="5,0,0,0" Grid.Row="0" Grid.Column="0" Padding="0" HorizontalOptions="Start"  VerticalOptions="Start" TextColor="#991B1B" FontSize="14" FontAttributes="None" />
 
                                             <BoxView Grid.Column="0" Grid.Row="1" HeightRequest="1" HorizontalOptions="FillAndExpand" Margin="0,10,0,0" Color="#fce9d9" BackgroundColor="#fce9d9"/>
 
@@ -149,13 +149,13 @@
                 </Grid>
             </StackLayout>
             
-            <!-- DateTime Stack Page-->
+            --><!-- DateTime Stack Page--><!--
 
             <StackLayout x:Name="DateTimeStack" IsVisible="False">
 
                 <Label x:Name="DateTimeTitle" FontFamily="HankenGroteskBold" FontSize="26"  Margin="20,20,0,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" />
 
-                <!-- DateTime Pickers-->
+                --><!-- DateTime Pickers--><!--
 
                 <Label Text="Activity Duration" FontSize="20" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
                 <Label Text="Please select a start date for the Activity. If you wish to set an end date, enable the checkbox and choose an end date." FontSize="12" Margin="20,0,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
@@ -214,18 +214,18 @@
 
                 <HorizontalStackLayout HorizontalOptions="Center">
                     <Label Text="Do you have an End Date ?"  FontSize="12" Margin="0,0,0,0" VerticalOptions="Center" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Center" />
-                    <CheckBox Color="#77212E" VerticalOptions="Center" x:Name="enddatecheck" CheckedChanged="enddatecheck_CheckedChanged" />
+                    <CheckBox Color="#991B1B" VerticalOptions="Center" x:Name="enddatecheck" CheckedChanged="enddatecheck_CheckedChanged" />
                 </HorizontalStackLayout>
 
             </StackLayout>
             
-            <!-- Frequency Stack Page-->
+            --><!-- Frequency Stack Page--><!--
 
             <StackLayout x:Name="FrequencyStack" IsVisible="False">
 
                 <Label x:Name="FrequencyTitle" FontFamily="HankenGroteskBold" FontSize="26"  Margin="20,20,0,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" />
 
-                <!-- Frequency Listivew-->
+                --><!-- Frequency Listivew--><!--
 
                 <Label Text="Activity Frequency" FontSize="20" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
                 <Label Text="Please select how often this activity will occur. Choose 'One Off' for a one-time activity or select one of the other options for a recurring activity" FontSize="12" Margin="20,0,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
@@ -260,7 +260,7 @@
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
 
-                                        <Label Text="{Binding .}" Margin="0,0,0,0" HorizontalTextAlignment="Center" FontFamily="HankenGroteskBold"  Grid.Row="1" VerticalOptions="StartAndExpand"  TextColor="#77212E" FontSize="14" />
+                                        <Label Text="{Binding .}" Margin="0,0,0,0" HorizontalTextAlignment="Center" FontFamily="HankenGroteskBold"  Grid.Row="1" VerticalOptions="StartAndExpand"  TextColor="#991B1B" FontSize="14" />
                                     </Grid>
                                 </Border>
                             </ViewCell>
@@ -268,7 +268,7 @@
                     </syncfusion:SfListView.SelectedItemTemplate>
                 </syncfusion:SfListView>
 
-                <!-- Which Days {Weekly Only}-->
+                --><!-- Which Days {Weekly Only}--><!--
                 <StackLayout x:Name="WhichDaysStack" IsVisible="False">
                     <Label Text="Which days?"  FontSize="20" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
 
@@ -302,7 +302,7 @@
                                                 <RowDefinition Height="Auto"/>
                                             </Grid.RowDefinitions>
 
-                                            <Label Text="{Binding .}" Margin="0,0,0,0" HorizontalTextAlignment="Center" FontFamily="HankenGroteskBold"  Grid.Row="1" VerticalOptions="StartAndExpand"  TextColor="#77212E" FontSize="14" />
+                                            <Label Text="{Binding .}" Margin="0,0,0,0" HorizontalTextAlignment="Center" FontFamily="HankenGroteskBold"  Grid.Row="1" VerticalOptions="StartAndExpand"  TextColor="#991B1B" FontSize="14" />
                                         </Grid>
                                     </Border>
                                 </ViewCell>
@@ -311,7 +311,7 @@
                     </syncfusion:SfListView>
                 </StackLayout>
 
-                <!-- How Many Times Per Day (All)-->
+                --><!-- How Many Times Per Day (All)--><!--
                 <StackLayout x:Name="HowManyTimesStack" IsVisible="False">
                 <Label Text="How many times per day?"  FontSize="20" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
 
@@ -345,7 +345,7 @@
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
 
-                                        <Label Text="{Binding .}" Margin="0,0,0,0" HorizontalTextAlignment="Center" FontFamily="HankenGroteskBold"  Grid.Row="1" VerticalOptions="StartAndExpand"  TextColor="#77212E" FontSize="14" />
+                                        <Label Text="{Binding .}" Margin="0,0,0,0" HorizontalTextAlignment="Center" FontFamily="HankenGroteskBold"  Grid.Row="1" VerticalOptions="StartAndExpand"  TextColor="#991B1B" FontSize="14" />
                                     </Grid>
                                 </Border>
                             </ViewCell>
@@ -354,9 +354,9 @@
                 </syncfusion:SfListView>
                 </StackLayout>
 
-                <!-- Same times for multiple days selected -->
+                --><!-- Same times for multiple days selected --><!--
                 <StackLayout x:Name="SameForAllStack" IsVisible="False">
-                    <Label Text="Do you want to use the same times for all selected days?"  FontSize="14" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
+                    <Label Text="Do you want to use the same times across all selected days?"  FontSize="14" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
 
                     <Grid>
                         <Grid.RowDefinitions>
@@ -373,7 +373,7 @@
                     </Grid>
                 </StackLayout>
                 
-                <!-- Qucik Add Times Stack-->
+                --><!-- Qucik Add Times Stack--><!--
                 <StackLayout x:Name="QuickAddTimesStack" IsVisible="False">
                     <Label Text="Quick Add Times (Optional)"  FontSize="20" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
                     <Label Text="Select your first activity time, then choose the interval in minutes. The next activity time will be automatically set based on this interval, continuing until all times are set." FontSize="12" Margin="20,0,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
@@ -430,7 +430,7 @@
 
                 </StackLayout>
 
-                <!-- Set Time Listview (All)-->
+                --><!-- Set Time Listview (All)--><!--
                 <StackLayout x:Name="SetTimesStack" IsVisible="False">
                     <Label Text="Set Times"  FontSize="20" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
                     <Label Text="Select your Activities times from the list below. To adjust the time, simply tap on it." FontSize="12" Margin="20,0,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
@@ -443,7 +443,7 @@
                             <DataTemplate>
                                 <ViewCell>
                                     <StackLayout>
-                                        <Label Text="{Binding day}" IsVisible="{Binding weeklyitem}" FontSize="12" Margin="20,0,0,0" VerticalOptions="Start" TextColor="#77212E"   FontAttributes="None" HorizontalOptions="Start" />
+                                        <Label Text="{Binding day}" IsVisible="{Binding weeklyitem}" FontSize="12" Margin="10,0,0,0" VerticalOptions="Start" TextColor="#991B1B"   FontAttributes="None" HorizontalOptions="Start" />
 
                                         <Border StrokeShape="RoundRectangle 10" Stroke="#fce9d9" StrokeThickness="1"  Margin="5,5,5,5" Padding="5" BackgroundColor="Transparent">
 
@@ -492,12 +492,12 @@
 
             </StackLayout>
             
-            <!-- Details Stack Page-->
+            --><!-- Details Stack Page--><!--
 
             <StackLayout x:Name="AddDetailspage" IsVisible="False">
                 <Label x:Name="DetailsTitle" FontFamily="HankenGroteskBold" FontSize="26"  Margin="20,20,0,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" />
 
-                <!-- Reminders Section-->
+                --><!-- Reminders Section--><!--
 
                 <Label Text="Activity Reminders" FontSize="20" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
                 <Label Text="Do you wish to recieve reminders for this activity?." FontSize="12" Margin="20,0,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
@@ -511,12 +511,12 @@
                         <ColumnDefinition Width="50*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button x:Name="enablebtn" Clicked="enableNotifications_Clicked" CommandParameter="Yes" Grid.Column="0" BorderColor="Transparent" BorderWidth="1" Text="Yes" HeightRequest="30" FontFamily="HankenGroteskBold" Padding="0" Margin="60,10,5,0" BackgroundColor="#fce9d9" TextColor="#77212E" />
+                    <Button x:Name="enablebtn" Clicked="enableNotifications_Clicked" CommandParameter="Yes" Grid.Column="0" BorderColor="Transparent" BorderWidth="1" Text="Yes" HeightRequest="30" FontFamily="HankenGroteskBold" Padding="0" Margin="60,10,5,0" BackgroundColor="#fce9d9" TextColor="#991B1B" />
                     <Button x:Name="disablebtn" Clicked="enableNotifications_Clicked" CommandParameter="No" Grid.Column="1" BorderColor="#fce9d9" BorderWidth="1" Text="No" HeightRequest="30" FontFamily="HankenGroteskBold" Padding="0" Margin="5,10,60,0" BackgroundColor="White" TextColor="Gray" />
 
                 </Grid>
 
-                <!-- Are your Times the same for every day -->
+                --><!-- Are your Times the same for every day --><!--
 
                 <StackLayout x:Name="SametimeQuestionStack" >
                     <Label Text="Do you carry out this activity at the same time every day?"  FontSize="14" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
@@ -536,7 +536,7 @@
                         </Grid>
                     </StackLayout>
 
-                <!-- Add to planner Section-->
+                --><!-- Add to planner Section--><!--
                 <StackLayout x:Name="AddtoPlanner" IsVisible="False" >
                     <Label Text="Do you want to add this activity to your planner?"  FontSize="14" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
 
@@ -556,7 +556,7 @@
                 </StackLayout>
 
 
-                <!-- affect on Symptoms Section-->
+                --><!-- affect on Symptoms Section--><!--
                 <StackLayout x:Name="AffectonSymptoms" IsVisible="False" >
                     <Label Text="Affect on Symptoms" FontSize="20" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
                     <Label Text="Does this activity affect your symptoms? If so, select from your added symptoms."  FontSize="12" Margin="20,0,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
@@ -570,18 +570,19 @@
                         </Grid.ColumnDefinitions>
 
                         <chip:SfChipGroup ChipType="Filter" x:Name="symptomlistview" BackgroundColor="Transparent" SelectionChanged="symptomlistview_SelectionChanged" ChipStrokeThickness="1" Margin="0"
-                                ShowIcon="False"  ChipTextColor="Gray" VerticalOptions="Center" Padding="5" ChipTextSize="10" ChipBackground="Transparent" SelectedChipBackground="#fff7ea" ChipStroke="#fff7ea"
-                                SelectedChipTextColor="Orange" SelectionIndicatorColor="Transparent" ChipPadding="4,4,0,0" DisplayMemberPath="symptomtitle" HorizontalOptions="Center" >
+                                ShowIcon="False"  ChipTextColor="Gray" VerticalOptions="Center" Padding="5" ChipTextSize="10" ChipBackground="Transparent" SelectedChipBackground="#fff7ea" ChipStroke="Orange"
+                                SelectedChipTextColor="Orange" SelectionIndicatorColor="Transparent" ChipPadding="4,4,0,0" DisplayMemberPath="symptomtitle"  HorizontalOptions="Start" >
                             <chip:SfChipGroup.ChipLayout>
                                 <FlexLayout
 			HorizontalOptions="Start"
 			VerticalOptions="Center"
 			Direction="Row"
 			Wrap="Wrap"
+            Padding="4,4,0,0"
             Margin="0"
 			JustifyContent="Start"
 			AlignContent="Start"
-			AlignItems="Center"/>
+			AlignItems="Start"/>
                             </chip:SfChipGroup.ChipLayout>
                         </chip:SfChipGroup>
 
@@ -591,7 +592,7 @@
                 
             </StackLayout>
             
-            <!-- Notes Stack-->
+            --><!-- Notes Stack--><!--
 
             <StackLayout x:Name="NotesSection" IsVisible="False">
                 <Label x:Name="AddDetailsTitle" FontFamily="HankenGroteskBold" FontSize="26"  Margin="20,20,10,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" />
@@ -626,14 +627,14 @@
 
             </StackLayout>
            
-            <!-- Confirm page Stack-->
+            --><!-- Confirm page Stack--><!--
             <StackLayout x:Name="ConfirmPageStack" IsVisible="False">
                 <Label x:Name="ConfirmPageTitle" FontFamily="HankenGroteskBold" FontSize="26"  Margin="20,20,10,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" />
           
                 <Label Text="Confirm Activity" FontSize="20" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
                 <Label Text="Please review all details before confirming the activity. You can go back to make changes if needed." FontSize="12" Margin="20,0,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
 
-                <!-- Confirm Details Section-->
+                --><!-- Confirm Details Section--><!--
 
                 <Label Text="Details" FontSize="16" Margin="20,20,0,0" TextColor="#991B1B" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
 
@@ -670,7 +671,7 @@
                     </StackLayout>
                 </Border>
 
-                <!-- Confirm Start/End Date Section-->
+                --><!-- Confirm Start/End Date Section--><!--
 
                 <Label Text="Duration" FontSize="16" Margin="20,20,0,0" TextColor="#991B1B" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
                 <Border Stroke="#fce9d9" StrokeThickness="1" Margin="20,10,20,0" StrokeShape="RoundRectangle 10" Background="Transparent" HorizontalOptions="FillAndExpand">
@@ -696,7 +697,7 @@
                     </StackLayout>
                 </Border>
 
-                <!-- Confirm Impacted Symptoms Section-->
+                --><!-- Confirm Impacted Symptoms Section--><!--
                 <StackLayout x:Name="ImpactedSymptomsStack">
                 <Label Text="Impacted Symptoms" FontSize="16" Margin="20,20,0,0" TextColor="#991B1B" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
                 <Border Stroke="#fce9d9" StrokeThickness="1" Margin="20,10,20,0" StrokeShape="RoundRectangle 10" Background="Transparent" HorizontalOptions="FillAndExpand">
@@ -744,9 +745,9 @@ AlignItems="Center"/>
                 </Border>
                 </StackLayout>
                 
-                <!-- Confirm Frequency Section-->
+                --><!-- Confirm Frequency Section--><!--
 
-                <Label Text="Frequeny" FontSize="16" Margin="20,20,0,0" TextColor="#991B1B" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
+                <Label x:Name="FreqtitleConfirm" FontSize="16" Margin="20,20,0,0" TextColor="#991B1B" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
                 <Border Stroke="#fce9d9" StrokeThickness="1" Margin="20,10,20,0" StrokeShape="RoundRectangle 10" Background="Transparent" HorizontalOptions="FillAndExpand">
 
                     <StackLayout Margin="0,10,0,10">
@@ -759,7 +760,7 @@ AlignItems="Center"/>
                                 <DataTemplate>
                                     <ViewCell>
                                         <StackLayout>
-                                            <Label Text="{Binding day}" IsVisible="{Binding weeklyitem}" FontSize="12" Margin="20,0,0,0" VerticalOptions="Start" TextColor="#77212E"   FontAttributes="None" HorizontalOptions="Start" />
+                                            <Label Text="{Binding day}" IsVisible="{Binding weeklyitem}" FontSize="12" Margin="20,0,0,0" VerticalOptions="Start" TextColor="#991B1B"   FontAttributes="None" HorizontalOptions="Start" />
 
                                             <Border StrokeShape="RoundRectangle 10" Stroke="#fce9d9" StrokeThickness="1"  Margin="5,5,5,5" Padding="5" BackgroundColor="Transparent">
 
@@ -811,6 +812,6 @@ AlignItems="Center"/>
 
             </StackLayout>
 
-        </VerticalStackLayout>
+        </VerticalStackLayout>-->
     </ScrollView>
 </ContentPage>

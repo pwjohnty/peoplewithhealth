@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Mopups:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                   xmlns:Animations="clr-namespace:Mopups.Animations;assembly=Mopups"
+                   xmlns:Mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+                   xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+                   xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Calendar;assembly=Syncfusion.Maui.Calendar" 
+                   BackgroundColor="#80000000"  BackgroundInputTransparent="False" CloseWhenBackgroundIsClicked="True"
+                   x:Class="PeopleWith.ActivityCalendar" >
+    <Mopups:PopupPage.Animation>
+        <Animations:ScaleAnimation
+            PositionIn="Center"
+            PositionOut="Center"
+            DurationIn="200"
+            DurationOut="200"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="False"/>
+    </Mopups:PopupPage.Animation>
+
+    <Grid RowDefinitions="Auto, *" VerticalOptions="Center">
+
+        <!-- Popup Container -->
+        <Border Stroke="White" StrokeThickness="1" Padding="0" StrokeShape="RoundRectangle 10" Margin="10,0,10,0" Background="White" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+
+            <Grid Margin="20,0,20,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Date/ Image Stack-->
+                <Grid Margin="0,20,0,0" Grid.Row="0" RowSpacing="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="1"/>
+                    </Grid.RowDefinitions>
+                    <Label Text="Select Date" TextColor="#991B1B" Grid.Row="0" Grid.Column="0" FontSize="12" HorizontalOptions="Start" Margin="0"/>
+
+                    <Label x:Name="Datelbl" Margin="10,0,0,0" Grid.Row="1" Grid.Column="0" FontSize="26" FontFamily="HankenGroteskBold" HorizontalOptions="Start" TextColor="#991B1B" />
+                    <Image x:Name="Dateimg" Margin="0,0,10,0" Source="compose.png" Grid.Row="1" Grid.Column="1"  HeightRequest="25" WidthRequest="25" HorizontalOptions="End">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
+                        </Image.GestureRecognizers>
+                    </Image>
+
+                    <BoxView BackgroundColor="#fce9d9" Background="#fce9d9" HeightRequest="1" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" />
+
+                </Grid>
+                <!-- View 1: Calendar View -->
+                <StackLayout Grid.Row="1" Margin="0,20,0,0" x:Name="CalendarView">
+                    <syncfusion:SfCalendar ViewChanged="Calendar_ViewChanged" ShowTrailingAndLeadingDates="False" NavigationDirection="Horizontal" SelectionBackground="#991B1B"  TodayHighlightBrush="#991B1B" HeightRequest="280" BackgroundColor="Transparent" ShowActionButtons="False" x:Name="Calendar" SelectionChanged="Calendar_SelectionChanged" View="Month"  />
+                </StackLayout>
+
+                <!-- View 2: Entry Details -->
+                <StackLayout Grid.Row="1" x:Name="EntryView" Margin="0,20,0,0" IsVisible="False">
+                    <inputLayout:SfTextInputLayout Grid.Row="0" x:Name="DateInput" InputViewPadding="10" IsHintAlwaysFloated="True"  HorizontalOptions="Center" Hint="Date" BackgroundColor="Transparent" ShowHint="True" Margin="5,10,5,0" UnfocusedStrokeThickness="2" FocusedStrokeThickness="2" Stroke="#fce9d9" ContainerBackground="Transparent" ContainerType="Outlined" OutlineCornerRadius="5">
+                        <Entry FontSize="14" PlaceholderColor="Gray" Keyboard="Numeric" ReturnType="Done" FontFamily="HankenGroteskBold" VerticalOptions="CenterAndExpand" x:Name="DateEntry" TextChanged="DateEntry_TextChanged" Placeholder="DD/MM/YYYY" TextColor="#031926"/>
+                        <inputLayout:SfTextInputLayout.ErrorLabelStyle>
+                            <inputLayout:LabelStyle TextColor="Red"  FontFamily="HankenGroteskBold" />
+                        </inputLayout:SfTextInputLayout.ErrorLabelStyle>
+                    </inputLayout:SfTextInputLayout>
+                </StackLayout>
+
+
+                <!-- Buttons -->
+                <HorizontalStackLayout Margin="0,10,0,0" Grid.Row="2" Grid.Column="1" HorizontalOptions="End" Spacing="10">
+                    <Button Text="Cancel" x:Name="Cancelbtn" TextColor="Gray" BackgroundColor="Transparent" Clicked="Cancelbtn_Clicked" />
+                    <Button Text="Ok" x:Name="Okbtn" TextColor="#991B1B" BackgroundColor="Transparent" Clicked="Okbtn_Clicked" />
+                </HorizontalStackLayout>
+
+            </Grid>
+        </Border>
+    </Grid>
+</Mopups:PopupPage>

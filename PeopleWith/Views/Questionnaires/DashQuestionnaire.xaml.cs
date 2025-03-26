@@ -12,7 +12,6 @@ public partial class DashQuestionnaire : ContentPage
 {
     public ObservableCollection<registryDataInputs> FilteredQuestions = new ObservableCollection<registryDataInputs>();
     public ObservableCollection<registryDataInputs> AllQuestions = new ObservableCollection<registryDataInputs>();
-    HttpClient client = new HttpClient();
     public List<string> MHq1 = new List<string>();
     public List<string> MHq2 = new List<string>();
 
@@ -46,11 +45,26 @@ public partial class DashQuestionnaire : ContentPage
     public string Tq13 = "";
     public string Tq131 = "";
     public string Tq132 = "";
+    public HttpClient Client = new HttpClient();
 
     public DashQuestionnaire()
 	{
 		InitializeComponent();
 	}
+
+    private void ConfigureClient()
+    {
+        try
+        {
+            Client = new HttpClient();
+            Client.DefaultRequestHeaders.Add("X-MS-CLIENT-PRINCIPAL", "eyAgCiAgImlkZW50aXR5UHJvdmlkZXIiOiAidGVzdCIsCiAgInVzZXJJZCI6ICIxMjM0NSIsCiAgInVzZXJEZXRhaWxzIjogImpvaG5AY29udG9zby5jb20iLAogICJ1c2VyUm9sZXMiOiBbIjFFMzNDMEFDLTMzOTMtNEMzNC04MzRBLURFNUZEQkNCQjNDQyJdCn0=");
+            Client.DefaultRequestHeaders.Add("X-MS-API-ROLE", "1E33C0AC-3393-4C34-834A-DE5FDBCBB3CC");
+        }
+        catch (Exception Ex)
+        {
+            //Empty
+        }
+    }
 
 
     public DashQuestionnaire(string input)
@@ -2930,11 +2944,12 @@ public partial class DashQuestionnaire : ContentPage
                         }
 
                         //  newuserresponse[i].id = "123";
-                        Uri uri = new Uri(string.Format("https://pwdevapi.peoplewith.com/api/userresponse", string.Empty));
+                        Uri uri = new Uri(string.Format("https://pwapi.peoplewith.com/api/userresponse", string.Empty));
                         // var url = APICalls.InsertUserResponse;
                         string jsonn = System.Text.Json.JsonSerializer.Serialize<userresponse>(newuserresponse[i], serializerOptions);
                         StringContent contenttt = new StringContent(jsonn, Encoding.UTF8, "application/json");
-                        var response = await client.PostAsync(uri, contenttt);
+                        ConfigureClient();
+                        var response = await Client.PostAsync(uri, contenttt);
 
                         if (response.IsSuccessStatusCode)
                         {

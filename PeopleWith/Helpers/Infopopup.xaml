@@ -251,6 +251,27 @@
                 </Grid>
 
 
+                <!-- Daily Activity -->
+                <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" RowSpacing="10" x:Name="DailyActivityInfo" IsVisible="false">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Text="Tracking your daily activities helps you maintain a balanced and healthy lifestyle." Grid.Row="0" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskRegular" />
+
+                    <Label Text="monitoring your daily habits can improve overall well-being." Grid.Row="1" VerticalOptions="Center" VerticalTextAlignment="Center" 
+           TextColor="#031926" FontSize="16" FontFamily="HankenGroteskRegular" />
+
+                    <Label Text="PeopleWith enables you to log and analyze your daily activities, empowering you to make informed health choices." Grid.Row="2" VerticalOptions="Center" VerticalTextAlignment="Center" 
+           TextColor="#031926" FontSize="16" FontFamily="HankenGroteskRegular" />
+                </Grid>
+
+
                 <BoxView x:Name="Boxtwo" BackgroundColor="LightBlue" Background="LightBlue" HeightRequest="1" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" />
 
 

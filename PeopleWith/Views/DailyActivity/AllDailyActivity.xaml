@@ -3,37 +3,28 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:chip="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
              xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
+             xmlns:local="clr-namespace:PeopleWith"
+             xmlns:progressBar="clr-namespace:Syncfusion.Maui.ProgressBar;assembly=Syncfusion.Maui.ProgressBar"
              x:Class="PeopleWith.AllDailyActivity" NavigationPage.IconColor="#031926"  BackgroundColor="White">
-    <ContentPage.ToolbarItems>
+    <!--<ContentPage.ToolbarItems>
         <ToolbarItem Clicked="AddBtn_Clicked" x:Name="AddBtn" Text="Add New" />
-    </ContentPage.ToolbarItems>
+    </ContentPage.ToolbarItems>-->
     <ScrollView>
-        <StackLayout>
-            <StackLayout>
-                <Grid IsVisible="False">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Text="Daily Activity" FontFamily="HankenGroteskBold" FontSize="26"  Margin="20,20,0,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" />
+        <!--<StackLayout>
+            <StackLayout x:Name="PlannerStack">
 
-                    <Frame x:Name="ActivityInfo" HasShadow="False" Padding="0" CornerRadius="15" Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,0,20,0" BorderColor="#77212E" BackgroundColor="Transparent">
-                        <Label Text="i" FontFamily="HankenGroteskBold" HorizontalOptions="Center" TextColor="#77212E" FontSize="12"  Grid.Column="1" VerticalOptions="Center" />
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
-                        </Frame.GestureRecognizers>
-                    </Frame>
-
+                <Grid x:Name="PlannerHeader" ColumnDefinitions="70*, 15*, 15*" >
+                    <Border Stroke="#fce9d9" StrokeThickness="2" Margin="10,20,0,0" Grid.Column="0"   StrokeShape="RoundRectangle 10"  Padding="0" HorizontalOptions="Start" HeightRequest="50" Background="#fce9d9">
+                        <Label x:Name="datelbl" FontFamily="HankenGroteskBold" Margin="10,10,10,10" HorizontalOptions="Start"  VerticalOptions="Start" TextColor="#991B1B" FontSize="20" FontAttributes="None" />
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1" NumberOfTapsRequired="1"/>
+                        </Border.GestureRecognizers>
+                    </Border>
+                    <ImageButton Grid.Column="1" x:Name="Listviewbtn" Source="listview.png" Clicked="Listviewbtn_Clicked" Margin="0,15,0,0" VerticalOptions="Center" HeightRequest="30" WidthRequest="30"/>
+                    <ImageButton Grid.Column="2" x:Name="todaybtn" Source="today.png" Clicked="todaybtn_Clicked" VerticalOptions="Center" Margin="0,15,0,0"  HeightRequest="30" WidthRequest="30"/>
                 </Grid>
-
-                <Border Stroke="#fce9d9" StrokeThickness="1" Margin="10,0,0,0" Grid.Row="0" Grid.Column="1"  Padding="0" StrokeShape="RoundRectangle 10" WidthRequest="220" HorizontalOptions="Start" HeightRequest="50" Background="#fce9d9">
-
-                    <Label x:Name="datelbl" FontFamily="HankenGroteskBold" Margin="10,10,0,10" HorizontalOptions="Start"  VerticalOptions="Start" TextColor="#991B1B" FontSize="20" FontAttributes="None" />
-                    <Border.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1" NumberOfTapsRequired="1"/>
-                    </Border.GestureRecognizers>
-                </Border>
-                <!-- Dates Listview Data-->
+                
+                --><!-- Dates Listview Data--><!--
                 <syncfusion:SfListView x:Name="ActivityDates" Orientation="Horizontal" AutoFitMode="Height" HeightRequest="80" BackgroundColor="Transparent" ItemTapped="ActivityDates_ItemTapped" Padding="5"  Margin="0,0,0,0" ScrollBarVisibility="Never">
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
@@ -55,23 +46,14 @@
                                         <Label Text="{Binding Day}" FontFamily="HankenGroteskBold" Margin="0,0,0,0" Grid.Row="2" Grid.Column="0" Padding="0" HorizontalOptions="Center"  VerticalOptions="Center" TextColor="#991B1B" FontSize="14" FontAttributes="None" />
 
                                     </Frame>
-
-
                                     <Label Text="{Binding Date}" FontFamily="HankenGroteskRegular" Margin="0,5,0,0" Grid.Row="1" Grid.Column="0" Padding="0" HorizontalOptions="Center"  VerticalOptions="Start" TextColor="Gray" FontSize="10" FontAttributes="None" />
 
-
-
-
                                 </Grid>
-
-
                             </ViewCell>
                         </DataTemplate>
                     </syncfusion:SfListView.ItemTemplate>
                     <syncfusion:SfListView.SelectedItemTemplate>
                         <DataTemplate>
-
-
                             <Grid VerticalOptions="Start" Margin="10,10,10,0">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
@@ -84,16 +66,11 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
-
                                 <Frame  HeightRequest="35" WidthRequest="35" CornerRadius="20" BorderColor="Transparent" Grid.Row="0" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,5,0,0" Grid.Column="0" Padding="5"  BackgroundColor="#991B1B">
                                     <Label Text="{Binding Day}" FontFamily="HankenGroteskBold" Margin="0,0,0,0" Grid.Row="2" Grid.Column="0" Padding="0" HorizontalOptions="Center"  VerticalOptions="Center" TextColor="White" FontSize="14" FontAttributes="None" />
 
                                 </Frame>
-
-
                                 <Label Text="{Binding Date}" FontFamily="HankenGroteskBold" Margin="0,5,0,0" Grid.Row="1" Grid.Column="0" Padding="0" HorizontalOptions="Center"  VerticalOptions="Start" TextColor="#031926" FontSize="10" FontAttributes="None" />
-
-
 
                             </Grid>
 
@@ -101,59 +78,138 @@
                     </syncfusion:SfListView.SelectedItemTemplate>
                 </syncfusion:SfListView>
 
-                
-                <!--Test New API -->
-                <!--<Button x:Name="Testbtn" BackgroundColor="#991B1B" HorizontalOptions="FillAndExpand" TextColor="White" Clicked="Testbtn_Clicked" FontAttributes="None" Margin="0,10,20,10" FontFamily="HankenGroteskBold" Text="Confirm Activity" />-->
 
-
-
-
-
-                <!-- All Activity Listview Data -->
-                <StackLayout x:Name="DietOverview" IsVisible="True" BackgroundColor="Transparent" >
-                    <syncfusion:SfListView  x:Name="AllDietView" Padding="0" Margin="0,10,0,0" AutoFitMode="Height" ItemSpacing="0" BackgroundColor="Transparent" HorizontalOptions="FillAndExpand" ItemTapped="AllDietView_ItemTapped" IsScrollingEnabled="True"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
+                --><!-- Activity Planner --><!--
+                <StackLayout x:Name="ActivityPlannerStack" IsVisible="False">
+                    <syncfusion:SfListView x:Name="ActivityPlanner" ItemsSource="{Binding ScheduleItems}" ScrollBarVisibility="Never" SelectionBackground="Transparent" CachingStrategy="RecycleTemplate" SelectionMode="Single" AutoFitMode="Height" ItemTapped="ActivityPlanner_ItemTapped" BackgroundColor="Transparent" Margin="10,10,10,0">
                         <syncfusion:SfListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
-                                    <Frame HasShadow="False" CornerRadius="10"  InputTransparent="True" Padding="5" BorderColor="Transparent" BackgroundColor="#e8efd8"  Margin="10,0,10,5">
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="25"/>
-                                                <RowDefinition Height="25"/>
+                                    <Border StrokeShape="RoundRectangle 10" Padding="10"  Margin="5" BackgroundColor="#fce9d9" Stroke="#fce9d9" StrokeThickness="1">
 
-                                            </Grid.RowDefinitions>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="90*"/>
-                                                <ColumnDefinition Width="10*"/>
-                                            </Grid.ColumnDefinitions>
+                                        <Grid ColumnDefinitions="14*,86*" RowSpacing="0" RowDefinitions="30,Auto">
 
-                                            <Label Text="{Binding diettitle}" Margin="10,0,0,0" FontFamily="HankenGroteskBold"  FontSize="14" VerticalOptions="End" HorizontalOptions="Start" Grid.Row="0" Grid.Column="0"  TextColor="#77212E" />
-                                            <Label Text="{Binding datestarted}" FontFamily="HankenGroteskBold" VerticalOptions="Start" Margin="10,0,0,0" HorizontalOptions="Start" FontSize="12" Grid.Row="1" Grid.Column="0"  TextColor="DarkGray" />
+                                            --><!-- Checkbox --><!--
+                                            <CheckBox Grid.Column="0" Color="#991B1B" IsChecked="{Binding Check, Mode=TwoWay}" IsVisible="{Binding IsCheckBoxEnabled}"  
+                                                      HeightRequest="30" WidthRequest="30" VerticalOptions="Start"   Margin="5,0,5,0" CheckedChanged="CheckBox_CheckedChanged"/>
 
-                                            <Image Source="nextdarker.png" Grid.Row="0" Grid.Column="2"  Grid.RowSpan="2"  Margin="0,0,0,0"  HeightRequest="12" WidthRequest="12" VerticalOptions="Center" HorizontalOptions="End" />
+                                            --><!-- Step Details --><!--
+                                            <StackLayout Grid.Row="0" Grid.Column="1">
+                                                <Label>
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span Text="{Binding Name}" TextDecorations="{Binding Strike}" FontSize="16" FontFamily="HankenGroteskBold" TextColor="#031926"/>
+                                                            <Span Text=" "  FontSize="16" FontFamily="HankenGroteskBold" TextColor="#031926"/>
+                                                            <Span Text="{Binding duration}" FontSize="12" FontFamily="HankenGroteskRegular" TextColor="gray"/>
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                            </StackLayout>
+
+                                            --><!-- Frequency Display --><!--
+                                            <Grid IsVisible="{Binding Showfrequency}" Padding="0" Grid.Row="1" Grid.Column="1">
+                                                <Grid ColumnDefinitions="Auto,Auto">
+                                                    <Image Source="repeatgray.png" Grid.Column="0" HeightRequest="10" WidthRequest="10"/>
+                                                    <Label Text="{Binding frequencystring}" Margin="10,0,0,0" Grid.Column="1" FontSize="12" FontFamily="HankenGroteskRegular" TextColor="gray"/>
+                                                </Grid>
+                                            </Grid>
+
+                                            --><!-- Completion Display --><!--
+                                            <Grid IsVisible="{Binding Showcompleted}" Padding="0" Grid.Row="1" Grid.Column="1">
+                                                <Label>
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span Text="Completed: " FontSize="12" FontFamily="HankenGroteskRegular" TextColor="gray"/>
+                                                            <Span Text="{Binding Datetimerecorded}" FontSize="12" FontFamily="HankenGroteskRegular" TextColor="gray"/>
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                            </Grid>
 
                                         </Grid>
-                                    </Frame>
-
+                                    </Border>
                                 </ViewCell>
-                            </DataTemplate>
-                        </syncfusion:SfListView.ItemTemplate>
+                        </DataTemplate>
+                      </syncfusion:SfListView.ItemTemplate>
                     </syncfusion:SfListView>
-                </StackLayout>
+
+
+
+                    --><!-- Add Task Section --><!--
+                <Border x:Name="AddTaskStack" Margin="100,10,100,0" IsVisible="False" StrokeShape="RoundRectangle 10" Padding="10" BackgroundColor="Transparent" Stroke="#991B1B" StrokeThickness="1">
+                    <Grid RowDefinitions="Auto" Padding="0" ColumnDefinitions="20*, 80*">
+                        <Image Grid.Column="0" Grid.Row="0" Source="task.png" HeightRequest="25" WidthRequest="25" VerticalOptions="Center" HorizontalOptions="Center"/>
+                        <Label Text="Add Daily Task" FontFamily="HankenGroteskBold" Margin="0" Grid.Column="1" Grid.Row="0" Padding="0" HorizontalOptions="Center"  VerticalOptions="Center" TextColor="#991B1B" FontSize="16" FontAttributes="None" />
+
+                    </Grid>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="AddBtn_Clicked" NumberOfTapsRequired="1"/>
+                    </Border.GestureRecognizers>
+                </Border>
             </StackLayout>
 
-            <StackLayout>
-                <Grid x:Name="DietLoading" Margin="0,150,0,0"  IsVisible="False">
+        </StackLayout>
+
+            <StackLayout x:Name="ListviewStack" IsVisible="False">
+                
+                <Grid x:Name="ListviewHeader" ColumnDefinitions="70*, 15*, 15*" >
+                    <Label Text="Daily Activity" Grid.Row="0" FontFamily="HankenGroteskBold" FontSize="26"  Margin="20,20,0,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" />
+                    <ImageButton Grid.Column="1" x:Name="timelinebtn" Source="selectcalendar.png" Clicked="timelinebtn_Clicked"  VerticalOptions="End" HeightRequest="30" WidthRequest="30"/>
+                    <Frame x:Name="ActivityInfo" Grid.Row="1" HasShadow="False" Padding="0" CornerRadius="15" Grid.Column="2" VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,0,20,0" BorderColor="#991B1B" BackgroundColor="Transparent">
+                        <Label Text="i" FontFamily="HankenGroteskBold" HorizontalOptions="Center" TextColor="#991B1B" FontSize="12"  Grid.Column="1" VerticalOptions="Center" />
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
+                </Grid>
+
+
+                <syncfusion:SfListView x:Name="ActivityListview" ItemTapped="ActivityListview_ItemTapped" ScrollBarVisibility="Never" CachingStrategy="CreateNewTemplate" BackgroundColor="Transparent" Margin="10,10,10,50" SelectionBackground="Transparent" SelectionMode="Single" AutoFitMode="Height" >
+                    <syncfusion:SfListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Border Stroke="#fce9d9" StrokeThickness="2" Margin="0,5,0,5"  StrokeShape="RoundRectangle 10"  Padding="0" Background="#fce9d9">
+                                    <StackLayout BackgroundColor="Transparent">
+                                        <Grid Margin="0" RowSpacing="0" Padding="0" Grid.ColumnDefinitions="45*, 45*, 10*" Grid.RowDefinitions="Auto,Auto,Auto">
+
+                                            <Label Text="{Binding name}" TextColor="#991B1B" FontSize="14" FontAttributes="Bold" Padding="0" FontFamily="HankenGroteskBold" Margin="10,5,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" Grid.Row="0" Grid.Column="0" />
+                                            <Label Text="{Binding displayname}" IsVisible="{Binding displaynameAdded}" TextColor="Gray" Padding="0" FontSize="12" FontAttributes="Bold" FontFamily="HankenGroteskBold" Margin="10,5,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" Grid.Row="1" Grid.Column="0" />
+                                            <Label  FontFamily="HankenGroteskBold" VerticalOptions="Center" Padding="0" Margin="10,5,0,5" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="Start Date: " TextColor="Gray" FontSize="12" FontFamily="HankenGroteskRegular" FontAttributes="Bold"/>
+                                                        <Span Text=" " TextColor="#031926" FontSize="12" FontAttributes="Bold"/>
+                                                        <Span Text="{Binding startdate}" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="12"   />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+
+                                            <Image Source="nextdarker.png" HeightRequest="15" Margin="0,10,0,10"  Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center" />
+                                        </Grid>
+                                    </StackLayout>
+                                </Border>
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.ItemTemplate>
+                </syncfusion:SfListView>
+
+
+
+            </StackLayout>
+
+
+            <StackLayout x:Name="ActivityLoading" VerticalOptions="CenterAndExpand"  IsVisible="False">
+                <Grid >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <ActivityIndicator IsRunning="True" Grid.Row="0" Color="#77212E" HorizontalOptions="Center" VerticalOptions="Start" />
+                    <ActivityIndicator IsRunning="True" Grid.Row="0" Color="#991B1B" HorizontalOptions="Center" VerticalOptions="Start" />
                     <Label Text="Loading Daily Activity..." Grid.Row="1" TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="Center" Margin="0,5,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" />
                 </Grid>
             </StackLayout>
-            <!--Empty Stack for No Items -->
-            <StackLayout x:Name="EmptyStack" Margin="0,150,0,0" IsVisible="False" VerticalOptions="CenterAndExpand">
+            --><!--Empty Stack for No Items --><!--
+            <StackLayout x:Name="EmptyStack"  IsVisible="False" VerticalOptions="CenterAndExpand">
                 <Image Source="adddataicon.png" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="50" WidthRequest="50"/>
                 <Label Text="Add Activity" FontSize="20" Margin="0,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Center" />
                 <Label Text="Tap here to add an Activity" FontSize="14" TextColor="#031926" FontFamily="HankenGroteskRegular" Margin="0,0,0,0" HorizontalOptions="Center" VerticalOptions="Center" VerticalTextAlignment="Center" />
@@ -170,6 +226,6 @@
                 <Label x:Name="NovoContentlbl"  Margin="0,0,0,0" FontFamily="HankenGroteskBold" HorizontalOptions="Center"  FontSize="8" VerticalOptions="Center" Grid.Row="0" Grid.Column="0" TextColor="#031926" />
                 <Label x:Name="NovoExitidlbl"  FontFamily="HankenGroteskBold" VerticalOptions="Start" Margin="0,5,0,0" HorizontalOptions="Center" FontSize="8" Grid.Row="1" Grid.Column="0"  TextColor="#031926"/>
             </Grid>
-        </StackLayout>
+        </StackLayout>-->
     </ScrollView>
 </ContentPage>
