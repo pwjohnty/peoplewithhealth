@@ -107,7 +107,7 @@ public partial class BiometricsLogin : ContentPage
     {
         try
         {
-            await Task.Delay(2000);
+            await Task.Delay(100);
             var result = await BiometricAuthenticationService.Default.AuthenticateAsync(new AuthenticationRequest()
             {
                 Title = "Confirm your fingerprint to access your account",
@@ -120,7 +120,7 @@ public partial class BiometricsLogin : ContentPage
                     Loadinglbl.IsVisible = true; 
                     PinKeyPad.IsVisible = false;
                     ForgotPassword.IsVisible = false;
-                    await Task.Delay(2000);
+                    await Task.Delay(100);
                 //Application.Current.MainPage = new MainDashboard();
                 Application.Current.MainPage = new NavigationPage(new MainDashboard());
             }
@@ -156,8 +156,14 @@ public partial class BiometricsLogin : ContentPage
                         Loadinglbl.IsVisible = true;
                         PinKeyPad.IsVisible = false;
                         ForgotPassword.IsVisible = false;
-                        await Task.Delay(2000);
-                        Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                        Task.Run(async () =>
+                        {
+                            await Task.Delay(100); // Simulate processing time if necessary
+                            MainThread.BeginInvokeOnMainThread(() =>
+                            {
+                                Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                            });
+                        });
                     }
                     else
                     {
@@ -173,8 +179,14 @@ public partial class BiometricsLogin : ContentPage
                         Loadinglbl.IsVisible = true;
                         PinKeyPad.IsVisible = false;
                         ForgotPassword.IsVisible = false;
-                        await Task.Delay(2000);
-                        Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                        Task.Run(async () =>
+                        {
+                           await Task.Delay(100); // Simulate processing time if necessary
+                            MainThread.BeginInvokeOnMainThread(() =>
+                            {
+                                Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                            });
+                        });
                     }
                     else
                     {
