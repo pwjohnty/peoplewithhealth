@@ -25,7 +25,7 @@ public partial class ProfileSection : ContentPage
     {
         try
         {
-            await crashHandler.CrashDetectedSend(Ex);
+            await crashHandler.SentryCrashDetected(Ex);
             await Navigation.PushAsync(new ErrorPage("Dashboard"), false);
         }
         catch (Exception ex)
@@ -229,7 +229,7 @@ public partial class ProfileSection : ContentPage
             //Date of Birth
             var DOB = new user();
             DOB.SettingsTitle = "Date of Birth";
-            if (Helpers.Settings.Age.Contains("00:00:00"))
+            if (Helpers.Settings.Age.Contains(Helpers.Settings.DOB))
             {
                 var n = Helpers.Settings.Age;
                 var nn = n.Replace("00:00:00", string.Empty);
@@ -237,7 +237,26 @@ public partial class ProfileSection : ContentPage
             }
             else
             {
-                DOB.SettingsItem = Helpers.Settings.Age;
+                if (string.IsNullOrEmpty(Helpers.Settings.Age) || Helpers.Settings.Age == "")
+                {
+                    DOB.SettingsItem = "--";
+                }
+                else
+                {
+                    DateTime CheckDOB = new DateTime();
+                    if (Helpers.Settings.DOB != null)
+                    {
+                        CheckDOB = DateTime.Parse(Helpers.Settings.Age);
+                    }
+                    if (CheckDOB.Date.ToString("dd/MM/yyyy") == "01/01/1900")
+                    {
+                        DOB.SettingsItem = "--";
+                    }
+                    else
+                    {
+                        DOB.SettingsItem = Helpers.Settings.DOB;
+                    }
+                }
             }
             UserDetailsList.Add(DOB);
 

@@ -24,6 +24,9 @@ namespace PeopleWith
 
         [System.Text.Json.Serialization.JsonIgnore]
         public string ShortGroup { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string Source { get; set; }
     }
 
     public class APIActivityResponse

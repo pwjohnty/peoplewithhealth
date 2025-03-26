@@ -115,7 +115,7 @@ namespace PeopleWith
         public const string GetAuth = "https://pwapicontainer.thankfulground-b43b4106.ukwest.azurecontainerapps.io/api/registryConfig";
 
         public HttpClient Client = new HttpClient();
-        
+
 
         private void ConfigureClient()
         {
@@ -139,7 +139,7 @@ namespace PeopleWith
             {
                 var USERID = Helpers.Settings.UserKey;
                 var url = $"https://pwapi.peoplewith.com/api/user/userid/{USERID}";
-                ConfigureClient(); 
+                ConfigureClient();
                 HttpResponseMessage responseconsent = await Client.GetAsync(url);
 
                 if (responseconsent.IsSuccessStatusCode)
@@ -3092,7 +3092,7 @@ namespace PeopleWith
                                     item.moodfeedbacklist = JsonConvert.DeserializeObject<ObservableCollection<feedbackdata>>(item.moodfeedback);
                                 }
                                 // Attempt to deserialize as an array
-                               
+
                             }
                             catch (JsonSerializationException)
                             {
@@ -3117,7 +3117,7 @@ namespace PeopleWith
                                     // Attempt to deserialize as an array
                                     item.initialquestionnairefeedbacklist = JsonConvert.DeserializeObject<ObservableCollection<feedbackdata>>(item.initialquestionnairefeedback);
                                 }
-                                
+
                             }
                             catch (JsonSerializationException)
                             {
@@ -3555,7 +3555,7 @@ namespace PeopleWith
                 ObservableCollection<userresponse> users = userResponse.Value;
                 foreach (var item in userResponse.Value)
                 {
-                
+
 
                 }
 
@@ -3603,12 +3603,12 @@ namespace PeopleWith
                             var GetString = item.grouping;
                             if (!String.IsNullOrEmpty(GetString))
                             {
-                                if(GetString.Contains("Diets"))
+                                if (GetString.Contains("Diets"))
                                 {
-                                    GetString = GetString.Replace(" Diets", ""); 
+                                    GetString = GetString.Replace(" Diets", "");
                                 }
 
-                                if(GetString.Contains("and"))
+                                if (GetString.Contains("and"))
                                 {
                                     GetString = GetString.Replace(" and ", "/");
                                 }
@@ -3698,7 +3698,7 @@ namespace PeopleWith
                 {
                     string errorcontent = await response.Content.ReadAsStringAsync();
                     var s = errorcontent;
-                    return new ObservableCollection<userdiet>();  
+                    return new ObservableCollection<userdiet>();
                 }
 
                 string content = await response.Content.ReadAsStringAsync();
@@ -3939,77 +3939,77 @@ namespace PeopleWith
 
         }
 
-            //GetUserInvestigation  
-            public async Task<ObservableCollection<userinvestigation>> GetUserInvestigationAsync()
+        //GetUserInvestigation  
+        public async Task<ObservableCollection<userinvestigation>> GetUserInvestigationAsync()
+        {
+            try
             {
-                try
+                var USERID = Helpers.Settings.UserKey;
+                var URl = APICalls.GetUserInvestigation;
+                string urlWithQuery = $"{URl}?$filter=userid eq '{USERID}'";
+                ConfigureClient();
+                HttpResponseMessage response = await Client.GetAsync(urlWithQuery);
+                string data = await response.Content.ReadAsStringAsync();
+
+                // Deserialize the response into a generic structure
+                var rawResponse = JsonConvert.DeserializeObject<SingleUserINvestigation>(data);
+                var UserInvestList = new List<userinvestigation>();
+
+                if (rawResponse?.Value != null)
                 {
-                    var USERID = Helpers.Settings.UserKey;
-                    var URl = APICalls.GetUserInvestigation;
-                    string urlWithQuery = $"{URl}?$filter=userid eq '{USERID}'";
-                    ConfigureClient();
-                    HttpResponseMessage response = await Client.GetAsync(urlWithQuery);
-                    string data = await response.Content.ReadAsStringAsync();
-
-                    // Deserialize the response into a generic structure
-                    var rawResponse = JsonConvert.DeserializeObject<SingleUserINvestigation>(data);
-                    var UserInvestList = new List<userinvestigation>();
-
-                    if (rawResponse?.Value != null)
+                    foreach (var rawUserInvest in rawResponse.Value)
                     {
-                        foreach (var rawUserInvest in rawResponse.Value)
+                        var NewUserInvest = new userinvestigation
                         {
-                            var NewUserInvest = new userinvestigation
-                            {
-                                id = rawUserInvest.id,
-                                createdAt = rawUserInvest.createdAt,
-                                userid = rawUserInvest.userid,
-                                deleted = rawUserInvest.deleted,
-                                investigationid = rawUserInvest.investigationid,
-                                investigationname = rawUserInvest.investigationname,
-                                value = rawUserInvest.value,
-                                status = rawUserInvest.status,
-                                investigationdate = rawUserInvest.investigationdate,
-                                investigationdocument = rawUserInvest.investigationdocument,
-                                investigationimage = rawUserInvest.investigationimage,
-                                notes = new ObservableCollection<notesuserfeedback>()
-                            };
+                            id = rawUserInvest.id,
+                            createdAt = rawUserInvest.createdAt,
+                            userid = rawUserInvest.userid,
+                            deleted = rawUserInvest.deleted,
+                            investigationid = rawUserInvest.investigationid,
+                            investigationname = rawUserInvest.investigationname,
+                            value = rawUserInvest.value,
+                            status = rawUserInvest.status,
+                            investigationdate = rawUserInvest.investigationdate,
+                            investigationdocument = rawUserInvest.investigationdocument,
+                            investigationimage = rawUserInvest.investigationimage,
+                            notes = new ObservableCollection<notesuserfeedback>()
+                        };
 
-                            // Deserialize notes only if not null or empty
-                            if (!string.IsNullOrEmpty(rawUserInvest.notes))
-                            {
-                                var feedbackUserInvest = JsonConvert.DeserializeObject<List<notesuserfeedback>>(rawUserInvest.notes);
+                        // Deserialize notes only if not null or empty
+                        if (!string.IsNullOrEmpty(rawUserInvest.notes))
+                        {
+                            var feedbackUserInvest = JsonConvert.DeserializeObject<List<notesuserfeedback>>(rawUserInvest.notes);
 
-                                if (feedbackUserInvest != null)
+                            if (feedbackUserInvest != null)
+                            {
+                                foreach (var feedback in feedbackUserInvest)
                                 {
-                                    foreach (var feedback in feedbackUserInvest)
+                                    if (feedback.deleted != "deleted")
                                     {
-                                        if (feedback.deleted != "deleted")
-                                        {
-                                            NewUserInvest.notes.Add(feedback);
-                                        }
+                                        NewUserInvest.notes.Add(feedback);
                                     }
                                 }
                             }
+                        }
 
                         // Always add NewUserDiet, even if notes are null or empty
                         UserInvestList.Add(NewUserInvest);
-                        }
                     }
+                }
 
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        string errorcontent = await response.Content.ReadAsStringAsync();
-                        var s = errorcontent;
-                        return new ObservableCollection<userinvestigation>();
-                    }
+                if (!response.IsSuccessStatusCode)
+                {
+                    string errorcontent = await response.Content.ReadAsStringAsync();
+                    var s = errorcontent;
+                    return new ObservableCollection<userinvestigation>();
+                }
 
-                    string content = await response.Content.ReadAsStringAsync();
-                    var userResponse = JsonConvert.DeserializeObject<APIUserInvestigationResponse>(content);
+                string content = await response.Content.ReadAsStringAsync();
+                var userResponse = JsonConvert.DeserializeObject<APIUserInvestigationResponse>(content);
 
-                    var filteredDiets = UserInvestList?.Where(item => !item.deleted).ToList() ?? new List<userinvestigation>();
+                var filteredDiets = UserInvestList?.Where(item => !item.deleted).ToList() ?? new List<userinvestigation>();
 
-                foreach(var item in filteredDiets)
+                foreach (var item in filteredDiets)
                 {
                     if (!string.IsNullOrEmpty(item.investigationdate))
                     {
@@ -4018,14 +4018,14 @@ namespace PeopleWith
                     }
                 }
 
-                    return new ObservableCollection<userinvestigation>(filteredDiets);
+                return new ObservableCollection<userinvestigation>(filteredDiets);
 
-                }
-                catch (Exception ex)
-                {
-                    return new ObservableCollection<userinvestigation>();
-                }
             }
+            catch (Exception ex)
+            {
+                return new ObservableCollection<userinvestigation>();
+            }
+        }
 
 
         //Post UserInvestigation
@@ -4207,29 +4207,42 @@ namespace PeopleWith
                     //Remove All Deleted Items 
                     foreach (var item in consent)
                     {
-                        if (item.deleted == true)
-                        {
+                        if (item.deleted) continue; // Skip deleted items immediately
 
+                        string getString = item.grouping?.Trim() ?? string.Empty;
+
+                        var replacements = new Dictionary<string, string>
+                        {
+                            { "Combat & Martial Arts", "Martial Arts" },
+                            { "Team Sports", "Team Sports" },
+                            { "Swimming", "Swimming" },
+                            { "Endurance & Cardio Activities", "Endurance" },
+                            { "Outdoor & Adventure", "Outdoor" },
+                            { "Individual Sports", "Individual Sports" },
+                            { "Additional Functional & Cognitive Assessments", "Cognitive" },
+                            { "Mind, Body & Flexibility", "MindBody" },
+                            { "Instrumental Activities of Daily Living (IADLs)", "Daily Living" },
+                            { "Strength & Resistance Training", "Strength Training" },
+                            { "Basic Activities of Daily Living (ADLs)", "Basic Activities" },
+                            { "Motor & Extreme Sports", "Extreme Sports" },
+                            { "Winter Sports", "Winter Sports" },
+                            { "Equestrian", "Equestrian" },
+                            { "Recreational & Alternative", "Recreational" },
+                            { "Open Water Sports", "Water Sports" }
+                        };
+
+                        if (replacements.TryGetValue(getString, out string newString))
+                        {
+                            item.ShortGroup = newString;
+                            item.Source = newString.Replace(" ", "").ToLower() + ".png";
                         }
                         else
                         {
-                            var GetString = item.grouping;
-                            if (!String.IsNullOrEmpty(GetString))
-                            {
-                                if (GetString.Contains("Basic"))
-                                {
-                                    GetString = GetString.Replace("Basic ", "");
-                                }
+                            item.ShortGroup = getString;
 
-                                if (GetString.Contains("&"))
-                                {
-                                    GetString = GetString.Replace(" & ", "/");
-                                }
-
-                                item.ShortGroup = GetString;
-                            }
-                            newcollection.Add(item);
                         }
+
+                        newcollection.Add(item);
                     }
 
                     return new ObservableCollection<dailyactivity>(newcollection);
@@ -4314,38 +4327,21 @@ namespace PeopleWith
                 foreach (var item in consent)
                 {
                     // Deserialize `activityfrequency`
-                    if (!string.IsNullOrEmpty(item.activityfrequency))
-                    {
-                        try
-                        {
-                            if (item.activityfrequency != "[]")
-                            {
-                                item.activityfrequencylist = JsonConvert.DeserializeObject<ObservableCollection<activefrequency>>(item.activityfrequency);
-                            }
-                        }
-                        catch (JsonSerializationException)
-                        {
-                            var singleItem = JsonConvert.DeserializeObject<activefrequency>(item.activityfrequency);
-                            item.activityfrequencylist = new ObservableCollection<activefrequency> { singleItem };
-                        }
-                    }
-
-                    // Deserialize `notes`
-                    if (!string.IsNullOrEmpty(item.notes))
-                    {
-                        try
-                        {
-                            if (item.notes != "[]")
-                            {
-                                item.noteslist = JsonConvert.DeserializeObject<ObservableCollection<activenotes>>(item.notes);
-                            }
-                        }
-                        catch (JsonSerializationException)
-                        {
-                            var singleItem = JsonConvert.DeserializeObject<activenotes>(item.notes);
-                            item.noteslist = new ObservableCollection<activenotes> { singleItem };
-                        }
-                    }
+                    //if (!string.IsNullOrEmpty(item.activityfrequency))
+                    //{
+                    //    try
+                    //    {
+                    //        if (item.activityfrequency != "[]")
+                    //        {
+                    //            item.activityfrequencylist = JsonConvert.DeserializeObject<ObservableCollection<activefrequency>>(item.activityfrequency);
+                    //        }
+                    //    }
+                    //    catch (JsonSerializationException)
+                    //    {
+                    //        var singleItem = JsonConvert.DeserializeObject<activefrequency>(item.activityfrequency);
+                    //        item.activityfrequencylist = new ObservableCollection<activefrequency> { singleItem };
+                    //    }
+                    //}
 
                     // Deserialize `activitysymptoms`
                     if (!string.IsNullOrEmpty(item.activitysymptoms))
@@ -4354,20 +4350,39 @@ namespace PeopleWith
                         {
                             if (item.activitysymptoms != "[]")
                             {
-                                item.activitysymptomslist = JsonConvert.DeserializeObject<ObservableCollection<activesymptoms>>(item.activitysymptoms);
+                                item.ActivitySymptomsList = JsonConvert.DeserializeObject<ObservableCollection<ActivitySymptoms>>(item.activitysymptoms);
                             }
                         }
                         catch (JsonSerializationException)
                         {
-                            var singleItem = JsonConvert.DeserializeObject<activesymptoms>(item.activitysymptoms);
-                            item.activitysymptomslist = new ObservableCollection<activesymptoms> { singleItem };
+                            var singleItem = JsonConvert.DeserializeObject<ActivitySymptoms>(item.activitysymptoms);
+                            item.ActivitySymptomsList = new ObservableCollection<ActivitySymptoms> { singleItem };
+                        }
+                    }
+
+                    // Deserialize `feedback`
+                    if (!string.IsNullOrEmpty(item.feedback))
+                    {
+                        try
+                        {
+                            if (item.feedback != "[]")
+                            {
+                                item.ActivityFeedbackList = JsonConvert.DeserializeObject<ActivityFeedback>(item.feedback);
+                            }
+                        }
+                        catch (JsonSerializationException)
+                        {
+                            var singleItem = JsonConvert.DeserializeObject<ActivityFeedback>(item.feedback);
+                            item.ActivityFeedbackList = singleItem;
                         }
                     }
 
                     newCollection.Add(item);
                 }
+                //remove Deleted from List
+                var UserActivity = newCollection?.Where(item => !item.deleted).ToObservableCollection() ?? new ObservableCollection<userdailyactivity>();
 
-                return newCollection;
+                return UserActivity;
             }
             catch (Exception ex)
             {
@@ -4377,7 +4392,85 @@ namespace PeopleWith
         }
 
 
+        //Update Activity Feedback 
+        public async Task UpdateUserActivity(userdailyactivity Updatefeedback)
+        {
+            try
+            {
 
+                var id = Updatefeedback.id;
+                var url = $"https://pwapi.peoplewith.com/api/userdailyactivity/id/{id}";
+                var feedbacks = Updatefeedback;
+
+                //Change the following  (To be defined)  
+                string json = System.Text.Json.JsonSerializer.Serialize(new
+                {
+                    feedback = feedbacks.feedback,
+                    notes = feedbacks.notes
+                });
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                ConfigureClient();
+                using (var client = new HttpClient())
+                {
+
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+
+                    var response = await Client.SendAsync(request);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Successfully updated userDiet");
+                    }
+                }
+            }
+
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+
+        //Delete User Activity
+        public async Task DeleteUserActivity(userdailyactivity Updatefeedback)
+        {
+            try
+            {
+                string id = Updatefeedback.id;
+                var url = $"https://pwapi.peoplewith.com/api/userdailyactivity/id/{id}";
+
+                string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = Updatefeedback.deleted });
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                ConfigureClient();
+                using (var client = new HttpClient())
+                {
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+
+                    var response = await Client.SendAsync(request);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                }
+
+                return;
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+        }
 
 
 
@@ -4442,6 +4535,52 @@ namespace PeopleWith
                 return null;
             }
         }
+
+
+        //Edit Activity Details 
+        public async Task UpdateActivityDetails(userdailyactivity Updatefeedback)
+        {
+            try
+            {
+                string id = Updatefeedback.id;
+                var url = $"https://pwapi.peoplewith.com/api/userdailyactivity/id/{id}";
+
+                var payload = new
+                {
+                    activityid = Updatefeedback.activityid,
+                    activitytitle = Updatefeedback.activitytitle,
+                    startdate = Updatefeedback.startdate,
+                    notes = Updatefeedback.notes,
+                    feedback = Updatefeedback.feedback
+                };
+
+                // Serialize the object into JSON
+                string json = System.Text.Json.JsonSerializer.Serialize(payload);
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                ConfigureClient();
+                using (var client = new HttpClient())
+                {
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+
+                    var response = await Client.SendAsync(request);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                }
+
+                return;
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+        }
+
 
         //Used to Test HttpClient Auth
         //public async Task<ObservableCollection<registryconfig>> GetAuthTest()

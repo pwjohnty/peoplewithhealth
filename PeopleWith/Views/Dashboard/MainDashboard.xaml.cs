@@ -10,6 +10,7 @@ using Microsoft.Azure.NotificationHubs;
 using Mopups.Services;
 using Plugin.LocalNotification;
 using Syncfusion.Maui.Charts;
+using Sentry;
 
 namespace PeopleWith;
 
@@ -46,7 +47,8 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
-            await crashHandler.CrashDetectedSend(Ex);
+
+            await crashHandler.SentryCrashDetected(Ex);
             await Navigation.PushAsync(new ErrorPage("Dashboard"), false);
         }
         catch (Exception ex)
@@ -289,8 +291,9 @@ public partial class MainDashboard : ContentPage
                 vidhelplbl.IsVisible = false;
                 videoslist.IsVisible = false;
             }
+
         }
-        catch(Exception Ex)
+        catch (Exception Ex)
         {
             NotasyncMethod(Ex);
         }
@@ -2340,6 +2343,10 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
+
+            // Sentry Checker
+            //SentrySdk.CaptureMessage("Hello Sentry");
+
             // Add all categories for help videos
             var allcatvideolist = new List<dashitem>
             {
@@ -2444,31 +2451,43 @@ public partial class MainDashboard : ContentPage
             //        //go to migration assitant
 
             //        await Navigation.PushAsync(new MigrationAssistant(), false);
-            //        return;
-
-
-                
-                
+            //        return;                              
             //}
-         
-           
+                 
             // Assuming UserDetails[0].dateofbirth is a string in a format like "yyyy-MM-dd"
             string dateOfBirthString = Helpers.Settings.Age;
 
-            // Convert the string to DateTime
-            DateTime dateOfBirth = DateTime.Parse(dateOfBirthString);
-
-            // Calculate the age
-            int age = DateTime.Now.Year - dateOfBirth.Year;
-
-            // Check if the birthday has occurred this year, if not subtract 1
-            if (DateTime.Now < dateOfBirth.AddYears(age))
+            if(string.IsNullOrEmpty(dateOfBirthString) || dateOfBirthString == "")
             {
-                age--;
+                // Display the age in the label
+                agelbl.Text = "--";
+            }
+            else
+            {
+                // Convert the string to DateTime
+                DateTime dateOfBirth = DateTime.Parse(dateOfBirthString);
+
+                if(dateOfBirth.Date.ToString("dd/MM/yyyy") == "01/01/1900")
+                {
+                    agelbl.Text = "--";
+                }
+                else
+                {
+                    // Calculate the age
+                    int age = DateTime.Now.Year - dateOfBirth.Year;
+
+                    // Check if the birthday has occurred this year, if not subtract 1
+                    if (DateTime.Now < dateOfBirth.AddYears(age))
+                    {
+                        age--;
+                    }
+
+                    // Display the age in the label
+                    agelbl.Text = age.ToString();
+                }
+               
             }
 
-            // Display the age in the label
-            agelbl.Text = age.ToString();
 
             //AllUserDetails.gender = UserDetails[0].gender;
             //Helpers.Settings.Gender = UserDetails[0].gender;
@@ -2808,7 +2827,7 @@ public partial class MainDashboard : ContentPage
                 }
                 else
                 {
-                    await Navigation.PushAsync(new AllDailyActivity(), false);
+                    await Navigation.PushAsync(new ActivitySchedule(), false);
                 }
 
             }
@@ -3181,7 +3200,7 @@ public partial class MainDashboard : ContentPage
                 }
                 else
                 {
-                    await Navigation.PushAsync(new AllDailyActivity(), false);
+                    await Navigation.PushAsync(new ActivitySchedule(), false);
                 }
 
             }

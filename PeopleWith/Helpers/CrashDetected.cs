@@ -8,6 +8,31 @@ namespace PeopleWith
 {
     public class CrashDetected
     {
+
+
+        public async Task SentryCrashDetected(Exception Ex)
+        {
+            try
+            {
+                SentrySdk.ConfigureScope(scope =>
+                {
+                    scope.User = new SentryUser
+                    {
+
+                        Id = Helpers.Settings.UserKey,
+                        Email = Helpers.Settings.Email
+                    };
+
+                    SentrySdk.CaptureException(Ex);
+                });
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        //Old Code 
         public async Task CrashDetectedSend(Exception Ex)
         {
             try

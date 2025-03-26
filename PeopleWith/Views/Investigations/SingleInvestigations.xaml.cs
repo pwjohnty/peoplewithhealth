@@ -13,7 +13,7 @@ public partial class SingleInvestigations : ContentPage
     {
         try
         {
-            await crashHandler.CrashDetectedSend(Ex);
+            await crashHandler.SentryCrashDetected(Ex);
             await Navigation.PushAsync(new ErrorPage("Dashboard"), false);
         }
         catch (Exception ex)
@@ -106,7 +106,7 @@ public partial class SingleInvestigations : ContentPage
                 Deletebtn.IsEnabled = false;
 
 
-                bool Delete = await DisplayAlert("Delete Investigation", "Are you sure you would like the delete this INvestigation? Once deleted it cannot be retrieved", "Continue", "Cancel");
+                bool Delete = await DisplayAlert("Delete Investigation", "Are you sure you would like the delete this Investigation? Once deleted it cannot be retrieved", "Continue", "Cancel");
                 if (Delete == true)
                 {
                     //Delete Item 

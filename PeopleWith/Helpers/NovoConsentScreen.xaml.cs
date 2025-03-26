@@ -114,7 +114,7 @@ public partial class NovoConsentScreen : PopupPage
         else if (GetArea == "Daily Activity")
         {
             Preferences.Default.Set("NovoActivity", false);
-            await Navigation.PushAsync(new AllDailyActivity(), false);
+            await Navigation.PushAsync(new ActivitySchedule(), false);
         }
 
 

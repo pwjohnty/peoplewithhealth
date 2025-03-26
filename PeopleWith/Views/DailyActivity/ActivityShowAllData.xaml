@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
+             x:Class="PeopleWith.ActivityShowAllData" >
+    <ScrollView>
+        <!--<StackLayout Margin="10,10,10,0" x:Name="MainStack">
+           
+            <Label x:Name="Titlelbl" FontFamily="HankenGroteskBold" Margin="10,20,0,0" Grid.Row="0" Padding="0" HorizontalOptions="Start"  VerticalOptions="Start" TextColor="#031926" FontSize="20" FontAttributes="None" />
+
+            <StackLayout x:Name="DataStack">
+       
+            --><!-- Select type All,Recorded,NotRecorded --><!--
+                <Grid Padding="0" Margin="10,0,10,0">
+                <syncfusion:SfListView x:Name="RecordsListview" AutoFitMode="Height" Orientation="Horizontal" HeightRequest="40" ItemTapped="RecordsListview_ItemTapped"  Grid.Row="0" Margin="0" ScrollBarVisibility="Never">
+                    <syncfusion:SfListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Border StrokeShape="RoundRectangle 10" Padding="5"  Margin="5,5,5,0" BackgroundColor="Transparent" Stroke="Transparent" StrokeThickness="1">
+                                    <Grid Grid.ColumnDefinitions="Auto,Auto">
+                                        <Ellipse WidthRequest="12" HeightRequest="12" Fill="{Binding dot}"  Grid.Column="0" HorizontalOptions="Center" VerticalOptions="Center" />
+                                        <Label Text="{Binding title}" FontFamily="HankenGroteskRegular" Margin="5,0,0,0" Grid.Column="1" Padding="0" HorizontalOptions="Start"  VerticalOptions="Center" TextColor="Gray" FontSize="14" FontAttributes="None" />
+                                    </Grid>
+                                </Border>
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.ItemTemplate>
+                    <syncfusion:SfListView.SelectedItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                    <Border StrokeShape="RoundRectangle 10" Padding="5"  Margin="5,5,5,0" BackgroundColor="#fce9d9" Stroke="#991B1B" StrokeThickness="1">
+                                    <Grid Grid.ColumnDefinitions="Auto,Auto">
+                                        <Ellipse WidthRequest="12" HeightRequest="12" Fill="{Binding dot}"   Grid.Column="0" HorizontalOptions="Center" VerticalOptions="Center" />
+                                        <Label Text="{Binding title}" FontFamily="HankenGroteskRegular" Margin="5,0,0,0" Grid.Column="1" Padding="0" HorizontalOptions="Start"  VerticalOptions="Center" TextColor="#031926" FontSize="14" FontAttributes="None" />
+                                    </Grid>
+                                </Border>
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.SelectedItemTemplate>
+                </syncfusion:SfListView>
+            </Grid>
+                
+               --><!-- Filter Timelne --><!--
+                <syncfusion:SfListView x:Name="FilterTimeLine" Padding="0" IsVisible="False" IsEnabled="True" ItemTapped="FilterTimeLine_ItemTapped" ScrollBarVisibility="Never" HeightRequest="40"  Margin="0,0,0,0" AutoFitMode="Height" Orientation="Horizontal" BackgroundColor="Transparent" VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" SelectionMode="Single">
+                    <syncfusion:SfListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Frame CornerRadius="10" Grid.Row="0" Grid.Column="0"  Margin="5" Padding="2" BorderColor="#fce9d9" BackgroundColor="Transparent" InputTransparent="True" HasShadow="False">
+                                        <Label Text="{Binding DisplayText}" HorizontalTextAlignment="Center" FontFamily="HankenGroteskRegular" Padding="5" FontSize="12" FontAttributes="Bold" TextColor="Gray" />
+                                    </Frame>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.ItemTemplate>
+                    <syncfusion:SfListView.SelectedItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Frame CornerRadius="10" Grid.Row="0" Grid.Column="0" Margin="5" Padding="2" BackgroundColor="#fce9d9" BorderColor="#991B1B" HasShadow="False">
+                                        <Label Text="{Binding DisplayText}" HorizontalTextAlignment="Center" FontFamily="HankenGroteskRegular" Padding="5" FontSize="12" FontAttributes="Bold" TextColor="#991B1B" />
+                                    </Frame>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.SelectedItemTemplate>
+                </syncfusion:SfListView>
+
+
+                --><!-- DataListview--><!--
+            <Grid x:Name="RecordsStack" Padding="0" Margin="10,0,10,0">
+                <syncfusion:SfListView x:Name="ActivityRecords" AutoFitMode="Height" Orientation="Vertical" ItemTapped="RecordsListview_ItemTapped"  Grid.Row="0" Margin="0" ScrollBarVisibility="Never">
+                    <syncfusion:SfListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Border StrokeShape="RoundRectangle 10" Padding="10"  Margin="5,5,5,0" BackgroundColor="Transparent" Stroke="#fce9d9" StrokeThickness="1">
+                                    <Grid RowDefinitions="Auto,Auto,Auto" Margin="5,0,0,0" Grid.ColumnDefinitions="70*,30*">
+                                            <Label Grid.Row="0" Grid.Column="0" VerticalOptions="Center">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="Assigned Time:" TextColor="Gray" FontSize="12" FontFamily="HankenGroteskRegular"/>
+                                                        <Span Text=" " TextColor="#031926" FontSize="25" FontAttributes="Bold"/>
+                                                        <Span Text="{Binding Scheduledatetime}" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="14"   />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                            <Label Text="Logged Time: " FontFamily="HankenGroteskRegular"  Grid.Row="1" Grid.Column="0"  Padding="0" HorizontalOptions="Start"  VerticalOptions="Center" TextColor="Gray" FontSize="12" FontAttributes="None" />
+                                            <Label Text="{Binding datetimerecorded}" FontFamily="HankenGroteskBold" Grid.Row="2" Grid.Column="0" Padding="0" HorizontalOptions="Start"  VerticalOptions="Center" TextColor="#031926" FontSize="14" FontAttributes="None" />
+                                        <Ellipse WidthRequest="40" HeightRequest="40" Fill="{Binding SetColour}"  Grid.Row="0" Grid.RowSpan="3"  Grid.Column="1" HorizontalOptions="Center" VerticalOptions="Center" />
+                                    </Grid>
+                                </Border>
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.ItemTemplate>
+                        <syncfusion:SfListView.FooterTemplate>
+                            <DataTemplate>
+                                <Grid BackgroundColor="Transparent" HeightRequest="25">
+                                    <Label LineBreakMode="NoWrap"
+Margin="10,0,0,0"  FontAttributes="Bold"
+FontSize="18" TextColor="White" HorizontalOptions="Center"
+VerticalOptions="Center"/>
+                                </Grid>
+                            </DataTemplate>
+                        </syncfusion:SfListView.FooterTemplate>
+                    </syncfusion:SfListView>
+            </Grid>
+
+                --><!-- Filter Item Clicked That's Empty--><!--
+                <StackLayout x:Name="FilterStackEmpty" IsVisible="False" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+                    <Image Source="nodataicon.png" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="70" WidthRequest="70"/>
+                    <Label x:Name="NoDatalbl"  FontSize="18"  Margin="0,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Center" />
+                </StackLayout>
+                
+            </StackLayout>
+            
+            --><!-- Empty Stack--><!--
+            <StackLayout x:Name="EmptyStack" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" IsVisible="False">
+                <Image Source="nodataicon.png" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="70" WidthRequest="70"/>
+                <Label Text="No data to display"  FontSize="18"  Margin="0,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Center" />
+            </StackLayout>
+            
+            
+       </StackLayout>-->
+    </ScrollView>
+</ContentPage>
