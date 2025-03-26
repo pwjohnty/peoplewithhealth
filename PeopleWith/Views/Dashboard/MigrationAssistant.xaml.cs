@@ -122,6 +122,7 @@ public partial class MigrationAssistant : ContentPage
                     else
                     {
                         // Set notifications as disabled
+                        updateuser[0].pushnotifications = "Disabled";
 
                     }
                 }
@@ -140,7 +141,7 @@ public partial class MigrationAssistant : ContentPage
                     else
                     {
                         // Set notifications as disabled
-
+                        updateuser[0].pushnotifications = "Disabled";
                     }
 
 

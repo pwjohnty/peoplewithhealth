@@ -27,5 +27,7 @@ namespace PeopleWith
 
         public string medicationquestions { get; set ; }
 
+        public string groupscheduleid { get; set; }
+
     }
 }

@@ -17,9 +17,11 @@ namespace PeopleWith
         public string id { get; set; }
         public string Recorded { get; set; }
 
+        public string dosage { get; set; }
+
         public string datetime { get; set; }
     
-
+        public string datetimerecorded { get; set; }
     
 
         // event handler for updating the list views

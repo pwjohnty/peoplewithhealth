@@ -26,5 +26,7 @@ namespace PeopleWith
         public bool deleted { get; set; }
 
         public string supplementquestions { get; set; }
+
+        public string groupscheduleid { get; set; }
     }
 }

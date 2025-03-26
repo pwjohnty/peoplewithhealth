@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using Mopups.Services;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Azure;
+using System.Linq;
 
 namespace PeopleWith;
 
@@ -134,7 +135,15 @@ public partial class MainSchedule : ContentPage
             datelbl.Text = dateforlabel.ToString("dddd, dd MMMM");
 
 
-            populateschedule();
+            if (dateforschedule.Date < DateTime.Now.Date)
+            {
+                
+                previousdaypopulateschedule();
+            }
+            else
+            {
+                populateschedule();
+            }
         }
         catch (Exception Ex)
         {
@@ -201,6 +210,7 @@ public partial class MainSchedule : ContentPage
                         hasnoendate = true;
                     }
 
+                   
                     //find out if it is daily, weekly or days interval
 
                     var splitstring = item.frequency.Split('|');
@@ -217,29 +227,80 @@ public partial class MainSchedule : ContentPage
                                 //add all the items 
                                 foreach (var medtimes in item.schedule)
                                 {
-                                    medtimes.Type = "Medication";
-                                    medtimes.Usermedid = item.id;
-                                    medtimes.Feedbackid = medtimes.id.ToString();
-                                    var SplitDetails = item.details.Split('|');
-                                    if (SplitDetails[0] == "--")
+                                   // if (medtimes.active == "true")
+                                   // {
+
+                                        medtimes.Type = "Medication";
+                                        medtimes.Usermedid = item.id;
+                                        medtimes.Feedbackid = medtimes.id.ToString();
+                                        var SplitDetails = item.details.Split('|');
+                                        if (SplitDetails[0] == "--")
+                                        {
+                                            //Contains Display Name 
+                                            medtimes.DisplayName = item.medicationtitle;
+                                            medtimes.DisplayNameAdded = false;
+                                            medtimes.RowNum = 1;
+                                            medtimes.RowSpan = 2;
+                                        }
+                                        else
+                                        {
+                                            //No Display Name 
+                                            medtimes.DisplayName = SplitDetails[0];
+                                            medtimes.Name = item.medicationtitle;
+                                            medtimes.DisplayNameAdded = true;
+                                            medtimes.RowNum = 2;
+                                            medtimes.RowSpan = 3;
+                                        }
+
+                                        //added to check if any inactive med times need to be checked if the user has recorded feedback against it
+                                    if (item.schedule.Any(x => x.active == "false"))
                                     {
-                                        //Contains Display Name 
-                                        medtimes.DisplayName = item.medicationtitle;
-                                        medtimes.DisplayNameAdded = false;
-                                        medtimes.RowNum = 1;
-                                        medtimes.RowSpan = 2;
+                                        if (medtimes.active == "false")
+                                        {
+
+                                            if (medtimes.frequency != item.frequency)
+                                            {
+                                                if (dateforschedule.Date >= DateTime.Now.Date)
+                                                {
+                                                    //do nothing
+                                                }
+                                                else
+                                                {
+
+                                                    populatescheduleforchangedfrequency(medtimes, item);
+                                                }
+                                            }
+                                            else
+                                            {
+
+                                                var dateadded = DateTime.Parse(medtimes.dateadded);
+
+                                                if (dateforschedule.Date < dateadded.Date)
+                                                {
+                                                    ScheduleList.Add(medtimes);
+                                                }
+                                            }
+
+
+                                        }
+                                        else
+                                        {
+                                            var dateadded = DateTime.Parse(medtimes.dateadded);
+
+                                            if (dateforschedule.Date >= dateadded.Date)
+                                            {
+                                                ScheduleList.Add(medtimes);
+                                            }
+
+                                        }
                                     }
                                     else
                                     {
-                                        //No Display Name 
-                                        medtimes.DisplayName = SplitDetails[0];
-                                        medtimes.Name = item.medicationtitle;
-                                        medtimes.DisplayNameAdded = true;
-                                        medtimes.RowNum = 2;
-                                        medtimes.RowSpan = 3;
+                                        ScheduleList.Add(medtimes);
                                     }
 
-                                        ScheduleList.Add(medtimes);
+                                    //ScheduleList.Add(medtimes);
+                                    //  }
                                 }
 
 
@@ -255,30 +316,65 @@ public partial class MainSchedule : ContentPage
                                 //add all the items 
                                 foreach (var medtimes in item.schedule)
                                 {
-                                    medtimes.Type = "Medication";
-                                    medtimes.Usermedid = item.id;
-                                    medtimes.Feedbackid = medtimes.id.ToString();
+                                 //   if (medtimes.active == "true")
+                                  //  {
+                                        medtimes.Type = "Medication";
+                                        medtimes.Usermedid = item.id;
+                                        medtimes.Feedbackid = medtimes.id.ToString();
 
-                                    var SplitDetails = item.details.Split('|');
-                                    if (SplitDetails[0] == "--")
+                                        var SplitDetails = item.details.Split('|');
+                                        if (SplitDetails[0] == "--")
+                                        {
+                                            //Contains Display Name 
+                                            medtimes.DisplayName = item.medicationtitle;
+                                            medtimes.DisplayNameAdded = false;
+                                            medtimes.RowNum = 1;
+                                            medtimes.RowSpan = 2;
+
+                                        }
+                                        else
+                                        {
+                                            //No Display Name 
+                                            medtimes.DisplayName = SplitDetails[0];
+                                            medtimes.Name = item.medicationtitle;
+                                            medtimes.DisplayNameAdded = true;
+                                            medtimes.RowNum = 2;
+                                            medtimes.RowSpan = 3;
+                                        }
+
+                                    //added to check if any inactive med times need to be checked if the user has recorded feedback against it
+                                    if (item.schedule.Any(x => x.active == "false"))
                                     {
-                                        //Contains Display Name 
-                                        medtimes.DisplayName = item.medicationtitle;
-                                        medtimes.DisplayNameAdded = false;
-                                        medtimes.RowNum = 1;
-                                        medtimes.RowSpan = 2;
+                                        if (medtimes.active == "false")
+                                        {
 
+                                            var dateadded = DateTime.Parse(medtimes.dateadded);
+
+                                            if (dateforschedule.Date < dateadded.Date)
+                                            {
+                                                ScheduleList.Add(medtimes);
+                                            }
+
+
+                                        }
+                                        else
+                                        {
+                                            var dateadded = DateTime.Parse(medtimes.dateadded);
+
+                                            if (dateforschedule.Date >= dateadded.Date)
+                                            {
+                                                ScheduleList.Add(medtimes);
+                                            }
+
+                                        }
                                     }
                                     else
                                     {
-                                        //No Display Name 
-                                        medtimes.DisplayName = SplitDetails[0];
-                                        medtimes.Name = item.medicationtitle;
-                                        medtimes.DisplayNameAdded = true;
-                                        medtimes.RowNum = 2;
-                                        medtimes.RowSpan = 3;
-                                    }
                                         ScheduleList.Add(medtimes);
+                                    }
+
+                                    //ScheduleList.Add(medtimes);
+                                    //  }
                                 }
                             }
 
@@ -314,31 +410,66 @@ public partial class MainSchedule : ContentPage
                                     //add all the items 
                                     foreach (var medtimes in item.schedule)
                                     {
-                                        if (medtimes.Day.Contains(dayname) || medtimes.Day == dayfour)
-                                        {
-                                            medtimes.Type = "Medication";
-                                            medtimes.Usermedid = item.id;
-                                            medtimes.Feedbackid = medtimes.id.ToString();
-                                            var SplitDetails = item.details.Split('|');
-                                            if (SplitDetails[0] == "--")
+                                      //  if (medtimes.active == "true")
+                                     //   {
+                                            if (medtimes.Day.Contains(dayname) || medtimes.Day == dayfour)
                                             {
-                                                //Contains Display Name 
-                                                medtimes.DisplayName = item.medicationtitle;
-                                                medtimes.DisplayNameAdded = false;
-                                                medtimes.RowNum = 1;
-                                                medtimes.RowSpan = 2;
+                                                medtimes.Type = "Medication";
+                                                medtimes.Usermedid = item.id;
+                                                medtimes.Feedbackid = medtimes.id.ToString();
+                                                var SplitDetails = item.details.Split('|');
+                                                if (SplitDetails[0] == "--")
+                                                {
+                                                    //Contains Display Name 
+                                                    medtimes.DisplayName = item.medicationtitle;
+                                                    medtimes.DisplayNameAdded = false;
+                                                    medtimes.RowNum = 1;
+                                                    medtimes.RowSpan = 2;
+                                                }
+                                                else
+                                                {
+                                                    //No Display Name 
+                                                    medtimes.DisplayName = SplitDetails[0];
+                                                    medtimes.Name = item.medicationtitle;
+                                                    medtimes.DisplayNameAdded = true;
+                                                    medtimes.RowNum = 2;
+                                                    medtimes.RowSpan = 3;
+                                                }
+
+
+                                            //added to check if any inactive med times need to be checked if the user has recorded feedback against it
+                                            if (item.schedule.Any(x => x.active == "false"))
+                                            {
+                                                if (medtimes.active == "false")
+                                                {
+
+                                                    var dateadded = DateTime.Parse(medtimes.dateadded);
+
+                                                    if (dateforschedule.Date < dateadded.Date)
+                                                    {
+                                                        ScheduleList.Add(medtimes);
+                                                    }
+
+
+                                                }
+                                                else
+                                                {
+                                                    var dateadded = DateTime.Parse(medtimes.dateadded);
+
+                                                    if (dateforschedule.Date >= dateadded.Date)
+                                                    {
+                                                        ScheduleList.Add(medtimes);
+                                                    }
+
+                                                }
                                             }
                                             else
                                             {
-                                                //No Display Name 
-                                                medtimes.DisplayName = SplitDetails[0];
-                                                medtimes.Name = item.medicationtitle;
-                                                medtimes.DisplayNameAdded = true;
-                                                medtimes.RowNum = 2;
-                                                medtimes.RowSpan = 3;
+                                                ScheduleList.Add(medtimes);
                                             }
 
-                                                ScheduleList.Add(medtimes);
+                                            // ScheduleList.Add(medtimes);
+                                            //  }
                                         }
                                     }
                                 }
@@ -363,32 +494,67 @@ public partial class MainSchedule : ContentPage
                                     //add all the items 
                                     foreach (var medtimes in item.schedule)
                                     {
-                                        if (medtimes.Day.Contains(dayname))
-                                        {
-                                            medtimes.Type = "Medication";
-                                            medtimes.Usermedid = item.id;
-                                            medtimes.Feedbackid = medtimes.id.ToString();
-                                            var SplitDetails = item.details.Split('|');
-                                            if (SplitDetails[0] == "--")
+                                      //  if (medtimes.active == "true")
+                                     //   {
+                                            if (medtimes.Day.Contains(dayname))
                                             {
-                                                //Contains Display Name 
-                                                medtimes.DisplayName = item.medicationtitle;
-                                                medtimes.DisplayNameAdded = false;
-                                                medtimes.RowNum = 1;
-                                                medtimes.RowSpan = 2;
+                                                medtimes.Type = "Medication";
+                                                medtimes.Usermedid = item.id;
+                                                medtimes.Feedbackid = medtimes.id.ToString();
+                                                var SplitDetails = item.details.Split('|');
+                                                if (SplitDetails[0] == "--")
+                                                {
+                                                    //Contains Display Name 
+                                                    medtimes.DisplayName = item.medicationtitle;
+                                                    medtimes.DisplayNameAdded = false;
+                                                    medtimes.RowNum = 1;
+                                                    medtimes.RowSpan = 2;
+                                                }
+                                                else
+                                                {
+                                                    //No Display Name 
+                                                    medtimes.DisplayName = SplitDetails[0];
+                                                    medtimes.Name = item.medicationtitle;
+                                                    medtimes.DisplayNameAdded = true;
+                                                    medtimes.RowNum = 2;
+                                                    medtimes.RowSpan = 3;
+                                                }
+
+
+                                            //added to check if any inactive med times need to be checked if the user has recorded feedback against it
+                                            if (item.schedule.Any(x => x.active == "false"))
+                                            {
+                                                if (medtimes.active == "false")
+                                                {
+
+                                                    var dateadded = DateTime.Parse(medtimes.dateadded);
+
+                                                    if (dateforschedule.Date < dateadded.Date)
+                                                    {
+                                                        ScheduleList.Add(medtimes);
+                                                    }
+
+
+                                                }
+                                                else
+                                                {
+                                                    var dateadded = DateTime.Parse(medtimes.dateadded);
+
+                                                    if (dateforschedule.Date >= dateadded.Date)
+                                                    {
+                                                        ScheduleList.Add(medtimes);
+                                                    }
+
+                                                }
                                             }
                                             else
                                             {
-                                                //No Display Name 
-                                                medtimes.DisplayName = SplitDetails[0];
-                                                medtimes.Name = item.medicationtitle;
-                                                medtimes.DisplayNameAdded = true;
-                                                medtimes.RowNum = 2;
-                                                medtimes.RowSpan = 3;
+                                                ScheduleList.Add(medtimes);
                                             }
 
-                                                ScheduleList.Add(medtimes);
+                                            //  ScheduleList.Add(medtimes);
                                         }
+                                       // }
                                     }
                                 }
                             }
@@ -415,29 +581,64 @@ public partial class MainSchedule : ContentPage
                                     // Add all the items for today
                                     foreach (var medtimes in item.schedule)
                                     {
-                                        medtimes.Type = "Medication";
-                                        medtimes.Usermedid = item.id;
-                                        medtimes.Feedbackid = medtimes.id.ToString();
-                                        var SplitDetails = item.details.Split('|');
-                                        if (SplitDetails[0] == "--")
+                                      //  if (medtimes.active == "true")
+                                      //  {
+                                            medtimes.Type = "Medication";
+                                            medtimes.Usermedid = item.id;
+                                            medtimes.Feedbackid = medtimes.id.ToString();
+                                            var SplitDetails = item.details.Split('|');
+                                            if (SplitDetails[0] == "--")
+                                            {
+                                                //Contains Display Name 
+                                                medtimes.DisplayName = item.medicationtitle;
+                                                medtimes.DisplayNameAdded = false;
+                                                medtimes.RowNum = 1;
+                                                medtimes.RowSpan = 2;
+                                            }
+                                            else
+                                            {
+                                                //No Display Name 
+                                                medtimes.DisplayName = SplitDetails[0];
+                                                medtimes.Name = item.medicationtitle;
+                                                medtimes.DisplayNameAdded = true;
+                                                medtimes.RowNum = 2;
+                                                medtimes.RowSpan = 3;
+                                            }
+
+
+                                        //added to check if any inactive med times need to be checked if the user has recorded feedback against it
+                                        if (item.schedule.Any(x => x.active == "false"))
                                         {
-                                            //Contains Display Name 
-                                            medtimes.DisplayName = item.medicationtitle;
-                                            medtimes.DisplayNameAdded = false;
-                                            medtimes.RowNum = 1;
-                                            medtimes.RowSpan = 2;
+                                            if (medtimes.active == "false")
+                                            {
+
+                                                var dateadded = DateTime.Parse(medtimes.dateadded);
+
+                                                if (dateforschedule.Date < dateadded.Date)
+                                                {
+                                                    ScheduleList.Add(medtimes);
+                                                }
+
+
+                                            }
+                                            else
+                                            {
+                                                var dateadded = DateTime.Parse(medtimes.dateadded);
+
+                                                if (dateforschedule.Date >= dateadded.Date)
+                                                {
+                                                    ScheduleList.Add(medtimes);
+                                                }
+
+                                            }
                                         }
                                         else
                                         {
-                                            //No Display Name 
-                                            medtimes.DisplayName = SplitDetails[0];
-                                            medtimes.Name = item.medicationtitle;
-                                            medtimes.DisplayNameAdded = true;
-                                            medtimes.RowNum = 2;
-                                            medtimes.RowSpan = 3;
+                                            ScheduleList.Add(medtimes);
                                         }
 
-                                        ScheduleList.Add(medtimes);
+                                        // ScheduleList.Add(medtimes);
+                                        // }
                                     }
                                 }
                             }
@@ -456,29 +657,64 @@ public partial class MainSchedule : ContentPage
                                     // Add all the items for today
                                     foreach (var medtimes in item.schedule)
                                     {
-                                        medtimes.Type = "Medication";
-                                        medtimes.Usermedid = item.id;
-                                        medtimes.Feedbackid = medtimes.id.ToString();
-                                        var SplitDetails = item.details.Split('|');
-                                        if (SplitDetails[0] == "--")
+                                     //   if (medtimes.active == "true")
+                                     //   {
+                                            medtimes.Type = "Medication";
+                                            medtimes.Usermedid = item.id;
+                                            medtimes.Feedbackid = medtimes.id.ToString();
+                                            var SplitDetails = item.details.Split('|');
+                                            if (SplitDetails[0] == "--")
+                                            {
+                                                //Contains Display Name 
+                                                medtimes.DisplayName = item.medicationtitle;
+                                                medtimes.DisplayNameAdded = false;
+                                                medtimes.RowNum = 1;
+                                                medtimes.RowSpan = 2;
+                                            }
+                                            else
+                                            {
+                                                //No Display Name 
+                                                medtimes.DisplayName = SplitDetails[0];
+                                                medtimes.Name = item.medicationtitle;
+                                                medtimes.DisplayNameAdded = true;
+                                                medtimes.RowNum = 2;
+                                                medtimes.RowSpan = 3;
+                                            }
+
+
+                                        //added to check if any inactive med times need to be checked if the user has recorded feedback against it
+                                        if (item.schedule.Any(x => x.active == "false"))
                                         {
-                                            //Contains Display Name 
-                                            medtimes.DisplayName = item.medicationtitle;
-                                            medtimes.DisplayNameAdded = false;
-                                            medtimes.RowNum = 1;
-                                            medtimes.RowSpan = 2;
+                                            if (medtimes.active == "false")
+                                            {
+
+                                                var dateadded = DateTime.Parse(medtimes.dateadded);
+
+                                                if (dateforschedule.Date < dateadded.Date)
+                                                {
+                                                    ScheduleList.Add(medtimes);
+                                                }
+
+
+                                            }
+                                            else
+                                            {
+                                                var dateadded = DateTime.Parse(medtimes.dateadded);
+
+                                                if (dateforschedule.Date >= dateadded.Date)
+                                                {
+                                                    ScheduleList.Add(medtimes);
+                                                }
+
+                                            }
                                         }
                                         else
                                         {
-                                            //No Display Name 
-                                            medtimes.DisplayName = SplitDetails[0];
-                                            medtimes.Name = item.medicationtitle;
-                                            medtimes.DisplayNameAdded = true;
-                                            medtimes.RowNum = 2;
-                                            medtimes.RowSpan = 3;
+                                            ScheduleList.Add(medtimes);
                                         }
 
-                                            ScheduleList.Add(medtimes);
+                                        //  ScheduleList.Add(medtimes);
+                                        // }
                                     }
                                 }
                             }
@@ -529,7 +765,7 @@ public partial class MainSchedule : ContentPage
                                     newitem.Buttonntop = 0;
                                     newitem.AsReqlblVis = true;
 
-                                    //ScheduleList.Add(newitem);
+                                    ScheduleList.Add(newitem);
                                 }
                             }
                         }
@@ -572,30 +808,33 @@ public partial class MainSchedule : ContentPage
                                 //add all the items 
                                 foreach (var medtimes in item.schedule)
                                 {
-                                    medtimes.Type = "Supplement";
-                                    medtimes.Usermedid = item.id;
-                                    medtimes.Feedbackid = medtimes.id.ToString();
+                                  //  if (medtimes.active == "true")
+                                  //  {
+                                        medtimes.Type = "Supplement";
+                                        medtimes.Usermedid = item.id;
+                                        medtimes.Feedbackid = medtimes.id.ToString();
 
-                                    var SplitDetails = item.details.Split('|');
-                                    if (SplitDetails[0] == "--")
-                                    {
-                                        //Contains Display Name 
-                                        medtimes.DisplayName = item.supplementtitle;
-                                        medtimes.DisplayNameAdded = false;
-                                        medtimes.RowNum = 1;
-                                        medtimes.RowSpan = 2; 
-                                    }
-                                    else
-                                    {
-                                        //No Display Name 
-                                        medtimes.DisplayName = SplitDetails[0];
-                                        medtimes.Name = item.supplementtitle;
-                                        medtimes.DisplayNameAdded = true;
-                                        medtimes.RowNum = 2;
-                                        medtimes.RowSpan = 3;
-                                    }
+                                        var SplitDetails = item.details.Split('|');
+                                        if (SplitDetails[0] == "--")
+                                        {
+                                            //Contains Display Name 
+                                            medtimes.DisplayName = item.supplementtitle;
+                                            medtimes.DisplayNameAdded = false;
+                                            medtimes.RowNum = 1;
+                                            medtimes.RowSpan = 2;
+                                        }
+                                        else
+                                        {
+                                            //No Display Name 
+                                            medtimes.DisplayName = SplitDetails[0];
+                                            medtimes.Name = item.supplementtitle;
+                                            medtimes.DisplayNameAdded = true;
+                                            medtimes.RowNum = 2;
+                                            medtimes.RowSpan = 3;
+                                        }
 
-                                    ScheduleList.Add(medtimes);
+                                        ScheduleList.Add(medtimes);
+                                   // }
                                 }
 
 
@@ -611,29 +850,32 @@ public partial class MainSchedule : ContentPage
                                 //add all the items 
                                 foreach (var medtimes in item.schedule)
                                 {
-                                    medtimes.Type = "Supplement";
-                                    medtimes.Usermedid = item.id;
-                                    medtimes.Feedbackid = medtimes.id.ToString();
+                                  //  if (medtimes.active == "true")
+                                  //  {
+                                        medtimes.Type = "Supplement";
+                                        medtimes.Usermedid = item.id;
+                                        medtimes.Feedbackid = medtimes.id.ToString();
 
-                                    var SplitDetails = item.details.Split('|');
-                                    if (SplitDetails[0] == "--")
-                                    {
-                                        //Contains Display Name 
-                                        medtimes.DisplayName = item.supplementtitle;
-                                        medtimes.DisplayNameAdded = false;
-                                        medtimes.RowNum = 1;
-                                        medtimes.RowSpan = 2; 
-                                    }
-                                    else
-                                    {
-                                        //No Display Name 
-                                        medtimes.DisplayName = SplitDetails[0];
-                                        medtimes.Name = item.supplementtitle;
-                                        medtimes.DisplayNameAdded = true;
-                                        medtimes.RowNum = 2;
-                                        medtimes.RowSpan = 3; 
-                                    }
-                                    ScheduleList.Add(medtimes);
+                                        var SplitDetails = item.details.Split('|');
+                                        if (SplitDetails[0] == "--")
+                                        {
+                                            //Contains Display Name 
+                                            medtimes.DisplayName = item.supplementtitle;
+                                            medtimes.DisplayNameAdded = false;
+                                            medtimes.RowNum = 1;
+                                            medtimes.RowSpan = 2;
+                                        }
+                                        else
+                                        {
+                                            //No Display Name 
+                                            medtimes.DisplayName = SplitDetails[0];
+                                            medtimes.Name = item.supplementtitle;
+                                            medtimes.DisplayNameAdded = true;
+                                            medtimes.RowNum = 2;
+                                            medtimes.RowSpan = 3;
+                                        }
+                                        ScheduleList.Add(medtimes);
+                                   // }
                                 }
                             }
 
@@ -666,31 +908,34 @@ public partial class MainSchedule : ContentPage
                                     //add all the items 
                                     foreach (var medtimes in item.schedule)
                                     {
-                                        if (medtimes.Day == dayname)
-                                        {
-                                            medtimes.Type = "Supplement";
-                                            medtimes.Usermedid = item.id;
-                                            medtimes.Feedbackid = medtimes.id.ToString();
+                                      //  if (medtimes.active == "true")
+                                     //   {
+                                            if (medtimes.Day == dayname)
+                                            {
+                                                medtimes.Type = "Supplement";
+                                                medtimes.Usermedid = item.id;
+                                                medtimes.Feedbackid = medtimes.id.ToString();
 
-                                            var SplitDetails = item.details.Split('|');
-                                            if (SplitDetails[0] == "--")
-                                            {
-                                                //Contains Display Name 
-                                                medtimes.DisplayName = item.supplementtitle;
-                                                medtimes.DisplayNameAdded = false;
-                                                medtimes.RowNum = 1;
-                                                medtimes.RowSpan = 2;
-                                            }
-                                            else
-                                            {
-                                                //No Display Name 
-                                                medtimes.DisplayName = SplitDetails[0];
-                                                medtimes.Name = item.supplementtitle;
-                                                medtimes.DisplayNameAdded = true;
-                                                medtimes.RowNum = 2;
-                                                medtimes.RowSpan = 3; 
-                                            }
-                                            ScheduleList.Add(medtimes);
+                                                var SplitDetails = item.details.Split('|');
+                                                if (SplitDetails[0] == "--")
+                                                {
+                                                    //Contains Display Name 
+                                                    medtimes.DisplayName = item.supplementtitle;
+                                                    medtimes.DisplayNameAdded = false;
+                                                    medtimes.RowNum = 1;
+                                                    medtimes.RowSpan = 2;
+                                                }
+                                                else
+                                                {
+                                                    //No Display Name 
+                                                    medtimes.DisplayName = SplitDetails[0];
+                                                    medtimes.Name = item.supplementtitle;
+                                                    medtimes.DisplayNameAdded = true;
+                                                    medtimes.RowNum = 2;
+                                                    medtimes.RowSpan = 3;
+                                                }
+                                                ScheduleList.Add(medtimes);
+                                          //  }
                                         }
                                     }
                                 }
@@ -715,32 +960,35 @@ public partial class MainSchedule : ContentPage
                                     //add all the items 
                                     foreach (var medtimes in item.schedule)
                                     {
-                                        if (medtimes.Day == dayname)
-                                        {
-                                            medtimes.Type = "Supplement";
-                                            medtimes.Usermedid = item.id;
-                                            medtimes.Feedbackid = medtimes.id.ToString();
-
-                                            var SplitDetails = item.details.Split('|');
-                                            if (SplitDetails[0] == "--")
+                                      //  if (medtimes.active == "true")
+                                     //   {
+                                            if (medtimes.Day == dayname)
                                             {
-                                                //Contains Display Name 
-                                                medtimes.DisplayName = item.supplementtitle;
-                                                medtimes.DisplayNameAdded = false;
-                                                medtimes.RowNum = 1;
-                                                medtimes.RowSpan = 2; 
-                                            }
-                                            else
-                                            {
-                                                //No Display Name 
-                                                medtimes.DisplayName = SplitDetails[0];
-                                                medtimes.Name = item.supplementtitle;
-                                                medtimes.DisplayNameAdded = true;
-                                                medtimes.RowNum = 2;
-                                                medtimes.RowSpan = 3; 
-                                            }
-                                            ScheduleList.Add(medtimes);
+                                                medtimes.Type = "Supplement";
+                                                medtimes.Usermedid = item.id;
+                                                medtimes.Feedbackid = medtimes.id.ToString();
 
+                                                var SplitDetails = item.details.Split('|');
+                                                if (SplitDetails[0] == "--")
+                                                {
+                                                    //Contains Display Name 
+                                                    medtimes.DisplayName = item.supplementtitle;
+                                                    medtimes.DisplayNameAdded = false;
+                                                    medtimes.RowNum = 1;
+                                                    medtimes.RowSpan = 2;
+                                                }
+                                                else
+                                                {
+                                                    //No Display Name 
+                                                    medtimes.DisplayName = SplitDetails[0];
+                                                    medtimes.Name = item.supplementtitle;
+                                                    medtimes.DisplayNameAdded = true;
+                                                    medtimes.RowNum = 2;
+                                                    medtimes.RowSpan = 3;
+                                                }
+                                                ScheduleList.Add(medtimes);
+
+                                         //   }
                                         }
                                     }
                                 }
@@ -767,29 +1015,32 @@ public partial class MainSchedule : ContentPage
                                     // Add all the items for today
                                     foreach (var medtimes in item.schedule)
                                     {
-                                        medtimes.Type = "Supplement";
-                                        medtimes.Usermedid = item.id;
-                                        medtimes.Feedbackid = medtimes.id.ToString();
+                                     //   if (medtimes.active == "true")
+                                     //   {
+                                            medtimes.Type = "Supplement";
+                                            medtimes.Usermedid = item.id;
+                                            medtimes.Feedbackid = medtimes.id.ToString();
 
-                                        var SplitDetails = item.details.Split('|');
-                                        if (SplitDetails[0] == "--")
-                                        {
-                                            //Contains Display Name 
-                                            medtimes.DisplayName = item.supplementtitle;
-                                            medtimes.DisplayNameAdded = false;
-                                            medtimes.RowNum = 1;
-                                            medtimes.RowSpan = 2; 
-                                        }
-                                        else
-                                        {
-                                            //No Display Name 
-                                            medtimes.DisplayName = SplitDetails[0];
-                                            medtimes.Name = item.supplementtitle;
-                                            medtimes.DisplayNameAdded = true;
-                                            medtimes.RowNum = 2;
-                                            medtimes.RowSpan = 3; 
-                                        }
-                                        ScheduleList.Add(medtimes);
+                                            var SplitDetails = item.details.Split('|');
+                                            if (SplitDetails[0] == "--")
+                                            {
+                                                //Contains Display Name 
+                                                medtimes.DisplayName = item.supplementtitle;
+                                                medtimes.DisplayNameAdded = false;
+                                                medtimes.RowNum = 1;
+                                                medtimes.RowSpan = 2;
+                                            }
+                                            else
+                                            {
+                                                //No Display Name 
+                                                medtimes.DisplayName = SplitDetails[0];
+                                                medtimes.Name = item.supplementtitle;
+                                                medtimes.DisplayNameAdded = true;
+                                                medtimes.RowNum = 2;
+                                                medtimes.RowSpan = 3;
+                                            }
+                                            ScheduleList.Add(medtimes);
+                                       // }
                                     }
                                 }
                             }
@@ -808,29 +1059,32 @@ public partial class MainSchedule : ContentPage
                                     // Add all the items for today
                                     foreach (var medtimes in item.schedule)
                                     {
-                                        medtimes.Type = "Supplement";
-                                        medtimes.Usermedid = item.id;
-                                        medtimes.Feedbackid = medtimes.id.ToString();
+                                      //  if (medtimes.active == "true")
+                                      //  {
+                                            medtimes.Type = "Supplement";
+                                            medtimes.Usermedid = item.id;
+                                            medtimes.Feedbackid = medtimes.id.ToString();
 
-                                        var SplitDetails = item.details.Split('|');
-                                        if (SplitDetails[0] == "--")
-                                        {
-                                            //Contains Display Name 
-                                            medtimes.DisplayName = item.supplementtitle;
-                                            medtimes.DisplayNameAdded = false;
-                                            medtimes.RowNum = 1;
-                                            medtimes.RowSpan = 2; 
-                                        }
-                                        else
-                                        {
-                                            //No Display Name 
-                                            medtimes.DisplayName = SplitDetails[0];
-                                            medtimes.Name = item.supplementtitle;
-                                            medtimes.DisplayNameAdded = true;
-                                            medtimes.RowNum = 2;
-                                            medtimes.RowSpan = 3; 
-                                        }
-                                        ScheduleList.Add(medtimes);
+                                            var SplitDetails = item.details.Split('|');
+                                            if (SplitDetails[0] == "--")
+                                            {
+                                                //Contains Display Name 
+                                                medtimes.DisplayName = item.supplementtitle;
+                                                medtimes.DisplayNameAdded = false;
+                                                medtimes.RowNum = 1;
+                                                medtimes.RowSpan = 2;
+                                            }
+                                            else
+                                            {
+                                                //No Display Name 
+                                                medtimes.DisplayName = SplitDetails[0];
+                                                medtimes.Name = item.supplementtitle;
+                                                medtimes.DisplayNameAdded = true;
+                                                medtimes.RowNum = 2;
+                                                medtimes.RowSpan = 3;
+                                            }
+                                            ScheduleList.Add(medtimes);
+                                       // }
                                     }
                                 }
                             }
@@ -912,8 +1166,14 @@ public partial class MainSchedule : ContentPage
                 }
                 else
                 {
+
+                    //check if any of them are edited
+
                     foreach (var med in ScheduleList)
                     {
+
+                
+
                         med.Buttonenabled = true;
                         med.Buttonop = 0.2;
                         med.Buttonntop = 0.2;
@@ -1091,9 +1351,12 @@ public partial class MainSchedule : ContentPage
                     }
                 }
 
+
+
+
                 mainschedulelistview.ItemsSource = orderbytime;
                 //   int totalItems = GroupedScheduleList.Sum(g => g.Count()) + GroupedScheduleList.Count; // Items + Group headers
-                mainschedulelistview.HeightRequest = ScheduleList.Count * 110;
+                mainschedulelistview.HeightRequest = ScheduleList.Count * 130;
             }
         }
         catch (Exception Ex)
@@ -1255,6 +1518,2692 @@ public partial class MainSchedule : ContentPage
         }
     }
 
+
+    async void previousdaypopulateschedule()
+    {
+        try
+        {
+            ScheduleList.Clear();
+            var sd = new DateTime();
+            var ed = new DateTime();
+            bool hasnoendate = new bool();
+
+            foreach(var item in AllUserMedications)
+            {
+                if(item.status == "Active")
+                {
+
+                    sd = DateTime.Parse(item.startdate);
+
+                    if (!string.IsNullOrEmpty(item.enddate))
+                    {
+                        ed = DateTime.Parse(item.enddate);
+                    }
+                    else
+                    {
+                        hasnoendate = true;
+                    }
+
+                    if (item.schedule.Any(x => x.active == "false"))
+                    {
+
+                        // var groupids = item.schedule.GroupBy(x => x.groupscheduleid).ToList();
+
+                        var filtermeds = item.schedule.Where(m => m.active == "true" && dateforschedule.Date >= DateTime.Parse(m.dateadded).Date)
+    .Concat(
+        item.schedule
+            .Where(m => m.active == "false" && dateforschedule.Date <= DateTime.Parse(m.dateadded).Date)
+            .GroupBy(m => DateTime.Parse(m.dateadded).Date)
+            .Select(m => m.OrderByDescending(g => g.dateadded).First())
+    );
+
+
+                        var groupids = filtermeds.GroupBy(m => m.groupscheduleid).ToList();
+
+
+                        foreach (var groupid in groupids)
+                        {
+
+                            foreach (var medtimes in groupid)
+                            {
+
+                                var splitstring = medtimes.frequency.Split('|');
+
+                                if (splitstring[0] == "Daily")
+                                {
+
+                                    if (hasnoendate)
+                                    {
+
+                                        if (dateforschedule >= sd)
+                                        {
+
+                                            if (!string.IsNullOrEmpty(medtimes.TimeDosage))
+                                            {
+
+                                                var daylist = medtimes.TimeDosage.Split(',').ToList();
+
+                                                int Index = 0;
+                                                foreach (var x in daylist)
+                                                {
+                                                    var medtimes1 = new MedtimesDosages();
+                                                    // if (medtimes.active == "true")
+                                                    // {
+                                                    var GetDay = x.Split('|');
+                                                    medtimes1.time = GetDay[0].Trim();
+                                                    medtimes1.Dosage = GetDay[1];
+                                                    medtimes1.dosageunit = medtimes.dosageunit;
+
+                                                    medtimes1.Type = "Medication";
+                                                    medtimes1.Usermedid = item.id;
+                                                    medtimes1.Feedbackid = medtimes.id.ToString();
+                                                    var SplitDetails = item.details.Split('|');
+                                                    if (SplitDetails[0] == "--")
+                                                    {
+                                                        //Contains Display Name 
+                                                        medtimes1.DisplayName = item.medicationtitle;
+                                                        medtimes1.DisplayNameAdded = false;
+                                                        medtimes1.RowNum = 1;
+                                                        medtimes1.RowSpan = 2;
+                                                    }
+                                                    else
+                                                    {
+                                                        //No Display Name 
+                                                        medtimes1.DisplayName = SplitDetails[0];
+                                                        medtimes1.Name = item.medicationtitle;
+                                                        medtimes1.DisplayNameAdded = true;
+                                                        medtimes1.RowNum = 2;
+                                                        medtimes1.RowSpan = 3;
+                                                    }
+
+
+                                                    ScheduleList.Add(medtimes1);
+                                                }
+
+                                            }
+                                            else
+                                            {
+                                                ScheduleList.Add(medtimes);
+                                            }
+                                            //ScheduleList.Add(medtimes);
+                                            //  }
+
+
+
+                                        }
+
+
+                                    }
+                                    else
+                                    {
+
+                                        if (dateforschedule >= sd && dateforschedule <= ed)
+                                        {
+                                            //add all the items 
+
+                                            if (!string.IsNullOrEmpty(medtimes.TimeDosage))
+                                            {
+
+                                                var daylist = medtimes.TimeDosage.Split(',').ToList();
+
+                                                int Index = 0;
+                                                foreach (var x in daylist)
+                                                {
+                                                    var medtimes1 = new MedtimesDosages();
+                                                    // if (medtimes.active == "true")
+                                                    // {
+                                                    var GetDay = x.Split('|');
+                                                    medtimes1.time = GetDay[0].Trim();
+                                                    medtimes1.Dosage = GetDay[1];
+                                                    medtimes1.dosageunit = medtimes.dosageunit;
+
+                                                    medtimes1.Type = "Medication";
+                                                    medtimes1.Usermedid = item.id;
+                                                    medtimes1.Feedbackid = medtimes.id.ToString();
+                                                    var SplitDetails = item.details.Split('|');
+                                                    if (SplitDetails[0] == "--")
+                                                    {
+                                                        //Contains Display Name 
+                                                        medtimes1.DisplayName = item.medicationtitle;
+                                                        medtimes1.DisplayNameAdded = false;
+                                                        medtimes1.RowNum = 1;
+                                                        medtimes1.RowSpan = 2;
+                                                    }
+                                                    else
+                                                    {
+                                                        //No Display Name 
+                                                        medtimes1.DisplayName = SplitDetails[0];
+                                                        medtimes1.Name = item.medicationtitle;
+                                                        medtimes1.DisplayNameAdded = true;
+                                                        medtimes1.RowNum = 2;
+                                                        medtimes1.RowSpan = 3;
+                                                    }
+
+
+                                                    ScheduleList.Add(medtimes1);
+                                                }
+
+                                            }
+                                            else
+                                            {
+                                                ScheduleList.Add(medtimes);
+                                            }
+
+
+                                            //ScheduleList.Add(medtimes);
+                                            //  }
+
+                                        }
+
+                                    }
+
+
+
+
+
+                                }
+                                else if (splitstring[0] == "Weekly")
+                                {
+                                    if (hasnoendate)
+                                    {
+
+                                        if (dateforschedule >= sd)
+                                        {
+
+                                            var dayname = dateforschedule.ToString("ddd");
+                                            var daynames = dateforschedule.ToString("dddd");
+                                            var dayfour = daynames.Substring(0, 4);
+                                            //check if today is within the days list
+                                            if (splitstring[1].Contains(dayname))
+                                            {
+
+                                                var daylist = medtimes.TimeDosage.Split(',').ToList();
+
+                                                int Index = 0;
+                                                foreach (var x in daylist)
+                                                {
+                                                    var medtimes1 = new MedtimesDosages();
+
+                                                    var GetDay = x.Split('|');
+                                                    medtimes1.Day = GetDay[2];
+                                                    // Index = Index + 1;
+
+
+                                                    medtimes1.time = GetDay[0].Trim();
+                                                    medtimes1.Dosage = GetDay[1];
+                                                    medtimes1.dosageunit = medtimes.dosageunit;
+                                                    //   var GetDay = medtimes.frequency.Split('|');
+                                                    //   medtimes.Day = GetDay[1];
+
+                                                    //add all the items 
+
+                                                    //  if (medtimes.active == "true")
+                                                    //   {
+                                                    if (medtimes1.Day.Contains(dayname) || medtimes1.Day == dayfour)
+                                                    {
+                                                        medtimes1.Type = "Medication";
+                                                        medtimes1.Usermedid = item.id;
+                                                        medtimes1.Feedbackid = medtimes.id.ToString();
+                                                        var SplitDetails = item.details.Split('|');
+                                                        if (SplitDetails[0] == "--")
+                                                        {
+                                                            //Contains Display Name 
+                                                            medtimes1.DisplayName = item.medicationtitle;
+                                                            medtimes1.DisplayNameAdded = false;
+                                                            medtimes1.RowNum = 1;
+                                                            medtimes1.RowSpan = 2;
+                                                        }
+                                                        else
+                                                        {
+                                                            //No Display Name 
+                                                            medtimes1.DisplayName = SplitDetails[0];
+                                                            medtimes1.Name = item.medicationtitle;
+                                                            medtimes1.DisplayNameAdded = true;
+                                                            medtimes1.RowNum = 2;
+                                                            medtimes1.RowSpan = 3;
+                                                        }
+
+
+                                                        //added to check if any inactive med times need to be checked if the user has recorded feedback against it
+
+                                                        ScheduleList.Add(medtimes1);
+
+
+                                                        // ScheduleList.Add(medtimes);
+                                                        //  }
+                                                    }
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+
+                                        if (dateforschedule >= sd && dateforschedule <= ed)
+                                        {
+                                            var dayname = dateforschedule.ToString("ddd");
+                                            //check if today is within the days list
+                                            if (splitstring[1].Contains(dayname))
+                                            {
+                                                var GetDay = medtimes.frequency.Split('|');
+                                                medtimes.Day = GetDay[1].Trim();
+                                                //int Index = 0;
+                                                //foreach (var x in item.schedule)
+                                                //{
+                                                //    var GetDay = item.TimeDosage[Index].Split('|');
+                                                //    x.Day = GetDay[2];
+                                                //    Index = Index + 1;
+                                                //}
+                                                //add all the items 
+
+                                                //  if (medtimes.active == "true")
+                                                //   {
+                                                if (medtimes.Day.Contains(dayname))
+                                                {
+                                                    medtimes.Type = "Medication";
+                                                    medtimes.Usermedid = item.id;
+                                                    medtimes.Feedbackid = medtimes.id.ToString();
+                                                    var SplitDetails = item.details.Split('|');
+                                                    if (SplitDetails[0] == "--")
+                                                    {
+                                                        //Contains Display Name 
+                                                        medtimes.DisplayName = item.medicationtitle;
+                                                        medtimes.DisplayNameAdded = false;
+                                                        medtimes.RowNum = 1;
+                                                        medtimes.RowSpan = 2;
+                                                    }
+                                                    else
+                                                    {
+                                                        //No Display Name 
+                                                        medtimes.DisplayName = SplitDetails[0];
+                                                        medtimes.Name = item.medicationtitle;
+                                                        medtimes.DisplayNameAdded = true;
+                                                        medtimes.RowNum = 2;
+                                                        medtimes.RowSpan = 3;
+                                                    }
+
+
+                                                    //added to check if any inactive med times need to be checked if the user has recorded feedback against it
+
+                                                    ScheduleList.Add(medtimes);
+
+                                                    //  ScheduleList.Add(medtimes);
+                                                }
+                                                // }
+
+                                            }
+                                        }
+
+                                    }
+                                }
+                                else if (splitstring[0] == "Days Interval")
+                                {
+
+                                    var daycount = Convert.ToInt32(splitstring[1]);
+
+                                    if (hasnoendate)
+                                    {
+
+                                        if (dateforschedule >= sd)
+                                        {
+
+                                            // Calculate the difference in days from the start date
+                                            var daysDifference = (dateforschedule - sd).Days;
+
+                                            // Check if today's date is a multiple of the daycount (e.g., every 3rd day)
+                                            if (daysDifference % daycount == 0)
+                                            {
+                                                // Add all the items for today
+
+                                                //  if (medtimes.active == "true")
+                                                //  {
+                                                if (!string.IsNullOrEmpty(medtimes.TimeDosage))
+                                                {
+
+                                                    var daylist = medtimes.TimeDosage.Split(',').ToList();
+
+                                                    int Index = 0;
+                                                    foreach (var x in daylist)
+                                                    {
+                                                        var medtimes1 = new MedtimesDosages();
+                                                        // if (medtimes.active == "true")
+                                                        // {
+                                                        var GetDay = x.Split('|');
+                                                        medtimes1.time = GetDay[0].Trim();
+                                                        medtimes1.Dosage = GetDay[1];
+                                                        medtimes1.dosageunit = medtimes.dosageunit;
+
+                                                        medtimes1.Type = "Medication";
+                                                        medtimes1.Usermedid = item.id;
+                                                        medtimes1.Feedbackid = medtimes.id.ToString();
+                                                        var SplitDetails = item.details.Split('|');
+                                                        if (SplitDetails[0] == "--")
+                                                        {
+                                                            //Contains Display Name 
+                                                            medtimes1.DisplayName = item.medicationtitle;
+                                                            medtimes1.DisplayNameAdded = false;
+                                                            medtimes1.RowNum = 1;
+                                                            medtimes1.RowSpan = 2;
+                                                        }
+                                                        else
+                                                        {
+                                                            //No Display Name 
+                                                            medtimes1.DisplayName = SplitDetails[0];
+                                                            medtimes1.Name = item.medicationtitle;
+                                                            medtimes1.DisplayNameAdded = true;
+                                                            medtimes1.RowNum = 2;
+                                                            medtimes1.RowSpan = 3;
+                                                        }
+
+
+                                                        ScheduleList.Add(medtimes1);
+                                                    }
+
+                                                }
+                                                else
+                                                {
+                                                    ScheduleList.Add(medtimes);
+                                                }
+
+
+                                                // ScheduleList.Add(medtimes);
+                                                // }
+
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+
+                                        if (dateforschedule >= sd && dateforschedule <= ed)
+                                        {
+                                            // Calculate the difference in days from the start date
+                                            var daysDifference = (DateTime.Now - sd).TotalDays;
+
+                                            // Check if today's date is a multiple of the daycount (e.g., every 3rd day)
+                                            if (daysDifference % daycount == 0)
+                                            {
+                                                // Add all the items for today
+
+                                                //   if (medtimes.active == "true")
+                                                //   {
+                                                if (!string.IsNullOrEmpty(medtimes.TimeDosage))
+                                                {
+
+                                                    var daylist = medtimes.TimeDosage.Split(',').ToList();
+
+                                                    int Index = 0;
+                                                    foreach (var x in daylist)
+                                                    {
+                                                        var medtimes1 = new MedtimesDosages();
+                                                        // if (medtimes.active == "true")
+                                                        // {
+                                                        var GetDay = x.Split('|');
+                                                        medtimes1.time = GetDay[0].Trim();
+                                                        medtimes1.Dosage = GetDay[1];
+                                                        medtimes1.dosageunit = medtimes.dosageunit;
+
+                                                        medtimes1.Type = "Medication";
+                                                        medtimes1.Usermedid = item.id;
+                                                        medtimes1.Feedbackid = medtimes.id.ToString();
+                                                        var SplitDetails = item.details.Split('|');
+                                                        if (SplitDetails[0] == "--")
+                                                        {
+                                                            //Contains Display Name 
+                                                            medtimes1.DisplayName = item.medicationtitle;
+                                                            medtimes1.DisplayNameAdded = false;
+                                                            medtimes1.RowNum = 1;
+                                                            medtimes1.RowSpan = 2;
+                                                        }
+                                                        else
+                                                        {
+                                                            //No Display Name 
+                                                            medtimes1.DisplayName = SplitDetails[0];
+                                                            medtimes1.Name = item.medicationtitle;
+                                                            medtimes1.DisplayNameAdded = true;
+                                                            medtimes1.RowNum = 2;
+                                                            medtimes1.RowSpan = 3;
+                                                        }
+
+
+                                                        ScheduleList.Add(medtimes1);
+                                                    }
+
+                                                }
+                                                else
+                                                {
+                                                    ScheduleList.Add(medtimes);
+                                                }
+
+
+                                                //  ScheduleList.Add(medtimes);
+                                                // }
+
+                                            }
+                                        }
+
+                                    }
+
+
+                                }
+                                else if (splitstring[0] == "As Required")
+                                {
+                                    if (item.feedback != null)
+                                    {
+
+
+                                        //var convertdate = DateTime.Parse(medtimes.datetime);
+
+                                        //if (convertdate.Date == dateforschedule.Date)
+                                        //{
+                                        //    var newitem = new MedtimesDosages();
+                                        //    newitem.Type = "Medication";
+                                        //    newitem.Usermedid = item.id;
+                                        //    newitem.Feedbackid = medtimes.id.ToString();
+                                        //    var SplitDetails = item.details.Split('|');
+                                        //    if (SplitDetails[0] == "--")
+                                        //    {
+                                        //        //Contains Display Name 
+                                        //        newitem.DisplayName = item.medicationtitle;
+                                        //        newitem.DisplayNameAdded = false;
+                                        //        newitem.RowNum = 1;
+                                        //        newitem.RowSpan = 2;
+                                        //    }
+                                        //    else
+                                        //    {
+                                        //        //No Display Name 
+                                        //        newitem.DisplayName = SplitDetails[0];
+                                        //        newitem.Name = item.medicationtitle;
+                                        //        newitem.DisplayNameAdded = true;
+                                        //        newitem.RowNum = 2;
+                                        //        newitem.RowSpan = 3;
+
+                                        //    }
+
+                                        //    newitem.Dosage = medtimes.Recorded;
+                                        //    newitem.dosageunit = item.unit;
+                                        //    newitem.time = "00:00";
+                                        //    newitem.Buttonop = 1;
+                                        //    newitem.Buttonntop = 0;
+                                        //    newitem.AsReqlblVis = true;
+
+                                        //    ScheduleList.Add(newitem);
+                                        //}
+
+                                    }
+
+
+                                }
+
+
+
+                            }
+
+
+
+                        }
+
+
+
+
+
+                    }
+                    else
+                    {
+
+                        //hasnt been edited 
+
+                        var splitstring = item.frequency.Split('|');
+
+                        if (splitstring[0] == "Daily")
+                        {
+
+                            if (hasnoendate)
+                            {
+
+                                if (dateforschedule >= sd)
+                                {
+
+                                    //add all the items 
+                                    foreach (var medtimes in item.schedule)
+                                    {
+                                        // if (medtimes.active == "true")
+                                        // {
+
+                                        medtimes.Type = "Medication";
+                                        medtimes.Usermedid = item.id;
+                                        medtimes.Feedbackid = medtimes.id.ToString();
+                                        var SplitDetails = item.details.Split('|');
+                                        if (SplitDetails[0] == "--")
+                                        {
+                                            //Contains Display Name 
+                                            medtimes.DisplayName = item.medicationtitle;
+                                            medtimes.DisplayNameAdded = false;
+                                            medtimes.RowNum = 1;
+                                            medtimes.RowSpan = 2;
+                                        }
+                                        else
+                                        {
+                                            //No Display Name 
+                                            medtimes.DisplayName = SplitDetails[0];
+                                            medtimes.Name = item.medicationtitle;
+                                            medtimes.DisplayNameAdded = true;
+                                            medtimes.RowNum = 2;
+                                            medtimes.RowSpan = 3;
+                                        }
+
+                                        //added to check if any inactive med times need to be checked if the user has recorded feedback against it
+                                        if (item.schedule.Any(x => x.active == "false"))
+                                        {
+                                            if (medtimes.active == "false")
+                                            {
+
+                                                if (medtimes.frequency != item.frequency)
+                                                {
+                                                    if (dateforschedule.Date >= DateTime.Now.Date)
+                                                    {
+                                                        //do nothing
+                                                    }
+                                                    else
+                                                    {
+
+                                                        populatescheduleforchangedfrequency(medtimes, item);
+                                                    }
+                                                }
+                                                else
+                                                {
+
+                                                    var dateadded = DateTime.Parse(medtimes.dateadded);
+
+                                                    if (dateforschedule.Date < dateadded.Date)
+                                                    {
+                                                        ScheduleList.Add(medtimes);
+                                                    }
+                                                }
+
+
+                                            }
+                                            else
+                                            {
+                                                var dateadded = DateTime.Parse(medtimes.dateadded);
+
+                                                if (dateforschedule.Date >= dateadded.Date)
+                                                {
+                                                    ScheduleList.Add(medtimes);
+                                                }
+
+                                            }
+                                        }
+                                        else
+                                        {
+                                            ScheduleList.Add(medtimes);
+                                        }
+
+                                        //ScheduleList.Add(medtimes);
+                                        //  }
+                                    }
+
+
+                                }
+
+
+                            }
+                            else
+                            {
+
+                                if (dateforschedule >= sd && dateforschedule <= ed)
+                                {
+                                    //add all the items 
+                                    foreach (var medtimes in item.schedule)
+                                    {
+                                        //   if (medtimes.active == "true")
+                                        //  {
+                                        medtimes.Type = "Medication";
+                                        medtimes.Usermedid = item.id;
+                                        medtimes.Feedbackid = medtimes.id.ToString();
+
+                                        var SplitDetails = item.details.Split('|');
+                                        if (SplitDetails[0] == "--")
+                                        {
+                                            //Contains Display Name 
+                                            medtimes.DisplayName = item.medicationtitle;
+                                            medtimes.DisplayNameAdded = false;
+                                            medtimes.RowNum = 1;
+                                            medtimes.RowSpan = 2;
+
+                                        }
+                                        else
+                                        {
+                                            //No Display Name 
+                                            medtimes.DisplayName = SplitDetails[0];
+                                            medtimes.Name = item.medicationtitle;
+                                            medtimes.DisplayNameAdded = true;
+                                            medtimes.RowNum = 2;
+                                            medtimes.RowSpan = 3;
+                                        }
+
+                                        //added to check if any inactive med times need to be checked if the user has recorded feedback against it
+                                        if (item.schedule.Any(x => x.active == "false"))
+                                        {
+                                            if (medtimes.active == "false")
+                                            {
+
+                                                var dateadded = DateTime.Parse(medtimes.dateadded);
+
+                                                if (dateforschedule.Date < dateadded.Date)
+                                                {
+                                                    ScheduleList.Add(medtimes);
+                                                }
+
+
+                                            }
+                                            else
+                                            {
+                                                var dateadded = DateTime.Parse(medtimes.dateadded);
+
+                                                if (dateforschedule.Date >= dateadded.Date)
+                                                {
+                                                    ScheduleList.Add(medtimes);
+                                                }
+
+                                            }
+                                        }
+                                        else
+                                        {
+                                            ScheduleList.Add(medtimes);
+                                        }
+
+                                        //ScheduleList.Add(medtimes);
+                                        //  }
+                                    }
+                                }
+
+                            }
+
+
+
+
+
+                        }
+                        else if (splitstring[0] == "Weekly")
+                        {
+                            if (hasnoendate)
+                            {
+
+                                if (dateforschedule >= sd)
+                                {
+
+                                    var dayname = dateforschedule.ToString("ddd");
+                                    var daynames = dateforschedule.ToString("dddd");
+                                    var dayfour = daynames.Substring(0, 4);
+                                    //check if today is within the days list
+                                    if (splitstring[1].Contains(dayname))
+                                    {
+                                        int Index = 0;
+                                        foreach (var x in item.schedule)
+                                        {
+                                            var GetDay = item.TimeDosage[Index].Split('|');
+                                            x.Day = GetDay[2];
+                                            Index = Index + 1;
+                                        }
+
+                                        //add all the items 
+                                        foreach (var medtimes in item.schedule)
+                                        {
+                                            //  if (medtimes.active == "true")
+                                            //   {
+                                            if (medtimes.Day.Contains(dayname) || medtimes.Day == dayfour)
+                                            {
+                                                medtimes.Type = "Medication";
+                                                medtimes.Usermedid = item.id;
+                                                medtimes.Feedbackid = medtimes.id.ToString();
+                                                var SplitDetails = item.details.Split('|');
+                                                if (SplitDetails[0] == "--")
+                                                {
+                                                    //Contains Display Name 
+                                                    medtimes.DisplayName = item.medicationtitle;
+                                                    medtimes.DisplayNameAdded = false;
+                                                    medtimes.RowNum = 1;
+                                                    medtimes.RowSpan = 2;
+                                                }
+                                                else
+                                                {
+                                                    //No Display Name 
+                                                    medtimes.DisplayName = SplitDetails[0];
+                                                    medtimes.Name = item.medicationtitle;
+                                                    medtimes.DisplayNameAdded = true;
+                                                    medtimes.RowNum = 2;
+                                                    medtimes.RowSpan = 3;
+                                                }
+
+
+                                                //added to check if any inactive med times need to be checked if the user has recorded feedback against it
+                                                if (item.schedule.Any(x => x.active == "false"))
+                                                {
+                                                    if (medtimes.active == "false")
+                                                    {
+
+                                                        var dateadded = DateTime.Parse(medtimes.dateadded);
+
+                                                        if (dateforschedule.Date < dateadded.Date)
+                                                        {
+                                                            ScheduleList.Add(medtimes);
+                                                        }
+
+
+                                                    }
+                                                    else
+                                                    {
+                                                        var dateadded = DateTime.Parse(medtimes.dateadded);
+
+                                                        if (dateforschedule.Date >= dateadded.Date)
+                                                        {
+                                                            ScheduleList.Add(medtimes);
+                                                        }
+
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    ScheduleList.Add(medtimes);
+                                                }
+
+                                                // ScheduleList.Add(medtimes);
+                                                //  }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+
+                                if (dateforschedule >= sd && dateforschedule <= ed)
+                                {
+                                    var dayname = dateforschedule.ToString("ddd");
+                                    //check if today is within the days list
+                                    if (splitstring[1].Contains(dayname))
+                                    {
+                                        int Index = 0;
+                                        foreach (var x in item.schedule)
+                                        {
+                                            var GetDay = item.TimeDosage[Index].Split('|');
+                                            x.Day = GetDay[2];
+                                            Index = Index + 1;
+                                        }
+                                        //add all the items 
+                                        foreach (var medtimes in item.schedule)
+                                        {
+                                            //  if (medtimes.active == "true")
+                                            //   {
+                                            if (medtimes.Day.Contains(dayname))
+                                            {
+                                                medtimes.Type = "Medication";
+                                                medtimes.Usermedid = item.id;
+                                                medtimes.Feedbackid = medtimes.id.ToString();
+                                                var SplitDetails = item.details.Split('|');
+                                                if (SplitDetails[0] == "--")
+                                                {
+                                                    //Contains Display Name 
+                                                    medtimes.DisplayName = item.medicationtitle;
+                                                    medtimes.DisplayNameAdded = false;
+                                                    medtimes.RowNum = 1;
+                                                    medtimes.RowSpan = 2;
+                                                }
+                                                else
+                                                {
+                                                    //No Display Name 
+                                                    medtimes.DisplayName = SplitDetails[0];
+                                                    medtimes.Name = item.medicationtitle;
+                                                    medtimes.DisplayNameAdded = true;
+                                                    medtimes.RowNum = 2;
+                                                    medtimes.RowSpan = 3;
+                                                }
+
+
+                                                //added to check if any inactive med times need to be checked if the user has recorded feedback against it
+                                                if (item.schedule.Any(x => x.active == "false"))
+                                                {
+                                                    if (medtimes.active == "false")
+                                                    {
+
+                                                        var dateadded = DateTime.Parse(medtimes.dateadded);
+
+                                                        if (dateforschedule.Date < dateadded.Date)
+                                                        {
+                                                            ScheduleList.Add(medtimes);
+                                                        }
+
+
+                                                    }
+                                                    else
+                                                    {
+                                                        var dateadded = DateTime.Parse(medtimes.dateadded);
+
+                                                        if (dateforschedule.Date >= dateadded.Date)
+                                                        {
+                                                            ScheduleList.Add(medtimes);
+                                                        }
+
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    ScheduleList.Add(medtimes);
+                                                }
+
+                                                //  ScheduleList.Add(medtimes);
+                                            }
+                                            // }
+                                        }
+                                    }
+                                }
+
+                            }
+                        }
+                        else if (splitstring[0] == "Days Interval")
+                        {
+
+                            var daycount = Convert.ToInt32(splitstring[1]);
+
+                            if (hasnoendate)
+                            {
+
+                                if (dateforschedule >= sd)
+                                {
+
+                                    // Calculate the difference in days from the start date
+                                    var daysDifference = (dateforschedule - sd).Days;
+
+                                    // Check if today's date is a multiple of the daycount (e.g., every 3rd day)
+                                    if (daysDifference % daycount == 0)
+                                    {
+                                        // Add all the items for today
+                                        foreach (var medtimes in item.schedule)
+                                        {
+                                            //  if (medtimes.active == "true")
+                                            //  {
+                                            medtimes.Type = "Medication";
+                                            medtimes.Usermedid = item.id;
+                                            medtimes.Feedbackid = medtimes.id.ToString();
+                                            var SplitDetails = item.details.Split('|');
+                                            if (SplitDetails[0] == "--")
+                                            {
+                                                //Contains Display Name 
+                                                medtimes.DisplayName = item.medicationtitle;
+                                                medtimes.DisplayNameAdded = false;
+                                                medtimes.RowNum = 1;
+                                                medtimes.RowSpan = 2;
+                                            }
+                                            else
+                                            {
+                                                //No Display Name 
+                                                medtimes.DisplayName = SplitDetails[0];
+                                                medtimes.Name = item.medicationtitle;
+                                                medtimes.DisplayNameAdded = true;
+                                                medtimes.RowNum = 2;
+                                                medtimes.RowSpan = 3;
+                                            }
+
+
+                                            //added to check if any inactive med times need to be checked if the user has recorded feedback against it
+                                            if (item.schedule.Any(x => x.active == "false"))
+                                            {
+                                                if (medtimes.active == "false")
+                                                {
+
+                                                    var dateadded = DateTime.Parse(medtimes.dateadded);
+
+                                                    if (dateforschedule.Date < dateadded.Date)
+                                                    {
+                                                        ScheduleList.Add(medtimes);
+                                                    }
+
+
+                                                }
+                                                else
+                                                {
+                                                    var dateadded = DateTime.Parse(medtimes.dateadded);
+
+                                                    if (dateforschedule.Date >= dateadded.Date)
+                                                    {
+                                                        ScheduleList.Add(medtimes);
+                                                    }
+
+                                                }
+                                            }
+                                            else
+                                            {
+                                                ScheduleList.Add(medtimes);
+                                            }
+
+                                            // ScheduleList.Add(medtimes);
+                                            // }
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+
+                                if (dateforschedule >= sd && dateforschedule <= ed)
+                                {
+                                    // Calculate the difference in days from the start date
+                                    var daysDifference = (DateTime.Now - sd).TotalDays;
+
+                                    // Check if today's date is a multiple of the daycount (e.g., every 3rd day)
+                                    if (daysDifference % daycount == 0)
+                                    {
+                                        // Add all the items for today
+                                        foreach (var medtimes in item.schedule)
+                                        {
+                                            //   if (medtimes.active == "true")
+                                            //   {
+                                            medtimes.Type = "Medication";
+                                            medtimes.Usermedid = item.id;
+                                            medtimes.Feedbackid = medtimes.id.ToString();
+                                            var SplitDetails = item.details.Split('|');
+                                            if (SplitDetails[0] == "--")
+                                            {
+                                                //Contains Display Name 
+                                                medtimes.DisplayName = item.medicationtitle;
+                                                medtimes.DisplayNameAdded = false;
+                                                medtimes.RowNum = 1;
+                                                medtimes.RowSpan = 2;
+                                            }
+                                            else
+                                            {
+                                                //No Display Name 
+                                                medtimes.DisplayName = SplitDetails[0];
+                                                medtimes.Name = item.medicationtitle;
+                                                medtimes.DisplayNameAdded = true;
+                                                medtimes.RowNum = 2;
+                                                medtimes.RowSpan = 3;
+                                            }
+
+
+                                            //added to check if any inactive med times need to be checked if the user has recorded feedback against it
+                                            if (item.schedule.Any(x => x.active == "false"))
+                                            {
+                                                if (medtimes.active == "false")
+                                                {
+
+                                                    var dateadded = DateTime.Parse(medtimes.dateadded);
+
+                                                    if (dateforschedule.Date < dateadded.Date)
+                                                    {
+                                                        ScheduleList.Add(medtimes);
+                                                    }
+
+
+                                                }
+                                                else
+                                                {
+                                                    var dateadded = DateTime.Parse(medtimes.dateadded);
+
+                                                    if (dateforschedule.Date >= dateadded.Date)
+                                                    {
+                                                        ScheduleList.Add(medtimes);
+                                                    }
+
+                                                }
+                                            }
+                                            else
+                                            {
+                                                ScheduleList.Add(medtimes);
+                                            }
+
+                                            //  ScheduleList.Add(medtimes);
+                                            // }
+                                        }
+                                    }
+                                }
+
+                            }
+
+
+                        }
+                        else if (splitstring[0] == "As Required")
+                        {
+                            if (item.feedback != null)
+                            {
+
+                                foreach (var medtimes in item.feedback)
+                                {
+                                    var convertdate = DateTime.Parse(medtimes.datetime);
+
+                                    if (convertdate.Date == dateforschedule.Date)
+                                    {
+                                        var newitem = new MedtimesDosages();
+                                        newitem.Type = "Medication";
+                                        newitem.Usermedid = item.id;
+                                        newitem.Feedbackid = medtimes.id.ToString();
+                                        var SplitDetails = item.details.Split('|');
+                                        if (SplitDetails[0] == "--")
+                                        {
+                                            //Contains Display Name 
+                                            newitem.DisplayName = item.medicationtitle;
+                                            newitem.DisplayNameAdded = false;
+                                            newitem.RowNum = 1;
+                                            newitem.RowSpan = 2;
+                                        }
+                                        else
+                                        {
+                                            //No Display Name 
+                                            newitem.DisplayName = SplitDetails[0];
+                                            newitem.Name = item.medicationtitle;
+                                            newitem.DisplayNameAdded = true;
+                                            newitem.RowNum = 2;
+                                            newitem.RowSpan = 3;
+
+                                        }
+
+                                        newitem.Dosage = medtimes.Recorded;
+                                        newitem.dosageunit = item.unit;
+                                        newitem.time = "00:00";
+                                        newitem.Buttonop = 1;
+                                        newitem.Buttonntop = 0;
+                                        newitem.AsReqlblVis = true;
+
+                                        ScheduleList.Add(newitem);
+                                    }
+                                }
+                            }
+
+
+                        }
+
+
+
+                    }
+
+
+                }
+
+
+
+
+
+            }
+
+
+
+
+            foreach (var item in AllUserSupplements)
+            {
+                if (item.status == "Active")
+                {
+
+                    sd = DateTime.Parse(item.startdate);
+
+                    if (!string.IsNullOrEmpty(item.enddate))
+                    {
+                        ed = DateTime.Parse(item.enddate);
+                    }
+                    else
+                    {
+                        hasnoendate = true;
+                    }
+
+                    if (item.schedule.Any(x => x.active == "false"))
+                    {
+
+                        // var groupids = item.schedule.GroupBy(x => x.groupscheduleid).ToList();
+                        var filtermeds = item.schedule.Where(m => m.active == "true" && dateforschedule.Date >= DateTime.Parse(m.dateadded).Date)
+.Concat(
+item.schedule
+  .Where(m => m.active == "false" && dateforschedule.Date <= DateTime.Parse(m.dateadded).Date)
+  .GroupBy(m => DateTime.Parse(m.dateadded).Date)
+  .Select(m => m.OrderByDescending(g => g.dateadded).First())
+);
+
+
+                        var groupids = filtermeds.GroupBy(m => m.groupscheduleid).ToList();
+
+
+                        foreach (var groupid in groupids)
+                        {
+
+                            foreach (var medtimes in groupid)
+                            {
+
+                                var splitstring = medtimes.frequency.Split('|');
+
+                                if (splitstring[0] == "Daily")
+                                {
+
+                                    if (hasnoendate)
+                                    {
+
+                                        if (dateforschedule >= sd)
+                                        {
+
+
+                                            // if (medtimes.active == "true")
+                                            // {
+
+                                            if (!string.IsNullOrEmpty(medtimes.TimeDosage))
+                                            {
+
+                                                var daylist = medtimes.TimeDosage.Split(',').ToList();
+
+                                                int Index = 0;
+                                                foreach (var x in daylist)
+                                                {
+                                                    var medtimes1 = new MedtimesDosages();
+                                                    // if (medtimes.active == "true")
+                                                    // {
+                                                    var GetDay = x.Split('|');
+                                                    medtimes1.time = GetDay[0].Trim();
+                                                    medtimes1.Dosage = GetDay[1];
+                                                    medtimes1.dosageunit = medtimes.dosageunit;
+
+                                                    medtimes1.Type = "Supplement";
+                                                    medtimes1.Usermedid = item.id;
+                                                    medtimes1.Feedbackid = medtimes.id.ToString();
+                                                    var SplitDetails = item.details.Split('|');
+                                                    if (SplitDetails[0] == "--")
+                                                    {
+                                                        //Contains Display Name 
+                                                        medtimes1.DisplayName = item.supplementtitle;
+                                                        medtimes1.DisplayNameAdded = false;
+                                                        medtimes1.RowNum = 1;
+                                                        medtimes1.RowSpan = 2;
+                                                    }
+                                                    else
+                                                    {
+                                                        //No Display Name 
+                                                        medtimes1.DisplayName = SplitDetails[0];
+                                                        medtimes1.Name = item.supplementtitle;
+                                                        medtimes1.DisplayNameAdded = true;
+                                                        medtimes1.RowNum = 2;
+                                                        medtimes1.RowSpan = 3;
+                                                    }
+
+
+                                                    ScheduleList.Add(medtimes1);
+                                                }
+
+                                            }
+                                            else
+                                            {
+                                                ScheduleList.Add(medtimes);
+                                            }
+
+
+                                            //ScheduleList.Add(medtimes);
+                                            //  }
+
+
+
+                                        }
+
+
+                                    }
+                                    else
+                                    {
+
+                                        if (dateforschedule >= sd && dateforschedule <= ed)
+                                        {
+                                            //add all the items 
+
+                                            //   if (medtimes.active == "true")
+                                            //  {
+                                            if (!string.IsNullOrEmpty(medtimes.TimeDosage))
+                                            {
+
+                                                var daylist = medtimes.TimeDosage.Split(',').ToList();
+
+                                                int Index = 0;
+                                                foreach (var x in daylist)
+                                                {
+                                                    var medtimes1 = new MedtimesDosages();
+                                                    // if (medtimes.active == "true")
+                                                    // {
+                                                    var GetDay = x.Split('|');
+                                                    medtimes1.time = GetDay[0].Trim();
+                                                    medtimes1.Dosage = GetDay[1];
+                                                    medtimes1.dosageunit = medtimes.dosageunit;
+
+                                                    medtimes1.Type = "Supplement";
+                                                    medtimes1.Usermedid = item.id;
+                                                    medtimes1.Feedbackid = medtimes.id.ToString();
+                                                    var SplitDetails = item.details.Split('|');
+                                                    if (SplitDetails[0] == "--")
+                                                    {
+                                                        //Contains Display Name 
+                                                        medtimes1.DisplayName = item.supplementtitle;
+                                                        medtimes1.DisplayNameAdded = false;
+                                                        medtimes1.RowNum = 1;
+                                                        medtimes1.RowSpan = 2;
+                                                    }
+                                                    else
+                                                    {
+                                                        //No Display Name 
+                                                        medtimes1.DisplayName = SplitDetails[0];
+                                                        medtimes1.Name = item.supplementtitle;
+                                                        medtimes1.DisplayNameAdded = true;
+                                                        medtimes1.RowNum = 2;
+                                                        medtimes1.RowSpan = 3;
+                                                    }
+
+
+                                                    ScheduleList.Add(medtimes1);
+                                                }
+
+                                            }
+                                            else
+                                            {
+                                                ScheduleList.Add(medtimes);
+                                            }
+
+
+                                            //ScheduleList.Add(medtimes);
+                                            //  }
+
+                                        }
+
+                                    }
+
+
+
+
+
+                                }
+                                else if (splitstring[0] == "Weekly")
+                                {
+                                    if (hasnoendate)
+                                    {
+
+                                        if (dateforschedule >= sd)
+                                        {
+
+                                            var dayname = dateforschedule.ToString("ddd");
+                                            var daynames = dateforschedule.ToString("dddd");
+                                            var dayfour = daynames.Substring(0, 4);
+                                            //check if today is within the days list
+                                            if (splitstring[1].Contains(dayname))
+                                            {
+
+                                                var daylist = medtimes.TimeDosage.Split(',').ToList();
+
+                                                int Index = 0;
+                                                foreach (var x in daylist)
+                                                {
+                                                    var medtimes1 = new MedtimesDosages();
+
+                                                    var GetDay = x.Split('|');
+                                                    medtimes1.Day = GetDay[2];
+                                                    // Index = Index + 1;
+
+
+                                                    medtimes1.time = GetDay[0];
+                                                    medtimes1.Dosage = GetDay[1];
+                                                    medtimes1.dosageunit = medtimes.dosageunit;
+                                                    //   var GetDay = medtimes.frequency.Split('|');
+                                                    //   medtimes.Day = GetDay[1];
+
+                                                    //add all the items 
+
+                                                    //  if (medtimes.active == "true")
+                                                    //   {
+                                                    if (medtimes1.Day.Contains(dayname) || medtimes1.Day == dayfour)
+                                                    {
+                                                        medtimes1.Type = "Supplement";
+                                                        medtimes1.Usermedid = item.id;
+                                                        medtimes1.Feedbackid = medtimes.id.ToString();
+                                                        var SplitDetails = item.details.Split('|');
+                                                        if (SplitDetails[0] == "--")
+                                                        {
+                                                            //Contains Display Name 
+                                                            medtimes1.DisplayName = item.supplementtitle;
+                                                            medtimes1.DisplayNameAdded = false;
+                                                            medtimes1.RowNum = 1;
+                                                            medtimes1.RowSpan = 2;
+                                                        }
+                                                        else
+                                                        {
+                                                            //No Display Name 
+                                                            medtimes1.DisplayName = SplitDetails[0];
+                                                            medtimes1.Name = item.supplementtitle;
+                                                            medtimes1.DisplayNameAdded = true;
+                                                            medtimes1.RowNum = 2;
+                                                            medtimes1.RowSpan = 3;
+                                                        }
+
+
+                                                        //added to check if any inactive med times need to be checked if the user has recorded feedback against it
+
+                                                        ScheduleList.Add(medtimes1);
+
+
+                                                        // ScheduleList.Add(medtimes);
+                                                        //  }
+                                                    }
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+
+                                        if (dateforschedule >= sd && dateforschedule <= ed)
+                                        {
+                                            var dayname = dateforschedule.ToString("ddd");
+                                            //check if today is within the days list
+                                            if (splitstring[1].Contains(dayname))
+                                            {
+                                                var GetDay = medtimes.frequency.Split('|');
+                                                medtimes.Day = GetDay[1];
+                                                //int Index = 0;
+                                                //foreach (var x in item.schedule)
+                                                //{
+                                                //    var GetDay = item.TimeDosage[Index].Split('|');
+                                                //    x.Day = GetDay[2];
+                                                //    Index = Index + 1;
+                                                //}
+                                                //add all the items 
+
+                                                //  if (medtimes.active == "true")
+                                                //   {
+                                                if (medtimes.Day.Contains(dayname))
+                                                {
+                                                    medtimes.Type = "Supplement";
+                                                    medtimes.Usermedid = item.id;
+                                                    medtimes.Feedbackid = medtimes.id.ToString();
+                                                    var SplitDetails = item.details.Split('|');
+                                                    if (SplitDetails[0] == "--")
+                                                    {
+                                                        //Contains Display Name 
+                                                        medtimes.DisplayName = item.supplementtitle;
+                                                        medtimes.DisplayNameAdded = false;
+                                                        medtimes.RowNum = 1;
+                                                        medtimes.RowSpan = 2;
+                                                    }
+                                                    else
+                                                    {
+                                                        //No Display Name 
+                                                        medtimes.DisplayName = SplitDetails[0];
+                                                        medtimes.Name = item.supplementtitle;
+                                                        medtimes.DisplayNameAdded = true;
+                                                        medtimes.RowNum = 2;
+                                                        medtimes.RowSpan = 3;
+                                                    }
+
+
+                                                    //added to check if any inactive med times need to be checked if the user has recorded feedback against it
+
+                                                    ScheduleList.Add(medtimes);
+
+                                                    //  ScheduleList.Add(medtimes);
+                                                }
+                                                // }
+
+                                            }
+                                        }
+
+                                    }
+                                }
+                                else if (splitstring[0] == "Days Interval")
+                                {
+
+                                    var daycount = Convert.ToInt32(splitstring[1]);
+
+                                    if (hasnoendate)
+                                    {
+
+                                        if (dateforschedule >= sd)
+                                        {
+
+                                            // Calculate the difference in days from the start date
+                                            var daysDifference = (dateforschedule - sd).Days;
+
+                                            // Check if today's date is a multiple of the daycount (e.g., every 3rd day)
+                                            if (daysDifference % daycount == 0)
+                                            {
+                                                // Add all the items for today
+
+                                                //  if (medtimes.active == "true")
+                                                //  {
+                                                if (!string.IsNullOrEmpty(medtimes.TimeDosage))
+                                                {
+
+                                                    var daylist = medtimes.TimeDosage.Split(',').ToList();
+
+                                                    int Index = 0;
+                                                    foreach (var x in daylist)
+                                                    {
+                                                        var medtimes1 = new MedtimesDosages();
+                                                        // if (medtimes.active == "true")
+                                                        // {
+                                                        var GetDay = x.Split('|');
+                                                        medtimes1.time = GetDay[0].Trim();
+                                                        medtimes1.Dosage = GetDay[1];
+                                                        medtimes1.dosageunit = medtimes.dosageunit;
+
+                                                        medtimes1.Type = "Supplement";
+                                                        medtimes1.Usermedid = item.id;
+                                                        medtimes1.Feedbackid = medtimes.id.ToString();
+                                                        var SplitDetails = item.details.Split('|');
+                                                        if (SplitDetails[0] == "--")
+                                                        {
+                                                            //Contains Display Name 
+                                                            medtimes1.DisplayName = item.supplementtitle;
+                                                            medtimes1.DisplayNameAdded = false;
+                                                            medtimes1.RowNum = 1;
+                                                            medtimes1.RowSpan = 2;
+                                                        }
+                                                        else
+                                                        {
+                                                            //No Display Name 
+                                                            medtimes1.DisplayName = SplitDetails[0];
+                                                            medtimes1.Name = item.supplementtitle;
+                                                            medtimes1.DisplayNameAdded = true;
+                                                            medtimes1.RowNum = 2;
+                                                            medtimes1.RowSpan = 3;
+                                                        }
+
+
+                                                        ScheduleList.Add(medtimes1);
+                                                    }
+
+                                                }
+                                                else
+                                                {
+                                                    ScheduleList.Add(medtimes);
+                                                }
+
+
+
+                                                // ScheduleList.Add(medtimes);
+                                                // }
+
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+
+                                        if (dateforschedule >= sd && dateforschedule <= ed)
+                                        {
+                                            // Calculate the difference in days from the start date
+                                            var daysDifference = (DateTime.Now - sd).TotalDays;
+
+                                            // Check if today's date is a multiple of the daycount (e.g., every 3rd day)
+                                            if (daysDifference % daycount == 0)
+                                            {
+                                                // Add all the items for today
+
+                                                //   if (medtimes.active == "true")
+                                                //   {
+                                                if (!string.IsNullOrEmpty(medtimes.TimeDosage))
+                                                {
+
+                                                    var daylist = medtimes.TimeDosage.Split(',').ToList();
+
+                                                    int Index = 0;
+                                                    foreach (var x in daylist)
+                                                    {
+                                                        var medtimes1 = new MedtimesDosages();
+                                                        // if (medtimes.active == "true")
+                                                        // {
+                                                        var GetDay = x.Split('|');
+                                                        medtimes1.time = GetDay[0].Trim();
+                                                        medtimes1.Dosage = GetDay[1];
+                                                        medtimes1.dosageunit = medtimes.dosageunit;
+
+                                                        medtimes1.Type = "Supplement";
+                                                        medtimes1.Usermedid = item.id;
+                                                        medtimes1.Feedbackid = medtimes.id.ToString();
+                                                        var SplitDetails = item.details.Split('|');
+                                                        if (SplitDetails[0] == "--")
+                                                        {
+                                                            //Contains Display Name 
+                                                            medtimes1.DisplayName = item.supplementtitle;
+                                                            medtimes1.DisplayNameAdded = false;
+                                                            medtimes1.RowNum = 1;
+                                                            medtimes1.RowSpan = 2;
+                                                        }
+                                                        else
+                                                        {
+                                                            //No Display Name 
+                                                            medtimes1.DisplayName = SplitDetails[0];
+                                                            medtimes1.Name = item.supplementtitle;
+                                                            medtimes1.DisplayNameAdded = true;
+                                                            medtimes1.RowNum = 2;
+                                                            medtimes1.RowSpan = 3;
+                                                        }
+
+
+                                                        ScheduleList.Add(medtimes1);
+                                                    }
+
+                                                }
+                                                else
+                                                {
+                                                    ScheduleList.Add(medtimes);
+                                                }
+
+
+
+                                                //  ScheduleList.Add(medtimes);
+                                                // }
+
+                                            }
+                                        }
+
+                                    }
+
+
+                                }
+                                else if (splitstring[0] == "As Required")
+                                {
+                                    if (item.feedback != null)
+                                    {
+
+
+                                        //var convertdate = DateTime.Parse(medtimes.datetime);
+
+                                        //if (convertdate.Date == dateforschedule.Date)
+                                        //{
+                                        //    var newitem = new MedtimesDosages();
+                                        //    newitem.Type = "Medication";
+                                        //    newitem.Usermedid = item.id;
+                                        //    newitem.Feedbackid = medtimes.id.ToString();
+                                        //    var SplitDetails = item.details.Split('|');
+                                        //    if (SplitDetails[0] == "--")
+                                        //    {
+                                        //        //Contains Display Name 
+                                        //        newitem.DisplayName = item.medicationtitle;
+                                        //        newitem.DisplayNameAdded = false;
+                                        //        newitem.RowNum = 1;
+                                        //        newitem.RowSpan = 2;
+                                        //    }
+                                        //    else
+                                        //    {
+                                        //        //No Display Name 
+                                        //        newitem.DisplayName = SplitDetails[0];
+                                        //        newitem.Name = item.medicationtitle;
+                                        //        newitem.DisplayNameAdded = true;
+                                        //        newitem.RowNum = 2;
+                                        //        newitem.RowSpan = 3;
+
+                                        //    }
+
+                                        //    newitem.Dosage = medtimes.Recorded;
+                                        //    newitem.dosageunit = item.unit;
+                                        //    newitem.time = "00:00";
+                                        //    newitem.Buttonop = 1;
+                                        //    newitem.Buttonntop = 0;
+                                        //    newitem.AsReqlblVis = true;
+
+                                        //    ScheduleList.Add(newitem);
+                                        //}
+
+                                    }
+
+
+                                }
+
+
+
+                            }
+
+
+
+                        }
+
+
+
+
+                    }
+                    else
+                    {
+
+                        var splitstring = item.frequency.Split('|');
+
+                        if (splitstring[0] == "Daily")
+                        {
+
+                            if (hasnoendate)
+                            {
+
+                                if (dateforschedule >= sd)
+                                {
+
+                                    //add all the items 
+                                    foreach (var medtimes in item.schedule)
+                                    {
+                                        //  if (medtimes.active == "true")
+                                        //  {
+                                        medtimes.Type = "Supplement";
+                                        medtimes.Usermedid = item.id;
+                                        medtimes.Feedbackid = medtimes.id.ToString();
+
+                                        var SplitDetails = item.details.Split('|');
+                                        if (SplitDetails[0] == "--")
+                                        {
+                                            //Contains Display Name 
+                                            medtimes.DisplayName = item.supplementtitle;
+                                            medtimes.DisplayNameAdded = false;
+                                            medtimes.RowNum = 1;
+                                            medtimes.RowSpan = 2;
+                                        }
+                                        else
+                                        {
+                                            //No Display Name 
+                                            medtimes.DisplayName = SplitDetails[0];
+                                            medtimes.Name = item.supplementtitle;
+                                            medtimes.DisplayNameAdded = true;
+                                            medtimes.RowNum = 2;
+                                            medtimes.RowSpan = 3;
+                                        }
+
+                                        ScheduleList.Add(medtimes);
+                                        // }
+                                    }
+
+
+                                }
+
+
+                            }
+                            else
+                            {
+
+                                if (dateforschedule >= sd && dateforschedule <= ed)
+                                {
+                                    //add all the items 
+                                    foreach (var medtimes in item.schedule)
+                                    {
+                                        //  if (medtimes.active == "true")
+                                        //  {
+                                        medtimes.Type = "Supplement";
+                                        medtimes.Usermedid = item.id;
+                                        medtimes.Feedbackid = medtimes.id.ToString();
+
+                                        var SplitDetails = item.details.Split('|');
+                                        if (SplitDetails[0] == "--")
+                                        {
+                                            //Contains Display Name 
+                                            medtimes.DisplayName = item.supplementtitle;
+                                            medtimes.DisplayNameAdded = false;
+                                            medtimes.RowNum = 1;
+                                            medtimes.RowSpan = 2;
+                                        }
+                                        else
+                                        {
+                                            //No Display Name 
+                                            medtimes.DisplayName = SplitDetails[0];
+                                            medtimes.Name = item.supplementtitle;
+                                            medtimes.DisplayNameAdded = true;
+                                            medtimes.RowNum = 2;
+                                            medtimes.RowSpan = 3;
+                                        }
+                                        ScheduleList.Add(medtimes);
+                                        // }
+                                    }
+                                }
+
+                            }
+
+
+
+
+
+                        }
+                        else if (splitstring[0] == "Weekly")
+                        {
+                            if (hasnoendate)
+                            {
+
+                                if (dateforschedule >= sd)
+                                {
+
+                                    var dayname = dateforschedule.ToString("ddd");
+                                    //check if today is within the days list
+                                    if (splitstring[1].Contains(dayname))
+                                    {
+                                        int Index = 0;
+                                        foreach (var x in item.schedule)
+                                        {
+                                            var GetDay = item.TimeDosage[Index].Split('|');
+                                            x.Day = GetDay[2];
+                                            Index = Index + 1;
+                                        }
+                                        //add all the items 
+                                        foreach (var medtimes in item.schedule)
+                                        {
+                                            //  if (medtimes.active == "true")
+                                            //   {
+                                            if (medtimes.Day == dayname)
+                                            {
+                                                medtimes.Type = "Supplement";
+                                                medtimes.Usermedid = item.id;
+                                                medtimes.Feedbackid = medtimes.id.ToString();
+
+                                                var SplitDetails = item.details.Split('|');
+                                                if (SplitDetails[0] == "--")
+                                                {
+                                                    //Contains Display Name 
+                                                    medtimes.DisplayName = item.supplementtitle;
+                                                    medtimes.DisplayNameAdded = false;
+                                                    medtimes.RowNum = 1;
+                                                    medtimes.RowSpan = 2;
+                                                }
+                                                else
+                                                {
+                                                    //No Display Name 
+                                                    medtimes.DisplayName = SplitDetails[0];
+                                                    medtimes.Name = item.supplementtitle;
+                                                    medtimes.DisplayNameAdded = true;
+                                                    medtimes.RowNum = 2;
+                                                    medtimes.RowSpan = 3;
+                                                }
+                                                ScheduleList.Add(medtimes);
+                                                //  }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+
+                                if (dateforschedule >= sd && dateforschedule <= ed)
+                                {
+                                    var dayname = dateforschedule.ToString("ddd");
+                                    //check if today is within the days list
+                                    if (splitstring[1].Contains(dayname))
+                                    {
+                                        int Index = 0;
+                                        foreach (var x in item.schedule)
+                                        {
+                                            var GetDay = item.TimeDosage[Index].Split('|');
+                                            x.Day = GetDay[2];
+                                            Index = Index + 1;
+                                        }
+                                        //add all the items 
+                                        foreach (var medtimes in item.schedule)
+                                        {
+                                            //  if (medtimes.active == "true")
+                                            //   {
+                                            if (medtimes.Day == dayname)
+                                            {
+                                                medtimes.Type = "Supplement";
+                                                medtimes.Usermedid = item.id;
+                                                medtimes.Feedbackid = medtimes.id.ToString();
+
+                                                var SplitDetails = item.details.Split('|');
+                                                if (SplitDetails[0] == "--")
+                                                {
+                                                    //Contains Display Name 
+                                                    medtimes.DisplayName = item.supplementtitle;
+                                                    medtimes.DisplayNameAdded = false;
+                                                    medtimes.RowNum = 1;
+                                                    medtimes.RowSpan = 2;
+                                                }
+                                                else
+                                                {
+                                                    //No Display Name 
+                                                    medtimes.DisplayName = SplitDetails[0];
+                                                    medtimes.Name = item.supplementtitle;
+                                                    medtimes.DisplayNameAdded = true;
+                                                    medtimes.RowNum = 2;
+                                                    medtimes.RowSpan = 3;
+                                                }
+                                                ScheduleList.Add(medtimes);
+
+                                                //   }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else if (splitstring[0] == "Days Interval")
+                        {
+
+                            var daycount = Convert.ToInt32(splitstring[1]);
+
+                            if (hasnoendate)
+                            {
+
+                                if (dateforschedule >= sd)
+                                {
+
+                                    // Calculate the difference in days from the start date
+                                    var daysDifference = (DateTime.Now - sd).Days;
+
+                                    // Check if today's date is a multiple of the daycount (e.g., every 3rd day)
+                                    if (daysDifference % daycount == 0)
+                                    {
+                                        // Add all the items for today
+                                        foreach (var medtimes in item.schedule)
+                                        {
+                                            //   if (medtimes.active == "true")
+                                            //   {
+                                            medtimes.Type = "Supplement";
+                                            medtimes.Usermedid = item.id;
+                                            medtimes.Feedbackid = medtimes.id.ToString();
+
+                                            var SplitDetails = item.details.Split('|');
+                                            if (SplitDetails[0] == "--")
+                                            {
+                                                //Contains Display Name 
+                                                medtimes.DisplayName = item.supplementtitle;
+                                                medtimes.DisplayNameAdded = false;
+                                                medtimes.RowNum = 1;
+                                                medtimes.RowSpan = 2;
+                                            }
+                                            else
+                                            {
+                                                //No Display Name 
+                                                medtimes.DisplayName = SplitDetails[0];
+                                                medtimes.Name = item.supplementtitle;
+                                                medtimes.DisplayNameAdded = true;
+                                                medtimes.RowNum = 2;
+                                                medtimes.RowSpan = 3;
+                                            }
+                                            ScheduleList.Add(medtimes);
+                                            // }
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+
+                                if (dateforschedule >= sd && dateforschedule <= ed)
+                                {
+                                    // Calculate the difference in days from the start date
+                                    var daysDifference = (DateTime.Now - sd).TotalDays;
+
+                                    // Check if today's date is a multiple of the daycount (e.g., every 3rd day)
+                                    if (daysDifference % daycount == 0)
+                                    {
+                                        // Add all the items for today
+                                        foreach (var medtimes in item.schedule)
+                                        {
+                                            //  if (medtimes.active == "true")
+                                            //  {
+                                            medtimes.Type = "Supplement";
+                                            medtimes.Usermedid = item.id;
+                                            medtimes.Feedbackid = medtimes.id.ToString();
+
+                                            var SplitDetails = item.details.Split('|');
+                                            if (SplitDetails[0] == "--")
+                                            {
+                                                //Contains Display Name 
+                                                medtimes.DisplayName = item.supplementtitle;
+                                                medtimes.DisplayNameAdded = false;
+                                                medtimes.RowNum = 1;
+                                                medtimes.RowSpan = 2;
+                                            }
+                                            else
+                                            {
+                                                //No Display Name 
+                                                medtimes.DisplayName = SplitDetails[0];
+                                                medtimes.Name = item.supplementtitle;
+                                                medtimes.DisplayNameAdded = true;
+                                                medtimes.RowNum = 2;
+                                                medtimes.RowSpan = 3;
+                                            }
+                                            ScheduleList.Add(medtimes);
+                                            // }
+                                        }
+                                    }
+                                }
+
+                            }
+
+
+                        }
+                        else if (splitstring[0] == "As Required")
+                        {
+                            if (item.feedback != null)
+                            {
+
+                                foreach (var medtimes in item.feedback)
+                                {
+                                    var convertdate = DateTime.Parse(medtimes.datetime);
+
+                                    if (convertdate.Date == dateforschedule.Date)
+                                    {
+                                        var newitem = new MedtimesDosages();
+                                        newitem.Type = "Supplement";
+                                        newitem.Usermedid = item.id;
+                                        newitem.Feedbackid = medtimes.id.ToString();
+                                        var SplitDetails = item.details.Split('|');
+                                        if (SplitDetails[0] == "--")
+                                        {
+                                            //Contains Display Name 
+                                            newitem.DisplayName = item.supplementtitle;
+                                            newitem.DisplayNameAdded = false;
+                                            newitem.RowNum = 1;
+                                            newitem.RowSpan = 2;
+                                        }
+                                        else
+                                        {
+                                            //No Display Name 
+                                            newitem.DisplayName = SplitDetails[0];
+                                            newitem.Name = item.supplementtitle;
+                                            newitem.DisplayNameAdded = true;
+                                            newitem.RowNum = 2;
+                                            newitem.RowSpan = 3;
+
+                                        }
+
+                                        newitem.Dosage = medtimes.Recorded + " " + item.unit;
+                                        newitem.time = "00:00";
+                                        newitem.Buttonop = 1;
+                                        newitem.Buttonntop = 0;
+                                        newitem.AsReqlblVis = true;
+                                        ScheduleList.Add(newitem);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+
+
+                }
+
+
+
+
+
+            }
+
+            if (dateforschedule.Date > DateTime.Now.Date)
+            {
+                foreach (var med in ScheduleList)
+                {
+                    med.Buttonenabled = false;
+                    med.Buttonop = 0;
+                    med.Buttonntop = 0;
+
+                    if (med.Type == "Medication")
+                    {
+                        med.ListBackgroundColor = Color.FromArgb("#e5f9f4");
+
+                    }
+                    else
+                    {
+                        med.ListBackgroundColor = Color.FromArgb("#f9f4e5");
+                    }
+
+                }
+            }
+            else
+            {
+
+                //check if any of them are edited
+
+                foreach (var med in ScheduleList)
+                {
+
+
+
+                    med.Buttonenabled = true;
+                    med.Buttonop = 0.2;
+                    med.Buttonntop = 0.2;
+
+                    if (med.Type == "Medication")
+                    {
+
+                        med.ListBackgroundColor = Color.FromArgb("#e5f9f4");
+
+                        //check feedback here
+                        var getuseremed = AllUserMedications.Where(x => x.id == med.Usermedid).FirstOrDefault();
+
+                        var dt = dateforschedule.ToString("dd/MM/yyyy");
+
+
+                        // Check if feedback is null before trying to access it
+                        if (getuseremed.feedback != null)
+                        {
+                            // Attempt to find the feedback item
+                            var getfeedbackitem = getuseremed.feedback
+                                .Where(x => x.id == med.Feedbackid)
+                                .Where(x => x.datetime.Contains(dt))
+                                .FirstOrDefault();
+
+                            if (getfeedbackitem != null)
+                            {
+
+                                if (getfeedbackitem.Recorded == "Taken")
+                                {
+                                    //Medication Taken 
+                                    med.Buttonop = 1;
+                                    med.Buttonntop = 0.2;
+                                    med.AsReqHidelbl = true;
+                                }
+                                else if (getfeedbackitem.Recorded == "Not Taken")
+                                {
+                                    //Not Taken
+
+                                    med.Buttonop = 0.2;
+                                    med.Buttonntop = 1;
+                                    med.AsReqHidelbl = true;
+                                }
+                                else
+                                {
+                                    //as required
+                                    med.Buttonop = 1;
+                                    med.Buttonntop = 0;
+                                    med.AsReqHidelbl = false;
+                                }
+                            }
+                            else
+                            {
+                                //Not Recorded
+                                med.Buttonop = 0.2;
+                                med.Buttonntop = 0.2;
+                                med.AsReqHidelbl = true;
+                            }
+                        }
+                        else
+                        {
+                            //Not Recorded
+                            med.Buttonop = 0.2;
+                            med.Buttonntop = 0.2;
+                            med.AsReqHidelbl = true;
+                        }
+                    }
+                    else
+                    {
+
+
+                        med.ListBackgroundColor = Color.FromArgb("#f9f4e5");
+
+                        //check feedback here
+                        var getusersupp = AllUserSupplements.Where(x => x.id == med.Usermedid).FirstOrDefault();
+
+                        var dtsupp = dateforschedule.ToString("dd/MM/yyyy");
+
+
+                        // Check if feedback is null before trying to access it
+                        if (getusersupp.feedback != null)
+                        {
+                            // Attempt to find the feedback item
+                            var getfeedbackitemsupp = getusersupp.feedback
+                                .Where(x => x.id == med.Feedbackid)
+                                .Where(x => x.datetime.Contains(dtsupp))
+                                .FirstOrDefault();
+
+                            if (getfeedbackitemsupp != null)
+                            {
+
+                                if (getfeedbackitemsupp.Recorded == "Taken")
+                                {
+                                    //Medication Taken 
+                                    med.Buttonop = 1;
+                                    med.Buttonntop = 0.2;
+                                    med.AsReqHidelbl = true;
+                                }
+                                else if (getfeedbackitemsupp.Recorded == "Not Taken")
+                                {
+                                    //Not Taken
+                                    med.Buttonop = 0.2;
+                                    med.Buttonntop = 1;
+                                    med.AsReqHidelbl = true;
+                                }
+                                else
+                                {
+                                    //as required
+                                    med.Buttonop = 1;
+                                    med.Buttonntop = 0;
+                                    med.AsReqHidelbl = false;
+                                }
+                            }
+                            else
+                            {
+                                //Not Recorded
+                                med.Buttonop = 0.2;
+                                med.Buttonntop = 0.2;
+                                med.AsReqHidelbl = true;
+                            }
+                        }
+                        else
+                        {
+                            //Not Recorded
+                            med.Buttonop = 0.2;
+                            med.Buttonntop = 0.2;
+                            med.AsReqHidelbl = true;
+                        }
+                    }
+
+                }
+            }
+
+            //group the listview so all days are the same
+            if (ScheduleList.Count == 0)
+            {
+                //No items Due for today 
+                mainschedulelistview.IsVisible = false;
+                nodatastack.IsVisible = true;
+            }
+            else
+            {
+                //populate mainschedulelistview 
+                mainschedulelistview.IsVisible = true;
+                nodatastack.IsVisible = false;
+
+                var orderbytime = ScheduleList.OrderBy(x => TimeSpan.Parse(x.time)).ToList();
+
+                foreach (var item in orderbytime)
+                {
+                    if (item.AsReqlblVis == true)
+                    {
+                        item.time = "As Required";
+                    }
+                }
+
+
+                //Add Double Dosage 
+                foreach (var item in orderbytime)
+                {
+                    if (item.Dosage.Contains("|"))
+                    {
+                        item.NormalDosage = false;
+                        item.DoubleDosage = true;
+
+                        var DosageSplit = item.Dosage.Split('|');
+                        var UnitSplit = item.dosageunit.Split(' ');
+                        item.DoubleDosagetxt = DosageSplit[0] + " " + UnitSplit[0] + " " + UnitSplit[1] + " " + DosageSplit[1] + " " + UnitSplit[2];
+                    }
+                    else
+                    {
+                        item.NormalDosage = true;
+                        item.DoubleDosage = false;
+                    }
+                }
+                 
+
+
+
+                mainschedulelistview.ItemsSource = orderbytime;
+                //   int totalItems = GroupedScheduleList.Sum(g => g.Count()) + GroupedScheduleList.Count; // Items + Group headers
+                mainschedulelistview.HeightRequest = ScheduleList.Count * 130;
+
+            }
+            }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
+
+    async void populatescheduleforchangedfrequency(MedtimesDosages dosageitem, usermedication item)
+    {
+        try
+        {
+            
+            var sd = new DateTime();
+            var ed = new DateTime();
+            bool hasnoendate = new bool();
+
+            sd = DateTime.Parse(item.startdate);
+
+            if (!string.IsNullOrEmpty(item.enddate))
+            {
+                ed = DateTime.Parse(item.enddate);
+            }
+            else
+            {
+                hasnoendate = true;
+            }
+
+            
+
+            //find out if it is daily, weekly or days interval
+
+            var splitstring = dosageitem.frequency.Split('|');
+
+            if (splitstring[0] == "Daily")
+            {
+
+                if (hasnoendate)
+                {
+
+                    if (dateforschedule >= sd)
+                    {
+
+                       
+                            // if (medtimes.active == "true")
+                            // {
+
+                            dosageitem.Type = "Medication";
+                            dosageitem.Usermedid = item.id;
+                            dosageitem.Feedbackid = dosageitem.id.ToString();
+                            var SplitDetails = item.details.Split('|');
+                            if (SplitDetails[0] == "--")
+                            {
+                                //Contains Display Name 
+                                dosageitem.DisplayName = item.medicationtitle;
+                                dosageitem.DisplayNameAdded = false;
+                                dosageitem.RowNum = 1;
+                                dosageitem.RowSpan = 2;
+                            }
+                            else
+                            {
+                                //No Display Name 
+                                dosageitem.DisplayName = SplitDetails[0];
+                                dosageitem.Name = item.medicationtitle;
+                                dosageitem.DisplayNameAdded = true;
+                                dosageitem.RowNum = 2;
+                                dosageitem.RowSpan = 3;
+                            }
+
+                            //added to check if any inactive med times need to be checked if the user has recorded feedback against it
+                        
+                                ScheduleList.Add(dosageitem);
+                            
+
+                            //ScheduleList.Add(medtimes);
+                            //  }
+                        
+
+
+                    }
+
+
+                }
+                else
+                {
+
+                    if (dateforschedule >= sd && dateforschedule <= ed)
+                    {
+                      
+                            //   if (medtimes.active == "true")
+                            //  {
+                            dosageitem.Type = "Medication";
+                            dosageitem.Usermedid = item.id;
+                            dosageitem.Feedbackid = dosageitem.id.ToString();
+
+                            var SplitDetails = item.details.Split('|');
+                            if (SplitDetails[0] == "--")
+                            {
+                                //Contains Display Name 
+                                dosageitem.DisplayName = item.medicationtitle;
+                                dosageitem.DisplayNameAdded = false;
+                                dosageitem.RowNum = 1;
+                                dosageitem.RowSpan = 2;
+
+                            }
+                            else
+                            {
+                                //No Display Name 
+                                dosageitem.DisplayName = SplitDetails[0];
+                                dosageitem.Name = item.medicationtitle;
+                                dosageitem.DisplayNameAdded = true;
+                                dosageitem.RowNum = 2;
+                                dosageitem.RowSpan = 3;
+                            }
+
+                     
+                                ScheduleList.Add(dosageitem);
+                            
+
+                            //ScheduleList.Add(medtimes);
+                            //  }
+                        
+                    }
+
+                }
+
+
+
+
+
+            }
+            else if (splitstring[0] == "Weekly")
+            {
+                if (hasnoendate)
+                {
+
+                    if (dateforschedule >= sd)
+                    {
+
+                        var dayname = dateforschedule.ToString("ddd");
+                        var daynames = dateforschedule.ToString("dddd");
+                        var dayfour = daynames.Substring(0, 4);
+
+                        //check if today is within the days list
+                        if (splitstring[1].Contains(dayname))
+                        {
+                            int Index = 0;
+                            foreach (var x in item.schedule)
+                            {
+                                var GetDay = item.TimeDosage[Index].Split('|');
+                                dosageitem.Day = GetDay[2];
+                                Index = Index + 1;
+                            }
+
+                            //add all the items 
+                            foreach (var medtimes in item.schedule)
+                            {
+                                //  if (medtimes.active == "true")
+                                //   {
+                                if (medtimes.Day.Contains(dayname) || medtimes.Day == dayfour)
+                                {
+                                    medtimes.Type = "Medication";
+                                    medtimes.Usermedid = item.id;
+                                    medtimes.Feedbackid = medtimes.id.ToString();
+                                    var SplitDetails = item.details.Split('|');
+                                    if (SplitDetails[0] == "--")
+                                    {
+                                        //Contains Display Name 
+                                        medtimes.DisplayName = item.medicationtitle;
+                                        medtimes.DisplayNameAdded = false;
+                                        medtimes.RowNum = 1;
+                                        medtimes.RowSpan = 2;
+                                    }
+                                    else
+                                    {
+                                        //No Display Name 
+                                        medtimes.DisplayName = SplitDetails[0];
+                                        medtimes.Name = item.medicationtitle;
+                                        medtimes.DisplayNameAdded = true;
+                                        medtimes.RowNum = 2;
+                                        medtimes.RowSpan = 3;
+                                    }
+
+
+                                  
+                                      ScheduleList.Add(medtimes);
+                                    
+
+                                    // ScheduleList.Add(medtimes);
+                                    //  }
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+
+                    if (dateforschedule >= sd && dateforschedule <= ed)
+                    {
+                        var dayname = dateforschedule.ToString("ddd");
+                        //check if today is within the days list
+                        if (splitstring[1].Contains(dayname))
+                        {
+                            int Index = 0;
+                            foreach (var x in item.schedule)
+                            {
+                                var GetDay = item.TimeDosage[Index].Split('|');
+                                x.Day = GetDay[2];
+                                Index = Index + 1;
+                            }
+                            //add all the items 
+                            foreach (var medtimes in item.schedule)
+                            {
+                                //  if (medtimes.active == "true")
+                                //   {
+                                if (medtimes.Day.Contains(dayname))
+                                {
+                                    medtimes.Type = "Medication";
+                                    medtimes.Usermedid = item.id;
+                                    medtimes.Feedbackid = medtimes.id.ToString();
+                                    var SplitDetails = item.details.Split('|');
+                                    if (SplitDetails[0] == "--")
+                                    {
+                                        //Contains Display Name 
+                                        medtimes.DisplayName = item.medicationtitle;
+                                        medtimes.DisplayNameAdded = false;
+                                        medtimes.RowNum = 1;
+                                        medtimes.RowSpan = 2;
+                                    }
+                                    else
+                                    {
+                                        //No Display Name 
+                                        medtimes.DisplayName = SplitDetails[0];
+                                        medtimes.Name = item.medicationtitle;
+                                        medtimes.DisplayNameAdded = true;
+                                        medtimes.RowNum = 2;
+                                        medtimes.RowSpan = 3;
+                                    }
+
+
+                                 
+                                        ScheduleList.Add(medtimes);
+                                    
+
+                                    //  ScheduleList.Add(medtimes);
+                                }
+                                // }
+                            }
+                        }
+                    }
+
+                }
+            }
+            else if (splitstring[0] == "Days Interval")
+            {
+
+                var daycount = Convert.ToInt32(splitstring[1]);
+
+                if (hasnoendate)
+                {
+
+                    if (dateforschedule >= sd)
+                    {
+
+                        // Calculate the difference in days from the start date
+                        var daysDifference = (dateforschedule - sd).Days;
+
+                        // Check if today's date is a multiple of the daycount (e.g., every 3rd day)
+                        if (daysDifference % daycount == 0)
+                        {
+                            // Add all the items for today
+                            foreach (var medtimes in item.schedule)
+                            {
+                                //  if (medtimes.active == "true")
+                                //  {
+                                medtimes.Type = "Medication";
+                                medtimes.Usermedid = item.id;
+                                medtimes.Feedbackid = medtimes.id.ToString();
+                                var SplitDetails = item.details.Split('|');
+                                if (SplitDetails[0] == "--")
+                                {
+                                    //Contains Display Name 
+                                    medtimes.DisplayName = item.medicationtitle;
+                                    medtimes.DisplayNameAdded = false;
+                                    medtimes.RowNum = 1;
+                                    medtimes.RowSpan = 2;
+                                }
+                                else
+                                {
+                                    //No Display Name 
+                                    medtimes.DisplayName = SplitDetails[0];
+                                    medtimes.Name = item.medicationtitle;
+                                    medtimes.DisplayNameAdded = true;
+                                    medtimes.RowNum = 2;
+                                    medtimes.RowSpan = 3;
+                                }
+
+
+                                //added to check if any inactive med times need to be checked if the user has recorded feedback against it
+                                if (item.schedule.Any(x => x.active == "false"))
+                                {
+                                    if (medtimes.active == "false")
+                                    {
+
+                                        var dateadded = DateTime.Parse(medtimes.dateadded);
+
+                                        if (dateforschedule.Date < dateadded.Date)
+                                        {
+                                            ScheduleList.Add(medtimes);
+                                        }
+
+
+                                    }
+                                    else
+                                    {
+                                        var dateadded = DateTime.Parse(medtimes.dateadded);
+
+                                        if (dateforschedule.Date >= dateadded.Date)
+                                        {
+                                            ScheduleList.Add(medtimes);
+                                        }
+
+                                    }
+                                }
+                                else
+                                {
+                                    ScheduleList.Add(medtimes);
+                                }
+
+                                // ScheduleList.Add(medtimes);
+                                // }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+
+                    if (dateforschedule >= sd && dateforschedule <= ed)
+                    {
+                        // Calculate the difference in days from the start date
+                        var daysDifference = (DateTime.Now - sd).TotalDays;
+
+                        // Check if today's date is a multiple of the daycount (e.g., every 3rd day)
+                        if (daysDifference % daycount == 0)
+                        {
+                            // Add all the items for today
+                            foreach (var medtimes in item.schedule)
+                            {
+                                //   if (medtimes.active == "true")
+                                //   {
+                                medtimes.Type = "Medication";
+                                medtimes.Usermedid = item.id;
+                                medtimes.Feedbackid = medtimes.id.ToString();
+                                var SplitDetails = item.details.Split('|');
+                                if (SplitDetails[0] == "--")
+                                {
+                                    //Contains Display Name 
+                                    medtimes.DisplayName = item.medicationtitle;
+                                    medtimes.DisplayNameAdded = false;
+                                    medtimes.RowNum = 1;
+                                    medtimes.RowSpan = 2;
+                                }
+                                else
+                                {
+                                    //No Display Name 
+                                    medtimes.DisplayName = SplitDetails[0];
+                                    medtimes.Name = item.medicationtitle;
+                                    medtimes.DisplayNameAdded = true;
+                                    medtimes.RowNum = 2;
+                                    medtimes.RowSpan = 3;
+                                }
+
+
+                                //added to check if any inactive med times need to be checked if the user has recorded feedback against it
+                                if (item.schedule.Any(x => x.active == "false"))
+                                {
+                                    if (medtimes.active == "false")
+                                    {
+
+                                        var dateadded = DateTime.Parse(medtimes.dateadded);
+
+                                        if (dateforschedule.Date < dateadded.Date)
+                                        {
+                                            ScheduleList.Add(medtimes);
+                                        }
+
+
+                                    }
+                                    else
+                                    {
+                                        var dateadded = DateTime.Parse(medtimes.dateadded);
+
+                                        if (dateforschedule.Date >= dateadded.Date)
+                                        {
+                                            ScheduleList.Add(medtimes);
+                                        }
+
+                                    }
+                                }
+                                else
+                                {
+                                    ScheduleList.Add(medtimes);
+                                }
+
+                                //  ScheduleList.Add(medtimes);
+                                // }
+                            }
+                        }
+                    }
+
+                }
+
+
+            }
+            else if (splitstring[0] == "As Required")
+            {
+                if (item.feedback != null)
+                {
+
+                    foreach (var medtimes in item.feedback)
+                    {
+                        var convertdate = DateTime.Parse(medtimes.datetime);
+
+                        if (convertdate.Date == dateforschedule.Date)
+                        {
+                            var newitem = new MedtimesDosages();
+                            newitem.Type = "Medication";
+                            newitem.Usermedid = item.id;
+                            newitem.Feedbackid = medtimes.id.ToString();
+                            var SplitDetails = item.details.Split('|');
+                            if (SplitDetails[0] == "--")
+                            {
+                                //Contains Display Name 
+                                newitem.DisplayName = item.medicationtitle;
+                                newitem.DisplayNameAdded = false;
+                                newitem.RowNum = 1;
+                                newitem.RowSpan = 2;
+                            }
+                            else
+                            {
+                                //No Display Name 
+                                newitem.DisplayName = SplitDetails[0];
+                                newitem.Name = item.medicationtitle;
+                                newitem.DisplayNameAdded = true;
+                                newitem.RowNum = 2;
+                                newitem.RowSpan = 3;
+
+                            }
+
+                            newitem.Dosage = medtimes.Recorded;
+                            newitem.dosageunit = item.unit;
+                            newitem.time = "00:00";
+                            newitem.Buttonop = 1;
+                            newitem.Buttonntop = 0;
+                            newitem.AsReqlblVis = true;
+
+                            ScheduleList.Add(newitem);
+                        }
+                    }
+                }
+
+
+            }
+
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
     private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
         try
@@ -1288,6 +4237,9 @@ public partial class MainSchedule : ContentPage
                         TimeSpan timeSpan = TimeSpan.Parse(getitem.time);
                         var dt = dateforschedule.Date + timeSpan;
                         newfeedback.datetime = dt.ToString("HH:mm, dd/MM/yyyy");
+                        newfeedback.dosage = getitem.Dosage + " " + getitem.dosageunit;
+                        newfeedback.datetimerecorded = DateTime.Now.ToString("HH:mm, dd/MM/yyyy");
+
 
                         if (getusermeditem.feedback == null || !getusermeditem.feedback.Any())
                         {
@@ -1331,6 +4283,8 @@ public partial class MainSchedule : ContentPage
                         TimeSpan timeSpan = TimeSpan.Parse(getitem.time);
                         var dt = dateforschedule.Date + timeSpan;
                         newfeedback.datetime = dt.ToString("HH:mm, dd/MM/yyyy");
+                        newfeedback.dosage = getitem.Dosage + " " + getitem.dosageunit;
+                        newfeedback.datetimerecorded = DateTime.Now.ToString("HH:mm, dd/MM/yyyy");
 
                         if (getusermeditem.feedback == null || !getusermeditem.feedback.Any())
                         {
@@ -1414,6 +4368,8 @@ public partial class MainSchedule : ContentPage
                         TimeSpan timeSpan = TimeSpan.Parse(getitem.time);
                         var dt = dateforschedule.Date + timeSpan;
                         newfeedback.datetime = dt.ToString("HH:mm, dd/MM/yyyy");
+                        newfeedback.dosage = getitem.Dosage + " " + getitem.dosageunit;
+                        newfeedback.datetimerecorded = DateTime.Now.ToString("HH:mm, dd/MM/yyyy");
 
                         if (getusermeditem.feedback == null || !getusermeditem.feedback.Any())
                         {
@@ -1457,6 +4413,8 @@ public partial class MainSchedule : ContentPage
                         TimeSpan timeSpan = TimeSpan.Parse(getitem.time);
                         var dt = dateforschedule.Date + timeSpan;
                         newfeedback.datetime = dt.ToString("HH:mm, dd/MM/yyyy");
+                        newfeedback.dosage = getitem.Dosage + " " + getitem.dosageunit;
+                        newfeedback.datetimerecorded = DateTime.Now.ToString("HH:mm, dd/MM/yyyy");
 
                         if (getusermeditem.feedback == null || !getusermeditem.feedback.Any())
                         {

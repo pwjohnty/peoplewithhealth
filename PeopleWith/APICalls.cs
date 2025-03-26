@@ -847,7 +847,8 @@ namespace PeopleWith
                             preparation = rawSymptom.preparation,
                             unit = rawSymptom.unit,
                             schedule = new ObservableCollection<MedtimesDosages>(),
-                            medicationquestions = rawSymptom.medicationquestions
+                            medicationquestions = rawSymptom.medicationquestions, 
+                            groupscheduleid = rawSymptom.groupscheduleid
                         };
                         if (rawSymptom.schedule == null)
                         {
@@ -1035,7 +1036,8 @@ namespace PeopleWith
                     schedule = Updatefeedback.schedule,
                     status = Updatefeedback.status,
                     details = Updatefeedback.details,
-                    medicationquestions = Updatefeedback.medicationquestions
+                    medicationquestions = Updatefeedback.medicationquestions,
+                    groupscheduleid = Updatefeedback.groupscheduleid
                 };
 
                 // Serialize the object into JSON
@@ -1083,7 +1085,8 @@ namespace PeopleWith
                     schedule = Updatefeedback.schedule,
                     status = Updatefeedback.status,
                     details = Updatefeedback.details,
-                    supplementquestions = Updatefeedback.supplementquestions
+                    supplementquestions = Updatefeedback.supplementquestions,
+                    groupscheduleid = Updatefeedback.groupscheduleid
                 };
 
                 // Serialize the object into JSON
@@ -1335,7 +1338,8 @@ namespace PeopleWith
                             preparation = rawSymptom.preparation,
                             unit = rawSymptom.unit,
                             schedule = new ObservableCollection<MedtimesDosages>(),
-                            supplementquestions = rawSymptom.supplementquestions
+                            supplementquestions = rawSymptom.supplementquestions,
+                            groupscheduleid = rawSymptom.groupscheduleid
                         };
                         // Deserialize the feedback string into the FeedbackList
                         if (rawSymptom.schedule == null || rawSymptom.schedule == "[]" || string.IsNullOrEmpty(rawSymptom.schedule))
