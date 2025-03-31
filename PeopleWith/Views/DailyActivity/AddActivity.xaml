@@ -9,11 +9,23 @@
                    xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
                    BackgroundColor="White" x:Class="PeopleWith.AddActivity">
     <ScrollView Grid.Row="0" VerticalScrollBarVisibility="Never">
-        <StackLayout>
+        <StackLayout x:Name="MainStack">
+            <StackLayout x:Name="ActivityLoading" IsVisible="False" VerticalOptions="CenterAndExpand">
+                <Grid >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <ActivityIndicator IsRunning="True" Grid.Row="0" Color="#991B1B" HorizontalOptions="Center" VerticalOptions="Start" />
+                    <Label x:Name="Loadinglbl" Grid.Row="1" TextColor="#031926" FontFamily="HankenGroteskRegular" HorizontalOptions="Center" Margin="0,5,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" />
+                </Grid>
+            </StackLayout>
 
-                <!-- TItle -->
+        <StackLayout x:Name="MainDataStack" IsVisible="False">
+
+                <!-- Title -->
             <StackLayout Margin="20,10,20,0" HorizontalOptions="FillAndExpand">
-                <Label Text="Daily Activity" Grid.Column="0" Grid.Row="0" TextColor="#031926" FontSize="26" FontFamily="HankenGroteskBold" HorizontalOptions="Start" VerticalOptions="Center" />
+                    <Label Text="Daily Activity" x:Name="DailyActivitylbl" Grid.Column="0" Grid.Row="0" TextColor="#031926" FontSize="26" FontFamily="HankenGroteskBold" HorizontalOptions="Start" VerticalOptions="Center" />
                 </StackLayout>
             
                 <!-- Date Time Picker -->
@@ -48,14 +60,14 @@
                         <Label x:Name="FilterTabTitle" Text="What kind of activity?" Grid.Row="0" Margin="20,0,0,0" FontSize="20" FontFamily="HankenGroteskBold" HorizontalOptions="Start" TextColor="#031926" />
                         <Label x:Name="FilterTabsub"  Text="Please choose the category that best describes your activity" Grid.Row="1" FontSize="12" Margin="20,5,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
 
-                        <syncfusion:SfListView x:Name="FilterTabsListview" Margin="20,10,20,0" Padding="0" CachingStrategy="RecycleTemplate" HeightRequest="100" ItemSize="90" ItemTapped="FilterTabsListview_ItemTapped"  Orientation="Horizontal" Grid.Row="2" ItemSpacing="0" ScrollBarVisibility="Never"  BackgroundColor="Transparent">
+                        <syncfusion:SfListView x:Name="FilterTabsListview" Margin="20,10,20,0" Padding="0" CachingStrategy="RecycleTemplate" HeightRequest="95" ItemSize="90" ItemTapped="FilterTabsListview_ItemTapped"  Orientation="Horizontal" Grid.Row="2" ItemSpacing="0" ScrollBarVisibility="Never"  BackgroundColor="Transparent">
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
                                     <ViewCell>
-                                        <Border StrokeShape="RoundRectangle 10" Grid.Row="0" StrokeThickness="1" Stroke="Transparent" Margin="5,5,5,5" Padding="5" BackgroundColor="#fafafa" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" >
+                                        <Border StrokeShape="RoundRectangle 10" Grid.Row="0" StrokeThickness="1"  Stroke="Transparent" Margin="5,5,5,5" Padding="5" BackgroundColor="#fafafa" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" >
                                             <Grid Grid.RowDefinitions="Auto,Auto">
-                                                <Image Source="{Binding Source}" Aspect="AspectFit" Margin="10" Grid.Row="0"/>
-                                                <Label Text="{Binding ShortGroup}" LineBreakMode="WordWrap" Grid.Row="1" FontAttributes="Bold" FontFamily="HankenGroteskBold" FontSize="10" TextColor="#031926" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" />
+                                                <Image Source="{Binding Source}" Aspect="AspectFit"  Margin="10" Grid.Row="0"/>
+                                                <Label Text="{Binding ShortGroup}" LineBreakMode="NoWrap" Grid.Row="1"  FontAttributes="Bold" Padding="0" FontFamily="HankenGroteskBold" FontSize="9" TextColor="#031926" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" />
 
                                             </Grid>
                                         </Border>
@@ -68,7 +80,7 @@
                                         <Border StrokeShape="RoundRectangle 10" Grid.Row="0" Stroke="#fce9d9" StrokeThickness="1"  Margin="5,5,5,5" Padding="5" BackgroundColor="#fce9d9" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" >
                                             <Grid Grid.RowDefinitions="Auto,Auto">
                                                 <Image Source="{Binding Source}" Aspect="AspectFit" Margin="10" Grid.Row="0"/>
-                                                <Label Text="{Binding ShortGroup}" LineBreakMode="WordWrap" Grid.Row="1" FontAttributes="Bold" FontFamily="HankenGroteskBold" FontSize="10" TextColor="#991B1B" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" />
+                                                <Label Text="{Binding ShortGroup}" LineBreakMode="NoWrap" Grid.Row="1" FontAttributes="Bold" FontFamily="HankenGroteskBold" Padding="0" FontSize="9" TextColor="#991B1B" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" />
                                             </Grid>
                                         </Border>
                                     </ViewCell>
@@ -115,44 +127,106 @@
                        
                 <!-- Duration Stack-->
                 <StackLayout x:Name="DurationStack" Margin="0,10,0,0" IsVisible="False">
-                    <Grid Grid.RowDefinitions="Auto,Auto,Auto" Padding="0" Margin="10,0,10,0">
-                        <Label x:Name="Durationtitle" Text="Enter Duration" Grid.Row="0" Margin="10,0,0,0" FontSize="20" FontFamily="HankenGroteskBold" HorizontalOptions="Start" TextColor="#031926" />
-                        <Label x:Name="DurationSub" Text="Enter or select the duration of your Activity" Grid.Row="1" FontSize="12" Margin="10,5,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
 
-                        <Frame HasShadow="False" Grid.Row="2" Margin="20,10,20,0" BorderColor="Transparent"  Padding="5" CornerRadius="20"  BackgroundColor="#fce9d9" >
-                            <Grid Grid.RowDefinitions="Auto,Auto" Margin="0,10,0,0" Grid.ColumnDefinitions="20*,26*,4*,26*,20*">
+                    <Label x:Name="Durationtitle" Text="Enter Duration" Grid.Row="0" Margin="20,0,0,0" FontSize="20" FontFamily="HankenGroteskBold" HorizontalOptions="Start" TextColor="#031926" />
+                    <Label x:Name="DurationSub" Text="Enter a duration manually or use the buttons to increment it. Swipe to see more options." Grid.Row="1" FontSize="12" Margin="20,5,20,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
 
-                            <Label Text="Hours" FontFamily="HankenGroteskBold" Margin="0,0,0,0"   VerticalOptions="Start" HorizontalOptions="Center" Grid.Row="0" Grid.Column="1" FontSize="10" TextColor="#991B1B" />
-                            <Label Text="Minutes" FontFamily="HankenGroteskBold" Margin="0,0,0,0"   VerticalOptions="Start" HorizontalOptions="Center" Grid.Row="0" Grid.Column="3" FontSize="10" TextColor="#991B1B" />
+                    <!-- Copy of simple -->
 
-                            <inputLayout:SfTextInputLayout Grid.Row="0" Grid.Column="1" InputViewPadding="10" ShowHint="True" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,0,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
-                                    <Entry FontSize="30" TextChanged="hoursentry_TextChanged" x:Name="hoursentry" Grid.Row="0" Keyboard="Numeric" Grid.Column="1" PlaceholderColor="LightGray"  FontFamily="HankenGroteskBold" HorizontalOptions="Center" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand" Placeholder="00" TextColor="#031926"/>
+                    <Border StrokeShape="RoundRectangle 10"  IsVisible="False" Grid.Row="0" Grid.Column="0" Margin="20,10,20,0" Stroke="LightGray" StrokeThickness="1"  Padding="10" BackgroundColor="Transparent" >
+                        <Grid Grid.RowDefinitions="Auto" Grid.ColumnDefinitions="20*,80*"  Padding="0" Margin="10,0,10,0">
+                        </Grid>
+
+                    </Border>
+
+                    <!-- Tap Through-->
+                    <Border StrokeShape="RoundRectangle 10" IsVisible="False" Grid.Row="0" Grid.Column="0" Margin="20,10,20,0" Stroke="LightGray" StrokeThickness="1"  Padding="10" BackgroundColor="Transparent" >
+                        <Grid Grid.RowDefinitions="Auto" Grid.ColumnDefinitions="20*,80*"  Padding="0" Margin="10,0,10,0">
+                            <Image Source="duration.png"  VerticalOptions="CenterAndExpand" HorizontalOptions="Center" Grid.Row="0" Grid.Column="0"  HeightRequest="30" WidthRequest="30" />
+                            <Label FontSize="16" Margin="0,-5,0,0" TextDecorations="Underline" TextColor="#031926"  Grid.Row="0" Grid.Column="1" Padding="0,5,0,5" x:Name="Durationlbl" FontFamily="HankenGroteskBold" FontAttributes="Bold" VerticalOptions="Start" HorizontalOptions="StartAndExpand" />
+                        </Grid>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Duration_Tapped" NumberOfTapsRequired="1"/>
+                        </Border.GestureRecognizers>
+                    </Border>
+
+                    <!-- Old Way-->
+                    <StackLayout  Padding="0" Margin="10,0,10,0">
+
+                        <Border StrokeShape="RoundRectangle 20" Grid.Row="2" Margin="10,10,10,0" Stroke="#fce9d9"  Padding="5" BackgroundColor="#fce9d9" >
+
+                           <Grid x:Name="DurationInput" Grid.Row="1" Grid.Column="0" Grid.RowDefinitions="Auto,Auto" Margin="0,10,0,0" Grid.ColumnDefinitions="5*, 26*,4*,26*,35*">
+
+                                <Label Text="Hours" FontFamily="HankenGroteskBold" Margin="0,0,0,0"   VerticalOptions="Start" HorizontalOptions="Center" Grid.Row="0" Grid.Column="1" FontSize="10" TextColor="#991B1B" />
+                                <Label Text="Minutes" FontFamily="HankenGroteskBold" Margin="0,0,0,0"   VerticalOptions="Start" HorizontalOptions="Center" Grid.Row="0" Grid.Column="3" FontSize="10" TextColor="#991B1B" />
+
+                                <inputLayout:SfTextInputLayout Grid.Row="0" Grid.Column="1" InputViewPadding="2" ShowHint="True" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,0,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
+                                    <Entry FontSize="25" TextChanged="hoursentry_TextChanged" x:Name="hoursentry" Grid.Row="0" Keyboard="Numeric" Grid.Column="1" PlaceholderColor="LightGray"  FontFamily="HankenGroteskBold" HorizontalOptions="Center" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand" Placeholder="00" TextColor="#031926"/>
                                 </inputLayout:SfTextInputLayout>
-                                <Label Text=":" FontFamily="HankenGroteskBold" Margin="0,0,0,0"   VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="0" Grid.Column="2"   FontSize="30" TextColor="#991B1B" />
-                                <inputLayout:SfTextInputLayout Grid.Row="0"  Grid.Column="3" InputViewPadding="10" ShowHint="True" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,0,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
-                                    <Entry FontSize="30" TextChanged="minsentry_TextChanged" x:Name="minsentry" Grid.Row="1" Keyboard="Numeric" Grid.Column="3" PlaceholderColor="LightGray" HorizontalOptions="Center" HorizontalTextAlignment="Center"  FontFamily="HankenGroteskBold" VerticalOptions="CenterAndExpand" Placeholder="00" TextColor="#031926"/>
+                                <Label Text=":" FontFamily="HankenGroteskBold" Margin="0,-15,0,0"   VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="0" Grid.Column="2"   FontSize="25" TextColor="#991B1B" />
+                                <inputLayout:SfTextInputLayout Grid.Row="0"  Grid.Column="3" InputViewPadding="2" ShowHint="True" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,0,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
+                                    <Entry FontSize="25" TextChanged="minsentry_TextChanged" x:Name="minsentry" Grid.Row="1" Keyboard="Numeric" Grid.Column="3" PlaceholderColor="LightGray" HorizontalOptions="Center" HorizontalTextAlignment="Center"  FontFamily="HankenGroteskBold" VerticalOptions="CenterAndExpand" Placeholder="00" TextColor="#031926"/>
                                 </inputLayout:SfTextInputLayout>
 
-                            <Grid Grid.Row="1" Margin="0,-15,0,0" Grid.Column="0" Grid.ColumnSpan="5" VerticalOptions="Start" Padding="0" Grid.RowDefinitions="Auto" Grid.ColumnDefinitions="25*,25*,25*,25*">
-                                    <Button Text="+15 mins" x:Name="fifteenminsbtn" Padding="0" FontSize="12" CommandParameter="15" Clicked="incrementminutes_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="0" BackgroundColor="#991B1B" TextColor="White" />
-                                    <Button Text="+30 mins" x:Name="thirtyminsbtn" Padding="0" FontSize="12" CommandParameter="30" Clicked="incrementminutes_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="1" BackgroundColor="#991B1B" TextColor="White" />
-                                    <Button Text="+60 mins" x:Name="sixtyminsbtn" Padding="0" FontSize="12" CommandParameter="60" Clicked="incrementminutes_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="2" BackgroundColor="#991B1B" TextColor="White" />
-                                    <Button Text="+90 mins" x:Name="ninetyminsbtn" Padding="0" FontSize="12" CommandParameter="90" Clicked="incrementminutes_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="3" BackgroundColor="#991B1B" TextColor="White" />
-                                </Grid>
+                                <syncfusion:SfListView x:Name="Incrementlist" Orientation="Horizontal" ScrollBarVisibility="Never" Grid.Row="0" HeightRequest="65" Grid.Column="4" Grid.RowSpan="2" AutoFitMode="Height"  Margin="10,-15,0,0" ItemTapped="Incrementlist_ItemTapped" SelectionBackground="Transparent" BackgroundColor="Transparent" SelectionMode="Single" VerticalOptions="CenterAndExpand"  >
+                                    <syncfusion:SfListView.ItemsLayout>
+                                        <syncfusion:GridLayout SpanCount="2"/>
+                                    </syncfusion:SfListView.ItemsLayout>
+                                    <syncfusion:SfListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <ViewCell>
+                                                <Border StrokeShape="RoundRectangle 10" Stroke="#991B1B" StrokeThickness="1" HeightRequest="30" Margin="5,5,5,5" Padding="5" BackgroundColor="#991B1B">
+                                                        <Label Text="{Binding .}" Margin="0,0,0,0" HorizontalTextAlignment="Center" FontFamily="HankenGroteskRegular"  Grid.Row="1" VerticalOptions="StartAndExpand" TextColor="White" FontSize="14" />
+                                                </Border>
+                                            </ViewCell>
+                                        </DataTemplate>
+                                    </syncfusion:SfListView.ItemTemplate>
+                                </syncfusion:SfListView>
 
                             </Grid>
-                        </Frame>
-                    </Grid>
+
+
+
+                        </Border>
+                    </StackLayout>
                 </StackLayout>
+
+
+                <!-- Old Way-->
+                    <!--<Grid Grid.RowDefinitions="Auto,Auto,Auto"  Padding="0" Margin="10,0,10,0">
+
+                        <Border StrokeShape="RoundRectangle 20" Grid.Row="2" Margin="10,10,10,0" Stroke="#fce9d9"  Padding="5" BackgroundColor="#fce9d9" >
+                            <Grid Grid.RowDefinitions="Auto,Auto,Auto" Margin="0,10,0,0" Grid.ColumnDefinitions="20*,26*,4*,26*,20*">
+                                <Label Text="Hours" FontFamily="HankenGroteskBold" Margin="0,0,0,0"   VerticalOptions="Start" HorizontalOptions="Center" Grid.Row="0" Grid.Column="1" FontSize="10" TextColor="#991B1B" />
+                                <Label Text="Minutes" FontFamily="HankenGroteskBold" Margin="0,0,0,0"   VerticalOptions="Start" HorizontalOptions="Center" Grid.Row="0" Grid.Column="3" FontSize="10" TextColor="#991B1B" />
+
+                                <inputLayout:SfTextInputLayout Grid.Row="0" Grid.Column="1" InputViewPadding="2" ShowHint="True" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,0,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
+                                    <Entry FontSize="25" TextChanged="hoursentry_TextChanged" x:Name="hoursentry" Grid.Row="0" Keyboard="Numeric" Grid.Column="1" PlaceholderColor="LightGray"  FontFamily="HankenGroteskBold" HorizontalOptions="Center" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand" Placeholder="00" TextColor="#031926"/>
+                                </inputLayout:SfTextInputLayout>
+                                <Label Text=":" FontFamily="HankenGroteskBold" Margin="0,-15,0,0"   VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="0" Grid.Column="2"   FontSize="25" TextColor="#991B1B" />
+                                <inputLayout:SfTextInputLayout Grid.Row="0"  Grid.Column="3" InputViewPadding="2" ShowHint="True" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,0,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5">
+                                    <Entry FontSize="25" TextChanged="minsentry_TextChanged" x:Name="minsentry" Grid.Row="1" Keyboard="Numeric" Grid.Column="3" PlaceholderColor="LightGray" HorizontalOptions="Center" HorizontalTextAlignment="Center"  FontFamily="HankenGroteskBold" VerticalOptions="CenterAndExpand" Placeholder="00" TextColor="#031926"/>
+                                </inputLayout:SfTextInputLayout>
+
+                                <Grid Grid.Row="1" x:Name="Showbtns" IsVisible="False" Margin="0,-15,0,0" Grid.Column="0" Grid.ColumnSpan="5" VerticalOptions="Start" Padding="0" Grid.RowDefinitions="Auto" Grid.ColumnDefinitions="25*,25*,25*,25*">
+                                    <Button Text="+15 mins" HeightRequest="40" x:Name="fifteenminsbtn" Padding="0" FontSize="12" CommandParameter="15" Clicked="incrementminutes_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="0" BackgroundColor="#991B1B" TextColor="White" />
+                                    <Button Text="+30 mins" HeightRequest="40" x:Name="thirtyminsbtn" Padding="0" FontSize="12" CommandParameter="30" Clicked="incrementminutes_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="1" BackgroundColor="#991B1B" TextColor="White" />
+                                    <Button Text="+60 mins" HeightRequest="40" x:Name="sixtyminsbtn" Padding="0" FontSize="12" CommandParameter="60" Clicked="incrementminutes_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="2" BackgroundColor="#991B1B" TextColor="White" />
+                                    <Button Text="+90 mins" HeightRequest="40" x:Name="ninetyminsbtn" Padding="0" FontSize="12" CommandParameter="90" Clicked="incrementminutes_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="3" BackgroundColor="#991B1B" TextColor="White" />
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </StackLayout>-->
 
             <StackLayout x:Name="FeedbackStack" IsVisible="False">
 
                 <!-- Completed Section -->
                 <Label Text="Activity Completed" FontFamily="HankenGroteskBold" Margin="20,10,0,0"  VerticalOptions="Center" HorizontalOptions="Start" FontSize="20" TextColor="#031926" />
                 <Label Text="Did you complete this activity?" Grid.Row="1" Grid.Column="0" FontSize="12" Margin="20,5,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
-                <Grid Grid.RowDefinitions="Auto" Grid.ColumnDefinitions="50*,50*">
-                    <Button CornerRadius="5" FontSize="16" FontFamily="HankenGroteskBold" x:Name="btnyes" CommandParameter="Yes" TextColor="Gray" BorderColor="LightGray" BorderWidth="1" BackgroundColor="Transparent" Clicked="Completed_Clicked" Text="Yes" VerticalOptions="Center" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="0"  />
-                    <Button CornerRadius="5" FontSize="16" x:Name="btnno" FontFamily="HankenGroteskBold" CommandParameter="No" TextColor="Gray" BorderColor="LightGray" BorderWidth="1" BackgroundColor="Transparent" Clicked="Completed_Clicked"  Text="No" VerticalOptions="Center" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="1"  />
+                <Grid Grid.RowDefinitions="Auto" Margin="20,10,20,0" ColumnSpacing="10"  Grid.ColumnDefinitions="50*,50*">
+                    <Button CornerRadius="10" HeightRequest="40" FontSize="16" FontFamily="HankenGroteskBold" x:Name="btnyes" CommandParameter="Yes" TextColor="Gray" BorderColor="LightGray" BorderWidth="1" BackgroundColor="Transparent" Clicked="Completed_Clicked" Text="Yes" VerticalOptions="Center" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="0"  />
+                    <Button CornerRadius="10" HeightRequest="40" FontSize="16" x:Name="btnno" FontFamily="HankenGroteskBold" CommandParameter="No" TextColor="Gray" BorderColor="LightGray" BorderWidth="1" BackgroundColor="Transparent" Clicked="Completed_Clicked"  Text="No" VerticalOptions="Center" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="1"  />
                 </Grid>
 
                 <StackLayout x:Name="ShowFeedback">
@@ -162,15 +236,6 @@
                     <Label Text="How'd the Activity go?" FontFamily="HankenGroteskBold" Margin="20,10,0,0"  VerticalOptions="Center" HorizontalOptions="Start" FontSize="20" TextColor="#031926" />
                     <Label Text="How would you rate the quality of your Activity?" Grid.Row="1" Grid.Column="0" FontSize="12" Margin="20,5,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
 
-                <!--<Border StrokeShape="RoundRectangle 10" Stroke="#fafafa" StrokeThickness="1" Margin="20,10,20,0" Padding="0" BackgroundColor="#fafafa">
-                        <Grid Grid.ColumnDefinitions="25*,25*,25*,25*" Grid.RowDefinitions="Auto" VerticalOptions="FillAndExpand" >
-                            <Button Text="Excellent" x:Name="ExcellentBtn" Padding="0" FontSize="16" CornerRadius="10" CommandParameter="Excellent" Clicked="HowditGo_Clicked" FontFamily="HankenGroteskRegular" Margin="1" Grid.Row="0" Grid.Column="0" BackgroundColor="Transparent" TextColor="Gray" VerticalOptions="Center" />
-                            <Button Text="Good" x:Name="GoodBtn" Padding="0" FontSize="16" CornerRadius="10" CommandParameter="Good" Clicked="HowditGo_Clicked" FontFamily="HankenGroteskRegular" Margin="1" Grid.Row="0" Grid.Column="1" BackgroundColor="Transparent" TextColor="Gray" VerticalOptions="Center" />
-                            <Button Text="Mediocre" x:Name="MediocreBtn" Padding="0" FontSize="16" CornerRadius="10" CommandParameter="Mediocre" Clicked="HowditGo_Clicked" FontFamily="HankenGroteskRegular" Margin="1" Grid.Row="0" Grid.Column="2" BackgroundColor="Transparent" TextColor="Gray"  VerticalOptions="Center" />
-                            <Button Text="Poor" x:Name="PoorBtn" Padding="0" FontSize="16" CornerRadius="10" CommandParameter="Poor" Clicked="HowditGo_Clicked" FontFamily="HankenGroteskRegular" Margin="1" Grid.Row="0" Grid.Column="3" BackgroundColor="Transparent" TextColor="Gray" VerticalOptions="Center" />
-
-                        </Grid>
-                    </Border>-->
                 <syncfusion:SfListView x:Name="Activityquality" Grid.Row="2" Grid.Column="0"
      AutoFitMode="Height" ItemTapped="Activityquality_ItemTapped"  Margin="10,10,10,0" 
      BackgroundColor="Transparent" SelectionMode="Single" VerticalOptions="CenterAndExpand"
@@ -264,6 +329,7 @@ BackgroundColor="Transparent">
             <!--</StackLayout>-->
     
     <!--</Grid>-->
+        </StackLayout>
         </StackLayout>
     </ScrollView>
 </ContentPage>

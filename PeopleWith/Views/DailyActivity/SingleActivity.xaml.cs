@@ -41,13 +41,41 @@ public partial class SingleActivity : ContentPage
         StartDatelbl.Text = PassedActivity.startdate;
         Durationlbl.Text = PassedActivity.convertedduration;
 
+        //Split Duration
+        var SplitDur = PassedActivity.ActivityFeedbackList.Duration.Split(":"); 
 
+        DateTime selectedDateTime = DateTime.Parse(PassedActivity.startdate);
 
+        // Safely parse hours and minutes
+        int hours = int.TryParse(SplitDur[0], out int h) ? h : 0;
+        int minutes = int.TryParse(SplitDur[1], out int m) ? m : 0;
+        // Create a TimeSpan for duration
+        var duration = new TimeSpan(hours, minutes, 0);
 
-        if (DateTime.Parse(PassedActivity.startdate).Date <= DateTime.Now.Date)
+        // Add duration to selected time
+        var finalDateTime = selectedDateTime + duration;
+        var currentDateTime = DateTime.Now;
+
+        // Show feedback if the date is in the past
+        bool CheckDateShow = finalDateTime < currentDateTime;
+        FeedbackStack.IsVisible = CheckDateShow;
+        if (CheckDateShow)
         {
-            FeedbackStack.IsVisible = true;
             bool CheckifEmpty = false;
+            if (String.IsNullOrEmpty(PassedActivity.ActivityFeedbackList.Completed))
+            {
+                Completedlbl.Text = "Not Recorded";
+                CheckifEmpty = true;
+            }
+            else
+            {
+                Completedlbl.Text = PassedActivity.ActivityFeedbackList.Completed;
+                CheckifEmpty = true;
+
+                FeedbackData.IsVisible = string.IsNullOrEmpty(PassedActivity?.ActivityFeedbackList?.Completed)
+                || PassedActivity.ActivityFeedbackList.Completed == "Completed";
+            }
+
             if (String.IsNullOrEmpty(PassedActivity.notes))
             {
                 Noteslbl.Text = "No Notes Added";
@@ -83,12 +111,6 @@ public partial class SingleActivity : ContentPage
             {
                 Outcomelbl.Text = PassedActivity.ActivityFeedbackList.Outcome;
             }
-
-            //if (CheckifEmpty)
-            //{
-            //    // If any Empty (Set is visible to true)
-            //    AddFeedbackBtn.IsVisible = true; 
-            //}
         }
     }
 
@@ -181,7 +203,7 @@ public partial class SingleActivity : ContentPage
         try
         {
             showallbtn.IsEnabled = false;
-            //await Navigation.PushAsync(new AddActivity(AllUserActivity, PassedActivity, AddEdit));
+            await Navigation.PushAsync(new ActivityShowAllData(AllUserActivity, PassedActivity));
             showallbtn.IsEnabled = true;
         }
         catch (Exception Ex)

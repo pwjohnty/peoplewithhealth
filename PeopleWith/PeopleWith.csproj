@@ -126,6 +126,11 @@
 	  <None Remove="Resources\Images\downarrow.png" />
 	  <None Remove="Resources\Images\dropdownarrow.png" />
 	  <None Remove="Resources\Images\duplicate.png" />
+	  <None Remove="Resources\Images\duration.png" />
+	  <None Remove="Resources\Images\durationaddlg.png" />
+	  <None Remove="Resources\Images\durationaddr.png" />
+	  <None Remove="Resources\Images\durationeditlg.png" />
+	  <None Remove="Resources\Images\durationeditr.png" />
 	  <None Remove="Resources\Images\emotional.png" />
 	  <None Remove="Resources\Images\Endurance.png" />
 	  <None Remove="Resources\Images\equal.png" />
@@ -230,6 +235,7 @@
 	  <None Remove="Resources\Images\searchorange.png" />
 	  <None Remove="Resources\Images\searchteal.png" />
 	  <None Remove="Resources\Images\smartwatchicon.png" />
+	  <None Remove="Resources\Images\stopwatch.png" />
 	  <None Remove="Resources\Images\strengthtraining.png" />
 	  <None Remove="Resources\Images\stressed.png" />
 	  <None Remove="Resources\Images\successtick.png" />
@@ -244,6 +250,7 @@
 	  <None Remove="Resources\Images\timered.png" />
 	  <None Remove="Resources\Images\tired.png" />
 	  <None Remove="Resources\Images\today.png" />
+	  <None Remove="Resources\Images\todaydate.png" />
 	  <None Remove="Resources\Images\truthaboutweightjune23app.png" />
 	  <None Remove="Resources\Images\uparrow.png" />
 	  <None Remove="Resources\Images\update.png" />
@@ -318,6 +325,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Helpers\ActivityDuration.xaml.cs">
+	    <DependentUpon>ActivityDuration.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Helpers\GettingReady.xaml.cs">
 	    <DependentUpon>GettingReady.xaml</DependentUpon>
 	  </Compile>
@@ -339,6 +349,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Helpers\ActivityDuration.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Helpers\ActivityCalendar.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

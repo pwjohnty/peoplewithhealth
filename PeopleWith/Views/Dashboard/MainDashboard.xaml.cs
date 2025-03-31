@@ -2359,7 +2359,7 @@ public partial class MainDashboard : ContentPage
                 new dashitem { Type = "Mood", ContactImage = "moodhome.png", Title = "Mood", BackgroundColor = Color.FromArgb("#FFF8DC") },
                 new dashitem { Type = "Diet", ContactImage ="diethome.png", Title = "Diet", BackgroundColor = Color.FromArgb("#e8efd8") },
                 new dashitem { Type = "Investigations", ContactImage ="investhome.png", Title = "Investigations", BackgroundColor = Color.FromArgb("#F5E6E8") },
-                //new dashitem { Type = "Activity", ContactImage ="activityhome.png", Title = "Daily Activity", BackgroundColor = Color.FromArgb("#fce9d9") },
+                new dashitem { Type = "Activity", ContactImage ="activityhome.png", Title = "Daily Activity", BackgroundColor = Color.FromArgb("#fce9d9") },
                 //new dashitem { Type = "Exercise", ContactImage ="investhome.png", Title = "Exercise/Activity", BackgroundColor = Color.FromArgb("#FDBA74") },
                 //new dashitem { Type = "Food Diary", ContactImage ="fooddiaryhome.png", Title = "Food Diary", BackgroundColor = Color.FromArgb("#ECE5C1") },
                 new dashitem { Type = "Appointments",  ContactImage = "appointhome.png", Title = "Appointments", BackgroundColor = Color.FromArgb("#ffe4e1") },

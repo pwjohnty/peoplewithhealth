@@ -24,14 +24,14 @@
             <Border StrokeShape="RoundRectangle 10" Padding="10" Margin="5" BackgroundColor="#fce9d9" Stroke="#fce9d9" StrokeThickness="1">
                 <Grid RowDefinitions="Auto,Auto" Grid.ColumnDefinitions="20*,80*"  RowSpacing="5" Padding="0" Margin="10,0,10,0">
                     <!-- Column Two-->
-                        <Border Stroke="#FDF3EC" StrokeThickness="1" Grid.Row="0" Grid.RowSpan="2"  Grid.Column="0" Margin="0,0,0,0"  Padding="5" StrokeShape="RoundRectangle 10" Background="#FDF3EC">
+                    <Border Stroke="Transparent" StrokeThickness="1" Grid.Row="0" Grid.RowSpan="2"  Grid.Column="0" Margin="0,0,0,0"  Padding="5" StrokeShape="RoundRectangle 10" Background="Transparent">
                             <Image x:Name="ActivityCategory" Grid.Row="0" Grid.Column="0" Margin="0,0,0,0" HeightRequest="40" WidthRequest="40" VerticalOptions="Center" HorizontalOptions="Center" />
                         </Border>
 
                     <Label FontFamily="HankenGroteskBold" VerticalOptions="End" Margin="10,0,0,0" Grid.Row="0" Grid.Column="1">
                         <Label.FormattedText>
                             <FormattedString>
-                                <Span Text="Date Added: " TextColor="Gray" FontSize="12" FontFamily="HankenGroteskRegular" FontAttributes="None"/>
+                                <Span Text="Date Time: " TextColor="Gray" FontSize="12" FontFamily="HankenGroteskRegular" FontAttributes="None"/>
                                 <Span Text=" " TextColor="#031926" FontSize="12" FontAttributes="Bold"/>
                                 <Span x:Name="StartDatelbl" TextColor="#031926" FontFamily="HankenGroteskRegular" FontSize="14"   />
                             </FormattedString>
@@ -53,11 +53,25 @@
 
             <StackLayout x:Name="FeedbackStack" IsVisible="False" >
                        
-            <Label Text="Feedback" FontSize="20" Margin="10,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
+            <Label Text="Activity Feedback" FontSize="20" Margin="10,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
+                <Label Text="Tap below to add or edit feedback"  FontSize="12" Margin="10,5,10,0" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
 
                 <Border x:Name="FeedBackSection" StrokeShape="RoundRectangle 10" Padding="10" Margin="0,10,0,0" BackgroundColor="#fce9d9" Stroke="#fce9d9" StrokeThickness="1">
-                    <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="10" ColumnSpacing="10" ColumnDefinitions="50*, 50*">
-                        <Label Text="Notes" FontFamily="HankenGroteskRegular" Margin="5,0,0,0" Grid.Row="0" Grid.Column="0" Padding="0" HorizontalOptions="Start"  VerticalOptions="Center" TextColor="#031926" FontSize="14" FontAttributes="None" />
+                    <Grid RowDefinitions="Auto,Auto" Grid.ColumnDefinitions="50*,50*" RowSpacing="0" ColumnSpacing="10" >
+
+                        <Label Margin="5,0,0,0" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Completed:  " TextColor="#031926" FontSize="14" FontFamily="HankenGroteskRegular" FontAttributes="None"/>
+                                    <Span Text=" " TextColor="#031926" FontSize="12" FontAttributes="Bold"/>
+                                    <Span x:Name="Completedlbl" TextColor="#991B1B" FontFamily="HankenGroteskBold" FontSize="18" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <!--<Label x:Name="Completedlbl" FontFamily="HankenGroteskBold" Margin="5,5,0,0" Grid.Row="0" Grid.Column="0" Padding="0" HorizontalOptions="Start"  VerticalOptions="Center" TextColor="#991B1B" FontSize="20" FontAttributes="None" />-->
+
+                        <Grid x:Name="FeedbackData" Grid.Row="1" Grid.Column="0" Margin="0,10,0,0" Grid.ColumnSpan="2" RowDefinitions="Auto,Auto,Auto,Auto"  ColumnDefinitions="50*, 50*" RowSpacing="10" ColumnSpacing="10" >
+                            <Label Text="Notes" FontFamily="HankenGroteskRegular" Margin="5,0,0,0" Grid.Row="0" Grid.Column="0" Padding="0" HorizontalOptions="Start"  VerticalOptions="Center" TextColor="#031926" FontSize="14" FontAttributes="None" />
                         <Border Stroke="#FDF3EC" StrokeThickness="1" Grid.Row="1" Grid.ColumnSpan="2"  Grid.Column="0" Margin="0,0,0,0"  Padding="10" StrokeShape="RoundRectangle 10" Background="#FDF3EC">
                             <Label x:Name="Noteslbl" FontFamily="HankenGroteskRegular" Margin="5,0,0,0" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Padding="0" HorizontalOptions="Start"  VerticalOptions="Center" TextColor="#991B1B" FontSize="16" FontAttributes="None" />
                         </Border>
@@ -67,21 +81,21 @@
                                 <HorizontalStackLayout >
                                     <Image x:Name="MoodImg" Grid.Row="0" Grid.Column="0" HeightRequest="30" WidthRequest="30" VerticalOptions="Center" HorizontalOptions="Center"/>
                                     <Label x:Name="Moodlbl" FontFamily="HankenGroteskRegular" Margin="5,0,0,0" Grid.Row="0" Grid.Column="1" Padding="0" HorizontalOptions="Start"  VerticalOptions="Center" TextColor="#991B1B" FontSize="16" FontAttributes="None" />
-                                    <Label x:Name="NoMood" IsVisible="False" FontFamily="HankenGroteskRegular" Margin="5,0,0,0" Grid.Row="0" Grid.Column="0" Padding="0" HorizontalOptions="Center"  VerticalOptions="Center" TextColor="#991B1B" FontSize="16" FontAttributes="None" />
+                                    <Label x:Name="NoMood" IsVisible="False" FontFamily="HankenGroteskRegular" Margin="5,0,0,0" Grid.Row="0" Grid.Column="0" Padding="0" HorizontalOptions="Start"  VerticalOptions="Center" TextColor="#991B1B" FontSize="16" FontAttributes="None" />
                                 </HorizontalStackLayout>
                             </Border>
                         </Grid>
 
                         <Label Text="Outcome" FontFamily="HankenGroteskRegular" Margin="5,0,0,0" Grid.Row="2" Grid.Column="1" Padding="0" HorizontalOptions="Start"  VerticalOptions="Center" TextColor="#031926" FontSize="14" FontAttributes="None" />
                         <Border Stroke="#FDF3EC" StrokeThickness="1" Grid.Row="3" Grid.Column="2" Margin="0,0,0,0"  Padding="5" StrokeShape="RoundRectangle 10" Background="#FDF3EC">
-                            <Label x:Name="Outcomelbl" FontFamily="HankenGroteskRegular" Margin="5,0,0,0" Grid.Row="3" Grid.Column="2" Padding="0" HorizontalOptions="Center"  VerticalOptions="Center" TextColor="#991B1B" FontSize="16" FontAttributes="None" />
+                            <Label x:Name="Outcomelbl" FontFamily="HankenGroteskRegular" Margin="5,0,0,0" Grid.Row="3" Grid.Column="2" Padding="0" HorizontalOptions="Start"  VerticalOptions="Center" TextColor="#991B1B" FontSize="16" FontAttributes="None" />
                         </Border>
 
                         <!--<StackLayout Grid.Row="4" Grid.ColumnSpan="2">
                             <Button BackgroundColor="#991B1B" IsVisible="False" HorizontalOptions="FillAndExpand" TextColor="White" Clicked="AddFeedbackBtn_Clicked" FontAttributes="None" x:Name="AddFeedbackBtn" Margin="0,10,0,10" FontFamily="HankenGroteskBold" Text="Add Feedback" />
                         </StackLayout>-->
                     </Grid>
-
+                    </Grid>
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
                     </Border.GestureRecognizers>
@@ -102,12 +116,8 @@
             <Label Text="Details" x:Name="detailslbl" IsVisible="True" FontSize="20" Margin="10,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
 
             <Frame CornerRadius="5"  Margin="10,5,10,5" BackgroundColor="Transparent" HasShadow="False"  BorderColor="#fce9d9" Padding="10">
-                <Grid HorizontalOptions="FillAndExpand" Grid.RowDefinitions="Auto,Auto,Auto"  Margin="0,10,0,10">
-                    <Label Text="Date Started" FontSize="14" Margin="0,0,0,0" Grid.Row="0" TextColor="#031926" FontFamily="HankenGroteskRegular" VerticalOptions="Center" FontAttributes="None" HorizontalOptions="Start" />
-                    <Label x:Name="datestartedlbl" FontSize="20" Margin="0,0,5,0" Grid.Row="0" TextColor="#031926" FontFamily="HankenGroteskBold" VerticalOptions="Center" FontAttributes="None" HorizontalOptions="End" />
-
-                    <BoxView HorizontalOptions="FillAndExpand" Margin="0,20,0,20" Color="#fce9d9" BackgroundColor="#fce9d9" HeightRequest="1" Grid.Row="1" />
-                    <Frame Padding="0" Grid.Row="2" HasShadow="False" BorderColor="Transparent" BackgroundColor="Transparent" >
+                <Grid HorizontalOptions="FillAndExpand" Grid.RowDefinitions="Auto"  Margin="0,10,0,10">
+                    <Frame Padding="0" Grid.Row="0" HasShadow="False" BorderColor="Transparent" BackgroundColor="Transparent" >
                         <Grid Grid.ColumnDefinitions="90*,10*" >
                             <Label Text="Information and Resources" FontSize="14" Margin="0,0,0,0"  Grid.Column="0" TextColor="#031926" FontFamily="HankenGroteskBold" VerticalOptions="Center" FontAttributes="None" HorizontalOptions="Start" />
                             <Image Source="nextdarker.png" HeightRequest="15" Margin="0,0,5,0"  Grid.Column="1" VerticalOptions="Center" HorizontalOptions="End" />

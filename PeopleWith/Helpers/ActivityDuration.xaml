@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Mopups:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                   xmlns:Animations="clr-namespace:Mopups.Animations;assembly=Mopups"
+                   xmlns:Mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+                   xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+                   xmlns:picker="clr-namespace:Syncfusion.Maui.Picker;assembly=Syncfusion.Maui.Picker"
+                   xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Calendar;assembly=Syncfusion.Maui.Calendar" 
+                   BackgroundColor="#80000000"  BackgroundInputTransparent="False" CloseWhenBackgroundIsClicked="True"
+                   x:Class="PeopleWith.ActivityDuration" >
+    <!-- Animation -->
+    <Mopups:PopupPage.Animation>
+        <Animations:ScaleAnimation
+            PositionIn="Bottom"
+            PositionOut="Bottom"
+            DurationIn="200"
+            DurationOut="200"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="False"/>
+    </Mopups:PopupPage.Animation>
+
+    <!-- Main Popup Container -->
+    <Grid Grid.RowDefinitions="Auto" Grid.ColumnDefinitions="*" VerticalOptions="End" Padding="10">
+        <Frame Grid.Row="1" BackgroundColor="White" Padding="15" CornerRadius="20" Margin="10,0,10,30">
+            <VerticalStackLayout Spacing="10">
+
+                <Grid ColumnDefinitions="50*,50*" RowDefinitions="Auto" >
+                    <!-- Done Button -->
+                                <Button Text="Reset" FontSize="16"
+                      x:Name="Resetbtn" FontFamily="HankenGroteskBold"
+                      TextColor="#991B1B" Grid.Row="0" Grid.Column="0"
+                      BackgroundColor="Transparent"
+                      HorizontalOptions="Start"
+                      Clicked="Reset_Clicked"/>
+
+                                <!-- Done Button -->
+                                <Button Text="Done" FontSize="16"
+                      x:Name="Closebtn" FontFamily="HankenGroteskBold"
+                      TextColor="#991B1B" Grid.Row="0" Grid.Column="1"
+                      BackgroundColor="Transparent"
+                      HorizontalOptions="End"
+                      Clicked="Closebtn_Clicked"/>
+                </Grid>
+              
+
+                <!-- Pickers Grid -->
+                <Grid  Margin="10,0,10,10" RowDefinitions="90" ColumnDefinitions="40*,8*, 4*,40*,8*">
+                    <!-- Hour Picker -->
+                    <picker:SfPicker x:Name="HourPicker" Grid.Row="0" Grid.Column="0" ItemHeight="30" HorizontalOptions="Center" BackgroundColor="Transparent" >
+                        <picker:SfPicker.FooterView>
+                            <picker:PickerFooterView  Height="0"/>
+                        </picker:SfPicker.FooterView>
+                        <picker:SfPicker.HeaderView>
+                            <picker:PickerHeaderView  Height="0"/>
+                        </picker:SfPicker.HeaderView>
+                        <picker:SfPicker.TextStyle>
+                            <picker:PickerTextStyle FontSize="12" FontFamily="HankenGroteskRegular" TextColor="LightGray" />
+                        </picker:SfPicker.TextStyle>
+                        <picker:SfPicker.SelectedTextStyle>
+                            <picker:PickerTextStyle FontSize="20" FontFamily="HankenGroteskBold" TextColor="#991B1B" />
+                        </picker:SfPicker.SelectedTextStyle>
+                        <picker:SfPicker.SelectionView>
+                            <picker:PickerSelectionView Stroke="#fce9d9" CornerRadius="10" Background="#fce9d9" />
+                        </picker:SfPicker.SelectionView>
+                    </picker:SfPicker>
+
+                    <!-- Seperator Label-->
+                    <Label Text="h" Grid.Row="0" Grid.Column="1" VerticalOptions="Center" FontSize="20" HorizontalOptions="Center" FontFamily="HankenGroteskBold" TextColor="#991B1B" />
+
+
+                    <!-- Seperator Label-->
+                    <Label Text=":" Grid.Row="0" Grid.Column="2" VerticalOptions="Center" FontSize="20" HorizontalOptions="Center" FontFamily="HankenGroteskBold" TextColor="#991B1B" />
+
+                    <!-- Minute Picker -->
+
+                    <picker:SfPicker x:Name="MinutePicker" Grid.Row="0" Grid.Column="3" ItemHeight="30" HorizontalOptions="Center" BackgroundColor="Transparent" >
+                        <picker:SfPicker.FooterView>
+                            <picker:PickerFooterView  Height="0"/>
+                        </picker:SfPicker.FooterView>
+                        <picker:SfPicker.HeaderView>
+                            <picker:PickerHeaderView  Height="0"/>
+                        </picker:SfPicker.HeaderView>
+                        <picker:SfPicker.TextStyle>
+                            <picker:PickerTextStyle FontSize="12" FontFamily="HankenGroteskRegular" TextColor="LightGray" />
+                        </picker:SfPicker.TextStyle>
+                        <picker:SfPicker.SelectedTextStyle>
+                            <picker:PickerTextStyle FontSize="20" FontFamily="HankenGroteskBold" TextColor="#991B1B" />
+                        </picker:SfPicker.SelectedTextStyle>
+                        <picker:SfPicker.SelectionView>
+                            <picker:PickerSelectionView Stroke="#fce9d9" CornerRadius="10" Background="#fce9d9" />
+                        </picker:SfPicker.SelectionView>
+                    </picker:SfPicker>
+
+                    <Label Text="m" Grid.Row="0" Grid.Column="4" VerticalOptions="Center" FontSize="20" HorizontalOptions="Center" FontFamily="HankenGroteskBold" TextColor="#991B1B" />
+               
+                </Grid>
+                
+                <!-- Quick Select Duration-->
+
+                <Grid Margin="10,10,10,10" RowDefinitions="Auto,Auto" ColumnDefinitions="33*,33*,33*">
+
+                    <Button Text="5m" HeightRequest="40" x:Name="fivebtn" Padding="0" FontSize="12" CommandParameter="5" Clicked="IncrementPickcer_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="0" BackgroundColor="#991B1B" TextColor="White" />
+                    <Button Text="15m" HeightRequest="40" x:Name="fifteenbtn" Padding="0" FontSize="12" CommandParameter="15" Clicked="IncrementPickcer_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="1" BackgroundColor="#991B1B" TextColor="White" />
+                    <Button Text="30m" HeightRequest="40" x:Name="thirtysbtn" Padding="0" FontSize="12" CommandParameter="30" Clicked="IncrementPickcer_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="0" Grid.Column="2" BackgroundColor="#991B1B" TextColor="White" />
+
+                    <Button Text="45m" HeightRequest="40" x:Name="fourtyfivebtn" Padding="0" FontSize="12" CommandParameter="45" Clicked="IncrementPickcer_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="1" Grid.Column="0" BackgroundColor="#991B1B" TextColor="White" />
+                    <Button Text="1h" HeightRequest="40" x:Name="onehourbtn" Padding="0" FontSize="12" CommandParameter="60" Clicked="IncrementPickcer_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="1" Grid.Column="1" BackgroundColor="#991B1B" TextColor="White" />
+                    <Button Text="1h 30m" HeightRequest="40" x:Name="hourthirtybtn" Padding="0" FontSize="12" CommandParameter="90" Clicked="IncrementPickcer_Clicked" FontFamily="HankenGroteskRegular" Margin="5" Grid.Row="1" Grid.Column="2" BackgroundColor="#991B1B" TextColor="White" />
+
+                </Grid>
+
+            </VerticalStackLayout>
+        </Frame>
+    </Grid>
+
+</Mopups:PopupPage>
