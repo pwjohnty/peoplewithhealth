@@ -524,6 +524,28 @@ namespace PeopleWith
             }
         }
 
+        public async Task<bool> GetSymptonsInput(usersymptom CheckSymptom)
+        {
+            try
+            {
+                var id = CheckSymptom.symptomid;
+                var url = $"https://pwapi.peoplewith.com/api/symptom/symptomid/{id}";
+                var fullurl = $"{url}?$select=imageinput";
+                ConfigureClient();
+                HttpResponseMessage response = await Client.GetAsync(fullurl);
+                string data = await response.Content.ReadAsStringAsync();
+
+                var jsonObject = JObject.Parse(data);
+                bool imageInput = jsonObject["value"]?[0]?["imageinput"]?.Value<bool>() ?? false;
+                return imageInput;
+
+            }
+            catch (Exception ex)
+            {
+                return true;
+            }
+        }
+
         public async Task<usersymptom> PostSymptomAsync(usersymptom usersymptomsPassed)
         {
             try

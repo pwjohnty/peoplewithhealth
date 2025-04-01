@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:sys="clr-namespace:System;assembly=System.Runtime"
              x:Class="PeopleWith.ShowAllSymptomData" 
              xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
              NavigationPage.HasNavigationBar="True" BackgroundColor="White">
@@ -13,7 +14,7 @@
             <Label x:Name="ShowAllTitle"  FontFamily="HankenGroteskBold" Margin="20,20,0,0" HorizontalOptions="Start" FontSize="20" TextColor="#031926"/>
             <Label Text="Select an item to edit or delete the symptom feedback" FontSize="12" IsVisible="True" Margin="20,5,0,0" TextColor="#031926" FontFamily="HankenGroteskRegualar" HorizontalOptions="Start" />
 
-            <syncfusion:SfListView x:Name="AllDataLV" Margin="20,20,20,20" AutoFitMode="DynamicHeight" ItemSpacing="2" ItemTapped="AllDataLV_ItemTapped" SelectionMode="Single" SelectionBackground="Transparent">
+            <syncfusion:SfListView x:Name="AllDataLV" Margin="20,20,20,20" AutoFitMode="DynamicHeight" CachingStrategy="CreateNewTemplate" ItemSpacing="2" ItemTapped="AllDataLV_ItemTapped" SelectionMode="Single" SelectionBackground="Transparent">
                 <syncfusion:SfListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
@@ -27,62 +28,75 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <Frame Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="0" HasShadow="False" Margin="0,0,0,0" InputTransparent="True" Padding="10" BackgroundColor="Transparent" BorderColor="#fff7ea" HorizontalOptions="FillAndExpand" >
-                         
-                               
-                                <Grid >
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
 
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="20*"/>
-                                        <ColumnDefinition Width="40*"/>
-                                        <ColumnDefinition Width="40*"/>
-                                    </Grid.ColumnDefinitions>
 
-                                    <Label Text="Score" FontSize="10" FontFamily="HankenGroteskBold" Margin="5,0,0,0" TextColor="Gray" Grid.Row="0" Grid.Column="0"  VerticalOptions="Center" HorizontalOptions="Start"/>
-                                    <Label Text="{Binding intensity}" FontSize="25" FontFamily="HankenGroteskBold" Margin="5,0,0,0" TextColor="Orange" Grid.Row="1" Grid.Column="0"  VerticalOptions="Center" HorizontalOptions="Start"/>
-
-                                    <Label Text="Date/Time" FontSize="10" FontFamily="HankenGroteskBold" Margin="5,0,0,0" TextColor="Gray" Grid.Row="0" Grid.Column="1"  VerticalOptions="Center" HorizontalOptions="Start"/>
-                                    <Label Text="{Binding formattedDateTime}" FontSize="12"  Grid.Row="1" Grid.Column="1" Margin="5,0,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" VerticalOptions="Center" HorizontalOptions="Start"/>
-
-                                    <Label Text="Duration" FontSize="10" FontFamily="HankenGroteskBold" Margin="5,0,0,0" TextColor="Gray" Grid.Row="0" Grid.Column="2"  VerticalOptions="Center" HorizontalOptions="Start"/>
-                                    <Label Text="{Binding duration}" Grid.ColumnSpan="1" FontSize="12" TextColor="#031926" Grid.Row="1" Grid.Column="2" Margin="5,0,0,0" FontFamily="HankenGroteskBold" VerticalOptions="Center" HorizontalOptions="Start"/>
-
-                                    <Grid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="50*"/>
-                                            <ColumnDefinition Width="50*"/>
-                                        </Grid.ColumnDefinitions>
+                                    <Grid >
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
-                       
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
 
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="20*"/>
+                                            <ColumnDefinition Width="40*"/>
+                                            <ColumnDefinition Width="40*"/>
+                                        </Grid.ColumnDefinitions>
 
-                                    <Label Text="{Binding triggerorIntervention}" Margin="0,10,0,5" FontSize="10" TextColor="Gray" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="1"  FontFamily="HankenGroteskBold" VerticalOptions="Center" HorizontalOptions="Start"/>
-                                    <Label Text="{Binding triggers}"  IsVisible="{Binding TriggerBool}" FontSize="12" FontFamily="HankenGroteskBold" TextColor="#031926" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="1" VerticalOptions="Center" HorizontalOptions="Start"/>
-                                    <Label Text="{Binding interventions}"  IsVisible="{Binding InterventionBool}" FontFamily="HankenGroteskBold"  FontSize="12" TextColor="#031926" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="1" VerticalOptions="Center" HorizontalOptions="Start"/>
-                                    <Label Text="None"  IsVisible="{Binding OtherBool}" FontSize="12" FontFamily="HankenGroteskBold" TextColor="#031926" Grid.Row="1" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Start"/>
+                                        <Label Text="Score" FontSize="10" FontFamily="HankenGroteskBold" Margin="5,0,0,0" TextColor="Gray" Grid.Row="0" Grid.Column="0"  VerticalOptions="Center" HorizontalOptions="Start"/>
+                                        <Label Text="{Binding intensity}" FontSize="25" FontFamily="HankenGroteskBold" Margin="5,0,0,0" TextColor="Orange" Grid.Row="1" Grid.Column="0"  VerticalOptions="Center" HorizontalOptions="Start"/>
 
-                                    <Label Text="Notes"   FontSize="10" FontFamily="HankenGroteskBold" TextColor="Gray" Margin="0,10,0,0" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" VerticalOptions="Center" HorizontalOptions="Start"/>
-                                    <Label Text="{Binding notes}" FontFamily="HankenGroteskBold"  FontSize="12" TextColor="#031926" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="1" VerticalOptions="Center" HorizontalOptions="Start"/>
+                                        <Label Text="Date/Time" FontSize="10" FontFamily="HankenGroteskBold" Margin="5,0,0,0" TextColor="Gray" Grid.Row="0" Grid.Column="1"  VerticalOptions="Center" HorizontalOptions="Start"/>
+                                        <Label Text="{Binding formattedDateTime}" FontSize="12"  Grid.Row="1" Grid.Column="1" Margin="5,0,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" VerticalOptions="Center" HorizontalOptions="Start"/>
+
+                                        <Label Text="Duration" FontSize="10" FontFamily="HankenGroteskBold" Margin="5,0,0,0" TextColor="Gray" Grid.Row="0" Grid.Column="2"  VerticalOptions="Center" HorizontalOptions="Start"/>
+                                        <Label Text="{Binding duration}" Grid.ColumnSpan="1" FontSize="12" TextColor="#031926" Grid.Row="1" Grid.Column="2" Margin="5,0,0,0" FontFamily="HankenGroteskBold" VerticalOptions="Center" HorizontalOptions="Start"/>
+
+                                        <Grid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="50*"/>
+                                                <ColumnDefinition Width="50*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+
+                                            </Grid.RowDefinitions>
+
+
+                                            <Label Text="{Binding triggerorIntervention}" Margin="0,10,0,5" FontSize="10" TextColor="Gray" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="1"  FontFamily="HankenGroteskBold" VerticalOptions="Center" HorizontalOptions="Start"/>
+                                            <Label Text="{Binding triggers}"  IsVisible="{Binding TriggerBool}" FontSize="12" FontFamily="HankenGroteskBold" TextColor="#031926" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="1" VerticalOptions="Center" HorizontalOptions="Start"/>
+                                            <Label Text="{Binding interventions}"  IsVisible="{Binding InterventionBool}" FontFamily="HankenGroteskBold"  FontSize="12" TextColor="#031926" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="1" VerticalOptions="Center" HorizontalOptions="Start"/>
+                                            <Label Text="None"  IsVisible="{Binding OtherBool}" FontSize="12" FontFamily="HankenGroteskBold" TextColor="#031926" Grid.Row="1" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Start"/>
+
+                                            <Label Text="Notes"   FontSize="10" FontFamily="HankenGroteskBold" TextColor="Gray" Margin="0,10,0,0" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" VerticalOptions="Center" HorizontalOptions="Start"/>
+                                            <Label Text="{Binding notes}" FontFamily="HankenGroteskBold"  FontSize="12" TextColor="#031926" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="1" VerticalOptions="Center" HorizontalOptions="Start"/>
+
+                                            <!-- Label to Show Image Attached -->
+                                            <Label Text="Image Attached" IsVisible="{Binding ImageAttached}" TextDecorations="Underline" FontFamily="HankenGroteskBold" FontSize="14" Margin="0,10,0,0"  TextColor="Orange" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"  VerticalOptions="Center" HorizontalOptions="Start">
+                                                <!--<Label.Triggers>
+                                                    <DataTrigger TargetType="Label"  Binding="{Binding symptomimage}" Value="">
+                                                        <Setter Property="IsVisible" Value="False"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger TargetType="Label" Binding="{Binding symptomimage}" Value="{x:Null}">
+                                                        <Setter Property="IsVisible" Value="False"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger TargetType="Label" Binding="{Binding symptomimage}" Value="{x:Static sys:String.Empty}">
+                                                        <Setter Property="IsVisible" Value="False"/>
+                                                    </DataTrigger>
+                                                </Label.Triggers>-->
+                                            </Label>
+
+                                        </Grid>
+                                        <CheckBox  IsVisible="{Binding DeleteCheck}" Color="#ffa500" Grid.Row="0" Grid.Column="2" Grid.RowSpan="5" IsChecked="{Binding DeleteSelected}" VerticalOptions="Center" HorizontalOptions="Center"/>
 
                                     </Grid>
-                                    <CheckBox  IsVisible="{Binding DeleteCheck}" Color="#ffa500" Grid.Row="0" Grid.Column="2" Grid.RowSpan="5" IsChecked="{Binding DeleteSelected}" VerticalOptions="Center" HorizontalOptions="Center"/>
 
-                                </Grid>
-                            
-                            
-                            
-                               
-                            </Frame>
+                                </Frame>
 
                                 <!--<Frame Grid.ColumnSpan="1" Grid.Column="0" Grid.Row="1" HasShadow="False" Margin="0,10,0,10" InputTransparent="True" Padding="5" BackgroundColor="#ededed" BorderColor="Transparent" HorizontalOptions="FillAndExpand" >
                                     <Label Text="Edit" FontSize="10" FontFamily="HankenGroteskBold" Margin="0,0,0,0" TextColor="Gray"   VerticalOptions="Center" HorizontalOptions="Center" HorizontalTextAlignment="Center"/>

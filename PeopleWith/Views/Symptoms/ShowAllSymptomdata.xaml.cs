@@ -90,6 +90,7 @@ public partial class ShowAllSymptomData : ContentPage
             {
                 item.OtherBool = false;
                 item.DeleteCheck = false;
+                item.ImageAttached = false;
                 item.DeleteSelected = false;
                 var time = DateTime.Parse(item.timestamp);
                 var format = time.ToString("HH:mm, dd/MM/yyyy");
@@ -117,12 +118,17 @@ public partial class ShowAllSymptomData : ContentPage
                 {
                     item.notes = "No Notes";
                 }
+
+                else if (!string.IsNullOrEmpty(item.symptomimage))
+                {
+                    item.ImageAttached = true; 
+                }
             }
 
             var orderlist = SymptomFeedback.OrderByDescending(x => DateTime.Parse(x.timestamp)).ToList();
 
             AllDataLV.ItemsSource = orderlist;
-            AllDataLV.HeightRequest = SymptomFeedback.Count * 120; 
+            //AllDataLV.HeightRequest = SymptomFeedback.Count * 120; 
         }
         catch (Exception Ex)
         {

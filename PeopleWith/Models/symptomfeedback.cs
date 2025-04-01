@@ -21,8 +21,9 @@ namespace PeopleWith
         public string triggers { get; set; }
         public string interventions { get; set; }
         public string duration { get; set; }
+        public string symptomimage { get; set; }
 
-     
+
         [System.Text.Json.Serialization.JsonIgnore]
         public string formattedDateTime { get; set; }
 
@@ -35,6 +36,9 @@ namespace PeopleWith
         public bool InterventionBool { get; set; }
         [System.Text.Json.Serialization.JsonIgnore]
         public bool OtherBool { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool ImageAttached { get; set; }
+
         [System.Text.Json.Serialization.JsonIgnore]
         public bool DeleteCheck
         {

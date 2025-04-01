@@ -634,6 +634,9 @@
 	  <MauiXaml Update="Views\Symptoms\SingleSymptom.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Symptoms\SymptomGallery.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Symptoms\UpdateAllSymptoms.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

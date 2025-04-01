@@ -654,8 +654,21 @@ public partial class SingleSymptom : ContentPage
         }
     }
 
-    private void Switch_Toggled_1(object sender, ToggledEventArgs e)
-    {
+    //private void Switch_Toggled_1(object sender, ToggledEventArgs e)
+    //{
 
+    //}
+
+    private async void OpenGallery(object sender, EventArgs e)
+    {
+        try
+        {
+            //Add Symptom Info Here
+            await DisplayAlert("Symptom Information", "No information or resources available for this Symptom", "Close");
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 }

@@ -89,6 +89,9 @@ namespace PeopleWith
         public string PreviousIntensity { get; set; }
 
         [System.Text.Json.Serialization.JsonIgnore]
+        public bool imageinput { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
         public double Opacity
         {
             get => opacity;
