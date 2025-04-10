@@ -1,6 +1,9 @@
 using Microsoft.Maui.Controls;
 using Mopups.Services;
 using System.Collections.ObjectModel;
+using Microsoft.Maui.Networking;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Devices;
 namespace PeopleWith;
 public partial class UpdateAllSymptoms : ContentPage
 {

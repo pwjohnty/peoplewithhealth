@@ -3,6 +3,9 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq.Expressions;
 using Mopups.Services;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Devices;
+using Microsoft.Maui.Networking;
 
 namespace PeopleWith;
 

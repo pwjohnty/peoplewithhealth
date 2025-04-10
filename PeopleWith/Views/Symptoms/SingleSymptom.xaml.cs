@@ -2,6 +2,7 @@ using CommunityToolkit.Maui.Core.Extensions;
 using Mopups.Services;
 using Syncfusion.Maui.Charts;
 using System.Collections.ObjectModel;
+using Microsoft.Maui.Networking;
 namespace PeopleWith;
 public partial class SingleSymptom : ContentPage
 {

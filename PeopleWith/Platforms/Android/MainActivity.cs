@@ -9,11 +9,16 @@ using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using AndroidX.AppCompat.App;
-using Firebase.Messaging;
+//using Firebase.Messaging;
 using Microsoft.Azure.NotificationHubs;
 using Plugin.Fingerprint;
 using static Android.Provider.Settings;
 using static Android.Provider.SyncStateContract;
+using Microsoft.Maui.Graphics;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Storage;
+using Microsoft.Maui;
+using Android.Runtime;
 
 namespace PeopleWith
 {
@@ -26,6 +31,15 @@ namespace PeopleWith
 
         protected override async void OnCreate(Bundle savedInstanceState)
         {
+
+            AndroidEnvironment.UnhandledExceptionRaiser += (sender, args) =>
+            {
+                Sentry.SentrySdk.CaptureException(args.Exception);
+                System.Diagnostics.Debug.WriteLine("Unhandled Exception: " + args.Exception.ToString());
+               
+            };
+
+
             base.OnCreate(savedInstanceState);
             // Window.SetStatusBarColor(Android.Graphics.Color.Transparent);
             // Window.SetNavigationBarColor(Android.Graphics.Color.Transparent);
@@ -47,7 +61,7 @@ namespace PeopleWith
 
             try
             {
-                Firebase.FirebaseApp.InitializeApp(this);
+                //Firebase.FirebaseApp.InitializeApp(this);
 
 
                 //var hubName = "PWDevHub";
@@ -94,7 +108,7 @@ namespace PeopleWith
 
                 if (token == null)
                 {
-                    token = FirebaseMessaging.Instance.GetToken().ToString();
+                   // token = FirebaseMessaging.Instance.GetToken().ToString();
                 }
 
                 Helpers.Settings.Token = token;

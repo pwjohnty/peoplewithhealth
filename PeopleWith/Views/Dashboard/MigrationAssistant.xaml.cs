@@ -1,3 +1,4 @@
+using Microsoft.Maui.ApplicationModel;
 namespace PeopleWith;
 
 using Syncfusion.Maui.ProgressBar;

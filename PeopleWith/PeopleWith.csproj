@@ -1,664 +1,617 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-	<PropertyGroup>
-		<TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
-		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
-		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
-
-		<!-- Note for MacCatalyst:
+  <PropertyGroup>
+    <TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
+    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
+    <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
+    <!-- <TargetFrameworks>$(TargetFrameworks);net9.0-tizen</TargetFrameworks> -->
+    <!-- Note for MacCatalyst:
 		The default runtime is maccatalyst-x64, except in Release config, in which case the default is maccatalyst-x64;maccatalyst-arm64.
 		When specifying both architectures, use the plural <RuntimeIdentifiers> instead of the singular <RuntimeIdentifier>.
 		The Mac App Store will NOT accept apps with ONLY maccatalyst-arm64 indicated;
 		either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
-		<!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
-
-		<OutputType>Exe</OutputType>
-		<RootNamespace>PeopleWith</RootNamespace>
-		<UseMaui>true</UseMaui>
-		<SingleProject>true</SingleProject>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
+    <!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
+    <OutputType>Exe</OutputType>
+    <RootNamespace>PeopleWith</RootNamespace>
+    <UseMaui>true</UseMaui>
+    <SingleProject>true</SingleProject>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
 
-		<!-- Display name -->
-		<ApplicationTitle>PeopleWith</ApplicationTitle>
-
-		<!-- App Identifier -->
-		<ApplicationId>com.companyname.peoplewith</ApplicationId>
-
-		<!-- Versions -->
-		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
-		<ApplicationVersion>1</ApplicationVersion>
-
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
-		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios'">
-	  <CodesignKey>Apple Development: Created via API (9AF7WV24ZX)</CodesignKey>
-	  <CodesignProvision>VS: com.peoplewith.peoplewith Development</CodesignProvision>
-	  <ProvisioningType>automatic</ProvisioningType>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
-		<MtouchLink>None</MtouchLink>
-	</PropertyGroup>
-
-	<ItemGroup>
-		<!-- App Icon -->
-		<!--<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />-->
-		<MauiIcon Condition="'$(TargetFramework)'=='net8.0-android'" Include="Resources\AppIcon\pwhealthicon.svg" ForegroundScale="0.65" Color="#FFFFFF" />
-		<MauiIcon Condition="'$(TargetFramework)'=='net8.0-ios'" Include="Resources\AppIcon\pwhealthicon.svg" Color="#FFFFFF" />
-
-		<!-- Splash Screen -->
-		<!--<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" Resize="False" ForegroundScale="0.75" BaseSize="128,128" />-->
-		<!--<MauiSplashScreen Include="Resources\Splash\splashpw.svg" Color="#FFFFFF" />-->
-
-		<MauiSplashScreen Condition="'$(TargetFramework)'=='net8.0-android'" Include="Resources\Splash\splashpw.svg" Color="#FFFFFF" />
-
-		<MauiSplashScreen Condition="'$(TargetFramework)'=='net8.0-ios'" BaseSize="200,200"  Include="Resources\Splash\splashpw.svg" Color="#FFFFFF" />
-
-		<!-- Images -->
-		<MauiImage Include="Resources\Images\*" />
-		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
-
-		<!-- Custom Fonts -->
-		<MauiFont Include="Resources\Fonts\*" />
-
-		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
-		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Remove="Platforms\Android\google-services.json" />
-	  <None Remove="Resources\AppIcon\pwhealthicon.svg" />
-	  <None Remove="Resources\Fonts\HankenGrotesk-Bold.ttf" />
-	  <None Remove="Resources\Fonts\HankenGrotesk-Light.ttf" />
-	  <None Remove="Resources\Fonts\HankenGrotesk-Regular.ttf" />
-	  <None Remove="Resources\Fonts\HankenGrotesk-SemiBold.ttf" />
-	  <None Remove="Resources\Images\activityhome.png" />
-	  <None Remove="Resources\Images\adddataicon.png" />
-	  <None Remove="Resources\Images\agreement.png" />
-	  <None Remove="Resources\Images\alarm.png" />
-	  <None Remove="Resources\Images\alarmbell.png" />
-	  <None Remove="Resources\Images\allergenhome.png" />
-	  <None Remove="Resources\Images\androidarrow.png" />
-	  <None Remove="Resources\Images\angry.png" />
-	  <None Remove="Resources\Images\anxious.png" />
-	  <None Remove="Resources\Images\appconstructionicon.png" />
-	  <None Remove="Resources\Images\appointhome.png" />
-	  <None Remove="Resources\Images\backbutton.png" />
-	  <None Remove="Resources\Images\background.png" />
-	  <None Remove="Resources\Images\basicactivities.png" />
-	  <None Remove="Resources\Images\bored.png" />
-	  <None Remove="Resources\Images\calendarred.png" />
-	  <None Remove="Resources\Images\charticon.png" />
-	  <None Remove="Resources\Images\close.png" />
-	  <None Remove="Resources\Images\closered.png" />
-	  <None Remove="Resources\Images\cognitive.png" />
-	  <None Remove="Resources\Images\compare.png" />
-	  <None Remove="Resources\Images\compose.png" />
-	  <None Remove="Resources\Images\confused.png" />
-	  <None Remove="Resources\Images\content.png" />
-	  <None Remove="Resources\Images\crying.png" />
-	  <None Remove="Resources\Images\dailyliving.png" />
-	  <None Remove="Resources\Images\dashbrowseactive.png" />
-	  <None Remove="Resources\Images\dashbrowseinactive.png" />
-	  <None Remove="Resources\Images\dashexploreactive.png" />
-	  <None Remove="Resources\Images\dashexploreinactive.png" />
-	  <None Remove="Resources\Images\dashiconactive.png" />
-	  <None Remove="Resources\Images\dashiconinactive.png" />
-	  <None Remove="Resources\Images\dashsearch.png" />
-	  <None Remove="Resources\Images\dataprivacy.png" />
-	  <None Remove="Resources\Images\delete.png" />
-	  <None Remove="Resources\Images\deleteicon.png" />
-	  <None Remove="Resources\Images\deletered.png" />
-	  <None Remove="Resources\Images\depressed.png" />
-	  <None Remove="Resources\Images\diagnosishome.png" />
-	  <None Remove="Resources\Images\diagnosisicon2022.png" />
-	  <None Remove="Resources\Images\diethome.png" />
-	  <None Remove="Resources\Images\doctor.png" />
-	  <None Remove="Resources\Images\downarrow.png" />
-	  <None Remove="Resources\Images\dropdownarrow.png" />
-	  <None Remove="Resources\Images\duplicate.png" />
-	  <None Remove="Resources\Images\duration.png" />
-	  <None Remove="Resources\Images\durationaddlg.png" />
-	  <None Remove="Resources\Images\durationaddr.png" />
-	  <None Remove="Resources\Images\durationeditlg.png" />
-	  <None Remove="Resources\Images\durationeditr.png" />
-	  <None Remove="Resources\Images\emotional.png" />
-	  <None Remove="Resources\Images\Endurance.png" />
-	  <None Remove="Resources\Images\equal.png" />
-	  <None Remove="Resources\Images\equestrian.png" />
-	  <None Remove="Resources\Images\erroricon.png" />
-	  <None Remove="Resources\Images\excited.png" />
-	  <None Remove="Resources\Images\exercisehome.png" />
-	  <None Remove="Resources\Images\extremesports.png" />
-	  <None Remove="Resources\Images\faceid.png" />
-	  <None Remove="Resources\Images\filterchargray.png" />
-	  <None Remove="Resources\Images\filterdarkblue.png" />
-	  <None Remove="Resources\Images\filtergray.png" />
-	  <None Remove="Resources\Images\filterorange.png" />
-	  <None Remove="Resources\Images\filterred.png" />
-	  <None Remove="Resources\Images\finger.png" />
-	  <None Remove="Resources\Images\fingerprint.png" />
-	  <None Remove="Resources\Images\fooddiaryhome.png" />
-	  <None Remove="Resources\Images\grateful.png" />
-	  <None Remove="Resources\Images\happy.png" />
-	  <None Remove="Resources\Images\hcphome.png" />
-	  <None Remove="Resources\Images\healthreporticon.png" />
-	  <None Remove="Resources\Images\home.png" />
-	  <None Remove="Resources\Images\hospital.png" />
-	  <None Remove="Resources\Images\icondate.png" />
-	  <None Remove="Resources\Images\icondatepicker.png" />
-	  <None Remove="Resources\Images\icontime.png" />
-	  <None Remove="Resources\Images\icontimepicker.png" />
-	  <None Remove="Resources\Images\imageicon.png" />
-	  <None Remove="Resources\Images\individualsports.png" />
-	  <None Remove="Resources\Images\insight.png" />
-	  <None Remove="Resources\Images\Investhome.png" />
-	  <None Remove="Resources\Images\iosback.png" />
-	  <None Remove="Resources\Images\laughing.png" />
-	  <None Remove="Resources\Images\laundry.png" />
-	  <None Remove="Resources\Images\link.png" />
-	  <None Remove="Resources\Images\list.png" />
-	  <None Remove="Resources\Images\listview.png" />
-	  <None Remove="Resources\Images\location.png" />
-	  <None Remove="Resources\Images\logo.png" />
-	  <None Remove="Resources\Images\loved.png" />
-	  <None Remove="Resources\Images\martialarts.png" />
-	  <None Remove="Resources\Images\measurementhome.png" />
-	  <None Remove="Resources\Images\medcalendericon.png" />
-	  <None Remove="Resources\Images\medicinehome.png" />
-	  <None Remove="Resources\Images\medpillicon.png" />
-	  <None Remove="Resources\Images\medssuccess.png" />
-	  <None Remove="Resources\Images\migration.png" />
-	  <None Remove="Resources\Images\mindbody.png" />
-	  <None Remove="Resources\Images\moodhome.png" />
-	  <None Remove="Resources\Images\medtime.png" />
-	  <None Remove="Resources\Images\medtimelg.png" />
-	  <None Remove="Resources\Images\nextdarker.png" />
-	  <None Remove="Resources\Images\nodataicon.png" />
-	  <None Remove="Resources\Images\nointerneticon.png" />
-	  <None Remove="Resources\Images\notesicon.png" />
-	  <None Remove="Resources\Images\notes.png" />
-	  <None Remove="Resources\Images\notesred.png" />
-	  <None Remove="Resources\Images\notificationicon.png" />
-	  <None Remove="Resources\Images\outdoor.png" />
-	  <None Remove="Resources\Images\pdf.png" />
-	  <None Remove="Resources\Images\pdficon.png" />
-	  <None Remove="Resources\Images\pencil.png" />
-	  <None Remove="Resources\Images\peoplewithlogoanimation.gif" />
-	  <None Remove="Resources\Images\pillicon.png" />
-	  <None Remove="Resources\Images\pin.png" />
-	  <None Remove="Resources\Images\pincode.png" />
-	  <None Remove="Resources\Images\pinicon.png" />
-	  <None Remove="Resources\Images\playbutton.png" />
-	  <None Remove="Resources\Images\profileicon.png" />
-	  <None Remove="Resources\Images\pwlogo.png" />
-	  <None Remove="Resources\Images\pwregbackgroundlight.png" />
-	  <None Remove="Resources\Images\questionnairehome.png" />
-	  <None Remove="Resources\Images\questionnaireicon.png" />
-	  <None Remove="Resources\Images\radiobutton.png" />
-	  <None Remove="Resources\Images\recreational.png" />
-	  <None Remove="Resources\Images\regcompletetick.png" />
-	  <None Remove="Resources\Images\regtick.png" />
-	  <None Remove="Resources\Images\Relaxed.png" />
-	  <None Remove="Resources\Images\reminder.png" />
-	  <None Remove="Resources\Images\repeat.png" />
-	  <None Remove="Resources\Images\repeatgray.png" />
-	  <None Remove="Resources\Images\repeatred.png" />
-	  <None Remove="Resources\Images\sad.png" />
-	  <None Remove="Resources\Images\scared.png" />
-	  <None Remove="Resources\Images\schedulehome.png" />
-	  <None Remove="Resources\Images\search.png" />
-	  <None Remove="Resources\Images\searchbaricon.png" />
-	  <None Remove="Resources\Images\searchbrown.png" />
-	  <None Remove="Resources\Images\searchchargray.png" />
-	  <None Remove="Resources\Images\searchdarkblue.png" />
-	  <None Remove="Resources\Images\searchgray.png" />
-	  <None Remove="Resources\Images\searchicon.png" />
-	  <None Remove="Resources\Images\searchorange.png" />
-	  <None Remove="Resources\Images\searchpurple.png" />
-	  <None Remove="Resources\Images\searchred.png" />
-	  <None Remove="Resources\Images\selectcalendar.png" />
-	  <None Remove="Resources\Images\shit.png" />
-	  <None Remove="Resources\Images\showimage.png" />
-	  <None Remove="Resources\Images\showimageorange.png" />
-	  <None Remove="Resources\Images\sick.png" />
-	  <None Remove="Resources\Images\scheduletick.png" />
-	  <None Remove="Resources\Images\schedulex.png" />
-	  <None Remove="Resources\Images\searchbaricon.png" />
-	  <None Remove="Resources\Images\searchorange.png" />
-	  <None Remove="Resources\Images\searchteal.png" />
-	  <None Remove="Resources\Images\smartwatchicon.png" />
-	  <None Remove="Resources\Images\stopwatch.png" />
-	  <None Remove="Resources\Images\strengthtraining.png" />
-	  <None Remove="Resources\Images\stressed.png" />
-	  <None Remove="Resources\Images\successtick.png" />
-	  <None Remove="Resources\Images\supphome.png" />
-	  <None Remove="Resources\Images\surprised.png" />
-	  <None Remove="Resources\Images\Swimming.png" />
-	  <None Remove="Resources\Images\symptomshome.png" />
-	  <None Remove="Resources\Images\syncicon.png" />
-	  <None Remove="Resources\Images\task.png" />
-	  <None Remove="Resources\Images\teamsports.png" />
-	  <None Remove="Resources\Images\timeline.png" />
-	  <None Remove="Resources\Images\timered.png" />
-	  <None Remove="Resources\Images\tired.png" />
-	  <None Remove="Resources\Images\today.png" />
-	  <None Remove="Resources\Images\todaydate.png" />
-	  <None Remove="Resources\Images\truthaboutweightjune23app.png" />
-	  <None Remove="Resources\Images\uparrow.png" />
-	  <None Remove="Resources\Images\update.png" />
-	  <None Remove="Resources\Images\updateicon.png" />
-	  <None Remove="Resources\Images\upset.png" />
-	  <None Remove="Resources\Images\usericon.png" />
-	  <None Remove="Resources\Images\videoicon.png" />
-	  <None Remove="Resources\Images\warningicon.png" />
-	  <None Remove="Resources\Images\watersports.png" />
-	  <None Remove="Resources\Images\webicon.png" />
-	  <None Remove="Resources\Images\wintersports.png" />
-	  <None Remove="Resources\Raw\success.json" />
-	  <None Remove="Resources\Splash\splashpw.svg" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <GoogleServicesJson Include="Platforms\Android\google-services.json" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Azure.Storage.Blobs" Version="12.22.0" />
-		<PackageReference Include="CommunityToolkit.Maui" Version="7.0.1" />
-		<PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="3.1.0" />
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.0" />
-		<PackageReference Include="FreakyControls" Version="0.5.0" />
-		<PackageReference Include="Microsoft.Azure.NotificationHubs" Version="4.2.0" />
-		<PackageReference Include="Microsoft.Datasync.Client" Version="6.0.0" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.7" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Maui.Essentials" Version="8.0.93" />
-		<PackageReference Include="Mopups" Version="1.3.1" />
-		<PackageReference Include="PINView.MAUI" Version="1.0.2" />
-		<PackageReference Include="Plugin.Fingerprint" Version="2.1.5" />
-		<PackageReference Include="Plugin.FirebasePushNotification" Version="3.4.35" />
-		<PackageReference Include="Plugin.LocalNotification" Version="11.1.0" />
-		<PackageReference Include="Plugin.Maui.Biometric" Version="0.0.2" />
-		<PackageReference Include="Plugin.Maui.SegmentedControl" Version="1.0.8" />
-		<PackageReference Include="Sentry.Maui" Version="5.4.0" />
-		<PackageReference Include="Syncfusion.Maui.Buttons" Version="25.2.5" />
-		<PackageReference Include="Syncfusion.Maui.Calendar" Version="25.2.5" />
-		<PackageReference Include="Syncfusion.Maui.Carousel" Version="25.2.5" />
-		<PackageReference Include="Syncfusion.Maui.Charts" Version="25.2.5" />
-		<PackageReference Include="Syncfusion.Maui.Core" Version="25.2.5" />
-		<PackageReference Include="Syncfusion.Maui.Gauges" Version="25.1.35" />
-		<PackageReference Include="Syncfusion.Maui.Inputs" Version="25.2.5" />
-		<PackageReference Include="Syncfusion.Maui.ListView" Version="25.2.5" />
-		<PackageReference Include="Syncfusion.Maui.PdfViewer" Version="25.2.5" />
-		<PackageReference Include="Syncfusion.Maui.Picker" Version="25.2.5" />
-		<PackageReference Include="Syncfusion.Maui.Popup" Version="25.2.5" />
-		<PackageReference Include="Syncfusion.Maui.ProgressBar" Version="25.2.5" />
-		<PackageReference Include="Syncfusion.Maui.Scheduler" Version="25.2.5" />
-		<PackageReference Include="Syncfusion.Maui.SignaturePad" Version="25.2.5" />
-		<PackageReference Include="Syncfusion.Maui.Sliders" Version="25.2.5" />
-		<PackageReference Include="Syncfusion.Maui.Toolkit" Version="1.0.4" />
-		<PackageReference Include="System.Net.Http" Version="4.3.4" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0-android'">
-	  <PackageReference Include="Xamarin.AndroidX.Collection.Ktx">
-	    <Version>1.3.0.2</Version>
-	  </PackageReference>
-	  <PackageReference Include="Xamarin.Firebase.Messaging">
-	    <Version>123.3.1.2</Version>
-	  </PackageReference>
-	  <PackageReference Include="Xamarin.GooglePlayServices.Base">
-	    <Version>118.2.0.6</Version>
-	  </PackageReference>
-	  <PackageReference Include="Xamarin.GooglePlayServices.Basement">
-	    <Version>118.2.0.6</Version>
-	  </PackageReference>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Compile Update="Helpers\ActivityDuration.xaml.cs">
-	    <DependentUpon>ActivityDuration.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Helpers\GettingReady.xaml.cs">
-	    <DependentUpon>GettingReady.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Helpers\infopopup.xaml.cs">
-	    <DependentUpon>Infopopup.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Helpers\PopupPageHelper.xaml.cs">
-	    <DependentUpon>PopupPageHelper.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\Allergies\AllergyInfo.xaml.cs">
-	    <DependentUpon>AllergyInfo.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\DailyActivity\ActivitySchedule.xaml.cs">
-	    <DependentUpon>ActivitySchedule.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\Diet\DietInfo.xaml.cs">
-	    <DependentUpon>DietInfo.xaml</DependentUpon>
-	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <MauiXaml Update="Helpers\ActivityDuration.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Helpers\ActivityCalendar.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\DailyActivity\AddActivity.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Helpers\DateTimePopup.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Helpers\GettingReady.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Helpers\imagePopUp.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Helpers\Infopopup.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Helpers\NovoConsentScreen.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Helpers\PopupPageHelper.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Allergies\AddAllergies.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Allergies\AllAllergies.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Allergies\AllergyInfo.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Allergies\SingleAllergies.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Appointments\AddAppointment.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Appointments\AllAppointments.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Appointments\AppointmentFeedback.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Appointments\Appointments.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Appointments\SingleAppointment.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Biometrics\BiometricsLogin.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\CrashTest\CrashTests.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\DailyActivity\ActivitySchedule.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\DailyActivity\ActivityShowAllData.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\DailyActivity\AddDailyActivity.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\DailyActivity\AllDailyActivity.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\DailyActivity\SingleActivity.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\DailyActivity\SingleDailyActivity.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Dashboard\MainDashboard.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Dashboard\MigrationAssistant.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Dashboard\SearchPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Diagnosis\AddDiagnosis.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Diagnosis\AllDiagnosis.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Diagnosis\DiagnosisInfo.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Diagnosis\SingleDiagnosis.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Diet\AddDiet.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Diet\AddFoodDiary.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Diet\AllDiet.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Diet\AllFoodDiary.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Diet\DietInfo.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Diet\SingleDiet.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Exercise\AddExercise.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Exercise\AllExercise.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\HCPs\AddHCPs.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\HCPs\HCPs.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\HCPs\SingleHCP.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\HelpPages\ErrorPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\HelpPages\NoInternetPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\HelpPages\PinPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\HelpPages\ShutdownAppPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\HelpPages\SyncWizardPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\HelpPages\UpdatePage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Investigations\AddInvestigations.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Investigations\AllInvestigations.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Investigations\InvestInfo.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Investigations\SingleInvestigations.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\LoginRegister\ForgottenPassword.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\LoginRegister\LoginPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\LoginRegister\RegisterFinalPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\LoginRegister\RegisterPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\LoginRegister\RegisterWithSignUpCodePage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\LoginRegister\SignupCodes\NOVO.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\LoginRegister\SignupCodes\SFENRAT.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\LoginRegister\SignupCodes\SFEOB.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\LoginRegister\SignupCodes\WH.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Measurements\AddMeasurement.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Measurements\MeasurementsInfo.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Measurements\MeasurementsPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Measurements\SearchAddMeasurement.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Measurements\ShowAllData.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Measurements\SingleMeasurement.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Mood\AddMood.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Mood\AllMood.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Mood\SingleMood.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Privacy\PrivacyPolicy.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Medications\AddMedication.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Medications\AllMedications.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Medications\ShowAllMedication.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Medications\SingleMedication.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Profile\ProfileEdit.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Profile\ProfileSection.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Questionnaires\AllQuestionnaires.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Questionnaires\AndroidQuestionnaires.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Questionnaires\DashQuestionnaire.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Questionnaires\QuestionnairePage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Questionnaires\SingleQuestion.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Schedule\AddAsRequiredDosage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Schedule\MainSchedule.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Supplements\AddSupplements.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Supplements\AllSupplements.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Supplements\ShowAllSupplement.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Supplements\SingleSupplement.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Symptoms\AddSymptom.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Symptoms\AllSymptoms.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Symptoms\CompareSymptoms.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Symptoms\ShowAllSymptomdata.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Symptoms\SingleSymptom.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Symptoms\SymptomGallery.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Symptoms\UpdateAllSymptoms.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Symptoms\UpdateSingleSymptom.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Symptoms\UpdateSymptomDash.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Videos\AllVideos.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Videos\NewPageVideoPlayer.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Videos\VideoPlayer.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	</ItemGroup>
-
-	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadGenericExceptionInfoBarPeopleWithHideInfoBar="True" /></VisualStudio></ProjectExtensions>
-
+    <!-- Display name -->
+    <ApplicationTitle>PeopleWith</ApplicationTitle>
+    <!-- App Identifier -->
+    <ApplicationId>com.companyname.peoplewith</ApplicationId>
+    <!-- Versions -->
+    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+    <ApplicationVersion>1</ApplicationVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">15.1</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">26.0</SupportedOSPlatformVersion>
+    <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</SupportedOSPlatformVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)'=='net9.0-ios'">
+    <CodesignKey>Apple Development: Created via API (9AF7WV24ZX)</CodesignKey>
+    <CodesignProvision>VS: com.peoplewith.peoplewith Development</CodesignProvision>
+    <ProvisioningType>manual</ProvisioningType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-ios|AnyCPU'">
+    <MtouchLink>None</MtouchLink>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- App Icon -->
+    <!--<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />-->
+    <MauiIcon Condition="'$(TargetFramework)'=='net9.0-android'" Include="Resources\AppIcon\pwhealthicon.svg" ForegroundScale="0.65" Color="#FFFFFF" />
+    <MauiIcon Condition="'$(TargetFramework)'=='net9.0-ios'" Include="Resources\AppIcon\pwhealthicon.svg" Color="#FFFFFF" />
+    <!-- Splash Screen -->
+    <!--<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" Resize="False" ForegroundScale="0.75" BaseSize="128,128" />-->
+    <!--<MauiSplashScreen Include="Resources\Splash\splashpw.svg" Color="#FFFFFF" />-->
+    <MauiSplashScreen Condition="'$(TargetFramework)'=='net9.0-android'" Include="Resources\Splash\splashpw.svg" Color="#FFFFFF" />
+    <MauiSplashScreen Condition="'$(TargetFramework)'=='net9.0-ios'" BaseSize="200,200" Include="Resources\Splash\splashpw.svg" Color="#FFFFFF" />
+    <!-- Images -->
+    <MauiImage Include="Resources\Images\*" />
+    <MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
+    <!-- Custom Fonts -->
+    <MauiFont Include="Resources\Fonts\*" />
+    <!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
+    <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Platforms\Android\google-services.json" />
+    <None Remove="Resources\AppIcon\pwhealthicon.svg" />
+    <None Remove="Resources\Fonts\HankenGrotesk-Bold.ttf" />
+    <None Remove="Resources\Fonts\HankenGrotesk-Light.ttf" />
+    <None Remove="Resources\Fonts\HankenGrotesk-Regular.ttf" />
+    <None Remove="Resources\Fonts\HankenGrotesk-SemiBold.ttf" />
+    <None Remove="Resources\Images\activityhome.png" />
+    <None Remove="Resources\Images\adddataicon.png" />
+    <None Remove="Resources\Images\agreement.png" />
+    <None Remove="Resources\Images\alarm.png" />
+    <None Remove="Resources\Images\alarmbell.png" />
+    <None Remove="Resources\Images\allergenhome.png" />
+    <None Remove="Resources\Images\androidarrow.png" />
+    <None Remove="Resources\Images\angry.png" />
+    <None Remove="Resources\Images\anxious.png" />
+    <None Remove="Resources\Images\appconstructionicon.png" />
+    <None Remove="Resources\Images\appointhome.png" />
+    <None Remove="Resources\Images\backbutton.png" />
+    <None Remove="Resources\Images\background.png" />
+    <None Remove="Resources\Images\basicactivities.png" />
+    <None Remove="Resources\Images\bored.png" />
+    <None Remove="Resources\Images\calendarred.png" />
+    <None Remove="Resources\Images\charticon.png" />
+    <None Remove="Resources\Images\close.png" />
+    <None Remove="Resources\Images\closered.png" />
+    <None Remove="Resources\Images\cognitive.png" />
+    <None Remove="Resources\Images\compare.png" />
+    <None Remove="Resources\Images\compose.png" />
+    <None Remove="Resources\Images\confused.png" />
+    <None Remove="Resources\Images\content.png" />
+    <None Remove="Resources\Images\crying.png" />
+    <None Remove="Resources\Images\dailyliving.png" />
+    <None Remove="Resources\Images\dashbrowseactive.png" />
+    <None Remove="Resources\Images\dashbrowseinactive.png" />
+    <None Remove="Resources\Images\dashexploreactive.png" />
+    <None Remove="Resources\Images\dashexploreinactive.png" />
+    <None Remove="Resources\Images\dashiconactive.png" />
+    <None Remove="Resources\Images\dashiconinactive.png" />
+    <None Remove="Resources\Images\dashsearch.png" />
+    <None Remove="Resources\Images\dataprivacy.png" />
+    <None Remove="Resources\Images\delete.png" />
+    <None Remove="Resources\Images\deleteicon.png" />
+    <None Remove="Resources\Images\deletered.png" />
+    <None Remove="Resources\Images\depressed.png" />
+    <None Remove="Resources\Images\diagnosishome.png" />
+    <None Remove="Resources\Images\diagnosisicon2022.png" />
+    <None Remove="Resources\Images\diethome.png" />
+    <None Remove="Resources\Images\doctor.png" />
+    <None Remove="Resources\Images\downarrow.png" />
+    <None Remove="Resources\Images\dropdownarrow.png" />
+    <None Remove="Resources\Images\duplicate.png" />
+    <None Remove="Resources\Images\emotional.png" />
+    <None Remove="Resources\Images\Endurance.png" />
+    <None Remove="Resources\Images\equal.png" />
+    <None Remove="Resources\Images\equestrian.png" />
+    <None Remove="Resources\Images\erroricon.png" />
+    <None Remove="Resources\Images\excited.png" />
+    <None Remove="Resources\Images\exercisehome.png" />
+    <None Remove="Resources\Images\extremesports.png" />
+    <None Remove="Resources\Images\faceid.png" />
+    <None Remove="Resources\Images\filterchargray.png" />
+    <None Remove="Resources\Images\filterdarkblue.png" />
+    <None Remove="Resources\Images\filtergray.png" />
+    <None Remove="Resources\Images\filterorange.png" />
+    <None Remove="Resources\Images\filterred.png" />
+    <None Remove="Resources\Images\finger.png" />
+    <None Remove="Resources\Images\fingerprint.png" />
+    <None Remove="Resources\Images\fooddiaryhome.png" />
+    <None Remove="Resources\Images\grateful.png" />
+    <None Remove="Resources\Images\happy.png" />
+    <None Remove="Resources\Images\hcphome.png" />
+    <None Remove="Resources\Images\healthreporticon.png" />
+    <None Remove="Resources\Images\home.png" />
+    <None Remove="Resources\Images\hospital.png" />
+    <None Remove="Resources\Images\icondate.png" />
+    <None Remove="Resources\Images\icondatepicker.png" />
+    <None Remove="Resources\Images\icontime.png" />
+    <None Remove="Resources\Images\icontimepicker.png" />
+    <None Remove="Resources\Images\imageicon.png" />
+    <None Remove="Resources\Images\individualsports.png" />
+    <None Remove="Resources\Images\insight.png" />
+    <None Remove="Resources\Images\Investhome.png" />
+    <None Remove="Resources\Images\iosback.png" />
+    <None Remove="Resources\Images\laughing.png" />
+    <None Remove="Resources\Images\laundry.png" />
+    <None Remove="Resources\Images\link.png" />
+    <None Remove="Resources\Images\list.png" />
+    <None Remove="Resources\Images\listview.png" />
+    <None Remove="Resources\Images\location.png" />
+    <None Remove="Resources\Images\logo.png" />
+    <None Remove="Resources\Images\loved.png" />
+    <None Remove="Resources\Images\martialarts.png" />
+    <None Remove="Resources\Images\measurementhome.png" />
+    <None Remove="Resources\Images\medcalendericon.png" />
+    <None Remove="Resources\Images\medicinehome.png" />
+    <None Remove="Resources\Images\medpillicon.png" />
+    <None Remove="Resources\Images\medssuccess.png" />
+    <None Remove="Resources\Images\migration.png" />
+    <None Remove="Resources\Images\mindbody.png" />
+    <None Remove="Resources\Images\moodhome.png" />
+    <None Remove="Resources\Images\medtime.png" />
+    <None Remove="Resources\Images\medtimelg.png" />
+    <None Remove="Resources\Images\nextdarker.png" />
+    <None Remove="Resources\Images\nodataicon.png" />
+    <None Remove="Resources\Images\nointerneticon.png" />
+    <None Remove="Resources\Images\notesicon.png" />
+    <None Remove="Resources\Images\notes.png" />
+    <None Remove="Resources\Images\notesred.png" />
+    <None Remove="Resources\Images\notificationicon.png" />
+    <None Remove="Resources\Images\outdoor.png" />
+    <None Remove="Resources\Images\pdf.png" />
+    <None Remove="Resources\Images\pdficon.png" />
+    <None Remove="Resources\Images\pencil.png" />
+    <None Remove="Resources\Images\peoplewithlogoanimation.gif" />
+    <None Remove="Resources\Images\pillicon.png" />
+    <None Remove="Resources\Images\pin.png" />
+    <None Remove="Resources\Images\pincode.png" />
+    <None Remove="Resources\Images\pinicon.png" />
+    <None Remove="Resources\Images\playbutton.png" />
+    <None Remove="Resources\Images\profileicon.png" />
+    <None Remove="Resources\Images\pwlogo.png" />
+    <None Remove="Resources\Images\pwregbackgroundlight.png" />
+    <None Remove="Resources\Images\questionnairehome.png" />
+    <None Remove="Resources\Images\questionnaireicon.png" />
+    <None Remove="Resources\Images\radiobutton.png" />
+    <None Remove="Resources\Images\recreational.png" />
+    <None Remove="Resources\Images\regcompletetick.png" />
+    <None Remove="Resources\Images\regtick.png" />
+    <None Remove="Resources\Images\Relaxed.png" />
+    <None Remove="Resources\Images\reminder.png" />
+    <None Remove="Resources\Images\repeat.png" />
+    <None Remove="Resources\Images\repeatgray.png" />
+    <None Remove="Resources\Images\repeatred.png" />
+    <None Remove="Resources\Images\sad.png" />
+    <None Remove="Resources\Images\scared.png" />
+    <None Remove="Resources\Images\schedulehome.png" />
+    <None Remove="Resources\Images\search.png" />
+    <None Remove="Resources\Images\searchbaricon.png" />
+    <None Remove="Resources\Images\searchbrown.png" />
+    <None Remove="Resources\Images\searchchargray.png" />
+    <None Remove="Resources\Images\searchdarkblue.png" />
+    <None Remove="Resources\Images\searchgray.png" />
+    <None Remove="Resources\Images\searchicon.png" />
+    <None Remove="Resources\Images\searchorange.png" />
+    <None Remove="Resources\Images\searchpurple.png" />
+    <None Remove="Resources\Images\searchred.png" />
+    <None Remove="Resources\Images\selectcalendar.png" />
+    <None Remove="Resources\Images\shit.png" />
+    <None Remove="Resources\Images\sick.png" />
+    <None Remove="Resources\Images\scheduletick.png" />
+    <None Remove="Resources\Images\schedulex.png" />
+    <None Remove="Resources\Images\searchbaricon.png" />
+    <None Remove="Resources\Images\searchorange.png" />
+    <None Remove="Resources\Images\searchteal.png" />
+    <None Remove="Resources\Images\smartwatchicon.png" />
+    <None Remove="Resources\Images\strengthtraining.png" />
+    <None Remove="Resources\Images\stressed.png" />
+    <None Remove="Resources\Images\successtick.png" />
+    <None Remove="Resources\Images\supphome.png" />
+    <None Remove="Resources\Images\surprised.png" />
+    <None Remove="Resources\Images\Swimming.png" />
+    <None Remove="Resources\Images\symptomshome.png" />
+    <None Remove="Resources\Images\syncicon.png" />
+    <None Remove="Resources\Images\task.png" />
+    <None Remove="Resources\Images\teamsports.png" />
+    <None Remove="Resources\Images\timeline.png" />
+    <None Remove="Resources\Images\timered.png" />
+    <None Remove="Resources\Images\tired.png" />
+    <None Remove="Resources\Images\today.png" />
+    <None Remove="Resources\Images\truthaboutweightjune23app.png" />
+    <None Remove="Resources\Images\uparrow.png" />
+    <None Remove="Resources\Images\update.png" />
+    <None Remove="Resources\Images\updateicon.png" />
+    <None Remove="Resources\Images\upset.png" />
+    <None Remove="Resources\Images\usericon.png" />
+    <None Remove="Resources\Images\videoicon.png" />
+    <None Remove="Resources\Images\warningicon.png" />
+    <None Remove="Resources\Images\watersports.png" />
+    <None Remove="Resources\Images\webicon.png" />
+    <None Remove="Resources\Images\wintersports.png" />
+    <None Remove="Resources\Raw\success.json" />
+    <None Remove="Resources\Splash\splashpw.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <GoogleServicesJson Include="Platforms\Android\google-services.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.22.0" />
+    <PackageReference Include="CommunityToolkit.Maui" Version="7.0.1" />
+    <PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="3.1.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.0" />
+    <PackageReference Include="FreakyControls" Version="0.5.0" />
+    <PackageReference Include="Microsoft.Azure.NotificationHubs" Version="4.2.0" />
+    <PackageReference Include="Microsoft.Datasync.Client" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+	  <!--<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.50" />
+	  <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.50" />-->
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.3" />
+    <PackageReference Include="Microsoft.Maui.Essentials" Version="$(MauiVersion)" />
+	  <!--<PackageReference Include="Microsoft.Maui.Essentials" Version="$(MauiVersion)" />-->
+    <PackageReference Include="Mopups" Version="1.3.1" />
+    <PackageReference Include="PINView.MAUI" Version="1.0.2" />
+    <PackageReference Include="Plugin.Fingerprint" Version="2.1.5" />
+    <PackageReference Include="Plugin.LocalNotification" Version="11.1.0" />
+    <PackageReference Include="Plugin.Maui.Biometric" Version="0.0.2" />
+    <PackageReference Include="Plugin.Maui.SegmentedControl" Version="1.0.8" />
+    <PackageReference Include="Sentry.Maui" Version="5.4.0" />
+    <PackageReference Include="Syncfusion.Maui.Buttons" Version="25.2.5" />
+    <PackageReference Include="Syncfusion.Maui.Calendar" Version="25.2.5" />
+    <PackageReference Include="Syncfusion.Maui.Carousel" Version="25.2.5" />
+    <PackageReference Include="Syncfusion.Maui.Charts" Version="25.2.5" />
+    <PackageReference Include="Syncfusion.Maui.Core" Version="25.2.5" />
+    <PackageReference Include="Syncfusion.Maui.Gauges" Version="25.1.35" />
+    <PackageReference Include="Syncfusion.Maui.Inputs" Version="25.2.5" />
+    <PackageReference Include="Syncfusion.Maui.ListView" Version="25.2.5" />
+    <PackageReference Include="Syncfusion.Maui.PdfViewer" Version="25.2.5" />
+    <PackageReference Include="Syncfusion.Maui.Picker" Version="25.2.5" />
+    <PackageReference Include="Syncfusion.Maui.Popup" Version="25.2.5" />
+    <PackageReference Include="Syncfusion.Maui.ProgressBar" Version="25.2.5" />
+    <PackageReference Include="Syncfusion.Maui.Scheduler" Version="25.2.5" />
+    <PackageReference Include="Syncfusion.Maui.SignaturePad" Version="25.2.5" />
+    <PackageReference Include="Syncfusion.Maui.Sliders" Version="25.2.5" />
+    <PackageReference Include="Syncfusion.Maui.Toolkit" Version="1.0.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Helpers\GettingReady.xaml.cs">
+      <DependentUpon>GettingReady.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Helpers\infopopup.xaml.cs">
+      <DependentUpon>Infopopup.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Helpers\PopupPageHelper.xaml.cs">
+      <DependentUpon>PopupPageHelper.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Allergies\AllergyInfo.xaml.cs">
+      <DependentUpon>AllergyInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\DailyActivity\ActivitySchedule.xaml.cs">
+      <DependentUpon>ActivitySchedule.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Diet\DietInfo.xaml.cs">
+      <DependentUpon>DietInfo.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <MauiXaml Update="Helpers\ActivityCalendar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\DailyActivity\AddActivity.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Helpers\DateTimePopup.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Helpers\GettingReady.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Helpers\imagePopUp.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Helpers\Infopopup.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Helpers\NovoConsentScreen.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Helpers\PopupPageHelper.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Allergies\AddAllergies.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Allergies\AllAllergies.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Allergies\AllergyInfo.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Allergies\SingleAllergies.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Appointments\AddAppointment.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Appointments\AllAppointments.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Appointments\AppointmentFeedback.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Appointments\Appointments.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Appointments\SingleAppointment.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Biometrics\BiometricsLogin.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\CrashTest\CrashTests.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\DailyActivity\ActivitySchedule.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\DailyActivity\ActivityShowAllData.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\DailyActivity\AddDailyActivity.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\DailyActivity\AllDailyActivity.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\DailyActivity\SingleActivity.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\DailyActivity\SingleDailyActivity.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Dashboard\HealthDataPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Dashboard\MainDashboard.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Dashboard\MigrationAssistant.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Dashboard\SearchPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Diagnosis\AddDiagnosis.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Diagnosis\AllDiagnosis.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Diagnosis\DiagnosisInfo.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Diagnosis\SingleDiagnosis.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Diet\AddDiet.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Diet\AddFoodDiary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Diet\AllDiet.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Diet\AllFoodDiary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Diet\DietInfo.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Diet\SingleDiet.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Exercise\AddExercise.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Exercise\AllExercise.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\HCPs\AddHCPs.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\HCPs\HCPs.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\HCPs\SingleHCP.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\HelpPages\ErrorPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\HelpPages\NoInternetPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\HelpPages\PinPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\HelpPages\ShutdownAppPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\HelpPages\SyncWizardPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\HelpPages\UpdatePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Investigations\AddInvestigations.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Investigations\AllInvestigations.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Investigations\InvestInfo.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Investigations\SingleInvestigations.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\LoginRegister\ForgottenPassword.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\LoginRegister\LoginPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\LoginRegister\RegisterFinalPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\LoginRegister\RegisterPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\LoginRegister\RegisterWithSignUpCodePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\LoginRegister\SignupCodes\NOVO.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\LoginRegister\SignupCodes\SFENRAT.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\LoginRegister\SignupCodes\SFEOB.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\LoginRegister\SignupCodes\WH.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Measurements\AddMeasurement.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Measurements\MeasurementsInfo.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Measurements\MeasurementsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Measurements\SearchAddMeasurement.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Measurements\ShowAllData.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Measurements\SingleMeasurement.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Mood\AddMood.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Mood\AllMood.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Mood\SingleMood.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Privacy\PrivacyPolicy.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Medications\AddMedication.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Medications\AllMedications.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Medications\ShowAllMedication.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Medications\SingleMedication.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Profile\ProfileEdit.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Profile\ProfileSection.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Questionnaires\AllQuestionnaires.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Questionnaires\AndroidQuestionnaires.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Questionnaires\DashQuestionnaire.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Questionnaires\QuestionnairePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Questionnaires\SingleQuestion.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Schedule\AddAsRequiredDosage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Schedule\MainSchedule.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Supplements\AddSupplements.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Supplements\AllSupplements.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Supplements\ShowAllSupplement.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Supplements\SingleSupplement.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Symptoms\AddSymptom.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Symptoms\AllSymptoms.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Symptoms\CompareSymptoms.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Symptoms\ShowAllSymptomdata.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Symptoms\SingleSymptom.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Symptoms\UpdateAllSymptoms.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Symptoms\UpdateSingleSymptom.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Symptoms\UpdateSymptomDash.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Videos\AllVideos.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Videos\NewPageVideoPlayer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Videos\VideoPlayer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+  </ItemGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties XamarinHotReloadGenericExceptionInfoBarPeopleWithHideInfoBar="True" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

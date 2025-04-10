@@ -12,6 +12,9 @@ using Syncfusion.Maui.Core.Internals;
 using Plugin.LocalNotification;
 using CommunityToolkit.Maui.Views;
 using Microsoft.Maui.Storage;
+using Microsoft.Maui.Networking;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Devices;
 
 namespace PeopleWith;
 

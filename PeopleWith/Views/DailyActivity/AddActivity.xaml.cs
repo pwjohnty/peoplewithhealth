@@ -9,6 +9,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using CommunityToolkit.Mvvm.Messaging;
 using Syncfusion.Maui.Picker;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Devices;
+
 
 namespace PeopleWith;
 

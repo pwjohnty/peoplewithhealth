@@ -2,6 +2,9 @@ using Mopups.Services;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using Microsoft.Maui.Networking;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Devices;
+using Microsoft.Maui.Storage;
 
 namespace PeopleWith;
 

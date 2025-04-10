@@ -1,6 +1,8 @@
 ﻿using PeopleWith;
 using Plugin.LocalNotification;
 using Plugin.LocalNotification.EventArgs;
+using Microsoft.Maui.Devices;
+using Microsoft.Maui.ApplicationModel;
 
 namespace PeopleWith
 {
@@ -24,7 +26,12 @@ namespace PeopleWith
             //Register Syncfusion license
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NBaF5cXmZCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdnWXpceHRQRmRcUER0W0A=");
 
-            MainPage = new AppShell();
+          //  MainPage = new AppShell();
+        }
+
+        protected override Window CreateWindow(IActivationState? activationState)
+        {
+            return new Window(new AppShell());
         }
 
         private async void OnNotificationTapped(NotificationActionEventArgs e)

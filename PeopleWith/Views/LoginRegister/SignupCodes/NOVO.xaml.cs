@@ -2,6 +2,8 @@
 //using AuthenticationServices;
 using PeopleWith;
 using System.Collections.ObjectModel;
+using Microsoft.Maui.Devices;
+using Microsoft.Maui.Networking;
 
 namespace PeopleWith;
 

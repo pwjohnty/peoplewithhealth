@@ -5,6 +5,8 @@ using System.Text.RegularExpressions;
 using Mopups.Services;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.Maui.Devices;
+using Microsoft.Maui.Networking;
 
 namespace PeopleWith;
 

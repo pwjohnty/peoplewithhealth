@@ -4,6 +4,9 @@ using Plugin.Maui.Biometric;
 using PINView.Maui;
 using Microsoft.Maui;
 using Syncfusion.Maui.Core.Internals;
+using Microsoft.Maui.Storage;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Devices;
 
 namespace PeopleWith;
 
@@ -120,9 +123,14 @@ public partial class BiometricsLogin : ContentPage
                     Loadinglbl.IsVisible = true; 
                     PinKeyPad.IsVisible = false;
                     ForgotPassword.IsVisible = false;
-                    await Task.Delay(100);
-                //Application.Current.MainPage = new MainDashboard();
-                Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                Task.Run(async () =>
+                {
+                    await Task.Delay(100); // Simulate processing time if necessary
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                    });
+                });
             }
             else
             {

@@ -1,6 +1,8 @@
 ﻿//using AndroidX.Activity;
 using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
+using Microsoft.Maui.Storage;
+using Microsoft.Maui.Networking;
 
 namespace PeopleWith
 {
@@ -76,8 +78,8 @@ namespace PeopleWith
                             var split = pincode.Split(',');
                             if (split[0] == "On" || biometrics == true)
                             {
-
-                                Application.Current.MainPage = new NavigationPage(new BiometricsLogin());
+                                await Navigation.PushAsync(new BiometricsLogin(), false);
+                                // Application.Current.MainPage = new NavigationPage(new BiometricsLogin());
                             }
                             else
                             {
@@ -87,7 +89,8 @@ namespace PeopleWith
                         }
                         else
                         {
-                            Application.Current.MainPage = new NavigationPage(new BiometricsLogin());
+                            await Navigation.PushAsync(new BiometricsLogin(), false);
+                           // Application.Current.MainPage = new NavigationPage(new BiometricsLogin());
                         }
                         
                     }

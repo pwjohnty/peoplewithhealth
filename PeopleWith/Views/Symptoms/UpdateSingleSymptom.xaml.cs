@@ -10,6 +10,10 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using System.Reflection.Metadata;
 using Azure;
+using Microsoft.Maui.Networking;
+using Microsoft.Maui.Devices;
+
+
 namespace PeopleWith;
 public partial class UpdateSingleSymptom : ContentPage
 {

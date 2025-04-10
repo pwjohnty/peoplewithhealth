@@ -1,5 +1,8 @@
 using System.Collections.ObjectModel;
 using Mopups.Services;
+using Microsoft.Maui.Storage;
+using Microsoft.Maui.Devices;
+using Microsoft.Maui.Networking;
 namespace PeopleWith;
 
 public partial class AddMeasurement : ContentPage

@@ -2,6 +2,8 @@
 using System.Collections.ObjectModel;
 using Color = Microsoft.Maui.Graphics.Color;
 using Mopups.Services;
+using Microsoft.Maui.Devices;
+using Microsoft.Maui.Networking;
 
 namespace PeopleWith;
 

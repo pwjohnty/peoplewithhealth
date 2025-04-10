@@ -1,5 +1,6 @@
 ﻿using Microsoft.Maui.Controls.Handlers.Compatibility;
 using Microsoft.Maui.Controls.Platform.Compatibility;
+using Microsoft.Maui.ApplicationModel;
 
 public class CustomShellRenderer : ShellRenderer
 {

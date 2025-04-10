@@ -23,9 +23,9 @@
             </Grid.RowDefinitions>
 
             <Image Source="logo.png" HeightRequest="125" WidthRequest="200" Grid.Row="0"/>
-            <Frame Grid.Row="1" CornerRadius="40" HasShadow="False"  BackgroundColor="#E5F0FB" HeightRequest="80" WidthRequest="80" BorderColor="Transparent">
+            <Border Grid.Row="1" StrokeShape="RoundRectangle 40"  BackgroundColor="#E5F0FB" HeightRequest="80" WidthRequest="80" Stroke="Transparent">
                 <Label x:Name="Initals" Padding="0" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" FontFamily="HankenGroteskBold" FontSize="22" TextColor="#031926"/>
-            </Frame>
+            </Border>
             <Grid Grid.Row="2" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>

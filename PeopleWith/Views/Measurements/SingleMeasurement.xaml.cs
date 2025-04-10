@@ -3,6 +3,7 @@ using Microsoft.Extensions.Azure;
 using Mopups.Services;
 using Syncfusion.Maui.Charts;
 using System.Collections.ObjectModel;
+using Microsoft.Maui.Networking;
 
 namespace PeopleWith;
 

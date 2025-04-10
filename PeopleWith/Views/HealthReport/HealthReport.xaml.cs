@@ -1,4 +1,8 @@
 using PeopleWith;
+using Microsoft.Maui.Storage;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Devices;
+using Microsoft.Maui.Networking;
 
 namespace PeopleWith;
 public partial class HealthReport : ContentPage

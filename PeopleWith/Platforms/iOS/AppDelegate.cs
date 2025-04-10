@@ -3,6 +3,9 @@ using Microsoft.Azure.NotificationHubs;
 using PeopleWith.Platforms.iOS.Services;
 using UIKit;
 using UserNotifications;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Storage;
+using Microsoft.Maui;
 
 namespace PeopleWith
 {
