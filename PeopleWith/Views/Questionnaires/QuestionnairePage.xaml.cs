@@ -4,6 +4,8 @@ using Newtonsoft.Json;
 using System.CodeDom.Compiler;
 using System.Collections.ObjectModel;
 using Mopups.Services;
+using Microsoft.Maui.Devices;
+using Microsoft.Maui.Networking;
 
 namespace PeopleWith;
 

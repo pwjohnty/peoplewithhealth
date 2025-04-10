@@ -11,6 +11,10 @@ using Mopups.Services;
 using Plugin.LocalNotification;
 using Syncfusion.Maui.Charts;
 using Sentry;
+using Microsoft.Maui.ApplicationModel.Communication;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Devices;
+using Microsoft.Maui.Storage;
 
 namespace PeopleWith;
 
@@ -3875,6 +3879,19 @@ public partial class MainDashboard : ContentPage
 
             await Navigation.PushAsync(new DashQuestionnaire("Previous Responses", "list"), false);
 
+
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
+    private async void Button_Clicked_6(object sender, EventArgs e)
+    {
+        try
+        {
+            await Navigation.PushAsync(new HealthDataPage(), false);
 
         }
         catch(Exception ex)

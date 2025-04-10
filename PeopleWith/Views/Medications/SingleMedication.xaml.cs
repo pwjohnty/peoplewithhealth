@@ -2,6 +2,7 @@
 using Mopups.Services;
 using Syncfusion.Maui.Scheduler;
 using System.Collections.ObjectModel;
+using Microsoft.Maui.Networking;
 
 namespace PeopleWith;
 

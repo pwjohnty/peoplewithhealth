@@ -4,6 +4,8 @@ using Syncfusion.Maui.DataSource.Extensions;
 using Syncfusion.Maui.Picker;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Design;
+using Microsoft.Maui.Networking;
+using Microsoft.Maui.Devices;
 namespace PeopleWith;
 public partial class UpdateSingleSymptom : ContentPage
 {

@@ -16,6 +16,8 @@ using Microsoft.Maui;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Handlers;
 using Sentry;
+using System.Globalization;
+//using Shiny;
 
 #if IOS
 using UIKit;
@@ -28,6 +30,14 @@ namespace PeopleWith
     {
         public static MauiApp CreateMauiApp()
         {
+
+            var culture = new CultureInfo("en-GB");
+            CultureInfo.DefaultThreadCurrentCulture = culture;
+            CultureInfo.DefaultThreadCurrentUICulture = culture;
+            Thread.CurrentThread.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentUICulture = culture;
+
+
             var builder = MauiApp.CreateBuilder();
             builder
                 .ConfigureSyncfusionCore()
@@ -128,12 +138,14 @@ namespace PeopleWith
 #if ANDROID
     handler.PlatformView.SetBackgroundColor(Android.Graphics.Color.Transparent);
     handler.PlatformView.Background = null;  // Remove any potential default background (if needed)
+              //  builder.Services.AddSingleton<IHealthKitService, HealthConnectService>();
 #endif
             });
 
             //builder.Services.AddSingleton(typeof(IFingerprint), CrossFingerprint.Current);
             builder.ConfigureSyncfusionCore();
             builder.InitializeFreakyControls();
+          
 
             // Use with Dependency Injection
             builder.Services.AddSingleton<IBiometric>(BiometricAuthenticationService.Default);
@@ -141,11 +153,24 @@ namespace PeopleWith
             //Add IOS Done to Numeric Keybaord
             EntryHandler.AddDone();
 
+            // Set the MainPage to your navigation page
+            builder.Services.AddSingleton<MainPage>();
+
 
             SentrySdk.ConfigureScope(scope =>
             {
                 scope.User = new SentryUser();
             });
+
+            AppDomain.CurrentDomain.UnhandledException += (s, e) =>
+            {
+                Sentry.SentrySdk.CaptureException(e.ExceptionObject as Exception);
+            };
+
+            TaskScheduler.UnobservedTaskException += (s, e) =>
+            {
+                Sentry.SentrySdk.CaptureException(e.Exception);
+            };
 
 
             return builder.Build();

@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json;
 using Microsoft.Maui.Controls.Platform;
 using Mopups.Services;
+using Microsoft.Maui.ApplicationModel;
 
 
 namespace PeopleWith;

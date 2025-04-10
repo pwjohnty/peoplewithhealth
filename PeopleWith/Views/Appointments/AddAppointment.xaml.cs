@@ -2,6 +2,8 @@ using System.Collections.ObjectModel;
 using Mopups.Services;
 using Syncfusion.Maui.DataSource.Extensions;
 using Syncfusion.Maui.Picker;
+using Microsoft.Maui.Devices;
+using Microsoft.Maui.Networking;
 
 namespace PeopleWith;
 

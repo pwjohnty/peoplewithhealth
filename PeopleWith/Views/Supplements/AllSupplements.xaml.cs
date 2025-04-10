@@ -2,6 +2,8 @@
 using Mopups.Services;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Microsoft.Maui.Networking;
+using Microsoft.Maui.Storage;
 //using static AndroidX.Core.Text.Util.LocalePreferences.FirstDayOfWeek;
 
 namespace PeopleWith;

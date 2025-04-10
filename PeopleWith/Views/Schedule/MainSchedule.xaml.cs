@@ -7,6 +7,7 @@ using Mopups.Services;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Azure;
 using System.Linq;
+using Microsoft.Maui.Networking;
 
 namespace PeopleWith;
 

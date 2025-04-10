@@ -1,6 +1,7 @@
 using Syncfusion.Maui.Core.Carousel;
 using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
+using Microsoft.Maui.Networking;
 namespace PeopleWith;
 public partial class ShowAllSymptomData : ContentPage
 {

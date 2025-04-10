@@ -9,6 +9,9 @@ using System.Collections.ObjectModel;
 using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Text.Json;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Devices;
+using Microsoft.Maui.Networking;
 
 namespace PeopleWith;
 

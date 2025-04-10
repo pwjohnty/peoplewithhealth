@@ -8,6 +8,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Color = Microsoft.Maui.Graphics.Color;
+using Microsoft.Maui.Devices;
+using Microsoft.Maui.Networking;
 
 namespace PeopleWith;
 

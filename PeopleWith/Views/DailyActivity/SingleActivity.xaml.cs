@@ -2,6 +2,8 @@ using System.Collections.ObjectModel;
 using System.Text;
 using Mopups.Services;
 using Syncfusion.Maui.ListView;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Networking;
 
 namespace PeopleWith;
 

@@ -3,6 +3,10 @@ using Syncfusion.Maui.ListView;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using Mopups.Services;
+using Microsoft.Maui.Networking;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Devices;
+using Microsoft.Maui.Storage;
 namespace PeopleWith;
 public partial class AllSymptoms : ContentPage
 {

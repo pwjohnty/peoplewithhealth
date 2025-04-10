@@ -3,6 +3,9 @@ using System.CodeDom.Compiler;
 using System.Collections.ObjectModel;
 using Mopups.Services;
 using System.IO.Pipes;
+using Microsoft.Maui.Networking;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Devices;
 
 namespace PeopleWith;
 

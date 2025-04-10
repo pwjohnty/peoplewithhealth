@@ -2,6 +2,11 @@ using Mopups.Services;
 using System.Collections.ObjectModel;
 using System.Text;
 using Plugin.LocalNotification;
+using Microsoft.Maui.Storage;
+using Microsoft.Maui.Networking;
+using Microsoft.Maui.Devices;
+using Microsoft.Maui.ApplicationModel.Communication;
+using Microsoft.Maui.ApplicationModel;
 
 namespace PeopleWith;
 

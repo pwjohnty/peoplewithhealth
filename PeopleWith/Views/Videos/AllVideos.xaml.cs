@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using Mopups.Services;
 using Syncfusion.Maui.Core;
+using Microsoft.Maui.Networking;
 
 namespace PeopleWith;
 

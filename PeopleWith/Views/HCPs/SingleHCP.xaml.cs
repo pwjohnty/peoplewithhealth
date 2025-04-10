@@ -1,5 +1,7 @@
 using Mopups.Services;
 using System.Collections.ObjectModel;
+using Microsoft.Maui.Networking;
+using Microsoft.Maui.ApplicationModel.Communication;
 
 namespace PeopleWith;
 

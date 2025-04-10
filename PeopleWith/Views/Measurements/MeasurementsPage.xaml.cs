@@ -7,6 +7,8 @@ using Microsoft.Extensions.Azure;
 using Mopups.Services;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Metrics;
+using Microsoft.Maui.Networking;
+using Microsoft.Maui.Storage;
 //using Vision;
 
 namespace PeopleWith;

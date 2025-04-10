@@ -1,4 +1,7 @@
 using Microsoft.Azure.NotificationHubs;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Devices;
+using Microsoft.Maui.Storage;
 
 namespace PeopleWith
 {

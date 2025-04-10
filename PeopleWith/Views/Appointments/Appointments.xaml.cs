@@ -3,6 +3,9 @@ using Mopups.Services;
 using Syncfusion.Maui.DataSource.Extensions;
 using Syncfusion.Maui.Scheduler;
 using System.Collections.ObjectModel;
+using Microsoft.Maui.Networking;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Devices;
 
 namespace PeopleWith;
 

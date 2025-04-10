@@ -8,6 +8,8 @@ using Syncfusion.Maui.ListView;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Devices;
 
 namespace PeopleWith;
 

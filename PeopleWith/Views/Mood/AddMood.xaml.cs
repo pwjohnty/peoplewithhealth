@@ -4,6 +4,7 @@ using Mopups.Services;
 using Syncfusion.Maui.Core.Carousel;
 using Syncfusion.Maui.ListView;
 using System.Collections.ObjectModel;
+using Microsoft.Maui.Networking;
 
 namespace PeopleWith;
 public partial class AddMood : ContentPage

@@ -2,6 +2,8 @@ using CommunityToolkit.Maui.Core.Primitives;
 using CommunityToolkit.Maui.Views;
 using System.ComponentModel;
 using System.Diagnostics;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Devices;
 namespace PeopleWith;
 public partial class VideoPlayer : ContentPage
 {

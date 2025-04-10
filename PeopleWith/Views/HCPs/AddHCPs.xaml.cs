@@ -1,6 +1,8 @@
 using Mopups.Services;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
+using Microsoft.Maui.Devices;
+using Microsoft.Maui.Networking;
 
 namespace PeopleWith;
 
