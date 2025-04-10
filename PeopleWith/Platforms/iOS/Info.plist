@@ -9,6 +9,14 @@
 		<integer>1</integer>
 		<integer>2</integer>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>We need access to your camera to capture photos of symptoms.</string>
+
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need access to your photo library to save and select images.</string>
+
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need access to your microphone for video recording.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

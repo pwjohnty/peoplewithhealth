@@ -14,6 +14,7 @@
 	<uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 	<uses-permission android:name="android.permission.USE_EXACT_ALARM" />
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+	<uses-permission android:name="android.permission.CAMERA" />
 	<!-- Check if Health Connect is installed -->
 	<queries>
 		<package android:name="com.google.android.apps.healthdata" />
@@ -22,4 +23,5 @@
 			<data android:scheme="mailto" />
 		</intent>
 	</queries>
+	<uses-sdk />
 </manifest>

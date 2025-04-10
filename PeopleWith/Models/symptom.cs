@@ -29,10 +29,7 @@ namespace PeopleWith
         public string grouping { get; set; }
         public string SNOWMED { get; set; }
         public string ICD10 { get; set; }
-
-
-
-
+        public bool imageinput { get; set; }
     }
 
     public class ApiResponseSymptom

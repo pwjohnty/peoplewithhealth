@@ -59,6 +59,9 @@ namespace PeopleWith
         [System.Text.Json.Serialization.JsonIgnore]
         public DateTime Date { get; set; }
 
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string Time { get; set; }
+
         //New Way
         [System.Text.Json.Serialization.JsonIgnore]
         public ActivityFeedback ActivityFeedbackList { get; set; }
@@ -102,6 +105,7 @@ namespace PeopleWith
     //New Way 
     public class ActivityFeedback
     {
+        public string Completed { get; set; }
         public string Duration { get; set; }
         public string Outcome { get; set; }
         public string Mood { get; set; }

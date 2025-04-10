@@ -21,6 +21,19 @@
     <ScrollView  Orientation="Vertical">
         <StackLayout x:Name="MainStack"  VerticalOptions="FillAndExpand" Margin="20,0,20,0" HorizontalOptions="FillAndExpand">
 
+
+
+
+                <!-- Overlay Loading --><!--
+            <Grid x:Name="ShowAllloading" BackgroundColor="Red"  IsVisible="False"   VerticalOptions="FillAndExpand"  HorizontalOptions="FillAndExpand" Padding="20">
+                <StackLayout VerticalOptions="CenterAndExpand"  HorizontalOptions="CenterAndExpand"  Spacing="10" BackgroundColor="Transparent"  Padding="20">
+                    <ActivityIndicator IsRunning="True"   Color="Orange"   HorizontalOptions="Center"/>
+                    <Label Text="Loading Symptom Data..."  TextColor="#031926"  FontFamily="HankenGroteskRegular" HorizontalOptions="Center"/>
+                </StackLayout>
+            </Grid>-->
+
+
+
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="5*"/>
@@ -220,7 +233,10 @@ Padding="10">
                 <Label Text="Tap on the Show All Data button to view, update and delete your symptom data" x:Name="showalllbl2" IsVisible="True" FontSize="12" Margin="0,5,0,0" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
 
 
-                <Button BackgroundColor="#fff7ea" Clicked="showallbtn_Clicked" HorizontalOptions="FillAndExpand" TextColor="Orange" FontAttributes="None" x:Name="showallbtn"  Margin="0,20,0,60" FontFamily="HankenGroteskBold" Text="Show all data" />
+                <Button BackgroundColor="#fff7ea" Clicked="showallbtn_Clicked"  HorizontalOptions="FillAndExpand" TextColor="Orange" FontAttributes="None" x:Name="showallbtn"  Margin="0,20,0,60" FontFamily="HankenGroteskBold" Text="Show all data" />
+
+                <Button BackgroundColor="#fff7ea" Clicked="OpenGallery" IsVisible="False" HorizontalOptions="FillAndExpand" TextColor="Orange" FontAttributes="None" x:Name="GalleryBtn"  Margin="0,20,0,60" FontFamily="HankenGroteskBold" Text="Open Gallery" />
+
 
 
                 <Button  Text="Delete Symptom" x:Name="DeleteBtn" Clicked="Button_Clicked_1"  Margin="0,40,0,5" FontSize="14" FontFamily="HankenGroteskBold" BackgroundColor="#ffe5e5" TextColor="Red" CornerRadius="10" />

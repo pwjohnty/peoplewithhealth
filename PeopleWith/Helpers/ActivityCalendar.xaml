@@ -60,8 +60,11 @@
 
                 <!-- View 2: Entry Details -->
                 <StackLayout Grid.Row="1" x:Name="EntryView" Margin="0,20,0,0" IsVisible="False">
-                    <inputLayout:SfTextInputLayout Grid.Row="0" x:Name="DateInput" InputViewPadding="10" IsHintAlwaysFloated="True"  HorizontalOptions="Center" Hint="Date" BackgroundColor="Transparent" ShowHint="True" Margin="5,10,5,0" UnfocusedStrokeThickness="2" FocusedStrokeThickness="2" Stroke="#fce9d9" ContainerBackground="Transparent" ContainerType="Outlined" OutlineCornerRadius="5">
+                    <inputLayout:SfTextInputLayout Grid.Row="0" x:Name="DateInput" InputViewPadding="10" IsHintAlwaysFloated="True"  HorizontalOptions="Center" Hint="Date" BackgroundColor="Transparent" ShowHint="True"  Margin="5,10,5,0" UnfocusedStrokeThickness="2" FocusedStrokeThickness="2"  Stroke="#fce9d9" ContainerBackground="Transparent" ContainerType="Outlined" OutlineCornerRadius="5">
                         <Entry FontSize="14" PlaceholderColor="Gray" Keyboard="Numeric" ReturnType="Done" FontFamily="HankenGroteskBold" VerticalOptions="CenterAndExpand" x:Name="DateEntry" TextChanged="DateEntry_TextChanged" Placeholder="DD/MM/YYYY" TextColor="#031926"/>
+                        <inputLayout:SfTextInputLayout.HintLabelStyle>
+                            <inputLayout:LabelStyle TextColor="#031926"/>
+                        </inputLayout:SfTextInputLayout.HintLabelStyle>
                         <inputLayout:SfTextInputLayout.ErrorLabelStyle>
                             <inputLayout:LabelStyle TextColor="Red"  FontFamily="HankenGroteskBold" />
                         </inputLayout:SfTextInputLayout.ErrorLabelStyle>

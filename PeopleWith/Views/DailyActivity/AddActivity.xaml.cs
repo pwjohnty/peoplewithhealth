@@ -8,6 +8,7 @@ using Syncfusion.Maui.ListView;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using CommunityToolkit.Mvvm.Messaging;
+using Syncfusion.Maui.Picker;
 
 namespace PeopleWith;
 
@@ -20,6 +21,8 @@ public partial class AddActivity : ContentPage
     public ObservableCollection<usersymptom> AllUserSymptoms = new ObservableCollection<usersymptom>();
     public ObservableCollection<userdailyactivity> AllUserActivities = new ObservableCollection<userdailyactivity>();
     public ActivityFeedback FeedbacktoAdd = new ActivityFeedback();
+    public List<string> Listoftimes = new List<string>();
+    public List<string> activequality = new List<string>();
     public string AddorEdit = string.Empty; 
     userdailyactivity NewUserActivity = new userdailyactivity();
     userdailyactivity ExistingActivity = new userdailyactivity();
@@ -64,6 +67,24 @@ public partial class AddActivity : ContentPage
     {
         try
         {
+            if (String.IsNullOrEmpty(AddorEdit))
+            {
+                Loadinglbl.Text = "Loading Add Activity...";
+            }
+            else if (AddorEdit == "Duplicate")
+            {
+                Loadinglbl.Text = "Loading Duplicate Activity...";
+            }
+            else if (AddorEdit == "Edit")
+            {
+                Loadinglbl.Text = "Loading Edit Activity...";
+            }
+            else if (AddorEdit == "Feedback")
+            {
+                Loadinglbl.Text = "Loading Activity Feedback...";
+            }
+
+            ActivityLoading.IsVisible = true;
             //Activityloading.IsVisible = true;
             var Userid = Helpers.Settings.UserKey;
             APICalls database = new APICalls();
@@ -100,21 +121,33 @@ public partial class AddActivity : ContentPage
             Datelbl.Text = "Today";
             Timelbl.Text = TimeNow;
 
-            //Populate how'd it go
-            HowditgoList.Add("Excellent");
-            HowditgoList.Add("Good");
-            HowditgoList.Add("Mediocre");
-            HowditgoList.Add("Poor");
-            Activityquality.ItemsSource = HowditgoList;
+            activequality.Add("Excellent");
+            activequality.Add("Good");
+            activequality.Add("Mediocre");
+            activequality.Add("Poor");
+            Activityquality.ItemsSource = activequality;
 
-            if (!string.IsNullOrEmpty(AddorEdit))
+            Listoftimes.Add("+15m");
+            Listoftimes.Add("+30m");
+            Listoftimes.Add("+45m");
+            Listoftimes.Add("+60m");
+            Listoftimes.Add("+75m");
+            Listoftimes.Add("+90m");
+            Incrementlist.ItemsSource = Listoftimes;
+
+        if (!string.IsNullOrEmpty(AddorEdit))
             {
                 PreSelectItems();
             }
+
+            ActivityLoading.IsVisible = false;
+            MainDataStack.IsVisible = true;
         }
 
         catch (Exception Ex)
         {
+            ActivityLoading.IsVisible = false;
+            MainDataStack.IsVisible = true;
             NotasyncMethod(Ex);
         }
     }
@@ -138,11 +171,7 @@ public partial class AddActivity : ContentPage
            
             Timelbl.Text = Duration;
 
-            //update Feedbackto add 
-
-            FeedbacktoAdd.Mood = ExistingActivity.ActivityFeedbackList.Mood;
-            FeedbacktoAdd.Outcome = ExistingActivity.ActivityFeedbackList.Outcome;
-            FeedbacktoAdd.Duration = ExistingActivity.ActivityFeedbackList.Duration;
+           
 
 
             //Category Section 
@@ -176,26 +205,56 @@ public partial class AddActivity : ContentPage
             hoursentry.Text = SplitDuration[0];
             minsentry.Text = SplitDuration[1];
 
-            if (!String.IsNullOrEmpty(ExistingActivity.ActivityFeedbackList.Mood))
-            {
-                var Selectedmood = AllMoods.Where(item => item.Text == ExistingActivity.ActivityFeedbackList.Mood).FirstOrDefault();
 
-                MoodListview.SelectedItem = Selectedmood;
+            //Dont Add Feedback for Duplicate 
+            //if (AddorEdit != "Duplicate")
+            //{
 
-                var MoodIndex = AllMoods.IndexOf(Selectedmood);
+                //update Feedbacktoadd 
+                FeedbacktoAdd.Mood = ExistingActivity.ActivityFeedbackList.Mood;
+                FeedbacktoAdd.Outcome = ExistingActivity.ActivityFeedbackList.Outcome;
+                FeedbacktoAdd.Duration = ExistingActivity.ActivityFeedbackList.Duration;
+                FeedbacktoAdd.Completed = ExistingActivity.ActivityFeedbackList.Completed;
 
-                MoodListview.ScrollTo(AllMoods[MoodIndex], ScrollToPosition.Center, true);
+                if (!String.IsNullOrEmpty(ExistingActivity.ActivityFeedbackList.Completed))
+                {
+                    if (ExistingActivity.ActivityFeedbackList.Completed == "Completed")
+                    {
+                        btnyes.Background = Color.FromArgb("#fce9d9");
+                        btnyes.BorderColor = Colors.Transparent;
+                        btnyes.TextColor = Color.FromArgb("#991B1B");
+                        ShowFeedback.IsVisible = true;
+                    }
+                    else
+                    {
+                        btnno.Background = Color.FromArgb("#fce9d9");
+                        btnno.BorderColor = Colors.Transparent;
+                        btnno.TextColor = Color.FromArgb("#991B1B");
+                        ShowFeedback.IsVisible = false;
+                    }
+                }
+
+                if (!String.IsNullOrEmpty(ExistingActivity.ActivityFeedbackList.Mood))
+                {
+                    var Selectedmood = AllMoods.Where(item => item.Text == ExistingActivity.ActivityFeedbackList.Mood).FirstOrDefault();
+
+                    MoodListview.SelectedItem = Selectedmood;
+
+                    var MoodIndex = AllMoods.IndexOf(Selectedmood);
+
+                    MoodListview.ScrollTo(AllMoods[MoodIndex], ScrollToPosition.Center, true);
+                }
+
+                if (!String.IsNullOrEmpty(ExistingActivity.ActivityFeedbackList.Outcome))
+                {
+                    Activityquality.SelectedItem = ExistingActivity.ActivityFeedbackList.Outcome;
+                }
+
+                if (!String.IsNullOrEmpty(ExistingActivity.notes))
+                {
+                    Notes.Text = ExistingActivity.notes;
             }
-
-            if (!String.IsNullOrEmpty(ExistingActivity.ActivityFeedbackList.Outcome))
-            {
-                Activityquality.SelectedItem = ExistingActivity.ActivityFeedbackList.Outcome;
-            }
-
-            if (!String.IsNullOrEmpty(ExistingActivity.notes))
-            {
-                Notes.Text = ExistingActivity.notes;
-            }
+            //}
 
             if (AddorEdit == "Edit")
             {
@@ -207,7 +266,7 @@ public partial class AddActivity : ContentPage
             }
             else if (AddorEdit == "Feedback")
             {
-                AddActivitybtn.Text = "Add Feedback";
+                AddActivitybtn.Text = "Update Feedback";
 
                 DateTimePicker.IsVisible = false;
                 FilterTabStack.IsVisible = false;
@@ -215,20 +274,21 @@ public partial class AddActivity : ContentPage
                 DurationStack.IsVisible = false;
                 CheckDateToShowFeedback();
                 AddActivitybtn.IsVisible = true;
-
+                DailyActivitylbl.Text = ExistingActivity.activitytitle;
             }
             else if (AddorEdit == "Duplicate")
             {
                 AddActivitybtn.Text = "Duplicate Activity";
-
-                ActivitySelectStack.IsVisible = true;
                 DurationStack.IsVisible = true;
                 AddActivitybtn.IsVisible = true;
 
+                FilterTabStack.IsVisible = false;
+                ActivitySelectStack.IsVisible = false;
+
                 NewUserActivity.activityid = ExistingActivity.activityid;
                 NewUserActivity.activitytitle = ExistingActivity.activitytitle;
+                DailyActivitylbl.Text = ExistingActivity.activitytitle;
             }
-
 
         }
         catch (Exception Ex)
@@ -241,28 +301,27 @@ public partial class AddActivity : ContentPage
         try
         {
             //Gets Current Selected Time 
-            var Date = Datelbl.Text;
-            if (Datelbl.Text == "Today")
-            {
-                Date = DateTime.Now.ToString("dd/MM/yy");
-            }
-            var CurrentDateTime = DateTime.Parse(Date + " " + Timelbl.Text);
-            var Tommorrow = DateTime.Now.AddDays(1);
+            string selectedDate = Datelbl.Text == "Today" ? DateTime.Today.ToString("dd/MM/yy") : Datelbl.Text;
 
-            if (CurrentDateTime.Date < Tommorrow.Date)
+            // Safely parse hours and minutes
+            int hours = int.TryParse(hoursentry.Text, out int h) ? h : 0;
+            int minutes = int.TryParse(minsentry.Text, out int m) ? m : 0;
+            // Create a TimeSpan for duration
+            var duration = new TimeSpan(hours, minutes,0);
+
+            // Parse selected DateTime safely
+            if (!DateTime.TryParseExact($"{selectedDate} {Timelbl.Text}", "dd/MM/yy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime selectedDateTime))
             {
-                FeedbackStack.IsVisible = true;
-            }
-            else
-            {
-                FeedbackStack.IsVisible = false;
+                Console.WriteLine("Invalid date format.");
+                return;
             }
 
-            //Add Process
-            if (AddorEdit == "Feedback")
-            {
-                FeedbackStack.IsVisible = true;
-            }
+            // Add duration to selected time
+            var finalDateTime = selectedDateTime + duration;
+            var currentDateTime = DateTime.Now;
+
+            // Show feedback if the date is in the past OR it's an "Add Feedback" action
+            FeedbackStack.IsVisible = finalDateTime < currentDateTime || AddorEdit == "Feedback";
         }
         catch (Exception Ex)
         {
@@ -319,7 +378,11 @@ public partial class AddActivity : ContentPage
             ExistingActivity.activitytitle = Selecteditem.activitytitle;
             NewUserActivity.activityid = Selecteditem.activityid;
 
-            DurationStack.IsVisible = true; 
+            DurationStack.IsVisible = true;
+
+            CheckDateToShowFeedback();
+
+            AddActivitybtn.IsVisible = true;
         }
         catch (Exception Ex)
         {
@@ -445,7 +508,6 @@ public partial class AddActivity : ContentPage
 
                 //Add New Activity 
                 AllUserActivities.Add(NewUserActivity);
-
 
                 await MopupService.Instance.PushAsync(new PopupPageHelper("Daily Activity Added"));
                 await Navigation.PushAsync(new ActivitySchedule(AllUserActivities));
@@ -579,7 +641,10 @@ public partial class AddActivity : ContentPage
             Datelbl.Text = SplitDate[0];
             Timelbl.Text = SplitDate[1];
 
-            CheckDateToShowFeedback();
+            if (DurationStack.IsVisible == true)
+            {
+                CheckDateToShowFeedback();
+            }          
         }
         catch (Exception Ex)
         {
@@ -609,6 +674,15 @@ public partial class AddActivity : ContentPage
                 {
                     newText = newText.Substring(0, 2);
                 }
+
+                // Validate the value is within the range (0-59)
+                if (int.TryParse(newText, out int minutes))
+                {
+                    if (minutes > 23)
+                    {
+                        newText = "00"; // Set to max value
+                    }
+                }
             }
 
             // Set the corrected text back to the entry
@@ -617,9 +691,8 @@ public partial class AddActivity : ContentPage
                 entry.Text = newText;
             }
 
-            //Make Other Items Visible 
             CheckDateToShowFeedback();
-            AddActivitybtn.IsVisible = true; 
+
         }
         catch (Exception ex)
         {
@@ -665,9 +738,8 @@ public partial class AddActivity : ContentPage
                 entry.Text = newText;
             }
 
-            //Make Other Items Visible 
             CheckDateToShowFeedback();
-            AddActivitybtn.IsVisible = true;
+
         }
         catch (Exception ex)
         {
@@ -704,9 +776,8 @@ public partial class AddActivity : ContentPage
             hoursentry.Text = hours.ToString("D2");   // Ensure 2-digit format
             minsentry.Text = minutes.ToString("D2");
 
-            //Make Other Items Visible 
             CheckDateToShowFeedback();
-            AddActivitybtn.IsVisible = true;
+
         }
         catch (Exception ex)
         {
@@ -734,21 +805,143 @@ public partial class AddActivity : ContentPage
             var GetCommand = (sender) as Button;
             var ShowHide = GetCommand.CommandParameter.ToString();
 
+            btnyes.Background = Colors.Transparent;
+            btnyes.BorderColor = Colors.LightGray;
+            btnyes.TextColor = Colors.Gray;
 
-            if(ShowHide == "Yes")
+            btnno.Background = Colors.Transparent;
+            btnno.BorderColor = Colors.LightGray;
+            btnno.TextColor = Colors.Gray;
+
+            if (ShowHide == "Yes")
             {
-                btnyes.Background = Color.FromArgb("#991B1B");
+                btnyes.Background = Color.FromArgb("#fce9d9");
                 btnyes.BorderColor = Colors.Transparent;
-                btnyes.TextColor = Color.FromArgb("#991B1B"); 
+                btnyes.TextColor = Color.FromArgb("#991B1B");
+
+                ShowFeedback.IsVisible = true;
+                FeedbacktoAdd.Completed = "Completed"; 
             }
             else
             {
-                btnno.Background = Color.FromArgb("#991B1B");
+                btnno.Background = Color.FromArgb("#fce9d9");
+                btnno.BorderColor = Colors.Transparent;
+                btnno.TextColor = Color.FromArgb("#991B1B");
+
+                ShowFeedback.IsVisible = false;
+                FeedbacktoAdd.Completed = "Not Completed";
             }
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
+
+    private async void Duration_Tapped(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            var DurationtoPass = "00 00";
+            var GetDuration = new TaskCompletionSource<string>();
+
+            // Open the popup and pass the TaskCompletionSource
+            await MopupService.Instance.PushAsync(new ActivityDuration(GetDuration, DurationtoPass));
+
+            string selectedDuration = await GetDuration.Task;
+
+            Durationlbl.Text = selectedDuration;
+
+            //if (DurationStack.IsVisible == true)
+            //{
+            //    CheckDateToShowFeedback();
+            //}
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    private void Incrementlist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
+    {
+        try
+        {
+            int hours = int.TryParse(hoursentry.Text, out int h) ? h : 0;
+            int minutes = int.TryParse(minsentry.Text, out int m) ? m : 0;
+
+            var SelectedItem = e.DataItem as string;
+
+            var StringTime = SelectedItem.Replace("+", "").Replace("m", "");
+            if (int.TryParse(StringTime, out int GetMins))
+            {
+                minutes += GetMins;
+
+                // Handle overflow into hours correctly
+                hours += minutes / 60;  // Add extra hours from overflow
+                minutes = minutes % 60; // Keep minutes in range (0-59)
+
+                // Optional: Limit hours to 24-hour format (reset to 0 after 24)
+                if (hours >= 24)
+                {
+                    hours = 0;
+                }
+
+                // Update the Entries with the new values
+                hoursentry.Text = hours.ToString("D2");   // Ensure 2-digit format
+                minsentry.Text = minutes.ToString("D2");
+            }
+
+
+            CheckDateToShowFeedback();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+
+
+    //private void SwapSection_Tapped(object sender, TappedEventArgs e)
+    //{
+    //    try
+    //    {
+
+    //        Sectionone.Background = Colors.LightGray;
+    //        Sectionone.BackgroundColor = Colors.LightGray;
+    //        Imageone.Source = "durationeditlg.png";
+
+    //        Sectiontwo.Background = Colors.LightGray;
+    //        Sectiontwo.BackgroundColor = Colors.LightGray;
+    //        Imagetwo.Source = "durationaddlg.png";
+
+    //        var GetCommand = (TappedEventArgs)e;
+    //        string Passed = (string)GetCommand.Parameter;
+
+    //        if (!string.IsNullOrEmpty(Passed))
+    //        {
+    //            //Section One 
+    //            if (Passed == "1")
+    //            {
+    //                Sectionone.Background = Color.FromArgb("#991B1B");
+    //                Sectionone.BackgroundColor = Color.FromArgb("#991B1B");
+    //                Imageone.Source = "durationeditr.png";
+    //                Showbtns.IsVisible = false;
+    //            }
+    //            //Section Two
+    //            else if (Passed == "2")
+    //            {
+    //                Sectiontwo.Background = Color.FromArgb("#991B1B");
+    //                Sectiontwo.BackgroundColor = Color.FromArgb("#991B1B");
+    //                Imagetwo.Source = "durationaddr.png";
+    //                Showbtns.IsVisible = false;
+    //            }
+    //        }
+    //    }
+    //    catch (Exception Ex)
+    //    {
+    //        NotasyncMethod(Ex);
+    //    }
+    //}
 }

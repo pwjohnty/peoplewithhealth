@@ -44,9 +44,7 @@ public partial class ActivitySchedule : ContentPage
         try
         {
             InitializeComponent();
-            ActivityLoading.IsVisible = true;
             GetActivityInfo();
-            ActivityLoading.IsVisible = false;
         }
         catch (Exception Ex)
         {
@@ -60,11 +58,9 @@ public partial class ActivitySchedule : ContentPage
         try
         {
             InitializeComponent();
-            ActivityLoading.IsVisible = true;
             //Update Listview on Add of New Activity 
             AllUserActivity = UpdatedActivities;
             GetActivityInfo();
-            ActivityLoading.IsVisible = false;
         }
         catch (Exception Ex)
         {
@@ -166,6 +162,8 @@ public partial class ActivitySchedule : ContentPage
     {
         try
         {
+
+            ActivityLoading.IsVisible = true;
             //Get User Activity Here
             APICalls database = new APICalls();
 
@@ -179,7 +177,9 @@ public partial class ActivitySchedule : ContentPage
 
             Preloaddata();
             editActivtyData();
-            WorkoutItemsDue();              
+            WorkoutItemsDue();
+
+            ActivityLoading.IsVisible = false;
 
         }
         catch (Exception Ex)
@@ -244,6 +244,10 @@ public partial class ActivitySchedule : ContentPage
 
                 ActivityLookup.TryGetValue(item.activitytitle, out var source);
                 item.Typeimg = source;
+
+                var splitstart = item.startdate.Split(" ");
+
+                item.Time = splitstart[1];
             }
 
             TimelineListview.ItemsSource = AllUserActivity.OrderByDescending(x => DateTime.Parse(x.startdate));
@@ -266,9 +270,9 @@ public partial class ActivitySchedule : ContentPage
             // Use dateforschedule as the selected date for populating the schedule
             DateTime selectedDate = dateforschedule;
             String SelectedDateString = selectedDate.ToString("dd/MM/yy");
-          
+
             var Filter = new ObservableCollection<userdailyactivity>(AllUserActivity.Where(s => s.startdate.Contains(SelectedDateString, StringComparison.OrdinalIgnoreCase))).OrderBy(m => m.startdate).Select(item =>
-            {           
+            {
                 return item;
             });
 
@@ -291,6 +295,8 @@ public partial class ActivitySchedule : ContentPage
                 EmptyStack.IsVisible = true;
                 AddTaskStack.IsVisible = false;
             }
+
+            PlannerHeader.IsVisible = true;
         }
         catch (Exception Ex)
         {
@@ -459,26 +465,40 @@ public partial class ActivitySchedule : ContentPage
     }
 
 
-    private void Listviewbtn_Clicked(object sender, EventArgs e)
+    async private void Listviewbtn_Clicked(object sender, EventArgs e)
     {
         try
         {
+            TimelineLoading.IsVisible = true;
             PlannerStack.IsVisible = false;
+
+            if(EmptyStack.IsVisible == true)
+            {
+                EmptyStack.IsVisible = false; 
+            }
+            await Task.Delay(1000);
+
             TimelineStack.IsVisible = true;
 
             if (AllUserActivity.Count == 0)
             {
-                TimelineListview.IsVisible = false;
+                TimelineStack.IsVisible = false;
+                PlannerStack.IsVisible = true;
+                TimelineLoading.IsVisible = false;
                 EmptyStack.IsVisible = true;
+                await DisplayAlert("Activity Timeline", "No activities found. Please add some to access this feature", "Close");
             }
             else
             {
-                TimelineListview.IsVisible = true;
+                TimelineStack.IsVisible = true;
                 EmptyStack.IsVisible = false;
             }
+
+            TimelineLoading.IsVisible = false;
         }
         catch (Exception Ex)
         {
+            TimelineLoading.IsVisible = false;
             NotasyncMethod(Ex);
         }
     }
@@ -504,16 +524,17 @@ public partial class ActivitySchedule : ContentPage
     {
         try
         {
+
             PlannerStack.IsVisible = true;
             TimelineStack.IsVisible = false;
+           
 
             //Set Schedule items 
             if (ScheduleItems.Count > 0)
             {
                 ActivityPlannerStack.IsVisible = true;
                 EmptyStack.IsVisible = false;
-                //ActivityPlanner.ItemsSource = ScheduleItems.OrderByDescending(m => m.Date);
-                //AddTaskStack.IsVisible = true;
+
             }
             else
             {
@@ -534,8 +555,11 @@ public partial class ActivitySchedule : ContentPage
         {
 
             var selectedItem = e.DataItem as userdailyactivity;
-            //Push to SingleActivity 
-            await Navigation.PushAsync(new SingleActivity(selectedItem, AllUserActivity), false);
+            if(selectedItem != null)
+            {
+                //Push to SingleActivity 
+                await Navigation.PushAsync(new SingleActivity(selectedItem, AllUserActivity), false);
+            }         
         }
         catch (Exception Ex)
         {
@@ -549,8 +573,11 @@ public partial class ActivitySchedule : ContentPage
         {
             var selectedItem = e.DataItem as userdailyactivity;
             //Push to SingleActivity 
-            await Navigation.PushAsync(new SingleActivity(selectedItem, AllUserActivity), false); 
-
+            if (selectedItem != null)
+            {
+                //Push to SingleActivity 
+                await Navigation.PushAsync(new SingleActivity(selectedItem, AllUserActivity), false);
+            }        
         }
         catch (Exception Ex)
         {

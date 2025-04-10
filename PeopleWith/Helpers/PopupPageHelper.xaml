@@ -16,7 +16,7 @@
             EasingOut="SinIn"
             HasBackgroundAnimation="False"/>
     </Mopups:PopupPage.Animation>
-    <VerticalStackLayout Margin="30,0,30,0" VerticalOptions="Center" BackgroundColor="Transparent">
+    <VerticalStackLayout Margin="20,0,20,0" VerticalOptions="Center" BackgroundColor="Transparent">
         <Frame CornerRadius="10"  Margin="0,5,0,5"
                BackgroundColor="Transparent" HasShadow="False"
                 BorderColor="Transparent" InputTransparent="True" Padding="0">

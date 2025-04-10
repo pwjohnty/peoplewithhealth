@@ -15,10 +15,24 @@ public partial class imagePopUp : PopupPage
         try
         {
             InitializeComponent();
-
-
             mainimage.Source = ImageSource.FromUri(new Uri(message));
-           
+
+        }
+        catch (Exception Ex)
+        {
+
+        }
+    }
+
+    public imagePopUp(string message, string rotate)
+    {
+        try
+        {
+            //just used to rotate the image 90°
+            InitializeComponent();
+            mainimage.Source = ImageSource.FromUri(new Uri(message));
+            mainimage.Rotation = 90; 
+
         }
         catch (Exception Ex)
         {

@@ -418,6 +418,38 @@ HorizontalOptions="FillAndExpand">
                 </Grid>
             </Frame>
 
+            <StackLayout x:Name="ImageStack">
+                <Label Text="Add Image" FontFamily="HankenGroteskBold" Margin="20,10,0,0"  VerticalOptions="Center" HorizontalOptions="Start"   FontSize="16" TextColor="#031926" />
+                <Label Text="Tap the box below to capture an image of the symptom. Tap the image to retake if you're not satisfied." FontFamily="HankenGroteskBold" Margin="20,5,0,0"  VerticalOptions="Center" HorizontalOptions="Start"   FontSize="12" TextColor="#031926" />
+
+                <Border  Stroke="#fff7ea" StrokeShape="RoundRectangle 10" StrokeThickness="1" Padding="10" BackgroundColor="#fff7ea" Margin="20,5,20,10">
+                    <Grid>
+                        <Grid Grid.RowDefinitions="Auto" x:Name="TakeImageStack" Grid.ColumnDefinitions="20*,80*">
+                            <Image Source="addimageblack.png" HeightRequest="30" WidthRequest="30" VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="0" Grid.Column="0" />
+                            <Label Text="Tap here to add a photo, you may be asked for permission to access the camera if not already enabled" LineBreakMode="WordWrap" Grid.Row="0" Grid.Column="1"  HorizontalOptions="Start" VerticalOptions="Center" FontFamily="HankenGroteskRegular" FontSize="12" TextColor="#031926"/>
+                        </Grid>
+
+                        <Grid  Grid.RowDefinitions="Auto,Auto" Grid.ColumnDefinitions="*" x:Name="ShowImagestack" IsVisible="False">
+                            <Border Stroke="Transparent" Grid.Row="0" StrokeShape="RoundRectangle 10"   Padding="{OnPlatform Android='0', iOS='0'}"  StrokeThickness="1" Margin="0" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="Center">
+                                <Image x:Name="ImageTaken" Aspect="AspectFill"  VerticalOptions="Center" HeightRequest="325" WidthRequest="325" HorizontalOptions="Center" Margin="0" Rotation="90" />
+                            </Border>
+                            <Grid Grid.RowDefinitions="Auto" ColumnSpacing="10" Grid.Row="1" Grid.ColumnDefinitions="50*,50*">
+                                <Button Text="Retake" Background="Transparent" Grid.Row="0" Grid.Column="0" BorderColor="Transparent" TextColor="#031926" Clicked="Retakeimage" FontFamily="HankenGroteskBold" FontSize="16"/>
+                                <Button Text="Remove" Background="Transparent" Grid.Row="0" Grid.Column="1" BorderColor="Red" TextColor="LightGray"  Clicked="RemoveSymptomImage" FontFamily="HankenGroteskBold" FontSize="16"/>
+                            </Grid>
+                        </Grid>
+                        <ActivityIndicator IsRunning="True" x:Name="Imageloading" IsVisible="False" Color="Orange" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Grid>
+
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OpenCamera_Tapped" NumberOfTapsRequired="1"/>
+                    </Border.GestureRecognizers>
+                </Border>
+            </StackLayout>
+
+
+
+
             <Label Text="Add Notes" FontFamily="HankenGroteskBold" Margin="20,10,0,0"  VerticalOptions="Center" HorizontalOptions="Start"   FontSize="16" TextColor="#031926" />
             <Frame  BorderColor="#E6E6E6" BackgroundColor="Transparent" HasShadow="False" CornerRadius="10" Padding="-11" Margin="20,5,20,30">
                 <ScrollView Orientation="Vertical" HorizontalScrollBarVisibility="Never">

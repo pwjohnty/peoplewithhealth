@@ -4,6 +4,12 @@ using Syncfusion.Maui.DataSource.Extensions;
 using Syncfusion.Maui.Picker;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Design;
+using Microsoft.Maui.Media;
+using SkiaSharp;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using System.Reflection.Metadata;
+using Azure;
 namespace PeopleWith;
 public partial class UpdateSingleSymptom : ContentPage
 {
@@ -16,6 +22,7 @@ public partial class UpdateSingleSymptom : ContentPage
     public ObservableCollection<usersymptom> PassedSymptom = new ObservableCollection<usersymptom>();
     public ObservableCollection<symptomfeedback> EditFeedback = new ObservableCollection<symptomfeedback>();
     public ObservableCollection<usersymptom> AllSymptomDataPassed = new ObservableCollection<usersymptom>();
+    public symptom GetSymptomInput = new symptom();
     string SelectedDate;
     string SelectedTime;
     string SliderValue;
@@ -30,12 +37,19 @@ public partial class UpdateSingleSymptom : ContentPage
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
     string triggorinterstring;
+    string ImageFileName = string.Empty;
+    ImageSource ImagetoShow;
+    bool BorderClickable = true; 
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
     userfeedback userfeedbacklistpassed = new userfeedback();
     bool edit;
     bool dashupdate;
+    private byte[] ResizedImage;
+    bool ShowhideImageIput = false; 
 
+    private const string StorageConnectionString = "DefaultEndpointsProtocol=https;AccountName=peoplewithappiamges;AccountKey=9maBMGnjWp6KfOnOuXWHqveV4LPKyOnlCgtkiKQOeA+d+cr/trKApvPTdQ+piyQJlicOE6dpeAWA56uD39YJhg==;EndpointSuffix=core.windows.net";
+    private const string Container = "symptomimages";
     async public void NotasyncMethod(Exception Ex)
     {
         try
@@ -110,26 +124,32 @@ public partial class UpdateSingleSymptom : ContentPage
                             SymptomSlider.Value = Int32.Parse(x.intensity);
                             DateTime DateAndTime = DateTime.Parse(x.timestamp);
                             addtimepicker.Time = DateAndTime.TimeOfDay;
-                            adddatepicker.Date = DateAndTime.Date; 
+                            adddatepicker.Date = DateAndTime.Date;
 
                             SelectedDate = DateAndTime.ToString("dd/MM/yyyy");
                             SelectedTime = DateAndTime.ToString("HH:mm:ss");
-                          
+
+                            if (!String.IsNullOrEmpty(x.symptomimage))
+                            {
+                                TakeImageStack.IsVisible = false;
+                                ShowImagestack.IsVisible = true;
+                            }
+
                             if (string.IsNullOrEmpty(x.duration) || x.duration == "No Duration")
                             {
                                 DurationPicker.SelectedTime = new TimeSpan(0, 0, 0);
                             }
                             else
                             {
-                                    var Duration = x.duration.Split(' ');
-                                    var hours = Duration[0];
-                                    var Seconds = Duration[2];
-                                    string GetDuration = hours + ":" + Seconds + ":00";
+                                var Duration = x.duration.Split(' ');
+                                var hours = Duration[0];
+                                var Seconds = Duration[2];
+                                string GetDuration = hours + ":" + Seconds + ":00";
 
                                 hoursentry.Text = hours;
                                 minsentry.Text = Seconds;
-                                   // TimeSpan DurationPick = TimeSpan.Parse(GetDuration);
-                                   // DurationPicker.SelectedTime = DurationPick;                              
+                                // TimeSpan DurationPick = TimeSpan.Parse(GetDuration);
+                                // DurationPicker.SelectedTime = DurationPick;                              
                             }
                             if (string.IsNullOrEmpty(x.notes) || x.notes == null)
                             {
@@ -142,8 +162,11 @@ public partial class UpdateSingleSymptom : ContentPage
                         }
                     }
                 }
+                updateImage();
             }
+
             updateResultCount();
+            CheckInput();
         }
         catch (Exception Ex)
         {
@@ -203,6 +226,13 @@ public partial class UpdateSingleSymptom : ContentPage
                             SelectedDate = DateAndTime.ToString("dd/MM/yyyy");
                             SelectedTime = DateAndTime.ToString("HH:mm:ss");
 
+                            if (!String.IsNullOrEmpty(x.symptomimage))
+                            {
+                                TakeImageStack.IsVisible = false;
+                                ShowImagestack.IsVisible = true;
+
+                            }
+
                             if (string.IsNullOrEmpty(x.duration) || x.duration == "No Duration")
                             {
                                 DurationPicker.SelectedTime = new TimeSpan(0, 0, 0);
@@ -227,8 +257,11 @@ public partial class UpdateSingleSymptom : ContentPage
                         }
                     }
                 }
+
+                updateImage();
             }
             updateResultCount();
+            CheckInput();
         }
         catch (Exception Ex)
         {
@@ -247,9 +280,9 @@ public partial class UpdateSingleSymptom : ContentPage
             addtimepicker.Time = DateTime.Now.TimeOfDay;
             userfeedbacklistpassed = userfeedbacklist;
             gettriggersandinterventions();
-          //  PassedSymptom = SymptomPassed;
+            //  PassedSymptom = SymptomPassed;
             EditAdd = "Add";
-          //  AllSymptomDataPassed = AllSymptomData;
+            //  AllSymptomDataPassed = AllSymptomData;
             TItlelbl.Text = symptomtitle;
             SymptomSlider.Value = Convert.ToInt32(symptomscore);
             currentint = Convert.ToInt32(symptomscore);
@@ -257,7 +290,7 @@ public partial class UpdateSingleSymptom : ContentPage
             UpdateBtn.Text = "Add";
             dashupdate = true;
 
- 
+
             updateResultCount();
 
 
@@ -267,7 +300,239 @@ public partial class UpdateSingleSymptom : ContentPage
             //Set Both Stacks to False on Load 
             TriggersStack.IsVisible = false;
             InterventionsStack.IsVisible = false;
+            CheckInput();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
 
+    //Check To Show image input 
+
+   private async void CheckInput()
+    {
+        try
+        {
+            APICalls databse = new APICalls();
+            var SingleSymptom = PassedSymptom[0];
+            ShowhideImageIput = await databse.GetSymptonsInput(SingleSymptom);
+            ImageStack.IsVisible = ShowhideImageIput;
+        }
+        catch (Exception Ex)
+        {
+            
+        }
+    }
+
+    private async void updateImage()
+    {
+        try
+        {
+            var SingleFeedback = PassedSymptom[0].feedback.FirstOrDefault(item => item.symptomfeedbackid == EditAdd) ?? new symptomfeedback();
+
+            if(SingleFeedback.ImageAttached == true)
+            {
+                var imagestring = $"https://peoplewithappiamges.blob.core.windows.net/symptomimages/{SingleFeedback.symptomimage}?t={DateTime.UtcNow.Ticks}";
+                var imageSource = ImageSource.FromUri(new Uri(imagestring));
+
+                await Task.Run(() =>
+                {
+                    ImageTaken.Source = imageSource;
+                });
+                bool BorderClickable = true;
+            }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    //Open Camera to take Photo
+    public async Task<FileResult> CapturePhotoAsync()
+    {
+        try
+        {
+            var status = await Permissions.CheckStatusAsync<Permissions.Camera>();
+
+            if (status != PermissionStatus.Granted)
+            {
+                status = await Permissions.RequestAsync<Permissions.Camera>();
+
+                if (status != PermissionStatus.Granted)
+                {
+                    await DisplayAlert("Permission Required", "Camera access is required to take a photo", "Close");
+                    return null;
+                }
+            }
+
+            if (MediaPicker.Default.IsCaptureSupported)
+            {
+                return await MediaPicker.Default.CapturePhotoAsync();
+            }
+
+            return null;
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+            return null;
+        }
+    }
+
+    private async Task ProcessCameraAsync()
+    {
+        try
+        {
+            if (!BorderClickable) return;
+            var photo = await CapturePhotoAsync();
+
+            if (photo != null)
+            {
+                Imageloading.IsVisible = true;
+                using var stream = await photo.OpenReadAsync();
+                var resizedImage = await ResizeImageAsync(stream, 1024, 1024, 80);
+
+
+                if (resizedImage != null)
+                {
+                    // Save the resized image bytes for later use
+                    ResizedImage = resizedImage;
+
+                    var ImagetoConvert = Convert.ToBase64String(resizedImage);
+                    ImagetoShow = await ConvertBase64ToImage(ImagetoConvert);
+
+                    //Update FIleName
+                    var backrandom = new Random();
+                    var backrandomnum = backrandom.Next(1000, 10000000);
+                    var Filename = Helpers.Settings.UserKey + "-" + DateTime.Now.ToString("H-m-s-yyyyy-MM-dd") + "-" + backrandomnum + ".Jpeg";
+                    if(EditAdd == "Add")
+                    {
+                        ImageFileName = Filename;
+                    }
+                    else
+                    {
+                        var SingleFeedback = PassedSymptom[0].feedback.FirstOrDefault(item => item.symptomfeedbackid == EditAdd) ?? new symptomfeedback();                     
+                        ImageFileName = SingleFeedback.symptomimage; 
+                    }
+                  
+                    TakeImageStack.IsVisible = false;
+                    ShowImagestack.IsVisible = true;
+                    ImageTaken.Source = ImagetoShow;
+                    Imageloading.IsVisible = false;
+                    BorderClickable = false;
+                }
+            }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+    private async void OpenCamera_Tapped(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            await ProcessCameraAsync();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    private async void UploadtoBlobStorage()
+    {
+        try
+        {
+            // Parse the connection string and create a blob client
+            BlobServiceClient blobServiceClient = new BlobServiceClient(StorageConnectionString);
+
+            // Get a reference to the container
+            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(Container);
+
+            // Get a reference to the blob
+            BlobClient blobClient = containerClient.GetBlobClient(ImageFileName);
+
+            using var stream = new MemoryStream(ResizedImage);
+            var response = await blobClient.UploadAsync(stream, overwrite: true);
+           
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    private async Task<byte[]> ResizeImageAsync(Stream imageStream, int maxWidth, int maxHeight, int quality)
+    {
+        try
+        {
+            using var memoryStream = new MemoryStream();
+            await imageStream.CopyToAsync(memoryStream);
+            byte[] imageData = memoryStream.ToArray();
+
+            using var original = SKBitmap.Decode(imageData);
+
+            float scale = Math.Min((float)maxWidth / original.Width, (float)maxHeight / original.Height);
+            int newWidth = (int)(original.Width * scale);
+            int newHeight = (int)(original.Height * scale);
+
+            using var resized = original.Resize(new SKImageInfo(newWidth, newHeight), SKFilterQuality.High);
+            using var image = SKImage.FromBitmap(resized);
+            using var outputStream = new MemoryStream();
+
+            image.Encode(SKEncodedImageFormat.Png, quality).SaveTo(outputStream);
+
+            return outputStream.ToArray();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+            return null;
+        }
+    }
+
+    public async Task<ImageSource> ConvertBase64ToImage(string base64String)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(base64String))
+                return null;
+
+            byte[] imageBytes = Convert.FromBase64String(base64String);
+            return ImageSource.FromStream(() => new MemoryStream(imageBytes));
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+            return null;
+        }
+    }
+
+    private void RemoveSymptomImage(object sender, EventArgs e)
+    {
+        try
+        {
+            //Clear both 
+            ImageFileName = String.Empty;
+            BorderClickable = true; 
+            ShowImagestack.IsVisible = false;
+            TakeImageStack.IsVisible = true;
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    private async void Retakeimage(object sender, EventArgs e)
+    {
+        try
+        {
+            BorderClickable = true;
+            await ProcessCameraAsync();
         }
         catch (Exception Ex)
         {
@@ -733,7 +998,7 @@ public partial class UpdateSingleSymptom : ContentPage
                 }
 
 
-                if(string.IsNullOrEmpty(hoursentry.Text) && string.IsNullOrEmpty(minsentry.Text))
+                if (string.IsNullOrEmpty(hoursentry.Text) && string.IsNullOrEmpty(minsentry.Text))
                 {
                     items.duration = null;
                 }
@@ -742,7 +1007,7 @@ public partial class UpdateSingleSymptom : ContentPage
                     var hours = "";
                     var mins = "";
 
-                    if(string.IsNullOrEmpty(hoursentry.Text))
+                    if (string.IsNullOrEmpty(hoursentry.Text))
                     {
                         hours = "00";
                     }
@@ -764,8 +1029,13 @@ public partial class UpdateSingleSymptom : ContentPage
                     items.duration = timestring;
                 }
 
+                if (!String.IsNullOrEmpty(ImageFileName))
+                {
+                    items.symptomimage = ImageFileName;
+                }
 
-               // items.duration = Duration;
+
+                // items.duration = Duration;
                 if (EditAdd == "Add")
                 {
                     foreach (var item in PassedSymptom)
@@ -789,13 +1059,17 @@ public partial class UpdateSingleSymptom : ContentPage
                                 i.interventions = items.interventions;
                                 i.triggers = items.triggers;
                                 i.duration = items.duration;
-                                
+                                i.symptomimage = items.symptomimage;
                             }
                         }
                     }
                 }
 
-
+            if (!String.IsNullOrEmpty(ImageFileName))
+            {
+                UploadtoBlobStorage();
+            }
+                
             APICalls database = new APICalls();
             await database.PutSymptomAsync(PassedSymptom);
 
@@ -1287,7 +1561,6 @@ public partial class UpdateSingleSymptom : ContentPage
                 // Add the updated symptom
                 AllSymptomDataPassed.Add(PassedSymptom[0]);
 
-
                 await MopupService.Instance.PushAsync(new PopupPageHelper("Symptom Feedback Deleted") { });
                 
                 //   await Navigation.PushAsync(new SingleSymptom(PassedSymptom, AllSymptomDataPassed));
@@ -1327,4 +1600,6 @@ public partial class UpdateSingleSymptom : ContentPage
 
         }
     }
+
+   
 }

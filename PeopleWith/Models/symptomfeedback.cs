@@ -12,6 +12,8 @@ namespace PeopleWith
     {
         bool deleteCheck;
         bool dateSelected;
+        bool imageAttached;
+        string Symptomimageurl;
 
         public string action { get; set; }
         public string timestamp { get; set; }
@@ -21,10 +23,27 @@ namespace PeopleWith
         public string triggers { get; set; }
         public string interventions { get; set; }
         public string duration { get; set; }
+        public string symptomimage { get; set; }
 
-     
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string symptomimageurl
+        {
+            get => Symptomimageurl;
+            set
+            {
+                if (Symptomimageurl != value)
+                {
+                    Symptomimageurl = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         [System.Text.Json.Serialization.JsonIgnore]
         public string formattedDateTime { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string formattedduration { get; set; }
 
         [System.Text.Json.Serialization.JsonIgnore]
         public DateTime DateTimeFormat { get; set; }
@@ -34,7 +53,28 @@ namespace PeopleWith
         [System.Text.Json.Serialization.JsonIgnore]
         public bool InterventionBool { get; set; }
         [System.Text.Json.Serialization.JsonIgnore]
+        public bool NormalShowAll { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool ImageShowAll { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
         public bool OtherBool { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool ImageAttached
+        {
+            get => imageAttached;
+            set
+            {
+                if (imageAttached != value)
+                {
+                    imageAttached = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         [System.Text.Json.Serialization.JsonIgnore]
         public bool DeleteCheck
         {
