@@ -7,7 +7,9 @@ using System.ComponentModel.Design;
 using Microsoft.Maui.Media;
 using SkiaSharp;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using System.Reflection.Metadata;
+using Azure;
 namespace PeopleWith;
 public partial class UpdateSingleSymptom : ContentPage
 {
@@ -46,9 +48,8 @@ public partial class UpdateSingleSymptom : ContentPage
     private byte[] ResizedImage;
     bool ShowhideImageIput = false; 
 
-    //private const string StorageConnectionString = "DefaultEndpointsProtocol=https;AccountName=peoplewithappiamges;AccountKey=9maBMGnjWp6KfOnOuXWHqveV4LPKyOnlCgtkiKQOeA+d+cr/trKApvPTdQ+piyQJlicOE6dpeAWA56uD39YJhg==;EndpointSuffix=core.windows.net";
-
-    //private const string Container = "symptomimages"
+    private const string StorageConnectionString = "DefaultEndpointsProtocol=https;AccountName=peoplewithappiamges;AccountKey=9maBMGnjWp6KfOnOuXWHqveV4LPKyOnlCgtkiKQOeA+d+cr/trKApvPTdQ+piyQJlicOE6dpeAWA56uD39YJhg==;EndpointSuffix=core.windows.net";
+    private const string Container = "symptomimages";
     async public void NotasyncMethod(Exception Ex)
     {
         try
@@ -123,7 +124,7 @@ public partial class UpdateSingleSymptom : ContentPage
                             SymptomSlider.Value = Int32.Parse(x.intensity);
                             DateTime DateAndTime = DateTime.Parse(x.timestamp);
                             addtimepicker.Time = DateAndTime.TimeOfDay;
-                            adddatepicker.Date = DateAndTime.Date; 
+                            adddatepicker.Date = DateAndTime.Date;
 
                             SelectedDate = DateAndTime.ToString("dd/MM/yyyy");
                             SelectedTime = DateAndTime.ToString("HH:mm:ss");
@@ -132,8 +133,6 @@ public partial class UpdateSingleSymptom : ContentPage
                             {
                                 TakeImageStack.IsVisible = false;
                                 ShowImagestack.IsVisible = true;
-                                //Convert Image from base64 to Image Source
-                                PreloadImage(x.symptomimage);
                             }
 
                             if (string.IsNullOrEmpty(x.duration) || x.duration == "No Duration")
@@ -142,15 +141,15 @@ public partial class UpdateSingleSymptom : ContentPage
                             }
                             else
                             {
-                                    var Duration = x.duration.Split(' ');
-                                    var hours = Duration[0];
-                                    var Seconds = Duration[2];
-                                    string GetDuration = hours + ":" + Seconds + ":00";
+                                var Duration = x.duration.Split(' ');
+                                var hours = Duration[0];
+                                var Seconds = Duration[2];
+                                string GetDuration = hours + ":" + Seconds + ":00";
 
                                 hoursentry.Text = hours;
                                 minsentry.Text = Seconds;
-                                   // TimeSpan DurationPick = TimeSpan.Parse(GetDuration);
-                                   // DurationPicker.SelectedTime = DurationPick;                              
+                                // TimeSpan DurationPick = TimeSpan.Parse(GetDuration);
+                                // DurationPicker.SelectedTime = DurationPick;                              
                             }
                             if (string.IsNullOrEmpty(x.notes) || x.notes == null)
                             {
@@ -163,7 +162,9 @@ public partial class UpdateSingleSymptom : ContentPage
                         }
                     }
                 }
+                updateImage();
             }
+
             updateResultCount();
             CheckInput();
         }
@@ -229,8 +230,7 @@ public partial class UpdateSingleSymptom : ContentPage
                             {
                                 TakeImageStack.IsVisible = false;
                                 ShowImagestack.IsVisible = true;
-                                //Convert Image from base64 to Image Source
-                                PreloadImage(x.symptomimage);
+
                             }
 
                             if (string.IsNullOrEmpty(x.duration) || x.duration == "No Duration")
@@ -257,6 +257,8 @@ public partial class UpdateSingleSymptom : ContentPage
                         }
                     }
                 }
+
+                updateImage();
             }
             updateResultCount();
             CheckInput();
@@ -319,6 +321,30 @@ public partial class UpdateSingleSymptom : ContentPage
         }
         catch (Exception Ex)
         {
+            
+        }
+    }
+
+    private async void updateImage()
+    {
+        try
+        {
+            var SingleFeedback = PassedSymptom[0].feedback.FirstOrDefault(item => item.symptomfeedbackid == EditAdd) ?? new symptomfeedback();
+
+            if(SingleFeedback.ImageAttached == true)
+            {
+                var imagestring = $"https://peoplewithappiamges.blob.core.windows.net/symptomimages/{SingleFeedback.symptomimage}?t={DateTime.UtcNow.Ticks}";
+                var imageSource = ImageSource.FromUri(new Uri(imagestring));
+
+                await Task.Run(() =>
+                {
+                    ImageTaken.Source = imageSource;
+                });
+                bool BorderClickable = true;
+            }
+        }
+        catch (Exception Ex)
+        {
             NotasyncMethod(Ex);
         }
     }
@@ -355,26 +381,6 @@ public partial class UpdateSingleSymptom : ContentPage
         }
     }
 
-    private async void PreloadImage(string image)
-    {
-        try
-        {
-            //using (var fileStream = new MemoryStream())
-            //{
-            //    await blockBlob.DownloadToStreamAsync(fileStream);
-            //    ImagetoShow = ImageSource.FromStream(() => fileStream);
-            //}
-
-            ImagetoShow = await ConvertBase64ToImage(image);
-            ImageTaken.Source = ImagetoShow;
-        }
-        catch (Exception Ex)
-        {
-            NotasyncMethod(Ex);
-        }
-    }
-
-
     private async Task ProcessCameraAsync()
     {
         try
@@ -401,8 +407,16 @@ public partial class UpdateSingleSymptom : ContentPage
                     var backrandom = new Random();
                     var backrandomnum = backrandom.Next(1000, 10000000);
                     var Filename = Helpers.Settings.UserKey + "-" + DateTime.Now.ToString("H-m-s-yyyyy-MM-dd") + "-" + backrandomnum + ".Jpeg";
-                    ImageFileName = Filename;
-
+                    if(EditAdd == "Add")
+                    {
+                        ImageFileName = Filename;
+                    }
+                    else
+                    {
+                        var SingleFeedback = PassedSymptom[0].feedback.FirstOrDefault(item => item.symptomfeedbackid == EditAdd) ?? new symptomfeedback();                     
+                        ImageFileName = SingleFeedback.symptomimage; 
+                    }
+                  
                     TakeImageStack.IsVisible = false;
                     ShowImagestack.IsVisible = true;
                     ImageTaken.Source = ImagetoShow;
@@ -432,67 +446,18 @@ public partial class UpdateSingleSymptom : ContentPage
     {
         try
         {
-
-            //string blobUrl = "http://peoplewithappiamges.blob.core.windows.net/appimages/symptomimages";
-            //string blobUrl = "http://peoplewithappiamges.blob.core.windows.net/appimages/appimages/symptomimages";
-            string StorageConnectionString = "DefaultEndpointsProtocol=https;AccountName=peoplewithappiamges;AccountKey=9maBMGnjWp6KfOnOuXWHqveV4LPKyOnlCgtkiKQOeA+d+cr/trKApvPTdQ+piyQJlicOE6dpeAWA56uD39YJhg==;EndpointSuffix=core.windows.net";
-
             // Parse the connection string and create a blob client
             BlobServiceClient blobServiceClient = new BlobServiceClient(StorageConnectionString);
 
             // Get a reference to the container
-            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient("symptomimages");
+            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(Container);
 
             // Get a reference to the blob
             BlobClient blobClient = containerClient.GetBlobClient(ImageFileName);
 
-            // This URL includes the container and blob name, along with a SAS token.
-
-            //string fullBlobUrl = $"{blobUrl}/{ImageFileName}";
-
-           // BlobClient blobClient = new BlobClient(new Uri(fullBlobUrl));
-
-            // Get a reference to the container
-            //BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient("consentsignatures");
-
-            // Get a reference to the blob
-            //BlobClient blobClient = containerClient.GetBlobClient(ImageFileName);
-
-            // Create a stream from the resized image bytes
-
             using var stream = new MemoryStream(ResizedImage);
             var response = await blobClient.UploadAsync(stream, overwrite: true);
-            if (response != null && response.Value.ETag != null)
-            {
-                //Debug.WriteLine("Upload successful!");
-            }
-            else
-            {
-                //Debug.WriteLine("Upload did not return a valid response.");
-            }
-
-
-            ////Send Signature to Azure 
-            //if (DeviceInfo.Platform == DevicePlatform.iOS)
-            //{
-            //    Stream IOSStream = await();
-
-            //    if (IOSStream != null)
-            //    {
-            //        await blobClient.UploadAsync(IOSStream);
-            //    }
-            //}
-            //else
-            //{
-            //    Stream AndroidStream = await ;
-
-            //    if (AndroidStream != null)
-            //    {
-            //        await blobClient.UploadAsync(AndroidStream);
-            //    }
-            //}
-
-
+           
         }
         catch (Exception Ex)
         {
@@ -1094,14 +1059,17 @@ public partial class UpdateSingleSymptom : ContentPage
                                 i.interventions = items.interventions;
                                 i.triggers = items.triggers;
                                 i.duration = items.duration;
-                                
+                                i.symptomimage = items.symptomimage;
                             }
                         }
                     }
                 }
 
-             UploadtoBlobStorage();
-
+            if (!String.IsNullOrEmpty(ImageFileName))
+            {
+                UploadtoBlobStorage();
+            }
+                
             APICalls database = new APICalls();
             await database.PutSymptomAsync(PassedSymptom);
 
@@ -1592,7 +1560,6 @@ public partial class UpdateSingleSymptom : ContentPage
 
                 // Add the updated symptom
                 AllSymptomDataPassed.Add(PassedSymptom[0]);
-
 
                 await MopupService.Instance.PushAsync(new PopupPageHelper("Symptom Feedback Deleted") { });
                 

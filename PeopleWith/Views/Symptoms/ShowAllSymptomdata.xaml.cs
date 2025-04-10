@@ -1,3 +1,5 @@
+using Maui.FreakyControls.Extensions;
+using Mopups.Services;
 using Syncfusion.Maui.Core.Carousel;
 using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
@@ -85,7 +87,7 @@ public partial class ShowAllSymptomData : ContentPage
             AllSymptomsData = AllSymptoms;
             ShowAllTitle.Text = SymptomPassed[0].Shorttitle;
             userfeedbacklistpassed = userfeedbacklist;
-
+            ShowAllloading.IsVisible = true; 
             foreach (var item in SymptomFeedback)
             {
                 item.OtherBool = false;
@@ -93,7 +95,7 @@ public partial class ShowAllSymptomData : ContentPage
                 item.ImageAttached = false;
                 item.DeleteSelected = false;
                 var time = DateTime.Parse(item.timestamp);
-                var format = time.ToString("HH:mm, dd/MM/yyyy");
+                var format = time.ToString("HH:mm, dd/MM/yy");
                 item.formattedDateTime = format;
                 if (!string.IsNullOrEmpty(item.triggers))
                 {
@@ -110,28 +112,59 @@ public partial class ShowAllSymptomData : ContentPage
                     item.triggerorIntervention = "Trigger/Intervention";
                     item.OtherBool = true;
                 }
-                if (item.duration == "00 Hours 00 Minutes" || item.duration == null || item.duration == "--" || string.IsNullOrEmpty(item.duration))
+                if (item.duration == "00 Hours 00 Minutes" || item.duration == "No Duration" || item.duration == null || item.duration == "--" || string.IsNullOrEmpty(item.duration))
                 {
-                    item.duration = "No Duration";
+                    item.formattedduration = "No Duration";
+                }
+                else
+                {
+                    var Replaceitem = item.duration.Replace(" Hours", "").Replace(" Minutes", "");
+                    var SplitReplace = Replaceitem.Split(" ");
+                    var NewDuration = $"{SplitReplace[0]}h{SplitReplace[1]}m";
+                    item.formattedduration = NewDuration;
                 }
                 if (item.notes == "--" || item.notes == null || string.IsNullOrEmpty(item.notes))
                 {
                     item.notes = "No Notes";
                 }
 
-                else if (!string.IsNullOrEmpty(item.symptomimage))
+                if (!string.IsNullOrEmpty(item.symptomimage))
                 {
-                    item.ImageAttached = true; 
+                    item.ImageAttached = true;
+                    var imagestring = $"https://peoplewithappiamges.blob.core.windows.net/symptomimages/{item.symptomimage}?t={DateTime.UtcNow.Ticks}";
+                    item.symptomimageurl = imagestring;
                 }
             }
 
             var orderlist = SymptomFeedback.OrderByDescending(x => DateTime.Parse(x.timestamp)).ToList();
 
+            //Show Hide Based 
+            bool CheckForTrue = orderlist.Any(x => x.ImageAttached == true);
+            ShowImageHeader.IsVisible = CheckForTrue;
+            GalleryBtn.IsVisible = CheckForTrue;
+
+           foreach(var item in orderlist)
+            {
+                if (CheckForTrue)
+                {
+                    item.ImageShowAll = true;
+                    item.NormalShowAll = false;
+                }
+                else
+                {
+                    item.ImageShowAll = false;
+                    item.NormalShowAll = true;
+                }
+            }
+
             AllDataLV.ItemsSource = orderlist;
+            Task.Delay(2000);
+            ShowAllloading.IsVisible = false;
             //AllDataLV.HeightRequest = SymptomFeedback.Count * 120; 
         }
         catch (Exception Ex)
         {
+            ShowAllloading.IsVisible = false;
             NotasyncMethod(Ex);
         }
     }
@@ -369,23 +402,47 @@ public partial class ShowAllSymptomData : ContentPage
                 }
                 else
                 {
-
                     await Navigation.PushAsync(new UpdateSingleSymptom(SymptomPassed, Symptom.symptomfeedbackid, AllSymptomsData, userfeedbacklistpassed, "editpage"));
                     return;
-
-                    //bool Result = await DisplayAlert("Edit symptom", "Would you like to edit the following Record?", "Accept", "Decline");
-                    //if (Result)
-                    //{
-                    //    //Edit
-                    //    await Navigation.PushAsync(new UpdateSingleSymptom(SymptomPassed, Symptom.symptomfeedbackid, AllSymptomsData));
-                    //    return;
-                    //}
-                    //else
-                    //{
-                    //    //Cancel
-                    //    return;
-                    //}
                 }
+            }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    private async void AllDataLV_ItemLongPress(object sender, Syncfusion.Maui.ListView.ItemLongPressEventArgs e)
+    {
+        try
+        {
+            var Symptom = e.DataItem as symptomfeedback;
+            if(Symptom != null)
+            {
+                if (!String.IsNullOrEmpty(Symptom.symptomimage))
+                {
+                    var imagestring = $"https://peoplewithappiamges.blob.core.windows.net/symptomimages/{Symptom.symptomimage}?t={DateTime.UtcNow.Ticks}";
+                    string rotate = string.Empty;
+                    await MopupService.Instance.PushAsync(new imagePopUp(imagestring, rotate) { });
+
+                }
+            }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    async private void Button_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+           if(SymptomFeedback != null )
+            {
+                var orderlist = SymptomFeedback.OrderByDescending(x => DateTime.Parse(x.timestamp)).ToObservable();
+                await Navigation.PushAsync(new SymptomGallery(orderlist, SymptomPassed[0].Shorttitle), false);
             }
         }
         catch (Exception Ex)

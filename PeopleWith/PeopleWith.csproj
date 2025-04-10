@@ -228,6 +228,8 @@
 	  <None Remove="Resources\Images\searchred.png" />
 	  <None Remove="Resources\Images\selectcalendar.png" />
 	  <None Remove="Resources\Images\shit.png" />
+	  <None Remove="Resources\Images\showimage.png" />
+	  <None Remove="Resources\Images\showimageorange.png" />
 	  <None Remove="Resources\Images\sick.png" />
 	  <None Remove="Resources\Images\scheduletick.png" />
 	  <None Remove="Resources\Images\schedulex.png" />

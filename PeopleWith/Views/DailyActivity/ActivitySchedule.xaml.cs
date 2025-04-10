@@ -482,13 +482,15 @@ public partial class ActivitySchedule : ContentPage
 
             if (AllUserActivity.Count == 0)
             {
-                TimelineListview.IsVisible = false;
+                TimelineStack.IsVisible = false;
                 PlannerStack.IsVisible = true;
+                TimelineLoading.IsVisible = false;
+                EmptyStack.IsVisible = true;
                 await DisplayAlert("Activity Timeline", "No activities found. Please add some to access this feature", "Close");
             }
             else
             {
-                TimelineListview.IsVisible = true;
+                TimelineStack.IsVisible = true;
                 EmptyStack.IsVisible = false;
             }
 

@@ -430,8 +430,8 @@ HorizontalOptions="FillAndExpand">
                         </Grid>
 
                         <Grid  Grid.RowDefinitions="Auto,Auto" Grid.ColumnDefinitions="*" x:Name="ShowImagestack" IsVisible="False">
-                            <Border Stroke="#fff7ea" Grid.Row="0" StrokeShape="RoundRectangle 10"  StrokeThickness="1" Padding="-50,-2,-50,-2" Margin="0" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="Center">
-                                <Image x:Name="ImageTaken" Aspect="AspectFit" VerticalOptions="Center" HorizontalOptions="Center" Margin="-0" Rotation="90" />
+                            <Border Stroke="Transparent" Grid.Row="0" StrokeShape="RoundRectangle 10"   Padding="{OnPlatform Android='0', iOS='0'}"  StrokeThickness="1" Margin="0" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="Center">
+                                <Image x:Name="ImageTaken" Aspect="AspectFill"  VerticalOptions="Center" HeightRequest="325" WidthRequest="325" HorizontalOptions="Center" Margin="0" Rotation="90" />
                             </Border>
                             <Grid Grid.RowDefinitions="Auto" ColumnSpacing="10" Grid.Row="1" Grid.ColumnDefinitions="50*,50*">
                                 <Button Text="Retake" Background="Transparent" Grid.Row="0" Grid.Column="0" BorderColor="Transparent" TextColor="#031926" Clicked="Retakeimage" FontFamily="HankenGroteskBold" FontSize="16"/>

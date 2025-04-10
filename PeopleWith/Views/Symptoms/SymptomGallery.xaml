@@ -3,32 +3,62 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PeopleWith.SymptomGallery"
              xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
-             Title="SymptomGallery" NavigationPage.HasNavigationBar="True" BackgroundColor="White">
-    <ScrollView>
-        <StackLayout x:Name="MainStack" VerticalOptions="FillAndExpand" Margin="20,0,20,0" HorizontalOptions="FillAndExpand">
-            <Label Text="Symptom Gallery" FontFamily="HankenGroteskBold" FontSize="26"  Margin="0,20,0,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" />
-            <Grid Grid.RowDefinitions="Auto,Auto" Grid.ColumnDefinitions="*">
-                <Border Stroke="Transparent" StrokeThickness="1" Margin="0,10,0,0" StrokeShape="RoundRectangle 10" Background="Transparent" HorizontalOptions="FillAndExpand">
-                    <Image x:Name="MostRecentImg" HeightRequest="200" WidthRequest="200" />
-                </Border>
+             xmlns:freakyControls ="clr-namespace:Maui.FreakyControls;assembly=Maui.FreakyControls"
+             NavigationPage.HasNavigationBar="True" BackgroundColor="White">
+    <StackLayout x:Name="MainStack" VerticalOptions="FillAndExpand" Margin="0" HorizontalOptions="FillAndExpand">
+
+        <StackLayout VerticalOptions="FillAndExpand" Margin="0" HorizontalOptions="FillAndExpand" x:Name="GalleryStack" >
+
+            <!-- Title  -->
+            <Grid  Grid.RowDefinitions="Auto" Grid.ColumnDefinitions="*">
+                <Label x:Name="GalleryTitle"  FontFamily="HankenGroteskBold" FontSize="26" Grid.Row="0" Grid.Column="0" Margin="20,10,0,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" />
+                <Button Text="Reset" x:Name="ResetBtn" IsVisible="False" Clicked="Button_Clicked" FontFamily="HankenGroteskRegular" FontSize="18"  TextColor="LightBlue" Opacity="0.8" Background="Transparent" BorderColor="Transparent" CornerRadius="10" Margin="0,5,10,-10" Grid.Row="0" Grid.Column="0" VerticalOptions="Center"  HorizontalOptions="End"/>
             </Grid>
 
-            <syncfusion:SfListView x:Name="Gallery" Orientation="Horizontal" ScrollBarVisibility="Never" Grid.Row="0" AutoFitMode="Height"  Margin="10,-15,0,0" ItemTapped="Gallery_ItemTapped" SelectionBackground="Transparent" BackgroundColor="Transparent" SelectionMode="Single" VerticalOptions="CenterAndExpand"  >
-                <syncfusion:SfListView.ItemsLayout>
-                    <syncfusion:GridLayout SpanCount="3"/>
-                </syncfusion:SfListView.ItemsLayout>
-                <syncfusion:SfListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <Border StrokeShape="RoundRectangle 10" Stroke="Transparent" StrokeThickness="1" HeightRequest="30" Margin="5,5,5,5" Padding="5" BackgroundColor="Transparent">
-                                <Image Source="{Binding source}" Margin="0"  VerticalOptions="CenterAndExpand" />
-                            </Border>
-                        </ViewCell>
-                    </DataTemplate>
-                </syncfusion:SfListView.ItemTemplate>
-            </syncfusion:SfListView>
+            <!-- Main Image  -->
+            <Grid Margin="5,10,5,0"  Grid.RowDefinitions="Auto,Auto" Grid.ColumnDefinitions="*">
+                <Border Stroke="Transparent" x:Name="ImageBorder"  StrokeThickness="1" Grid.Row="0" Padding="0" StrokeShape="RoundRectangle 10" Background="#01000000" BackgroundColor="#01000000" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+                    <Grid x:Name="Container" Grid.RowDefinitions="Auto" CascadeInputTransparent="True" Grid.ColumnDefinitions="*">
+                        <freakyControls:FreakyZoomableView x:Name="ZoomControl" MinScale="1" MaxScale="5" DoubleTapToZoom="True" Grid.Row="0" Grid.Column="0" Rotation="90">
+                            <Grid x:Name="FreakyGrid" HorizontalOptions="FillAndExpand" Padding="0" VerticalOptions="FillAndExpand">
+                                <Image x:Name="CurrentImage" Aspect="AspectFit"  HeightRequest="525"  WidthRequest="525" />
+                                <Image x:Name="NextImage" Aspect="AspectFit"  HeightRequest="525" WidthRequest="525" Opacity="0" />
+                            </Grid>
+                        </freakyControls:FreakyZoomableView> 
+                        <Border Stroke="Transparent" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" StrokeThickness="1" Padding="0" StrokeShape="RoundRectangle 10"  Margin="5,0,5,5" Background="#EDEDED" Opacity="0.6" VerticalOptions="End" HorizontalOptions="Start">
+                            <Label x:Name="ImageCount" FontFamily="HankenGroteskBold" FontSize="20" Padding="5" HorizontalOptions="End" VerticalOptions="Center" TextColor="#031926" />
+                        </Border>
 
+                        <Border Stroke="Transparent" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" StrokeThickness="1" Padding="0" StrokeShape="RoundRectangle 10"  Margin="0,5,5,5" Background="#EDEDED" Opacity="0.6" VerticalOptions="End" HorizontalOptions="End">
+                            <Label x:Name="MainText"  FontFamily="HankenGroteskBold" FontSize="20" Padding="5" Background="Transparent" HorizontalOptions="Center" VerticalOptions="Center" Opacity="1"  TextColor="#031926" />
+                        </Border>
+                        <Grid.GestureRecognizers>
+                            <SwipeGestureRecognizer Direction="Left" Threshold="12" Swiped="OnSwipeUpdatedAsync"/>
+                            <SwipeGestureRecognizer Direction="Right" Threshold="12" Swiped="OnSwipeUpdatedAsync"/>
+                        </Grid.GestureRecognizers>
+                    </Grid>
+                </Border>
+                <!-- ThumbNail Items   -->
+                <syncfusion:SfListView x:Name="ThumbNail" ItemsSource="{Binding ListviewItems}"  Background="Transparent" CachingStrategy="RecycleTemplate" AutoFitMode="None"   Grid.Row="1"  HeightRequest="110" VerticalOptions="EndAndExpand" HorizontalOptions="FillAndExpand" IsScrollingEnabled="True" Orientation="Horizontal" Padding="0" ScrollBarVisibility="Never" ItemSpacing="1" ItemTapped="ThumbNail_ItemTapped" SelectionMode="Single" SelectionBackground="Transparent">
+                    <syncfusion:SfListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Border Stroke="Transparent" Margin="0" StrokeThickness="2" Padding="0" HeightRequest="75" StrokeShape="RoundRectangle 10" Background="Transparent" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+                                    <Grid  Grid.RowDefinitions="Auto" Grid.ColumnDefinitions="*" Padding="0">
+                                        <Image Grid.Row="0" Grid.Column="0"  HeightRequest="75" WidthRequest="75" VerticalOptions="CenterAndExpand"  HorizontalOptions="CenterAndExpand" Rotation="90">
+                                            <Image.Source>
+                                                <UriImageSource Uri="{Binding Image}" CacheValidity="1" CachingEnabled="true"/>
+                                            </Image.Source>
+                                        </Image>
+                                    </Grid>
+                                </Border>
+                            </ViewCell>
+                        </DataTemplate>
+                    </syncfusion:SfListView.ItemTemplate>
+                </syncfusion:SfListView>
+
+            </Grid>
 
         </StackLayout>
-    </ScrollView>
+    </StackLayout>
 </ContentPage>

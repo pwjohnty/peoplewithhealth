@@ -622,11 +622,18 @@ public partial class SingleSymptom : ContentPage
     {
         try
         {
+            //MainStack.Opacity = 0.2;
+            //MainStack.IsEnabled = false;
+            //ShowAllloading.IsVisible = true;
+            // Open the popup and pass the TaskCompletionSource
+            string Data = "Loading Symptom Data...";
+            string Orange = "Orange";
+            await MopupService.Instance.PushAsync(new GettingReady(Data, Orange));
             var allfeedback = new ObservableCollection<symptomfeedback>();
 
-            foreach(var item in PassedSymptom[0].feedback)
+            foreach (var item in PassedSymptom[0].feedback)
             {
-                if(item.action != "deleted")
+                if (item.action != "deleted")
                 {
                     allfeedback.Add(item);
                 }
@@ -634,10 +641,20 @@ public partial class SingleSymptom : ContentPage
 
 
             await Navigation.PushAsync(new ShowAllSymptomData(PassedSymptom, allfeedback, AllSymptomData, userfeedbacklistpassed), false);
+
+
+            await MopupService.Instance.PopAllAsync(false);
+            //MainStack.Opacity = 1;
+            //MainStack.IsEnabled = true;
+            //ShowAllloading.IsVisible = false;
         }
-        catch(Exception Ex)
+        catch (Exception Ex)
         {
-           NotasyncMethod(Ex);
+            //MainStack.Opacity = 1;
+            //MainStack.IsEnabled = true;
+            //ShowAllloading.IsVisible = false;
+
+            NotasyncMethod(Ex);
         }
     }
 
@@ -671,4 +688,27 @@ public partial class SingleSymptom : ContentPage
             NotasyncMethod(Ex);
         }
     }
+
+    //private async void ShowAll_Tapped(object sender, TappedEventArgs e)
+    //{
+    //    try
+    //    {
+    //        var allfeedback = new ObservableCollection<symptomfeedback>();
+
+    //        foreach (var item in PassedSymptom[0].feedback)
+    //        {
+    //            if (item.action != "deleted")
+    //            {
+    //                allfeedback.Add(item);
+    //            }
+    //        }
+
+
+    //        await Navigation.PushAsync(new ShowAllSymptomData(PassedSymptom, allfeedback, AllSymptomData, userfeedbacklistpassed), false);
+    //    }
+    //    catch (Exception Ex)
+    //    {
+    //        NotasyncMethod(Ex);
+    //    }
+    //}
 }

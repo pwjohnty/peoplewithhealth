@@ -10,7 +10,7 @@ using Microsoft.Azure.NotificationHubs;
 using Mopups.Services;
 using Plugin.LocalNotification;
 using Syncfusion.Maui.Charts;
-using Sentry;
+//using Sentry;
 
 namespace PeopleWith;
 
