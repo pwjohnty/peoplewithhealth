@@ -467,8 +467,7 @@ FontFamily="HankenGroteskBold"
 FontAttributes="Bold"
 HorizontalOptions="Start" />
 
-                    <inputLayout:SfTextInputLayout InputViewPadding="10" IsHintAlwaysFloated="True" BackgroundColor="Transparent" ShowHint="False" Margin="5,10,5,0" UnfocusedStrokeThickness="1" Stroke="LightGray" ContainerBackground="Transparent" ContainerType="Outlined" OutlineCornerRadius="5"
-          >
+                    <inputLayout:SfTextInputLayout InputViewPadding="10" IsHintAlwaysFloated="True" BackgroundColor="Transparent" ShowHint="False" Margin="5,10,5,0" UnfocusedStrokeThickness="1" Stroke="LightGray" ContainerBackground="Transparent" ContainerType="Outlined" OutlineCornerRadius="5" >
                         <Entry FontSize="12" PlaceholderColor="Gray" Keyboard="Numeric" FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" x:Name="dateEntry" TextChanged="dateEntry_TextChanged" Placeholder="DD/MM/YYYY" TextColor="#031926"/>
                     </inputLayout:SfTextInputLayout>
 

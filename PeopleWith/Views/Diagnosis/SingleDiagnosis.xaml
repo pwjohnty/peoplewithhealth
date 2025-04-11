@@ -9,17 +9,9 @@
         <ToolbarItem x:Name="EditBtn" Text="Edit"  Clicked="EditBtn_Clicked"  />
     </ContentPage.ToolbarItems>
     <VerticalStackLayout>
-        <Grid x:Name="NavStack" HorizontalOptions="FillAndExpand">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <ImageButton x:Name="AndroidBtn" Clicked="BackButton_Clicked" IsVisible="False" Grid.Row="0" Grid.Column="0" Source="androidarrow.png" HeightRequest="24" WidthRequest="24" HorizontalOptions="Start" VerticalOptions="Center" Margin="15,15,0,0"/>
+        <Grid x:Name="NavStack"  HorizontalOptions="Fill" Grid.RowDefinitions="Auto" Grid.ColumnDefinitions="*">
+            <ImageButton x:Name="AndroidBtn" Aspect="AspectFit" Padding="0" BorderWidth="0" Scale="0.55" Clicked="BackButton_Clicked" IsVisible="False" Grid.Row="0" Grid.Column="0" Source="androidarrow.png" HeightRequest="24" WidthRequest="24" HorizontalOptions="Start" VerticalOptions="Center" Margin="5,5,0,0"/>
             <ImageButton x:Name="IOSBtn" Clicked="BackButton_Clicked" IsVisible="False" Grid.Row="0" Grid.Column="0" Source="iosback.png" HeightRequest="50" WidthRequest="60" HorizontalOptions="Start" VerticalOptions="Center" Margin="15,5,0,0"/>
-
         </Grid>
 
         <Frame x:Name="DiagInfo" HasShadow="False" Padding="0" CornerRadius="15"  VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,10,20,0" BorderColor="#702963" BackgroundColor="Transparent">
@@ -42,11 +34,11 @@
                     </Grid.ColumnDefinitions>
 
                     <Label x:Name="DiagnosisTitle" Margin="10,0,0,0" FontFamily="HankenGroteskBold"  FontSize="20" VerticalOptions="End" Grid.Row="0" Grid.Column="0"  TextColor="#031926" />
-                    <Label x:Name="DiagnosisDate" FontFamily="HankenGroteskBold" VerticalOptions="Start" Margin="10,0,0,0" HorizontalOptions="Start" FontSize="12" Grid.Row="1" Grid.Column="0"  TextColor="DarkGray" />
+                    <Label x:Name="DiagnosisDate" FontFamily="HankenGroteskBold" VerticalOptions="Start" Margin="10,5,0,0" HorizontalOptions="Start" FontSize="12" Grid.Row="1" Grid.Column="0"  TextColor="DarkGray" />
                 </Grid>
             </Frame>
 
-            <Label Text="Details" Margin="10,0,0,0" FontFamily="HankenGroteskBold"  FontSize="20" VerticalOptions="Center" TextColor="#031926" />
+            <Label Text="Details" Margin="20,10,0,0" FontFamily="HankenGroteskBold"  FontSize="20" VerticalOptions="Center" TextColor="#031926" />
             <Frame x:Name="NoDiagDetails"  HasShadow="False" BorderColor="#E5E5E5" BackgroundColor="Transparent" Margin="10,10,10,0">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -151,7 +143,7 @@ HorizontalOptions="End" />
                 </Grid>
             </Grid>
             <Label x:Name="EntryError" IsVisible="False" Margin="25,0,25,0"  FontFamily="HankenGroteskRegualar" HorizontalOptions="Center" HorizontalTextAlignment="Center" FontSize="12" TextColor="Red" />
-            <Button x:Name="AddBtn" Text="Update Diagnosis" IsEnabled="False" FontFamily="HankenGroteskBold" Clicked="UpdateBtn_Clicked" BackgroundColor="#E6E6FA" TextColor="#702963" Margin="20,10,20,5" HorizontalOptions="CenterAndExpand" HeightRequest="40" WidthRequest="300" />
+            <Button x:Name="AddBtn" Text="Update Diagnosis" IsEnabled="False" FontFamily="HankenGroteskBold" Clicked="UpdateBtn_Clicked" BackgroundColor="#E6E6FA" TextColor="#702963" Margin="20,10,20,5" HorizontalOptions="Fill" />
         </StackLayout>
         <!--<StackLayout x:Name="SuccessScreen" VerticalOptions="Center" HorizontalOptions="Center" IsVisible="False">
             <Grid Margin="20,50,20,0">

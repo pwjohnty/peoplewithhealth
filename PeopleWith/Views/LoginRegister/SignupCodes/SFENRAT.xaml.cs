@@ -248,6 +248,16 @@ public partial class SFENRAT : ContentPage
     {
         try
         {
+#if ANDROID
+                var handler = dateEntry.Handler as Microsoft.Maui.Handlers.EntryHandler;
+                var editText = handler?.PlatformView as AndroidX.AppCompat.Widget.AppCompatEditText;
+                if (editText != null)
+                {
+                    editText.EmojiCompatEnabled = false;
+                    editText.SetTextKeepState(dateEntry.Text);
+                }
+#endif
+
             if (isEditing)
                 return;
 

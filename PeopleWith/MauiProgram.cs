@@ -80,6 +80,7 @@ namespace PeopleWith
     handlers.AddHandler<Microsoft.Maui.Controls.Editor, Microsoft.Maui.Handlers.EditorHandler>(); // Add the EditorHandler
 })
 #endif
+
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("HankenGrotesk-Regular.ttf", "OpenSansRegular");
@@ -142,6 +143,7 @@ namespace PeopleWith
               //  builder.Services.AddSingleton<IHealthKitService, HealthConnectService>();
 #endif
             });
+
 
             //builder.Services.AddSingleton(typeof(IFingerprint), CrossFingerprint.Current);
             builder.ConfigureSyncfusionCore();

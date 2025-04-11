@@ -8,18 +8,11 @@
     <ScrollView>
         <VerticalStackLayout x:Name="Mainstack">
 
-            <Grid x:Name="NavStack" HorizontalOptions="FillAndExpand">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <ImageButton x:Name="AndroidBtn" Clicked="Backbutton_Clicked" IsVisible="False" Grid.Row="0" Grid.Column="0" Source="androidarrow.png" HeightRequest="24" WidthRequest="24" HorizontalOptions="Start" VerticalOptions="Center" Margin="15,15,0,0"/>
+            <Grid x:Name="NavStack"  HorizontalOptions="Fill" Grid.RowDefinitions="Auto" Grid.ColumnDefinitions="*">
+                <ImageButton x:Name="AndroidBtn" Aspect="AspectFit" Padding="0" BorderWidth="0" Scale="0.55" Clicked="Backbutton_Clicked" IsVisible="False" Grid.Row="0" Grid.Column="0" Source="androidarrow.png" HeightRequest="24" WidthRequest="24" HorizontalOptions="Start" VerticalOptions="Center" Margin="5,5,0,0"/>
                 <ImageButton x:Name="IOSBtn" Clicked="Backbutton_Clicked" IsVisible="False" Grid.Row="0" Grid.Column="0" Source="iosback.png" HeightRequest="50" WidthRequest="60" HorizontalOptions="Start" VerticalOptions="Center" Margin="15,5,0,0"/>
-
             </Grid>
+
             <StackLayout x:Name="FirstStack">
 
                 <Label Text="Add Investigation" FontFamily="HankenGroteskBold" FontSize="26"  Margin="20,20,0,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" />
