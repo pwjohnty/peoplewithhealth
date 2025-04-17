@@ -8,7 +8,10 @@ namespace PeopleWith
 {
     public interface Healthinterface
     {
-        void GetHealthPermissionAsync(Action<bool> completion);
-        void FetchSteps(Action<double> completionHandler);
+
+        Task<bool> GetHealthPermissionAsync();
+        Task<double> FetchStepsAsync();
+        //   void GetHealthPermissionAsync(Action<bool> completion);
+        // void FetchSteps(Action<double> completionHandler);
     }
 }

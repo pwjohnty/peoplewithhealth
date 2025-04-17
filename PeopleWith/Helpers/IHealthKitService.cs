@@ -8,7 +8,9 @@ namespace PeopleWith
 {
     public interface IHealthKitService
     {
-        Task<bool> RequestAuthorization();
-        Task<double> GetStepCount(DateTime startDate, DateTime endDate);
+
+        Task<bool> RequestAuthorizationAsync();
+     //   Task<bool> RequestAuthorization();
+     //   Task<double> GetStepCount(DateTime startDate, DateTime endDate);
     }
 }

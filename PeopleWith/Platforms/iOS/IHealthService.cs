@@ -1,12 +1,12 @@
 ﻿using Foundation;
 using HealthKit;
 using PeopleWith;
-using PeopleWith.iOS; // Replace with your actual namespace
+using PeopleWith; // Replace with your actual namespace
 
-[assembly: Dependency(typeof(HealthService))]
-namespace PeopleWith.iOS
+[assembly: Dependency(typeof(IHealthService))]
+namespace PeopleWith
 {
-    public class HealthService : Healthinterface
+    public class IHealthService : Healthinterface
     {
         public HKHealthStore HealthStore { get; set; }
 
@@ -36,60 +36,116 @@ namespace PeopleWith.iOS
             }
         }
 
-        public void GetHealthPermissionAsync(Action<bool> completion)
+        public async Task<bool> GetHealthPermissionAsync()
         {
             try
             {
 
+
+                var tcs = new TaskCompletionSource<bool>();
 
                 if (HKHealthStore.IsHealthDataAvailable)
                 {
                     HealthStore = new HKHealthStore();
-                    HealthStore.RequestAuthorizationToShare(DataTypesToWrite, DataTypesToRead, (bool authorized, NSError error) =>
+                    HealthStore.RequestAuthorizationToShare(DataTypesToWrite, DataTypesToRead, (authorized, error) =>
                     {
-                        completion(authorized);
+                        tcs.SetResult(authorized);
                     });
                 }
                 else
                 {
-                    completion(false);
+                    tcs.SetResult(false);
                 }
-            }
-            catch(Exception ex)
-            {
 
+                return await tcs.Task;
+            }
+            catch (Exception ex)
+            {
+                return false;
             }
         }
 
-        public void FetchSteps(Action<double> completionHandler)
+        public async Task<double> FetchStepsAsync()
         {
-            try
-            {
-                var calendar = NSCalendar.CurrentCalendar;
-                var startDate = DateTime.Today;
-                var endDate = DateTime.Now;
-                var stepsQuantityType = HKQuantityType.Create(HKQuantityTypeIdentifier.StepCount);
+            var tcs = new TaskCompletionSource<double>();
 
-                var predicate = HKQuery.GetPredicateForSamples((NSDate)startDate, (NSDate)endDate, HKQueryOptions.StrictStartDate);
+            var startDate = DateTime.Today;
+            var endDate = DateTime.Now;
+            var stepsQuantityType = HKQuantityType.Create(HKQuantityTypeIdentifier.StepCount);
+            var predicate = HKQuery.GetPredicateForSamples((NSDate)startDate, (NSDate)endDate, HKQueryOptions.StrictStartDate);
 
-                var query = new HKStatisticsQuery(stepsQuantityType, predicate, HKStatisticsOptions.CumulativeSum,
-                                (HKStatisticsQuery resultQuery, HKStatistics results, NSError error) =>
-                                {
-                                    if (error != null && completionHandler != null)
-                                        completionHandler(0.0f);
+            var query = new HKStatisticsQuery(stepsQuantityType, predicate, HKStatisticsOptions.CumulativeSum,
+                (resultQuery, results, error) =>
+                {
+                    if (error != null)
+                    {
+                        tcs.SetResult(0.0);
+                        return;
+                    }
 
-                                    var totalSteps = results.SumQuantity();
-                                    if (totalSteps == null)
-                                        totalSteps = HKQuantity.FromQuantity(HKUnit.Count, 0.0);
+                    var totalSteps = results.SumQuantity() ?? HKQuantity.FromQuantity(HKUnit.Count, 0.0);
+                    tcs.SetResult(totalSteps.GetDoubleValue(HKUnit.Count));
+                });
 
-                                    completionHandler(totalSteps.GetDoubleValue(HKUnit.Count));
-                                });
-                HealthStore.ExecuteQuery(query);
-            }
-            catch(Exception e)
-            {
+            HealthStore.ExecuteQuery(query);
 
-            }
+            return await tcs.Task;
         }
+
+        //public void GetHealthPermissionAsync(Action<bool> completion)
+        //{
+        //    try
+        //    {
+
+
+        //        if (HKHealthStore.IsHealthDataAvailable)
+        //        {
+        //            HealthStore = new HKHealthStore();
+        //            HealthStore.RequestAuthorizationToShare(DataTypesToWrite, DataTypesToRead, (bool authorized, NSError error) =>
+        //            {
+        //                completion(authorized);
+        //            });
+        //        }
+        //        else
+        //        {
+        //            completion(false);
+        //        }
+        //    }
+        //    catch(Exception ex)
+        //    {
+
+        //    }
+        //}
+
+        //public void FetchSteps(Action<double> completionHandler)
+        //{
+        //    try
+        //    {
+        //        var calendar = NSCalendar.CurrentCalendar;
+        //        var startDate = DateTime.Today;
+        //        var endDate = DateTime.Now;
+        //        var stepsQuantityType = HKQuantityType.Create(HKQuantityTypeIdentifier.StepCount);
+
+        //        var predicate = HKQuery.GetPredicateForSamples((NSDate)startDate, (NSDate)endDate, HKQueryOptions.StrictStartDate);
+
+        //        var query = new HKStatisticsQuery(stepsQuantityType, predicate, HKStatisticsOptions.CumulativeSum,
+        //                        (HKStatisticsQuery resultQuery, HKStatistics results, NSError error) =>
+        //                        {
+        //                            if (error != null && completionHandler != null)
+        //                                completionHandler(0.0f);
+
+        //                            var totalSteps = results.SumQuantity();
+        //                            if (totalSteps == null)
+        //                                totalSteps = HKQuantity.FromQuantity(HKUnit.Count, 0.0);
+
+        //                            completionHandler(totalSteps.GetDoubleValue(HKUnit.Count));
+        //                        });
+        //        HealthStore.ExecuteQuery(query);
+        //    }
+        //    catch(Exception e)
+        //    {
+
+        //    }
+        //}
     }
 }

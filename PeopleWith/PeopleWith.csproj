@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
-    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
+    <!--<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>-->
     <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
     <!-- <TargetFrameworks>$(TargetFrameworks);net9.0-tizen</TargetFrameworks> -->
     <!-- Note for MacCatalyst:
@@ -39,6 +39,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-ios|AnyCPU'">
     <MtouchLink>None</MtouchLink>
+	  <CodesignEntitlements>Platforms\iOS\Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
   <ItemGroup>
     <!-- App Icon -->
@@ -267,6 +268,7 @@
     <PackageReference Include="Plugin.Maui.Biometric" Version="0.0.2" />
     <PackageReference Include="Plugin.Maui.SegmentedControl" Version="1.0.8" />
     <PackageReference Include="Sentry.Maui" Version="5.4.0" />
+    <PackageReference Include="Shiny.Health" Version="1.0.0-beta-0021" />
     <PackageReference Include="Syncfusion.Maui.Buttons" Version="25.2.5" />
     <PackageReference Include="Syncfusion.Maui.Calendar" Version="25.2.5" />
     <PackageReference Include="Syncfusion.Maui.Carousel" Version="25.2.5" />
@@ -608,6 +610,21 @@
     <MauiXaml Update="Views\Videos\VideoPlayer.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
+    <PackageReference Include="Plugin.Maui.Health">
+      <Version>1.0.0-preview8</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net9.0-ios'">
+    <PackageReference Include="Plugin.Maui.Health">
+      <Version>1.0.0-preview8</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net9.0-maccatalyst'">
+    <PackageReference Include="Plugin.Maui.Health">
+      <Version>1.0.0-preview8</Version>
+    </PackageReference>
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>

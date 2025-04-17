@@ -17,6 +17,10 @@ using Microsoft.Maui.Controls;
 using Microsoft.Maui.Handlers;
 using Sentry;
 using System.Globalization;
+using Plugin.Maui.Health;
+
+
+
 //using Shiny;
 
 #if IOS
@@ -41,6 +45,7 @@ namespace PeopleWith
             var builder = MauiApp.CreateBuilder();
             builder
                 .ConfigureSyncfusionCore()
+              //  .UseShiny()
                 .UseMauiCommunityToolkitMediaElement()
                 .UseMauiCommunityToolkit()
                 .UseMauiApp<App>()
@@ -146,10 +151,16 @@ namespace PeopleWith
             //builder.Services.AddSingleton(typeof(IFingerprint), CrossFingerprint.Current);
             builder.ConfigureSyncfusionCore();
             builder.InitializeFreakyControls();
-          
+            builder.Services.AddSingleton(HealthDataProvider.Default);
+
+            //  builder.Services.AddSingleton(HealthDataProvider.Default);
+            //  builder.Services.AddSingleton(Health.Default);
+
 
             // Use with Dependency Injection
             builder.Services.AddSingleton<IBiometric>(BiometricAuthenticationService.Default);
+
+
 
             //Add IOS Done to Numeric Keybaord
             EntryHandler.AddDone();
