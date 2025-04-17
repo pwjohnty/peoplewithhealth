@@ -32,12 +32,12 @@ namespace PeopleWith
         protected override async void OnCreate(Bundle savedInstanceState)
         {
 
-            //AndroidEnvironment.UnhandledExceptionRaiser += (sender, args) =>
-            //{
-            //    Sentry.SentrySdk.CaptureException(args.Exception);
-            //    System.Diagnostics.Debug.WriteLine("Unhandled Exception: " + args.Exception.ToString());
-               
-            //};
+            AndroidEnvironment.UnhandledExceptionRaiser += (sender, args) =>
+            {
+                Sentry.SentrySdk.CaptureException(args.Exception);
+                System.Diagnostics.Debug.WriteLine("Unhandled Exception: " + args.Exception.ToString());
+
+            };
 
 
             base.OnCreate(savedInstanceState);
