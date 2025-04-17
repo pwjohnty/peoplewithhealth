@@ -16,17 +16,17 @@ namespace PeopleWith
         {
             try
             {
-                //SentrySdk.ConfigureScope(scope =>
-                //{
-                //    scope.User = new SentryUser
-                //    {
+                SentrySdk.ConfigureScope(scope =>
+                {
+                    scope.User = new SentryUser
+                    {
 
-                //        Id = Helpers.Settings.UserKey,
-                //        Email = Helpers.Settings.Email
-                //    };
+                        Id = Helpers.Settings.UserKey,
+                        Email = Helpers.Settings.Email
+                    };
 
-                //    SentrySdk.CaptureException(Ex);
-                //});
+                    SentrySdk.CaptureException(Ex);
+                });
             }
             catch (Exception ex)
             {
