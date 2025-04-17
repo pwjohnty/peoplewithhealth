@@ -1759,7 +1759,7 @@ public partial class AddSupplement : ContentPage
                 {
 
                     medname5lbl.Text = SelectedMed.supplementtitle;
-                    ConfirmBtn.Text = "Update Medication";
+                    ConfirmBtn.Text = "Update Supplement";
                     var newlist = new List<string>();
 
                     if (string.IsNullOrEmpty(displaynameentry.Text))

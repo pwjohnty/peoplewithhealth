@@ -1444,7 +1444,22 @@ public partial class MainSchedule : ContentPage
                         Medtime.time = "As Required";
                         Medtime.Type = "Medication";
                         Medtime.ListBackgroundColor = Color.FromArgb("#e5f9f4");
-                        AsRequiredList.Add(Medtime);
+                        if (!String.IsNullOrEmpty(item.enddate))
+                        {
+                            var CheckDate = DateTime.Parse(item.enddate);
+                            if (DateTime.Now.Date <= CheckDate)
+                            {
+                                AsRequiredList.Add(Medtime);
+                            }
+                            else
+                            {
+                                //Don't Add
+                            }
+                        }
+                        else
+                        {
+                            AsRequiredList.Add(Medtime);
+                        }
                     }
                 }
               
@@ -1479,7 +1494,22 @@ public partial class MainSchedule : ContentPage
                         Medtime.time = "As Required";
                         Medtime.Type = "Supplement";
                         Medtime.ListBackgroundColor = Color.FromArgb("#f9f4e5");
-                        AsRequiredList.Add(Medtime);
+                        if (!String.IsNullOrEmpty(item.enddate))
+                        {
+                            var CheckDate = DateTime.Parse(item.enddate);
+                            if (DateTime.Now.Date <= CheckDate)
+                            {
+                                AsRequiredList.Add(Medtime);
+                            }
+                            else
+                            {
+                                //Don't Add
+                            }
+                        }
+                        else
+                        {
+                            AsRequiredList.Add(Medtime);
+                        }
                     }
                 }
                 else
@@ -1507,7 +1537,22 @@ public partial class MainSchedule : ContentPage
                         Medtime.time = "As Required";
                         Medtime.Type = "Supplement";
                         Medtime.ListBackgroundColor = Color.FromArgb("#f9f4e5");
-                        AsRequiredList.Add(Medtime);
+                        if (!String.IsNullOrEmpty(item.enddate))
+                        {
+                            var CheckDate = DateTime.Parse(item.enddate);
+                            if (DateTime.Now.Date <= CheckDate)
+                            {
+                                AsRequiredList.Add(Medtime);
+                            }
+                            else
+                            {
+                                //Don't Add
+                            }
+                        }
+                        else
+                        {
+                            AsRequiredList.Add(Medtime);
+                        }
                     }
                 }
 
@@ -4500,15 +4545,24 @@ item.schedule
                         AsRequiredlistview.IsVisible = true;
                         nodatastack.IsVisible = false;
                         AsRequiredlistview.ItemsSource = AsRequiredList;
-                        AsRequiredlistview.HeightRequest = AsRequiredList.Count * 100;
+                        //AsRequiredlistview.HeightRequest = AsRequiredList.Count * 100;
                     }
                 }
                 else
                 {
                     asrequiredbtn.Text = "As Required Medications/Supplements";
-
-                    mainschedulelistview.IsVisible = true;
                     AsRequiredlistview.IsVisible = false;
+                    if (ScheduleList.Count == 0) 
+                    {
+                        mainschedulelistview.IsVisible = false;
+                        nodatastack.IsVisible = true;
+                    }
+                    else
+                    {
+                        mainschedulelistview.IsVisible = true;
+                        nodatastack.IsVisible = false;
+                    }
+                   
                 }
                 asrequiredbtn.IsEnabled = true;
             }

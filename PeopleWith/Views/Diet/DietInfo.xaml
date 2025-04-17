@@ -11,7 +11,7 @@
         <Label x:Name="Bodylbl" FontSize="16" Margin="0,10,0,0" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
 
 
-            <Border StrokeShape="RoundRectangle 10"  BackgroundColor="Transparent" Stroke="#F5E6E8"  Padding="10"   Margin="0,10,0,0">
+            <Border StrokeShape="RoundRectangle 10"  BackgroundColor="Transparent" Stroke="#e8efd8"  Padding="10"   Margin="0,10,0,0">
             <Grid Margin="0,0,0,0" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -23,7 +23,7 @@
                     <ColumnDefinition Width="80*"/>
                     <ColumnDefinition Width="5*"/>
                 </Grid.ColumnDefinitions>
-                <Image Source="link.png" HeightRequest="40" WidthRequest="40" Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" HorizontalOptions="Center" Margin="0,0,0,0" VerticalOptions="Center"/>
+                    <Image Source="link.png"  HeightRequest="30" WidthRequest="30" Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" HorizontalOptions="Center" Margin="0,0,0,0" VerticalOptions="Center"/>
                 <Label x:Name="typelbl" FontSize="12" FontAttributes="None"  Margin="10,0,0,0" VerticalOptions="Center" HorizontalOptions="Start" VerticalTextAlignment="Center" TextColor="Gray" FontFamily="HankenGroteskRegular"  Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" />
                 <Label x:Name="titelbl" FontSize="14" FontAttributes="Bold" Margin="10,0,0,10" VerticalOptions="Center" HorizontalOptions="Start" VerticalTextAlignment="Center" TextColor="Black"  FontFamily="HankenGroteskBold"   Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="1" Padding="0,0,0,0"/>
                 <Image Source="nextdarker.png" HeightRequest="15" WidthRequest="15" Grid.Row="0" Grid.RowSpan="3" Grid.Column="2"  VerticalOptions="Center" HorizontalOptions="CenterAndExpand" Margin="0,0,0,0" />

@@ -835,7 +835,7 @@ public partial class UpdateSingleSymptom : ContentPage
         try
         {
             DateTime datetime = DateTime.Parse(Datelbl.Text);
-            DateTime SelectedDate = datetime + e.NewValue;
+            DateTime SelectedDate = (DateTime)(datetime + e.NewValue);
             if (SelectedDate <= DateTime.Now)
             {
                 var Time = e.NewValue.ToString();
@@ -861,10 +861,11 @@ public partial class UpdateSingleSymptom : ContentPage
     {
         try
         {
-            var Date = e.NewValue;
-            Datelbl.Text = Date.ToString("dd MMM");
-            var split = Date.ToString().Split(' ');
-            SelectedDate = split[0];
+            if (e.NewValue is DateTime selectedDate)
+            {
+                Datelbl.Text = selectedDate.ToString("dd MMM");
+                SelectedDate = selectedDate.ToString("yyyy-MM-dd"); 
+            }
         }
         catch (Exception Ex)
         {

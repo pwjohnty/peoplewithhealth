@@ -2,6 +2,7 @@
 using Mopups.Services;
 using System.Collections.ObjectModel;
 using Microsoft.Maui.Networking;
+using Plugin.LocalNotification;
 
 namespace PeopleWith;
 
@@ -293,6 +294,12 @@ public partial class SingleSupplement : ContentPage
 
                     DeleteBtn.IsEnabled = true;
                     UserMedications.Remove(MedSelected);
+
+                    //Delete Notfication 
+                    foreach (var item in Schedule)
+                    {
+                        LocalNotificationCenter.Current.Cancel(item.id);
+                    }
 
                     await Navigation.PushAsync(new AllSupplements(UserMedications));
                     var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(p => p is AllSupplements);

@@ -108,6 +108,17 @@ public partial class ActivityCalendar : PopupPage
     {
         try
         {
+
+#if ANDROID
+            var handler = DateEntry.Handler as Microsoft.Maui.Handlers.EntryHandler;
+            var editText = handler?.PlatformView as AndroidX.AppCompat.Widget.AppCompatEditText;
+            if (editText != null)
+            {
+                editText.EmojiCompatEnabled = false;
+                editText.SetTextKeepState(DateEntry.Text);
+            }
+#endif
+
             if (isediting)
                 return;
 

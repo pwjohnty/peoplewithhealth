@@ -254,6 +254,17 @@ public partial class AddMeasurement : ContentPage
     {
         try
         {
+
+#if ANDROID
+                var handler = unitentry.Handler as Microsoft.Maui.Handlers.EntryHandler;
+                var editText = handler?.PlatformView as AndroidX.AppCompat.Widget.AppCompatEditText;
+                if (editText != null)
+                {
+                    editText.EmojiCompatEnabled = false;
+                    editText.SetTextKeepState(unitentry.Text);
+                }
+#endif
+
             if (e.NewTextValue.Length > 8)
             {
                 return;

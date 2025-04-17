@@ -40,6 +40,7 @@ namespace PeopleWith
 
         public string supplementquestions { get; set; }
 
+        [System.Text.Json.Serialization.JsonIgnore]
         public string groupscheduleid { get; set; }
 
         [System.Text.Json.Serialization.JsonIgnore]

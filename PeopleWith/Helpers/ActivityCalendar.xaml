@@ -55,7 +55,7 @@
                 </Grid>
                 <!-- View 1: Calendar View -->
                 <StackLayout Grid.Row="1" Margin="0,20,0,0" x:Name="CalendarView">
-                    <syncfusion:SfCalendar ViewChanged="Calendar_ViewChanged" ShowTrailingAndLeadingDates="False" NavigationDirection="Horizontal" SelectionBackground="#991B1B"  TodayHighlightBrush="#991B1B" HeightRequest="280" BackgroundColor="Transparent" ShowActionButtons="False" x:Name="Calendar" SelectionChanged="Calendar_SelectionChanged" View="Month"  />
+                    <syncfusion:SfCalendar ViewChanged="Calendar_ViewChanged" MinimumDate="01/01/2000" ShowTrailingAndLeadingDates="False" NavigationDirection="Horizontal" SelectionBackground="#991B1B"  TodayHighlightBrush="#991B1B" HeightRequest="280" BackgroundColor="Transparent" ShowActionButtons="False" x:Name="Calendar" SelectionChanged="Calendar_SelectionChanged" View="Month"  />
                 </StackLayout>
 
                 <!-- View 2: Entry Details -->

@@ -5,17 +5,9 @@
              x:Class="PeopleWith.VideoPlayer" NavigationPage.HasNavigationBar="True" BackgroundColor="White">
     <StackLayout>
 
-        <Grid x:Name="NavStack" HorizontalOptions="FillAndExpand">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <ImageButton x:Name="AndroidBtn" Clicked="BacKArrow_Clicked" IsVisible="False" Grid.Row="0" Grid.Column="0" Source="androidarrow.png" HeightRequest="25" WidthRequest="25" HorizontalOptions="Start" VerticalOptions="Center" Margin="15,15,0,0"/>
+        <Grid x:Name="NavStack"  HorizontalOptions="Fill" Grid.RowDefinitions="Auto" Grid.ColumnDefinitions="*">
+            <ImageButton x:Name="AndroidBtn" Aspect="AspectFit" Scale="0.55" BorderWidth="0" Padding="10" Clicked="BacKArrow_Clicked" IsVisible="False" Grid.Row="0" Grid.Column="0" Source="androidarrow.png" HeightRequest="24" WidthRequest="24" HorizontalOptions="Start" VerticalOptions="Center" Margin="5,5,0,0"/>
             <ImageButton x:Name="IOSBtn" Clicked="BacKArrow_Clicked" IsVisible="False" Grid.Row="0" Grid.Column="0" Source="iosback.png" HeightRequest="50" WidthRequest="60" HorizontalOptions="Start" VerticalOptions="Center" Margin="15,5,0,0"/>
-
             <Button Text="Close Video" TextColor="White" IsVisible="False" x:Name="closevideobtn" Clicked="closevideobtn_Clicked" BackgroundColor="#031926" FontFamily="HankenGroteskBold" Grid.Row="0" Grid.Column="0" Margin="10"/>
 
         </Grid>

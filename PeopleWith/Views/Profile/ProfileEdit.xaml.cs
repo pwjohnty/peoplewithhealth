@@ -815,6 +815,16 @@ public partial class ProfileEdit : ContentPage
     {
         try
         {
+#if ANDROID
+                var handler = DateofBirthEntry.Handler as Microsoft.Maui.Handlers.EntryHandler;
+                var editText = handler?.PlatformView as AndroidX.AppCompat.Widget.AppCompatEditText;
+                if (editText != null)
+                {
+                    editText.EmojiCompatEnabled = false;
+                    editText.SetTextKeepState(DateofBirthEntry.Text);
+                }
+#endif
+
             if (isEditing)
                 return;
 

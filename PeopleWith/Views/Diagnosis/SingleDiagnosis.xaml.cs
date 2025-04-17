@@ -17,6 +17,8 @@ public partial class SingleDiagnosis : ContentPage
     bool validdob;
     string WebpageLink;
     public string WeborPdf;
+    bool ResetCheck = false;
+    private bool isResetting = false;
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
@@ -337,7 +339,8 @@ public partial class SingleDiagnosis : ContentPage
                 dateofBirth.IsVisible = true;
                 Diagnosislbl.Text = DiagnosisPassed[0].diagnosistitle;
                 EditBtn.IsEnabled = true;
-                if(DeviceInfo.Current.Platform == DevicePlatform.Android)
+                DiagInfo.IsVisible = false; 
+                if (DeviceInfo.Current.Platform == DevicePlatform.Android)
                 {
                     AndroidBtn.IsVisible = true; 
                 }
@@ -384,8 +387,33 @@ public partial class SingleDiagnosis : ContentPage
     {
         try
         {
+            if (isResetting)
+                return;
+
             if (isEditing)
                 return;
+
+#if ANDROID
+                var handler = DateEntry.Handler as Microsoft.Maui.Handlers.EntryHandler;
+                var editText = handler?.PlatformView as AndroidX.AppCompat.Widget.AppCompatEditText;
+                if (editText != null)
+                {
+                    editText.EmojiCompatEnabled = false;
+                    editText.SetTextKeepState(DateEntry.Text);
+                }
+#endif
+
+
+            if (diagdatecheckbox.IsChecked == true)
+            {
+                if (ResetCheck)
+                {
+                    ResetCheck = false;
+                    return;
+                }
+
+                diagdatecheckbox.IsChecked = false;
+            }
 
             isEditing = true;
 
@@ -509,7 +537,8 @@ public partial class SingleDiagnosis : ContentPage
                 DiagnosisSingle.IsVisible = true;
                 dateofBirth.IsVisible = false;
                 AndroidBtn.IsVisible = false;
-                IOSBtn.IsVisible = false; 
+                IOSBtn.IsVisible = false;
+                DiagInfo.IsVisible = true;
                 Title = null;
                 NavigationPage.SetHasNavigationBar(this, true); 
             }
@@ -529,13 +558,27 @@ public partial class SingleDiagnosis : ContentPage
         }
     }
 
-    private void diagdatecheckbox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    private async void diagdatecheckbox_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
         try
         {
-            DateEntry.Text = string.Empty;
+            if (!string.IsNullOrEmpty(DateEntry.Text))
+            {
+                isResetting = true;
+                ResetCheck = true;
+
+                MainThread.BeginInvokeOnMainThread(async () =>
+                {
+                    DateEntry.Text = string.Empty;
+
+                    await Task.Delay(100);
+                    isResetting = false;
+                });
+            }
+
             DateofDiagnosis = null;
             validdob = true;
+
         }
         catch (Exception Ex)
         {

@@ -13,5 +13,6 @@ namespace PeopleWith
         public string link { get; set; }
         public string type { get; set; }
         public ImageSource img { get; set; }
+        public string shortlink { get; set; }
     }
 }

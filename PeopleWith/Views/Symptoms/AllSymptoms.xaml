@@ -92,24 +92,10 @@
                 <syncfusion:SfListView  x:Name="AllSymptomView" Padding="0" Margin="10,5,10,50" AutoFitMode="Height"  ItemSpacing="0"  HorizontalOptions="FillAndExpand" ItemTapped="AllSymptomView_ItemTapped" IsScrollingEnabled="False"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
-                            <ViewCell>
+                                <ViewCell>
                                 <StackLayout>
-                                <Frame CornerRadius="10"  Margin="0,5,0,5"
-        BackgroundColor="#fff7ea" HasShadow="False"
-                       BorderColor="Transparent" InputTransparent="True"
-       Padding="0">
-                                    <Grid Margin="0,10,0,0">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="45*"/>
-                                            <ColumnDefinition Width="45*"/>
-                                            <ColumnDefinition Width="10*"/>
-                                        </Grid.ColumnDefinitions>
+                                <Border StrokeShape="RoundRectangle 10"  Margin="0,5,0,5"  BackgroundColor="#fff7ea" Stroke="Transparent" InputTransparent="True" Padding="0">
+                                     <Grid Margin="0,10,0,0" Grid.RowDefinitions="Auto,Auto,Auto" Grid.ColumnDefinitions="45*,45*,10*">
 
                                         <Label Text="{Binding Shorttitle}" FontFamily="HankenGroteskBold"  FontSize="14" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,0,10" TextColor="Orange" />
                                         <Label Text="{Binding LastUpdated}" Margin="10,0,0,10" VerticalOptions="Center" HorizontalOptions="End" VerticalTextAlignment="Center"  FontFamily="HankenGroteskRegular" TextColor="Gray" FontSize="14"   Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
@@ -127,16 +113,9 @@
                                         <Image Source="nextdarker.png" HeightRequest="15" Margin="0,0,0,10"  Grid.Row="0" Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center" />
 
                                     </Grid>
-                                </Frame>
+                                </Border>
                                     <Border StrokeShape="RoundRectangle 10" Padding="5" IsVisible="{Binding Firstadd}"  Stroke="Orange" BackgroundColor="White" Margin="0,0,0,10" >
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto"/>
-                                            </Grid.RowDefinitions>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="10*"/>
-                                                <ColumnDefinition Width="90*"/>
-                                            </Grid.ColumnDefinitions>
+                                        <Grid Grid.RowDefinitions="Auto" Grid.ColumnDefinitions="10*,90*" >
                                             <Image Source="warningicon.png" Grid.Column="0" Grid.Row="0" HeightRequest="20" WidthRequest="20" Aspect="AspectFit" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
                                             <Label Text="Your symptom has been added at an intensity of 50. All symptoms are added at 50 to show improvement or deterioration of your symptom, with 0 representing the symptom is no longer evident and 100 representing the worst the symptom has ever been." Grid.Row="0" Grid.Column="1" Margin="0,0,0,0" FontSize="11" TextColor="#031926" FontFamily="HankenGroteskRegular"/>
 

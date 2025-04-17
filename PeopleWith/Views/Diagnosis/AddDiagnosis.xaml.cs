@@ -22,6 +22,8 @@ public partial class AddDiagnosis : ContentPage
     string diagnosistitle;
     bool isEditing;
     bool validdob;
+    bool ResetCheck = false;
+    private bool isResetting = false; 
     DateTime DateOBirth; 
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
@@ -228,7 +230,7 @@ public partial class AddDiagnosis : ContentPage
                     if (DOB.Date > DateTime.Now.Date)
                     {
                         DateEntry.Focus();
-                        DOBHelper.ErrorText = "Diagnosis Date is Greater than today's Date, Enter a Valid Date";
+                        DOBHelper.ErrorText = "Diagnosis Date is Greater than today's Date";
                         DOBHelper.HasError = true;
                         await Task.Delay(5000);
                         DOBHelper.HasError = false;
@@ -290,6 +292,10 @@ public partial class AddDiagnosis : ContentPage
             if(diagdatecheckbox.IsChecked != true)
             {
                 DateofDiagnosis = DateOBirth.ToString("dd/MM/yyyy");
+            }
+            else
+            {
+                DateofDiagnosis = null;
             }
             var Userid = Helpers.Settings.UserKey;
             var NewDiagnosis = new userdiagnosis();
@@ -362,8 +368,34 @@ public partial class AddDiagnosis : ContentPage
     {
         try
         {
+
+            if (isResetting)
+                return;
+
             if (isEditing)
                 return;
+
+#if ANDROID
+                var handler = DateEntry.Handler as Microsoft.Maui.Handlers.EntryHandler;
+                var editText = handler?.PlatformView as AndroidX.AppCompat.Widget.AppCompatEditText;
+                if (editText != null)
+                {
+                    editText.EmojiCompatEnabled = false;
+                    editText.SetTextKeepState(DateEntry.Text);
+                }
+#endif
+
+
+            if (diagdatecheckbox.IsChecked == true)
+            {
+                if (ResetCheck)
+                {
+                    ResetCheck = false;
+                    return;
+                }
+
+                diagdatecheckbox.IsChecked = false;
+            }
 
             isEditing = true;
 
@@ -459,13 +491,27 @@ public partial class AddDiagnosis : ContentPage
         }
     }
 
-    private void diagdatecheckbox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    private async void diagdatecheckbox_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
         try
         {
-            DateEntry.Text = string.Empty;
+            if (!string.IsNullOrEmpty(DateEntry.Text))
+            {
+                isResetting = true;
+                ResetCheck = true;
+
+                MainThread.BeginInvokeOnMainThread(async () =>
+                {
+                    DateEntry.Text = string.Empty;
+
+                    await Task.Delay(100);
+                    isResetting = false;
+                });
+            }
+
             DateofDiagnosis = null;
-            validdob = true; 
+            validdob = true;
+
         }
         catch (Exception Ex)
         {
