@@ -90,7 +90,7 @@ public partial class ActivitySchedule : ContentPage
         try
         {
 
-            TodayDay.Text = DateTime.Now.ToString("dd"); 
+            TodayDaylbl.Text = DateTime.Now.ToString("dd"); 
             // Get today's date
             DateTime today = DateTime.Today;
 
@@ -456,6 +456,15 @@ public partial class ActivitySchedule : ContentPage
             {
                 //Update Dates
                 UpdateDates(selectedDate);
+
+                if(DateTime.Parse(selectedDate).Date == DateTime.Now.Date)
+                {
+                    TodayDay.IsVisible = false;
+                }
+                else
+                {
+                    TodayDay.IsVisible = true;
+                }
             }
         }
         catch (Exception Ex)
@@ -503,7 +512,7 @@ public partial class ActivitySchedule : ContentPage
         }
     }
 
-    private void todaybtn_Clicked(object sender, EventArgs e)
+    private void todaybtn_Clicked(object sender, TappedEventArgs e)
     {
         try
         {
@@ -512,6 +521,7 @@ public partial class ActivitySchedule : ContentPage
             {
                 string selectedDate = DateTime.Now.ToString("dd/MM/yyyy");
                 UpdateDates(selectedDate);
+                TodayDay.IsVisible = false;
             }
         }
         catch (Exception Ex)

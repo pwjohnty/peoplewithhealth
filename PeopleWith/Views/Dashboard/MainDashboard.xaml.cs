@@ -11,11 +11,11 @@ using Mopups.Services;
 using Plugin.LocalNotification;
 using Syncfusion.Maui.Charts;
 //using Sentry;
-using Sentry;
 using Microsoft.Maui.ApplicationModel.Communication;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Devices;
 using Microsoft.Maui.Storage;
+using System.Reflection.Metadata;
 
 namespace PeopleWith;
 
@@ -39,6 +39,7 @@ public partial class MainDashboard : ContentPage
     public ObservableCollection<usersymptom> UserSymptomPassed = new ObservableCollection<usersymptom>();
 
     ObservableCollection<signupcode> signupcodecollection = new ObservableCollection<signupcode>();
+    public ObservableCollection<questionnaire> questionnaires = new ObservableCollection<questionnaire>();
 
     bool setnotificationsfromlogin;
     MedSuppNotifications ScheduleNotifications = new MedSuppNotifications();
@@ -1095,48 +1096,133 @@ public partial class MainDashboard : ContentPage
             //check if the questionnaire prompt is needed
 
             var signup = Helpers.Settings.SignUp;
-             
-            if(signup.Contains("SFEWH"))
-            {
+            //Get Signup Questionnaries 
+            var getQuestionairesTask = await database.GetQuestionnaires();
+            questionnaires = getQuestionairesTask;
 
+
+
+
+                if (signup.Contains("SFEWH"))
+                {
+
+                var QuestionList = new ObservableCollection<questionnaire>();
+
+                var ItemstoRemove = new List<string>();                  
                 additionalquestionstab.IsVisible = true;
+
+                if (signup.Contains("SFEWHA1"))
+                {
+                    var IDList = new List<string>
+                        {
+                            //SF36 ID 
+                            "DC6A9FD7-242B-4299-9672-D745669FEAF0",
+                            //Diabetes ID
+                            "73D47262-1B2C-4451-A4FC-978582D77FE0"
+                        };
+
+                    if (questionnaires != null)
+                    {
+                        QuestionList = new ObservableCollection<questionnaire>(questionnaires.Where(q => IDList.Contains(q.questionnaireid)));
+                    }
+
+                    questionnaireinfotext.Text = "Complete Diabetes Questionnaire";
+                }
+                else if (signup.Contains("SFEWHA2"))
+                {
+
+                    var IDList = new List<string>
+                        {
+                            //SF36 ID 
+                            "DC6A9FD7-242B-4299-9672-D745669FEAF0",
+                            //Breast cancer ID
+                            "F7FB770B-286F-4300-814D-E76AACB6DACF"
+                        };
+
+                    if (questionnaires != null)
+                    {
+                        QuestionList = new ObservableCollection<questionnaire>(questionnaires.Where(q => IDList.Contains(q.questionnaireid)));
+                    }
+
+                    questionnaireinfotext.Text = "Complete Breast Cancer Questionnaire";
+                }
+                else if (signup.Contains("SFEWHA3"))
+                {
+
+                    var IDList = new List<string>
+                        {
+                            //SF36 ID 
+                            "DC6A9FD7-242B-4299-9672-D745669FEAF0",
+                            //Stress ID
+                            "4A27076A-A2A3-45DD-A061-34A4F1799B20"
+                        };
+
+                    if (questionnaires != null)
+                    {
+                        QuestionList = new ObservableCollection<questionnaire>(questionnaires.Where(q => IDList.Contains(q.questionnaireid)));
+                    }
+
+                    questionnaireinfotext.Text = "Complete SF36 Questionnaire";
+                }
+                else if (signup.Contains("SFEWHA4"))
+                {
+                    var IDList = new List<string>
+                        {
+                            //SF36 ID 
+                            "DC6A9FD7-242B-4299-9672-D745669FEAF0",
+                            //Stress ID
+                            "4A27076A-A2A3-45DD-A061-34A4F1799B20"
+                        };
+
+                    if (questionnaires != null)
+                    {
+                        QuestionList = new ObservableCollection<questionnaire>(questionnaires.Where(q => IDList.Contains(q.questionnaireid)));
+                    }
+
+                    questionnaireinfotext.Text = "Complete SF36 Questionnaire";
+                }
 
 
                 if (userfeedbacklist[0].initialquestionnairefeedbacklist != null)
                 {
                     //check dates
-
                     completequestionnaireborder.IsVisible = false;
-                    
+
+                    if(userfeedbacklist[0].initialquestionnairefeedbacklist.Count > 1)
+                    {
+                        QuestionnairePrompt.IsVisible = false;
+                    }
+                    else
+                    {
+                        //Item to Remove 
+                        ItemstoRemove.Add(userfeedbacklist[0].initialquestionnairefeedbacklist[0].label);
+                        QuestionsIndicator.IsVisible = false; 
+                        var Filter = new ObservableCollection<questionnaire>(QuestionList.Where(q => !ItemstoRemove.Contains(q.title)));
+                        QuestionsPrompt.ItemsSource = Filter;
+                        QuestionsPrompt.IsSwipeEnabled = false;
+                        QuestionnairePrompt.IsVisible = true;
+                    }
+                    //Use label to remove item 
                 }
                 else
                 {
-                    completequestionnaireborder.IsVisible = true;
+                    //completequestionnaireborder.IsVisible = true;
 
-
-                    if(signup.Contains("SFEWHA1"))
-                    {
-                        questionnaireinfotext.Text = "Complete Diabetes Questionnaire";
-                    }
-                    else if (signup.Contains("SFEWHA2"))
-                    {
-                        questionnaireinfotext.Text = "Complete Breast Cancer Questionnaire";
-                    }
-                    else if (signup.Contains("SFEWHA3"))
-                    {
-                        questionnaireinfotext.Text = "Complete SF36 Questionnaire";
-                    }
-                    else if (signup.Contains("SFEWHA4"))
-                    {
-                        questionnaireinfotext.Text = "Complete SF36 Questionnaire";
-                    }
-
+                    QuestionnairePrompt.IsVisible = true;
+                    QuestionsIndicator.IsVisible = true;
+                    QuestionsPrompt.IsSwipeEnabled = true;
+                    QuestionsPrompt.ItemsSource = QuestionList;
                 }
+
+                //Check once complete 
+
+               
 
 
             }
             else if (signup.Contains("SFEAT"))
             {
+                completequestionnaireborder.IsVisible = true;
 
                 if (userfeedbacklist[0].initialquestionnairefeedbacklist != null)
                 {
@@ -3900,6 +3986,30 @@ public partial class MainDashboard : ContentPage
 
         }
     }
+
+    private async void QuestionnaireTappedEvent(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            if (sender is VisualElement visualElement && visualElement.BindingContext is questionnaire tappedItem)
+            {
+                var signup = Helpers.Settings.SignUp;
+
+                if (signup.Contains("SFEWHA"))
+                {
+                    await Navigation.PushAsync(new AndroidQuestionnaires(tappedItem.questionnaireid, userfeedbacklist[0]), false);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+  
+
+
 
     //private async void Button_Clicked_6(object sender, EventArgs e)
     //{

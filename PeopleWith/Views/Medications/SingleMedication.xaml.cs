@@ -3,6 +3,7 @@ using Mopups.Services;
 using Syncfusion.Maui.Scheduler;
 using System.Collections.ObjectModel;
 using Microsoft.Maui.Networking;
+using Plugin.LocalNotification;
 
 namespace PeopleWith;
 
@@ -293,6 +294,12 @@ public partial class SingleMedication : ContentPage
 
 
                     UserMedications.Remove(MedSelected);
+
+                    //Delete Notfication 
+                    foreach(var item in Schedule)
+                    {
+                        LocalNotificationCenter.Current.Cancel(item.id);
+                    }
 
                     await Navigation.PushAsync(new AllMedications(UserMedications));
                     DeleteBtn.IsEnabled = true;

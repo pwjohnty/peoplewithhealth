@@ -285,24 +285,24 @@ BackgroundColor="Transparent">
                             <syncfusion:SfListView.ItemTemplate>
                                 <DataTemplate>
                                     <ViewCell>
-                                        <Frame HasShadow="False" CornerRadius="10" Padding="10" Margin="5" WidthRequest="100"  InputTransparent="True" BorderColor="Transparent" BackgroundColor="#fafafa" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+                                     <Border StrokeShape="RoundRectangle 10" Padding="10" Margin="5" WidthRequest="100"  InputTransparent="True" Stroke="Transparent" BackgroundColor="#fafafa" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
                                             <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Spacing="5">
                                                 <Image Source="{Binding ImageSource}" HeightRequest="30" WidthRequest="30"/>
                                                 <Label Text="{Binding Text}" FontAttributes="Bold" FontFamily="HankenGroteskBold" FontSize="14" TextColor="#031926" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" />
                                             </StackLayout>
-                                        </Frame>
+                                        </Border>
                                     </ViewCell>
                                 </DataTemplate>
                             </syncfusion:SfListView.ItemTemplate>
                             <syncfusion:SfListView.SelectedItemTemplate>
                                 <DataTemplate>
                                     <ViewCell>
-                                    <Frame HasShadow="False" CornerRadius="10" Padding="10" Margin="5" WidthRequest="100" InputTransparent="True"   BorderColor="Transparent" BackgroundColor="#fce9d9" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+                                       <Border StrokeShape="RoundRectangle 10" Padding="10" Margin="5" WidthRequest="100" InputTransparent="True" Stroke="Transparent" BackgroundColor="#fce9d9" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
                                             <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Spacing="5">
                                             <Image Source="{Binding ImageSource}" HeightRequest="30" WidthRequest="30"/>
                                                 <Label Text="{Binding Text}" FontAttributes="Bold" FontFamily="HankenGroteskBold" FontSize="14" TextColor="#991B1B" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" />
                                             </StackLayout>
-                                        </Frame>
+                                        </Border>
                                     </ViewCell>
                                 </DataTemplate>
                             </syncfusion:SfListView.SelectedItemTemplate>

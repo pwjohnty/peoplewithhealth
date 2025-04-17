@@ -399,7 +399,7 @@ HorizontalOptions="FillAndExpand">
                                 TextColor="#031926" FontFamily="HankenGroteskRegular"
                                 Margin="0,5,5,5" CheckedChanged="ExtendedRadioButton_CheckedChanged_28"
                                 Content="{Binding .}" 
-                                            GroupName="RadioGroup2" >
+                                            GroupName="RadioGroup1" >
 
 
                                                 </local:ExtendedRadioButton>
@@ -433,7 +433,7 @@ HorizontalOptions="FillAndExpand">
                                 TextColor="#031926" FontFamily="HankenGroteskRegular"
                                 Margin="0,5,5,5" CheckedChanged="ExtendedRadioButton_CheckedChanged_29"
                                 Content="{Binding .}" 
-                                            GroupName="RadioGroup3" >
+                                            GroupName="RadioGroup2" >
 
 
                                                 </local:ExtendedRadioButton>

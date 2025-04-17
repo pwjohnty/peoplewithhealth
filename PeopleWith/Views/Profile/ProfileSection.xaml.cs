@@ -434,10 +434,12 @@ public partial class ProfileSection : ContentPage
             NetworkAccess accessType = Connectivity.Current.NetworkAccess;
             if (accessType == NetworkAccess.Internet)
             {
+                UserDetails.IsEnabled = false;
                 var ItemTapped = e.DataItem as user;
                 var SelectedItem = ItemTapped.SettingsTitle;
                 string Selected = "Health Details";
                 await Navigation.PushAsync(new ProfileEdit(SelectedItem, Selected, AllUserData), false);
+                UserDetails.IsEnabled = true;
             }
             else
             {
@@ -447,6 +449,7 @@ public partial class ProfileSection : ContentPage
         }
         catch (Exception Ex) 
         {
+            UserDetails.IsEnabled = true;
             NotasyncMethod(Ex);
         }
     }
@@ -459,6 +462,7 @@ public partial class ProfileSection : ContentPage
             NetworkAccess accessType = Connectivity.Current.NetworkAccess;
             if (accessType == NetworkAccess.Internet)
             {
+                Settings.IsEnabled = false; 
                 var ItemTapped = e.DataItem as user;
                 var SelectedItem = ItemTapped.SettingsTitle;
                 if (SelectedItem == "Notifications")
@@ -495,13 +499,14 @@ public partial class ProfileSection : ContentPage
 
                         //}
                     }
+                   
                 }
                 else
                 {
                     string Selected = "Settings";
                     await Navigation.PushAsync(new ProfileEdit(SelectedItem, Selected, AllUserData), false);
                 }
-               
+                Settings.IsEnabled = true;
             }
             else
             {
@@ -511,6 +516,7 @@ public partial class ProfileSection : ContentPage
         }
         catch (Exception Ex)
         {
+            Settings.IsEnabled = true;
             NotasyncMethod(Ex);
         }
     }
@@ -523,6 +529,7 @@ public partial class ProfileSection : ContentPage
             NetworkAccess accessType = Connectivity.Current.NetworkAccess;
             if (accessType == NetworkAccess.Internet)
             {
+                PrivacyList.IsEnabled = false; 
                 var ItemTapped = e.DataItem as user;
                 var SelectedItem = ItemTapped.SettingsTitle;
                 if (SelectedItem == "Terms of Use")
@@ -538,6 +545,7 @@ public partial class ProfileSection : ContentPage
                     string Selected = "Privacy";
                     await Navigation.PushAsync(new ProfileEdit(SelectedItem, Selected, AllUserData), false);
                 }
+                PrivacyList.IsEnabled = true;
             }
             else
             {
@@ -547,6 +555,7 @@ public partial class ProfileSection : ContentPage
         }
         catch (Exception Ex)
         {
+            PrivacyList.IsEnabled = true;
             NotasyncMethod(Ex);
         }
     }

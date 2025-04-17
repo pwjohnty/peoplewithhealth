@@ -1142,7 +1142,7 @@ namespace PeopleWith
                     status = Updatefeedback.status,
                     details = Updatefeedback.details,
                     supplementquestions = Updatefeedback.supplementquestions,
-                    groupscheduleid = Updatefeedback.groupscheduleid
+                    //groupscheduleid = Updatefeedback.groupscheduleid
                 };
 
                 // Serialize the object into JSON

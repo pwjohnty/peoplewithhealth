@@ -5,6 +5,7 @@ using System.Text.Json;
 using Microsoft.Maui.Controls.Platform;
 using Mopups.Services;
 using Microsoft.Maui.ApplicationModel;
+//using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 
 
 namespace PeopleWith;
@@ -83,7 +84,7 @@ public partial class DashQuestionnaire : ContentPage
 
             titlelbl.Text = input;
         }
-
+        datePicker.MaximumDate = DateTime.Now; 
     }
 
     public DashQuestionnaire(string input, string list)

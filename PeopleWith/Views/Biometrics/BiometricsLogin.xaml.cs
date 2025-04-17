@@ -126,9 +126,10 @@ public partial class BiometricsLogin : ContentPage
                 Task.Run(async () =>
                 {
                     await Task.Delay(100); // Simulate processing time if necessary
-                    MainThread.BeginInvokeOnMainThread(() =>
+                    MainThread.BeginInvokeOnMainThread(async () =>
                     {
                         Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                        //await Navigation.PushAsync(new MainDashboard(), false);
                     });
                 });
             }
@@ -167,9 +168,10 @@ public partial class BiometricsLogin : ContentPage
                         Task.Run(async () =>
                         {
                             await Task.Delay(100); // Simulate processing time if necessary
-                            MainThread.BeginInvokeOnMainThread(() =>
+                            MainThread.BeginInvokeOnMainThread(async () =>
                             {
                                 Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                                //await Navigation.PushAsync(new MainDashboard(), false);
                             });
                         });
                     }
@@ -190,9 +192,10 @@ public partial class BiometricsLogin : ContentPage
                         Task.Run(async () =>
                         {
                            await Task.Delay(100); // Simulate processing time if necessary
-                            MainThread.BeginInvokeOnMainThread(() =>
+                            MainThread.BeginInvokeOnMainThread(async () =>
                             {
                                 Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                                //await Navigation.PushAsync(new MainDashboard(), false);
                             });
                         });
                     }

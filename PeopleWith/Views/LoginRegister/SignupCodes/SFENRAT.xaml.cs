@@ -573,9 +573,18 @@ public partial class SFENRAT : ContentPage
     {
         try
         {
+
+#if ANDROID
+                var handler = dateofsurgeryEntry.Handler as Microsoft.Maui.Handlers.EntryHandler;
+                var editText = handler?.PlatformView as AndroidX.AppCompat.Widget.AppCompatEditText;
+                if (editText != null)
+                {
+                    editText.EmojiCompatEnabled = false;
+                    editText.SetTextKeepState(dateofsurgeryEntry.Text);
+                }
+#endif
             if (isEditingsurgery)
                 return;
-
             isEditingsurgery = true;
 
             string input = e.NewTextValue;
@@ -1297,8 +1306,6 @@ public partial class SFENRAT : ContentPage
                 var isConnected = accessType == NetworkAccess.Internet;
                 ConnectivityChanged?.Invoke(this, isConnected);
             }
-
-
         }
         catch (Exception Ex)
         {

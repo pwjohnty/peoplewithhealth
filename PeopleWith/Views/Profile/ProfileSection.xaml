@@ -14,79 +14,62 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Frame Grid.Row="0" CornerRadius="40" HasShadow="False" BackgroundColor="#E5F0FB" HeightRequest="80" WidthRequest="80" BorderColor="Transparent">
+                <Border Grid.Row="0" StrokeShape="RoundRectangle 40" BackgroundColor="#E5F0FB" HeightRequest="80" WidthRequest="80" Stroke="Transparent">
                     <Label x:Name="Initals" Padding="0" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" FontFamily="HankenGroteskBold" FontSize="22" TextColor="#031926"/>
-                </Frame>
+                </Border>
                 <Label Grid.Row="1" Text="Your Profile" HorizontalOptions="Center" Margin="0,5,0,0" FontFamily="HankenGroteskBold" FontSize="26" TextColor="#031926"/>
             </Grid>
 
             <!-- Health Details-->
-            <Frame HasShadow="false" Margin="20,10,20,0" BorderColor="#E8E8E8" Padding="5,0,5,-2" BackgroundColor="Transparent" >
-                <syncfusion:SfListView x:Name="UserDetails"  SelectionBackground="Transparent" ItemTapped="UserDetails_ItemTapped" AutoFitMode="Height" >
+            <Border Stroke="#E8E8E8" StrokeShape="RoundRectangle 10" Margin="20,10,20,0" Padding="5,0,5,-2" BackgroundColor="Transparent" >
+                <syncfusion:SfListView x:Name="UserDetails"  ItemTapped="UserDetails_ItemTapped" AutoFitMode="Height" >
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate >
                             <ViewCell>
-                                <ViewCell.View>
-                                    <Grid >
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
+                                
+                                <Grid Grid.RowDefinitions="Auto,Auto,Auto" Background="Transparent" Grid.ColumnDefinitions="*">
 
-                                        <Label FontAutoScalingEnabled="False" HorizontalOptions="StartAndExpand" Text="{Binding SettingsTitle}"  FontFamily="HankenGroteskRegular" HeightRequest="20" FontSize="12" VerticalOptions="Center" Grid.Row="0" Grid.Column="0" Margin="10,10,0,0" TextColor="Gray" />
-                                        <Label HorizontalOptions="StartAndExpand" Text="{Binding SettingsItem}" FontFamily="HankenGroteskBold" HeightRequest="25" VerticalOptions="Center" FontSize="14" Grid.Row="1" Grid.Column="0" Margin="10,0,0,0" FontAttributes="Bold" TextColor="#031926" />
-                                        <Image Source="backbutton.png" Rotation="180" Grid.Row="0" HeightRequest="10" WidthRequest="10" Grid.RowSpan="2" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="End" Margin="0,10,10,0" />
+                                    <Label FontAutoScalingEnabled="False" HorizontalOptions="Fill" Text="{Binding SettingsTitle}"  FontFamily="HankenGroteskRegular" HeightRequest="20" FontSize="12" VerticalOptions="Center" Grid.Row="0" Grid.Column="0" Margin="10,10,0,0" TextColor="Gray" />
+                                    <Label HorizontalOptions="Fill" Text="{Binding SettingsItem}" FontFamily="HankenGroteskBold" HeightRequest="25" VerticalOptions="Center" FontSize="14" Grid.Row="1" Grid.Column="0" Margin="10,0,0,0" FontAttributes="Bold" TextColor="#031926" />
+                                    <Image Source="backbutton.png" Rotation="180" Grid.Row="0" HeightRequest="10" WidthRequest="10" Grid.RowSpan="2" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="End" Margin="0,10,10,0" />
 
-                                        <BoxView HeightRequest="1" Color="#E8E8E8" BackgroundColor="#E8E8E8"  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="1" Margin="5,0,5,0" HorizontalOptions="FillAndExpand" />
+                                    <BoxView HeightRequest="1" Color="#E8E8E8" BackgroundColor="#E8E8E8"  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="1" Margin="5,0,5,0" HorizontalOptions="Fill" />
 
-                                    </Grid>
-                                </ViewCell.View>
+                                </Grid>
                             </ViewCell>
                         </DataTemplate>
                     </syncfusion:SfListView.ItemTemplate>
                 </syncfusion:SfListView>
-            </Frame>
+            </Border>
 
             <!-- Settings-->
             <Label Text="Settings"  HorizontalOptions="Start" Margin="20,10,0,0" FontFamily="HankenGroteskBold" FontSize="26" TextColor="#031926"/>
 
-            <Frame HasShadow="false" Margin="20,10,20,0" Padding="5,0,5,-2" HeightRequest="112" BorderColor="#E8E8E8"  BackgroundColor="Transparent" >
-                <syncfusion:SfListView x:Name="Settings" SelectionBackground="Transparent" ItemTapped="Settings_ItemTapped" AutoFitMode="Height" >
+            <Border Stroke="#E8E8E8" StrokeShape="RoundRectangle 10" Margin="20,10,20,0" Padding="5,0,5,-2" BackgroundColor="Transparent" >
+                <!--<Frame HasShadow="false" Margin="20,10,20,0" Padding="5,0,5,-2" HeightRequest="112" BorderColor="#E8E8E8"  BackgroundColor="Transparent" >-->
+                <syncfusion:SfListView x:Name="Settings" SelectionBackground="Transparent" ScrollBarVisibility="Never" ItemTapped="Settings_ItemTapped" AutoFitMode="Height" >
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <ViewCell.View>
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
+                                <Grid Grid.RowDefinitions="Auto,Auto,Auto" Background="Transparent" Grid.ColumnDefinitions="*">
 
-                                        <Label FontAutoScalingEnabled="False" HorizontalOptions="StartAndExpand" Text="{Binding SettingsTitle}" FontFamily="HankenGroteskRegular" HeightRequest="20" FontSize="12" VerticalOptions="Center" Grid.Row="0" Grid.Column="0" Margin="10,10,0,0" TextColor="Gray" />
-                                        <Label HorizontalOptions="StartAndExpand" Text="{Binding SettingsItem}" FontFamily="HankenGroteskBold" HeightRequest="25" VerticalOptions="Center" FontSize="14" Grid.Row="1" Grid.Column="0" Margin="10,0,0,0" FontAttributes="Bold" TextColor="#031926" />
-                                        <Image Source="backbutton.png" Rotation="180" Grid.Row="0" HeightRequest="10" WidthRequest="10" Grid.RowSpan="2" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="End" Margin="0,10,10,0" />
+                                    <Label FontAutoScalingEnabled="False" HorizontalOptions="Fill" Text="{Binding SettingsTitle}" FontFamily="HankenGroteskRegular" HeightRequest="20" FontSize="12" VerticalOptions="Center" Grid.Row="0" Grid.Column="0" Margin="10,10,0,0" TextColor="Gray" />
+                                    <Label HorizontalOptions="Fill" Text="{Binding SettingsItem}" FontFamily="HankenGroteskBold" HeightRequest="25" VerticalOptions="Center" FontSize="14" Grid.Row="1" Grid.Column="0" Margin="10,0,0,0" FontAttributes="Bold" TextColor="#031926" />
+                                    <Image Source="backbutton.png" Rotation="180" Grid.Row="0" HeightRequest="10" WidthRequest="10" Grid.RowSpan="2" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="End" Margin="0,10,10,0" />
 
-                                        <BoxView HeightRequest="1" Color="#E8E8E8" BackgroundColor="#E8E8E8"  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="1" Margin="5,0,5,0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+                                    <BoxView HeightRequest="1" Color="#E8E8E8" BackgroundColor="#E8E8E8"  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="1" Margin="5,0,5,0" HorizontalOptions="Fill" VerticalOptions="Fill"/>
 
-                                    </Grid>
-                                </ViewCell.View>
+                                </Grid>
                             </ViewCell>
                         </DataTemplate>
                     </syncfusion:SfListView.ItemTemplate>
                 </syncfusion:SfListView>
-            </Frame>
+            </Border>
 
             <!-- Email Response -->
 
-            <Frame x:Name="ImproveSection"  InputTransparent="False" CornerRadius="10"  Margin="20,20,20,5"  BackgroundColor="#031926" HasShadow="False" HeightRequest="100" BorderColor="White" Padding="0">
+            <Border x:Name="ImproveSection" Stroke="Transparent" StrokeShape="RoundRectangle 10" Margin="20,10,20,0" HeightRequest="100" Padding="0" BackgroundColor="#031926" >
+                <!--<Frame   InputTransparent="False" CornerRadius="10"  Margin="20,10,20,0"  BackgroundColor="#031926" HasShadow="False" HeightRequest="100" BorderColor="White" Padding="0">-->
                 <StackLayout >
                     <Label HorizontalOptions="Center" FontFamily="HankenGroteskBold" Text="Want to help us improve?" FontSize="20" FontAttributes="Bold" VerticalOptions="Start" Margin="0,10,0,0" TextColor="White" />
                     <Label HorizontalOptions="Center"  FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" Text="If you find any issues or want to recommend any improvements click here to contact us" FontSize="15" FontAttributes="None" VerticalOptions="Start" Margin="10,0,10,0" TextColor="White" />
@@ -94,7 +77,7 @@
                         <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
                     </StackLayout.GestureRecognizers>
                 </StackLayout>
-            </Frame>
+            </Border>
 
             <Frame x:Name="CBDOrderSection" IsVisible="False" CornerRadius="10"  Margin="10,20,10,5"  BackgroundColor="#009fe3" HasShadow="False" HeightRequest="100" BorderColor="#009fe3" Padding="0">
                 <StackLayout>
@@ -109,32 +92,24 @@
             <!--Privacy List -->
             <Label Text="Privacy"  HorizontalOptions="Start" Margin="20,10,0,0" FontFamily="HankenGroteskBold" FontSize="26" TextColor="#031926"/>
 
-            <Frame HasShadow="false" Margin="20,10,20,0" Padding="5,0,5,-2" BorderColor="#E8E8E8"  BackgroundColor="Transparent" >
-                <syncfusion:SfListView x:Name="PrivacyList" SelectionBackground="Transparent" ItemTapped="PrivacyList_ItemTapped" AutoFitMode="Height" >
+            <Border Stroke="#E8E8E8" StrokeShape="RoundRectangle 10" Margin="20,10,20,0" Padding="5,0,5,-2" BackgroundColor="Transparent" >
+                <!--<Frame HasShadow="false" Margin="20,10,20,0" Padding="5,0,5,-2" BorderColor="#E8E8E8"  BackgroundColor="Transparent" >-->
+                <syncfusion:SfListView x:Name="PrivacyList" SelectionBackground="Transparent" ScrollBarVisibility="Never" ItemTapped="PrivacyList_ItemTapped" AutoFitMode="Height" >
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <ViewCell.View>
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
+                                <Grid Grid.RowDefinitions="Auto,Auto" Background="Transparent" Grid.ColumnDefinitions="*">
 
-                                        <Label HorizontalOptions="StartAndExpand" Text="{Binding SettingsTitle}" FontFamily="HankenGroteskRegular" HeightRequest="45" FontSize="14" VerticalOptions="Center" VerticalTextAlignment="Center" Grid.Row="0" Margin="10,10,0,0" TextColor="#031926" />
-                                        <Image Source="backbutton.png" Rotation="180" Grid.Row="0" HeightRequest="10" WidthRequest="10" VerticalOptions="Center" HorizontalOptions="End" Margin="0,10,10,0" />
-                                        <BoxView HeightRequest="1" Color="#E8E8E8" BackgroundColor="#E8E8E8"  Grid.Row="1" Margin="5,0,5,0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+                                    <Label HorizontalOptions="Fill" Text="{Binding SettingsTitle}" FontFamily="HankenGroteskRegular" HeightRequest="45" FontSize="14" VerticalOptions="Center" VerticalTextAlignment="Center" Grid.Row="0" Margin="10,10,0,0" TextColor="#031926" />
+                                    <Image Source="backbutton.png" Rotation="180" Grid.Row="0" HeightRequest="10" WidthRequest="10" VerticalOptions="Center" HorizontalOptions="End" Margin="0,10,10,0" />
+                                    <BoxView HeightRequest="1" Color="#E8E8E8" BackgroundColor="#E8E8E8"  Grid.Row="1" Margin="5,0,5,0" HorizontalOptions="Fill" VerticalOptions="Fill"/>
 
-                                    </Grid>
-                                </ViewCell.View>
+                                </Grid>
                             </ViewCell>
                         </DataTemplate>
                     </syncfusion:SfListView.ItemTemplate>
                 </syncfusion:SfListView>
-            </Frame>
+            </Border>
             
             <!-- Logout Button-->
             <Button Margin="20,20,20,0" x:Name="Logout" Text="Logout" Clicked="Logout_Clicked" FontFamily="HankenGroteskBold" HeightRequest="45" CornerRadius="10" BorderColor="Transparent" BorderWidth="1" BackgroundColor="#e5f0fb" TextColor="#031926"/>
@@ -156,7 +131,7 @@
             <!-- Delete Account  Button-->
             <Button Margin="20,440,20,5" x:Name="DeleteAccount" Text="Delete Account" Clicked="DeleteAccount_Clicked" FontFamily="HankenGroteskBold" HeightRequest="45" FontSize="14" Padding="5" CornerRadius="10" BorderColor="Transparent" BorderWidth="1" BackgroundColor="#ffe5e5" TextColor="red"/>
 
-            <Label HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="Once your Account is Deleted, it cannot be retrieved. Ensure you no longer require access to this Account before Deletion." FontFamily="HankenGroteskBold"  FontSize="10" VerticalOptions="Center" Margin="20,0,20,20" TextColor="DarkGray" />
+            <Label HorizontalOptions="Fill" HorizontalTextAlignment="Center" Text="Once your Account is Deleted, it cannot be retrieved. Ensure you no longer require access to this Account before Deletion." FontFamily="HankenGroteskBold"  FontSize="10" VerticalOptions="Center" Margin="20,0,20,20" TextColor="DarkGray" />
 
         </VerticalStackLayout>
     </ScrollView>

@@ -81,44 +81,18 @@
                             </Grid>
 
 
-                            <syncfusion:SfListView x:Name="allhelpvideocatlist" ItemTapped="allhelpvideocatlist_ItemTapped" BackgroundColor="Transparent"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Horizontal" ItemSize="90" HeightRequest="100"     Margin="10,20,10,10" >
+                            <syncfusion:SfListView x:Name="allhelpvideocatlist" ItemTapped="allhelpvideocatlist_ItemTapped" BackgroundColor="Transparent"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Horizontal" ItemSize="90" HeightRequest="100" Margin="10,20,10,10" >
                                 <syncfusion:SfListView.ItemTemplate>
                                     <DataTemplate>
                                         <ViewCell>
-                                            <ViewCell.View>
-                  
-                                                    <Frame CornerRadius="10" BackgroundColor="{Binding BackgroundColor}" InputTransparent="True" BorderColor="Transparent" HasShadow="False" Padding="0" Margin="10,0,0,0">
-                                                    <Grid>
-                                                        <Grid.RowDefinitions>
-                                                            <!--<RowDefinition>
-                                                    <RowDefinition.Height>
-                                                        <OnPlatform x:TypeArguments="GridLength" Android="90" iOS="90"/>
-                                                    </RowDefinition.Height>
-                                                </RowDefinition>-->
-                                                            <RowDefinition Height="Auto"/>
-                                                            <RowDefinition Height="Auto"/>
-                                                        </Grid.RowDefinitions>
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="100*"/>
-                                                        </Grid.ColumnDefinitions>
-                                                        <Frame CornerRadius="10" VerticalOptions="FillAndExpand" BackgroundColor="Transparent" InputTransparent="False" BorderColor="Transparent"   HorizontalOptions="FillAndExpand"  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="1" Margin="0,0,0,0"  Padding="0" HasShadow="False"  IsClippedToBounds="True" >
-                                                            <Image
-                       Aspect="AspectFit"
-                        BackgroundColor="Transparent"
-                                          Margin="10"
-                           Source="{Binding ContactImage}"
-                        HorizontalOptions="CenterAndExpand"
-                        VerticalOptions="FillAndExpand"
-                        />
-                                                        </Frame>
-                                                        <Label VerticalOptions="CenterAndExpand" HorizontalOptions="Center" HorizontalTextAlignment="Center" Text="{Binding Title}" FontSize="10"  Margin="0,0,0,0"  TextColor="#031926" FontFamily="HankenGroteskBold"   Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1"/>
-                                                        <!--<Frame CornerRadius="10" VerticalOptions="Start" BackgroundColor="White" BorderColor="White"   HorizontalOptions="FillAndExpand" HeightRequest="80" Margin="0,0,0,0" Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1"  Padding="0" HasShadow="False"  IsClippedToBounds="True" >
-                       <StackLayout>
-                           </StackLayout>
-                       </Frame>-->
-                                                    </Grid>
-                                                </Frame>
-                                            </ViewCell.View>
+                                            <Border StrokeShape="RoundRectangle 10" BackgroundColor="{Binding BackgroundColor}" InputTransparent="True" Stroke="Transparent" Padding="0" Margin="10,0,0,0">
+                                                <Grid Grid.RowDefinitions="Auto,Auto" Grid.ColumnDefinitions="*">
+                                                    <Border StrokeShape="RoundRectangle 10" VerticalOptions="Fill" BackgroundColor="Transparent" InputTransparent="False" Stroke="Transparent"   HorizontalOptions="Fill"  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="1" Margin="0,0,0,0"  Padding="0"  >
+                                                        <Image  Aspect="AspectFit" BackgroundColor="Transparent" Margin="10" Source="{Binding ContactImage}" HorizontalOptions="Center" VerticalOptions="Center" />
+                                                    </Border>
+                                                    <Label VerticalOptions="Fill" HorizontalOptions="Center" LineBreakMode="NoWrap" HorizontalTextAlignment="Center" Text="{Binding Title}" FontSize="10" Margin="0"  Padding="0" TextColor="#031926" FontFamily="HankenGroteskBold"   Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1"/>
+                                                </Grid>
+                                            </Border>
                                         </ViewCell>
                                     </DataTemplate>
                                 </syncfusion:SfListView.ItemTemplate>
@@ -127,6 +101,27 @@
 
                             <Button Text="Check Health data" IsVisible="False" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Clicked="Button_Clicked_6"/>
 
+                            <Grid x:Name="QuestionnairePrompt" IsVisible="False" Grid.RowDefinitions="Auto,Auto" Grid.ColumnDefinitions="*">
+                                <CarouselView  x:Name="QuestionsPrompt" Loop="False"  IndicatorView="QuestionsIndicator"  HeightRequest="80"  Margin="20,5,20,5" Grid.Row="0" HorizontalOptions="Fill"  >
+                                    <CarouselView.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackLayout>
+                                                <Border StrokeShape="RoundRectangle 10" HeightRequest="80" Background="#f9f9fb" Stroke="#e74c3c" StrokeThickness="1" InputTransparent="False" Padding="0,5,0,5">
+                                                    <Grid Margin="0,5,0,5" Grid.RowDefinitions="Auto,Auto" Grid.ColumnDefinitions="15*,85*">
+                                                        <Image Grid.Row="0"  Grid.Column="0" BackgroundColor="Transparent" Margin="0,10,0,0" Grid.RowSpan="2" HeightRequest="30" WidthRequest="30" Source="alert.png" HorizontalOptions="Center" VerticalOptions="Start"  />
+                                                        <Label Text="{Binding title}" FontFamily="HankenGroteskBold"  FontSize="14" Grid.Row="0" Grid.Column="1" Margin="5,0,5,0" TextColor="#e74c3c" />
+                                                        <Label Text="{Binding description}" FontFamily="HankenGroteskRegular"  FontSize="11" Grid.Row="1" Grid.Column="1"  Margin="5,0,10,0" TextColor="#031926" />
+                                                    </Grid>
+                                                    <Border.GestureRecognizers>
+                                                        <TapGestureRecognizer Tapped="QuestionnaireTappedEvent" NumberOfTapsRequired="1"/>
+                                                    </Border.GestureRecognizers>
+                                                </Border>
+                                            </StackLayout>
+                                        </DataTemplate>
+                                    </CarouselView.ItemTemplate>
+                                </CarouselView>
+                                <IndicatorView x:Name="QuestionsIndicator"  IndicatorColor="LightGray" SelectedIndicatorColor="#031926" VerticalOptions="Center" HorizontalOptions="Center" Count="2" Grid.Row="1" Grid.Column="0" IndicatorSize="8" />
+                            </Grid>
 
                             <Border  BackgroundColor="#ff3232" InputTransparent="False" x:Name="completequestionnaireborder" IsVisible="False" StrokeShape="RoundRectangle 10" Stroke="Red"  Padding="0" Margin="20,5,20,5">
                                                     <Grid>

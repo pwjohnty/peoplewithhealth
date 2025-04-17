@@ -268,10 +268,11 @@ public partial class UpdateAllSymptoms : ContentPage
     {
         try
         {
-            var Date = e.NewValue;
-            Datelbl.Text = Date.ToString("dd MMM");
-            var split = Date.ToString().Split(' ');
-            SelectedDate = split[0];
+            if (e.NewValue is DateTime selectedDate)
+            {
+                Datelbl.Text = selectedDate.ToString("dd MMM");
+                SelectedDate = selectedDate.ToString("yyyy-MM-dd"); 
+            }
         }
         catch (Exception Ex)
         {

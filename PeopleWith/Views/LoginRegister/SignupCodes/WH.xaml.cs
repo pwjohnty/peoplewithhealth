@@ -1492,17 +1492,27 @@ public partial class WH : ContentPage
     }
 
 
-    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {
         //priv policy tapped
-
         try
         {
-
+            //Connectivity Changed 
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                string BackArrow = "PeopleWith";
+                await Navigation.PushAsync(new PrivacyPolicy(BackArrow), false);
+            }
+            else
+            {
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
         }
-        catch(Exception ex)
+        catch(Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 

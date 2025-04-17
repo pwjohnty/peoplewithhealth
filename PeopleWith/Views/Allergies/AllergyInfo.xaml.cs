@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using Microsoft.Maui.ApplicationModel;
+using System.Text.RegularExpressions;
 
 namespace PeopleWith;
 
@@ -21,14 +22,32 @@ public partial class AllergyInfo : ContentPage
         //Getinfo[0] = Description 
         Info.title = GetInfo[0];
         //Getinfo[1] = WebLink 
+        string extracted = ExtractDomain(GetInfo[1]);
+        Info.shortlink = extracted;
         Info.link = GetInfo[1];
         //Getinfo[2] = Type (In this Instance 'Web')
-        Info.type = GetInfo[2];
+        Info.type = GetInfo[2] + "site";
         //Set Image 
-        Info.img = "webicon.png";
+        Info.img = "link.png";
+
+        Bodylbl.Text = GetInfo[0];
 
         infoSource.Add(Info);
         infolist.ItemsSource = infoSource;
+    }
+
+    static string ExtractDomain(string url)
+    {
+        try
+        {
+            Match match = Regex.Match(url, @"//([^/]+)");
+            return match.Success ? match.Groups[1].Value : string.Empty;
+        }
+        catch (Exception ex)
+        {
+            return null;
+            //Dunno 
+        }
     }
 
     async private void infolist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)

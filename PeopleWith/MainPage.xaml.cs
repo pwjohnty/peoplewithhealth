@@ -79,7 +79,7 @@ namespace PeopleWith
                             if (split[0] == "On" || biometrics == true)
                             {
                                 await Navigation.PushAsync(new BiometricsLogin(), false);
-                                // Application.Current.MainPage = new NavigationPage(new BiometricsLogin());
+                                 //Application.Current.MainPage = new NavigationPage(new BiometricsLogin());
                             }
                             else
                             {
@@ -90,7 +90,7 @@ namespace PeopleWith
                         else
                         {
                             await Navigation.PushAsync(new BiometricsLogin(), false);
-                           // Application.Current.MainPage = new NavigationPage(new BiometricsLogin());
+                            //Application.Current.MainPage = new NavigationPage(new BiometricsLogin());
                         }
                         
                     }

@@ -15,7 +15,7 @@ using Microsoft.Maui.Hosting;
 using Microsoft.Maui;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Handlers;
-using Sentry;
+//using Sentry;
 using System.Globalization;
 //using Shiny;
 
@@ -47,30 +47,30 @@ namespace PeopleWith
                 .UseLocalNotification()
                 .ConfigureSyncfusionToolkit()
                 .UseSegmentedControl()
-                .UseSentry(options =>
-                {
-                    // The DSN is the only required setting.
-                    options.Dsn = "https://faf4adbbdf143332f8ff986bed5fec3d@o4508890543816704.ingest.de.sentry.io/4508890641858640";
+                //.UseSentry(options =>
+                //{
+                //    // The DSN is the only required setting.
+                //    options.Dsn = "https://faf4adbbdf143332f8ff986bed5fec3d@o4508890543816704.ingest.de.sentry.io/4508890641858640";
 
-                    // Use debug mode if you want to see what the SDK is doing.
-                    // Debug messages are written to stdout with Console.Writeline,
-                    // and are viewable in your IDE's debug console or with 'adb logcat', etc.
-                    // Debug Mode = True/ Release = False;
-                    options.Debug = true;
+                //    // Use debug mode if you want to see what the SDK is doing.
+                //    // Debug messages are written to stdout with Console.Writeline,
+                //    // and are viewable in your IDE's debug console or with 'adb logcat', etc.
+                //    // Debug Mode = True/ Release = False;
+                //    options.Debug = true;
 
-                    options.AttachStacktrace = true;
+                //    options.AttachStacktrace = true;
 
-                    // Set TracesSampleRate to 1.0 to capture 100% of transactions for tracing.
-                    // We recommend adjusting this value in production.
-                    options.TracesSampleRate = 1.0;
+                //    // Set TracesSampleRate to 1.0 to capture 100% of transactions for tracing.
+                //    // We recommend adjusting this value in production.
+                //    options.TracesSampleRate = 1.0;
 
-                    options.MaxBreadcrumbs = 1000;
-                    //options.AttachScreenshot = true;
-                    options.IncludeTextInBreadcrumbs = true;
-                    options.IncludeTitleInBreadcrumbs = true;
-                    options.IncludeBackgroundingStateInBreadcrumbs = true;
+                //    options.MaxBreadcrumbs = 1000;
+                //    //options.AttachScreenshot = true;
+                //    options.IncludeTextInBreadcrumbs = true;
+                //    options.IncludeTitleInBreadcrumbs = true;
+                //    options.IncludeBackgroundingStateInBreadcrumbs = true;
 
-                })
+                //})
 
                 //.UseSkiaSharp()
 #if ANDROID
@@ -160,20 +160,20 @@ namespace PeopleWith
             builder.Services.AddSingleton<MainPage>();
 
 
-            SentrySdk.ConfigureScope(scope =>
-            {
-                scope.User = new SentryUser();
-            });
+            //SentrySdk.ConfigureScope(scope =>
+            //{
+            //    scope.User = new SentryUser();
+            //});
 
-            AppDomain.CurrentDomain.UnhandledException += (s, e) =>
-            {
-                Sentry.SentrySdk.CaptureException(e.ExceptionObject as Exception);
-            };
+            //AppDomain.CurrentDomain.UnhandledException += (s, e) =>
+            //{
+            //    Sentry.SentrySdk.CaptureException(e.ExceptionObject as Exception);
+            //};
 
-            TaskScheduler.UnobservedTaskException += (s, e) =>
-            {
-                Sentry.SentrySdk.CaptureException(e.Exception);
-            };
+            //TaskScheduler.UnobservedTaskException += (s, e) =>
+            //{
+            //    Sentry.SentrySdk.CaptureException(e.Exception);
+            //};
 
 
             return builder.Build();

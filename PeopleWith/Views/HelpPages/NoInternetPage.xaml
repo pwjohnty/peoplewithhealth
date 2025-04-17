@@ -23,7 +23,7 @@ AbsoluteLayout.LayoutFlags="All">
 
             <Label
     Text="No Internet Connection"
-    FontSize="36"
+    FontSize="32"
     Margin="0,20,0,0"
     TextColor="#031926"
     FontFamily="HankenGroteskBold"
@@ -44,7 +44,7 @@ AbsoluteLayout.LayoutFlags="All">
 
         <!-- Buttons at the bottom of the screen -->
         <VerticalStackLayout
-Padding="20,0,20,20"
+Padding="10,0,10,20"
 VerticalOptions="End"
 Spacing="10"
 AbsoluteLayout.LayoutBounds="0,1,1,AutoSize"
