@@ -221,23 +221,23 @@ public partial class MainDashboard : ContentPage
 
                     item.type = item.type.ToUpper();
 
-                    if (signupcodecollection[0].referral == "NOVO")
-                    {
-                        item.Padding = 8;
-                    }
-                    else if (signupcodecollection[0].referral == "SFEWH")
-                    {
-                        item.Padding = 10;
-                    }
-                    else if (signupcodecollection[0].referral == "SFEAT")
-                    {
-                        item.Padding = 7;
-                    }
+                    //if (signupcodecollection[0].referral == "NOVO")
+                    //{
+                    //    item.Padding = 8;
+                    //}
+                    //else if (signupcodecollection[0].referral == "SFEWH")
+                    //{
+                    //    item.Padding = 10;
+                    //}
+                    //else if (signupcodecollection[0].referral == "SFEAT")
+                    //{
+                    //    item.Padding = 7;
+                    //}
 
                 }
 
                 infolist.ItemsSource = signupcodecollection[0].signupcodeinfolist;
-                infolist.HeightRequest = signupcodecollection[0].signupcodeinfolist.Count * 96;
+                //infolist.HeightRequest = signupcodecollection[0].signupcodeinfolist.Count * 96;
 
 
                 //hide Seemore Btn for Saxanda Signup Code 
@@ -929,6 +929,7 @@ public partial class MainDashboard : ContentPage
             else
             {
                 measlbl.IsVisible = false;
+                measlblsub.IsVisible = false;
                // measurementdetaillist.IsVisible = false;
                 measurementnochartdetaillist.IsVisible = false;
                 nomeasurementdataframe.IsVisible = true;
@@ -1222,6 +1223,7 @@ public partial class MainDashboard : ContentPage
             }
             else if (signup.Contains("SFEAT"))
             {
+                var QuestionList = new ObservableCollection<questionnaire>();
                 completequestionnaireborder.IsVisible = true;
 
                 if (userfeedbacklist[0].initialquestionnairefeedbacklist != null)
@@ -1251,11 +1253,21 @@ public partial class MainDashboard : ContentPage
                 }
                 else
                 {
-                    completequestionnaireborder.IsVisible = true;
+                    completequestionnaireborder.IsVisible = false;
 
 
-                   
-                     questionnaireinfotext.Text = "Complete EQ-5D 5L General Health Questionnaire";
+                    string QID = "A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF";
+                    if (questionnaires != null)
+                    {
+                        QuestionList = new ObservableCollection<questionnaire>(questionnaires.Where(q => QID.Contains(q.questionnaireid)));
+                    }
+
+                    QuestionsIndicator.IsVisible = false;
+                    QuestionsPrompt.ItemsSource = QuestionList;
+                    QuestionsPrompt.IsSwipeEnabled = false;
+                    QuestionnairePrompt.IsVisible = true;
+
+                    questionnaireinfotext.Text = "Complete EQ-5D 5L General Health Questionnaire";
                 
 
                 }
@@ -3459,11 +3471,10 @@ public partial class MainDashboard : ContentPage
                 //health report
                 if(bc == "Health Report")
                 {
-                    string Area = text;
                     bool Check = Preferences.Default.Get("NovoHeRep", false);
                     if (Check)
                     {
-                        await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                        await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, bc, userfeedbacklist[0]) { });
                     }
                     else
                     {
@@ -3476,7 +3487,7 @@ public partial class MainDashboard : ContentPage
                     bool Check = Preferences.Default.Get("NovoDiag", false);
                     if (Check)
                     {
-                        await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                        await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, bc, userfeedbacklist[0]) { });
                     }
                     else
                     {
@@ -3485,11 +3496,10 @@ public partial class MainDashboard : ContentPage
                 }
                 else if(bc == "Appointments")
                 {
-                    string Area = text;
                     bool Check = Preferences.Default.Get("NovoAppt", false);
                     if (Check)
                     {
-                        await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                        await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, bc, userfeedbacklist[0]) { });
                     }
                     else
                     {
@@ -3498,11 +3508,10 @@ public partial class MainDashboard : ContentPage
                 }
                 else if (bc == "Measurements")
                 {
-                    string Area = text;
                     bool Check = Preferences.Default.Get("NovoMeas", false);
                     if (Check)
                     {
-                        await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                        await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, bc, userfeedbacklist[0]) { });
                     }
                     else
                     {
@@ -3511,11 +3520,10 @@ public partial class MainDashboard : ContentPage
                 }
                 else if (bc == "Symptoms")
                 {
-                    string Area = text;
                     bool Check = Preferences.Default.Get("NovoSyms", false);
                     if (Check)
                     {
-                        await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                        await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, bc, userfeedbacklist[0]) { });
                     }
                     else
                     {
@@ -3524,11 +3532,10 @@ public partial class MainDashboard : ContentPage
                 }
                 else if (bc == "Mood")
                 {
-                    string Area = text;
                     bool Check = Preferences.Default.Get("NovoMood", false);
                     if (Check)
                     {
-                        await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                        await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, bc, userfeedbacklist[0]) { });
                     }
                     else
                     {
@@ -3556,7 +3563,7 @@ public partial class MainDashboard : ContentPage
                         bool Check = Preferences.Default.Get("NovoSupps", false);
                         if (Check)
                         {
-                            await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                            await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, bc, userfeedbacklist[0]) { });
                         }
                         else
                         {
@@ -3582,11 +3589,10 @@ public partial class MainDashboard : ContentPage
                     }
                     else
                     {
-                        string Area = text;
                         bool Check = Preferences.Default.Get("NovoMeds", false);
                         if (Check)
                         {
-                            await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                            await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, bc, userfeedbacklist[0]) { });
                         }
                         else
                         {
@@ -3995,10 +4001,11 @@ public partial class MainDashboard : ContentPage
             {
                 var signup = Helpers.Settings.SignUp;
 
-                if (signup.Contains("SFEWHA"))
+                if (!string.IsNullOrEmpty(signup))
                 {
                     await Navigation.PushAsync(new AndroidQuestionnaires(tappedItem.questionnaireid, userfeedbacklist[0]), false);
                 }
+
             }
         }
         catch (Exception ex)

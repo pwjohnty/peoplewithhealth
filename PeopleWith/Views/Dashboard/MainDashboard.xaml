@@ -102,7 +102,7 @@
                             <Button Text="Check Health data" IsVisible="False" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Clicked="Button_Clicked_6"/>
 
                             <Grid x:Name="QuestionnairePrompt" IsVisible="False" Grid.RowDefinitions="Auto,Auto" Grid.ColumnDefinitions="*">
-                                <CarouselView  x:Name="QuestionsPrompt" Loop="False"  IndicatorView="QuestionsIndicator"  HeightRequest="80"  Margin="20,5,20,5" Grid.Row="0" HorizontalOptions="Fill"  >
+                                <CarouselView  x:Name="QuestionsPrompt" Loop="False"  IndicatorView="QuestionsIndicator" HorizontalScrollBarVisibility="Never" HeightRequest="80"  Margin="20,5,20,5" Grid.Row="0" HorizontalOptions="Fill"  >
                                     <CarouselView.ItemTemplate>
                                         <DataTemplate>
                                             <StackLayout>
@@ -1065,6 +1065,18 @@ Text="Get Started" />
                                 </Border>
 
 
+                                <!--<Border StrokeShape="RoundRectangle 10"  IsVisible="False" x:Name="nosupdataframe" BackgroundColor="#f9f4e5" Stroke="Transparent" Padding="10" Margin="10,10,10,0">
+                                    <Grid Grid.RowDefinitions="Auto,Auto,Auto" Grid.ColumnDefinitions="25*,75*">
+
+                                        <Image Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Source="supphome.png" Aspect="AspectFit" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
+                                        <Label Text="Set Daily Targets" Grid.Row="0" Grid.Column="1" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="20" Margin="5,0,0,5" HorizontalOptions="Start" />
+                                        <Label Text="In addition to prescribed Medications you can also set up and record your Supplements and Vitamins to present evidence on their effects to your Health Care Professional" Grid.Row="1" Grid.Column="1" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="12" Margin="5,0,0,0" HorizontalOptions="Start" />
+                                        <Button BackgroundColor="#ac5735" HorizontalOptions="FillAndExpand" TextColor="White" Clicked="Button_Clicked_3" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" FontAttributes="None" Margin="10,10,10,10" FontFamily="HankenGroteskBold" Text="Get Started" />
+
+                                    </Grid>
+                                </Border>-->
+
+
                                 <Border StrokeShape="RoundRectangle 10"  x:Name="insightframe" BackgroundColor="White" Stroke="Transparent" Padding="10" Margin="10,10,10,0">
                                     <Grid>
                                         <Grid.RowDefinitions>
@@ -1194,13 +1206,13 @@ HorizontalOptions="Center" />
                             <Label Text="Project Resources" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="18" Margin="20,10,20,0" HorizontalOptions="Start" />
 
 
-                            <syncfusion:SfListView x:Name="infolist" ItemTapped="infolist_ItemTapped" BackgroundColor="#e5f0fb"  CachingStrategy="CreateNewTemplate" IsScrollingEnabled="False"  AutoFitMode="Height"  SelectionBackground="Transparent" ScrollBarVisibility="Never"  Margin="-20,10,-20,0">
+                            <syncfusion:SfListView x:Name="infolist" ItemTapped="infolist_ItemTapped" ItemSpacing="0,5,0,5" BackgroundColor="#e5f0fb"  VerticalOptions="Fill" CachingStrategy="CreateNewTemplate" IsScrollingEnabled="False"  AutoFitMode="Height"  SelectionBackground="Transparent" ScrollBarVisibility="Never"  Margin="-20,10,-20,0" >
                                 <syncfusion:SfListView.ItemTemplate>
                                     <!--<SfListView x:Name="dflist" BackgroundColor="Transparent"  RowHeight="60" SeparatorVisibility="None" Margin="20,0,20,0" SeparatorColor="LightGray" ItemTapped="dflist_ItemTapped">
                                  <SfListView.ItemTemplate>-->
                                     <DataTemplate>
                                         <ViewCell>
-                                            <Border Stroke="White" x:Name="infolistPadd" StrokeThickness="1" Margin="30,10,30,0"  StrokeShape="RoundRectangle 10" Padding="10" Background="White" HorizontalOptions="FillAndExpand">
+                                            <Border Stroke="White" x:Name="infolistPadd" StrokeThickness="1" Margin="30,0,30,0"  StrokeShape="RoundRectangle 10" Padding="10" Background="White" HorizontalOptions="Fill">
                                                 <Grid Margin="0,10,0,0" Padding="0"  >
                                                     <Grid.RowDefinitions>
                                                         <RowDefinition Height="Auto"/>

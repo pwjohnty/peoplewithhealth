@@ -45,6 +45,7 @@ public partial class ActivitySchedule : ContentPage
         {
             InitializeComponent();
             GetActivityInfo();
+            NovoConsentData();
         }
         catch (Exception Ex)
         {
@@ -61,10 +62,32 @@ public partial class ActivitySchedule : ContentPage
             //Update Listview on Add of New Activity 
             AllUserActivity = UpdatedActivities;
             GetActivityInfo();
+            NovoConsentData();
         }
         catch (Exception Ex)
         {
             ActivityLoading.IsVisible = false;
+            NotasyncMethod(Ex);
+        }
+    }
+
+    private void NovoConsentData()
+    {
+        try
+        {
+            if (!String.IsNullOrEmpty(Helpers.Settings.SignUp))
+            {
+                var signup = Helpers.Settings.SignUp;
+                if (signup.Contains("SAX"))
+                { //All Novo SignupCodes 
+                    NovoConsent.IsVisible = true;
+                    NovoContentlbl.Text = Preferences.Default.Get("NovoContent", String.Empty);
+                    NovoExitidlbl.Text = Preferences.Default.Get("NovoExitid", String.Empty);
+                }
+            }
+        }
+        catch (Exception Ex)
+        {
             NotasyncMethod(Ex);
         }
     }

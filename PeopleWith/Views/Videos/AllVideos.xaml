@@ -184,7 +184,7 @@
                                             <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" HeightRequest="100" WidthRequest="220" Source="{Binding thumbnail}" />
                                         </Frame>
                                         <Label Text="{Binding title}" Margin="5,0,0,0" Grid.Row="0" Grid.Column="1" HeightRequest="20" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" FontSize="14" FontFamily="HankenGroteskBold" />
-                                        <Label Text="{Binding subtitleshort}" Margin="5,0,0,0" Grid.Row="1" Grid.Column="1" HeightRequest="55" HorizontalOptions="Start" VerticalOptions="Start" TextColor="DarkGray" FontSize="12" FontFamily="HankenGroteskBold" />
+                                        <Label Text="{Binding subtitleshort}" Margin="5,0,0,0" LineBreakMode="TailTruncation" MaxLines="3" Grid.Row="1" Grid.Column="1" HeightRequest="55" HorizontalOptions="Start" VerticalOptions="Start" TextColor="DarkGray" FontSize="12" FontFamily="HankenGroteskBold" />
                                         <Label Text="{Binding dateandlength}" Margin="5,0,0,0" Grid.Row="2" Grid.Column="1" HeightRequest="20" HorizontalOptions="Start" VerticalOptions="Start" TextColor="DarkGray" FontSize="12" FontFamily="HankenGroteskRegular" />
                                     </Grid>
                                 </Border>

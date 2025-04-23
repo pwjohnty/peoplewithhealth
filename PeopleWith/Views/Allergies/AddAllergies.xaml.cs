@@ -157,7 +157,7 @@ public partial class AddAllergies : ContentPage
 
                     APICalls database = new APICalls();
                     AddedAllergy = await database.PostUserAllergiesAsync(AllergytoAdd);
-                    await MopupService.Instance.PushAsync(new PopupPageHelper("Allery Added") { });
+                    await MopupService.Instance.PushAsync(new PopupPageHelper("Allergy Added") { });
                     await Task.Delay(1500);
 
                     foreach (var item in AddedAllergy)

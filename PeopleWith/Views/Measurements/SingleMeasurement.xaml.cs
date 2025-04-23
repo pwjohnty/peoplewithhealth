@@ -1245,6 +1245,7 @@ public partial class SingleMeasurement : ContentPage
                 }
                 else
                 {
+                    Deltebtn.IsEnabled = true;
                     return;
                 }
                

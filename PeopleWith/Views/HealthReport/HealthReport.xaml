@@ -2,7 +2,9 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PeopleWith.HealthReport" BackgroundColor="White">
-    <StackLayout>
+    <ScrollView>
+        <StackLayout>
+
     <Grid  x:Name="HealthReportStack" Margin="0,10,0,0" IsVisible="False">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -12,10 +14,9 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Button BackgroundColor="#031926" CornerRadius="5" FontFamily="HankenGroteskBold" TextColor="White" Margin="20,0,20,5" Grid.Row="0" HeightRequest="40" Text="Print Health Report" Clicked="Button_Clicked" />
-
-        <WebView x:Name="HealthReportViewer" Grid.Row="1" Navigated="HealthReportViewer_Navigated" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"  />
-    </Grid>
+            <Button BackgroundColor="#031926" CornerRadius="5" FontFamily="HankenGroteskBold" TextColor="White" Margin="20,0,20,5" Grid.Row="0" HeightRequest="40" Text="Print Health Report" Clicked="Button_Clicked" />
+            <WebView x:Name="HealthReportViewer" Grid.Row="1" Navigated="HealthReportViewer_Navigated" HorizontalOptions="Fill" VerticalOptions="Fill"  />
+        </Grid>
 
     <Grid VerticalOptions="CenterAndExpand" x:Name="LoadingStack">
         <Grid.RowDefinitions>
@@ -34,8 +35,10 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Label x:Name="NovoContentlbl"  Margin="0,0,0,0" FontFamily="HankenGroteskBold" HorizontalOptions="Center"  FontSize="8" VerticalOptions="Center" Grid.Row="0" Grid.Column="0" TextColor="#031926" />
+                <Label x:Name="NovoContentlbl"  Margin="0,0,0,0" FontFamily="HankenGroteskBold" HorizontalOptions="Center" HorizontalTextAlignment="Justify"  FontSize="8" VerticalOptions="Center" Grid.Row="0" Grid.Column="0" TextColor="#031926" />
             <Label x:Name="NovoExitidlbl"  FontFamily="HankenGroteskBold" VerticalOptions="Start" Margin="0,5,0,0" HorizontalOptions="Center" FontSize="8" Grid.Row="1" Grid.Column="0"  TextColor="#031926"/>
         </Grid>
+
     </StackLayout>
+    </ScrollView>
 </ContentPage>

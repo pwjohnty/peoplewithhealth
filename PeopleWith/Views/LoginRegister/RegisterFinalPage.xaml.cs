@@ -36,6 +36,7 @@ public partial class RegisterFinalPage : ContentPage
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
     userfeedback userfeedbacklistpassed = new userfeedback();
+    userfeedback UserFeedbackToAdd = new userfeedback();
 
     async public void NotasyncMethod(Exception Ex)
     {
@@ -715,6 +716,11 @@ public partial class RegisterFinalPage : ContentPage
 
                     if (usermeasurementpassed != null)
                     {
+                        if (userfeedbacklistpassed.measurementfeedbacklist == null)
+                        {
+                            userfeedbacklistpassed.measurementfeedbacklist = new ObservableCollection<feedbackdata>();
+                        }
+
                         //add the user measurement
                         foreach (var item in usermeasurementpassed)
                         {
@@ -726,7 +732,21 @@ public partial class RegisterFinalPage : ContentPage
                             if (response.IsSuccessStatusCode)
                             {
                             }
+
+                            //add to feedback list
+                            var newmeas = new feedbackdata();
+                            newmeas.id = item.id;
+                            newmeas.value = item.value;
+                            newmeas.datetime = item.inputdatetime;
+                            newmeas.action = "update";
+                            newmeas.label = item.measurementname;
+                            newmeas.unit = item.unit;
+
+                            userfeedbacklistpassed.measurementfeedbacklist.Add(newmeas);
                         }
+
+                        string newMeasJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.measurementfeedbacklist);
+                        userfeedbacklistpassed.measurementfeedback = newMeasJson;
                     }
                 }
                 else

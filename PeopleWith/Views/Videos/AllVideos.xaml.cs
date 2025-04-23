@@ -52,6 +52,10 @@ public partial class AllVideos : ContentPage
         {
             VidsLoading.IsVisible = true;
             var signupCode = Helpers.Settings.SignUp;
+            if (string.IsNullOrEmpty(signupCode))
+            {
+                signupCode = null;
+            }
             var GetVideos = aPICalls.GetAllVideos();
             //var GetEngagement = aPICalls.GetAllVideosEngagement(); 
 
@@ -66,12 +70,12 @@ public partial class AllVideos : ContentPage
 
             foreach(var item in AllVideosList)
             {
-                if (item.signupcodeid == null && item.referral == null)
+                //Add items with no Signup && Refferral 
+                if (item.referral == null)
                 {
                     VideosList.Add(item);
                 }
-                else if ((item.signupcodeid != null && item.signupcodeid.Contains(signupCode)) ||
-           (item.referral != null && item.referral.Contains(signupCode)))
+                else if (signupCode != null && item.referral.Contains(signupCode))
                 {
                     VideosList.Add(item);
                 }

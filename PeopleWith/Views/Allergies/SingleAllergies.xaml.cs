@@ -115,7 +115,7 @@ public partial class SingleAllergies : ContentPage
                     APICalls database = new APICalls();
                     await database.DeleteUserAllergy(AllergyPassed);
 
-                    await MopupService.Instance.PushAsync(new PopupPageHelper("Allery Deleted") { });
+                    await MopupService.Instance.PushAsync(new PopupPageHelper("Allergy Deleted") { });
                     await Task.Delay(1500);
 
                     foreach (var item in AllUserAllergies)

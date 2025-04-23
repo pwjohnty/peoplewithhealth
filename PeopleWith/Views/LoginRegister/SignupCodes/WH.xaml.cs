@@ -59,6 +59,7 @@ public partial class WH : ContentPage
     ObservableCollection<answer> GetCommPref = new ObservableCollection<answer>();
 
     ObservableCollection<usermeasurement> addusermeasurements = new ObservableCollection<usermeasurement>();
+    userfeedback UserFeedbackToAdd = new userfeedback();
 
     List<string> commprefaddedlist = new List<string>();
 
@@ -759,6 +760,7 @@ public partial class WH : ContentPage
             umheight.userid = newuser.userid;
             umheight.inputdatetime = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
             addusermeasurements.Add(umheight);
+          
 
             //add weight
             var umweight = new usermeasurement();
@@ -769,6 +771,7 @@ public partial class WH : ContentPage
             umweight.userid = newuser.userid;
             umweight.inputdatetime = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
             addusermeasurements.Add(umweight);
+            
 
             //add bmi
             var umbmi = new usermeasurement();
@@ -779,9 +782,7 @@ public partial class WH : ContentPage
             umbmi.userid = newuser.userid;
             umbmi.inputdatetime = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
             addusermeasurements.Add(umbmi);
-
-
-
+          
             hwframe.IsVisible = false;
             genderatbirthframe.IsVisible = true;
             skipbtn.IsVisible = false;
