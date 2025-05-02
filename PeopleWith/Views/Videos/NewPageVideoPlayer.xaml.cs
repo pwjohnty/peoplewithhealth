@@ -55,17 +55,17 @@ public partial class NewPageVideoPlayer : ContentPage
 
         MediaElement.Source = videolink;
 
-        if (DeviceInfo.Current.Platform == DevicePlatform.iOS)
-        {
-            Task.Delay(100).ContinueWith(t =>
-            {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    Navigation.RemovePage(this);
-                });
-            });
-            return;
-        }
+        //if (DeviceInfo.Current.Platform == DevicePlatform.iOS)
+        //{
+        //    Task.Delay(100).ContinueWith(t =>
+        //    {
+        //        Device.BeginInvokeOnMainThread(() =>
+        //        {
+        //            Navigation.RemovePage(this);
+        //        });
+        //    });
+        //    return;
+        //}
 
         var zeroTimeSpan = TimeSpan.Zero;
 

@@ -382,7 +382,10 @@
     <MauiXaml Update="Views\DailyActivity\SingleDailyActivity.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
-    <MauiXaml Update="Views\Dashboard\HealthDataPage.xaml">
+    <MauiXaml Update="Views\FitnessHealth\AllFitness.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\FitnessHealth\HealthDataPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
     <MauiXaml Update="Views\Dashboard\MainDashboard.xaml">
