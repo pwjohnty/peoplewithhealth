@@ -37,6 +37,7 @@ public partial class RegisterFinalPage : ContentPage
     CrashDetected crashHandler = new CrashDetected();
     userfeedback userfeedbacklistpassed = new userfeedback();
     userfeedback UserFeedbackToAdd = new userfeedback();
+    userdiet DietToAdd = new userdiet(); 
 
     async public void NotasyncMethod(Exception Ex)
     {
@@ -218,7 +219,7 @@ public partial class RegisterFinalPage : ContentPage
         }
     }
 
-    public RegisterFinalPage(user userpass, double progress, ObservableCollection<userresponse> userresponsep, consent additonalcon, ObservableCollection<usersymptom> usersymptompassed, ObservableCollection<usermedication> usermedicationspassed, ObservableCollection<userdiagnosis> userdiagpassed, ObservableCollection<usermeasurement> usermeasurementspass)
+    public RegisterFinalPage(user userpass, double progress, ObservableCollection<userresponse> userresponsep, consent additonalcon, ObservableCollection<usersymptom> usersymptompassed, ObservableCollection<usermedication> usermedicationspassed, ObservableCollection<userdiagnosis> userdiagpassed, ObservableCollection<usermeasurement> usermeasurementspass, userdiet DietPassed)
     {
         try
         {
@@ -234,6 +235,7 @@ public partial class RegisterFinalPage : ContentPage
             //userdiag = userdiagpassed;
             usermeasurementpassed = usermeasurementspass;
             userdiagnosispassed = userdiagpassed;
+            DietToAdd = DietPassed;
 
             if (additonalcon != null)
             {
@@ -672,7 +674,11 @@ public partial class RegisterFinalPage : ContentPage
                     if (medicationstoadd != null || medicationstoadd.Count != 0)
                     {
                         //add the medications
-                        foreach (var item in medicationstoadd)
+                        //Ensures the same Diagnosis isnt added twice
+                        var distinctMeds = medicationstoadd.GroupBy(x => x.medicationid).Select(g => g.First());
+                        //Previous 
+                        //foreach (var item in medicationstoadd)
+                        foreach (var item in distinctMeds)
                         {
                             var url = APICalls.InsertUserMedications;
                             string jsonn = System.Text.Json.JsonSerializer.Serialize<usermedication>(item, serializerOptions);
@@ -700,7 +706,11 @@ public partial class RegisterFinalPage : ContentPage
 
                     if (userdiagnosispassed != null || userdiagnosispassed.Count != 0)
                     {
-                        foreach (var item in userdiagnosispassed)
+                        //Ensures the same Diagnosis isnt added twice
+                        var distinctDiagnoses = userdiagnosispassed.GroupBy(x => x.diagnosisid).Select(g => g.First());
+                        //Previous 
+                        //foreach (var item in userdiagnosispassed)
+                        foreach (var item in distinctDiagnoses)
                         {
                             //add the user diagnosis
                             var url = APICalls.InsertUserDiagnosis;
@@ -711,6 +721,18 @@ public partial class RegisterFinalPage : ContentPage
                             if (response.IsSuccessStatusCode)
                             {
                             }
+                        }
+                    }
+                    if(DietToAdd != null)
+                    {
+                        //add the user Diet
+                        var url = APICalls.InsertUserDiet;
+                        string jsonn = System.Text.Json.JsonSerializer.Serialize<userdiet>(DietToAdd, serializerOptions);
+                        StringContent contenttt = new StringContent(jsonn, Encoding.UTF8, "application/json");
+                        response = await Client.PostAsync(url, contenttt);
+
+                        if (response.IsSuccessStatusCode)
+                        {
                         }
                     }
 
@@ -889,10 +911,13 @@ public partial class RegisterFinalPage : ContentPage
 
                 // Preferences.Default.Set("validationcode", newuser.validationcode);
 
-                await Task.Delay(3000);
-                MainThread.BeginInvokeOnMainThread(() =>
+                Task.Run(async () =>
                 {
-                    Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                    await Task.Delay(100); // Simulate processing time if necessary
+                    MainThread.BeginInvokeOnMainThread(async () =>
+                    {
+                        Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                    });
                 });
 
                 //Application.Current.MainPage = new NavigationPage(new MainDashboard());

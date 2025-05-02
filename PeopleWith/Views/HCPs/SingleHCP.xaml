@@ -5,7 +5,7 @@
              x:Class="PeopleWith.SingleHCP" BackgroundColor="White"
              NavigationPage.HasNavigationBar="True">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Clicked="ToolbarItem_Clicked" x:Name="Editbtn" Text="Edit HCP" />
+        <ToolbarItem Clicked="ToolbarItem_Clicked" CommandParameter="Edit" x:Name="Editbtn" Text="Edit HCP" />
     </ContentPage.ToolbarItems>
     <ScrollView>
     <VerticalStackLayout >
@@ -184,10 +184,13 @@
             </StackLayout>
 
             <!-- Contact Details -->
-            <Label Text="Contact Details"  FontSize="20" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
-        
-        <!-- Appointments Assocaited with Doc-->
-            <Frame HasShadow="false" Margin="20,5,20,0" BorderColor="#CBC3E3" Padding="-2" BackgroundColor="Transparent" >
+            <Label  x:Name="ContactDetailslbl" FontSize="20" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
+
+            <Button BackgroundColor="#CBC3E3" x:Name="AddContactDetails" IsVisible="False" Text="Add Contact Details" Clicked="ToolbarItem_Clicked" CommandParameter="AddContact" HorizontalOptions="FillAndExpand" TextColor="#9F2B68" FontAttributes="None"  Margin="20,10,20,0" FontFamily="HankenGroteskBold"  />
+
+
+            <!-- Appointments Assocaited with Doc-->
+            <Frame HasShadow="false" x:Name="HCPContactFrame" IsVisible="False" Margin="20,5,20,0" BorderColor="#CBC3E3" Padding="-2" BackgroundColor="Transparent" >
                 <syncfusion:SfListView x:Name="HCPContactDetails" SelectionBackground="Transparent" AutoFitMode="Height" >
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
@@ -215,6 +218,11 @@
                     </syncfusion:SfListView.ItemTemplate>
                 </syncfusion:SfListView>
             </Frame>
+
+            <!--<Label Text="Appointments"  IsVisible="True" FontSize="20" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
+
+            <Label IsVisible="True" FontSize="12" Margin="20,5,0,0" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />-->
+
 
 
             <Label Text="Appointments" x:Name="showalllbl1" IsVisible="True" FontSize="20" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />

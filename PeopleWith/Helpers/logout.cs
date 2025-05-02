@@ -22,7 +22,7 @@ namespace PeopleWith
             try
             {
                 //clear local notifcations
-                LocalNotificationCenter.Current.ClearAll();
+                LocalNotificationCenter.Current.CancelAll();
 
                 //clear tags for azure notications
                 var notificationService = new PWNotificationService();

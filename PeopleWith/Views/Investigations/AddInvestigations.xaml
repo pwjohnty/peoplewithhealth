@@ -39,7 +39,7 @@
                             </Grid.ColumnDefinitions>
                             <Image Source="searchdarkblue.png" HorizontalOptions="Center" HeightRequest="15" BackgroundColor="Transparent" WidthRequest="15"  Grid.Row="0" Grid.Column="0"  />
                             <Entry Grid.Row="0" Grid.Column="1" FontFamily="HankenGroteskRegular" IsTextPredictionEnabled="False" IsSpellCheckEnabled="False" x:Name="searchbar"  ClearButtonVisibility="Never" InputTransparent="False"  TextChanged="searchbar_TextChanged"
-                                   Placeholder="Search Diet"  BackgroundColor="Transparent" Background="Transparent" HeightRequest="60"  TextColor="#2C2E43"/>
+                                   Placeholder="Search Investigation"  BackgroundColor="Transparent" Background="Transparent" HeightRequest="60"  TextColor="#2C2E43"/>
                             <Frame x:Name="FilterTap" HasShadow="False" BackgroundColor="Transparent" BorderColor="Transparent"  Grid.Row="0" Grid.Column="3">
                                 <Image Source="filterdarkblue.png" HeightRequest="15" BackgroundColor="Transparent" WidthRequest="15"  Grid.Row="0" Grid.Column="3"  />
                                 <Frame.GestureRecognizers>

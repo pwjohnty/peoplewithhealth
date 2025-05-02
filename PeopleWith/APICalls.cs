@@ -40,6 +40,7 @@ namespace PeopleWith
         public const string InsertUserDiagnosis = "https://pwapi.peoplewith.com/api/userdiagnosis/";
         public const string InsertUserMeasurements = "https://pwapi.peoplewith.com/api/usermeasurement/";
         public const string usersymptoms = "https://pwapi.peoplewith.com/api/usersymptom";
+        public const string InsertUserDiet = "https://pwapi.peoplewith.com/api/userdiet/";
         //CrashLog  
         public const string CrashLog = "https://pwapi.peoplewith.com/api/crashlog";
 
@@ -525,15 +526,40 @@ namespace PeopleWith
             }
         }
 
-        public async Task<bool> GetSymptonsInput(usersymptom CheckSymptom)
+        public async Task<bool> GetSymptonsInput(string symptomID)
         {
             try
             {
-                var id = CheckSymptom.symptomid;
+                //var id = CheckSymptom.symptomid;
+                var id = symptomID;
                 var url = $"https://pwapi.peoplewith.com/api/symptom/symptomid/{id}";
                 var fullurl = $"{url}?$select=imageinput";
                 ConfigureClient();
                 HttpResponseMessage response = await Client.GetAsync(fullurl);
+                string data = await response.Content.ReadAsStringAsync();
+
+                var jsonObject = JObject.Parse(data);
+                bool imageInput = jsonObject["value"]?[0]?["imageinput"]?.Value<bool>() ?? false;
+                return imageInput;
+
+            }
+            catch (Exception ex)
+            {
+                return true;
+            }
+        }
+
+        public async Task<bool> GetSymptonsInputbyName(string SymptomName)
+        {
+            try
+            {
+                //Search By Name (No SymptomId in UserFeedback) 
+                var Name = SymptomName;
+                var url = $"https://pwapi.peoplewith.com/api/symptom/";
+                string urlWithQuery = $"{url}?$filter=title eq '{Name}'";
+                ConfigureClient();
+                HttpResponseMessage response = await Client.GetAsync(urlWithQuery);
+
                 string data = await response.Content.ReadAsStringAsync();
 
                 var jsonObject = JObject.Parse(data);
@@ -1036,6 +1062,38 @@ namespace PeopleWith
             catch (Exception ex)
             {
                 return;
+            }
+        }
+
+        public async Task DeletePendingMedications(ObservableCollection<usermedication> deletelistpassed)
+        {
+            try
+            {
+                for (int i = 0; i < deletelistpassed.Count; i++)
+                {
+                    var url = $"https://pwapi.peoplewith.com/api/usermedication/id/{deletelistpassed[i].id}";
+                    string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = deletelistpassed[i].deleted });
+                    StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                    ConfigureClient();
+                    using (var client = new HttpClient())
+                    {
+                        var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                        {
+                            Content = content
+                        };
+
+                        var response = await Client.SendAsync(request);
+
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            var errorResponse = await response.Content.ReadAsStringAsync();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
             }
         }
 
@@ -2471,10 +2529,11 @@ namespace PeopleWith
 
 
         //Get All User Videos
-        public async Task<ObservableCollection<videos>> GetAllVideos()
+        public async Task<ObservableCollection<videos>> GetAllVideos(string ReturnType)
         {
             try
             {
+
                 ObservableCollection<videos> itemstoremove = new ObservableCollection<videos>();
                 var urls = APICalls.Videos;
                 ConfigureClient();
@@ -2487,12 +2546,33 @@ namespace PeopleWith
                     var consent = userResponseconsent.Value;
 
                     //Remove All Deleted Items 
+                    var signupid = Helpers.Settings.SignUp;
                     foreach (var item in consent)
                     {
-                        if (item.deleted == true)
+                        //Return All items Including SignupCode 
+                        if(ReturnType == "All")
                         {
-                            itemstoremove.Add(item);
+                            if (item.deleted == true)
+                            {
+                                itemstoremove.Add(item);
+                            }
                         }
+                        //Just Return SignupCode Items 
+                        else
+                        {
+                            bool Check = (!string.IsNullOrEmpty(item.referral) && item.referral.Contains(signupid)) ||
+                                (!string.IsNullOrEmpty(item.signupcodeid) && item.signupcodeid.Contains(signupid));
+
+                            if (item.deleted == true)
+                            {
+                                itemstoremove.Add(item);
+                            }
+                            if (!Check)
+                            {
+                                itemstoremove.Add(item);
+                            }
+                        }
+
 
                         item.dateandlength = item.dateadded + " " + "Length: " + item.lenght;
                         item.thumbnail = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/" + item.thumbnail;
@@ -2594,65 +2674,80 @@ namespace PeopleWith
             }
         }
 
-        public async Task<ObservableCollection<videos>> GetAllVideoswithsignupcode()
-        {
-            try
-            {
-                ObservableCollection<videos> itemstoremove = new ObservableCollection<videos>();
-                //var urls = APICalls.Videos;
-                // var signupcode = Helpers.Settings.SignUp;
-                var signupcode = Helpers.Settings.SignUp;
-                string urlWithQuery = $"{Videos}?$filter=referral eq '{signupcode}'";
-                ConfigureClient();
-                HttpResponseMessage responseconsent = await Client.GetAsync(urlWithQuery);
+        //public async Task<ObservableCollection<videos>> GetAllVideoswithsignupcode()
+        //{
+        //    try
+        //    {
+        //        ObservableCollection<videos> itemstoremove = new ObservableCollection<videos>();
+        //        var urls = APICalls.Videos;
+        //        ConfigureClient();
+        //        HttpResponseMessage responseconsent = await Client.GetAsync(urls);
+        //        //var urls = APICalls.Videos;
+        //        // var signupcode = Helpers.Settings.SignUp;
+        //        //var signupcode = Helpers.Settings.SignUp;
+        //        //string urlWithQuery = $"{Videos}?$filter=referral eq '{signupcode}'";
+        //        //string encodedSignupCode = Uri.EscapeDataString(signupcode);
+        //        //public const string Videos = "https://pwapi.peoplewith.com/api/video";
+        //        //string urlWithQuery = $"{Videos}?$filter=contains(referral, '{signupcode}') or contains(signupcodeid, '{signupcode}')";
+        //        //string urlWithQuery = $"{Videos}?$filter=referral eq '{encodedSignupCode}' or contains(signupcodeid, '{encodedSignupCode}')";
+        //        //string urlWithQuery = $"{Videos}?$filter=referral eq '{signupcode}' and contains(signupcodeid, '{signupcode}')";
+        //        //ConfigureClient();
+        //        //HttpResponseMessage responseconsent = await Client.GetAsync(urlWithQuery);
 
-                if (responseconsent.IsSuccessStatusCode)
-                {
-                    string contentconsent = await responseconsent.Content.ReadAsStringAsync();
-                    var userResponseconsent = JsonConvert.DeserializeObject<ApiResponseVideos>(contentconsent);
-                    var consent = userResponseconsent.Value;
+        //        if (responseconsent.IsSuccessStatusCode)
+        //        {
+        //            string contentconsent = await responseconsent.Content.ReadAsStringAsync();
+        //            var userResponseconsent = JsonConvert.DeserializeObject<ApiResponseVideos>(contentconsent);
+        //            var consent = userResponseconsent.Value;
+        //            var signupid = Helpers.Settings.SignUp; 
+        //            //Remove All Deleted Items 
+        //            foreach (var item in consent)
+        //            {
+        //                bool Check = (!string.IsNullOrEmpty(item.referral) && item.referral.Contains(signupid)) ||
+        //                    (!string.IsNullOrEmpty(item.signupcodeid) && item.signupcodeid.Contains(signupid));
 
-                    //Remove All Deleted Items 
-                    foreach (var item in consent)
-                    {
-                        if (item.deleted == true)
-                        {
-                            itemstoremove.Add(item);
-                        }
+        //                if (item.deleted == true)
+        //                {
+        //                    itemstoremove.Add(item);
+        //                }
+        //                if (!Check)
+        //                {
+        //                    itemstoremove.Add(item);
+        //                }
 
-                        item.dateandlength = item.dateadded + " " + "Length: " + item.lenght;
-                        item.thumbnail = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/" + item.thumbnail;
-                        item.filename = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/" + item.filename;
+        //                item.dateandlength = item.dateadded + " " + "Length: " + item.lenght;
+        //                item.thumbnail = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/" + item.thumbnail;
+        //                item.filename = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/" + item.filename;
 
-                        if (item.subtitle.Length > 122)
-                        {
-                            var SubString = item.subtitle.Substring(0, 122) + "...";
-                            item.subtitleshort = SubString;
-                        }
-                        else
-                        {
-                            item.subtitleshort = item.subtitle;
-                        }
-                    }
+        //                if (item.subtitle.Length > 122)
+        //                {
+        //                    var SubString = item.subtitle.Substring(0, 122) + "...";
+        //                    item.subtitleshort = SubString;
+        //                }
+        //                else
+        //                {
+        //                    item.subtitleshort = item.subtitle;
+        //                }
+        //            }
 
-                    foreach (var item in itemstoremove)
-                    {
-                        consent.Remove(item);
-                    }
+        //            foreach (var item in itemstoremove)
+        //            {
+        //                consent.Remove(item);
+        //            }
 
-                    return new ObservableCollection<videos>(consent);
+        //            return new ObservableCollection<videos>(consent);
 
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-        }
+        //        }
+        //        else
+        //        {
+        //            return null;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return null;
+        //    }
+        //}
 
         //Update Video Engagement 
         public async Task<videoengage> PostEngagementAsync(videoengage PassedEngagement)

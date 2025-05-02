@@ -37,7 +37,7 @@
                         <syncfusion:SfListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
-                                    <Grid HorizontalOptions="FillAndExpand" RowSpacing="10" Margin="0,10,0,0" Padding="0"  >
+                                    <Grid HorizontalOptions="Fill" Background="White" RowSpacing="10" Margin="0,10,0,0" Padding="0"  >
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>

@@ -11,7 +11,7 @@
         <Label x:Name="Bodylbl" FontSize="16" Margin="0,10,0,0" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
 
 
-            <Border StrokeShape="RoundRectangle 10"  BackgroundColor="Transparent" Stroke="#e8efd8"  Padding="10"   Margin="0,10,0,0">
+            <Border x:Name="WebsiteStack" StrokeShape="RoundRectangle 10"  BackgroundColor="Transparent" Stroke="#e8efd8"  Padding="10"   Margin="0,10,0,0">
             <Grid Margin="0,0,0,0" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>

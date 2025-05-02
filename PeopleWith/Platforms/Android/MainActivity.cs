@@ -19,6 +19,7 @@ using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Storage;
 using Microsoft.Maui;
 using Android.Runtime;
+using AndroidX.Activity;
 
 namespace PeopleWith
 {
@@ -43,6 +44,28 @@ namespace PeopleWith
             base.OnCreate(savedInstanceState);
             // Window.SetStatusBarColor(Android.Graphics.Color.Transparent);
             // Window.SetNavigationBarColor(Android.Graphics.Color.Transparent);
+
+            //Android on back Pressed 
+            //OnBackPressedDispatcher.AddCallback(this, new BackPressed(this));
+
+
+            //OnBackPressedDispatcher.OnBackPressed += async (sender, e) =>
+            //{
+            //    var navigation = Application.Current.MainPage?.Navigation;
+
+            //    if (navigation != null && navigation.NavigationStack.Count > 1)
+            //    {
+            //        await MainThread.InvokeOnMainThreadAsync(async () =>
+            //        {
+            //            await navigation.PopAsync();
+            //        });
+            //    }
+            //    else
+            //    {
+            //        Finish(); // or moveTaskToBack(true) if you want it to go to background
+            //    }
+            //};
+
             Instance = this;
             //Initalize Fingerprint 
             //CrossFingerprint.SetCurrentActivityResolver(() => this);
@@ -80,8 +103,36 @@ namespace PeopleWith
             {
                 HandleNotificationTap(Intent);
             }
-
         }
+
+        //internal class BackPressed : OnBackPressedCallback
+        //{
+        //    private readonly Activity activity;
+        //    private long backPressed;
+        //    public BackPressed(Activity activity) : base(true)
+        //    {
+        //        this.activity = activity;
+        //    }
+        //    public override void HandleOnBackPressed()
+        //    {
+        //        var navigation = Microsoft.Maui.Controls.Application.Current?.MainPage?.Navigation;
+        //        if (navigation is not null && navigation.NavigationStack.Count <= 1 && navigation.ModalStack.Count <= 0)
+        //        {
+        //            const int delay = 2000;
+        //            if (backPressed + delay > DateTimeOffset.UtcNow.ToUnixTimeMilliseconds())
+        //            {
+        //                activity.FinishAndRemoveTask();
+        //                Process.KillProcess(Process.MyPid());
+        //            }
+        //            else
+        //            {
+        //                activity.MoveTaskToBack(true);
+        //                //Toast.MakeText(activity, "Close", ToastLength.Long)?.Show();
+        //                //backPressed = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        //            }
+        //        }
+        //    }
+        //}
 
         private void initFontScale()
         {
@@ -174,16 +225,23 @@ namespace PeopleWith
 
         public override void OnBackPressed()
         {
-            // Handle the back button press
-            // You can show a dialog, navigate to a different page, or cancel the action
+            //    var currentPage = MainPage.Navigation.NavigationStack.LastOrDefault();
 
-            // For example, to cancel the back button press:
-            // base.OnBackPressed(); // Uncomment this line if you want to allow the default behavior
+            //    var navigation = Application.Current.MainPage;
 
-            // Alternatively, if you want to perform some action:
-            // DisplayAlert("Back button pressed", "The back button was pressed and handled.", "OK");
-
-            // To cancel the back button action, do not call the base method
+            //    if (navigation != null && navigation.NavigationStack.Count > 1)
+            //    {
+            //        // Remove the top page
+            //        MainThread.BeginInvokeOnMainThread(async () =>
+            //        {
+            //            await navigation.PopAsync(); 
+            //        });
+            //    }
+            //    else
+            //    {
+            //        // It's the root page, allow default back behavior (e.g., app exits)
+            //        base.OnBackPressed();
+            //    }
         }
 
         // Add this method to handle the navigation

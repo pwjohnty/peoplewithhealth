@@ -50,7 +50,8 @@ public partial class UpdateSingleSymptom : ContentPage
     bool edit;
     bool dashupdate;
     private byte[] ResizedImage;
-    bool ShowhideImageIput = false; 
+    bool ShowhideImageIput = false;
+    string SymptomTitlePassed;
 
     private const string StorageConnectionString = "DefaultEndpointsProtocol=https;AccountName=peoplewithappiamges;AccountKey=9maBMGnjWp6KfOnOuXWHqveV4LPKyOnlCgtkiKQOeA+d+cr/trKApvPTdQ+piyQJlicOE6dpeAWA56uD39YJhg==;EndpointSuffix=core.windows.net";
     private const string Container = "symptomimages";
@@ -284,6 +285,7 @@ public partial class UpdateSingleSymptom : ContentPage
             addtimepicker.Time = DateTime.Now.TimeOfDay;
             userfeedbacklistpassed = userfeedbacklist;
             gettriggersandinterventions();
+            SymptomTitlePassed = symptomtitle;
             //  PassedSymptom = SymptomPassed;
             EditAdd = "Add";
             //  AllSymptomDataPassed = AllSymptomData;
@@ -319,8 +321,18 @@ public partial class UpdateSingleSymptom : ContentPage
         try
         {
             APICalls databse = new APICalls();
-            var SingleSymptom = PassedSymptom[0];
-            ShowhideImageIput = await databse.GetSymptonsInput(SingleSymptom);
+
+            var firstSymptom = PassedSymptom?.FirstOrDefault();
+
+            if (firstSymptom != null)
+            {
+                ShowhideImageIput = await databse.GetSymptonsInput(firstSymptom.symptomid);
+            }
+            else
+            {
+                ShowhideImageIput = await databse.GetSymptonsInputbyName(SymptomTitlePassed);
+            }
+     
             ImageStack.IsVisible = ShowhideImageIput;
         }
         catch (Exception Ex)
@@ -918,7 +930,7 @@ public partial class UpdateSingleSymptom : ContentPage
                 //Limit No. of Taps 
                 UpdateBtn.IsEnabled = false;
                 SelectedDate = adddatepicker.Date.ToString("dd/MM/yyyy");
-                SelectedTime = addtimepicker.Time.ToString();
+                SelectedTime = DateTime.Today.Add(addtimepicker.Time).ToString("HH:mm:ss");
                 if (TriggersStack.IsVisible == true)
                 {
                     triggORInter = "Trigger";

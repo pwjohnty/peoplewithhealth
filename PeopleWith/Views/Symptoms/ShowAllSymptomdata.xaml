@@ -15,7 +15,7 @@
                 
             <Label x:Name="ShowAllTitle"  FontFamily="HankenGroteskBold" Margin="20,20,0,0" HorizontalOptions="Start" FontSize="20" TextColor="#031926"/>
             <Label Text="Select an item to edit or delete the symptom feedback" FontSize="12" IsVisible="True" Margin="20,5,0,0" TextColor="#031926" FontFamily="HankenGroteskRegualar" HorizontalOptions="Start" />
-            <Label x:Name="ShowImageHeader" Text="To view images attached to Symptom Feedback, Press and hold onto the feedback item" FontSize="12"  Margin="20,5,0,0" TextColor="#031926" FontFamily="HankenGroteskRegualar" HorizontalOptions="Start" />
+             <Label x:Name="ShowImageHeader" Text="To view all images associated with this symptom, tap the Symptom Gallery or press and hold the selected feedback to preview its image." FontSize="12"  Margin="20,5,20,0" TextColor="#031926" FontFamily="HankenGroteskRegualar" HorizontalOptions="Start" />
 
             <Button x:Name="GalleryBtn" CornerRadius="10" Margin="20,10,20,0" Background="Orange" Clicked="Button_Clicked" FontFamily="HankenGroteskBold" FontSize="14" Text="Symptom Gallery" TextColor="#fff7ea" />
 

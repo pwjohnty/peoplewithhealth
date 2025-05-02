@@ -11,10 +11,8 @@
 	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>We need access to your camera to capture photos of symptoms.</string>
-
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>We need access to your photo library to save and select images.</string>
-
 	<key>NSMicrophoneUsageDescription</key>
 	<string>We need access to your microphone for video recording.</string>
 	<key>UIBackgroundModes</key>
@@ -55,8 +53,8 @@
 	<key>UIUserInterfaceStyle</key>
 	<string>Light</string>
 	<key>CFBundleShortVersionString</key>
-	<string>12.3</string>
+	<string>12.5</string>
 	<key>CFBundleVersion</key>
-	<string>12.3</string>
+	<string>12.5</string>
 </dict>
 </plist>

@@ -123,14 +123,16 @@ public partial class BiometricsLogin : ContentPage
                     Loadinglbl.IsVisible = true; 
                     PinKeyPad.IsVisible = false;
                     ForgotPassword.IsVisible = false;
-                Task.Run(async () =>
+
+                await Task.Run(async () =>
                 {
-                    await Task.Delay(100); // Simulate processing time if necessary
-                    MainThread.BeginInvokeOnMainThread(async () =>
-                    {
-                        Application.Current.MainPage = new NavigationPage(new MainDashboard());
-                        //await Navigation.PushAsync(new MainDashboard(), false);
-                    });
+                    // Simulate some processing that may take up to 2 seconds
+                    await Task.Delay(2000);
+                });
+
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    Application.Current.MainPage = new NavigationPage(new MainDashboard());
                 });
             }
             else
@@ -165,14 +167,25 @@ public partial class BiometricsLogin : ContentPage
                         Loadinglbl.IsVisible = true;
                         PinKeyPad.IsVisible = false;
                         ForgotPassword.IsVisible = false;
-                        Task.Run(async () =>
+                        //Task.Run(async () =>
+                        //{
+                        //    await Task.Delay(100); // Simulate processing time if necessary
+                        //    MainThread.BeginInvokeOnMainThread(async () =>
+                        //    {
+                        //        Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                        //        //await Navigation.PushAsync(new MainDashboard(), false);
+                        //    });
+                        //});
+
+                        await Task.Run(async () =>
                         {
-                            await Task.Delay(100); // Simulate processing time if necessary
-                            MainThread.BeginInvokeOnMainThread(async () =>
-                            {
-                                Application.Current.MainPage = new NavigationPage(new MainDashboard());
-                                //await Navigation.PushAsync(new MainDashboard(), false);
-                            });
+                            // Simulate some processing that may take up to 2 seconds
+                            await Task.Delay(2000);
+                        });
+
+                        MainThread.BeginInvokeOnMainThread(() =>
+                        {
+                            Application.Current.MainPage = new NavigationPage(new MainDashboard());
                         });
                     }
                     else
@@ -189,14 +202,37 @@ public partial class BiometricsLogin : ContentPage
                         Loadinglbl.IsVisible = true;
                         PinKeyPad.IsVisible = false;
                         ForgotPassword.IsVisible = false;
-                        Task.Run(async () =>
+
+                        //var newPage = new MainDashboard();
+
+                        //// Set MainPage first so OnAppearing can be triggered
+                        //MainThread.BeginInvokeOnMainThread(() =>
+                        //{
+                        //    Application.Current.MainPage = new NavigationPage(newPage);
+                        //});
+
+                        //// Then wait for OnAppearing
+                        //await newPage.PageReady.Task;
+
+                        //Task.Run(async () =>
+                        //{
+                        //    await Task.Delay(100); // Simulate processing time if necessary
+                        //    MainThread.BeginInvokeOnMainThread(async () =>
+                        //    {
+                        //        Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                        //        //await Navigation.PushAsync(new MainDashboard(), false);
+                        //    });
+                        //});
+
+                        await Task.Run(async () =>
                         {
-                           await Task.Delay(100); // Simulate processing time if necessary
-                            MainThread.BeginInvokeOnMainThread(async () =>
-                            {
-                                Application.Current.MainPage = new NavigationPage(new MainDashboard());
-                                //await Navigation.PushAsync(new MainDashboard(), false);
-                            });
+                            // Simulate some processing that may take up to 2 seconds
+                            await Task.Delay(2000);
+                        });
+
+                        MainThread.BeginInvokeOnMainThread(() =>
+                        {
+                            Application.Current.MainPage = new NavigationPage(new MainDashboard());
                         });
                     }
                     else

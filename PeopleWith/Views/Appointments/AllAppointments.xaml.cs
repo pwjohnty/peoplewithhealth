@@ -99,7 +99,7 @@ public partial class AllAppointments : ContentPage
                 }
                 else
                 {
-                    item.AppointWith = "Appointment With " + item.hcpname; 
+                    item.AppointWith = "Appointment with " + item.hcpname; 
                 }
 
                 item.locationtype = item.location + " - " + item.type;

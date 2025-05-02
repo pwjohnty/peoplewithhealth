@@ -47,7 +47,7 @@
                                                 <ColumnDefinition Width="10*"/>
                                             </Grid.ColumnDefinitions>
 
-                                            <Label Text="{Binding diagnosistitle}" Margin="10,0,0,0" FontFamily="HankenGroteskBold"  FontSize="14" VerticalOptions="End" Grid.Row="0" Grid.Column="0"  TextColor="#702963" />
+                                            <Label Text="{Binding diagnosistitle}" Margin="10,0,0,0" LineBreakMode="TailTruncation" FontFamily="HankenGroteskBold"  FontSize="14" VerticalOptions="End" Grid.Row="0" Grid.Column="0"  TextColor="#702963" />
                                             <Label Text="{Binding dateofdiagnosis}" FontFamily="HankenGroteskBold" VerticalOptions="Start" Margin="10,0,0,0" HorizontalOptions="Start" FontSize="12" Grid.Row="1" Grid.Column="0"  TextColor="DarkGray" />
 
                                             <Image Source="nextdarker.png" Grid.Row="0" Grid.Column="2"  Grid.RowSpan="2"  Margin="0,0,0,0"  HeightRequest="12" WidthRequest="12" VerticalOptions="Center" HorizontalOptions="End" />

@@ -153,36 +153,20 @@
 
 
             </Grid>
-            
-            <Grid Margin="0,10,0,0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+
+            <Grid Margin="0,10,0,0" Grid.RowDefinitions="Auto,Auto" Grid.ColumnDefinitions="*">
                 <Label x:Name="Results" Margin="0,0,20,0" Grid.Row="0" Grid.Column="0"  HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskBold" />
 
-                <syncfusion:SfListView x:Name="VideosListview" Margin="0,5,0,0" AutoFitMode="Height" CachingStrategy="RecycleTemplate" SelectionBackground="Transparent" ItemTapped="VideosListview_ItemTapped"  Grid.Row="1" Grid.Column="0" ScrollBarVisibility="Never">
+                <syncfusion:SfListView x:Name="VideosListview" Margin="0,5,0,0" Padding="0" AutoFitMode="Height" CachingStrategy="RecycleTemplate" SelectionBackground="Transparent" ItemTapped="VideosListview_ItemTapped"  Grid.Row="1" Grid.Column="0" ScrollBarVisibility="Never">
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <Border Stroke="#FAFAFA" StrokeThickness="1" Margin="0,2.5,0,2.5" Padding="5" StrokeShape="RoundRectangle 10"  Background="Transparent" HorizontalOptions="FillAndExpand">
+                                <Border Stroke="#FAFAFA" StrokeThickness="1" Margin="0,2.5,0,2.5" Padding="5" StrokeShape="RoundRectangle 10"  Background="Transparent" HorizontalOptions="Fill">
 
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="30*"/>
-                                            <ColumnDefinition  Width="70*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Frame HasShadow="False" Padding="0" Grid.Row="0" HeightRequest="100" InputTransparent="True"  VerticalOptions="Center" Grid.Column="0" Grid.RowSpan="3" CornerRadius="5" BorderColor="Transparent" BackgroundColor="Transparent">
-                                            <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" HeightRequest="100" WidthRequest="220" Source="{Binding thumbnail}" />
-                                        </Frame>
+                                    <Grid Grid.RowDefinitions="Auto,Auto,Auto" Grid.ColumnDefinitions="30*,70*">
+                                        <Border  Padding="0" Grid.Row="0" HeightRequest="100" InputTransparent="True"  VerticalOptions="Center" Grid.Column="0" Grid.RowSpan="3" StrokeShape="RoundRectangle 10" Stroke="Transparent" BackgroundColor="Transparent">
+                                            <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" VerticalOptions="Fill" HorizontalOptions="Fill" HeightRequest="100" WidthRequest="220" Source="{Binding thumbnail}" />
+                                        </Border>
                                         <Label Text="{Binding title}" Margin="5,0,0,0" Grid.Row="0" Grid.Column="1" HeightRequest="20" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" FontSize="14" FontFamily="HankenGroteskBold" />
                                         <Label Text="{Binding subtitleshort}" Margin="5,0,0,0" LineBreakMode="TailTruncation" MaxLines="3" Grid.Row="1" Grid.Column="1" HeightRequest="55" HorizontalOptions="Start" VerticalOptions="Start" TextColor="DarkGray" FontSize="12" FontFamily="HankenGroteskBold" />
                                         <Label Text="{Binding dateandlength}" Margin="5,0,0,0" Grid.Row="2" Grid.Column="1" HeightRequest="20" HorizontalOptions="Start" VerticalOptions="Start" TextColor="DarkGray" FontSize="12" FontFamily="HankenGroteskRegular" />
@@ -191,16 +175,12 @@
                             </ViewCell>
                         </DataTemplate>
                     </syncfusion:SfListView.ItemTemplate>
+                    <!-- Added Buffer to Help With Lsitview height-->
                     <syncfusion:SfListView.FooterTemplate>
                         <DataTemplate>
-                            <Grid BackgroundColor="Transparent" HeightRequest="300">
-                                <Label LineBreakMode="NoWrap"
-Margin="10,0,0,0"  FontAttributes="Bold"
-FontSize="18" TextColor="White" HorizontalOptions="Center"
-VerticalOptions="Center"/>
-                            </Grid>
+                            <Grid BackgroundColor="Transparent" HeightRequest="350"/>
                         </DataTemplate>
-                    </syncfusion:SfListView.FooterTemplate>
+                    </syncfusion:SfListView.FooterTemplate> 
                 </syncfusion:SfListView>
 
             </Grid>

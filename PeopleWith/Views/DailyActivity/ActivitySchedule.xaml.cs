@@ -445,14 +445,14 @@ public partial class ActivitySchedule : ContentPage
 
             datelbl.Text = dateforlabel.ToString("dddd, dd MMMM");
 
-            if(DateTime.Now.ToString("dd/MM/yy") != dateforschedule.ToString("dd/MM/yy"))
-            {
-                TodayDay.IsVisible = true; 
-            }
-            else
-            {
-                TodayDay.IsVisible = false; 
-            }
+            //if(DateTime.Now.ToString("dd/MM/yy") != dateforschedule.ToString("dd/MM/yy"))
+            //{
+            //    TodayDay.IsVisible = true; 
+            //}
+            //else
+            //{
+            //    TodayDay.IsVisible = false; 
+            //}
 
             WorkoutItemsDue();
         }
@@ -480,14 +480,14 @@ public partial class ActivitySchedule : ContentPage
                 //Update Dates
                 UpdateDates(selectedDate);
 
-                if(DateTime.Parse(selectedDate).Date == DateTime.Now.Date)
-                {
-                    TodayDay.IsVisible = false;
-                }
-                else
-                {
-                    TodayDay.IsVisible = true;
-                }
+                //if(DateTime.Parse(selectedDate).Date == DateTime.Now.Date)
+                //{
+                //    TodayDay.IsVisible = false;
+                //}
+                //else
+                //{
+                //    TodayDay.IsVisible = true;
+                //}
             }
         }
         catch (Exception Ex)
@@ -544,7 +544,7 @@ public partial class ActivitySchedule : ContentPage
             {
                 string selectedDate = DateTime.Now.ToString("dd/MM/yyyy");
                 UpdateDates(selectedDate);
-                TodayDay.IsVisible = false;
+                //TodayDay.IsVisible = false;
             }
         }
         catch (Exception Ex)

@@ -29,9 +29,10 @@
                         <Label x:Name="TodayDay" Grid.Column="2" FontFamily="HankenGroteskBold" Margin="0,0,0,0" Grid.Row="2"  Padding="0" HorizontalOptions="Center"  VerticalOptions="Center" TextColor="#991B1B" FontSize="14" FontAttributes="None" />
                     </Border>-->
 
-                    <Border x:Name="TodayDay" IsVisible="False" Stroke="#991B1B" StrokeThickness="2.4" Margin="0,10,0,0" Grid.Column="3" HorizontalOptions="Fill"  StrokeShape="RoundRectangle 10"  Padding="0"  HeightRequest="33" WidthRequest="33" Background="Transparent">
+                    <Border x:Name="TodayDay"  Stroke="#991B1B" StrokeThickness="2.4" Margin="0,10,0,0" Grid.Column="3" HorizontalOptions="Fill"  StrokeShape="RoundRectangle 10"  Padding="0"  HeightRequest="33" WidthRequest="33"  Background="Transparent">
                         <Grid Padding="0">
-                            <Label x:Name="TodayDaylbl" FontFamily="HankenGroteskBold" Margin="0" HorizontalOptions="Center"  Padding="0" VerticalOptions="Center" TextColor="#991B1B" FontSize="14" FontAttributes="None" />
+                            <Label Text="Today" IsVisible="False" FontFamily="HankenGroteskBold" Margin="0" HorizontalOptions="Center"  Padding="0" VerticalOptions="Center" TextColor="#991B1B" FontSize="10" FontAttributes="None" />
+                            <Label x:Name="TodayDaylbl" IsVisible="True" FontFamily="HankenGroteskBold" Margin="0" HorizontalOptions="Center"  Padding="0" VerticalOptions="Center" TextColor="#991B1B" FontSize="15" FontAttributes="None" />
                         </Grid>
                         <Border.GestureRecognizers>
                             <TapGestureRecognizer Tapped="todaybtn_Clicked" NumberOfTapsRequired="1"/>

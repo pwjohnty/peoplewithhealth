@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using Mopups.Services;
 using Syncfusion.Maui.Core;
 using Microsoft.Maui.Networking;
+using Microsoft.Extensions.Azure;
 
 namespace PeopleWith;
 
@@ -9,6 +10,7 @@ public partial class AllVideos : ContentPage
 {
     public ObservableCollection<videos> AllVideosList = new ObservableCollection<videos>();
     public ObservableCollection<videos> VideosList = new ObservableCollection<videos>();
+    public ObservableCollection<videos> itemstoremove = new ObservableCollection<videos>();
     public ObservableCollection<videos> FilterListData = new ObservableCollection<videos>();
     //public ObservableCollection<videoengage> VideoEngagement = new ObservableCollection<videoengage>();
     videoengage SelectedVideoEngage = new videoengage();
@@ -56,7 +58,9 @@ public partial class AllVideos : ContentPage
             {
                 signupCode = null;
             }
-            var GetVideos = aPICalls.GetAllVideos();
+            string ReturnType = "All";
+            AllVideosList = await aPICalls.GetAllVideos(ReturnType);
+            VideosList = AllVideosList;
             //var GetEngagement = aPICalls.GetAllVideosEngagement(); 
 
             //var delayTask = Task.Delay(1000);
@@ -66,19 +70,29 @@ public partial class AllVideos : ContentPage
             //    await MopupService.Instance.PushAsync(new GettingReady("Loading Videos") { });
             //}
 
-            AllVideosList = await GetVideos;
+            //AllVideosList = await GetVideos;
 
-            foreach(var item in AllVideosList)
+            foreach (var item in AllVideosList)
             {
                 //Add items with no Signup && Refferral 
-                if (item.referral == null)
+
+                bool BothEmpty = string.IsNullOrEmpty(item.referral) && string.IsNullOrEmpty(item.signupcodeid);
+
+                if (!BothEmpty)
                 {
-                    VideosList.Add(item);
-                }
-                else if (signupCode != null && item.referral.Contains(signupCode))
-                {
-                    VideosList.Add(item);
-                }
+                    bool referralContains = !string.IsNullOrEmpty(item.referral) && item.referral.Contains(signupCode);
+                    bool signupContains = !string.IsNullOrEmpty(item.signupcodeid) && item.signupcodeid.Contains(signupCode);
+
+                    if (!referralContains && !signupContains)
+                    {
+                        itemstoremove.Add(item);
+                    }
+                }             
+            }
+
+            foreach(var item in itemstoremove)
+            {
+                VideosList.Remove(item);
             }
             //VideoEngagement = await GetEngagement; 
 
@@ -87,13 +101,13 @@ public partial class AllVideos : ContentPage
             VideosListview.ItemsSource = VideosList;
             //VideosListview.HeightRequest = AllVideosList.Count() * 110;
 
-            //Set Filter chips
-            var AddALL = new videos();
-            AddALL.category = "All";
-            VideosList.Add(AddALL);
+            ////Set Filter chips
+            var AddALL = new videos { category = "All" };
+            //VideosList.Add(AddALL);
 
             var FilterTabList = VideosList.GroupBy(s => s.category).Select(g => g.First()).ToList().OrderBy(g => g.category);
             FilterListData = new ObservableCollection<videos>(FilterTabList);
+            FilterListData.Insert(0, AddALL);
             var count = VideosList.Count().ToString();
             Results.Text = "Results" + " (" + count + ")";
    
@@ -216,9 +230,9 @@ public partial class AllVideos : ContentPage
             var item = tappedFrame.Text;
             if(item == "All")
             {
-                var count = VideosList.Count().ToString();
+                var count = VideosList.Count();
                 Results.Text = "Results" + " (" + count + ")";
-                VideosListview.ItemsSource = VideosList;
+                VideosListview.ItemsSource = VideosList.OrderBy(m => m.title);
                 VideosListview.IsVisible = true;
                 NoResultslbl.IsVisible = false;
                 //VideosListview.HeightRequest = AllVideosList.Count() * 110;
@@ -247,7 +261,7 @@ public partial class AllVideos : ContentPage
 
                 var count = FilteredVideo.Count().ToString();
                 Results.Text = "Results" + " (" + count + ")";
-                VideosListview.ItemsSource = null; 
+                VideosListview.ItemsSource = null;
                 VideosListview.ItemsSource = FilteredVideo;
                 VideosListview.IsVisible = true;
                 NoResultslbl.IsVisible = false;

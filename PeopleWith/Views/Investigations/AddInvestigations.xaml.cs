@@ -130,10 +130,10 @@ public partial class AddInvestigations : ContentPage
             {
                 var InvestAdded = new ObservableCollection<investigation>(AllInvests.Where(s => AllUserInvests.Any(x => x.investigationname == s.investigationtitle)));
 
-                foreach (var item in InvestAdded)
-                {
-                    AllInvests.Remove(item);
-                }
+                //foreach (var item in InvestAdded)
+                //{
+                //    AllInvests.Remove(item);
+                //}
             }
             //FilterTabs 
             InvestListview.ItemsSource = AllInvests.OrderBy(s => s.investigationtitle);

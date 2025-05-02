@@ -1236,13 +1236,13 @@ HorizontalOptions="Center" />
 
 
 
-                            <Label Text="Help and Support Videos" x:Name="vidhelplbl" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="18" Margin="20,20,20,0" HorizontalOptions="Start" />
+                            <Label Text="Help and Support Videos" x:Name="vidhelplbl" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="18" Margin="20,20,20,10" HorizontalOptions="Start" />
 
                             <StackLayout BackgroundColor="#f9f9fb"  >
                                 
                           
 
-                            <syncfusion:SfListView x:Name="videoslist" BackgroundColor="Transparent"  ItemTapped="videoslist_ItemTapped" IsScrollingEnabled="False"  CachingStrategy="RecycleTemplate"  Orientation="Vertical" AutoFitMode="Height"  SelectionBackground="Transparent" ScrollBarVisibility="Never"  Margin="0,0,0,0">
+                            <syncfusion:SfListView x:Name="videoslist" BackgroundColor="Transparent"  ItemTapped="videoslist_ItemTapped" IsScrollingEnabled="False"  CachingStrategy="RecycleTemplate"  Orientation="Vertical" AutoFitMode="Height"  SelectionBackground="Transparent" ScrollBarVisibility="Never"  Margin="0,0,0,10">
                                 <syncfusion:SfListView.ItemTemplate>
                                     <!--<SfListView x:Name="dflist" BackgroundColor="Transparent"  RowHeight="60" SeparatorVisibility="None" Margin="20,0,20,0" SeparatorColor="LightGray" ItemTapped="dflist_ItemTapped">
         <SfListView.ItemTemplate>-->

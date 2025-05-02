@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
-             ios:Page.UseSafeArea="True"
+             ios:Page.UseSafeArea="True"   xmlns:local="clr-namespace:PeopleWith"  x:Name="MedicationsPage"
              xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
              xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
              x:Class="PeopleWith.AllMedications" Shell.NavBarIsVisible="False" BackgroundColor="White" >
@@ -55,6 +55,40 @@
 
                     </buttons:SfSegmentedControl>
 
+                    <syncfusion:SfListView  x:Name="PendingMedsList" AllowSwiping="True" SwipeThreshold="10" SwipeOffset="80" IsVisible="False"  Padding="0" Margin="10,10,10,-5" ItemTapped="PendingMedsList_ItemTapped" AutoFitMode="Height"  ItemSpacing="0"  HorizontalOptions="FillAndExpand" IsScrollingEnabled="False"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
+                        <syncfusion:SfListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Border StrokeShape="RoundRectangle 10"  Margin="0" BackgroundColor="Transparent"  Stroke="Transparent" InputTransparent="True" Padding="0">
+                                        <Grid Grid.RowDefinitions="Auto"  Grid.ColumnDefinitions="15*,85*" >
+                                            <Image Opacity="1" Source="warningicon.png" Margin="0,0,0,0" Grid.Row="0" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="30" WidthRequest="30"/>
+
+                                            <Border StrokeShape="RoundRectangle 10"  Margin="0,5,0,5" BackgroundColor="#e5f9f4"  Grid.Row="0" Grid.Column="1"  Stroke="Transparent" InputTransparent="True" Padding="0">
+                                                <Grid Margin="0,10,0,0" Grid.RowDefinitions="Auto,Auto" Grid.ColumnDefinitions="15*,75*,10*">
+                                                    <Label Text="{Binding ChangedMedName}" FontFamily="HankenGroteskBold"  FontSize="14" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Margin="10,0,0,0" TextColor="#031926" />
+                                                    <Label Text="Finish Setting up or swipe left to delete" FontFamily="HankenGroteskBold"  FontSize="12" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="Center" HorizontalOptions="Start" VerticalTextAlignment="Center" Margin="10,0,0,10" TextColor="Teal" />
+                                                </Grid>
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+                                </ViewCell>
+                            </DataTemplate>
+                        </syncfusion:SfListView.ItemTemplate>
+                        <syncfusion:SfListView.EndSwipeTemplate>
+                            <DataTemplate x:Name="StartSwipeTemplate" >
+                                <Border StrokeShape="RoundRectangle 10" Stroke="Transparent" BackgroundColor="#FF474C" HorizontalOptions="Fill" VerticalOptions="Fill" Grid.Column="0">
+                                    <Grid VerticalOptions="Center" HorizontalOptions="Center">
+                                        <Image Grid.Column="0"  Grid.Row="0" BackgroundColor="Transparent"  HeightRequest="25" WidthRequest="25"  Source="deletewhite.png" />
+                                    </Grid>
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="DeletePendingMed" CommandParameter="{Binding .}" NumberOfTapsRequired="1"/>
+                                    </Border.GestureRecognizers>
+                                </Border>
+                            </DataTemplate>
+                        </syncfusion:SfListView.EndSwipeTemplate>
+                    </syncfusion:SfListView>
+
+
                     <!-- Tab Explanation -->
                     <Grid Margin="0,10,0,0">
                         <Grid.ColumnDefinitions>
@@ -66,16 +100,24 @@
 
                         <Label x:Name="SegmentDetails" Grid.Row="0" Grid.Column="0" HorizontalTextAlignment="Center" FontFamily="HankenGroteskRegular" FontSize="14" TextColor="Teal" />
                     </Grid>
+                    
+                    <!-- Delete Border -->
 
-                    <syncfusion:SfListView  x:Name="AllUserMedsList" IsVisible="False" Padding="0" Margin="10,10,10,50" ItemTapped="AllUserMedsList_ItemTapped" AutoFitMode="Height"  ItemSpacing="0"  HorizontalOptions="FillAndExpand" IsScrollingEnabled="False"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
+                    <!--<Border x:Name="DeleteFrame" StrokeShape="RoundRectangle 10" IsVisible="False" Margin="10,5,10,5" Stroke="Transparent" Background="Transparent" >
+                        <Grid BackgroundColor="#ebebeb" Grid.ColumnDefinitions="*,*"  HeightRequest="60">
+                            <Button Grid.Row="0" Grid.Column="0" Margin="10,0,0,0" Padding="5" HeightRequest="35" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskRegular" Text="Cancel" Background="Transparent" VerticalOptions="Center" HorizontalOptions="Start" CommandParameter="Cancel" Clicked="ImageButton_Clicked"/>
+                            <ImageButton Grid.Row="0" Grid.Column="1" Margin="0,0,10,0" Padding="5" HeightRequest="35" WidthRequest="35" Source="deletered.png" VerticalOptions="Center" HorizontalOptions="End" CommandParameter="Delete"  Clicked="ImageButton_Clicked"/>
+                        </Grid>
+                    </Border>-->
+
+                    
+
+                    <syncfusion:SfListView  x:Name="AllUserMedsList" AllowSwiping="False" SwipeThreshold="10" SwipeOffset="80" IsVisible="False"  Padding="0" Margin="10,10,10,50" ItemTapped="AllUserMedsList_ItemTapped"  AutoFitMode="Height"  ItemSpacing="0"  HorizontalOptions="FillAndExpand" IsScrollingEnabled="False"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
                         <syncfusion:SfListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
                                     <StackLayout>
-                                        <Frame CornerRadius="10"  Margin="0,5,0,5"
- BackgroundColor="#e5f9f4" HasShadow="False" IsVisible="{Binding ActiveMeds}"
-                BorderColor="Transparent" InputTransparent="True"
-Padding="0">
+                                        <Frame CornerRadius="10"  Margin="0,5,0,5"  BackgroundColor="#e5f9f4" HasShadow="False" IsVisible="{Binding ActiveMeds}"  BorderColor="Transparent" InputTransparent="True" Padding="0">
                                             <Grid Margin="0,10,0,0">
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="Auto"/>
@@ -140,49 +182,21 @@ Padding="0">
 
                                             </Grid>
                                         </Frame>
-                                        <Grid IsVisible="{Binding PendingMeds}">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto"/>
+                                        
+                                        <!-- Pending Medications Frame --><!--
+                                        <Border StrokeShape="RoundRectangle 10" IsVisible="{Binding PendingMeds}" Margin="0" BackgroundColor="{Binding pendborderBack}"  Stroke="Transparent" InputTransparent="True" Padding="0">
+                                            <Grid Grid.RowDefinitions="Auto"  Grid.ColumnDefinitions="15*,85*" >
+                                                <Image Opacity="1" Source="{Binding pendimgSource}" Margin="0,0,0,0" Grid.Row="0" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="30" WidthRequest="30"/>
 
-
-                                            </Grid.RowDefinitions>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="15*"/>
-                                                <ColumnDefinition Width="85*"/>
-
-                                            </Grid.ColumnDefinitions>
-                                            <Image Opacity="1" Source="warningicon.png" Margin="0,0,0,0" Grid.Row="0" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="30" WidthRequest="30"/>
-
-                                            <Frame CornerRadius="10"  Margin="0,5,0,5"
- BackgroundColor="#e5f9f4" HasShadow="False" Grid.Row="0" Grid.Column="1"
-                BorderColor="Transparent" InputTransparent="True"
-Padding="0">
-                                                <Grid Margin="0,10,0,0">
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="Auto"/>
-                                                        <RowDefinition Height="Auto"/>
-                                                        <RowDefinition Height="Auto"/>
-                                                        <RowDefinition Height="Auto"/>
-                                                        <RowDefinition Height="Auto"/>
-
-                                                    </Grid.RowDefinitions>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="15*"/>
-                                                        <ColumnDefinition Width="75*"/>
-                                                        <ColumnDefinition Width="10*"/>
-                                                    </Grid.ColumnDefinitions>
-
+                                            <Border StrokeShape="RoundRectangle 10"  Margin="0,5,0,5" BackgroundColor="#e5f9f4"  Grid.Row="0" Grid.Column="1"  Stroke="Transparent" InputTransparent="True" Padding="0">
+                                                <Grid Margin="0,10,0,0" Grid.RowDefinitions="Auto,Auto" Grid.ColumnDefinitions="15*,75*,10*">
                                                     <Label Text="{Binding ChangedMedName}" FontFamily="HankenGroteskBold"  FontSize="14" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Margin="10,0,0,0" TextColor="#031926" />
-
-
-                                                    <Label Text="Finish setting up medication" FontFamily="HankenGroteskBold"  FontSize="12" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="Center" HorizontalOptions="Start" VerticalTextAlignment="Center" Margin="10,0,0,10" TextColor="Teal" />
-
-
-
-
+                                                    <Label Text="Finish adding medication, or hold to delete" FontFamily="HankenGroteskBold"  FontSize="12" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="Center" HorizontalOptions="Start" VerticalTextAlignment="Center" Margin="10,0,0,10" TextColor="Teal" />
                                                 </Grid>
-                                            </Frame>
+                                            </Border>
                                         </Grid>
+                                        </Border>-->
+                                        
                                         <Grid Margin="0,5,0,0" Padding="0" IsVisible="{Binding EndingSoon}">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto"/>
@@ -207,6 +221,27 @@ Padding="0">
                                 </ViewCell>
                             </DataTemplate>
                         </syncfusion:SfListView.ItemTemplate>
+                        <!--<syncfusion:SfListView.StartSwipeTemplate>
+                            <DataTemplate x:Name="StartSwipeTemplate">
+                                <Grid>
+                                    <Border StrokeShape="RoundRectangle 10" Stroke="Transparent" BackgroundColor="#FF474C" HorizontalOptions="Fill" VerticalOptions="Fill" Grid.Column="0">
+                                        <Grid VerticalOptions="Center" HorizontalOptions="Center">
+                                            <Image Grid.Column="0"  Grid.Row="0" BackgroundColor="Transparent"  HeightRequest="25" WidthRequest="25"  Source="deletewhite.png" />
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </syncfusion:SfListView.StartSwipeTemplate>-->
+                        <!--<syncfusion:SfListView.HeaderTemplate> 
+                            <DataTemplate>
+                                <Border StrokeShape="RoundRectangle 10" IsVisible="False" Margin="0,0,0,10" Stroke="Transparent" Background="Transparent" >
+                                    <Grid BackgroundColor="#ebebeb" Grid.ColumnDefinitions="*,*"  HeightRequest="60">
+                                        <Button Grid.Row="0" Grid.Column="0" Margin="10,0,0,0" Padding="5" HeightRequest="35" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskRegular" Text="Cancel" Background="Transparent" VerticalOptions="Center" HorizontalOptions="Start" Clicked="ImageButton_Clicked"/>
+                                        <ImageButton Grid.Row="0" Grid.Column="1" Margin="0,0,10,0" Padding="5" HeightRequest="35" WidthRequest="35" Source="deletered.png" VerticalOptions="Center" HorizontalOptions="End" Clicked="ImageButton_Clicked"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </syncfusion:SfListView.HeaderTemplate>-->
                     </syncfusion:SfListView>
                     <Label Text="No Active Medications Added" x:Name="noActivemedlbl" IsVisible="False" FontSize="14" TextColor="#031926" FontFamily="HankenGroteskRegular" Margin="0,50,0,0" HorizontalOptions="Center" VerticalOptions="Center" VerticalTextAlignment="Center" />
 

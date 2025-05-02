@@ -45,7 +45,7 @@
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <Frame HasShadow="False" CornerRadius="10"  InputTransparent="True" Padding="5" BorderColor="Transparent" Opacity="1" BackgroundColor="#FFF8DC"  Margin="10,0,10,5">
+                                <Border  StrokeShape="RoundRectangle 10"  InputTransparent="True" Padding="5" Stroke="Transparent" Opacity="1" BackgroundColor="#FFF8DC"  Margin="10,0,10,5">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="25"/>
@@ -67,7 +67,7 @@
 
 
                                     </Grid>
-                                </Frame>
+                                </Border>
 
                             </ViewCell>
                         </DataTemplate>
