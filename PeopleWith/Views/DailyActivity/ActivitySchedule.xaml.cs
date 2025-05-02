@@ -45,6 +45,7 @@ public partial class ActivitySchedule : ContentPage
         {
             InitializeComponent();
             GetActivityInfo();
+            NovoConsentData();
         }
         catch (Exception Ex)
         {
@@ -61,10 +62,32 @@ public partial class ActivitySchedule : ContentPage
             //Update Listview on Add of New Activity 
             AllUserActivity = UpdatedActivities;
             GetActivityInfo();
+            NovoConsentData();
         }
         catch (Exception Ex)
         {
             ActivityLoading.IsVisible = false;
+            NotasyncMethod(Ex);
+        }
+    }
+
+    private void NovoConsentData()
+    {
+        try
+        {
+            if (!String.IsNullOrEmpty(Helpers.Settings.SignUp))
+            {
+                var signup = Helpers.Settings.SignUp;
+                if (signup.Contains("SAX"))
+                { //All Novo SignupCodes 
+                    NovoConsent.IsVisible = true;
+                    NovoContentlbl.Text = Preferences.Default.Get("NovoContent", String.Empty);
+                    NovoExitidlbl.Text = Preferences.Default.Get("NovoExitid", String.Empty);
+                }
+            }
+        }
+        catch (Exception Ex)
+        {
             NotasyncMethod(Ex);
         }
     }
@@ -422,14 +445,14 @@ public partial class ActivitySchedule : ContentPage
 
             datelbl.Text = dateforlabel.ToString("dddd, dd MMMM");
 
-            if(DateTime.Now.ToString("dd/MM/yy") != dateforschedule.ToString("dd/MM/yy"))
-            {
-                TodayDay.IsVisible = true; 
-            }
-            else
-            {
-                TodayDay.IsVisible = false; 
-            }
+            //if(DateTime.Now.ToString("dd/MM/yy") != dateforschedule.ToString("dd/MM/yy"))
+            //{
+            //    TodayDay.IsVisible = true; 
+            //}
+            //else
+            //{
+            //    TodayDay.IsVisible = false; 
+            //}
 
             WorkoutItemsDue();
         }
@@ -457,14 +480,14 @@ public partial class ActivitySchedule : ContentPage
                 //Update Dates
                 UpdateDates(selectedDate);
 
-                if(DateTime.Parse(selectedDate).Date == DateTime.Now.Date)
-                {
-                    TodayDay.IsVisible = false;
-                }
-                else
-                {
-                    TodayDay.IsVisible = true;
-                }
+                //if(DateTime.Parse(selectedDate).Date == DateTime.Now.Date)
+                //{
+                //    TodayDay.IsVisible = false;
+                //}
+                //else
+                //{
+                //    TodayDay.IsVisible = true;
+                //}
             }
         }
         catch (Exception Ex)
@@ -521,7 +544,7 @@ public partial class ActivitySchedule : ContentPage
             {
                 string selectedDate = DateTime.Now.ToString("dd/MM/yyyy");
                 UpdateDates(selectedDate);
-                TodayDay.IsVisible = false;
+                //TodayDay.IsVisible = false;
             }
         }
         catch (Exception Ex)

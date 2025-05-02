@@ -5,6 +5,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Microsoft.Maui.Networking;
 using Microsoft.Maui.Storage;
+using System.ComponentModel;
+using Maui.FreakyControls.Extensions;
+using System.Threading.Tasks;
+using Syncfusion.Maui.DataSource.Extensions;
 //using static AndroidX.Core.Text.Util.LocalePreferences.FirstDayOfWeek;
 
 namespace PeopleWith;
@@ -12,12 +16,15 @@ namespace PeopleWith;
 public partial class AllMedications : ContentPage
 {
 	APICalls aPICalls = new APICalls();
+    //public ObservableCollection<usermedication> AllUserMedications = new ObservableCollection<usermedication>();
     public ObservableCollection<usermedication> AllUserMedications = new ObservableCollection<usermedication>();
     public ObservableCollection<usermedication> CompletedMedications = new ObservableCollection<usermedication>();
+    public ObservableCollection<usermedication> PendingMedications = new ObservableCollection<usermedication>();
     public ObservableCollection<usermedication> CurrentMedications = new ObservableCollection<usermedication>();
     public ObservableCollection<usermedication> AsRequiredMedications = new ObservableCollection<usermedication>();
     public ObservableCollection<usermedication> AddinAsRequired = new ObservableCollection<usermedication>();
-    private bool IsLoading = true; 
+    private bool IsLoading = true;
+
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
@@ -40,9 +47,8 @@ public partial class AllMedications : ContentPage
         try
         {
             InitializeComponent();
-            
+            BindingContext = this;
             getusermedications();
-         
             //if (AllUserMedications.Count == 0 && CompletedMedications.Count == 0 && AsRequiredMedications.Count == 0)
             //{
             //    nodatastack.IsVisible = true;
@@ -81,13 +87,12 @@ public partial class AllMedications : ContentPage
         try
         {
             InitializeComponent();
-
+            BindingContext = this;
             AllUserMedications.Clear();
 
             AllUserMedications = AllUsermeds;
 
             WorkOutNextDue();
-            
 
             //if (AllUserMedications.Count == 0)
             //{
@@ -679,6 +684,8 @@ public partial class AllMedications : ContentPage
                 {
                     item.ChangedMedName = item.medicationtitle;
                     item.ChangedMed = false;
+                    item.pendborderBack = "#00FFFFFF";
+                    item.pendimgSource = "warningicon.png";
 
                 }
                 else
@@ -717,6 +724,8 @@ public partial class AllMedications : ContentPage
                 {
                     item.PendingMeds = true;
                     item.ActiveMeds = false;
+                    item.pendborderBack = "#00FFFFFF";
+                    item.pendimgSource = "warningicon.png";
                     CurrentMedications.Add(item);
                     
                 }
@@ -724,7 +733,6 @@ public partial class AllMedications : ContentPage
                 {
                     item.ActiveMeds = true;
                     item.PendingMeds = false;
-
 
 
                     if (!string.IsNullOrEmpty(item.enddate))
@@ -757,7 +765,9 @@ public partial class AllMedications : ContentPage
 
             }
 
-            var sortedbyname = CurrentMedications
+            var PendingList = new ObservableCollection<usermedication>(CurrentMedications.Where(x => x.status == "Pending").OrderBy(x => x.ChangedMedName)); 
+
+            var sortedbyname = CurrentMedications.Where(x=> x.status != "Pending")
     .OrderBy(x => x.status == "Pending" ? 0 : 1)  // Pending first
     .ThenBy(x => x.ChangedMedName)                 // Then by medication name
     .ToList();
@@ -767,7 +777,7 @@ public partial class AllMedications : ContentPage
             NovoConsentData();
 
             //Active Medications List 
-            if (sortedbyname.Count == 0 && sortedbyname2.Count == 0 && sortedbyname3.Count == 0)
+            if (PendingList.Count == 0 && sortedbyname.Count == 0 && sortedbyname2.Count == 0 && sortedbyname3.Count == 0)
             {
                 nodatastack.IsVisible = true;
                 datastack.IsVisible = false;
@@ -777,10 +787,13 @@ public partial class AllMedications : ContentPage
             }
             else if (sortedbyname.Count == 0)
             {
-                noActivemedlbl.IsVisible = true;
+                if(PendingList.Count == 0)
+                {
+                    noActivemedlbl.IsVisible = true;
+                }
                 AllUserMedsList.IsVisible = false;
                 await Task.Delay(2000);
-               // NovoConsent.Margin = new Thickness(20, 300, 20, 10);
+                // NovoConsent.Margin = new Thickness(20, 300, 20, 10);
                 //await MopupService.Instance.PopAllAsync(false);
             }
             else
@@ -798,6 +811,17 @@ public partial class AllMedications : ContentPage
                 //await MopupService.Instance.PopAllAsync(false);
             }
 
+            PendingMedsList.ItemsSource = PendingList;
+            PendingMedications = PendingList;
+            if (PendingList.Count > 0)
+            {
+                PendingMedsList.IsVisible = true; 
+            }
+            else
+            {
+                PendingMedsList.IsVisible = false;
+            }
+          
             AllUserMedsList.ItemsSource = sortedbyname;
             CompletedMedsList.ItemsSource = sortedbyname2;
             AsRequiredList.ItemsSource = sortedbyname3;
@@ -870,6 +894,8 @@ public partial class AllMedications : ContentPage
                 //Limit No. of Taps 
                 AddBtn.IsEnabled = false;
                 usermedication NullInstance = new usermedication();
+                //RevertSelectedPending();
+
                 await Navigation.PushAsync(new AddMedication(AllUserMedications, NullInstance), false);
                 AddBtn.IsEnabled = true;
             }
@@ -894,6 +920,8 @@ public partial class AllMedications : ContentPage
             if (accessType == NetworkAccess.Internet)
             {
                 usermedication SelectedMed = e.DataItem as usermedication;
+
+                //RevertSelectedPending();
 
                 if (SelectedMed.status == "Pending")
                 {
@@ -924,13 +952,15 @@ public partial class AllMedications : ContentPage
         {
             var index = e.NewIndex;
 
-            if(index == 0)
+            //RevertSelectedPendingRevertSelectedPending();
+
+            if (index == 0)
             {
              if(IsLoading == true)
                 {
                     AllUserMedsList.IsVisible = true;
                     noActivemedlbl.IsVisible = false;
-                    IsLoading = false; 
+                    IsLoading = false;                  
                 }
                 else
                 {
@@ -938,6 +968,8 @@ public partial class AllMedications : ContentPage
                     CompletedMedsList.IsVisible = false;
                     noARmedlbl.IsVisible = false;
                     noCompletedmedlbl.IsVisible = false;
+                    bool Check = CurrentMedications.All(x => x.status == "Pending");
+                    //bool hasMultipleStatuses = CurrentMedications.Select(x => x.status).Distinct().Count() > 1;
                     if (CurrentMedications.Count == 0)
                     {
                         AllUserMedsList.IsVisible = false;
@@ -945,14 +977,27 @@ public partial class AllMedications : ContentPage
                     }
                     else
                     {
-                        SegmentDetails.Text = "Medications you have currently scheduled";
+                        if (!Check)
+                        {
+                            SegmentDetails.Text = "Medications you have currently scheduled";
+                        }
                         AllUserMedsList.IsVisible = true;
                         noActivemedlbl.IsVisible = false;
+                    }
+
+                    if (PendingMedications.Count > 0)
+                    {
+                        PendingMedsList.IsVisible = true;
+                    }
+                    else
+                    {
+                        PendingMedsList.IsVisible = false;
                     }
                 }
             }
             else if(index == 1)
             {
+                PendingMedsList.IsVisible = false;
                 noActivemedlbl.IsVisible = false;
                 AllUserMedsList.IsVisible = false;
                 if(AsRequiredMedications.Count == 0)
@@ -972,6 +1017,7 @@ public partial class AllMedications : ContentPage
             }
             else if(index == 2)
             {
+                PendingMedsList.IsVisible = false;
                 noActivemedlbl.IsVisible = false;
                 AllUserMedsList.IsVisible = false;
                 AsRequiredList.IsVisible = false;
@@ -1029,4 +1075,220 @@ public partial class AllMedications : ContentPage
             NotasyncMethod(Ex);
         }
     }
+
+    private async void PendingMedsList_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
+    {
+        try
+        {
+            usermedication SelectedMed = e.DataItem as usermedication;
+
+            if (SelectedMed.status == "Pending")
+            {
+                SelectedMed.EditMedSection = "Details";
+                await Navigation.PushAsync(new AddMedication(AllUserMedications, SelectedMed), false);
+            }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    private async void DeletePendingMed(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            bool Delete = await DisplayAlert("Delete Pending Medication", "Are you sure you would like the delete this Medication? Once deleted it cannot be retrieved", "Delete", "Cancel");
+            if (Delete == true)
+            {
+
+                if (e.Parameter is usermedication selectedMed)
+                {
+                    APICalls database = new APICalls();
+                    selectedMed.deleted = true; 
+                    await database.DeleteMedication(selectedMed);
+
+                    //Upadte Pendinglist 
+                    if (PendingMedications.Contains(selectedMed))
+                    {
+                        PendingMedications.Remove(selectedMed);
+                    }
+
+                    if (CurrentMedications.Contains(selectedMed))
+                    {
+                        CurrentMedications.Remove(selectedMed);
+                    }
+
+                    if (PendingMedications.Count > 0)
+                    {
+                        PendingMedsList.IsVisible = true;
+                        PendingMedsList.ItemsSource = PendingMedications;
+                    }
+                    else
+                    {
+                        PendingMedsList.IsVisible = false; 
+                    }
+
+                    if (CurrentMedications.Count == 0 && PendingMedications.Count == 0 && CompletedMedications.Count == 0 && AsRequiredMedications.Count == 0 )
+                    {
+                        nodatastack.IsVisible = true;
+                        datastack.IsVisible = false;
+                    }
+
+                    await MopupService.Instance.PushAsync(new PopupPageHelper("Medication Deleted") { });
+                    await Task.Delay(1500);
+                    await MopupService.Instance.PopAllAsync(false);
+
+
+                }
+            }
+            else
+            {
+                return;
+            }
+        }
+        catch (Exception Ex)
+        {
+           NotasyncMethod(Ex);
+        }
+    }
+
+
+    //Press to Hold Pending Meds Delete
+
+    //private async void RevertSelectedPending() 
+    //{
+    //    try
+    //    {
+    //        if (DeleteFrame.IsVisible == true)
+    //        {
+    //            DeleteFrame.IsVisible = false;
+    //            foreach (var item in AllUserMedications)
+    //            {
+    //                if (item.status == "Pending")
+    //                {
+    //                    item.pendimgSource = "warningicon.png";
+    //                    item.pendborderBack = "#00FFFFFF";
+    //                }
+    //            }
+    //        }
+    //    }
+    //    catch (Exception Ex)
+    //    {
+    //        NotasyncMethod(Ex);
+    //    }
+    //}
+
+    //async void ImageButton_Clicked(object sender, EventArgs e)
+    //{
+    //    try
+    //    {
+    //        //delete all selected items
+    //        string Borrar = null;
+
+    //        if (sender is Button btn)
+    //        {
+    //            Borrar = btn.CommandParameter?.ToString();
+    //        }
+    //        else if (sender is ImageButton imgBtn)
+    //        {
+    //            Borrar = imgBtn.CommandParameter?.ToString();
+    //        }
+
+    //        if (Borrar == "Delete")
+    //        {
+    //            var AllSelectedMeds = new ObservableCollection<usermedication>(AllUserMedications.Where(x => x.pendborderBack == "#e5f9f4"));
+    //            foreach (var item in AllSelectedMeds)
+    //            {
+    //                AllUserMedications.Remove(item);
+    //                CurrentMedications.Remove(item);
+    //                item.deleted = true;               
+    //            }
+    //            APICalls database = new APICalls();
+    //            await database.DeletePendingMedications(AllSelectedMeds);
+
+    //            //Update Page 
+    //            await MopupService.Instance.PushAsync(new PopupPageHelper("Medication Deleted") { });
+    //            await Task.Delay(1500);
+    //            await MopupService.Instance.PopAllAsync(false);
+
+    //            //Update items 
+
+    //            var sortedbyname = CurrentMedications.OrderBy(x => x.status == "Pending" ? 0 : 1).ThenBy(x => x.ChangedMedName).ToList();
+
+    //            NovoConsentData();
+
+    //            //Active Medications List 
+    //            if (sortedbyname.Count == 0)
+    //            {
+    //                nodatastack.IsVisible = true;
+    //                datastack.IsVisible = false;
+    //                await Task.Delay(2000);
+    //            }
+    //            else
+    //            {
+    //                noActivemedlbl.IsVisible = false;
+    //                nodatastack.IsVisible = false;
+    //                datastack.IsVisible = true;
+    //                SegmentDetails.Text = "Medications you have currently scheduled";
+    //                AllUserMedsList.IsVisible = true;
+    //                AllUserMedsList.ItemsSource = sortedbyname;
+
+    //            }         
+
+
+    //        }
+    //        else
+    //        {
+    //            //Cancel 
+    //            foreach (var item in AllUserMedications)
+    //            {
+    //                if (item.status == "Pending")
+    //                {
+    //                    item.pendimgSource = "warningicon.png";
+    //                    item.pendborderBack = "#00FFFFFF";
+    //                }
+    //            }
+    //        }
+
+    //        //DeleteFrame.IsVisible = false;
+    //    }
+    //    catch (Exception Ex)
+    //    {
+    //        NotasyncMethod(Ex);
+    //    }
+    //}
+
+    //private void AllUserMedsList_ItemLongPress(object sender, Syncfusion.Maui.ListView.ItemLongPressEventArgs e)
+    //{
+    //    try
+    //    {
+    //        if (e == null) return;
+    //        usermedication SelectedMed = e.DataItem as usermedication;
+
+    //        var medication = AllUserMedications.FirstOrDefault(m => m.id == SelectedMed.id);
+    //        if (medication != null && medication.PendingMeds == true)
+    //        {
+    //            // Toggle between two states
+    //            if (medication.pendimgSource == "regcompletetick.png")
+    //            {
+    //                medication.pendimgSource = "warningicon.png";
+    //                medication.pendborderBack = "#00FFFFFF";
+    //            }
+    //            else
+    //            {
+    //                medication.pendimgSource = "regcompletetick.png";
+    //                medication.pendborderBack = "#e5f9f4";
+    //            }
+    //        }
+
+    //        bool check = AllUserMedications.Any(x => x.pendborderBack != "#00FFFFFF" && x.PendingMeds == true);
+    //        DeleteFrame.IsVisible = check;
+
+    //    }
+    //    catch (Exception Ex)
+    //    {
+    //        NotasyncMethod(Ex);
+    //    }
+    //}
 }

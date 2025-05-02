@@ -14,6 +14,7 @@ public partial class AddHCPs : ContentPage
     static Regex ValidEmailRegex = CreateValidEmailRegex();
     APICalls database = new APICalls();
     bool IsEdit;
+    bool AddContact; 
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
@@ -44,7 +45,7 @@ public partial class AddHCPs : ContentPage
             NotasyncMethod(Ex);
         }
     }
-    public AddHCPs(ObservableCollection<hcp> AllHCPsPassed, bool Editis, hcp HCPSelected)
+    public AddHCPs(ObservableCollection<hcp> AllHCPsPassed, bool Editis, hcp HCPSelected, bool AddContactClick)
     {
         try
         {
@@ -52,7 +53,10 @@ public partial class AddHCPs : ContentPage
             IsEdit = Editis;
             AllUserHCPs = AllHCPsPassed;
             SelectedHCP = HCPSelected;
+            AddContact = AddContactClick; 
             PopulateEdit();
+            CheckAddContact(); 
+
         }
         catch (Exception Ex)
         {
@@ -65,6 +69,7 @@ public partial class AddHCPs : ContentPage
         try
         {
             HCPAdd.Text = "Update HCP";
+            AddHCPtitle.Text = "Edit HCP";
             //Should always contain value 
             FirstNameEntry.Text = SelectedHCP.firstname;
             SurNameEntry.Text = SelectedHCP.surname;
@@ -114,6 +119,25 @@ public partial class AddHCPs : ContentPage
             else
             {
                 CheckBox.IsChecked = true;
+            }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    public async void CheckAddContact()
+    {
+        try
+        {
+            if (AddContact)
+            {
+                //Set Checkbox
+                CheckBox.IsChecked = true;
+                await Task.Delay(100); // Wait for the layout to complete
+                await AddScrollview.ScrollToAsync(0, AddScrollview.ContentSize.Height, true);
+
             }
         }
         catch (Exception Ex)
@@ -434,29 +458,57 @@ public partial class AddHCPs : ContentPage
                     {
                         NEWHCP.addresslineone = addresslineoneEntry.Text;
                     }
+                    else
+                    {
+                        NEWHCP.addresslineone = null; 
+                    }
                     if (!string.IsNullOrEmpty(towncityEntry.Text))
                     {
                         NEWHCP.towncity = towncityEntry.Text;
+                    }
+                    else
+                    {
+                        NEWHCP.towncity = null;
                     }
                     if (!string.IsNullOrEmpty(countryEntry.Text))
                     {
                         NEWHCP.country = countryEntry.Text;
                     }
+                    else
+                    {
+                        NEWHCP.country = null;
+                    }
                     if (!string.IsNullOrEmpty(countyEntry.Text))
                     {
                         NEWHCP.county = countyEntry.Text;
+                    }
+                    else
+                    {
+                        NEWHCP.county = null;
                     }
                     if (!string.IsNullOrEmpty(postcodeEntry.Text))
                     {
                         NEWHCP.postcode = postcodeEntry.Text;
                     }
+                    else
+                    {
+                        NEWHCP.postcode = null;
+                    }
                     if (!string.IsNullOrEmpty(telephoneEntry.Text))
                     {
                         NEWHCP.telephone = telephoneEntry.Text;
                     }
+                    else
+                    {
+                        NEWHCP.telephone = null;
+                    }
                     if (!string.IsNullOrEmpty(EmailEntry.Text))
                     {
                         NEWHCP.email = EmailEntry.Text;
+                    }
+                    else
+                    {
+                        NEWHCP.email = null;
                     }
                 }
                 //Update HCP in the DB 
@@ -471,29 +523,57 @@ public partial class AddHCPs : ContentPage
                     {
                         SelectedHCP.addresslineone = NEWHCP.addresslineone;
                     }
+                    else
+                    {
+                        SelectedHCP.addresslineone = null;
+                    }
                     if (!string.IsNullOrEmpty(NEWHCP.towncity))
                     {
                         SelectedHCP.towncity = NEWHCP.towncity;
+                    }
+                    else
+                    {
+                        SelectedHCP.addresslineone = null;
                     }
                     if (!string.IsNullOrEmpty(NEWHCP.country))
                     {
                         SelectedHCP.country = NEWHCP.country;
                     }
+                    else
+                    {
+                        SelectedHCP.country = null;
+                    }
                     if (!string.IsNullOrEmpty(NEWHCP.county))
                     {
                         SelectedHCP.county = NEWHCP.county;
+                    }
+                    else
+                    {
+                        SelectedHCP.county = null;
                     }
                     if (!string.IsNullOrEmpty(NEWHCP.postcode))
                     {
                         SelectedHCP.postcode = NEWHCP.postcode;
                     }
+                    else
+                    {
+                        SelectedHCP.postcode = null;
+                    }
                     if (!string.IsNullOrEmpty(NEWHCP.telephone))
                     {
                         SelectedHCP.telephone = NEWHCP.telephone;
                     }
+                    else
+                    {
+                        SelectedHCP.telephone = null;
+                    }
                     if (!string.IsNullOrEmpty(NEWHCP.email))
                     {
                         SelectedHCP.email = NEWHCP.email;
+                    }
+                    else
+                    {
+                        SelectedHCP.email = null;
                     }
                     await database.UpdateHCPItem(SelectedHCP);
 

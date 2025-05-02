@@ -70,13 +70,23 @@ public partial class HealthReport : ContentPage
                     NovoContentlbl.Text = Preferences.Default.Get("NovoContent", String.Empty);
                     NovoExitidlbl.Text = Preferences.Default.Get("NovoExitid", String.Empty);
 
-                    // Hide NovoConsent after 5 Seconds 
-                    Task.Run(async () =>
-                    {
-                        await Task.Delay(5000);
-                        NovoConsent.IsVisible = false;
-                    });
+                    await Task.Delay(5000);
+                    NovoConsent.IsVisible = false;
 
+                    //// Hide NovoConsent after 5 Seconds 
+                    //Task.Run(async () =>
+                    //{
+                    //    try
+                    //    {
+                    //        await Task.Delay(5000);
+                    //        MainThread.BeginInvokeOnMainThread(() => NovoConsent.IsVisible = false);
+                    //    }
+                    //    catch (Exception ex)
+                    //    {
+                    //        // Handle/log the exception here
+                    //        NotasyncMethod(ex);
+                    //    }
+                    //});              
                 }
             }
         }

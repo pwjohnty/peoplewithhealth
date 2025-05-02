@@ -185,7 +185,7 @@ HorizontalOptions="Start" />
 
                     <inputLayout:SfTextInputLayout InputViewPadding="10" x:Name="postcodefloat" ShowHint="True" IsHintAlwaysFloated="True" BackgroundColor="Transparent" Margin="0,20,0,0" Stroke="#031926" ContainerBackground="Transparent" ContainerType="None" OutlineCornerRadius="5"
 >
-                        <Entry FontSize="12" PlaceholderColor="Gray" IsTextPredictionEnabled="False" TextChanged="postcodetext_TextChanged" x:Name="postcodetext"  FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Postcode" TextColor="#031926">
+                        <Entry FontSize="12" PlaceholderColor="Gray" IsTextPredictionEnabled="False" MaxLength="4" TextChanged="postcodetext_TextChanged" x:Name="postcodetext"  FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" Placeholder="Postcode" TextColor="#031926">
                             <Entry.Keyboard>
                                 <Keyboard x:FactoryMethod="Create">
                                     <x:Arguments>

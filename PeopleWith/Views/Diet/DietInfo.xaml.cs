@@ -80,14 +80,22 @@ public partial class DietInfo : ContentPage
 
             if (!String.IsNullOrEmpty(Dietinformation.dietid))
             {
-                var Split = Dietinformation.dietinformation.Split('|');
-                Bodylbl.Text = Split[0];
-                infoSource.link = Split[1];
+                if (!Dietinformation.dietinformation.Contains("|"))
+                {
+                    WebsiteStack.IsVisible = false;
+                    Bodylbl.Text = Dietinformation.dietinformation;
+                }
+                else
+                {
+                    var Split = Dietinformation.dietinformation.Split('|');
+                    Bodylbl.Text = Split[0];
+                    infoSource.link = Split[1];
+                    string extracted = ExtractDomain(Split[1]);
+                    infoSource.title = extracted;
+                }
+
                 infoSource.img = "link.png";
                 infoSource.type = "Website";
-                string extracted = ExtractDomain(Split[1]);
-                infoSource.title = extracted;
-
                 typelbl.Text = infoSource.type;
                 titelbl.Text = infoSource.title;
             }

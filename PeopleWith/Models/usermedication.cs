@@ -117,6 +117,39 @@ namespace PeopleWith
         [System.Text.Json.Serialization.JsonIgnore]
         public bool PendingMeds { get; set; }
 
+        private string pendimgsource;
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string pendimgSource
+        {
+            get { return pendimgsource; }
+            set
+            {
+                pendimgsource = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(pendimgSource)));
+                }
+            }
+        }
+
+
+        private string pendborderback;
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string pendborderBack
+        {
+            get { return pendborderback; }
+            set
+            {
+                pendborderback = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(pendborderBack)));
+                }
+            }
+        }
+
         [System.Text.Json.Serialization.JsonIgnore]
         public bool ActiveMeds { get; set; }
 

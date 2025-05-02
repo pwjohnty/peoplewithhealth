@@ -74,8 +74,6 @@ public partial class AllInvestigations : ContentPage
                 EmptyStack.IsVisible = false;
                 InvestOverview.IsVisible = true;
                 AllInvestView.ItemsSource = AllUserInvests
-                .GroupBy(m => m.investigationname)
-                .Select(g => g.OrderByDescending(f => DateTime.Parse(f.investigationdate)).First())
                 .OrderByDescending(f => DateTime.Parse(f.investigationdate))
                 .ToList();
 

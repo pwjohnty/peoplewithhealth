@@ -4844,15 +4844,17 @@ public partial class AddMeasurement : ContentPage
                     else if (measurementnamestring == "Sleep Duration")
                     {
                         //Add Sleep Duration 
+                        // Add Sleep Duration
+                        int hours = int.TryParse(hoursentry.Text, out int h) ? h : 0;
+                        int minutes = int.TryParse(minsentry.Text, out int m) ? m : 00;
 
-                        var hours = hoursentry.Text;
-                        if (!string.IsNullOrEmpty(hours) && hours.Length == 2 && hours.StartsWith("0"))
-                        {
-                            hours = hours.Substring(1); // Remove first char '0;
-                        }
-                        var Mins = minsentry.Text;
-                        var Time = hours + "." + Mins;
-                        newmeasurment.value = Time;
+                        string formattedHours = hours.ToString();
+
+                        // Format time as decimal string
+                        string timeString = $"{formattedHours}.{minutes:D2}";
+
+                        // Assign to measurement value
+                        newmeasurment.value = timeString;
 
                         if (SleepQualitySelect.SelectedItem != null)
                         {

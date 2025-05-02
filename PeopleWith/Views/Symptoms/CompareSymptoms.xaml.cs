@@ -257,52 +257,86 @@ public partial class CompareSymptoms : ContentPage
             CurrentChip = getitem.Text;
             if (getitem.Text == "All")
             {
-                ConfigureChart(isAllTime: true);
+
+                // If "All" is tapped while it's already selected and it's the only item selected — clear selection
+                if (SymptomName.SelectedItems.Count == 1 && getitem.IsSelected)
+                {
+                    //SymptomName.SelectedItems.Remove(getitem);
+                    getitem.IsSelected = false;
+                    SymptomProgChart.Series.Clear();
+                }
+                else
+                {
+                    // Remove all non-"All" items
+                    var nonAllItems = SymptomName.SelectedItems
+                        .Where(item => item is ChipItem chip && chip.Text != "All")
+                        .ToList();
+
+                    foreach (var item in nonAllItems)
+                    {
+                        SymptomName.SelectedItems.Remove(item);
+                        if (item is ChipItem chip) chip.IsSelected = false;
+                    }
+
+                    if (!getitem.IsSelected)
+                    {
+                        //SymptomName.SelectedItems.Add(getitem);
+                        getitem.IsSelected = true;
+                    }
+
+                    SymptomProgChart.Series.Clear();
+                    ConfigureChart(isAllTime: true);
+                }
 
             }
             else
             {
 
-                var allItem = SymptomName.SelectedItems.FirstOrDefault(item =>
-               item is ChipItem chipItem && chipItem.Text == "All");
+                var allItem = SymptomName.SelectedItems
+               .FirstOrDefault(item => item is ChipItem chip && chip.Text == "All") as ChipItem;
 
                 if (allItem != null)
                 {
                     SymptomName.SelectedItems.Remove(allItem);
-                    SymptomProgChart.Series.Clear();
+                    allItem.IsSelected = false;
                 }
 
-                //if (getitem.IsSelected == true && SymptomName.SelectedItems.Count == 1)
-                //{
-                //    SymptomProgChart.Series.Clear();
-                //    getitem.IsSelected = false;
-                //    return;
-                //}
-
-                if(getitem.IsSelected == true)
+                // Toggle tapped item
+                if (SymptomName.SelectedItems.Contains(getitem))
                 {
+                    //SymptomName.SelectedItems.Remove(getitem);
                     getitem.IsSelected = false;
+                    var existing = Newchartusersymptoms.FirstOrDefault(x => x.symptomtitle == getitem.Text);
+                    if (existing != null)
+                    {
+                        Newchartusersymptoms.Remove(existing);
+                    }
                 }
                 else
                 {
+                    //SymptomName.SelectedItems.Add(getitem);
                     getitem.IsSelected = true;
+
+                    var finditem = AllUserSymptoms.FirstOrDefault(x => x.symptomtitle == getitem.Text);
+                    if (finditem != null && !Newchartusersymptoms.Contains(finditem))
+                    {
+                        Newchartusersymptoms.Add(finditem);
+                    }
                 }
-           
-                
+
                 SymptomProgChart.Series.Clear();
-               
+
                 // Check if any selected item is "All"
 
-                var finditem = AllUserSymptoms.Where(x => x.symptomtitle == getitem.Text).FirstOrDefault();
-
-                if(Newchartusersymptoms.Contains(finditem))
-                {
-                    Newchartusersymptoms.Remove(finditem);
-                }
-                else
-                {
-                    Newchartusersymptoms.Add(finditem);
-                }
+                // Update your symptom list based on the selected item
+                //var finditem = AllUserSymptoms.FirstOrDefault(x => x.symptomtitle == getitem.Text);
+                //if (finditem != null)
+                //{
+                //    if (Newchartusersymptoms.Contains(finditem))
+                //        Newchartusersymptoms.Remove(finditem);
+                //    else
+                //        Newchartusersymptoms.Add(finditem);
+                //}
 
 
                 foreach (var item in Newchartusersymptoms)

@@ -382,21 +382,30 @@ public partial class SFENRAT : ContentPage
     {
         try
         {
-            var item = e.AddedItem as symptom;
-            if(item == null)
+
+            if (e == null) return;
+
+            // Addded Item Clicked
+            if (e.AddedItem != null)
             {
-                item = e.RemovedItem as symptom; 
+                var Item = e.AddedItem as symptom;
+
+                if (!symptomchipselectedlist.Contains(Item))
+                {
+                    symptomchipselectedlist.Add(Item);
+                }                 
             }
 
-            if(symptomchipselectedlist.Contains(item))
+            // Remove Item Clicked
+            if (e.RemovedItem != null)
             {
-                symptomchipselectedlist.Remove(item);
+                var Item = e.RemovedItem as symptom;
+
+                if (symptomchipselectedlist.Contains(Item))
+                {
+                    symptomchipselectedlist.Remove(Item);
+                }
             }
-            else
-            {
-                symptomchipselectedlist.Add(item);
-            }
-           
 
         }
         catch(Exception ex)
@@ -1054,6 +1063,8 @@ public partial class SFENRAT : ContentPage
                 newuser.registrycondition = "PPGL";
                 userdiag.diagnosisid = "4561A0CB-7536-4712-9DF9-CE0E4FA5BEC9";
             }
+
+            userdiag.userid = newuser.userid; 
         }
         catch (Exception Ex)
         {
@@ -1173,20 +1184,29 @@ public partial class SFENRAT : ContentPage
     {
         try
         {
-            var item = e.AddedItem as medication;
-            if (item == null)
+            if (e == null) return;
+
+            // Addded Item Clicked
+            if (e.AddedItem != null)
             {
-                item = e.RemovedItem as medication;
+                var Item = e.AddedItem as medication;
+
+                if (!medicationchipselectedlist.Contains(Item))
+                {
+                    medicationchipselectedlist.Add(Item);
+                }
             }
 
-            if (medicationchipselectedlist.Contains(item))
+            // Remove Item Clicked
+            if (e.RemovedItem != null)
             {
-                medicationchipselectedlist.Remove(item);
-            }
-            else
-            {
-                medicationchipselectedlist.Add(item);
-            }
+                var Item = e.RemovedItem as medication;
+
+                if (medicationchipselectedlist.Contains(Item))
+                {
+                    medicationchipselectedlist.Remove(Item);
+                }
+            }         
         }
         catch (Exception Ex)
         {

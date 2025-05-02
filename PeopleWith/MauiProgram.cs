@@ -56,7 +56,7 @@ namespace PeopleWith
                     // Debug messages are written to stdout with Console.Writeline,
                     // and are viewable in your IDE's debug console or with 'adb logcat', etc.
                     // Debug Mode = True/ Release = False;
-                    options.Debug = true;
+                    options.Debug = false;
 
                     options.AttachStacktrace = true;
 

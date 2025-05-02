@@ -418,9 +418,9 @@ HorizontalOptions="FillAndExpand">
                 </Grid>
             </Frame>
 
-            <StackLayout x:Name="ImageStack">
+            <StackLayout x:Name="ImageStack"  IsVisible="False">
                 <Label Text="Add Image" FontFamily="HankenGroteskBold" Margin="20,10,0,0"  VerticalOptions="Center" HorizontalOptions="Start"   FontSize="16" TextColor="#031926" />
-                <Label Text="Tap the box below to capture an image of the symptom. Tap the image to retake if you're not satisfied." FontFamily="HankenGroteskBold" Margin="20,5,0,0"  VerticalOptions="Center" HorizontalOptions="Start"   FontSize="12" TextColor="#031926" />
+                <Label Text="Tap the box below to capture an image of the symptom" FontFamily="HankenGroteskBold" Margin="20,5,0,0"  VerticalOptions="Center" HorizontalOptions="Start"   FontSize="12" TextColor="#031926" />
 
                 <Border  Stroke="#fff7ea" StrokeShape="RoundRectangle 10" StrokeThickness="1" Padding="10" BackgroundColor="#fff7ea" Margin="20,5,20,10">
                     <Grid>

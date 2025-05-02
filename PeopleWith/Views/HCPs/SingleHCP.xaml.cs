@@ -68,8 +68,9 @@ public partial class SingleHCP : ContentPage
             else
             {
                 Address.ContactItem = HCPSelected.addresslineone;
+                ContactDetailsList.Add(Address);
             }
-            ContactDetailsList.Add(Address);
+         
 
             //Town/City
             var Town = new hcp();
@@ -81,9 +82,9 @@ public partial class SingleHCP : ContentPage
             else
             {
                 Town.ContactItem = HCPSelected.towncity;
+                ContactDetailsList.Add(Town);
             }
-            ContactDetailsList.Add(Town);
-
+           
             //Country
             var Country = new hcp();
             Country.ContactTitle = "Country";
@@ -94,8 +95,9 @@ public partial class SingleHCP : ContentPage
             else
             {
                 Country.ContactItem = HCPSelected.country;
+                ContactDetailsList.Add(Country);
             }
-            ContactDetailsList.Add(Country);
+            
        
             //County
             var County = new hcp();
@@ -107,8 +109,9 @@ public partial class SingleHCP : ContentPage
             else
             {
                 County.ContactItem = HCPSelected.county;
+                ContactDetailsList.Add(County);
             }
-            ContactDetailsList.Add(County);
+            
 
             //postcode 
             var postcode = new hcp();
@@ -120,8 +123,9 @@ public partial class SingleHCP : ContentPage
             else
             {
                 postcode.ContactItem = HCPSelected.postcode;
+                ContactDetailsList.Add(postcode);
             }
-            ContactDetailsList.Add(postcode);
+            
 
             //Telephone  
             var Telephone = new hcp();
@@ -133,8 +137,9 @@ public partial class SingleHCP : ContentPage
             else
             {
                 Telephone.ContactItem = HCPSelected.telephone;
+                ContactDetailsList.Add(Telephone);
             }
-            ContactDetailsList.Add(Telephone);
+            
 
             //Email  
             var Email = new hcp();
@@ -146,10 +151,23 @@ public partial class SingleHCP : ContentPage
             else
             {
                 Email.ContactItem = HCPSelected.email;
+                ContactDetailsList.Add(Email);
             }
-            ContactDetailsList.Add(Email);
 
-            HCPContactDetails.ItemsSource = ContactDetailsList;
+            if (ContactDetailsList.Count > 0)
+            {
+                ContactDetailslbl.Text = "Contact Details";
+                HCPContactFrame.IsVisible = true;
+                AddContactDetails.IsVisible = false;
+                HCPContactDetails.ItemsSource = ContactDetailsList;
+            }
+            else
+            {
+                ContactDetailslbl.Text = "No Contact Details";
+                HCPContactFrame.IsVisible = false;
+                AddContactDetails.IsVisible = true;
+            }
+               
         }
         catch (Exception Ex)
         {
@@ -200,7 +218,7 @@ public partial class SingleHCP : ContentPage
                     HistoricalListview.ItemsSource = HistoricalAppointments.OrderBy(X => X.datetimeConverted);
                 }
 
-                showalllbl2.Text = "Tap to view all Appointments With this HCP";
+                showalllbl2.Text = "Tap to view all Appointments with this HCP";
                 showallbtn.Text = "View Appointments";
 
             }
@@ -231,7 +249,23 @@ public partial class SingleHCP : ContentPage
                 //Limit No. of Taps 
                 Editbtn.IsEnabled = false;
                 bool IsEdit = true;
-                await Navigation.PushAsync(new AddHCPs(AllUserHCPs, IsEdit, HCPSelected), false);
+                bool AddContactDetails = false;
+
+                var toolbarItem = sender as ToolbarItem;
+                if (toolbarItem != null && toolbarItem.CommandParameter != null)
+                {
+                    string command = toolbarItem.CommandParameter.ToString();
+                    if (command == "Edit")
+                    {
+                        //Do Nothing
+                    }
+                }
+                else
+                {
+                    AddContactDetails = true;
+                }
+
+                    await Navigation.PushAsync(new AddHCPs(AllUserHCPs, IsEdit, HCPSelected, AddContactDetails), false);
                 Editbtn.IsEnabled = true;
             }
             else

@@ -59,6 +59,8 @@ public partial class WH : ContentPage
     ObservableCollection<answer> GetCommPref = new ObservableCollection<answer>();
 
     ObservableCollection<usermeasurement> addusermeasurements = new ObservableCollection<usermeasurement>();
+    userfeedback UserFeedbackToAdd = new userfeedback();
+    userdiet DietToAdd = new userdiet(); 
 
     List<string> commprefaddedlist = new List<string>();
 
@@ -759,6 +761,7 @@ public partial class WH : ContentPage
             umheight.userid = newuser.userid;
             umheight.inputdatetime = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
             addusermeasurements.Add(umheight);
+          
 
             //add weight
             var umweight = new usermeasurement();
@@ -769,6 +772,7 @@ public partial class WH : ContentPage
             umweight.userid = newuser.userid;
             umweight.inputdatetime = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
             addusermeasurements.Add(umweight);
+            
 
             //add bmi
             var umbmi = new usermeasurement();
@@ -779,9 +783,7 @@ public partial class WH : ContentPage
             umbmi.userid = newuser.userid;
             umbmi.inputdatetime = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
             addusermeasurements.Add(umbmi);
-
-
-
+          
             hwframe.IsVisible = false;
             genderatbirthframe.IsVisible = true;
             skipbtn.IsVisible = false;
@@ -1481,7 +1483,7 @@ public partial class WH : ContentPage
                 newuser.registrycondition = "WHA4";
             }
 
-            await Navigation.PushAsync(new RegisterFinalPage(newuser, topprogress.Progress, userresponselist, additonalconsent, symptomstoadd, medicationstoadd, adduserdiagnosis, addusermeasurements), false);
+            await Navigation.PushAsync(new RegisterFinalPage(newuser, topprogress.Progress, userresponselist, additonalconsent, symptomstoadd, medicationstoadd, adduserdiagnosis, addusermeasurements, DietToAdd), false);
 
 
         }
@@ -1544,22 +1546,30 @@ public partial class WH : ContentPage
     {
         try
         {
-            var item = e.AddedItem as symptom;
-            if (item == null)
+
+            if (e == null) return;
+
+            // Addded Item Clicked
+            if (e.AddedItem != null)
             {
-                item = e.RemovedItem as symptom;
+                var Item = e.AddedItem as symptom;
+
+                if (!symptomchipselectedlist.Contains(Item))
+                {
+                    symptomchipselectedlist.Add(Item);
+                }
             }
 
-            if (symptomchipselectedlist.Contains(item))
+            // Remove Item Clicked
+            if (e.RemovedItem != null)
             {
-                symptomchipselectedlist.Remove(item);
-            }
-            else
-            {
-                symptomchipselectedlist.Add(item);
-            }
+                var Item = e.RemovedItem as symptom;
 
-
+                if (symptomchipselectedlist.Contains(Item))
+                {
+                    symptomchipselectedlist.Remove(Item);
+                }
+            }
         }
         catch (Exception ex)
         {
@@ -1571,19 +1581,29 @@ public partial class WH : ContentPage
     {
         try
         {
-            var item = e.AddedItem as medication;
-            if (item == null)
+
+            if (e == null) return;
+
+            // Addded Item Clicked
+            if (e.AddedItem != null)
             {
-                item = e.RemovedItem as medication;
+                var Item = e.AddedItem as medication;
+
+                if (!medicationchipselectedlist.Contains(Item))
+                {
+                    medicationchipselectedlist.Add(Item);
+                }
             }
 
-            if (medicationchipselectedlist.Contains(item))
+            // Remove Item Clicked
+            if (e.RemovedItem != null)
             {
-                medicationchipselectedlist.Remove(item);
-            }
-            else
-            {
-                medicationchipselectedlist.Add(item);
+                var Item = e.RemovedItem as medication;
+
+                if (medicationchipselectedlist.Contains(Item))
+                {
+                    medicationchipselectedlist.Remove(Item);
+                }
             }
         }
         catch (Exception Ex)
@@ -2048,9 +2068,47 @@ public partial class WH : ContentPage
                 dietetext.Text = string.Empty;
             }
 
+            DietToAdd = null;
 
+            if (item.label.Contains("Other"))
+            {
+                return;
+            }
+            else
+            {
+                DietToAdd = new userdiet();
+                var AddDiet = new userdiet();
+                AddDiet.userid = newuser.userid;
+                AddDiet.datestarted = DateTime.Now.Date.ToString("dd/MM/yyyy");
 
+                if (item.answerid == "29F8D326-23F9-401F-9CB7-37368F60924A" || item.label == "Vegetarian")
+                {
+                    AddDiet.diettitle = "Vegetarian Diet";
+                    AddDiet.dietid = "59120ABF-A96E-470E-AF3F-26ABE992F1A6";
+                }
+                else if (item.answerid == "69D8DE85-BF86-4FB4-B3C8-3DBE215CFC21" || item.label == "Dairy Free")
+                {
+                    AddDiet.diettitle = "Dairy Free (Lactose-Free Diet)";
+                    AddDiet.dietid = "FD13132F-82CA-4E50-AD8D-1DE069D2524F";
+                }
+                else if (item.answerid == "8F43A920-485A-4040-B26C-078F6C36B6BF" || item.label == "Gluten Free")
+                {
+                    AddDiet.diettitle = "Gluten-Free Diet";
+                    AddDiet.dietid = "FDB2C391-F172-40A4-8B21-A72AB8B6CC72";
+                }
+                else if (item.answerid == "8FB873F9-66B8-448E-A360-F6AE1EC7CC50" || item.label == "Pescatarian")
+                {
+                    AddDiet.diettitle = "Pescatarian";
+                    AddDiet.dietid = "972F4A6A-993B-4C6E-B58C-C94AC37B477D";
+                }
+                else if (item.answerid == "B4B423D1-395A-4F7D-9700-F9D652D0260A" || item.label == "Vegan")
+                {
+                    AddDiet.diettitle = "Vegan Diet";
+                    AddDiet.dietid = "0566612F-691F-4FBB-B96C-1FB1E8458A2F";
+                }
 
+                DietToAdd = AddDiet;
+            }           
         }
         catch(Exception ex)
         {
@@ -2100,6 +2158,7 @@ public partial class WH : ContentPage
 
             newud.diagnosisid = item.Diagnosisid;
             newud.diagnosistitle = item.Title;
+            newud.userid = newuser.userid;
 
             adduserdiagnosis.Add(newud);
 

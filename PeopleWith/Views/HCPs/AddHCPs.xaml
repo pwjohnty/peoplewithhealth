@@ -4,11 +4,11 @@
              NavigationPage.HasNavigationBar="True"
              xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
              x:Class="PeopleWith.AddHCPs" BackgroundColor="White">
-    <ScrollView>
+    <ScrollView x:Name="AddScrollview">
     <VerticalStackLayout >
         
         <!--Title-->
-        <Label Text="Add HCP" FontSize="26" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
+        <Label Text="Add HCP" x:Name="AddHCPtitle" FontSize="26" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
       
         <!--firstname & Surname-->
             <Grid x:Name="NameStack" Margin="20,0,20,0" HeightRequest="85" Padding="0" ColumnSpacing="10" >

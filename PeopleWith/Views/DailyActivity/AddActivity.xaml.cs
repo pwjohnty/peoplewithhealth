@@ -29,7 +29,8 @@ public partial class AddActivity : ContentPage
     public string AddorEdit = string.Empty; 
     userdailyactivity NewUserActivity = new userdailyactivity();
     userdailyactivity ExistingActivity = new userdailyactivity();
-    public List<string> HowditgoList = new List<string>(); 
+    public List<string> HowditgoList = new List<string>();
+    public string DurationToAdd; 
     public ObservableCollection<moodlist> AllMoods { get; set; }
     public moodlist GetMoodlist { get; set; }
     public event EventHandler<bool> ConnectivityChanged;
@@ -464,7 +465,12 @@ public partial class AddActivity : ContentPage
             }
 
             //Mood and Outcome Already Added if Selcted 
-            FeedbacktoAdd.Duration = hoursentry.Text + ":" + minsentry.Text;
+            int hours = int.TryParse(hoursentry.Text, out int h) ? h : 00;
+            int minutes = int.TryParse(minsentry.Text, out int m) ? m : 00;
+            // Create a TimeSpan for duration
+            var duration = new TimeSpan(hours, minutes,0);
+
+            FeedbacktoAdd.Duration = $"{(int)duration.TotalHours:D2}:{duration.Minutes:D2}";
             NewUserActivity.ActivityFeedbackList = FeedbacktoAdd;
             ExistingActivity.ActivityFeedbackList = FeedbacktoAdd;
 

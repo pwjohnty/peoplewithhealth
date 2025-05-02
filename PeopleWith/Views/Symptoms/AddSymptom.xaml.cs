@@ -166,7 +166,7 @@ public partial class AddSymptom : ContentPage
                     var usersymptom = new symptomfeedback();
                     Guid newUUID = Guid.NewGuid();
                     usersymptom.symptomfeedbackid = newUUID.ToString().ToUpper();
-                    usersymptom.timestamp = DateTime.Now.ToString();
+                    usersymptom.timestamp = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
                     usersymptom.intensity = "50";
                     usersymptom.notes = null;
                     usersymptom.triggers = null;

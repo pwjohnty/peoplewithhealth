@@ -7,6 +7,7 @@ using Microsoft.Maui.Networking;
 using Microsoft.Maui.Devices;
 using Microsoft.Maui.ApplicationModel.Communication;
 using Microsoft.Maui.ApplicationModel;
+using System.Reflection.Metadata.Ecma335;
 
 namespace PeopleWith;
 
@@ -25,6 +26,7 @@ public partial class ProfileSection : ContentPage
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
+    bool isrunning = false; 
 
     async public void NotasyncMethod(Exception Ex)
     {
@@ -434,12 +436,16 @@ public partial class ProfileSection : ContentPage
             NetworkAccess accessType = Connectivity.Current.NetworkAccess;
             if (accessType == NetworkAccess.Internet)
             {
-                UserDetails.IsEnabled = false;
+                if (isrunning) return;
+
+                isrunning = true; 
                 var ItemTapped = e.DataItem as user;
                 var SelectedItem = ItemTapped.SettingsTitle;
                 string Selected = "Health Details";
                 await Navigation.PushAsync(new ProfileEdit(SelectedItem, Selected, AllUserData), false);
-                UserDetails.IsEnabled = true;
+                isrunning = false; 
+                //UserDetails.SelectedItem = null;
+                // UserDetails.IsEnabled = true;
             }
             else
             {
@@ -462,7 +468,9 @@ public partial class ProfileSection : ContentPage
             NetworkAccess accessType = Connectivity.Current.NetworkAccess;
             if (accessType == NetworkAccess.Internet)
             {
-                Settings.IsEnabled = false; 
+                if (isrunning) return;
+
+                isrunning = true;
                 var ItemTapped = e.DataItem as user;
                 var SelectedItem = ItemTapped.SettingsTitle;
                 if (SelectedItem == "Notifications")
@@ -506,7 +514,7 @@ public partial class ProfileSection : ContentPage
                     string Selected = "Settings";
                     await Navigation.PushAsync(new ProfileEdit(SelectedItem, Selected, AllUserData), false);
                 }
-                Settings.IsEnabled = true;
+                isrunning = false;
             }
             else
             {
@@ -529,7 +537,9 @@ public partial class ProfileSection : ContentPage
             NetworkAccess accessType = Connectivity.Current.NetworkAccess;
             if (accessType == NetworkAccess.Internet)
             {
-                PrivacyList.IsEnabled = false; 
+                if (isrunning) return;
+
+                isrunning = true;
                 var ItemTapped = e.DataItem as user;
                 var SelectedItem = ItemTapped.SettingsTitle;
                 if (SelectedItem == "Terms of Use")
@@ -545,7 +555,8 @@ public partial class ProfileSection : ContentPage
                     string Selected = "Privacy";
                     await Navigation.PushAsync(new ProfileEdit(SelectedItem, Selected, AllUserData), false);
                 }
-                PrivacyList.IsEnabled = true;
+
+                isrunning = false;
             }
             else
             {
