@@ -79,7 +79,7 @@
                 </StackLayout>
             </Border>
 
-            <Border x:Name="CBDOrderSection" IsVisible="False" StrokeShape="RoundRectangle 10"  Margin="10,20,10,5"  BackgroundColor="#009fe3" HeightRequest="100" Stroke="#009fe3" Padding="0">
+            <!--<Border x:Name="CBDOrderSection" IsVisible="False" StrokeShape="RoundRectangle 10"  Margin="10,20,10,5"  BackgroundColor="#009fe3" HeightRequest="100" Stroke="#009fe3" Padding="0">
                 <StackLayout>
                     <Label HorizontalOptions="Center" FontFamily="HankenGroteskBold" Text="Request Additional Oval CBD Patches" FontSize="18" FontAttributes="Bold" VerticalOptions="Start" Margin="0,10,0,0" TextColor="White" />
                     <Label HorizontalOptions="Center" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" Text="Tap here to start an email to request additional Oval CBD patches. Please include your postal address in the email." FontSize="15" FontAttributes="None" VerticalOptions="Start" Margin="10,0,10,0" TextColor="White" />
@@ -87,7 +87,7 @@
                         <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
                     </StackLayout.GestureRecognizers>
                 </StackLayout>
-            </Border>
+            </Border>-->
 
             <!--Privacy List -->
             <Label Text="Privacy"  HorizontalOptions="Start" Margin="20,10,0,0" FontFamily="HankenGroteskBold" FontSize="26" TextColor="#031926"/>

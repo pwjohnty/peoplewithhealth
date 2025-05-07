@@ -84,9 +84,7 @@ public partial class MainDashboard : ContentPage
 
             checksignupinfo();
 
-            MessagingCenter.Subscribe<App>(this, "CallNotifications", (sender) => {
-                checknotifications();
-            });
+            MessagingCenter.Subscribe<App>(this, "CallNotifications", (sender) => { checknotifications(); });
 
         }
         catch (Exception Ex)
@@ -99,6 +97,9 @@ public partial class MainDashboard : ContentPage
 
     public MainDashboard(bool fromlogin)
     {
+        try
+        {
+
         InitializeComponent();
 
         setnotificationsfromlogin = fromlogin;
@@ -116,9 +117,12 @@ public partial class MainDashboard : ContentPage
 
         checksignupinfo();
 
-        MessagingCenter.Subscribe<App>(this, "CallNotifications", (sender) => {
-            checknotifications();
-        });
+        MessagingCenter.Subscribe<App>(this, "CallNotifications", (sender) => { checknotifications(); });
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
         //lbl.Text = firstName;
     }
 

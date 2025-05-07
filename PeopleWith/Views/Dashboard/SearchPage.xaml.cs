@@ -104,7 +104,7 @@ public partial class SearchPage : ContentPage
            // MediaElement.ShouldAutoPlay = true;
 
 
-          await Navigation.PushModalAsync(new VideoPlayer(selectedvideo), false);
+          await Navigation.PushAsync(new VideoPlayer(selectedvideo), false);
         }
         catch(Exception ex)
         {

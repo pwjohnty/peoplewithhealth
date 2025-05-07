@@ -184,7 +184,7 @@ public partial class DashQuestionnaire : ContentPage
             previousstack.IsVisible = true;
             titlelbl.IsVisible = true;
             previouslist.ItemsSource = correctresponses;
-            previouslist.HeightRequest = correctresponses.Count * 100; 
+            //previouslist.HeightRequest = correctresponses.Count * 100; 
 
 
             

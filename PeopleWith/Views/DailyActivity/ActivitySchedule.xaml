@@ -43,7 +43,7 @@
 
                 <!-- Dates Listview Data-->
                 <StackLayout>
-                    <syncfusion:SfListView x:Name="ActivityDates" Orientation="Horizontal" HorizontalOptions="FillAndExpand" AutoFitMode="Height" CachingStrategy="RecycleTemplate" HeightRequest="80"  BackgroundColor="Transparent" ItemTapped="ActivityDates_ItemTapped" Padding="5"  Margin="0,0,0,0" ScrollBarVisibility="Never">
+                    <syncfusion:SfListView x:Name="ActivityDates" Orientation="Horizontal" HorizontalOptions="Fill" AutoFitMode="Height" CachingStrategy="RecycleTemplate" HeightRequest="80"  BackgroundColor="Transparent" ItemTapped="ActivityDates_ItemTapped" Padding="5"  Margin="0,0,0,0" ScrollBarVisibility="Never">
                         <syncfusion:SfListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>

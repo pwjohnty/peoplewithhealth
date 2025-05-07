@@ -44,7 +44,7 @@ public partial class VideoPlayer : ContentPage
          //   MediaElement.Source = SelectedVideo.filename;
             VideoEngagement.userid = Helpers.Settings.UserKey;
             VideoEngagement.videoid = VideoSelected.videoid;
-
+            //NavigationPage.SetHasNavigationBar(this, true);
         }
         catch (Exception Ex)
         {

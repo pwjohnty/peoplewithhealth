@@ -16,13 +16,15 @@ namespace PeopleWith
         {
             try
             {
+                // Add/Remove as Needed
+                string UserID = Preferences.Default.Get("userid", "Unknown");
+                string UserEmail = Preferences.Default.Get("email", "Unknown");
                 SentrySdk.ConfigureScope(scope =>
                 {
                     scope.User = new SentryUser
                     {
-
-                        Id = Helpers.Settings.UserKey,
-                        Email = Helpers.Settings.Email
+                        Id = UserID,
+                        Email = UserEmail
                     };
 
                     SentrySdk.CaptureException(Ex);
