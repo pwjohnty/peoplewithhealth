@@ -1887,7 +1887,7 @@ HorizontalOptions="FillAndExpand">
             <StackLayout IsVisible="False" x:Name="previousstack">
 
 
-                <ListView  x:Name="previouslist" SelectionMode="None" BackgroundColor="#f5f5f5" SeparatorVisibility="None" SeparatorColor="#031926" VerticalScrollBarVisibility="Never" VerticalOptions="FillAndExpand" HasUnevenRows="True" Margin="10,20,10,20"  HorizontalOptions="FillAndExpand" >
+                <ListView  x:Name="previouslist" SelectionMode="None" BackgroundColor="#f5f5f5"  SeparatorVisibility="None" SeparatorColor="#031926" VerticalScrollBarVisibility="Never" VerticalOptions="FillAndExpand" HasUnevenRows="True" Margin="10,20,10,20"  HorizontalOptions="FillAndExpand" >
                     <!-- ListView Header -->
             
 

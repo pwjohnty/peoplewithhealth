@@ -601,10 +601,10 @@ public partial class ProfileSection : ContentPage
                 }
 
                 //Add if CBD Signup Code Being Used 
-                if (CBDOrderSection.IsVisible == true)
-                {
+                //if (CBDOrderSection.IsVisible == true)
+                //{
 
-                }
+                //}
             }
             else
             {

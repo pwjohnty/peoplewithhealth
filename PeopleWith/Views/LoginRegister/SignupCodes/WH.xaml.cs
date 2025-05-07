@@ -50,10 +50,12 @@ public partial class WH : ContentPage
     question smokingquestion;
     question smokingquestionyes;
     question smokingquestionno;
+    question hotflushesquestion;
     answer answersmokingyes;
     answer answersmokingno;
     answer answerexercise4;
     answer answerexercise5;
+
     string CommandPassed;
     ObservableCollection<answer> GetAnswers = new ObservableCollection<answer>();
     ObservableCollection<answer> GetCommPref = new ObservableCollection<answer>();
@@ -354,6 +356,21 @@ public partial class WH : ContentPage
                 compreflist.ItemsSource = GetCommPref;
             }
 
+            hotflushesquestion = lsquestions.Where(x => x.title.Contains("Hot Flushes")).SingleOrDefault();
+
+            if (hotflushesquestion != null)
+            {
+
+                HotFlushquestion.Text = hotflushesquestion.title;
+                HotFlushquestiondes.Text = hotflushesquestion.directions;
+
+                var getanswers = reganswers.Where(x => x.questionid == hotflushesquestion.questionid).ToList();
+
+                var GetAnswersorder = getanswers.OrderBy(x => Convert.ToInt32(x.order)).ToObservableCollection();
+
+                hotFlushlist.ItemsSource = GetAnswersorder;
+            }
+
 
             getpostcodes();
             getdiagnosis();
@@ -464,6 +481,12 @@ public partial class WH : ContentPage
                     nextbtn.IsEnabled = true;
                     skipbtn.IsEnabled = true;
                 }
+                else if (HotFlushesframe.IsVisible == true)
+                {
+                    HandleHFframe();
+                    nextbtn.IsEnabled = true;
+                    skipbtn.IsEnabled = true;
+                }
                 else if (comprefframe.IsVisible == true)
                 {
                     Handlecomprefframe();
@@ -476,8 +499,7 @@ public partial class WH : ContentPage
                     nextbtn.IsEnabled = true;
                     skipbtn.IsEnabled= true;
                        
-                }
-             
+                }            
 
             }
             else
@@ -1377,8 +1399,8 @@ public partial class WH : ContentPage
             }
 
             medicationsframe.IsVisible = false;
-            comprefframe.IsVisible = true;
-            skipbtn.IsVisible = true;
+            HotFlushesframe.IsVisible = true;
+            skipbtn.IsVisible = false;
             UpdateProgress();
 
 
@@ -1485,6 +1507,47 @@ public partial class WH : ContentPage
 
             await Navigation.PushAsync(new RegisterFinalPage(newuser, topprogress.Progress, userresponselist, additonalconsent, symptomstoadd, medicationstoadd, adduserdiagnosis, addusermeasurements, DietToAdd), false);
 
+
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    async void HandleHFframe()
+    {
+        try
+        {
+            if (hotFlushlist.SelectedItem == null)
+            {
+                Vibration.Vibrate();
+                return;
+            }
+
+            var item = hotFlushlist.SelectedItem as answer;
+
+            var itemToRemove = userresponselist.FirstOrDefault(q => q.questionid == hotflushesquestion.questionid);
+
+            if (itemToRemove != null)
+            {
+                userresponselist.Remove(itemToRemove);
+            }
+
+            //add the question
+            var response = new userresponse();
+            response.questionid = hotflushesquestion.questionid;
+            response.answerid = item.answerid;
+            response.responsedate = DateTime.Now.ToString("dd/MM/yyyy");
+            response.userid = newuser.userid;
+            userresponselist.Add(response);
+
+            HotFlushesframe.IsVisible = false;
+            comprefframe.IsVisible = true;
+            skipbtn.IsVisible = true;
+
+
+            UpdateProgress();
 
         }
         catch (Exception ex)
@@ -1632,6 +1695,27 @@ public partial class WH : ContentPage
             NotasyncMethod(Ex);
         }
     }
+
+    //private void hotflusheslist_ItemTapped_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
+    //{
+    //    try
+    //    {
+    //        var item = e.DataItem as answer;
+
+    //        if (commprefaddedlist.Contains(item.answerid))
+    //        {
+    //            commprefaddedlist.Remove(item.answerid);
+    //        }
+    //        else
+    //        {
+    //            commprefaddedlist.Add(item.answerid);
+    //        }
+    //    }
+    //    catch (Exception Ex)
+    //    {
+    //        NotasyncMethod(Ex);
+    //    }
+    //}
 
     private void searchsymsentry_TextChanged(object sender, TextChangedEventArgs e)
     {
@@ -2177,19 +2261,24 @@ public partial class WH : ContentPage
             NetworkAccess accessType = Connectivity.Current.NetworkAccess;
             if (accessType == NetworkAccess.Internet)
             {
-                //back button clicked
+                //back button clicked             
                 if (ctframe.IsVisible == true)
                 {
                     ctframe.IsVisible = false;
                     comprefframe.IsVisible = true;
                     skipbtn.IsVisible = true;
-
                 }
                 else if (comprefframe.IsVisible == true)
                 {
                     comprefframe.IsVisible = false;
+                    skipbtn.IsVisible = false;
+                    HotFlushesframe.IsVisible = true;
+                }
+                else if (HotFlushesframe.IsVisible == true)
+                {
+                    HotFlushesframe.IsVisible = false;
+                    skipbtn.IsVisible = true;
                     medicationsframe.IsVisible = true;
-
                 }
                 else if (medicationsframe.IsVisible == true)
                 {

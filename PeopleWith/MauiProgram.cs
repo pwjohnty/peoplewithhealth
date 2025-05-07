@@ -47,6 +47,7 @@ namespace PeopleWith
                 .UseLocalNotification()
                 .ConfigureSyncfusionToolkit()
                 .UseSegmentedControl()
+                // Add/Remove as Needed
                 .UseSentry(options =>
                 {
                     // The DSN is the only required setting.
@@ -159,20 +160,36 @@ namespace PeopleWith
             // Set the MainPage to your navigation page
             builder.Services.AddSingleton<MainPage>();
 
-
+            // Add/Remove as Needed
             SentrySdk.ConfigureScope(scope =>
             {
                 scope.User = new SentryUser();
             });
 
+            void ConfigureSentryUserScope()
+            {
+                SentrySdk.ConfigureScope(scope =>
+                {
+                    string UserID = Preferences.Default.Get("userid", "Unknown");
+                    string UserEmail = Preferences.Default.Get("email", "Unknown");
+                    scope.User = new SentryUser
+                    {
+                        Id = UserID,
+                        Email = UserEmail
+                    };
+                });
+            }
+
             AppDomain.CurrentDomain.UnhandledException += (s, e) =>
             {
-                Sentry.SentrySdk.CaptureException(e.ExceptionObject as Exception);
+                ConfigureSentryUserScope();
+                SentrySdk.CaptureException(e.ExceptionObject as Exception);
             };
 
             TaskScheduler.UnobservedTaskException += (s, e) =>
             {
-                Sentry.SentrySdk.CaptureException(e.Exception);
+                ConfigureSentryUserScope();
+                SentrySdk.CaptureException(e.Exception);
             };
 
 

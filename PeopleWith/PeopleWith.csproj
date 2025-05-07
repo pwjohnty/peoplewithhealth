@@ -34,8 +34,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)'=='net9.0-ios'">
     <CodesignKey>Apple Development: Created via API (QB732BRMZC)</CodesignKey>
-    <CodesignProvision></CodesignProvision>
-    <ProvisioningType>automatic</ProvisioningType>
+    <CodesignProvision>VS: com.peoplewith.peoplewith Development</CodesignProvision>
+    <ProvisioningType>manual</ProvisioningType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-ios|AnyCPU'">
     <MtouchLink>None</MtouchLink>
