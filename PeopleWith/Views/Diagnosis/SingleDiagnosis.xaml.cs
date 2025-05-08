@@ -80,13 +80,13 @@ public partial class SingleDiagnosis : ContentPage
                 DiagnosisTitle.Text = DiagnosisPassed[0].diagnosistitle;
                 if(DiagnosisPassed[0].dateofdiagnosis == "Unknown")
                 {
-                    DiagnosisDate.Text = "Diagnosed on: " + DiagnosisPassed[0].dateofdiagnosis;
+                    DiagnosisDate.Text = "Diagnosed: " + DiagnosisPassed[0].dateofdiagnosis;
                     diagdatecheckbox.IsChecked = true;
                 }
                 else
                 {
                     var date = DateTime.Parse(DiagnosisPassed[0].dateofdiagnosis);
-                    DiagnosisDate.Text = "Diagnosed on: " + date.ToString("dd MMMM yyyy");
+                    DiagnosisDate.Text = "Diagnosed: " + date.ToString("dd MMMM yyyy");
                     DateofDiagnosis = DiagnosisPassed[0].dateofdiagnosis;
                     DateEntry.Text = date.ToString("dd/MM/yyyy");
                     diagdatecheckbox.IsChecked = false;
@@ -233,7 +233,7 @@ public partial class SingleDiagnosis : ContentPage
             {
                 //Limit No. of Taps 
                 Deletebtn.IsEnabled = false;
-                bool Delete = await DisplayAlert("Delete Diagnosis", "Are you sure you would like the delete this Diagnosis? Once deleted it cannot be retrieved", "Delete", "Cancel");
+                bool Delete = await DisplayAlert("Delete Diagnosis", "Are you sure you want to delete this Diagnosis? Once deleted it cannot be retrieved", "Delete", "Cancel");
                 if (Delete == true)
                 {
 

@@ -335,6 +335,7 @@ public partial class RegisterPage : ContentPage
                     {
                         onboarding = true;
                         newuser.userid = users[0].userid;
+                     
                         //update the ui and progress bar
                         //emailframe.IsVisible = false;
                         //confirmemailframe.IsVisible = true;
@@ -347,7 +348,7 @@ public partial class RegisterPage : ContentPage
                         ////Spelling Mistake (Change)
                         //newuser.registrationstatus = "Onboarding";
                         //return;
-                     
+
 
                     }
                     else
@@ -379,6 +380,7 @@ public partial class RegisterPage : ContentPage
             //Spelling Mistake (Change)
             newuser.registrationstatus = "Onboarding";
 
+          
             //generate validation code
 
             var randomnum = new Random();
@@ -450,8 +452,11 @@ public partial class RegisterPage : ContentPage
            // check if the response is successful
            if (emailresponse.IsSuccessStatusCode)
             {
-                await DisplayAlert("Email Sent", "An email containing your confirmation code has been sent. If the email is not in your inbox please check your junk mail. If an email is not received please contact: support@peoplewith.com", "Close"); 
+                await DisplayAlert("Email Sent", "An email containing your confirmation code has been sent. If the email is not in your inbox please check your junk mail. If an email is not received please contact: support@peoplewith.com", "Close");
 
+                //Update Userid And Email for Sentry Crash 
+                Preferences.Default.Set("email", newuser.userid);
+                Preferences.Default.Set("userid", newuser.email);
                 //string content = await emailresponse.content.readasstringasync();
                 // debug.writeline(content); // uncomment this line if you want to debug the content
             }

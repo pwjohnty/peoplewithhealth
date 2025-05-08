@@ -100,7 +100,7 @@ VerticalOptions="Center" />
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <Frame CornerRadius="10" Grid.Row="0" Grid.Column="0"  Margin="5" Padding="2" BorderColor="#e5f9f4" BackgroundColor="Transparent" InputTransparent="True" HasShadow="False">
+                                    <Frame CornerRadius="10" Grid.Row="0" Grid.Column="0"  Margin="5" Padding="2" BorderColor="#f9f4e5" BackgroundColor="Transparent" InputTransparent="True" HasShadow="False">
                                         <Label Text="{Binding DisplayText}" HorizontalTextAlignment="Center" FontFamily="HankenGroteskRegular" Padding="5" FontSize="12" FontAttributes="Bold" TextColor="Gray" />
                                     </Frame>
                                 </Grid>
@@ -117,8 +117,8 @@ VerticalOptions="Center" />
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <Frame CornerRadius="10" Grid.Row="0" Grid.Column="0" Margin="5" Padding="2" BackgroundColor="#e5f9f4" HasShadow="False">
-                                        <Label Text="{Binding DisplayText}" HorizontalTextAlignment="Center" FontFamily="HankenGroteskRegular" Padding="5" FontSize="12" FontAttributes="Bold" TextColor="Teal" />
+                                    <Frame CornerRadius="10" Grid.Row="0" Grid.Column="0" Margin="5" Padding="2" BackgroundColor="#f9f4e5" BorderColor="#ac5735" HasShadow="False">
+                                        <Label Text="{Binding DisplayText}" HorizontalTextAlignment="Center" FontFamily="HankenGroteskRegular" Padding="5" FontSize="12" FontAttributes="Bold" TextColor="#ac5735" />
                                     </Frame>
                                 </Grid>
                             </ViewCell>

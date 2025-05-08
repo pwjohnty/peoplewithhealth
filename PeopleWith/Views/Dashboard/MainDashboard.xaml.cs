@@ -43,6 +43,7 @@ public partial class MainDashboard : ContentPage
     public ObservableCollection<questionnaire> questionnaires = new ObservableCollection<questionnaire>();
 
     bool setnotificationsfromlogin;
+    bool IsNavigating = false; 
     MedSuppNotifications ScheduleNotifications = new MedSuppNotifications();
 
     public event EventHandler<bool> ConnectivityChanged;
@@ -167,6 +168,19 @@ public partial class MainDashboard : ContentPage
 
 //        }
 //}
+    private void IsNavigatingTo()
+    {
+        try
+        {
+            if (IsNavigating) return;
+            IsNavigating = true;
+        }
+        catch
+        {
+            IsNavigating = false;
+        }
+    }
+
 
     async void checksignupinfo()
     {
@@ -2653,7 +2667,7 @@ public partial class MainDashboard : ContentPage
                 hometab.ImageSource = ImageSource.FromFile("dashiconactive.png");
                 infotab.ImageSource = ImageSource.FromFile("dashexploreinactive.png");
                 profiletab.ImageSource = ImageSource.FromFile("dashbrowseinactive.png");
-                additionalquestionstab.ImageSource = ImageSource.FromFile("quesinactive.png");
+                additionalquestionstab.ImageSource = ImageSource.FromFile("questiondashgrey.png");
 
                 hometab.TextColor = Color.FromArgb("#031926");
                 infotab.TextColor = Color.FromArgb("#b3babd");
@@ -2671,7 +2685,7 @@ public partial class MainDashboard : ContentPage
                 hometab.ImageSource = ImageSource.FromFile("dashiconinactive.png");
                 infotab.ImageSource = ImageSource.FromFile("dashexploreactive.png");
                 profiletab.ImageSource = ImageSource.FromFile("dashbrowseinactive.png");
-                additionalquestionstab.ImageSource = ImageSource.FromFile("quesinactive.png");
+                additionalquestionstab.ImageSource = ImageSource.FromFile("questiondashgrey.png");
 
                 infotab.TextColor = Color.FromArgb("#031926");
                 hometab.TextColor = Color.FromArgb("#b3babd");
@@ -2688,7 +2702,7 @@ public partial class MainDashboard : ContentPage
                 hometab.ImageSource = ImageSource.FromFile("dashiconinactive.png");
                 infotab.ImageSource = ImageSource.FromFile("dashexploreinactive.png");
                 profiletab.ImageSource = ImageSource.FromFile("dashbrowseactive.png");
-                additionalquestionstab.ImageSource = ImageSource.FromFile("quesinactive.png");
+                additionalquestionstab.ImageSource = ImageSource.FromFile("questiondashgrey.png");
 
                 profiletab.TextColor = Color.FromArgb("#031926");
                 infotab.TextColor = Color.FromArgb("#b3babd");
@@ -2720,7 +2734,7 @@ public partial class MainDashboard : ContentPage
                 hometab.ImageSource = ImageSource.FromFile("dashiconinactive.png");
                 infotab.ImageSource = ImageSource.FromFile("dashexploreinactive.png");
                 profiletab.ImageSource = ImageSource.FromFile("dashbrowseinactive.png");
-                additionalquestionstab.ImageSource = ImageSource.FromFile("questactive.png");
+                additionalquestionstab.ImageSource = ImageSource.FromFile("questiondashblack.png");
             }
  
         }
@@ -2738,7 +2752,8 @@ public partial class MainDashboard : ContentPage
             var item = e.DataItem as dashitem;
             var signup = Helpers.Settings.SignUp;
             bool NovoSignup = !string.IsNullOrEmpty(signup) && signup.Contains("SAX");
-
+            if (IsNavigating) return;
+            IsNavigating = true;
             if (item != null && item.Title == "Medications")
             {
                 string Area = item.Title;
@@ -2953,9 +2968,11 @@ public partial class MainDashboard : ContentPage
                 }
 
             }
+            IsNavigating = false;
         }
         catch (Exception Ex)
         {
+            IsNavigating = false;
             NotasyncMethod(Ex);
             //await Navigation.PushAsync(new ErrorPage()) ,false);  
         }
@@ -2991,7 +3008,8 @@ public partial class MainDashboard : ContentPage
         try
         {
             var item = e.DataItem as signupcodeinformation;
-
+            if (IsNavigating) return;
+            IsNavigating = true;
             item.type = item.type.ToLower();
 
             if (item.type == "pdf")
@@ -3026,10 +3044,11 @@ public partial class MainDashboard : ContentPage
             {
                 await Browser.OpenAsync(item.link, BrowserLaunchMode.SystemPreferred);
             }
-         
+            IsNavigating = false;
         }
         catch (Exception Ex)
         {
+            IsNavigating = false;
             NotasyncMethod(Ex);
         }
     }
@@ -3038,7 +3057,9 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
-                string Area = "Health Report";
+            if (IsNavigating) return;
+            IsNavigating = true;
+            string Area = "Health Report";
                 var signup = Helpers.Settings.SignUp;
                 bool NovoSignup = !string.IsNullOrEmpty(signup) && signup.Contains("SAX");
                 bool Check = Preferences.Default.Get("NovoHeRep", false);
@@ -3050,9 +3071,11 @@ public partial class MainDashboard : ContentPage
                 {
                     await Navigation.PushAsync(new HealthReport(), false);
                 }
+            IsNavigating = false;
         }
         catch (Exception Ex)
         {
+            IsNavigating = false;
             NotasyncMethod(Ex);
         }
     }
@@ -3061,7 +3084,9 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
-                string Area = "Questionnaires";
+            if (IsNavigating) return;
+            IsNavigating = true;
+            string Area = "Questionnaires";
                 var signup = Helpers.Settings.SignUp;
                 bool NovoSignup = !string.IsNullOrEmpty(signup) && signup.Contains("SAX");
                 bool Check = Preferences.Default.Get("NovoQues", false);
@@ -3073,9 +3098,11 @@ public partial class MainDashboard : ContentPage
                 {
                     await Navigation.PushAsync(new AllQuestionnaires(), false);
                 }
+            IsNavigating = false;
         }
         catch (Exception Ex)
         {
+            IsNavigating = false;
             NotasyncMethod(Ex);
         }
     }
@@ -3086,11 +3113,14 @@ public partial class MainDashboard : ContentPage
 
         try
         {
+            if (IsNavigating) return;
+            IsNavigating = true;
             await Navigation.PushAsync(new ProfileSection(), false);
-
+            IsNavigating = false;
         }
         catch(Exception Ex)
         {
+            IsNavigating = false;
             NotasyncMethod(Ex);
         }
     }
@@ -3104,6 +3134,8 @@ public partial class MainDashboard : ContentPage
 
             var signup = Helpers.Settings.SignUp;
             bool NovoSignup = !string.IsNullOrEmpty(signup) && signup.Contains("SAX");
+            if (IsNavigating) return;
+            IsNavigating = true;
 
             if (item != null && item.Title == "Medications")
             {
@@ -3330,9 +3362,11 @@ public partial class MainDashboard : ContentPage
 
             }
 
+            IsNavigating = false;
         }
         catch (Exception Ex)
         {
+            IsNavigating = false;
             NotasyncMethod(Ex);
         }
     }
@@ -3343,6 +3377,8 @@ public partial class MainDashboard : ContentPage
         {
             //fix here 
             //no symptom data button click
+            if (IsNavigating) return;
+            IsNavigating = true;
             string Area = "Symptoms";
             var signup = Helpers.Settings.SignUp;
             bool NovoSignup = !string.IsNullOrEmpty(signup) && signup.Contains("SAX");
@@ -3355,9 +3391,11 @@ public partial class MainDashboard : ContentPage
             {
                 await Navigation.PushAsync(new AllSymptoms(userfeedbacklist[0]), false);
             }
+            IsNavigating = false;
         }
         catch(Exception Ex)
         {
+            IsNavigating = false;
             NotasyncMethod(Ex);
         }
     }
@@ -3367,6 +3405,8 @@ public partial class MainDashboard : ContentPage
         try
         {
             //no symptom data button click
+            if (IsNavigating) return;
+            IsNavigating = true;
             string Area = "Mood";
             var signup = Helpers.Settings.SignUp;
             bool NovoSignup = !string.IsNullOrEmpty(signup) && signup.Contains("SAX");
@@ -3379,9 +3419,11 @@ public partial class MainDashboard : ContentPage
             {
                 await Navigation.PushAsync(new AllMood(userfeedbacklist[0]), false);
             }
+            IsNavigating = false;
         }
         catch (Exception Ex)
         {
+            IsNavigating = false;
             NotasyncMethod(Ex);
         }
     }
@@ -3392,6 +3434,8 @@ public partial class MainDashboard : ContentPage
         {
 
             var item = e.DataItem as dashitem;
+            if (IsNavigating) return;
+            IsNavigating = true;
 
             if (item != null && item.Title == "Account Settings")
             {
@@ -3422,10 +3466,11 @@ public partial class MainDashboard : ContentPage
                 await Navigation.PushAsync(new PrivacyPolicy(), false);
             }
 
+            IsNavigating = false;
         }
         catch(Exception Ex)
         {
-
+            IsNavigating = false;
         }
     }
 
@@ -3433,6 +3478,8 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
+            if (IsNavigating) return;
+            IsNavigating = true;
             string Area = "Supplements";
             var signup = Helpers.Settings.SignUp;
             bool NovoSignup = !string.IsNullOrEmpty(signup) && signup.Contains("SAX");
@@ -3445,9 +3492,11 @@ public partial class MainDashboard : ContentPage
             {
                 await Navigation.PushAsync(new AllSupplements(), false);
             }
+            IsNavigating = false;
         }
         catch(Exception Ex)
         {
+            IsNavigating = false;
             NotasyncMethod(Ex);
         }
     }
@@ -3456,11 +3505,14 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
+            if (IsNavigating) return;
+            IsNavigating = true;
             await Navigation.PushAsync(new SearchPage(), false);
+            IsNavigating = false;
         }
         catch(Exception Ex)
         {
-
+            IsNavigating = false;
         }
     }
 
@@ -3468,7 +3520,9 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
-                string Area = "Measurements";
+            if (IsNavigating) return;
+            IsNavigating = true;
+            string Area = "Measurements";
                 var signup = Helpers.Settings.SignUp;
                 bool NovoSignup = !string.IsNullOrEmpty(signup) && signup.Contains("SAX");
                 bool Check = Preferences.Default.Get("NovoMeas", false);
@@ -3479,10 +3533,12 @@ public partial class MainDashboard : ContentPage
                 else
                 {
                     await Navigation.PushAsync(new MeasurementsPage(userfeedbacklist[0]), false);
-                }     
+                }
+            IsNavigating = false;
         }
         catch(Exception Ex)
         {
+            IsNavigating = false;
             NotasyncMethod(Ex);
         }
     }
@@ -3495,6 +3551,9 @@ public partial class MainDashboard : ContentPage
             var tappedItem = e.DataItem as dashitem;
             if (tappedItem != null)
             {
+
+                if (IsNavigating) return;
+                IsNavigating = true;
                 // Access properties dynamically
                 var bc = tappedItem.Type;
                 var text = tappedItem.Title;
@@ -3637,12 +3696,13 @@ public partial class MainDashboard : ContentPage
 
             }
 
-
+            IsNavigating = false;
 
 
         }
         catch(Exception Ex)
         {
+            IsNavigating = false;
             NotasyncMethod(Ex);
         }
     }
@@ -3651,6 +3711,8 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
+            if (IsNavigating) return;
+            IsNavigating = true;
             var signup = Helpers.Settings.SignUp;
             bool NovoSignup = !string.IsNullOrEmpty(signup) && signup.Contains("SAX");
             string Area = "Medications";
@@ -3663,10 +3725,11 @@ public partial class MainDashboard : ContentPage
             {
                 await Navigation.PushAsync(new AllMedications(), false);
             }
+            IsNavigating = false;
         }
         catch(Exception ex)
         {
-
+            IsNavigating = false;
         }
     }
 
@@ -3676,18 +3739,20 @@ public partial class MainDashboard : ContentPage
         {
             //Novo Needs Added Here
             UserSymptomPassed.Clear();
-
+            if (IsNavigating) return;
+            IsNavigating = true;
             var item = e.DataItem as feedbackdata;
 
            // UserSymptomPassed.Add(item);
 
             await Navigation.PushAsync(new UpdateSingleSymptom(userfeedbacklist[0], item.title, item.value), false);
-
+            IsNavigating = false;
 
             // await Navigation.PushAsync(new AllSymptoms(userfeedbacklist[0]), false);
         }
         catch (Exception Ex)
         {
+            IsNavigating = false;
             NotasyncMethod(Ex);
         }      
     }
@@ -3696,7 +3761,9 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
-                string Area = "Measurements";
+            if (IsNavigating) return;
+            IsNavigating = true;
+            string Area = "Measurements";
                 var signup = Helpers.Settings.SignUp;
                 bool NovoSignup = !string.IsNullOrEmpty(signup) && signup.Contains("SAX");
                 bool Check = Preferences.Default.Get("NovoMeas", false);
@@ -3708,9 +3775,11 @@ public partial class MainDashboard : ContentPage
                 {
                     await Navigation.PushAsync(new MeasurementsPage(userfeedbacklist[0]), false);
                 }
+            IsNavigating = false;
         }
         catch (Exception Ex)
         {
+            IsNavigating = false;
             NotasyncMethod(Ex);
         }
     }
@@ -3719,6 +3788,8 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
+            if (IsNavigating) return;
+            IsNavigating = true;
             string Area = "Mood";
             bool Check = Preferences.Default.Get("NovoMood", false);
             var signup = Helpers.Settings.SignUp;
@@ -3731,9 +3802,11 @@ public partial class MainDashboard : ContentPage
             {
                 await Navigation.PushAsync(new AllMood(userfeedbacklist[0]), false);
             }
+            IsNavigating = false;
         }
         catch (Exception Ex)
         {
+            IsNavigating = false;
             NotasyncMethod(Ex);
         }
     }
@@ -3742,7 +3815,8 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
-
+            if (IsNavigating) return;
+            IsNavigating = true;
             string Area = "Symptoms";
             var signup = Helpers.Settings.SignUp;
             bool NovoSignup = !string.IsNullOrEmpty(signup) && signup.Contains("SAX");
@@ -3755,9 +3829,11 @@ public partial class MainDashboard : ContentPage
             {
                 await Navigation.PushAsync(new AllSymptoms(userfeedbacklist[0]), false);
             }
+            IsNavigating = false;
         }
         catch (Exception Ex)
         {
+            IsNavigating = false;
             NotasyncMethod(Ex);
         }
     }
@@ -3766,6 +3842,8 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
+            if (IsNavigating) return;
+            IsNavigating = true;
             string Area = "Schedule";
             var signup = Helpers.Settings.SignUp;
             bool NovoSignup = !string.IsNullOrEmpty(signup) && signup.Contains("SAX");
@@ -3778,9 +3856,11 @@ public partial class MainDashboard : ContentPage
             {
                 await Navigation.PushAsync(new MainSchedule(), false);
             }
+            IsNavigating = false; 
         }
         catch (Exception Ex)
         {
+            IsNavigating = false;
             NotasyncMethod(Ex);
         }
        
@@ -3791,6 +3871,8 @@ public partial class MainDashboard : ContentPage
         try
         {
             var item = e.DataItem as feedbackdata;
+            if (IsNavigating) return;
+            IsNavigating = true;
 
                 string Area = "Measurements";
                 var signup = Helpers.Settings.SignUp;
@@ -3804,11 +3886,11 @@ public partial class MainDashboard : ContentPage
                 {
                     await Navigation.PushAsync(new MeasurementsPage(userfeedbacklist[0]), false);
                 }
-
+            IsNavigating = false;
         }
         catch(Exception ex)
         {
-
+            IsNavigating = false;
         }
     }
 
@@ -3828,8 +3910,6 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
-
-
             if (DeviceInfo.Platform == DevicePlatform.Android)
             {
                 // Request and capture the permission status on Android
@@ -3843,23 +3923,13 @@ public partial class MainDashboard : ContentPage
                 {
                     await LocalNotificationCenter.Current.RequestNotificationPermission();
                     checknotifications();
-
                 }
             }
             else
             {
-
                     await LocalNotificationCenter.Current.RequestNotificationPermission();
-
                     checknotifications();
-
-
-
-
             }
-
-
-
         }
         catch(Exception ex)
         {
@@ -3873,6 +3943,8 @@ public partial class MainDashboard : ContentPage
         {
             //womans health questionnaire tapped
             var signup = Helpers.Settings.SignUp;
+            if (IsNavigating) return;
+            IsNavigating = true;
 
             if (signup.Contains("SFEWHA1"))
             {
@@ -3939,12 +4011,12 @@ public partial class MainDashboard : ContentPage
             {
                 await Navigation.PushAsync(new AndroidQuestionnaires("A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF", userfeedbacklist[0]), false);
             }
-        
 
+            IsNavigating = false;
         }
         catch(Exception ex)
         {
-
+            IsNavigating = false;
         }
     }
 
@@ -3952,11 +4024,14 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
+            if (IsNavigating) return;
+            IsNavigating = true;
             await Browser.OpenAsync("https://www.truthaboutweight.global/ie/en.html", BrowserLaunchMode.SystemPreferred);
+            IsNavigating = false;
         }
         catch (Exception Ex)
         {
-
+            IsNavigating = false;
         }
     }
 
@@ -3964,14 +4039,17 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
+            if (IsNavigating) return;
+            IsNavigating = true;
             var Getitem = e.DataItem as videos;
             bool FromDash = true; 
 
             await Navigation.PushAsync(new NewPageVideoPlayer(Getitem, FromDash), false);
+            IsNavigating = false;
         }
         catch (Exception Ex)
         {
-
+            IsNavigating = false;
         }
     }
 
@@ -3979,11 +4057,14 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
+            if (IsNavigating) return;
+            IsNavigating = true;
             await Navigation.PushAsync(new DashQuestionnaire("Medical History"),false);
+            IsNavigating = false;
         }
         catch(Exception ex)
         {
-
+            IsNavigating = false;
         }
     }
 
@@ -3991,11 +4072,14 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
+            if (IsNavigating) return;
+            IsNavigating = true;
             await Navigation.PushAsync(new DashQuestionnaire("Menstural Cycle"), false);
+            IsNavigating = false;
         }
         catch(Exception ex)
         {
-
+            IsNavigating = false;
         }
     }
 
@@ -4003,11 +4087,14 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
+            if (IsNavigating) return;
+            IsNavigating = true;
             await Navigation.PushAsync(new DashQuestionnaire("Treatment"), false);
+            IsNavigating = false;
         }
         catch(Exception ex)
         {
-
+            IsNavigating = false;
         }
     }
 
@@ -4015,14 +4102,15 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
-
+            if (IsNavigating) return;
+            IsNavigating = true;
             await Navigation.PushAsync(new DashQuestionnaire("Previous Responses", "list"), false);
-
+            IsNavigating = false;
 
         }
         catch(Exception ex)
         {
-
+            IsNavigating = false;
         }
     }
 
@@ -4030,12 +4118,14 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
+            if (IsNavigating) return;
+            IsNavigating = true;
             await Navigation.PushAsync(new HealthDataPage(), false);
-
+            IsNavigating = false;
         }
         catch(Exception ex)
         {
-
+            IsNavigating = false;
         }
     }
 
@@ -4043,6 +4133,8 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
+            if (IsNavigating) return;
+            IsNavigating = true;
             if (sender is VisualElement visualElement && visualElement.BindingContext is questionnaire tappedItem)
             {
                 var signup = Helpers.Settings.SignUp;
@@ -4053,10 +4145,11 @@ public partial class MainDashboard : ContentPage
                 }
 
             }
+            IsNavigating = false;
         }
         catch (Exception ex)
         {
-
+            IsNavigating = false;
         }
     }
 

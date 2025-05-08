@@ -276,7 +276,7 @@ public partial class ShowAllSymptomData : ContentPage
 
             else
             {
-                bool DeleteMsg = await DisplayAlert("Delete Selected Records", "Are you Sure you Would like to Delete the following Records?, Once Deleted they cannot be retrieved", "Delete", "Cancel");
+                bool DeleteMsg = await DisplayAlert("Delete Selected Records", "Are you sure you want to delete the following Records? Once deleted they cannot be retrieved", "Delete", "Cancel");
                 if (DeleteMsg)
                 {
                     //Accept

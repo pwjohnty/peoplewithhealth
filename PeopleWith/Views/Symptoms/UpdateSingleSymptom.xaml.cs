@@ -1530,7 +1530,7 @@ public partial class UpdateSingleSymptom : ContentPage
         try
         {
 
-            var userresponse = await DisplayAlert("Confirm Delete", "Are you sure you want to delete this symptom feedback ?", "Cancel", "Yes");
+            var userresponse = await DisplayAlert("Confirm Delete", "Are you sure you want to delete this Symptom Feedback? Once deleted it cannot be retrieved", "Cancel", "Delete");
 
             if (!userresponse)
             {

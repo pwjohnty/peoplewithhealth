@@ -76,9 +76,9 @@
                 <Button Text="8" Command="{Binding KeyTapped}" Padding="0" Margin="5" BackgroundColor="#fcfcfd" CommandParameter="8" HeightRequest="60" TextColor="#031926" Grid.Row="2" Grid.Column="1" x:Name="Numeight" FontFamily="HankenGroteskBold" FontAttributes="None" FontSize="25" HorizontalOptions="FillAndExpand" />
                 <Button Text="9" Command="{Binding KeyTapped}" Padding="0" Margin="5" BackgroundColor="#fcfcfd" CommandParameter="9" HeightRequest="60" TextColor="#031926" Grid.Row="2" Grid.Column="2" x:Name="Numnine" FontFamily="HankenGroteskBold" FontAttributes="None" FontSize="25" HorizontalOptions="FillAndExpand" />
 
-                <ImageButton Command="{Binding FingerprintTapped}" Scale="{OnPlatform Android='0.55', iOS='1'}" Aspect="AspectFit"  HeightRequest="25" WidthRequest="25" Grid.Row="3" Grid.Column="0" x:Name="fingerprint" HorizontalOptions="Center" VerticalOptions="Center" />
+                <ImageButton Command="{Binding FingerprintTapped}" Scale="{OnPlatform Android='0.75', iOS='1'}" Aspect="AspectFit"  HeightRequest="25" WidthRequest="25" Grid.Row="3" Grid.Column="0" x:Name="fingerprint" HorizontalOptions="Center" VerticalOptions="Center" />
                 <Button Command="{Binding KeyTapped}" Padding="0" Margin="5" BackgroundColor="#fcfcfd" CommandParameter="0" HeightRequest="60" TextColor="#031926" Text="0" Grid.Row="3" Grid.Column="1" x:Name="Numzero" FontFamily="HankenGroteskBold" FontAttributes="None" FontSize="25" HorizontalOptions="FillAndExpand" VerticalOptions="Center" />
-                <ImageButton Source="delete.png" Aspect="AspectFit" Scale="{OnPlatform Android='0.55', iOS='1'}"  Command="{Binding DeleteTapped}" HeightRequest="25" WidthRequest="25" Grid.Row="3" Grid.Column="2" x:Name="delete" HorizontalOptions="Center"  VerticalOptions="Center"/>
+                <ImageButton Source="delete.png" Aspect="AspectFit" Scale="{OnPlatform Android='0.75', iOS='1'}"  Command="{Binding DeleteTapped}" HeightRequest="25" WidthRequest="25" Grid.Row="3" Grid.Column="2" x:Name="delete" HorizontalOptions="Center"  VerticalOptions="Center"/>
 
             </Grid>
             <ActivityIndicator x:Name="LoadingInd" Grid.Row="6" Margin="0,50,0,0" IsVisible="{Binding Success}" IsRunning="True" Color="#BFDBF7"  HorizontalOptions="Center" VerticalOptions="Center" />

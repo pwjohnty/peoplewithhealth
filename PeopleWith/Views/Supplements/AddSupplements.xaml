@@ -747,7 +747,7 @@ HorizontalOptions="FillAndExpand">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <Image Source="pillicon.png" HorizontalOptions="FillAndExpand" HeightRequest="30" BackgroundColor="Transparent" WidthRequest="35"  Grid.Row="0" Grid.Column="0"  />
+                            <Image Source="pilliconsupps.png" HorizontalOptions="FillAndExpand" HeightRequest="30" BackgroundColor="Transparent" WidthRequest="35"  Grid.Row="0" Grid.Column="0"  />
                             <Entry Grid.Row="0" Grid.Column="1" FontSize="16" HorizontalTextAlignment="Center" Completed="samedosageentry_Completed" HorizontalOptions="FillAndExpand" FontFamily="HankenGroteskRegular" Keyboard="Numeric" x:Name="samedosageentry" TextChanged="Entry_TextChanged_1" IsTextPredictionEnabled="False" IsSpellCheckEnabled="False"   ClearButtonVisibility="Never" InputTransparent="False"   Placeholder="Add"  BackgroundColor="Transparent" Background="Transparent" HeightRequest="60"  TextColor="#031926"/>
                             <Label IsVisible="True" x:Name="dosageunitlbl" Grid.Row="0" Grid.Column="2" FontSize="12" Margin="0,0,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" VerticalOptions="Center" />
                             <Entry Grid.Row="0" Grid.Column="3" FontSize="16" HorizontalTextAlignment="Center" IsVisible="False" HorizontalOptions="FillAndExpand" FontFamily="HankenGroteskRegular" Keyboard="Numeric" x:Name="samedosageentry2" TextChanged="samedosageentry2_TextChanged_1" IsTextPredictionEnabled="False" IsSpellCheckEnabled="False"   ClearButtonVisibility="Never" InputTransparent="False"   Placeholder="Add"  BackgroundColor="Transparent" Background="Transparent" HeightRequest="60"  TextColor="#031926"/>
@@ -828,7 +828,7 @@ HorizontalOptions="FillAndExpand">
 
                                                     </Grid.ColumnDefinitions>
 
-                                                    <Image Source="pillicon.png" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" HeightRequest="25" VerticalOptions="Center" HorizontalOptions="Start"  Margin="5,10,0,0"/>
+                                                    <Image Source="pilliconsupps.png" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" HeightRequest="25" VerticalOptions="Center" HorizontalOptions="Start"  Margin="5,10,0,0"/>
 
 
                                                     <Label Grid.Row="0" Grid.Column="1" FontSize="10" Margin="0,5,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start">
@@ -889,7 +889,7 @@ HorizontalOptions="FillAndExpand">
                                                 </TimePicker>
 
 
-                                                <Image Source="pillicon.png" Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" HeightRequest="20" VerticalOptions="Center" HorizontalOptions="Start"  Margin="5,10,0,0"/>
+                                                <Image Source="pilliconsupps.png" Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" HeightRequest="20" VerticalOptions="Center" HorizontalOptions="Start"  Margin="5,10,0,0"/>
 
 
                                                 <Label Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="3" FontSize="10" Margin="0,5,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start">
@@ -1131,7 +1131,7 @@ BorderColor="#f9f4e5">
 
                                                             </Grid.ColumnDefinitions>
 
-                                                            <Image Source="pillicon.png" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" HeightRequest="25" VerticalOptions="Center" HorizontalOptions="Start"  Margin="5,10,0,0"/>
+                                                            <Image Source="pilliconsupps.png" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" HeightRequest="25" VerticalOptions="Center" HorizontalOptions="Start"  Margin="5,10,0,0"/>
 
 
                                                             <Label Grid.Row="0" Grid.Column="1" FontSize="10" Margin="0,5,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start">

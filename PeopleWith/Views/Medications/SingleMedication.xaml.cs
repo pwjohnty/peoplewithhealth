@@ -276,7 +276,7 @@ public partial class SingleMedication : ContentPage
             {
                 //Limit No. of Taps 
                 DeleteBtn.IsEnabled = false;
-                bool Result = await DisplayAlert("Delete Medication", "Are you sure you would like to Delete this Medicaiton, it cannot be retrieved once Deleted", "Delete", "Cancel");
+                bool Result = await DisplayAlert("Delete Medication", "Are you sure you want to delete this Medicaiton? Once deleted it cannot be retrieved", "Delete", "Cancel");
                 if (Result)
                 {
                     //Delete

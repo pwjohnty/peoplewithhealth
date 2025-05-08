@@ -183,7 +183,18 @@ public partial class DashQuestionnaire : ContentPage
             loadingstack.IsVisible = false;
             previousstack.IsVisible = true;
             titlelbl.IsVisible = true;
-            previouslist.ItemsSource = correctresponses;
+            if(correctresponses.Count > 0)
+            {
+                previouslist.ItemsSource = correctresponses;
+                previouslist.IsVisible = true;
+                nodatastack.IsVisible = false; 
+            }
+            else
+            {
+                previouslist.IsVisible = false;
+                nodatastack.IsVisible = true;
+            }
+                
             //previouslist.HeightRequest = correctresponses.Count * 100; 
 
 

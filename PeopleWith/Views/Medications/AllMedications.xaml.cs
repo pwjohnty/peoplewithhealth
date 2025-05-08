@@ -775,18 +775,23 @@ public partial class AllMedications : ContentPage
             var sortedbyname3 = AsRequiredMedications.OrderBy(x => x.ChangedMedName).ToList();
 
             NovoConsentData();
-
+            bool checkonenotEmpty = true; 
             //Active Medications List 
             if (PendingList.Count == 0 && sortedbyname.Count == 0 && sortedbyname2.Count == 0 && sortedbyname3.Count == 0)
             {
                 nodatastack.IsVisible = true;
                 datastack.IsVisible = false;
+                checkonenotEmpty = false; 
                 await Task.Delay(2000);
                 //NovoConsent.Margin = new Thickness(20, 300, 20, 10);
                 //await MopupService.Instance.PopAllAsync(false);
             }
             else if (sortedbyname.Count == 0)
             {
+                if (checkonenotEmpty)
+                {
+                    SegmentDetails.Text = "Medications you have currently scheduled";
+                }
                 if(PendingList.Count == 0)
                 {
                     noActivemedlbl.IsVisible = true;
@@ -803,7 +808,6 @@ public partial class AllMedications : ContentPage
                 datastack.IsVisible = true;
                 //Set Segmentlbl
                 SegmentDetails.Text = "Medications you have currently scheduled";
-
                 AllUserMedsList.IsVisible = true;
                 AllUserMedsList.ItemsSource = AllUserMedications;
                 //NovoConsent.Margin = new Thickness(20, 0, 20, 10);
@@ -970,6 +974,11 @@ public partial class AllMedications : ContentPage
                     noCompletedmedlbl.IsVisible = false;
                     bool Check = CurrentMedications.All(x => x.status == "Pending");
                     //bool hasMultipleStatuses = CurrentMedications.Select(x => x.status).Distinct().Count() > 1;
+                    if (!Check)
+                    {
+                        SegmentDetails.Text = "Medications you have currently scheduled";
+                    }
+
                     if (CurrentMedications.Count == 0)
                     {
                         AllUserMedsList.IsVisible = false;
@@ -977,10 +986,7 @@ public partial class AllMedications : ContentPage
                     }
                     else
                     {
-                        if (!Check)
-                        {
-                            SegmentDetails.Text = "Medications you have currently scheduled";
-                        }
+                      
                         AllUserMedsList.IsVisible = true;
                         noActivemedlbl.IsVisible = false;
                     }
@@ -1000,13 +1006,14 @@ public partial class AllMedications : ContentPage
                 PendingMedsList.IsVisible = false;
                 noActivemedlbl.IsVisible = false;
                 AllUserMedsList.IsVisible = false;
-                if(AsRequiredMedications.Count == 0)
+                SegmentDetails.Text = "Medications you take as you require them";
+                if (AsRequiredMedications.Count == 0)
                 {
                     noARmedlbl.IsVisible = true;
                 }
                 else
                 {
-                    SegmentDetails.Text = "Medications you take as you require them";
+                    
                     noARmedlbl.IsVisible = false;
                     AsRequiredList.IsVisible = true;
 
@@ -1022,14 +1029,14 @@ public partial class AllMedications : ContentPage
                 AllUserMedsList.IsVisible = false;
                 AsRequiredList.IsVisible = false;
                 noARmedlbl.IsVisible = false;
-
+                SegmentDetails.Text = "Medications you are no longer taking";
                 if (CompletedMedications.Count == 0)
                 {
                     noCompletedmedlbl.IsVisible = true;
                 }
                 else
                 {
-                    SegmentDetails.Text = "Medications you are no long taking";
+                    
                     noCompletedmedlbl.IsVisible = false;
                     CompletedMedsList.IsVisible = true;
                 }
@@ -1098,7 +1105,7 @@ public partial class AllMedications : ContentPage
     {
         try
         {
-            bool Delete = await DisplayAlert("Delete Pending Medication", "Are you sure you would like the delete this Medication? Once deleted it cannot be retrieved", "Delete", "Cancel");
+            bool Delete = await DisplayAlert("Delete Pending Medication", "Are you sure you want to delete this Medication? Once deleted it cannot be retrieved", "Delete", "Cancel");
             if (Delete == true)
             {
 

@@ -559,8 +559,8 @@ public partial class WH : ContentPage
                 medicationstoadd.Clear();
 
                 medicationsframe.IsVisible = false;
-                comprefframe.IsVisible = true;
-
+                HotFlushesframe.IsVisible = true;
+                skipbtn.IsVisible = false;
                 UpdateProgress();
             }
             else if(comprefframe.IsVisible == true)

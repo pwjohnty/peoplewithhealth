@@ -154,14 +154,14 @@ public partial class SingleActivity : ContentPage
             {
                 DeleteBtn.IsEnabled = false;
 
-                bool Delete = await DisplayAlert("Delete Activity", "Are you sure you would like the delete this Activity? Once deleted it cannot be retrieved", "Continue", "Cancel");
+                bool Delete = await DisplayAlert("Delete Activity", "Are you sure you want to delete this Activity? Once deleted it cannot be retrieved", "Delete", "Cancel");
                 if (Delete == true)
                 {
                     //Delete Item 
                     PassedActivity.deleted = true;
                     APICalls database = new APICalls();
 
-                    await MopupService.Instance.PushAsync(new PopupPageHelper("Actvity Deleted") { });
+                    await MopupService.Instance.PushAsync(new PopupPageHelper("Activity Deleted") { });
                     await database.DeleteUserActivity(PassedActivity);
 
                     await Navigation.PushAsync(new ActivitySchedule());

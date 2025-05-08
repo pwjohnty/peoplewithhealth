@@ -628,7 +628,7 @@ public partial class ProfileSection : ContentPage
             {
                 Logout.IsEnabled = false; 
                 //Limit No. of Taps 
-                bool Answer = await DisplayAlert("Logout", "Are you sure you would like to logout", "Logout", "Cancel");
+                bool Answer = await DisplayAlert("Logout", "Are you sure you want to logout", "Logout", "Cancel");
                 if (Answer)
                 {
                     Logout HandleLogout = new Logout();
@@ -661,7 +661,7 @@ public partial class ProfileSection : ContentPage
             {
                 //Limit No. of Taps 
                 DeleteAccount.IsEnabled = false; 
-                bool Answer = await DisplayAlert("Delete Account", "Are you sure you would like to Delete this account, Once Deleted it cannot be retrieved", "Delete Account", "Cancel");
+                bool Answer = await DisplayAlert("Delete Account", "Are you sure you want to delete this Account? Once deleted it cannot be retrieved", "Delete Account", "Cancel");
                 if (Answer)
                 {
                     //Delete Account

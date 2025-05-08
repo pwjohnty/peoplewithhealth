@@ -1170,7 +1170,7 @@ public partial class SingleMeasurement : ContentPage
             {
                 //Limit No. of Taps 
                 Deltebtn.IsEnabled = false;
-                bool Delete = await DisplayAlert("Delete Measurement", "Are you sure you would like the delete this Measurement? Once deleted it cannot be retrieved", "Delete", "Cancel");
+                bool Delete = await DisplayAlert("Delete Measurement", "Are you sure you want to delete this Measurement? Once deleted it cannot be retrieved", "Delete", "Cancel");
                 if (Delete == true)
                 {
                     foreach (var item in usermeasurementlistpassed)
