@@ -11,12 +11,12 @@
         </Grid.RowDefinitions>
 
 
-        <Button Text="Close Video" TextColor="White" IsVisible="False" x:Name="closevideobtn" Clicked="closevideobtn_Clicked" BackgroundColor="#031926" FontFamily="HankenGroteskBold" Grid.Row="0" Grid.Column="0" Margin="10"/>
+        <Button Text="Close Video" TextColor="White" x:Name="closevideobtn" Clicked="closevideobtn_Clicked" BackgroundColor="#031926" FontFamily="HankenGroteskBold" Grid.Row="0" Grid.Column="0" Margin="10"/>
 
         <toolkit:MediaElement MediaEnded="MediaElement_MediaEnded" PositionChanged="MediaElement_PositionChanged" StateChanged="MediaElement_StateChanged"
  x:Name="MediaElement" Grid.Row="1" Grid.Column="0"  Aspect="AspectFit" 
- ShouldAutoPlay="True" IsVisible="False" WidthRequest="300" ShouldShowPlaybackControls="True"
- HorizontalOptions="Center" Background="Transparent" BackgroundColor="Transparent" 
+ ShouldAutoPlay="True" WidthRequest="300" ShouldShowPlaybackControls="True"
+ HorizontalOptions="Center" Background="Transparent" BackgroundColor="Transparent"
  />
 
     </Grid>

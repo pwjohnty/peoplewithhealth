@@ -310,6 +310,7 @@ public partial class ActivitySchedule : ContentPage
                 ActivityPlannerStack.IsVisible = true;
                 EmptyStack.IsVisible = false;
                 ActivityPlanner.ItemsSource = ScheduleItems;
+                ActivityPlanner.HeightRequest = ScheduleItems.Count * 50 + 100;
                 AddTaskStack.IsVisible = false;
             }
             else

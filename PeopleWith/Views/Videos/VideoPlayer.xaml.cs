@@ -45,6 +45,7 @@ public partial class VideoPlayer : ContentPage
             VideoEngagement.userid = Helpers.Settings.UserKey;
             VideoEngagement.videoid = VideoSelected.videoid;
             //NavigationPage.SetHasNavigationBar(this, true);
+
         }
         catch (Exception Ex)
         {
@@ -199,7 +200,7 @@ public partial class VideoPlayer : ContentPage
             else
             {
 
-
+                
                 await Navigation.PushAsync(new NewPageVideoPlayer(SelectedVideo.filename, SelectedVideo.videoid), false);
                 return;
             }

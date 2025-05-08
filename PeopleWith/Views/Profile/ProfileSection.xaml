@@ -45,8 +45,7 @@
             <!-- Settings-->
             <Label Text="Settings"  HorizontalOptions="Start" Margin="20,10,0,0" FontFamily="HankenGroteskBold" FontSize="26" TextColor="#031926"/>
 
-            <Border Stroke="#E8E8E8" StrokeShape="RoundRectangle 10" Margin="20,10,20,0" Padding="5,0,5,-2" BackgroundColor="White" >
-                <!--<Frame HasShadow="false" Margin="20,10,20,0" Padding="5,0,5,-2" HeightRequest="112" BorderColor="#E8E8E8"  BackgroundColor="Transparent" >-->
+              <!--<Frame HasShadow="false" Margin="20,10,20,0" Padding="5,0,5,-2" HeightRequest="112" BorderColor="#E8E8E8"  BackgroundColor="Transparent" >-->
                 <syncfusion:SfListView x:Name="Settings" SelectionBackground="Transparent" SelectionMode="SingleDeselect" ScrollBarVisibility="Never" ItemTapped="Settings_ItemTapped" AutoFitMode="Height" >
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
@@ -64,7 +63,7 @@
                         </DataTemplate>
                     </syncfusion:SfListView.ItemTemplate>
                 </syncfusion:SfListView>
-            </Border>
+         
 
             <!-- Email Response -->
 

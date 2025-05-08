@@ -59,12 +59,11 @@ public partial class NewPageVideoPlayer : ContentPage
         {
             Task.Delay(100).ContinueWith(t =>
             {
-                Device.BeginInvokeOnMainThread(() =>
+                MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    Navigation.RemovePage(this);
+                   // Navigation.RemovePage(this);
                 });
             });
-            return;
         }
 
         var zeroTimeSpan = TimeSpan.Zero;
@@ -125,7 +124,7 @@ public partial class NewPageVideoPlayer : ContentPage
                 {
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        Navigation.RemovePage(this);
+                       // Navigation.RemovePage(this);
                     });
                 });
                 return;
@@ -197,7 +196,7 @@ public partial class NewPageVideoPlayer : ContentPage
                 {
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        Navigation.RemovePage(this);
+                       // Navigation.RemovePage(this);
                     });
                 });
                 return;
@@ -239,6 +238,7 @@ public partial class NewPageVideoPlayer : ContentPage
                 //IOSBtn.IsVisible = true;
             }
 
+           // MediaElement.IsVisible = true;
             closevideobtn.IsVisible = true;
         }
         catch (Exception Ex)
@@ -254,9 +254,16 @@ public partial class NewPageVideoPlayer : ContentPage
     {
         try
         {
+          // Navigation.RemovePage(this);
+          //  await Navigation.PushAsync(new AllVideos(), false);
+          //  return;
+
             if (Video.IsVisible == true)
             {
                 MediaElement.Stop();
+                MediaElement.CancelAnimations();
+                
+
                 isPlaying = false;
                 if (!string.IsNullOrEmpty(VideoEngagement.closeaction))
                 {
@@ -311,7 +318,7 @@ public partial class NewPageVideoPlayer : ContentPage
                         }
                         else if (i == 2)
                         {
-                            // Navigation.RemovePage(page);
+                             Navigation.RemovePage(page);
                         }
                         else
                         {
@@ -321,6 +328,7 @@ public partial class NewPageVideoPlayer : ContentPage
                     }
                 }
 
+               
                // await Navigation.PushAsync(new AllVideos(), false);
 
             }
@@ -350,11 +358,12 @@ public partial class NewPageVideoPlayer : ContentPage
             if (MediaElement.Handler != null)
             {
                 // Stop the video and disconnect the handler
-               // MediaElement.Stop();
-               // MediaElement.IsVisible = false;
-             //   MediaElement.Handler?.DisconnectHandler();
+                MediaElement.Handler?.DisconnectHandler();
+                // MediaElement.Stop();
+                // MediaElement.IsVisible = false;
+                //   MediaElement.Handler?.DisconnectHandler();
 
-          
+
             }
         }
         catch (Exception Ex)
