@@ -21,12 +21,12 @@
             </Grid>
 
             <!-- Health Details-->
-            <Border Stroke="#E8E8E8" StrokeShape="RoundRectangle 10" Margin="20,10,20,0" Padding="5,0,5,-2" BackgroundColor="White" >
+            <Border Stroke="#E8E8E8" StrokeShape="RoundRectangle 10" Margin="20,10,20,0" Padding="5,0,5,0" BackgroundColor="White" >
                 <syncfusion:SfListView x:Name="UserDetails" SelectionBackground="Transparent" SelectionMode="SingleDeselect"  ItemTapped="UserDetails_ItemTapped" AutoFitMode="Height" >
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate >
                             <ViewCell>
-                                
+
                                 <Grid Grid.RowDefinitions="Auto,Auto,Auto"  Grid.ColumnDefinitions="*">
 
                                     <Label FontAutoScalingEnabled="False" HorizontalOptions="Fill" Text="{Binding SettingsTitle}"  FontFamily="HankenGroteskRegular" HeightRequest="20" FontSize="12" VerticalOptions="Center" Grid.Row="0" Grid.Column="0" Margin="10,10,0,0" TextColor="Gray" />
@@ -45,7 +45,8 @@
             <!-- Settings-->
             <Label Text="Settings"  HorizontalOptions="Start" Margin="20,10,0,0" FontFamily="HankenGroteskBold" FontSize="26" TextColor="#031926"/>
 
-              <!--<Frame HasShadow="false" Margin="20,10,20,0" Padding="5,0,5,-2" HeightRequest="112" BorderColor="#E8E8E8"  BackgroundColor="Transparent" >-->
+            <!--<Frame HasShadow="false" Margin="20,10,20,0" Padding="5,0,5,-2" HeightRequest="112" BorderColor="#E8E8E8"  BackgroundColor="Transparent" >-->
+            <Border  Stroke="#E8E8E8" StrokeShape="RoundRectangle 10" Margin="20,10,20,0" Padding="5,0,5,0" BackgroundColor="White" HeightRequest="113">
                 <syncfusion:SfListView x:Name="Settings" SelectionBackground="Transparent" SelectionMode="SingleDeselect" ScrollBarVisibility="Never" ItemTapped="Settings_ItemTapped" AutoFitMode="Height" >
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
@@ -63,7 +64,7 @@
                         </DataTemplate>
                     </syncfusion:SfListView.ItemTemplate>
                 </syncfusion:SfListView>
-         
+            </Border>
 
             <!-- Email Response -->
 
@@ -91,7 +92,7 @@
             <!--Privacy List -->
             <Label Text="Privacy"  HorizontalOptions="Start" Margin="20,10,0,0" FontFamily="HankenGroteskBold" FontSize="26" TextColor="#031926"/>
 
-            <Border Stroke="#E8E8E8" StrokeShape="RoundRectangle 10" Margin="20,10,20,0" Padding="5,0,5,-2" BackgroundColor="White" >
+            <Border Stroke="#E8E8E8" StrokeShape="RoundRectangle 10" Margin="20,10,20,0" Padding="5,0,5,0" BackgroundColor="White" >
                 <!--<Frame HasShadow="false" Margin="20,10,20,0" Padding="5,0,5,-2" BorderColor="#E8E8E8"  BackgroundColor="Transparent" >-->
                 <syncfusion:SfListView x:Name="PrivacyList" SelectionBackground="Transparent" SelectionMode="SingleDeselect" ScrollBarVisibility="Never" ItemTapped="PrivacyList_ItemTapped" AutoFitMode="Height" >
                     <syncfusion:SfListView.ItemTemplate>
@@ -109,7 +110,7 @@
                     </syncfusion:SfListView.ItemTemplate>
                 </syncfusion:SfListView>
             </Border>
-            
+
             <!-- Logout Button-->
             <Button Margin="20,20,20,0" x:Name="Logout" Text="Logout" Clicked="Logout_Clicked" FontFamily="HankenGroteskBold" HeightRequest="45" CornerRadius="10" BorderColor="Transparent" BorderWidth="1" BackgroundColor="#e5f0fb" TextColor="#031926"/>
 
