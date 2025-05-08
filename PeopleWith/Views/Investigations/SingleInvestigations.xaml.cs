@@ -107,7 +107,7 @@ public partial class SingleInvestigations : ContentPage
                 Deletebtn.IsEnabled = false;
 
 
-                bool Delete = await DisplayAlert("Delete Investigation", "Are you sure you would like the delete this Investigation? Once deleted it cannot be retrieved", "Continue", "Cancel");
+                bool Delete = await DisplayAlert("Delete Investigation", "Are you sure you want to delete this Investigation? Once deleted it cannot be retrieved", "Delete", "Cancel");
                 if (Delete == true)
                 {
                     //Delete Item 

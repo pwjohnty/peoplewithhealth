@@ -103,7 +103,7 @@ public partial class SingleDiet : ContentPage
                 Deletebtn.IsEnabled = false;
 
 
-                bool Delete = await DisplayAlert("Delete Diet", "Are you sure you would like the delete this Diet? Once deleted it cannot be retrieved", "Continue", "Cancel");
+                bool Delete = await DisplayAlert("Delete Diet", "Are you sure you want to delete this Diet? Once deleted it cannot be retrieved", "Delete", "Cancel");
                 if (Delete == true)
                 {
                     //Delete Item 

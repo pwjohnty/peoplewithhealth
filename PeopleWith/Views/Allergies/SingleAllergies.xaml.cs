@@ -103,7 +103,7 @@ public partial class SingleAllergies : ContentPage
                 
                 //Limit No. of Taps 
                 Deletebtn.IsEnabled = false;
-                bool Delete = await DisplayAlert("Delete Allergy", "Are you sure you would like the delete this Allergy? Once deleted it cannot be retrieved", "Delete", "Cancel");
+                bool Delete = await DisplayAlert("Delete Allergy", "Are you sure you want to delete this Allergy? Once deleted it cannot be retrieved", "Delete", "Cancel");
                 if (Delete == true)
                 {
 

@@ -118,7 +118,7 @@ VerticalOptions="Center" />
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <Frame CornerRadius="10" Grid.Row="0" Grid.Column="0" Margin="5" Padding="2" BackgroundColor="#fce9d9" HasShadow="False">
+                                    <Frame CornerRadius="10" Grid.Row="0" Grid.Column="0" Margin="5" Padding="2" BackgroundColor="#e5f9f4" BorderColor="Teal" HasShadow="False">
                                         <Label Text="{Binding DisplayText}" HorizontalTextAlignment="Center" FontFamily="HankenGroteskRegular" Padding="5" FontSize="12" FontAttributes="Bold" TextColor="Teal" />
                                     </Frame>
                                 </Grid>

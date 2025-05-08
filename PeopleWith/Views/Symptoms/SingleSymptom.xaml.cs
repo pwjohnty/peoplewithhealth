@@ -507,7 +507,7 @@ public partial class SingleSymptom : ContentPage
             {
                 //Limit No. of Taps 
                 DeleteBtn.IsEnabled = false;
-                bool Delete = await DisplayAlert("Delete Symptom", "Are you sure you would like the delete this Symptom? Once deleted it cannot be retrieved", "Continue", "Cancel");
+                bool Delete = await DisplayAlert("Delete Symptom", "Are you sure you want to delete this Symptom? Once deleted it cannot be retrieved", "Continue", "Cancel");
                 if (Delete == true)
                 {
                     bool finalConfirmation = await DisplayAlert(

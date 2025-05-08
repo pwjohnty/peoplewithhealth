@@ -290,7 +290,7 @@ public partial class SingleHCP : ContentPage
             {
                 //Limit No. of Taps 
                 Deletebtn.IsEnabled = false;
-                var Result = await DisplayAlert("Delete HCP", "Are you sure you would like to delete this HCP? Once Deleted it cannot be retrieved.", "Accept", "Decline");
+                var Result = await DisplayAlert("Delete HCP", "Are you sure you want to delete this HCP? Once deleted it cannot be retrieved", "Delete", "Cancel");
                 if (Result)
                 {
                     //Accept

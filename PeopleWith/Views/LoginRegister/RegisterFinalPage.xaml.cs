@@ -910,15 +910,24 @@ public partial class RegisterFinalPage : ContentPage
 
 
                 // Preferences.Default.Set("validationcode", newuser.validationcode);
-
-                Task.Run(async () =>
+                await Task.Run(async () =>
                 {
-                    await Task.Delay(100); // Simulate processing time if necessary
-                    MainThread.BeginInvokeOnMainThread(async () =>
-                    {
-                        Application.Current.MainPage = new NavigationPage(new MainDashboard());
-                    });
+                    // Simulate some processing that may take up to seconds
+                    await Task.Delay(100);
                 });
+
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                });
+                //Task.Run(async () =>
+                //{
+                //    await Task.Delay(100); // Simulate processing time if necessary
+                //    MainThread.BeginInvokeOnMainThread(async () =>
+                //    {
+                //        Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                //    });
+                //});
 
                 //Application.Current.MainPage = new NavigationPage(new MainDashboard());
 

@@ -113,7 +113,7 @@ public partial class SingleMood : ContentPage
             if (accessType == NetworkAccess.Internet)
             {
                 Deletebtn.IsEnabled = false; 
-                bool Delete = await DisplayAlert("Delete Mood", "Are you sure you would like the delete this Mood? Once deleted it cannot be retrieved", "Delete", "Cancel");
+                bool Delete = await DisplayAlert("Delete Mood", "Are you sure you want to delete this Mood? Once deleted it cannot be retrieved", "Delete", "Cancel");
                 if (Delete == true)
                 {
                     var PassedMood = MoodPassed[0];

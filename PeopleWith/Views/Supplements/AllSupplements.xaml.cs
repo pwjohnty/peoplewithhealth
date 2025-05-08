@@ -756,17 +756,23 @@ public partial class AllSupplements : ContentPage
             var sortedbyname3 = AsRequiredMedications.OrderBy(x => x.ChangedMedName).ToList();
 
             NovoConsentData();
+            bool checkonenotEmpty = true;
             //Active Medications List 
             if (sortedbyname.Count == 0 && sortedbyname2.Count == 0 && sortedbyname3.Count == 0)
             {
                 nodatastack.IsVisible = true;
                 datastack.IsVisible = false;
+                checkonenotEmpty = false;
                 await Task.Delay(2000);
                 //await MopupService.Instance.PopAllAsync(false);
                 //NovoConsent.Margin = new Thickness(20, 300, 20, 10);
             }
             else if (sortedbyname.Count == 0)
             {
+                if (checkonenotEmpty)
+                {
+                    SegmentDetails.Text = "Supplements you have currently scheduled";
+                }
                 noActivemedlbl.IsVisible = true;
                 AllUserMedsList.IsVisible = false;
                 await Task.Delay(2000);
@@ -910,6 +916,7 @@ public partial class AllSupplements : ContentPage
                     CompletedMedsList.IsVisible = false;
                     noARmedlbl.IsVisible = false;
                     noCompletedmedlbl.IsVisible = false;
+                    SegmentDetails.Text = "Supplements you have currently scheduled";
                     if (CurrentMedications.Count == 0)
                     {
                         AllUserMedsList.IsVisible = false;
@@ -917,7 +924,7 @@ public partial class AllSupplements : ContentPage
                     }
                     else
                     {
-                        SegmentDetails.Text = "Supplements you have currently scheduled";
+                       
                         AllUserMedsList.IsVisible = true;
                         noActivemedlbl.IsVisible = false;
                     }
@@ -927,13 +934,14 @@ public partial class AllSupplements : ContentPage
             {
                 noActivemedlbl.IsVisible = false;
                 AllUserMedsList.IsVisible = false;
+                SegmentDetails.Text = "Supplements you take as you require them";
                 if (AsRequiredMedications.Count == 0)
                 {
                     noARmedlbl.IsVisible = true;
                 }
                 else
                 {
-                    SegmentDetails.Text = "Supplements you take as you require them";
+                    
                     noARmedlbl.IsVisible = false;
                     AsRequiredList.IsVisible = true;
 
@@ -948,6 +956,7 @@ public partial class AllSupplements : ContentPage
                 AllUserMedsList.IsVisible = false;
                 AsRequiredList.IsVisible = false;
                 noARmedlbl.IsVisible = false;
+                SegmentDetails.Text = "Supplements you are no longer taking";
 
                 if (CompletedMedications.Count == 0)
                 {
@@ -955,7 +964,7 @@ public partial class AllSupplements : ContentPage
                 }
                 else
                 {
-                    SegmentDetails.Text = "Supplements you are no long taking";
+                    
                     noCompletedmedlbl.IsVisible = false;
                     CompletedMedsList.IsVisible = true;
                 }

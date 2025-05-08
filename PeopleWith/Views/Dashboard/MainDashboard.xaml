@@ -1299,7 +1299,7 @@ HorizontalOptions="Center" />
                 </tabView:SfTabItem.Content>
             </tabView:SfTabItem>
 
-            <tabView:SfTabItem x:Name="additionalquestionstab" IsVisible="False" Header="Questions" ImageSource="quesinactive.png" FontFamily="HankenGroteskRegular" FontSize="12" TextColor="#b3babd">
+            <tabView:SfTabItem x:Name="additionalquestionstab" IsVisible="False" Header="Questions" ImageSource="questiondashgrey.png" FontFamily="HankenGroteskRegular" FontSize="12" TextColor="#b3babd">
                 <tabView:SfTabItem.Content>
                     <ScrollView VerticalScrollBarVisibility="Never">
 
@@ -1343,7 +1343,7 @@ HorizontalOptions="Center" />
     </StackLayout>
 </Frame>-->
                                     <Grid.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_8"/>
+                                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_8" NumberOfTapsRequired="1"/>
                                     </Grid.GestureRecognizers>
                                 </Grid>
                             </Frame>
