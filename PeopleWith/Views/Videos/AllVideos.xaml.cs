@@ -77,13 +77,20 @@ public partial class AllVideos : ContentPage
                 //Add items with no Signup && Refferral 
 
                 bool BothEmpty = string.IsNullOrEmpty(item.referral) && string.IsNullOrEmpty(item.signupcodeid);
-
+              
                 if (!BothEmpty)
                 {
-                    bool referralContains = !string.IsNullOrEmpty(item.referral) && item.referral.Contains(signupCode);
-                    bool signupContains = !string.IsNullOrEmpty(item.signupcodeid) && item.signupcodeid.Contains(signupCode);
+                    if (!string.IsNullOrEmpty(signupCode))
+                    {
+                        bool referralContains = !string.IsNullOrEmpty(item.referral) && item.referral.Contains(signupCode);
+                        bool signupContains = !string.IsNullOrEmpty(item.signupcodeid) && item.signupcodeid.Contains(signupCode);
 
-                    if (!referralContains && !signupContains)
+                        if (!referralContains && !signupContains)
+                        {
+                            itemstoremove.Add(item);
+                        }
+                    }
+                    else
                     {
                         itemstoremove.Add(item);
                     }
