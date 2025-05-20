@@ -113,6 +113,10 @@ namespace PeopleWith
         public const string GetUserActivity = "https://pwapi.peoplewith.com/api/userdailyactivity";
 
 
+        //Fitness
+        public const string GetUserFitness = "https://pwapi.peoplewith.com/api/userfitnessdata";
+
+
         //Authentication Test
         public const string GetAuth = "https://pwapicontainer.thankfulground-b43b4106.ukwest.azurecontainerapps.io/api/registryConfig";
 
@@ -4703,6 +4707,211 @@ namespace PeopleWith
             }
         }
 
+
+        public async Task<ObservableCollection<userfitnessdata>> GetUserFitnessData()
+        {
+            try
+            {
+                ObservableCollection<userfitnessdata> itemstoremove = new ObservableCollection<userfitnessdata>();
+                var userid = Helpers.Settings.UserKey;
+                string urlWithQuery = $"{GetUserFitness}?$filter=userid eq '{userid}'";
+                ConfigureClient();
+                HttpResponseMessage responseconsent = await Client.GetAsync(urlWithQuery);
+
+                if (responseconsent.IsSuccessStatusCode)
+                {
+                    string contentconsent = await responseconsent.Content.ReadAsStringAsync();
+                    // Add Feedback Converter
+                    //  var settings = new JsonSerializerSettings();
+                    //  settings.Converters.Add(new AppointmentFeedbackConverter());
+                    var userResponseconsent = JsonConvert.DeserializeObject<ApiResponseUserFitness>(contentconsent);
+                    var consent = userResponseconsent.Value;
+
+                    var newcollection = new ObservableCollection<userfitnessdata>();
+
+                    //Remove All Deleted Items 
+                    foreach (var item in consent)
+                    {
+
+                        ////item.moodfeedbacklist = JsonConvert.DeserializeObject<ObservableCollection<feedbackdata>>(item.moodfeedback);
+                        //if (!string.IsNullOrEmpty(item.medicationfeedback))
+                        //{
+                        //    try
+                        //    {
+                        //        // Attempt to deserialize as an array
+                        //        item.medicationfeedbacklist = JsonConvert.DeserializeObject<ObservableCollection<feedbackdata>>(item.medicationfeedback);
+
+                        //    }
+                        //    catch (JsonSerializationException)
+                        //    {
+                        //        // If the JSON is a single object, deserialize it as such and wrap it in a collection
+                        //        var singleItem = JsonConvert.DeserializeObject<feedbackdata>(item.medicationfeedback);
+                        //        item.medicationfeedbacklist = new ObservableCollection<feedbackdata> { singleItem };
+                        //    }
+                        //}
+
+                        //if(!string.IsNullOrEmpty(item.supplementfeedback))
+                        //try
+                        //{
+                        //    // Attempt to deserialize as an array
+                        //    item.supplementfeedbacklist = JsonConvert.DeserializeObject<ObservableCollection<feedbackdata>>(item.supplementfeedback);
+                        //}
+                        //catch (JsonSerializationException)
+                        //{x 
+                        //    // If the JSON is a single object, deserialize it as such and wrap it in a collection
+                        //    var singleItem = JsonConvert.DeserializeObject<feedbackdata>(item.supplementfeedback);
+                        //    item.supplementfeedbacklist = new ObservableCollection<feedbackdata> { singleItem };
+                        //}
+
+                        if (!string.IsNullOrEmpty(item.stepfeedback))
+                        {
+
+                            try
+                            {
+                                // Attempt to deserialize as an array
+                                if (item.stepfeedback == "[]")
+                                {
+
+                                }
+                                else
+                                {
+                                    item.stepfeedbacklist = JsonConvert.DeserializeObject<ObservableCollection<fitnessfeedback>>(item.stepfeedback);
+                                }
+                            }
+                            catch (JsonSerializationException)
+                            {
+                                // If the JSON is a single object, deserialize it as such and wrap it in a collection
+                                var singleItem = JsonConvert.DeserializeObject<fitnessfeedback>(item.stepfeedback);
+                                item.stepfeedbacklist = new ObservableCollection<fitnessfeedback> { singleItem };
+                            }
+                        }
+
+
+                        //if (!string.IsNullOrEmpty(item.measurementfeedback))
+                        //{
+                        //    try
+                        //    {
+
+                        //        // Attempt to deserialize as an array
+                        //        if (item.measurementfeedback == "[]")
+                        //        {
+
+                        //        }
+                        //        else
+                        //        {
+                        //            // Attempt to deserialize as an array
+                        //            item.measurementfeedbacklist = JsonConvert.DeserializeObject<ObservableCollection<feedbackdata>>(item.measurementfeedback);
+                        //        }
+
+                        //    }
+                        //    catch (JsonSerializationException)
+                        //    {
+                        //        // If the JSON is a single object, deserialize it as such and wrap it in a collection
+                        //        var singleItem = JsonConvert.DeserializeObject<feedbackdata>(item.measurementfeedback);
+                        //        item.measurementfeedbacklist = new ObservableCollection<feedbackdata> { singleItem };
+                        //    }
+                        //}
+
+                        //if (!string.IsNullOrEmpty(item.moodfeedback))
+                        //{
+
+                        //    try
+                        //    {
+                        //        // Attempt to deserialize as an array
+                        //        if (item.moodfeedback == "[]")
+                        //        {
+
+                        //        }
+                        //        else
+                        //        {
+                        //            // Attempt to deserialize as an array
+                        //            item.moodfeedbacklist = JsonConvert.DeserializeObject<ObservableCollection<feedbackdata>>(item.moodfeedback);
+                        //        }
+                        //        // Attempt to deserialize as an array
+
+                        //    }
+                        //    catch (JsonSerializationException)
+                        //    {
+                        //        // If the JSON is a single object, deserialize it as such and wrap it in a collection
+                        //        var singleItem = JsonConvert.DeserializeObject<feedbackdata>(item.moodfeedback);
+                        //        item.moodfeedbacklist = new ObservableCollection<feedbackdata> { singleItem };
+                        //    }
+                        //}
+
+                        //if (!string.IsNullOrEmpty(item.initialquestionnairefeedback))
+                        //{
+
+                        //    try
+                        //    {
+                        //        // Attempt to deserialize as an array
+                        //        if (item.initialquestionnairefeedback == "[]")
+                        //        {
+
+                        //        }
+                        //        else
+                        //        {
+                        //            // Attempt to deserialize as an array
+                        //            item.initialquestionnairefeedbacklist = JsonConvert.DeserializeObject<ObservableCollection<feedbackdata>>(item.initialquestionnairefeedback);
+                        //        }
+
+                        //    }
+                        //    catch (JsonSerializationException)
+                        //    {
+                        //        // If the JSON is a single object, deserialize it as such and wrap it in a collection
+                        //        var singleItem = JsonConvert.DeserializeObject<feedbackdata>(item.initialquestionnairefeedback);
+                        //        item.initialquestionnairefeedbacklist = new ObservableCollection<feedbackdata> { singleItem };
+                        //    }
+                        //}
+
+
+
+                        newcollection.Add(item);
+                    }
+
+
+
+                    return new ObservableCollection<userfitnessdata>(newcollection);
+
+                }
+                else
+                {
+                    return null;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
+        public async Task<userfitnessdata> InsertUserFitness(userfitnessdata item)
+        {
+            try
+            {
+                ConfigureClient();
+                var url = APICalls.GetUserFitness;
+                string jsonn = System.Text.Json.JsonSerializer.Serialize<userfitnessdata>(item);
+                StringContent contenttt = new StringContent(jsonn, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await Client.PostAsync(url, contenttt);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    //Nothing to return
+                    return null;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+                //Error Occured on Crashlog 
+            }
+        }
 
         //Used to Test HttpClient Auth
         //public async Task<ObservableCollection<registryconfig>> GetAuthTest()

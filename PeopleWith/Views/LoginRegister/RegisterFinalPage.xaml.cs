@@ -327,31 +327,31 @@ public partial class RegisterFinalPage : ContentPage
             }
             else
             {
-                DependencyService.Get<Healthinterface>().GetHealthPermissionAsync(async (result) =>
-                {
-                    var a = result;
-                    if (result)
-                    {
+                //DependencyService.Get<Healthinterface>().GetHealthPermissionAsync(async (result) =>
+                //{
+                //    var a = result;
+                //    if (result)
+                //    {
 
-                        //topgrid.IsVisible = false;
-                        //bottomstack.IsVisible = false;
-                        //healthdatastack.IsVisible = false;
-                        //finishstack.IsVisible = true;
-                        //await Task.Delay(3000);
+                //        //topgrid.IsVisible = false;
+                //        //bottomstack.IsVisible = false;
+                //        //healthdatastack.IsVisible = false;
+                //        //finishstack.IsVisible = true;
+                //        //await Task.Delay(3000);
 
-                        //finishstack.IsVisible = false;
-                    }
-                    else
-                    {
-                        topgrid.IsVisible = false;
-                        bottomstack.IsVisible = false;
-                        healthdatastack.IsVisible = false;
-                        finishstack.IsVisible = true;
-                      //  await Task.Delay(3000);
+                //        //finishstack.IsVisible = false;
+                //    }
+                //    else
+                //    {
+                //        topgrid.IsVisible = false;
+                //        bottomstack.IsVisible = false;
+                //        healthdatastack.IsVisible = false;
+                //        finishstack.IsVisible = true;
+                //      //  await Task.Delay(3000);
 
-                        //finishstack.IsVisible = false;
-                    }
-                });
+                //        //finishstack.IsVisible = false;
+                //    }
+                //});
             }
         }
         catch (Exception Ex)

@@ -17,12 +17,17 @@ using Microsoft.Maui.Devices;
 using Microsoft.Maui.Storage;
 using System.Reflection.Metadata;
 using Microsoft.Maui.Controls.Hosting;
+using Microsoft.Maui.Controls;
+using Plugin.Maui.Health.Enums;
+using Plugin.Maui.Health;
+using System.Globalization;
+//using Xamarin.Google.Crypto.Tink.Subtle;
 
 namespace PeopleWith;
 
 public partial class MainDashboard : ContentPage
 {
-    ObservableCollection<user> UserDetails = new ObservableCollection<user>();
+<    ObservableCollection<user> UserDetails = new ObservableCollection<user>();
     consent NovoConsent = new consent();
     user AllUserDetails = new user();
     APICalls database = new APICalls();
@@ -51,6 +56,7 @@ public partial class MainDashboard : ContentPage
    // public TaskCompletionSource<bool> PageReady { get; set; } = new();
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
+    private readonly IHealth health;
 
     async public void NotasyncMethod(Exception Ex)
     {
@@ -72,6 +78,7 @@ public partial class MainDashboard : ContentPage
         {
             InitializeComponent();
 
+            health = HealthDataProvider.Default;
             //Get All user Details & Set Helpers.Settings
             Checkifuserhasmigrated();
 
@@ -396,7 +403,7 @@ public partial class MainDashboard : ContentPage
 
             updateyourhealthdata();
 
-
+           // getfitnesshealthdata();
 
             // Stop the stopwatch after retrieval
             // stopwatch.Stop();
@@ -443,6 +450,33 @@ public partial class MainDashboard : ContentPage
             //symptom data
             if (userfeedbacklist[0].symptomfeedbacklist != null)
             {
+                var inputFormats = new[] {
+    "M/d/yyyy h:mm:ss tt",
+    "MM/dd/yyyy h:mm:ss tt",
+    "M/d/yyyy H:mm:ss",
+    "MM/dd/yyyy HH:mm:ss"
+};
+
+                var expectedFormat = "dd/MM/yyyy HH:mm:ss";
+                var culture = new CultureInfo("en-GB");
+
+                foreach (var x in userfeedbacklist[0].symptomfeedbacklist)
+                {
+                    if (!x.action.Contains("deleted"))
+                    {
+                        // Normalize special space character before AM/PM
+                        x.datetime = x.datetime.Replace('\u202F', ' ').Trim();
+
+                        if (DateTime.TryParseExact(x.datetime, inputFormats, culture, DateTimeStyles.None, out var parsed))
+                        {
+                            x.datetime = parsed.ToString(expectedFormat, culture); // Normalize to UK format
+
+                            var ss = x.datetime;
+                        }
+                    }
+                }
+
+
                 //var groupedsymptoms = userfeedbacklist[0].symptomfeedbacklist.GroupBy(x => x.label).ToList();
 
                 // Group by label and select the first item from each group
@@ -492,9 +526,15 @@ public partial class MainDashboard : ContentPage
 
                     if (sl.Count >= 2)
                     {
+
+                        var value0 = Convert.ToDouble(sl[0].value);
+                        var value1 = Convert.ToDouble(sl[1].value);
+
+                        var newestScore = double.IsNaN(value0) ? 0 : Convert.ToInt32(value0);
+                        var previousScore = double.IsNaN(value1) ? 0 : Convert.ToInt32(value1);
                         // Compare the newest and the previous score
-                        var newestScore = Convert.ToInt32(sl[0].value);      // Assuming .value represents the score
-                        var previousScore = Convert.ToInt32(sl[1].value);
+                     //   var newestScore = Convert.ToInt32(sl[0].value);      // Assuming .value represents the score
+                     //   var previousScore = Convert.ToInt32(sl[1].value);
 
                         if (newestScore > previousScore)
                         {
@@ -1316,6 +1356,107 @@ public partial class MainDashboard : ContentPage
     }
 
 
+    async void getfitnesshealthdata()
+    {
+        try
+        {
+
+            //check if they have any fitness health data added
+
+            var hasPermission = await health.CheckPermissionAsync(HealthParameter.StepCount, PermissionType.Read);
+            if (hasPermission)
+            {
+
+
+                var startOfDay = DateTime.Today;
+                var now = DateTime.Now;
+
+                var stepsCount = await health.ReadCountAsync(HealthParameter.StepCount, startOfDay, now);
+
+                int roundedSteps = (int)Math.Round(stepsCount);
+
+                stepcountlbl.Text = roundedSteps.ToString();
+            }
+            else
+            {
+                stepcountlbl.Text = "--";
+            }
+
+
+            var hasPermission2 = await health.CheckPermissionAsync(HealthParameter.DistanceWalkingRunning, PermissionType.Read);
+            if (hasPermission2)
+            {
+
+
+                var startOfDay = DateTime.Today;
+                var now = DateTime.Now;
+
+                var walkingdistance = await health.ReadLatestAvailableAsync(HealthParameter.DistanceWalkingRunning, "m");
+
+                //int roundedDistance = (int)Math.Round(walkingdistance);
+
+                double distanceKm = Math.Round(walkingdistance.Value.Value / 10, 1);
+
+                distancelbl.Text = distanceKm.ToString();
+            }
+            else
+            {
+                distancelbl.Text = "--";
+            }
+
+
+            var hasPermission3 = await health.CheckPermissionAsync(HealthParameter.HeartRate, PermissionType.Read);
+            if (hasPermission3)
+            {
+
+
+                var startOfDay = DateTime.Today;
+                var now = DateTime.Now;
+
+                var hr = await health.ReadLatestAvailableAsync(HealthParameter.HeartRate, "count/min");
+
+                //int roundedDistance = (int)Math.Round(walkingdistance);
+
+                // double heartrateround = Math.Round(heartrate.Value.Value);
+
+                heartratelbl.Text = hr.Value.Value.ToString();
+            }
+            else
+            {
+                heartratelbl.Text = "--";
+            }
+
+
+            var hasPermission4 = await health.CheckPermissionAsync(HealthParameter.RespiratoryRate, PermissionType.Read);
+            if (hasPermission4)
+            {
+
+
+                var startOfDay = DateTime.Today;
+                var now = DateTime.Now;
+
+                var hr = await health.ReadLatestAvailableAsync(HealthParameter.RespiratoryRate, "count/min");
+
+                //int roundedDistance = (int)Math.Round(walkingdistance);
+
+                // double heartrateround = Math.Round(heartrate.Value.Value);
+
+                resplbl.Text = hr.Value.Value.ToString();
+            }
+            else
+            {
+                resplbl.Text = "--";
+            }
+
+
+
+        }
+        catch(Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
     private void findsymptomdata()
     {
         try
@@ -1354,6 +1495,29 @@ public partial class MainDashboard : ContentPage
                 SymptomProgChart.IsVisible = false;
                 nosymdataframe.IsVisible = true;
                 return;
+            }
+
+
+            var inputFormats = new[] {
+   "M/d/yyyy h:mm:ss tt",
+    "MM/dd/yyyy h:mm:ss tt",
+    "M/d/yyyy H:mm:ss",
+    "MM/dd/yyyy HH:mm:ss"
+};
+            var outputFormat = "dd/MM/yyyy HH:mm:ss";
+            var ukCulture = new CultureInfo("en-GB");
+
+            foreach (var x in userfeedbacklist[0].symptomfeedbacklist)
+            {
+                if (!x.action.Contains("deleted"))
+                {
+                    x.datetime = x.datetime.Replace('\u202F', ' ').Trim();
+
+                    if (DateTime.TryParseExact(x.datetime, inputFormats, ukCulture, DateTimeStyles.None, out var parsed))
+                    {
+                        x.datetime = parsed.ToString(outputFormat, ukCulture);
+                    }
+                }
             }
 
             recentsymlbl.IsVisible = true;
@@ -4156,6 +4320,19 @@ public partial class MainDashboard : ContentPage
   
 
 
+
+    private async void TapGestureRecognizer_Tapped_12(object sender, TappedEventArgs e)
+    {
+        try
+        {
+
+            await Navigation.PushAsync(new AllFitness(), false);
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
 
     //private async void Button_Clicked_6(object sender, EventArgs e)
     //{

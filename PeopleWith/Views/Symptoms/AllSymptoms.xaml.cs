@@ -7,6 +7,7 @@ using Microsoft.Maui.Networking;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Devices;
 using Microsoft.Maui.Storage;
+using System.Globalization;
 namespace PeopleWith;
 public partial class AllSymptoms : ContentPage
 {
@@ -135,7 +136,18 @@ public partial class AllSymptoms : ContentPage
             }
 
 
-            foreach(var item in AllUserSymptoms)
+            var inputFormats = new[]
+{
+     "M/d/yyyy h:mm:ss tt",
+    "MM/dd/yyyy h:mm:ss tt",
+    "M/d/yyyy H:mm:ss",
+    "MM/dd/yyyy HH:mm:ss"
+};
+            var expectedFormat = "dd/MM/yyyy HH:mm:ss";
+            var ukCulture = new CultureInfo("en-GB");
+
+
+            foreach (var item in AllUserSymptoms)
             {
                 var allIntensities = new List<int>();
                 var allTimestamps = new List<DateTime>();
@@ -151,9 +163,25 @@ public partial class AllSymptoms : ContentPage
                         {
                             allIntensities.Add(intensity);
                         }
-                        if (DateTime.TryParse(x.timestamp, out DateTime timestamp))
+                        if (!string.IsNullOrWhiteSpace(x.timestamp))
                         {
-                            allTimestamps.Add(timestamp);
+                            x.timestamp = x.timestamp.Replace('\u202F', ' ').Trim();
+
+                            if (DateTime.TryParseExact(x.timestamp, inputFormats, ukCulture, DateTimeStyles.None, out DateTime timestamp))
+                            {
+                                allTimestamps.Add(timestamp);
+                                x.timestamp = timestamp.ToString(expectedFormat, ukCulture);
+
+                                var ss = x.timestamp;
+                            }
+                            else
+                            {
+                                if (DateTime.TryParse(x.timestamp, out DateTime timestampp))
+                                {
+                                    allTimestamps.Add(timestampp);
+                                }
+                            }
+
                         }
                     }
                 }
@@ -283,6 +311,17 @@ public partial class AllSymptoms : ContentPage
         {
             //  ListviewData.Clear();
 
+            var inputFormats = new[]
+{
+    "dd/MM/yyyy HH:mm:ss.fffffff", // with fractional seconds
+    "dd/MM/yyyy HH:mm:ss",         // standard UK format
+    "d/M/yyyy h:mm:ss tt",         // 12-hour with AM/PM
+    "M/d/yyyy h:mm:ss tt",         // US fallback with AM/PM
+    "yyyy-MM-ddTHH:mm:ss",         // ISO fallback if needed
+};
+            var expectedFormat = "dd/MM/yyyy HH:mm:ss";
+            var ukCulture = new CultureInfo("en-GB");
+
             foreach (var item in AllUserSymptoms)
             {
                 var allIntensities = new List<int>();
@@ -293,9 +332,16 @@ public partial class AllSymptoms : ContentPage
                     {
                         allIntensities.Add(intensity);
                     }
-                    if (DateTime.TryParse(x.timestamp, out DateTime timestamp))
+                    if (!string.IsNullOrWhiteSpace(x.timestamp))
                     {
-                        allTimestamps.Add(timestamp);
+                        x.timestamp = x.timestamp.Replace('\u202F', ' ').Trim();
+
+                        if (DateTime.TryParseExact(x.timestamp, inputFormats, ukCulture, DateTimeStyles.None, out DateTime timestamp))
+                        {
+                            allTimestamps.Add(timestamp);
+                            x.timestamp = timestamp.ToString(expectedFormat, ukCulture);
+                        }
+                    
                     }
                 }
                 if (allIntensities.Count > 0 && allTimestamps.Count > 0)

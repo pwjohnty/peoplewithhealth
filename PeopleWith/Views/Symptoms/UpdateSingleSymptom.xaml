@@ -452,9 +452,9 @@ HorizontalOptions="FillAndExpand">
 
             <Label Text="Add Notes" FontFamily="HankenGroteskBold" Margin="20,10,0,0"  VerticalOptions="Center" HorizontalOptions="Start"   FontSize="16" TextColor="#031926" />
             <Frame  BorderColor="#E6E6E6" BackgroundColor="Transparent" HasShadow="False" CornerRadius="10" Padding="-11" Margin="20,5,20,30">
-                <ScrollView Orientation="Vertical" HorizontalScrollBarVisibility="Never">
-                    <Editor x:Name="Notes" HeightRequest="80" TextColor="#031926" BackgroundColor="Transparent"  HorizontalTextAlignment="Start"  Margin="20,15,5,0"  />
-                </ScrollView>
+               
+                    <Editor x:Name="Notes" HeightRequest="150" TextColor="#031926" BackgroundColor="Transparent"  HorizontalTextAlignment="Start"  Margin="20,10,10,10"  />
+              
             </Frame>
 
 
