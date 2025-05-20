@@ -27,7 +27,7 @@ namespace PeopleWith;
 
 public partial class MainDashboard : ContentPage
 {
-<    ObservableCollection<user> UserDetails = new ObservableCollection<user>();
+    ObservableCollection<user> UserDetails = new ObservableCollection<user>();
     consent NovoConsent = new consent();
     user AllUserDetails = new user();
     APICalls database = new APICalls();

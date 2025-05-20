@@ -18,7 +18,7 @@ namespace PeopleWith
 
         public ConnectivityService()
         {
-            Connectivity.Current.ConnectivityChanged += OnConnectivityChanged;
+            Connectivity.ConnectivityChanged += OnConnectivityChanged;
             //Connectivity.ConnectivityChanged += OnConnectivityChanged;
           
         }
