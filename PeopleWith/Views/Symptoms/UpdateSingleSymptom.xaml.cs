@@ -371,24 +371,38 @@ public partial class UpdateSingleSymptom : ContentPage
         try
         {
             var status = await Permissions.CheckStatusAsync<Permissions.Camera>();
+            PermissionStatus storageStatus = PermissionStatus.Granted;
+
+            //if (DeviceInfo.Current.Platform == DevicePlatform.Android)
+            //{
+            //    storageStatus = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
+            //}
 
             if (status != PermissionStatus.Granted)
             {
                 status = await Permissions.RequestAsync<Permissions.Camera>();
+            }
 
-                if (status != PermissionStatus.Granted)
-                {
-                    await DisplayAlert("Permission Required", "Camera access is required to take a photo", "Close");
-                    return null;
-                }
+            //if (DeviceInfo.Current.Platform == DevicePlatform.Android && storageStatus != PermissionStatus.Granted)
+            //{
+            //    storageStatus = await Permissions.RequestAsync<Permissions.StorageWrite>();
+            //}
+
+            if (status != PermissionStatus.Granted) //|| (DeviceInfo.Current.Platform == DevicePlatform.Android && storageStatus != PermissionStatus.Granted))
+            {
+                await DisplayAlert("Permission Required", "Camera access is required to take a photo", "Close");
+                return null;
             }
 
             if (MediaPicker.Default.IsCaptureSupported)
             {
                 return await MediaPicker.Default.CapturePhotoAsync();
             }
-
-            return null;
+            else
+            {
+                await DisplayAlert("Not Supported", "Image capture is not supported on this device", "OK");
+                return null;
+            }
         }
         catch (Exception Ex)
         {
@@ -396,6 +410,7 @@ public partial class UpdateSingleSymptom : ContentPage
             return null;
         }
     }
+
 
     private async Task ProcessCameraAsync()
     {

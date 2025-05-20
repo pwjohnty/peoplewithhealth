@@ -3526,14 +3526,33 @@ public partial class AddMedication : ContentPage
 
                 }
 
-                if (selectedDosages[0].dosageunit.Contains("per"))
+                if (selectedDosages != null && selectedDosages.Count > 0)
                 {
-                    samedosageentry2.IsVisible = true;
+                    var dosageUnit = selectedDosages[0]?.dosageunit;
+
+                    if (!string.IsNullOrWhiteSpace(dosageUnit) && dosageUnit.Contains("per", StringComparison.OrdinalIgnoreCase))
+                    {
+                        samedosageentry2.IsVisible = true;
+                    }
+                    else
+                    {
+                        samedosageentry2.IsVisible = false;
+                    }
                 }
                 else
                 {
                     samedosageentry2.IsVisible = false;
                 }
+
+                //Old
+                //if (selectedDosages[0].dosageunit.Contains("per"))
+                //{
+                //    samedosageentry2.IsVisible = true;
+                //}
+                //else
+                //{
+                //    samedosageentry2.IsVisible = false;
+                //}
 
                 // Bind the MedtimesDosages list to the ListView
                 timesanddosageslistview.ItemsSource = selectedDosages;

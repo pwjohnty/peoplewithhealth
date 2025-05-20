@@ -20,6 +20,7 @@ using Microsoft.Maui.Storage;
 using Microsoft.Maui;
 using Android.Runtime;
 using AndroidX.Activity;
+using Android.Provider;
 
 namespace PeopleWith
 {
@@ -223,6 +224,13 @@ namespace PeopleWith
             }
         }
 
+        //public static void OpenBatterySettings(Activity activity)
+        //{
+        //    Intent intent = new Intent();
+        //    intent.SetAction(Settings.Panel.ActionBatterySettings);
+        //    activity.StartActivity(intent);
+        //}
+
         public override void OnBackPressed()
         {
             //    var currentPage = MainPage.Navigation.NavigationStack.LastOrDefault();
@@ -268,6 +276,8 @@ namespace PeopleWith
         {
             try
             {
+                if (intent == null) return;
+
                 string studyidfornotification = intent.GetStringExtra("studyid");
                 if (studyidfornotification == "IID3")
                 {

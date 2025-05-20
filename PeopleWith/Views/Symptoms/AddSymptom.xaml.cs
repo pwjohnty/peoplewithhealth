@@ -11,6 +11,8 @@ using System.Text.Json;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Devices;
 using Microsoft.Maui.Networking;
+using SkiaSharp;
+using Azure.Storage.Blobs;
 namespace PeopleWith;
 public partial class AddSymptom : ContentPage
 {
@@ -23,7 +25,13 @@ public partial class AddSymptom : ContentPage
     public ObservableCollection<usersymptom> UpdatedAllUserSymptoms = new ObservableCollection<usersymptom>();
     public ObservableCollection<symptom> AlreadyAdded = new ObservableCollection<symptom>();
     private bool FilterTabClicked = false;
+    bool ShowHideSymptomIMG = false;
+    private byte[] ResizedImage;
+    symptom SelectedSymptom = new symptom();
+    string ImageFileName = string.Empty;
     // private PopupViewModel viewModel;
+    private const string StorageConnectionString = "DefaultEndpointsProtocol=https;AccountName=peoplewithappiamges;AccountKey=9maBMGnjWp6KfOnOuXWHqveV4LPKyOnlCgtkiKQOeA+d+cr/trKApvPTdQ+piyQJlicOE6dpeAWA56uD39YJhg==;EndpointSuffix=core.windows.net";
+    private const string Container = "symptomimages";
     string previous;
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
@@ -141,143 +149,269 @@ public partial class AddSymptom : ContentPage
             NotasyncMethod(Ex);
         }
     }
+
+    private async void CheckInput(string symptomID)
+    {
+        try
+        {
+            APICalls databse = new APICalls();
+            if (symptomID != null)
+            {
+                ShowHideSymptomIMG = await databse.GetSymptonsInput(symptomID);
+            }        
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    //Open Camera to take Photo
+    public async Task<FileResult> CapturePhotoAsync()
+    {
+        try
+        {
+            var status = await Permissions.CheckStatusAsync<Permissions.Camera>();
+
+            if (status != PermissionStatus.Granted)
+            {
+                status = await Permissions.RequestAsync<Permissions.Camera>();
+
+                if (status != PermissionStatus.Granted)
+                {
+                    await DisplayAlert("Permission Required", "Camera access is required to take a photo", "Close");
+                    return null;
+                }
+            }
+
+            if (MediaPicker.Default.IsCaptureSupported)
+            {
+                return await MediaPicker.Default.CapturePhotoAsync();
+            }
+
+            return null;
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+            return null;
+        }
+    }
+
+    private async Task<byte[]> ResizeImageAsync(Stream imageStream, int maxWidth, int maxHeight, int quality)
+    {
+        try
+        {
+            using var memoryStream = new MemoryStream();
+            await imageStream.CopyToAsync(memoryStream);
+            byte[] imageData = memoryStream.ToArray();
+
+            using var original = SKBitmap.Decode(imageData);
+
+            float scale = Math.Min((float)maxWidth / original.Width, (float)maxHeight / original.Height);
+            int newWidth = (int)(original.Width * scale);
+            int newHeight = (int)(original.Height * scale);
+
+            using var resized = original.Resize(new SKImageInfo(newWidth, newHeight), SKFilterQuality.High);
+            using var image = SKImage.FromBitmap(resized);
+            using var outputStream = new MemoryStream();
+
+            image.Encode(SKEncodedImageFormat.Png, quality).SaveTo(outputStream);
+
+            return outputStream.ToArray();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+            return null;
+        }
+    }
+
+    private async void UploadtoBlobStorage()
+    {
+        try
+        {
+            // Parse the connection string and create a blob client
+            BlobServiceClient blobServiceClient = new BlobServiceClient(StorageConnectionString);
+
+            // Get a reference to the container
+            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(Container);
+
+            // Get a reference to the blob
+            BlobClient blobClient = containerClient.GetBlobClient(ImageFileName);
+
+            using var stream = new MemoryStream(ResizedImage);
+            var response = await blobClient.UploadAsync(stream, overwrite: true);
+
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
     private async void SymptomsListview_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
     {
         try
         {
-            //Connectivity Changed 
-            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
-            if (accessType == NetworkAccess.Internet)
+
+            var symptom = e.DataItem as symptom;
+            SelectedSymptom = symptom;
+            CheckInput(symptom.symptomid);
+        
+            var result = await DisplayAlert("Confirm Symptom", "Are you sure you want to add " + symptom.title + "?", "Ok", "Cancel");
+            if (result)
             {
-                //Limit No. of Taps 
-                var symptom = e.DataItem as symptom;
-
-                var result = await DisplayAlert("Confirm Symptom", "Are you sure you want to add " + symptom.title + "?", "Cancel", "OK");
-                if (result)
+                //OK Clicked
+                if (ShowHideSymptomIMG)
                 {
-
-                    SymptomsListview.SelectedItems.Clear();
-                    return;
-                }
-                else
-                {
-                    // popup.HeaderTitle = symptom.title.ToString();
-                    //  popup.IsOpen = true;
-                    var usersymptom = new symptomfeedback();
-                    Guid newUUID = Guid.NewGuid();
-                    usersymptom.symptomfeedbackid = newUUID.ToString().ToUpper();
-                    usersymptom.timestamp = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
-                    usersymptom.intensity = "50";
-                    usersymptom.notes = null;
-                    usersymptom.triggers = null;
-                    usersymptom.interventions = null;
-                    usersymptom.duration = null;
-                    AddNewFeedback.Add(usersymptom);
-                    var NewSymptom = new usersymptom();
-                    NewSymptom.userid = Helpers.Settings.UserKey;
-                    NewSymptom.symptomtitle = symptom.title;
-                    NewSymptom.symptomid = symptom.symptomid;
-                    NewSymptom.feedback = AddNewFeedback;
-
-
-                    APICalls database = new APICalls();
-                    //insert to db
-                    var returnedsymptom = await database.PostSymptomAsync(NewSymptom);
-
-                    SymptomsPassed.Add(returnedsymptom);
-
-                    var newsym = new feedbackdata();
-                    newsym.value = "50";
-                    newsym.datetime = AddNewFeedback[0].timestamp;
-                    newsym.action = "add";
-                    newsym.label = NewSymptom.symptomtitle;
-                    newsym.id = usersymptom.symptomfeedbackid;
-
-                    if (userfeedbacklistpassed.symptomfeedbacklist == null)
+                    var Question = await DisplayAlert("Add Symptom Image", "Would you like to add a photo of the affected area?", "Ok", "Cancel");
+                    if (Question)
                     {
-                        userfeedbacklistpassed.symptomfeedbacklist = new ObservableCollection<feedbackdata>();
-                    }
-
-                    userfeedbacklistpassed.symptomfeedbacklist.Add(newsym);
-
-                    string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.symptomfeedbacklist);
-                    userfeedbacklistpassed.symptomfeedback = newsymJson;
-
-
-                    await database.UserfeedbackUpdateSymptomData(userfeedbacklistpassed);
-
-
-                    await MopupService.Instance.PushAsync(new PopupPageHelper("Symptom Added") { });
-                    await Task.Delay(1500);
-
-                    await Navigation.PushAsync(new AllSymptoms(SymptomsPassed, userfeedbacklistpassed));
-
-                    await MopupService.Instance.PopAllAsync(false);
-
-                    var pageToRemoves = Navigation.NavigationStack.ToList();
-
-                    int i = 0;
-
-                    foreach (var page in pageToRemoves)
-                    {
-                        if (i == 0)
+                        //Ok Clicked (Add Image)
+                        var photo = await CapturePhotoAsync();
+                        if (photo != null)
                         {
-                        }
-                        else if (i == 1 || i == 2 || i == 3)
-                        {
-                            Navigation.RemovePage(page);
+                            using var stream = await photo.OpenReadAsync();
+                            var resizedImage = await ResizeImageAsync(stream, 1024, 1024, 80);
+
+                            if (resizedImage != null)
+                            {
+                                // Save the resized image bytes for later use
+                                ResizedImage = resizedImage;
+                                //Update FIleName
+                                var backrandom = new Random();
+                                var backrandomnum = backrandom.Next(1000, 10000000);
+                                var Filename = Helpers.Settings.UserKey + "-" + DateTime.Now.ToString("H-m-s-yyyyy-MM-dd") + "-" + backrandomnum + ".Jpeg";
+                                ImageFileName = Filename;
+                                AddSymptomToDB();
+
+                            }
                         }
                         else
                         {
-                            //Navigation.RemovePage(page);
+                            //Cancel Clicked (Add Image)
+                            AddSymptomToDB();
                         }
-                        i++;
                     }
+                    else
+                    {
+                        //Show Symptom Image False (Add Symptom)
+                        AddSymptomToDB();
+                    }
+                }
+                else
+                {
+                    AddSymptomToDB();
+                }
+            }
+            else
+            {
+                //Cancel Clicked
+                SymptomsListview.SelectedItems.Clear();
+                return;
+            }
+             
+         }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
 
+    async void AddSymptomToDB()
+    {
+        try
+        {
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+
+                var usersymptom = new symptomfeedback();
+                Guid newUUID = Guid.NewGuid();
+                usersymptom.symptomfeedbackid = newUUID.ToString().ToUpper();
+                usersymptom.timestamp = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
+                usersymptom.intensity = "50";
+                usersymptom.notes = null;
+                usersymptom.triggers = null;
+                usersymptom.interventions = null;
+                usersymptom.duration = null;
+                if (!String.IsNullOrEmpty(ImageFileName))
+                {
+                    usersymptom.symptomimage = ImageFileName;
+                }            
+                AddNewFeedback.Add(usersymptom);
+                var NewSymptom = new usersymptom();
+                NewSymptom.userid = Helpers.Settings.UserKey;
+                NewSymptom.symptomtitle = SelectedSymptom.title;
+                NewSymptom.symptomid = SelectedSymptom.symptomid;
+                NewSymptom.feedback = AddNewFeedback;
+
+
+                APICalls database = new APICalls();
+                //insert to db
+                var returnedsymptom = await database.PostSymptomAsync(NewSymptom);
+
+                if (!String.IsNullOrEmpty(ImageFileName))
+                {
+                    UploadtoBlobStorage();
+                }
+
+                SymptomsPassed.Add(returnedsymptom);
+
+                var newsym = new feedbackdata();
+                newsym.value = "50";
+                newsym.datetime = AddNewFeedback[0].timestamp;
+                newsym.action = "add";
+                newsym.label = NewSymptom.symptomtitle;
+                newsym.id = usersymptom.symptomfeedbackid;
+
+                if (userfeedbacklistpassed.symptomfeedbacklist == null)
+                {
+                    userfeedbacklistpassed.symptomfeedbacklist = new ObservableCollection<feedbackdata>();
+                }
+
+                userfeedbacklistpassed.symptomfeedbacklist.Add(newsym);
+
+                string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.symptomfeedbacklist);
+                userfeedbacklistpassed.symptomfeedback = newsymJson;
+
+
+                await database.UserfeedbackUpdateSymptomData(userfeedbacklistpassed);
+
+
+                await MopupService.Instance.PushAsync(new PopupPageHelper("Symptom Added") { });
+                await Task.Delay(1500);
+
+                await Navigation.PushAsync(new AllSymptoms(SymptomsPassed, userfeedbacklistpassed));
+
+                await MopupService.Instance.PopAllAsync(false);
+
+                var pageToRemoves = Navigation.NavigationStack.ToList();
+
+                int i = 0;
+
+                foreach (var page in pageToRemoves)
+                {
+                    if (i == 0)
+                    {
+                    }
+                    else if (i == 1 || i == 2 || i == 3)
+                    {
+                        Navigation.RemovePage(page);
+                    }
+                    else
+                    {
+                        //Navigation.RemovePage(page);
+                    }
+                    i++;
                 }
             }
             else
             {
                 var isConnected = accessType == NetworkAccess.Internet;
                 ConnectivityChanged?.Invoke(this, isConnected);
-            }
-
-            //bool result = await viewModel.ShowPopupAsync();
-            //if (result)
-            //{
-            //    // Accepted
-            //    APICalls database = new APICalls();
-            //    await database.PostSymptomAsync(AddNewSymptom[0]);
-            //    var allUserSymptoms = await database.GetUserSymptomAsync(Helpers.Settings.UserKey);
-
-            //    foreach (var item in allUserSymptoms)
-            //    {
-            //        if (item.deleted == false)
-            //        {
-            //            UpdatedAllUserSymptoms.Add(item);
-            //        }
-            //    }
-            //    foreach (var item in UpdatedAllUserSymptoms)
-            //    {
-            //        if (item.symptomtitle == NewSymptom.symptomtitle)
-            //        {
-            //            SymptomsPassed.Add(item);
-            //        }
-
-            //    }
-            //    await Navigation.PushAsync(new AllSymptoms(SymptomsPassed));
-            //    var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is AllSymptoms);
-            //    if (pageToRemoves != null)
-            //    {
-            //        Navigation.RemovePage(pageToRemoves);
-            //    }
-            //    Navigation.RemovePage(this);
-            //}
-            //else
-            //{
-            //    // Declined
-            //    await Navigation.PopAsync();
-            //}
+            }       
         }
         catch (Exception Ex)
         {

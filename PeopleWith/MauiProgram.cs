@@ -63,9 +63,9 @@ namespace PeopleWith
                     // and are viewable in your IDE's debug console or with 'adb logcat', etc.
                     // Debug Mode = True/ Release = False;
                     options.Debug = false;
-
+                    //options.EnableAndroidNativeNdk = true;
+                    //options.EnableXamarinSupport = true;
                     options.AttachStacktrace = true;
-
                     // Set TracesSampleRate to 1.0 to capture 100% of transactions for tracing.
                     // We recommend adjusting this value in production.
                     options.TracesSampleRate = 1.0;
@@ -77,6 +77,8 @@ namespace PeopleWith
                     options.IncludeBackgroundingStateInBreadcrumbs = true;
 
                 })
+
+
 
                 //.UseSkiaSharp()
 #if ANDROID
@@ -177,6 +179,7 @@ namespace PeopleWith
                 scope.User = new SentryUser();
             });
 
+
             void ConfigureSentryUserScope()
             {
                 SentrySdk.ConfigureScope(scope =>
@@ -195,12 +198,14 @@ namespace PeopleWith
             {
                 ConfigureSentryUserScope();
                 SentrySdk.CaptureException(e.ExceptionObject as Exception);
+                SentrySdk.FlushAsync(TimeSpan.FromSeconds(2)).Wait(); // Ensure it's sent
             };
 
             TaskScheduler.UnobservedTaskException += (s, e) =>
             {
                 ConfigureSentryUserScope();
                 SentrySdk.CaptureException(e.Exception);
+                SentrySdk.FlushAsync(TimeSpan.FromSeconds(2)).Wait(); // Ensure it's sent
             };
 
 

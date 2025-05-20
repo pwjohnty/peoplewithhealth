@@ -48,7 +48,10 @@ public partial class MainDashboard : ContentPage
     public ObservableCollection<questionnaire> questionnaires = new ObservableCollection<questionnaire>();
 
     bool setnotificationsfromlogin;
-    bool IsNavigating = false; 
+    bool IsNavigating = false;
+    bool NoficiationsActive = false;
+    bool BatterySaverOff = false;
+    ObservableCollection<SettingsOn> SettingstoShow = new ObservableCollection<SettingsOn>();
     MedSuppNotifications ScheduleNotifications = new MedSuppNotifications();
 
     public event EventHandler<bool> ConnectivityChanged;
@@ -72,6 +75,15 @@ public partial class MainDashboard : ContentPage
         }
     }
 
+    public class SettingsOn
+    {
+        public string img { get; set; }
+        public string title { get; set; }
+        public string description { get; set; }
+        public string guide { get; set; }
+
+    }
+
     public MainDashboard()
     {
         try
@@ -92,7 +104,11 @@ public partial class MainDashboard : ContentPage
 
             checksignupinfo();
 
-            MessagingCenter.Subscribe<App>(this, "CallNotifications", (sender) => { checknotifications(); });
+            MessagingCenter.Subscribe<App>(this, "CheckUserSettings", (sender) => { UserSettingsCheck(); });
+            //MessagingCenter.Subscribe<App>(this, "CallNotifications", (sender) => { checknotifications(); });
+
+            //MessagingCenter.Subscribe<App>(this, "CallBatterySaver", (sender) => { CheckbatterySaverON(); });
+
 
         }
         catch (Exception Ex)
@@ -125,7 +141,10 @@ public partial class MainDashboard : ContentPage
 
         checksignupinfo();
 
-        MessagingCenter.Subscribe<App>(this, "CallNotifications", (sender) => { checknotifications(); });
+            MessagingCenter.Subscribe<App>(this, "CheckUserSettings", (sender) => { UserSettingsCheck(); });
+            //MessagingCenter.Subscribe<App>(this, "CallNotifications", (sender) => { checknotifications(); });
+
+            //MessagingCenter.Subscribe<App>(this, "CallBatterySaver", (sender) => { CheckbatterySaverON(); });
         }
         catch (Exception Ex)
         {
@@ -2704,7 +2723,15 @@ public partial class MainDashboard : ContentPage
 
             // activitylist.ItemsSource = foryouuserlist;
 
-            checknotifications();
+            //checknotifications();
+
+            //if (DeviceInfo.Platform == DevicePlatform.Android)
+            //{
+            //    CheckbatterySaverON(); 
+                
+            //}
+            UserSettingsCheck();
+            //CreateSettings();
 
         }
         catch (Exception Ex)
@@ -2713,23 +2740,155 @@ public partial class MainDashboard : ContentPage
         }
     }
 
-    async void checknotifications()
+    //async void checknotifications()
+    //{
+    //    try
+    //    {
+
+    //        var check = await LocalNotificationCenter.Current.AreNotificationsEnabled();
+
+    //        if (!check)
+    //        {
+    //            //pushnotifcationsframe.IsVisible = true;
+    //            NoficiationsActive = false; 
+    //        }
+    //        else
+    //        {
+    //            //pushnotifcationsframe.IsVisible = false;
+    //            NoficiationsActive = true;
+    //        }
+
+    //    }
+    //    catch(Exception ex)
+    //    {
+
+    //    }
+    //}
+
+    //async void CheckbatterySaverON()
+    //{
+    //    try
+    //    {
+    
+    //        var status = Battery.EnergySaverStatus;
+
+    //        if (status == EnergySaverStatus.On)
+    //        {
+    //            //AndroidbatteryOptimise.IsVisible = true;
+    //            bool BatterySaverOff = false;
+    //        }
+    //        else if (status == EnergySaverStatus.Off)
+    //        {
+    //            //AndroidbatteryOptimise.IsVisible = false;
+    //            bool BatterySaverOff = true;
+    //        }
+    //        else
+    //        {
+    //            //Ignore Unknown Status 
+    //            //AndroidbatteryOptimise.IsVisible = false;
+    //            bool BatterySaverOff = true;
+    //        }
+    //    }
+    //    catch (Exception ex)
+    //    {
+
+    //    }
+    //}
+
+    async void UserSettingsCheck()
     {
         try
         {
+            SettingstoShow.Clear();
+            //Add Items 
+            var Alerts = new SettingsOn
+            {
+                img = "pushnoticon.png",
+                title = "Turn On Notifications",
+                description = "Stay on top of your health journey with timely reminders! By turning on notifications for our app, you'll never miss important updates.",
+                guide = "Turn On"
+            };
+
+            var Saver = new SettingsOn
+            {
+                img = "batterysaver.png",
+                title = "Turn Off Battery Saver",
+                description = "Battery Saver may block notifications when the app is closed. To avoid missing alerts, please disable it.",
+                guide = "Turn Off"
+            };
+
+            //Check Notifications Enabled
+
             var check = await LocalNotificationCenter.Current.AreNotificationsEnabled();
 
             if (!check)
             {
-                pushnotifcationsframe.IsVisible = true;
+                NoficiationsActive = false;
             }
             else
             {
-                pushnotifcationsframe.IsVisible = false;
+                NoficiationsActive = true;
+            }
+
+            //Check batter Saver Off (Android)
+            if (DeviceInfo.Platform == DevicePlatform.Android)
+            {
+                var status = Battery.EnergySaverStatus;
+
+                if (status == EnergySaverStatus.On)
+                {
+                    BatterySaverOff = false;
+                }
+                else if (status == EnergySaverStatus.Off)
+                {
+                    BatterySaverOff = true;
+                }
+                else
+                {
+                    //Status Unknown Set to Faslse
+                    BatterySaverOff = false;
+                }
+            }
+          
+            //Add To Settings List 
+            if (NoficiationsActive == false)
+            {
+                SettingstoShow.Add(Alerts); 
+            }
+
+            if (DeviceInfo.Platform == DevicePlatform.Android)
+            {
+                if (BatterySaverOff == false)
+                {
+                    SettingstoShow.Add(Saver);
+                }
+            }
+          
+
+            //Show hide Items 
+            if(SettingstoShow.Count > 0)
+            {
+                if(SettingstoShow.Count > 1)
+                {
+                    SettingsIND.IsVisible = true;
+                    SettingsCarousel.IsSwipeEnabled = true;
+                }
+                else
+                {
+                    SettingsIND.IsVisible = false;
+                    SettingsCarousel.IsSwipeEnabled = false;
+                }
+                SettingsCarousel.ItemsSource = SettingstoShow;
+                SettingsPrompt.IsVisible = true;
+            }
+            else
+            {
+                SettingsPrompt.IsVisible = true;
+                SettingsIND.IsVisible = false;
             }
 
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
 
         }
@@ -4070,37 +4229,52 @@ public partial class MainDashboard : ContentPage
         }
     }
 
-    private async void Button_Clicked_7(object sender, EventArgs e)
+    //private async void Button_Clicked_7(object sender, EventArgs e)
+    //{
+    //    try
+    //    {
+    //        if (DeviceInfo.Platform == DevicePlatform.Android)
+    //        {
+    //            // Request and capture the permission status on Android
+    //            PermissionStatus status = await Permissions.CheckStatusAsync<Permissions.PostNotifications>();
+
+    //            if (status == PermissionStatus.Denied)
+    //            {
+    //                AppInfo.ShowSettingsUI();
+    //            }
+    //            else
+    //            {
+    //                await LocalNotificationCenter.Current.RequestNotificationPermission();
+    //                checknotifications();
+    //            }
+    //        }
+    //        else
+    //        {
+    //                await LocalNotificationCenter.Current.RequestNotificationPermission();
+    //                checknotifications();
+    //        }
+    //    }
+    //    catch(Exception ex)
+    //    {
+
+    //    }
+    //}
+
+
+    private async void TurnoffBatterySaver(object sender, EventArgs e)
     {
         try
         {
-            if (DeviceInfo.Platform == DevicePlatform.Android)
-            {
-                // Request and capture the permission status on Android
-                PermissionStatus status = await Permissions.CheckStatusAsync<Permissions.PostNotifications>();
 
-                if (status == PermissionStatus.Denied)
-                {
-                    AppInfo.ShowSettingsUI();
-                }
-                else
-                {
-                    await LocalNotificationCenter.Current.RequestNotificationPermission();
-                    checknotifications();
-                }
-            }
-            else
-            {
-                    await LocalNotificationCenter.Current.RequestNotificationPermission();
-                    checknotifications();
-            }
+            #if ANDROID
+                        BatterySettingsOpener.OpenBatterySettings();
+            #endif
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
 
         }
     }
-
     private async void TapGestureRecognizer_Tapped_6(object sender, TappedEventArgs e)
     {
         try
@@ -4317,7 +4491,59 @@ public partial class MainDashboard : ContentPage
         }
     }
 
-  
+    private async void SettingButttonClicked(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            if (IsNavigating) return;
+            IsNavigating = true;
+
+            SettingsOn GetItem = new SettingsOn(); 
+            var btnTapped = sender as Border;
+            if (btnTapped?.BindingContext is SettingsOn TappedItem)
+            {
+                GetItem = TappedItem;
+            }
+            if (GetItem == null) return; 
+
+            if (GetItem.title == "Turn On Notifications")
+            {
+                if (DeviceInfo.Platform == DevicePlatform.Android)
+                {
+                    // Request and capture the permission status on Android
+                    PermissionStatus status = await Permissions.CheckStatusAsync<Permissions.PostNotifications>();
+
+                    if (status == PermissionStatus.Denied)
+                    {
+                        AppInfo.ShowSettingsUI();
+                    }
+                    else
+                    {
+                        await LocalNotificationCenter.Current.RequestNotificationPermission();
+                        UserSettingsCheck();
+                    }
+                }
+                else
+                {
+                    await LocalNotificationCenter.Current.RequestNotificationPermission();
+                    UserSettingsCheck();
+                }
+            }
+            else
+            {
+                #if ANDROID
+                      BatterySettingsOpener.OpenBatterySettings();
+                #endif
+            }
+            IsNavigating = false;
+        }
+        catch (Exception Ex)
+        {
+            IsNavigating = false;
+        }
+    }
+
+
 
 
 

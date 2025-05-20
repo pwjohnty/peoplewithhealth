@@ -19,7 +19,7 @@ Spacing="0"
 AbsoluteLayout.LayoutBounds="0,0,1,1"
 AbsoluteLayout.LayoutFlags="All">
 
-            <Image Source="nointerneticon.png" Margin="0,70,0,0"  HorizontalOptions="Center" HeightRequest="70" WidthRequest="70"/>
+            <Image Source="nowifi.png" Margin="0,70,0,0"  HorizontalOptions="Center" HeightRequest="70" WidthRequest="70"/>
 
             <Label
     Text="No Internet Connection"

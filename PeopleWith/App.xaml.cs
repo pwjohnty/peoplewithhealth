@@ -3,6 +3,7 @@ using Plugin.LocalNotification;
 using Plugin.LocalNotification.EventArgs;
 using Microsoft.Maui.Devices;
 using Microsoft.Maui.ApplicationModel;
+using Mopups.Services;
 
 namespace PeopleWith
 {
@@ -30,6 +31,20 @@ namespace PeopleWith
             //  MainPage = new AppShell();
         }
 
+        void ConfigureSentryUserScope()
+        {
+            SentrySdk.ConfigureScope(scope =>
+            {
+                string UserID = Preferences.Default.Get("userid", "Unknown");
+                string UserEmail = Preferences.Default.Get("email", "Unknown");
+                scope.User = new SentryUser
+                {
+                    Id = UserID,
+                    Email = UserEmail
+                };
+            });
+        }
+
         protected override Window CreateWindow(IActivationState? activationState)
         {
             return new Window(new AppShell());
@@ -47,6 +62,7 @@ namespace PeopleWith
                     // if(getQuestionairesTask != null)
                     // {
                     Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                    //Application.Current.MainPage = new NavigationPage(new MainDashboard());
 
                     if (DeviceInfo.Platform == DevicePlatform.iOS)
                     {
@@ -56,14 +72,12 @@ namespace PeopleWith
                     {
                         await (Application.Current.MainPage as NavigationPage)?.Navigation.PushAsync(new AndroidQuestionnaires("A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF"), false);
                     }
-                    // }
-
-
                 }
             }
-            catch (Exception ex)
+            catch (Exception Ex)
             {
-
+                ConfigureSentryUserScope();
+                SentrySdk.CaptureException(Ex);
             }
         }
 
@@ -82,18 +96,33 @@ namespace PeopleWith
                 if (currentPage == null)  return;
 
                 // Check the type of the current page and send appropriate messages
-                if (currentPage.GetType().Name == "ProfileSection")
+                if (currentPage is ProfileSection)
                 {
                     MessagingCenter.Send<App>(this, "CallMethodOnPage");
                 }
-                else if (currentPage.GetType().Name == "MainDashboard")
+                else if (currentPage is MainDashboard)
                 {
-                    MessagingCenter.Send<App>(this, "CallNotifications");
+                    MessagingCenter.Send<App>(this, "CheckUserSettings");
+                    //MessagingCenter.Send<App>(this, "CallNotifications");
+                    //#if ANDROID
+                    //     MessagingCenter.Send<App>(this, "CallBatterySaver");
+                    //#endif
+
                 }
+
+                //if (currentPage.GetType().Name == "ProfileSection")
+                //{
+                //    MessagingCenter.Send<App>(this, "CallMethodOnPage");
+                //}
+                //else if (currentPage.GetType().Name == "MainDashboard")
+                //{
+                //    MessagingCenter.Send<App>(this, "CallNotifications");
+                //}
             }
             catch (Exception Ex)
             {
-
+                ConfigureSentryUserScope();
+                SentrySdk.CaptureException(Ex);
             }
         }
 
@@ -103,6 +132,13 @@ namespace PeopleWith
         {
             try
             {
+
+                //Close any popup page 
+                if (MopupService.Instance.PopupStack.Count > 0)
+                {
+                    await MopupService.Instance.PopAsync();
+                }
+              
                 if (!isConnected)
                 {
                     // Check if NoInternetPage is already on the navigation stack
@@ -114,12 +150,17 @@ namespace PeopleWith
                 }
                 else
                 {
-                    // Check if NoInternetPage is on the navigation stack and pop it
-                    var noInternetPage = MainPage.Navigation.NavigationStack.FirstOrDefault(p => p is NoInternetPage);
-                    if (noInternetPage != null)
-                    {
-                        await MainPage.Navigation.PopAsync();
-                    }
+                        var pageToRemove = MainPage.Navigation.NavigationStack.FirstOrDefault(p => p is NoInternetPage);
+                        if (pageToRemove != null)
+                        {
+                            MainPage.Navigation.RemovePage(pageToRemove);
+                        }
+
+                    //var noInternetPage = MainPage.Navigation.NavigationStack.FirstOrDefault(p => p is NoInternetPage);
+                    //if (noInternetPage != null)
+                    //{
+                    //    await MainPage.Navigation.PopAsync();
+                    //}
                 }
             }
             catch(Exception Ex)
