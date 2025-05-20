@@ -10,7 +10,7 @@ namespace PeopleWith
 {
     public class CrashDetected
     {
-        CrashDetected crashHandler = new CrashDetected();
+       // CrashDetected crashHandler = new CrashDetected();
 
         public async Task SentryCrashDetected(Exception Ex)
         {
@@ -32,7 +32,7 @@ namespace PeopleWith
                 });
 
                 //Add back into crash log 
-                await crashHandler.CrashDetectedSend(Ex);
+               // await crashHandler.CrashDetectedSend(Ex);
             }
             catch (Exception innerEx)
             {

@@ -187,8 +187,8 @@ public partial class AllMood : ContentPage
             //await MopupService.Instance.PopAllAsync(false);
 
             //Test Crash 
-            int zero = 0;
-            int crash = 5 / zero;
+           // int zero = 0;
+          //  int crash = 5 / zero;
 
 
         }
