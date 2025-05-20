@@ -10,7 +10,7 @@ namespace PeopleWith
 {
     public class CrashDetected
     {
-
+        CrashDetected crashHandler = new CrashDetected();
 
         public async Task SentryCrashDetected(Exception Ex)
         {
@@ -28,11 +28,16 @@ namespace PeopleWith
                     };
 
                     SentrySdk.CaptureException(Ex);
+                    SentrySdk.FlushAsync(TimeSpan.FromSeconds(2)).Wait(); // Ensure it's sent
                 });
-            }
-            catch (Exception ex)
-            {
 
+                //Add back into crash log 
+                await crashHandler.CrashDetectedSend(Ex);
+            }
+            catch (Exception innerEx)
+            {
+                SentrySdk.CaptureException(innerEx);
+                SentrySdk.FlushAsync(TimeSpan.FromSeconds(2)).Wait(); // Ensure it's sent
             }
         }
 

@@ -198,7 +198,7 @@
 
                     <syncfusion:SfListView x:Name="medpreparationslistview" Margin="0,10,10,0"
                                AutoFitMode="Height" ItemTapped="medpreparationslistview_ItemTapped"
-                               BackgroundColor="Transparent" SelectionMode="Single"
+                               BackgroundColor="Transparent" SelectionMode="Single" ScrollBarVisibility="Never"
                                VerticalOptions="CenterAndExpand" Orientation="Vertical" >
                         <syncfusion:SfListView.ItemsLayout>
                             <syncfusion:GridLayout SpanCount="3"/>
@@ -230,7 +230,7 @@
                     <Label Text="Medication Formulation (Optional)" x:Name="mflbl" IsVisible="False" FontSize="20" Margin="0,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
                     <Label Text="Please select the medication formulation from the options" x:Name="mf2lbl" IsVisible="False" FontSize="12" Margin="0,0,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
 
-                    <syncfusion:SfListView x:Name="medformulationslistview" Margin="0,10,10,0"
+                    <syncfusion:SfListView x:Name="medformulationslistview" Margin="0,10,10,0" ScrollBarVisibility="Never"
                                AutoFitMode="Height" IsVisible="False"   ItemTapped="medformulationslistview_ItemTapped" 
                                BackgroundColor="Transparent" SelectionMode="SingleDeselect"
                                VerticalOptions="CenterAndExpand" Orientation="Vertical" >
@@ -266,7 +266,7 @@
 
                     <syncfusion:SfListView x:Name="meddosageunitlistview" Margin="0,10,10,100"
                                AutoFitMode="Height" IsVisible="False" ItemTapped="meddosageunitlistview_ItemTapped"    
-                               BackgroundColor="Transparent" SelectionMode="Single"
+                               BackgroundColor="Transparent" SelectionMode="Single" ScrollBarVisibility="Never"
                                VerticalOptions="CenterAndExpand" Orientation="Vertical" >
                         <syncfusion:SfListView.ItemsLayout>
                             <syncfusion:GridLayout SpanCount="3"/>

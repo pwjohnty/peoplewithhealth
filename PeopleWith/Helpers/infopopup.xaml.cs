@@ -1,3 +1,4 @@
+using CommunityToolkit.Mvvm.Messaging;
 using Mopups.Pages;
 using Mopups.Services;
 
@@ -5,7 +6,9 @@ namespace PeopleWith;
 
 public partial class Infopopup : PopupPage
 {
-	public Infopopup()
+    string Passed;
+    public readonly struct UpdateBiometrics { }
+    public Infopopup()
 	{
 		InitializeComponent();
 	}
@@ -15,7 +18,7 @@ public partial class Infopopup : PopupPage
         try
         {
             InitializeComponent();
-
+            Passed = message; 
             if (message == "symptom")
             {
                 syminfo.IsVisible = true;
@@ -148,6 +151,19 @@ public partial class Infopopup : PopupPage
                 Boxtwo.BackgroundColor = Color.FromArgb("#fce9d9");
                 Closebtn.BackgroundColor = Color.FromArgb("#fce9d9");
             }
+            else if (message == "biometrics" || message == "Login" || message == "Reset")
+            {
+                LoginInfo.IsVisible = true;
+                titlelbl.FontSize = 20; 
+                titlelbl.Text = "Internet Connection Required";
+                Boxone.IsVisible = false;
+                Boxtwo.IsVisible = false; 
+                Closebtn.BackgroundColor = Color.FromArgb("#031926");
+                Closebtn.TextColor = Color.FromArgb("ffffff");
+                this.Background = Color.FromArgb("#80808080"); 
+                //Overlay.BackgroundColor = Color.FromArgb("#d3d3d3");
+                titlelbl.HorizontalOptions = LayoutOptions.Center;
+            }
         }
         catch (Exception Ex)
         {
@@ -172,6 +188,19 @@ public partial class Infopopup : PopupPage
         try
         {
             await MopupService.Instance.PopAsync();
+
+            //if(Passed == "biometrics")
+            //{
+            //    WeakReferenceMessenger.Default.Send(new BiometricsOpacity(1));
+            //}
+            //else if (Passed == "Login")
+            //{
+            //    WeakReferenceMessenger.Default.Send(new LoginOpacity(1));
+            //}
+            //else
+            //{
+            //    WeakReferenceMessenger.Default.Send(new ResetOpacity(1));
+            //}
         }
         catch (Exception Ex)
         {

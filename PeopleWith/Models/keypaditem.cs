@@ -8,6 +8,8 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Mopups.Services;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace PeopleWith
 {
@@ -107,8 +109,17 @@ namespace PeopleWith
                     NegativeText = "USE PIN"
                 }, CancellationToken.None);
 
+                var connectivity = Connectivity.Current;
+                bool Isconnected = connectivity.NetworkAccess == NetworkAccess.Internet;
+
                 if (result.Status == BiometricResponseStatus.Success)
                 {
+                    if (!Isconnected)
+                    {
+                        await MopupService.Instance.PushAsync(new Infopopup("biometrics") { });
+                        //WeakReferenceMessenger.Default.Send(new BiometricsOpacity(0.2));
+                        return; 
+                    }
                     PinValue = "////";
                     OnPropertyChanged(nameof(PinValue));
 
@@ -129,7 +140,13 @@ namespace PeopleWith
                 }
                 else
                 {
-                   //Failure
+                    //if (!Isconnected)
+                    //{
+                    //    await MopupService.Instance.PushAsync(new Infopopup("biometrics") { });
+                    //    WeakReferenceMessenger.Default.Send(new BiometricsOpacity(0.2));
+                    //    return;
+                    //}
+                    //Failure
                 }
             }
             catch(Exception Ex)

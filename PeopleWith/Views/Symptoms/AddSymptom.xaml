@@ -53,7 +53,7 @@
                 <Label Text="Filters" Margin="0,0,0,5" Grid.Row="1" Grid.Column="0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" FontSize="12" FontFamily="HankenGroteskBold" />
 
                 <ScrollView Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Margin="0,0,0,0"  HorizontalScrollBarVisibility="Never">
-                    <chip:SfChipGroup ChipFontFamily="HankenGroteskRegular" ChipType="Choice" SelectionIndicatorColor="Transparent" ChipClicked="FilterTabs_ChipClicked" x:Name="FilterTabs"  Grid.Row="2" Grid.Column="0" SelectedChipBackground="Orange" ChipStroke="Transparent" ChipPadding="0" ChipTextSize="12" SelectedChipTextColor="White" ShowIcon="False" ChipTextColor="LightGray" ChipBackground="#fff7ea"/>
+                    <chip:SfChipGroup ChipFontFamily="HankenGroteskRegular" ChipType="Choice" SelectionIndicatorColor="Transparent" ChipClicked="FilterTabs_ChipClicked" x:Name="FilterTabs"  Grid.Row="2" Grid.Column="0" SelectedChipBackground="Orange" ChipStroke="Transparent" ChipPadding="0" ChipTextSize="12" SelectedChipTextColor="White" ShowIcon="False" ChipTextColor="Orange" ChipBackground="#fff7ea"/>
                 </ScrollView>
             </StackLayout>
 
@@ -86,7 +86,7 @@
 
                                     <Label Text="{Binding title}" FontFamily="HankenGroteskRegular" Margin="5,0,0,0" Grid.Row="0" Grid.Column="0" Padding="0" HorizontalOptions="Start"  VerticalOptions="Start" TextColor="#031926" FontSize="14" FontAttributes="None" />
 
-                                        <BoxView Grid.Column="0" Grid.Row="1" HeightRequest="1" HorizontalOptions="FillAndExpand" Margin="0,10,0,0" Color="#fafafa" BackgroundColor="#fafafa"/>
+                                        <BoxView Grid.Column="0" Grid.Row="1" HeightRequest="1" HorizontalOptions="FillAndExpand" Margin="0,10,0,0" Color="#fff7ea" BackgroundColor="#fff7ea"/>
 
                                 </Grid>
 

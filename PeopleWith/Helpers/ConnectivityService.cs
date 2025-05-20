@@ -18,15 +18,9 @@ namespace PeopleWith
 
         public ConnectivityService()
         {
-            try
-            {
-                    Connectivity.ConnectivityChanged += OnConnectivityChanged;
-            }
-            catch (Exception Ex)
-            {
-
-            }
-        
+            Connectivity.Current.ConnectivityChanged += OnConnectivityChanged;
+            //Connectivity.ConnectivityChanged += OnConnectivityChanged;
+          
         }
 
         private void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)

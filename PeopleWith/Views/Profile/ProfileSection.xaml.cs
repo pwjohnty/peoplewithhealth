@@ -97,7 +97,8 @@ public partial class ProfileSection : ContentPage
             }
             if (!string.IsNullOrEmpty(one) && !string.IsNullOrEmpty(two))
             {
-                Initals.Text = one + two;
+                var NameInt = one + two; 
+                Initals.Text = NameInt.ToUpper();
             }
 
             if (string.IsNullOrEmpty(Initals.Text))

@@ -73,6 +73,10 @@ namespace PeopleWith
                     Title = nottitle,
                     Description = notdescription,
                     BadgeNumber = 0,
+                    Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
+                    {
+                        Priority = Plugin.LocalNotification.AndroidOption.AndroidPriority.High, // 🔥 Set priority here
+                    },
                     Schedule = new NotificationRequestSchedule
                     {
                         NotifyTime = startdateandtime,

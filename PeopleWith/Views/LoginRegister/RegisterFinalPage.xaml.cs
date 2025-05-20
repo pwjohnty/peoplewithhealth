@@ -891,11 +891,21 @@ public partial class RegisterFinalPage : ContentPage
                             Title = "Complete your EQ-5D Questionnaire",
                             Description = "Please take a moment to complete your EQ-5D questionnaire",
                             BadgeNumber = 0,
+                           
+                             Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
+                             {
+                                 Priority = Plugin.LocalNotification.AndroidOption.AndroidPriority.High, // ?? Set priority here
+                             },
+
+                            // Add any custom data you need to retrieve when the notification is tapped
+                            //ReturningData = "action=questionnaire&studyid=IID3",
+
                             Schedule = new NotificationRequestSchedule
                             {
                                 NotifyTime = DateTime.Now.AddDays(1),
                                 RepeatType = NotificationRepeat.No,
-                                NotifyRepeatInterval = null
+                                NotifyRepeatInterval = null,
+                               
                             }
 
                         };

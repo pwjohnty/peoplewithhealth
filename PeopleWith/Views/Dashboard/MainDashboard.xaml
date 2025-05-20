@@ -259,7 +259,7 @@ Aspect="AspectFit" Grid.Row="0" Grid.Column="0"
                                 <Button x:Name="TurnonNotif"  Text="Turn On Notifications" Clicked="TurnonNotif_Clicked" BorderWidth="2" Padding="10" Margin="10" TextColor="White" FontFamily="HankenGroteskBold" Grid.Row="1" HorizontalOptions="FillAndExpand" VerticalOptions="Fill" BorderColor="#4682B4" BackgroundColor="#4682B4" />
                             </Grid>
 
-                            <Border StrokeShape="RoundRectangle 10" IsVisible="False" x:Name="pushnotifcationsframe" BackgroundColor="#f9f9fb" Stroke="Transparent" Padding="10" Margin="10,20,10,0">
+                            <!--<Border StrokeShape="RoundRectangle 10" IsVisible="False" x:Name="pushnotifcationsframe" BackgroundColor="#f9f9fb" Stroke="Transparent" Padding="10" Margin="10,20,10,0">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
@@ -289,7 +289,43 @@ Text="Turn On" />
 
 
                                 </Grid>
+                            </Border> -->
+
+                            <Border StrokeShape="RoundRectangle 10" IsVisible="False" x:Name="AndroidbatteryOptimise" BackgroundColor="#f9f9fb" Stroke="Transparent" Padding="10" Margin="10,20,10,0">
+                                <Grid Grid.RowDefinitions="Auto,Auto,Auto"  Grid.ColumnDefinitions="20*,80*"> 
+                                    <Image Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Source="batterysaver.png" HeightRequest="50" WidthRequest="50" HorizontalOptions="Fill" VerticalOptions="Fill" />
+                                    <Label Text="Turn Off Battery Saver" Grid.Row="0" Grid.Column="1" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="14" Margin="5,0,0,5" HorizontalOptions="Start" />
+
+                                    <Label Text="Battery Saver may prevent notifications (such as medication reminders) from being received when the app is closed. To ensure you don't miss important alerts, please disable Battery Saver for this app." Grid.Row="1" Grid.Column="1" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="11" Margin="5,0,0,0" HorizontalOptions="Start" />
+                                    <Button BackgroundColor="#BFDBF7" HorizontalOptions="Fill" TextColor="#031926" Clicked="TurnoffBatterySaver" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" FontAttributes="None" Margin="10,10,10,10" FontFamily="HankenGroteskBold" Text="Turn Off" />
+                                    
+                                </Grid>
                             </Border>
+
+                            <Grid x:Name="SettingsPrompt" IsVisible="False" Grid.RowDefinitions="Auto,Auto" Grid.ColumnDefinitions="*">
+                                <CarouselView  x:Name="SettingsCarousel" Loop="False"  IndicatorView="SettingsIND" HorizontalScrollBarVisibility="Never"   Margin="20,10,20,5" Grid.Row="0" HorizontalOptions="Fill"  >
+                                    <CarouselView.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackLayout>
+                                                <Border StrokeShape="RoundRectangle 10"  Background="#f9f9fb" Stroke="Transparent" StrokeThickness="1" InputTransparent="False" Padding="10">
+                                                    <Grid Margin="0,5,0,5" Grid.RowDefinitions="Auto,Auto,Auto" Grid.ColumnDefinitions="20*,80*">
+                                                        <Image Source="{Binding img}" Grid.Row="0"  Grid.Column="0" BackgroundColor="Transparent" Margin="0,10,0,0" Grid.RowSpan="2" HeightRequest="50" WidthRequest="50" HorizontalOptions="Fill" VerticalOptions="Fill"  />
+                                                        <Label Text="{Binding title}" Grid.Row="0" Grid.Column="1" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="14" Margin="5,0,0,5" HorizontalOptions="Start" />
+                                                        <Label Text="{Binding description}" Grid.Row="1" Grid.Column="1" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="11" Margin="5,0,0,0" HorizontalOptions="Start" />
+                                                        <Border StrokeShape="RoundRectangle 10" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,10,0,0"  Background="#BFDBF7" Stroke="Transparent" StrokeThickness="1" InputTransparent="False" Padding="2.5">
+                                                            <Label Text="{Binding guide}" Grid.Row="0" Grid.Column="1" TextColor="#031926" FontFamily="HankenGroteskBold" Margin="10" FontSize="14" HorizontalOptions="Center"  />
+                                                            <Border.GestureRecognizers>
+                                                                <TapGestureRecognizer Tapped="SettingButttonClicked" NumberOfTapsRequired="1"/>
+                                                            </Border.GestureRecognizers>
+                                                        </Border>
+                                                    </Grid>
+                                                </Border>
+                                            </StackLayout>
+                                        </DataTemplate>
+                                    </CarouselView.ItemTemplate>
+                                </CarouselView>
+                                <IndicatorView x:Name="SettingsIND"  IndicatorColor="LightGray" SelectedIndicatorColor="#031926" VerticalOptions="Center" HorizontalOptions="Center" Count="2" Grid.Row="1" Grid.Column="0" IndicatorSize="8" />
+                            </Grid>
 
 
 

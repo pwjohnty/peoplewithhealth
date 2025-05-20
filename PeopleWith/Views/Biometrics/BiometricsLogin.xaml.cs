@@ -7,6 +7,8 @@ using Syncfusion.Maui.Core.Internals;
 using Microsoft.Maui.Storage;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Devices;
+using Mopups.Services;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace PeopleWith;
 
@@ -14,12 +16,27 @@ public partial class BiometricsLogin : ContentPage
 {
     string one;
     string two;
+    public event EventHandler<bool> ConnectivityChanged;
+    public readonly struct UpdateBiometrics { }
+    //Crash Handler
+    CrashDetected crashHandler = new CrashDetected();
+    async public void NotasyncMethod(Exception Ex)
+    {
+        try
+        {
+            await crashHandler.SentryCrashDetected(Ex);
+            await Navigation.PushAsync(new ErrorPage("Login"), false);
+        }
+        catch (Exception ex)
+        {
+            //Dunno 
+        }
+    }
     public BiometricsLogin()
 	{
         try
         {
             InitializeComponent();
-
 
             NavigationPage.SetHasNavigationBar(this, false);
 
@@ -45,107 +62,29 @@ public partial class BiometricsLogin : ContentPage
             }
             if (!string.IsNullOrEmpty(one) && !string.IsNullOrEmpty(two))
             {
-                Initals.Text = one + two;
-                //Name.Text = Helpers.Settings.FirstName + " " + Helpers.Settings.Surname;
+                var NameInt = one + two; 
+                Initals.Text = NameInt.ToUpper();
             }
 
             if (string.IsNullOrEmpty(Initals.Text))
             {
                 Initals.Text = "PW";
-                //Name.Text = "Enter Pin Code";
             }
 
-            //Set Page Visible/Not Visible 
-            var biometrics = Preferences.Default.Get("biometrics", true);
             var pincode = Preferences.Default.Get("pincode", string.Empty);
-            if (pincode.Contains(","))
-            {
-                var split = pincode.Split(',');
-                if (split[0] == "On")
-                {
-                    if (biometrics == false)
-                    {
-                        fingerprint.IsVisible = true;
-                    }
-                }
-                else
-                {
-                    //Hide PinCode 
-                    Pincode.IsVisible = false;
-                    incorrectcodelbl.IsVisible = false;
-                    PinKeyPad.IsVisible = false;
-                    ForgotPassword.IsVisible = false;
-                    Name.IsVisible = false;
 
-                    if (biometrics == true)
-                    {
-                        CallFingerPrint();
-                    }
-                    //Set to Mainpage
-                }
-            }
-
+            //Return to Normal Opacticy 
+            //WeakReferenceMessenger.Default.Register<BiometricsOpacity>(this, (r, m) =>
+            //{
+            //    this.Opacity = m.Value;
+            //});
         }
         catch (Exception Ex)
         {
-           
+            NotasyncMethod(Ex);
         }
 
     }
-
-    async public void CallFingerPrint()
-    {
-        try
-        {
-
-           await Fingerprint();
-        }
-        catch (Exception Ex)
-        {
-
-        }
-    }
-
-    async public Task Fingerprint()
-    {
-        try
-        {
-            await Task.Delay(100);
-            var result = await BiometricAuthenticationService.Default.AuthenticateAsync(new AuthenticationRequest()
-            {
-                Title = "Confirm your fingerprint to access your account",
-                NegativeText = "USE PIN"
-            }, CancellationToken.None);
-
-            if (result.Status == BiometricResponseStatus.Success)
-            {
-                    LoadingInd.IsVisible = true;
-                    Loadinglbl.IsVisible = true; 
-                    PinKeyPad.IsVisible = false;
-                    ForgotPassword.IsVisible = false;
-
-                await Task.Run(async () =>
-                {
-                    // Simulate some processing that may take up to 2 seconds
-                    await Task.Delay(2000);
-                });
-
-                MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    Application.Current.MainPage = new NavigationPage(new MainDashboard());
-                });
-            }
-            else
-            {
-               
-            }
-        }
-        catch (Exception Ex)
-        {
-
-        }
-    }
-
 
     async private void Pincode_PINEntryCompleted(object sender, PINView.Maui.Helpers.PINCompletedEventArgs e)
     {
@@ -154,28 +93,28 @@ public partial class BiometricsLogin : ContentPage
             var GetPin = Helpers.Settings.PinCode;         
             if (e.PIN == "////")
             {
+                //Used to Simulate Correct Password When Using Biometrics over Pin
                 return; 
             }
             else
             {
-                if (GetPin.Contains(","))
+                var connectivity = Connectivity.Current;
+                bool Isconnected = connectivity.NetworkAccess == NetworkAccess.Internet;
+
+                if (Helpers.Settings.PinCode == e.PIN)
                 {
-                    var GetPinSplit = GetPin.Split(',');
-                    if (GetPinSplit[1] == e.PIN)
-                    {
+                        if (!Isconnected)
+                        {
+                            await MopupService.Instance.PushAsync(new Infopopup("biometrics") { });
+                            //this.Opacity = 0.2; 
+                            Pincode.PINValue = null;
+                            return;
+                        }
+
                         LoadingInd.IsVisible = true;
                         Loadinglbl.IsVisible = true;
                         PinKeyPad.IsVisible = false;
                         ForgotPassword.IsVisible = false;
-                        //Task.Run(async () =>
-                        //{
-                        //    await Task.Delay(100); // Simulate processing time if necessary
-                        //    MainThread.BeginInvokeOnMainThread(async () =>
-                        //    {
-                        //        Application.Current.MainPage = new NavigationPage(new MainDashboard());
-                        //        //await Navigation.PushAsync(new MainDashboard(), false);
-                        //    });
-                        //});
 
                         await Task.Run(async () =>
                         {
@@ -193,55 +132,7 @@ public partial class BiometricsLogin : ContentPage
                         Pincode.PINValue = null;
                         Vibration.Vibrate();
                     }
-                }
-                else
-                {
-                    if (Helpers.Settings.PinCode == e.PIN)
-                    {
-                        LoadingInd.IsVisible = true;
-                        Loadinglbl.IsVisible = true;
-                        PinKeyPad.IsVisible = false;
-                        ForgotPassword.IsVisible = false;
-
-                        //var newPage = new MainDashboard();
-
-                        //// Set MainPage first so OnAppearing can be triggered
-                        //MainThread.BeginInvokeOnMainThread(() =>
-                        //{
-                        //    Application.Current.MainPage = new NavigationPage(newPage);
-                        //});
-
-                        //// Then wait for OnAppearing
-                        //await newPage.PageReady.Task;
-
-                        //Task.Run(async () =>
-                        //{
-                        //    await Task.Delay(100); // Simulate processing time if necessary
-                        //    MainThread.BeginInvokeOnMainThread(async () =>
-                        //    {
-                        //        Application.Current.MainPage = new NavigationPage(new MainDashboard());
-                        //        //await Navigation.PushAsync(new MainDashboard(), false);
-                        //    });
-                        //});
-
-                        await Task.Run(async () =>
-                        {
-                            // Simulate some processing that may take up to 2 seconds
-                            await Task.Delay(2000);
-                        });
-
-                        MainThread.BeginInvokeOnMainThread(() =>
-                        {
-                            Application.Current.MainPage = new NavigationPage(new MainDashboard());
-                        });
-                    }
-                    else
-                    {
-                        Pincode.PINValue = null;
-                        Vibration.Vibrate();
-                    }
-                }
-            }          
+            }        
         }
         catch (Exception Ex)
         {
@@ -250,6 +141,7 @@ public partial class BiometricsLogin : ContentPage
             Name.IsVisible = true;
             incorrectcodelbl.IsVisible = false;
             LoadingInd.IsVisible = false;
+            NotasyncMethod(Ex);
         }
     }
 
@@ -261,33 +153,10 @@ public partial class BiometricsLogin : ContentPage
         }
         catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 
-    private void Keypad_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
-    {
-        try
-        {
-
-        }
-        catch (Exception Ex)
-        {
-
-        }
-    }
-
-    private void Pincode_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        try
-        {
-
-        }
-        catch (Exception Ex)
-        {
-
-        }
-    }
     async private void Pincode_Focused(object sender, FocusEventArgs e)
     {
         try

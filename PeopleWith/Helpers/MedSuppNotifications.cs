@@ -45,13 +45,17 @@ namespace PeopleWith
                     Title = nottitle,
                     Description = notdescription,
                     BadgeNumber = 0,
+                    Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
+                    {
+                        Priority = Plugin.LocalNotification.AndroidOption.AndroidPriority.High, // 🔥 Set priority here
+                    },
                     Schedule = new NotificationRequestSchedule
                     {
                         NotifyTime = startdateandtime,
                         RepeatType = NotificationRepeat.Daily,
                         NotifyRepeatInterval = null 
                     }
-
+                     
 
 
                 };
@@ -97,7 +101,11 @@ namespace PeopleWith
                         Title = nottitle,
                         Description = notdescription,
                         BadgeNumber = 0,
-                        Schedule = new NotificationRequestSchedule
+                        Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
+                        {
+                            Priority = Plugin.LocalNotification.AndroidOption.AndroidPriority.High, // 🔥 Set priority here
+                        },
+                    Schedule = new NotificationRequestSchedule
                         {
                             NotifyTime = startdateandtime,
                             NotifyAutoCancelTime = enddatewithtime,
@@ -173,6 +181,10 @@ namespace PeopleWith
                     Title = nottitle,
                     Description = notdescription,
                     BadgeNumber = 0,
+                    Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
+                    {
+                        Priority = Plugin.LocalNotification.AndroidOption.AndroidPriority.High, // 🔥 Set priority here
+                    },
                     Schedule = new NotificationRequestSchedule
                     {
                         NotifyTime = startdateandtime,
@@ -252,6 +264,10 @@ namespace PeopleWith
                     Title = nottitle,
                     Description = notdescription,
                     BadgeNumber = 0,
+                    Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
+                    {
+                        Priority = Plugin.LocalNotification.AndroidOption.AndroidPriority.High, // 🔥 Set priority here
+                    },
                     Schedule = new NotificationRequestSchedule
                     {
                         NotifyTime = startdateandtime,
@@ -324,6 +340,10 @@ namespace PeopleWith
                     Title = nottitle,
                     Description = notdescription,
                     BadgeNumber = 0,
+                    Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
+                    {
+                        Priority = Plugin.LocalNotification.AndroidOption.AndroidPriority.High, // 🔥 Set priority here
+                    },
                     Schedule = new NotificationRequestSchedule
                     {
                         NotifyTime = startdateandtime,
@@ -380,6 +400,10 @@ namespace PeopleWith
                     Title = nottitle,
                     Description = notdescription,
                     BadgeNumber = 0,
+                    Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
+                    {
+                        Priority = Plugin.LocalNotification.AndroidOption.AndroidPriority.High, // 🔥 Set priority here
+                    },
                     Schedule = new NotificationRequestSchedule
                     {
                         NotifyTime = startdateandtime,
