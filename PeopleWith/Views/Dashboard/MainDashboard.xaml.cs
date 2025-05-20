@@ -19,6 +19,7 @@ using Microsoft.Maui.Storage;
 using Microsoft.Maui.Controls;
 using Plugin.Maui.Health.Enums;
 using Plugin.Maui.Health;
+using System.Globalization;
 //using Xamarin.Google.Crypto.Tink.Subtle;
 
 namespace PeopleWith;
@@ -375,7 +376,7 @@ public partial class MainDashboard : ContentPage
 
             updateyourhealthdata();
 
-            getfitnesshealthdata();
+           // getfitnesshealthdata();
 
             // Stop the stopwatch after retrieval
             // stopwatch.Stop();
@@ -422,6 +423,33 @@ public partial class MainDashboard : ContentPage
             //symptom data
             if (userfeedbacklist[0].symptomfeedbacklist != null)
             {
+                var inputFormats = new[] {
+    "M/d/yyyy h:mm:ss tt",
+    "MM/dd/yyyy h:mm:ss tt",
+    "M/d/yyyy H:mm:ss",
+    "MM/dd/yyyy HH:mm:ss"
+};
+
+                var expectedFormat = "dd/MM/yyyy HH:mm:ss";
+                var culture = new CultureInfo("en-GB");
+
+                foreach (var x in userfeedbacklist[0].symptomfeedbacklist)
+                {
+                    if (!x.action.Contains("deleted"))
+                    {
+                        // Normalize special space character before AM/PM
+                        x.datetime = x.datetime.Replace('\u202F', ' ').Trim();
+
+                        if (DateTime.TryParseExact(x.datetime, inputFormats, culture, DateTimeStyles.None, out var parsed))
+                        {
+                            x.datetime = parsed.ToString(expectedFormat, culture); // Normalize to UK format
+
+                            var ss = x.datetime;
+                        }
+                    }
+                }
+
+
                 //var groupedsymptoms = userfeedbacklist[0].symptomfeedbacklist.GroupBy(x => x.label).ToList();
 
                 // Group by label and select the first item from each group
@@ -1338,6 +1366,29 @@ public partial class MainDashboard : ContentPage
                 SymptomProgChart.IsVisible = false;
                 nosymdataframe.IsVisible = true;
                 return;
+            }
+
+
+            var inputFormats = new[] {
+   "M/d/yyyy h:mm:ss tt",
+    "MM/dd/yyyy h:mm:ss tt",
+    "M/d/yyyy H:mm:ss",
+    "MM/dd/yyyy HH:mm:ss"
+};
+            var outputFormat = "dd/MM/yyyy HH:mm:ss";
+            var ukCulture = new CultureInfo("en-GB");
+
+            foreach (var x in userfeedbacklist[0].symptomfeedbacklist)
+            {
+                if (!x.action.Contains("deleted"))
+                {
+                    x.datetime = x.datetime.Replace('\u202F', ' ').Trim();
+
+                    if (DateTime.TryParseExact(x.datetime, inputFormats, ukCulture, DateTimeStyles.None, out var parsed))
+                    {
+                        x.datetime = parsed.ToString(outputFormat, ukCulture);
+                    }
+                }
             }
 
             recentsymlbl.IsVisible = true;

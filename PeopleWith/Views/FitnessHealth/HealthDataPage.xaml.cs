@@ -534,7 +534,7 @@ public partial class HealthDataPage : ContentPage
                     var stopwatch = Stopwatch.StartNew();
 
                     var endDate = DateTime.UtcNow;
-                    var startDate = endDate.Date.AddYears(-10); // start of today (00:00 UTC)
+                    var startDate = endDate.Date.AddYears(-1); // start of today (00:00 UTC)
                     var unit = "";
 
                     // Query step count data
@@ -560,7 +560,11 @@ public partial class HealthDataPage : ContentPage
                     // syncstack.IsVisible = false;
 
 
-                       var data1 = await health.ReadAllAsync(HealthParameter.StepCount, startDate, endDate, unit);
+                    var data1 = await health.ReadAllAsync(HealthParameter.StepCount, startDate, endDate, unit);
+
+                    newuserfitness.stepfeedbacklist = new ObservableCollection<fitnessfeedback>();
+                    newuserfitness.heartratefeedbacklist = new ObservableCollection<fitnessfeedback>();
+                    newuserfitness.respiratoryratefeedbacklist = new ObservableCollection<fitnessfeedback>();
 
                     foreach (var item in data1)
                     {
@@ -572,17 +576,65 @@ public partial class HealthDataPage : ContentPage
                             value = item.Value.ToString(),
                             unit = item.Unit,
                             source = item.Source,
-                            name = item.Description,
+                          //  name = item.Description,
                             datetime = item.From.ToString()
 
                         });
                     }
 
+                    string json = System.Text.Json.JsonSerializer.Serialize(newuserfitness.stepfeedbacklist);
+                    newuserfitness.stepfeedback = json;
+
                     //   var walkingdistance = await health.ReadAllAsync(HealthParameter.DistanceWalkingRunning, startDate, endDate, "m");
 
-                    // var hr = await health.ReadAllAsync(HealthParameter.HeartRate, startDate, endDate, "count/min");
+                    var hr = await health.ReadAllAsync(HealthParameter.HeartRate, startDate, endDate, "count/min");
 
-                    //   var resp = await health.ReadAllAsync(HealthParameter.RespiratoryRate, startDate, endDate, "count/min");
+         
+
+                    foreach (var item in hr)
+                    {
+                        newuserfitness.heartratefeedbacklist.Add(new fitnessfeedback
+                        {
+                            // Map properties from `item` to `fitnessfeedback`
+                            // e.g., Steps = item.Value, Time = item.Date
+
+                            value = item.Value.ToString(),
+                            unit = item.Unit,
+                            source = item.Source,
+                            //  name = item.Description,
+                            datetime = item.From.ToString()
+
+                        });
+                    }
+
+                    string jsonhr = System.Text.Json.JsonSerializer.Serialize(newuserfitness.heartratefeedbacklist);
+                    newuserfitness.heartratefeedback = jsonhr;
+
+
+
+                    var resp = await health.ReadAllAsync(HealthParameter.RespiratoryRate, startDate, endDate, "count/min");
+
+                    foreach (var item in resp)
+                    {
+                        newuserfitness.respiratoryratefeedbacklist.Add(new fitnessfeedback
+                        {
+                            // Map properties from `item` to `fitnessfeedback`
+                            // e.g., Steps = item.Value, Time = item.Date
+
+                            value = item.Value.ToString(),
+                            unit = item.Unit,
+                            source = item.Source,
+                            //  name = item.Description,
+                            datetime = item.From.ToString()
+
+                        });
+                    }
+
+
+                    string jsonres = System.Text.Json.JsonSerializer.Serialize(newuserfitness.respiratoryratefeedbacklist);
+                    newuserfitness.respiratoryratefeedback = jsonres;
+
+
 
                     // string newsymJson = System.Text.Json.JsonSerializer.Serialize(data1);
                     // newuserfitness.stepfeedback = newsymJson;
@@ -591,9 +643,13 @@ public partial class HealthDataPage : ContentPage
                     // string newsymJsonhr = System.Text.Json.JsonSerializer.Serialize(hr);
                     // newuserfitness.heartratefeedback = newsymJsonhr;
 
+
+
+
                     await database.InsertUserFitness(newuserfitness);
 
 
+                    loader.IsVisible = false;
                     migimg.IsVisible = true;
 
                     stopwatch.Stop();

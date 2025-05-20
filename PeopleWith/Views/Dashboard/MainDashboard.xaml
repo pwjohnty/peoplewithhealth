@@ -652,7 +652,7 @@ FontSize="8" />
 
 
 
-                                <Grid>
+                                <Grid x:Name="healthdatagrid" IsVisible="False" >
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="50*"/>
                                         <ColumnDefinition Width="50*"/>

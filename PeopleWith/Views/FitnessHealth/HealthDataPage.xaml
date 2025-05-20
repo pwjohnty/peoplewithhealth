@@ -817,7 +817,7 @@ Stroke="LightGray">
                         ProgressCornerRadius="5" />
 
 
-                    <ActivityIndicator IsRunning="True" Margin="0,50,0,0" Color="#031926" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    <ActivityIndicator IsRunning="True" x:Name="loader" Margin="0,50,0,0" Color="#031926" HorizontalOptions="Center" VerticalOptions="Center"/>
 
 
                     <Label
