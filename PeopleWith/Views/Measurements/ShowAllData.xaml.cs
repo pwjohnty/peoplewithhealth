@@ -4,12 +4,20 @@ using Mopups.Services;
 using System.Collections.ObjectModel;
 using Microsoft.Maui.Networking;
 
+
+
 namespace PeopleWith;
 
 public partial class ShowAllData : ContentPage
 {
     ObservableCollection<usermeasurement> usermeasurementlistpassed = new ObservableCollection<usermeasurement>();
     ObservableCollection<usermeasurement> deleeteusermeasurementlistpassed = new ObservableCollection<usermeasurement>();
+    ObservableCollection<usermeasurement> displayedMeasurements = new ObservableCollection<usermeasurement>();
+    int batchSize = 50;
+    int currentIndex = 0;
+    private const int PageSize = 30;
+    private int currentPage = 0;
+    bool isLoading = false;
     APICalls aPICalls = new APICalls();
 
     ObservableCollection<usermeasurement> allusermeasurements = new ObservableCollection<usermeasurement>();
@@ -50,8 +58,8 @@ public partial class ShowAllData : ContentPage
             this.ToolbarItems.Add(item);
             //edit button clicked
             usermeasurementlist.IsEnabled = false;
-            deletelbl.IsVisible = false;
-            foreach (var items in usermeasurementlistpassed)
+           deletelbl.IsVisible = false;
+            foreach (var items in displayedMeasurements)
             {
                 items.Deleteisvis = false;
             }
@@ -125,15 +133,67 @@ public partial class ShowAllData : ContentPage
                 }
             }
 
+         
+
             usermeasurementlistpassed = new ObservableCollection<usermeasurement>(usermeasurementlistpassed.OrderByDescending(x => DateTime.Parse(x.inputdatetime)));
 
-            usermeasurementlist.ItemsSource = usermeasurementlistpassed;
+          //  if(usermeasurementlistpassed.Count > 50)
+           // {
+             //   var newlist = usermeasurementlistpassed.Take(50).ToList();
+               // usermeasurementlist.ItemsSource = newlist;
+               // usermeasurementlist.HeightRequest = newlist.Count * 100;
+           // }
+
+
+            displayedMeasurements.Clear();
+            currentIndex = 0;
+            LoadMoreItems(); // load the first batch
+            usermeasurementlist.ItemsSource = displayedMeasurements;
+           // usermeasurementlist.HeightRequest = displayedMeasurements.Count * 110;
+
+            int itemHeight = 100; // estimate per item
+            int maxVisibleItems = 50; // or however many you want to show max
+
+           // var visibleCount = Math.Min(displayedMeasurements.Count, maxVisibleItems);
+          //  usermeasurementlist.HeightRequest = displayedMeasurements.Count * itemHeight;
+            // usermeasurementlist.HeightRequest = displayedMeasurements.Count * 100;
+
+            // usermeasurementlist.ItemsSource = usermeasurementlistpassed;
             //usermeasurementlist.HeightRequest = usermeasurementlistpassed.Count * 100;
         }
         catch (Exception Ex)
         {
             NotasyncMethod(Ex);
         }  
+    }
+
+    void LoadMoreItems()
+    {
+        try
+        {
+
+
+            var itemsToLoad = usermeasurementlistpassed.Skip(currentPage * PageSize).Take(PageSize).ToList();
+
+            foreach (var item in itemsToLoad)
+                displayedMeasurements.Add(item);
+
+            currentPage++;
+
+            //if (isLoading) return;
+            //isLoading = true;
+
+            //var nextBatch = usermeasurementlistpassed.Skip(currentIndex).Take(batchSize).ToList();
+            //foreach (var item in nextBatch)
+            //    displayedMeasurements.Add(item);
+            //usermeasurementlist.HeightRequest = displayedMeasurements.Count * 100;
+            //currentIndex += nextBatch.Count;
+            //isLoading = false;
+        }
+        catch(Exception ex)
+        {
+
+        }
     }
 
 
@@ -146,12 +206,12 @@ public partial class ShowAllData : ContentPage
             if (accessType == NetworkAccess.Internet)
             {
                 //Limit No. of Taps 
-                toolbaritem.IsEnabled = false;
+              //  toolbaritem.IsEnabled = false;
                 //edit button clicked
                 usermeasurementlist.IsEnabled = true;
                 deletelbl.IsVisible = true;
                 // Iterate over the source collection and add each item to SelectedItems
-                foreach (var item in usermeasurementlistpassed)
+                foreach (var item in displayedMeasurements)
                 {
                     item.Deleteisvis = true;
                 }
@@ -171,7 +231,7 @@ public partial class ShowAllData : ContentPage
                 this.ToolbarItems.Add(itemm);
 
                 //  usermeasurementlist.SelectionMode = Syncfusion.Maui.ListView.SelectionMode.None;
-                toolbaritem.IsEnabled = true;
+                //toolbaritem.IsEnabled = true;
             }
             else
             {
@@ -192,6 +252,15 @@ public partial class ShowAllData : ContentPage
         try
         {
             //done toolbar item clicked
+
+            var getdeleteditems = displayedMeasurements.Where(x => x.Deleteisvis == true).ToList();
+
+
+            if(getdeleteditems != null || getdeleteditems.Count > 0)
+            {
+
+            }
+
             if(deleeteusermeasurementlistpassed.Count == 0)
             {
                 this.ToolbarItems.Clear();
@@ -226,7 +295,7 @@ public partial class ShowAllData : ContentPage
             {
                 return;
             }
-          
+
 
             deletelbl.IsVisible = false;
 
@@ -334,8 +403,8 @@ public partial class ShowAllData : ContentPage
                 this.ToolbarItems.Add(item);
                 //edit button clicked
                 usermeasurementlist.IsEnabled = false;
-                deletelbl.IsVisible = false;
-                foreach (var items in usermeasurementlistpassed)
+               deletelbl.IsVisible = false;
+            foreach (var items in usermeasurementlistpassed)
                 {
                     items.Deleteisvis = false;
                 }
@@ -427,6 +496,79 @@ public partial class ShowAllData : ContentPage
         catch (Exception Ex)
         {
             NotasyncMethod(Ex);
+        }
+    }
+
+    private void usermeasurementlist_ItemAppearing(object sender, Syncfusion.Maui.ListView.ItemAppearingEventArgs e)
+    {
+        try
+        {
+            // If we're within the last 5 items, load more
+            if (isLoading || currentIndex >= usermeasurementlistpassed.Count)
+                return;
+
+            if (e.DataItem == displayedMeasurements[displayedMeasurements.Count - 1])
+            {
+                LoadMoreItems();
+            }
+        }
+        catch(Exception Ex)
+        {
+
+        }
+    }
+
+    private void LoadMoreButton_Clicked(object sender, EventArgs e)
+    {
+
+    }
+
+    private void usermeasurementlist_RemainingItemsThresholdReached(object sender, EventArgs e)
+    {
+        try
+        {
+            // Load next page
+            if ((currentPage * PageSize) < usermeasurementlistpassed.Count)
+            {
+                LoadMoreItems();
+            }
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
+    private void usermeasurementlist_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        try
+        {
+
+            //if (deletelbl.IsVisible)
+            //{
+            //    var selectedItems = e.CurrentSelection;
+
+
+            //    foreach (var selectedItem in selectedItems)
+            //    {
+            //        var item = selectedItem as usermeasurement;
+            //        if (item == null)
+            //            continue;
+
+            //        if (deleeteusermeasurementlistpassed.Contains(item))
+            //        {
+            //            deleeteusermeasurementlistpassed.Remove(item);
+            //        }
+            //        else
+            //        {
+            //            deleeteusermeasurementlistpassed.Add(item);
+            //        }
+            //    }
+            //}
+        }
+        catch (Exception ex)
+        {
+            NotasyncMethod(ex);
         }
     }
 }

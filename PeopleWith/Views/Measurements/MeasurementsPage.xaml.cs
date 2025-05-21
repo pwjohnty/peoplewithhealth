@@ -362,7 +362,7 @@ public partial class MeasurementsPage : ContentPage
              
            
                 usermeasurementlist.ItemsSource = filteredMeasurements;
-                //susermeasurementlist.HeightRequest = filteredMeasurements.Count * 110;
+                usermeasurementlist.HeightRequest = filteredMeasurements.Count * 130;
 
                 
 
