@@ -51,6 +51,8 @@ public partial class MainDashboard : ContentPage
     bool IsNavigating = false;
     bool NoficiationsActive = false;
     bool BatterySaverOff = false;
+    public bool MedNotifAdded = false;
+    public bool SuppNotifAdded = false; 
     ObservableCollection<SettingsOn> SettingstoShow = new ObservableCollection<SettingsOn>();
     MedSuppNotifications ScheduleNotifications = new MedSuppNotifications();
 
@@ -2101,6 +2103,8 @@ public partial class MainDashboard : ContentPage
 
             if (setnotificationsfromlogin)
             {
+                if (SuppNotifAdded == true) return;
+
                 var daycount = 0;
                 var mednottitle = "Supplement Reminder";
 
@@ -2108,11 +2112,21 @@ public partial class MainDashboard : ContentPage
                 {
                     foreach (var it in item.schedule)
                     {
+                        if (!string.IsNullOrEmpty(item.enddate))
+                        {
+                            if (!item.frequency.Contains("As Required"))
+                            {
+                                if (DateTime.Now.Date > DateTime.Parse(item.enddate).Date)
+                                {
+                                    //Don't Add/ Run through Process
+                                    break;
+                                }
+                            }
+                        }
 
-                        Random randomm = new Random();
-                        int randomNumberr = randomm.Next(100000, 100000001);
-
-                        it.id = randomNumberr;
+                        //Random randomm = new Random();
+                        //int randomNumberr = randomm.Next(100000, 100000001);
+                        //it.id = randomNumberr;
 
 
                         var timeconverted = TimeSpan.Parse(it.time);
@@ -2190,6 +2204,10 @@ public partial class MainDashboard : ContentPage
 
                     }
                 }
+
+                //Added to stop The Code Running again 
+                SuppNotifAdded = true;
+
             }
 
 
@@ -2556,6 +2574,7 @@ public partial class MainDashboard : ContentPage
             //add the med notifications if they have logged in again
             if(setnotificationsfromlogin)
             {
+                if (MedNotifAdded == true) return; 
                 var daycount = 0;
                 var mednottitle = "Medication Reminder";
 
@@ -2563,11 +2582,21 @@ public partial class MainDashboard : ContentPage
                 {
                     foreach(var it in item.schedule)
                     {
+                        if (!string.IsNullOrEmpty(item.enddate))
+                        {
+                            if (!item.frequency.Contains("As Required"))
+                            {
+                                if (DateTime.Now.Date > DateTime.Parse(item.enddate).Date)
+                                {
+                                    //Don't Add/ Run through Process
+                                    break;
+                                }
+                            }
+                        }
+                        //Random randomm = new Random();
+                        //int randomNumberr = randomm.Next(100000, 100000001);
 
-                        Random randomm = new Random();
-                        int randomNumberr = randomm.Next(100000, 100000001);
-
-                        it.id = randomNumberr;
+                        //it.id = randomNumberr;
 
 
                         var timeconverted = TimeSpan.Parse(it.time);
@@ -2645,10 +2674,10 @@ public partial class MainDashboard : ContentPage
 
                     }
                 }
+
+                //Added to Stop Supps from Activiting Again 
+                 MedNotifAdded = true;
             }
-
-
-
         }
         catch(Exception Ex)
         {
@@ -2731,6 +2760,13 @@ public partial class MainDashboard : ContentPage
                 
             //}
             UserSettingsCheck();
+
+            if (DeviceInfo.Platform == DevicePlatform.Android)
+            {
+                healthgrid.IsVisible = false; 
+            }
+            
+
             //CreateSettings();
 
         }

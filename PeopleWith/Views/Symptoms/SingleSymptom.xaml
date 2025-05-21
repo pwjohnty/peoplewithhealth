@@ -110,6 +110,19 @@ Padding="0">
                             </buttons:SfSegmentedControl.ItemsSource>
                         </buttons:SfSegmentedControl>-->
                         <chart:SfCartesianChart Margin="-5,0,0,10" BackgroundColor="Transparent" x:Name="SymptomProgChart">
+                    <chart:SfCartesianChart.Resources>
+                        <DataTemplate x:Key="tooltipTemplate">
+                            <StackLayout Orientation="Horizontal" Background="Black">
+                                <Label Text="{Binding Item.intensity}"
+                       TextColor="White" Padding="2" 
+                       FontFamily="HankenGroteskBold"
+                       FontSize="14"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"/>
+
+                            </StackLayout>
+                        </DataTemplate>
+                    </chart:SfCartesianChart.Resources>
                     <chart:SfCartesianChart.HeightRequest>
                         <OnPlatform x:TypeArguments="x:Double">
                             <On Platform="iOS" Value="350" />
@@ -125,7 +138,7 @@ Padding="0">
                                 </chart:NumericalAxis>
                             </chart:SfCartesianChart.YAxes>
                             <chart:SfCartesianChart.Series>
-                                <chart:SplineSeries ItemsSource="{Binding .}" EnableTooltip="True" XBindingPath="timestamp" YBindingPath="intensity" ShowTrackballLabel="True" ShowMarkers="True" ShowDataLabels="False" EnableAnimation="True" StrokeWidth="2" Fill="#BFDBF7">
+                        <chart:SplineSeries ItemsSource="{Binding .}"  EnableTooltip="True" XBindingPath="timestamp" YBindingPath="intensity" ShowTrackballLabel="True" ShowMarkers="True" ShowDataLabels="False" EnableAnimation="True" StrokeWidth="2" Fill="#BFDBF7">
                                     <chart:SplineSeries.MarkerSettings>
                                 <chart:ChartMarkerSettings Type="Circle" StrokeWidth="2" Stroke="Orange"  Height="8" Width="8"  Fill="#fff7ea" />
                                     </chart:SplineSeries.MarkerSettings>

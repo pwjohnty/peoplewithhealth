@@ -171,7 +171,28 @@ public partial class AllSymptoms : ContentPage
                             {
                                 if (DateTime.TryParse(x.timestamp, out DateTime timestampp))
                                 {
-                                    allTimestamps.Add(timestampp);
+                                    if (DateTime.TryParse(x.timestamp, out DateTime timestampp))
+                                    {
+                                        allTimestamps.Add(timestampp);
+                                    }
+                                    else
+                                    {
+                                        if (DateTime.TryParseExact(x.timestamp, inputFormats, ukCulture, DateTimeStyles.None, out DateTime timestamp))
+                                        {
+                                            allTimestamps.Add(timestamp);
+                                            x.timestamp = timestamp.ToString(expectedFormat, ukCulture);
+                                            var ss = x.timestamp;
+                                        }
+                                    }
+                                }
+                                catch
+                                {
+                                    if (DateTime.TryParseExact(x.timestamp, inputFormats, ukCulture, DateTimeStyles.None, out DateTime timestamp))
+                                    {
+                                        allTimestamps.Add(timestamp);
+                                        x.timestamp = timestamp.ToString(expectedFormat, ukCulture);
+                                        var ss = x.timestamp;
+                                    }
                                 }
                                 else
                                 {
@@ -212,7 +233,7 @@ public partial class AllSymptoms : ContentPage
                             //}
 
                         }
-                    }
+                    //}
                 }
                 if (allIntensities.Count > 0 && allTimestamps.Count > 0)
                 {
