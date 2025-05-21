@@ -4872,7 +4872,7 @@ public partial class AddMeasurement : ContentPage
                     newmeasurment.unit = inputvalue;
                     newmeasurment.status = "Active";
                     var dt = adddatepicker.Date + addtimepicker.Time;
-                    newmeasurment.inputdatetime = dt.ToString();
+                    newmeasurment.inputdatetime = dt.ToString("dd/MM/yyyy HH:mm:ss");
 
                     //insert to db
                     var returnedmeasurement = await aPICalls.InsertUsermeasurement(newmeasurment);
