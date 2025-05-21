@@ -378,6 +378,7 @@ public partial class SingleSymptom : ContentPage
                     StrokeWidth = 2,
                     Fill = Colors.Orange,
                     SelectionBehavior = selection,
+                    TooltipTemplate = SymptomProgChart.Resources["tooltipTemplate"] as DataTemplate
                 };
 
                 SymptomProgChart.Series.Add(series);

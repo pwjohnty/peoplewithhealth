@@ -930,6 +930,7 @@ public partial class RegisterFinalPage : ContentPage
                 {
                     Application.Current.MainPage = new NavigationPage(new MainDashboard());
                 });
+
                 //Task.Run(async () =>
                 //{
                 //    await Task.Delay(100); // Simulate processing time if necessary

@@ -167,23 +167,44 @@ public partial class AllSymptoms : ContentPage
                         {
                             x.timestamp = x.timestamp.Replace('\u202F', ' ').Trim();
 
-                            if (DateTime.TryParseExact(x.timestamp, inputFormats, ukCulture, DateTimeStyles.None, out DateTime timestamp))
-                            {
-                                allTimestamps.Add(timestamp);
-                                x.timestamp = timestamp.ToString(expectedFormat, ukCulture);
+                            //if (DateTime.TryParseExact(x.timestamp, inputFormats, ukCulture, DateTimeStyles.None, out DateTime timestamp))
+                            //{
+                            //    allTimestamps.Add(timestamp);
+                            //    x.timestamp = timestamp.ToString(expectedFormat, ukCulture);
 
-                                var ss = x.timestamp;
-                            }
-                            else
-                            {
-                                if (DateTime.TryParse(x.timestamp, out DateTime timestampp))
+                            //    var ss = x.timestamp;
+                            //}
+                            //else
+                            //{
+                                try
                                 {
-                                    allTimestamps.Add(timestampp);
+                                    if (DateTime.TryParse(x.timestamp, out DateTime timestampp))
+                                    {
+                                        allTimestamps.Add(timestampp);
+                                    }
+                                    else
+                                    {
+                                        if (DateTime.TryParseExact(x.timestamp, inputFormats, ukCulture, DateTimeStyles.None, out DateTime timestamp))
+                                        {
+                                            allTimestamps.Add(timestamp);
+                                            x.timestamp = timestamp.ToString(expectedFormat, ukCulture);
+                                            var ss = x.timestamp;
+                                        }
+                                    }
+                                }
+                                catch
+                                {
+                                    if (DateTime.TryParseExact(x.timestamp, inputFormats, ukCulture, DateTimeStyles.None, out DateTime timestamp))
+                                    {
+                                        allTimestamps.Add(timestamp);
+                                        x.timestamp = timestamp.ToString(expectedFormat, ukCulture);
+                                        var ss = x.timestamp;
+                                    }
                                 }
                             }
 
                         }
-                    }
+                    //}
                 }
                 if (allIntensities.Count > 0 && allTimestamps.Count > 0)
                 {
