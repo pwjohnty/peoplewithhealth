@@ -332,7 +332,7 @@ Text="Turn On" />
                             </Border>
 
                             <Grid x:Name="SettingsPrompt" IsVisible="False" Grid.RowDefinitions="Auto,Auto" Grid.ColumnDefinitions="*">
-                                <CarouselView  x:Name="SettingsCarousel" Loop="False"  HeightRequest="{OnPlatform iOS='120'}" IndicatorView="SettingsIND" HorizontalScrollBarVisibility="Never" Margin="20,10,20,5" Grid.Row="0" HorizontalOptions="Fill"  >
+                                <CarouselView  x:Name="SettingsCarousel" Loop="False"  HeightRequest="{OnPlatform iOS='135'}" IndicatorView="SettingsIND" HorizontalScrollBarVisibility="Never" Margin="20,10,20,5" Grid.Row="0" HorizontalOptions="Fill"  >
                                     <CarouselView.ItemTemplate>
                                         <DataTemplate>
                                             <StackLayout>
