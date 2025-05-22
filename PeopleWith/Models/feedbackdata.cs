@@ -16,6 +16,7 @@ namespace PeopleWith
         public string action { get; set; }
         public string value { get; set; }
         public string label { get; set; }
+
         public string unit { get; set; }
 
         [System.Text.Json.Serialization.JsonIgnore]

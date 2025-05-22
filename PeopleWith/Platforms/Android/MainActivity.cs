@@ -78,9 +78,9 @@ namespace PeopleWith
             AppCompatDelegate.DefaultNightMode = AppCompatDelegate.ModeNightNo;
 
             // Register the custom connectivity receiver
-            //CustomConnectivityReceiver customReceiver = new CustomConnectivityReceiver();
-            //IntentFilter intentFilter = new IntentFilter(ConnectivityManager.ConnectivityAction);
-            //RegisterReceiver(customReceiver, intentFilter);
+            CustomConnectivityReceiver customReceiver = new CustomConnectivityReceiver();
+            IntentFilter intentFilter = new IntentFilter(ConnectivityManager.ConnectivityAction);
+            RegisterReceiver(customReceiver, intentFilter);
 
 
             try

@@ -50,7 +50,7 @@ public partial class UpdateSingleSymptom : ContentPage
     bool edit;
     bool dashupdate;
     private byte[] ResizedImage;
-    public bool ShowhideImageIput = false;
+    bool ShowhideImageIput = false;
     string SymptomTitlePassed;
 
     private const string StorageConnectionString = "DefaultEndpointsProtocol=https;AccountName=peoplewithappiamges;AccountKey=9maBMGnjWp6KfOnOuXWHqveV4LPKyOnlCgtkiKQOeA+d+cr/trKApvPTdQ+piyQJlicOE6dpeAWA56uD39YJhg==;EndpointSuffix=core.windows.net";
@@ -307,7 +307,6 @@ public partial class UpdateSingleSymptom : ContentPage
             TriggersStack.IsVisible = false;
             InterventionsStack.IsVisible = false;
             CheckInput();
-
         }
         catch (Exception Ex)
         {
@@ -593,7 +592,7 @@ public partial class UpdateSingleSymptom : ContentPage
             foreach (var item in AllUserSymptoms)
             {
 
-                if (item.symptomtitle == TItlelbl.Text && item.deleted != true)
+                if (item.symptomtitle == TItlelbl.Text)
                 {
                     PassedSymptom.Add(item);
                 }

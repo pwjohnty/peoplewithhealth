@@ -62,17 +62,6 @@ namespace PeopleWith
                     // Debug messages are written to stdout with Console.Writeline,
                     // and are viewable in your IDE's debug console or with 'adb logcat', etc.
                     // Debug Mode = True/ Release = False;
-
-                    #if ANDROID
-                    options.Native.EnableActivityLifecycleBreadcrumbs = false;
-                    options.Native.EnableAppComponentBreadcrumbs = false;
-                    options.Native.EnableAppLifecycleBreadcrumbs = false;
-                    options.Native.EnableNetworkEventBreadcrumbs = false; 
-                    options.Native.EnableSystemEventBreadcrumbs = false;
-                    options.Native.EnableUserInteractionBreadcrumbs = false;
-                    #endif
-
-
                     options.Debug = false;
                     //options.EnableAndroidNativeNdk = true;
                     //options.EnableXamarinSupport = true;
@@ -86,7 +75,6 @@ namespace PeopleWith
                     options.IncludeTextInBreadcrumbs = true;
                     options.IncludeTitleInBreadcrumbs = true;
                     options.IncludeBackgroundingStateInBreadcrumbs = true;
-                    options.CaptureFailedRequests = true;
 
                 })
 
