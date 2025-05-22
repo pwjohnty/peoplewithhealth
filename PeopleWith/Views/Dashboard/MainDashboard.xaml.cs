@@ -2125,10 +2125,22 @@ public partial class MainDashboard : ContentPage
 
                     foreach (var it in item.schedule)
                     {
-                      
+
                         //Random randomm = new Random();
                         //int randomNumberr = randomm.Next(100000, 100000001);
                         //it.id = randomNumberr;
+
+                        //Handle Edited Supplement with Active true 
+
+                        if (it.active != null) 
+
+                        { 
+                            if(it.active != "true")
+                            {
+                                //Skip as its the Previous Version
+                                continue; 
+                            }
+                        }
 
 
                         var timeconverted = TimeSpan.Parse(it.time);
@@ -2603,6 +2615,18 @@ public partial class MainDashboard : ContentPage
                         //it.id = randomNumberr;
 
 
+                        //Handle Edited Medication with Active true 
+
+                        if (it.active != null)
+                        {
+                            if (it.active != "true")
+                            {
+                                //Skip as its the Previous Version
+                                continue;
+                            }
+                        }
+
+
                         var timeconverted = TimeSpan.Parse(it.time);
 
                         
@@ -2768,6 +2792,11 @@ public partial class MainDashboard : ContentPage
             if (DeviceInfo.Platform == DevicePlatform.Android)
             {
                 healthgrid.IsVisible = false; 
+            }
+            else 
+            {
+                //hidden for now
+                healthgrid.IsVisible = false;
             }
             
 
