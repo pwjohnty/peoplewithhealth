@@ -2110,20 +2110,22 @@ public partial class MainDashboard : ContentPage
 
                 foreach (var item in AllUserSupplements)
                 {
-                    foreach (var it in item.schedule)
+
+                    if (!string.IsNullOrEmpty(item.enddate))
                     {
-                        if (!string.IsNullOrEmpty(item.enddate))
+                        if (!item.frequency.Contains("As Required"))
                         {
-                            if (!item.frequency.Contains("As Required"))
+                            if (DateTime.Now.Date > DateTime.Parse(item.enddate).Date)
                             {
-                                if (DateTime.Now.Date > DateTime.Parse(item.enddate).Date)
-                                {
-                                    //Don't Add/ Run through Process
-                                    break;
-                                }
+                                //Don't Add/ Run through Process
+                                continue;
                             }
                         }
+                    }
 
+                    foreach (var it in item.schedule)
+                    {
+                      
                         //Random randomm = new Random();
                         //int randomNumberr = randomm.Next(100000, 100000001);
                         //it.id = randomNumberr;
@@ -2580,19 +2582,21 @@ public partial class MainDashboard : ContentPage
 
                 foreach (var item in AllUserMedications)
                 {
-                    foreach(var it in item.schedule)
+                    if (!string.IsNullOrEmpty(item.enddate))
                     {
-                        if (!string.IsNullOrEmpty(item.enddate))
+                        if (!item.frequency.Contains("As Required"))
                         {
-                            if (!item.frequency.Contains("As Required"))
+                            if (DateTime.Now.Date > DateTime.Parse(item.enddate).Date)
                             {
-                                if (DateTime.Now.Date > DateTime.Parse(item.enddate).Date)
-                                {
-                                    //Don't Add/ Run through Process
-                                    break;
-                                }
+                                //Don't Add/ Run through Process
+                                continue;
                             }
                         }
+                    }
+
+                    foreach (var it in item.schedule)
+                    {
+
                         //Random randomm = new Random();
                         //int randomNumberr = randomm.Next(100000, 100000001);
 
