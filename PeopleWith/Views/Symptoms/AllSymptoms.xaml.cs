@@ -118,7 +118,7 @@ public partial class AllSymptoms : ContentPage
 
             if (!addsymptom)
             {
-                SymLoading.IsVisible = true; 
+                SymLoading.IsVisible = true;
                 APICalls aPICalls = new APICalls();
 
                 var getSymptomsTask = aPICalls.GetUserSymptomAsync();
@@ -127,12 +127,12 @@ public partial class AllSymptoms : ContentPage
 
                 //if (await Task.WhenAny(getSymptomsTask, delayTask) == delayTask)
                 //{
-                   // await MopupService.Instance.PushAsync(new GettingReady("Loading Symptoms") { });
+                // await MopupService.Instance.PushAsync(new GettingReady("Loading Symptoms") { });
                 //}
 
                 AllUserSymptoms = await getSymptomsTask;
 
-                
+
             }
 
 
@@ -167,32 +167,12 @@ public partial class AllSymptoms : ContentPage
                         {
                             x.timestamp = x.timestamp.Replace('\u202F', ' ').Trim();
 
+
                             try
                             {
                                 if (DateTime.TryParse(x.timestamp, out DateTime timestampp))
                                 {
-                                    if (DateTime.TryParse(x.timestamp, out DateTime timestampp))
-                                    {
-                                        allTimestamps.Add(timestampp);
-                                    }
-                                    else
-                                    {
-                                        if (DateTime.TryParseExact(x.timestamp, inputFormats, ukCulture, DateTimeStyles.None, out DateTime timestamp))
-                                        {
-                                            allTimestamps.Add(timestamp);
-                                            x.timestamp = timestamp.ToString(expectedFormat, ukCulture);
-                                            var ss = x.timestamp;
-                                        }
-                                    }
-                                }
-                                catch
-                                {
-                                    if (DateTime.TryParseExact(x.timestamp, inputFormats, ukCulture, DateTimeStyles.None, out DateTime timestamp))
-                                    {
-                                        allTimestamps.Add(timestamp);
-                                        x.timestamp = timestamp.ToString(expectedFormat, ukCulture);
-                                        var ss = x.timestamp;
-                                    }
+                                    allTimestamps.Add(timestampp);
                                 }
                                 else
                                 {
@@ -205,7 +185,7 @@ public partial class AllSymptoms : ContentPage
                                     }
                                 }
                             }
-                            catch 
+                            catch
                             {
                                 if (DateTime.TryParseExact(x.timestamp, inputFormats, ukCulture, DateTimeStyles.None, out DateTime timestamp))
                                 {
@@ -215,141 +195,126 @@ public partial class AllSymptoms : ContentPage
                                     var ss = x.timestamp;
                                 }
                             }
-               
-
-                            //if (DateTime.TryParseExact(x.timestamp, inputFormats, ukCulture, DateTimeStyles.None, out DateTime timestamp))
-                            //{
-                            //    allTimestamps.Add(timestamp);
-                            //    x.timestamp = timestamp.ToString(expectedFormat, ukCulture);
-
-                            //    var ss = x.timestamp;
-                            //}
-                            //else
-                            //{
-                            //    if (DateTime.TryParse(x.timestamp, out DateTime timestampp))
-                            //    {
-                            //        allTimestamps.Add(timestampp);
-                            //    }
-                            //}
-
                         }
-                    //}
-                }
-                if (allIntensities.Count > 0 && allTimestamps.Count > 0)
-                {
-                    int largest = allIntensities.Max();
-                    int smallest = allIntensities.Min();
-                    double average = allIntensities.Average();
-                    DateTime lastUpdate = allTimestamps.Max();
-                    var current = item.feedback.Where(f => f.action != "deleted").OrderByDescending(f => DateTime.Parse(f.timestamp)).FirstOrDefault()?.intensity;
-                    int Score = Int32.Parse(current);
-                    var Scorelabel = "";
-                    if (Score == 0)
-                    {
-                        Scorelabel = "Absent";
                     }
-                    else if (Score > 0 && Score <= 25)
-                    {
-                        Scorelabel = "Mild";
+                
                     }
-                    else if (Score > 25 && Score <= 50)
+                    if (allIntensities.Count > 0 && allTimestamps.Count > 0)
                     {
-                        Scorelabel = "Moderate";
-                    }
-                    else if (Score > 50 && Score <= 75)
-                    {
-                        Scorelabel = "High";
-                    }
-                    else if (Score > 75 && Score <= 100)
-                    {
-                        Scorelabel = "Severe";
-                    }
-                    if (item.feedback.Count > 1)
-                    {
-                        var count = allIntensities.Count - 2;
-                        if(count == -1)
+                        int largest = allIntensities.Max();
+                        int smallest = allIntensities.Min();
+                        double average = allIntensities.Average();
+                        DateTime lastUpdate = allTimestamps.Max();
+                        var current = item.feedback.Where(f => f.action != "deleted").OrderByDescending(f => DateTime.Parse(f.timestamp)).FirstOrDefault()?.intensity;
+                        int Score = Int32.Parse(current);
+                        var Scorelabel = "";
+                        if (Score == 0)
                         {
-                            count = 0;
+                            Scorelabel = "Absent";
                         }
-                        allIntensities[count].ToString();
-                        previous = allIntensities[count].ToString();
+                        else if (Score > 0 && Score <= 25)
+                        {
+                            Scorelabel = "Mild";
+                        }
+                        else if (Score > 25 && Score <= 50)
+                        {
+                            Scorelabel = "Moderate";
+                        }
+                        else if (Score > 50 && Score <= 75)
+                        {
+                            Scorelabel = "High";
+                        }
+                        else if (Score > 75 && Score <= 100)
+                        {
+                            Scorelabel = "Severe";
+                        }
+                        if (item.feedback.Count > 1)
+                        {
+                            var count = allIntensities.Count - 2;
+                            if (count == -1)
+                            {
+                                count = 0;
+                            }
+                            allIntensities[count].ToString();
+                            previous = allIntensities[count].ToString();
+                        }
+                        else
+                        {
+                            previous = "N/A";
+                        }
+
+                        //old
+                        item.LastUpdated = lastUpdate.ToString("dd MMM");
+                        item.LastUpdatedTime = lastUpdate.ToString("HH:mm, dd MMMM yyyy");
+                        item.CurrentIntensity = current;
+                        item.Score = Scorelabel;
+                        item.LowIntensity = smallest.ToString();
+                        item.HighIntensity = largest.ToString();
+                        item.IntensityAverage = average.ToString("F0");
+                        item.PreviousIntensity = previous;
+                        //title too long, trim 
+                        var title = item.symptomtitle;
+                        if (title.Length > 30)
+                        {
+
+                            var trimtitle = item.symptomtitle;
+                            string cut = trimtitle.Substring(0, 30);
+                            item.Shorttitle = cut + "...";
+                        }
+                        else
+                        {
+                            item.Shorttitle = item.symptomtitle;
+                        }
+
+
+                    }
+                }
+
+                SymptomOverview.IsVisible = true;
+
+
+                foreach (var item in AllUserSymptoms)
+                {
+                    if (item.deleted == true)
+                    {
+                        itemstoremove.Add(item);
+                    }
+
+                    if (item.feedback.Count == 1)
+                    {
+                        item.Firstadd = true;
                     }
                     else
                     {
-                        previous = "N/A";
+                        item.Firstadd = false;
                     }
-
-                    //old
-                    item.LastUpdated = lastUpdate.ToString("dd MMM");
-                    item.LastUpdatedTime = lastUpdate.ToString("HH:mm, dd MMMM yyyy");
-                    item.CurrentIntensity = current;
-                    item.Score = Scorelabel;
-                    item.LowIntensity = smallest.ToString();
-                    item.HighIntensity = largest.ToString();
-                    item.IntensityAverage = average.ToString("F0");
-                    item.PreviousIntensity = previous;
-                    //title too long, trim 
-                    var title = item.symptomtitle;
-                    if (title.Length > 30)
-                    {
-
-                        var trimtitle = item.symptomtitle;
-                        string cut = trimtitle.Substring(0, 30);
-                        item.Shorttitle = cut + "...";
-                    }
-                    else
-                    {
-                        item.Shorttitle = item.symptomtitle;
-                    }
-
-
                 }
-            }
-
-            SymptomOverview.IsVisible = true;
-
-         
-            foreach (var item in AllUserSymptoms)
-            {
-                if (item.deleted == true)
+                foreach (var item in itemstoremove)
                 {
-                    itemstoremove.Add(item);
+                    AllUserSymptoms.Remove(item);
                 }
-
-                if(item.feedback.Count == 1)
+                if (AllUserSymptoms.Count == 0)
                 {
-                    item.Firstadd = true;
+                    EmptyStack.IsVisible = true;
+                    SymptomOverview.IsVisible = false;
+                    //NovoConsent.Margin = new Thickness(20, 300, 20, 10);
                 }
                 else
                 {
-                    item.Firstadd = false;
+                    EmptyStack.IsVisible = false;
+                    SymptomOverview.IsVisible = true;
+
+                    var orderlist = AllUserSymptoms.OrderByDescending(x => DateTime.Parse(x.LastUpdatedTime)).ToList();
+                    AllSymptomView.ItemsSource = orderlist;
+                    //NovoConsent.Margin = new Thickness(20, 0, 20, 10);
+                    //populatelsitview();
                 }
-            }
-            foreach (var item in itemstoremove)
-            {
-                AllUserSymptoms.Remove(item);
-            }
-            if (AllUserSymptoms.Count == 0)
-            {
-                EmptyStack.IsVisible = true;
-                SymptomOverview.IsVisible = false;
-                //NovoConsent.Margin = new Thickness(20, 300, 20, 10);
-            }
-            else
-            {
-                EmptyStack.IsVisible = false;
-                SymptomOverview.IsVisible = true;
+                SymLoading.IsVisible = false;
+                NovoConsentData();
+                //await MopupService.Instance.PopAllAsync(false);
 
-                var orderlist = AllUserSymptoms.OrderByDescending(x => DateTime.Parse(x.LastUpdatedTime)).ToList();
-                AllSymptomView.ItemsSource = orderlist;
-                //NovoConsent.Margin = new Thickness(20, 0, 20, 10);
-                //populatelsitview();
             }
-            SymLoading.IsVisible = false;
-            NovoConsentData();
-            //await MopupService.Instance.PopAllAsync(false);
-
-        }
+       
         catch (Exception Ex)
         {
             NotasyncMethod(Ex);
