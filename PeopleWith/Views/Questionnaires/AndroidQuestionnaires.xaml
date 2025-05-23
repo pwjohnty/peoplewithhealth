@@ -25,7 +25,7 @@
                 <CollectionView x:Name="mainquestionnaire" HeightRequest="{OnPlatform iOS=3000, Default=-1}" SizeChanged="mainquestionnaire_SizeChanged" IsVisible="False" MaximumHeightRequest="690" SelectionMode="None" BackgroundColor="#f5f5f5" ItemSizingStrategy="MeasureAllItems" VerticalScrollBarVisibility="Never" VerticalOptions="FillAndExpand" Margin="10,0,10,20"  HorizontalOptions="FillAndExpand" >
                      <!--ListView Header--> 
                     <CollectionView.Header>
-                        <Border Stroke="Transparent" BackgroundColor="Transparent"
+                        <Border Stroke="Transparent" HeightRequest="{OnPlatform iOS='140'}" BackgroundColor="Transparent"
 StrokeThickness="1" Margin="0,0,0,0" 
 StrokeShape="RoundRectangle 10" VerticalOptions="FillAndExpand"
 HorizontalOptions="FillAndExpand">
@@ -52,7 +52,7 @@ HorizontalOptions="FillAndExpand">
                     </CollectionView.Header>
 
                     <CollectionView.Footer>
-                        <StackLayout Orientation="Vertical" Margin="0,20,0,50">
+                        <StackLayout Orientation="Vertical" HeightRequest="{OnPlatform iOS='65'}" Margin="0,20,0,50">
                             <Grid Margin="10,0,10,0" x:Name="NavigationStack">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>

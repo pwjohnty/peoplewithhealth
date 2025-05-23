@@ -383,6 +383,70 @@ namespace PeopleWith
 
         }
 
+        public async Task DeleteSingleMeasurement(usermeasurement SingleMeasure)
+        {
+            try
+            {
+                var id = SingleMeasure.id;
+                var url = $"https://pwapi.peoplewith.com/api/usermeasurement/id/{id}";
+                string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = SingleMeasure.deleted });
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                ConfigureClient();
+                using (var client = new HttpClient())
+                {
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+
+                    var response = await Client.SendAsync(request);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+        }
+
+        //Update Single Measurement
+        public async Task UpdateSingleMeasurement(usermeasurement SingleMeasure)
+        {
+            try
+            {
+                var id = SingleMeasure.id;
+                var url = $"https://pwapi.peoplewith.com/api/usermeasurement/id/{id}";
+                //Update the only three possible fields to change
+                string json = System.Text.Json.JsonSerializer.Serialize(new { inputdatetime = SingleMeasure.inputdatetime, value = SingleMeasure.value, inputmethod = SingleMeasure.inputmethod });
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                ConfigureClient();
+                using (var client = new HttpClient())
+                {
+                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    {
+                        Content = content
+                    };
+
+                    var response = await Client.SendAsync(request);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+        }
+
         //Delete User Symptom 
         public async Task DeleteSymptom(ObservableCollection<usersymptom> Updatefeedback)
         {

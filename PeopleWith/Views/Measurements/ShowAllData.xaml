@@ -19,19 +19,16 @@
             <Label x:Name="measurementname" FontSize="20" Margin="0,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
 
 
-            <Label x:Name="deletelbl" FontSize="12" Text="Select items to delete" IsVisible="False" Margin="0,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Center" />
+            <Label x:Name="deletelbl" FontSize="12" Text="Select an item to edit or delete the symptom feedback"  Margin="0,5,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
 
 
-
-            <CollectionView x:Name="usermeasurementlist"
-                   VerticalScrollBarVisibility="Never"
-                            SelectionMode="Multiple"
-                            HeightRequest="650" IsEnabled="False"
+            <CollectionView x:Name="usermeasurementlist" 
+                            VerticalScrollBarVisibility="Never" SelectionMode="Single" 
+                            IsEnabled="False" Margin="0,10,1,100" HeightRequest="{OnPlatform iOS='650', Android='610'}"
                             RemainingItemsThreshold="5" SelectionChanged="usermeasurementlist_SelectionChanged"
-                         RemainingItemsThresholdReached="usermeasurementlist_RemainingItemsThresholdReached"
-                            Margin="0,10,1,100">
+                            RemainingItemsThresholdReached="usermeasurementlist_RemainingItemsThresholdReached" >
                 <CollectionView.ItemsLayout>
-                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="5"/>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="4"/>
                 </CollectionView.ItemsLayout>
 
                 <CollectionView.ItemTemplate>
@@ -84,7 +81,7 @@
 
                                     <Label Text="{Binding datechanged}" IsVisible="{Binding isnotsleepduration}" TextColor="#031926" FontSize="12" Margin="15,0,10,10" VerticalOptions="Center" HorizontalOptions="Start" Grid.Row="1" Grid.Column="0" />
 
-                                    <CheckBox Color="#031926" IsVisible="{Binding Deleteisvis}" Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Start" />
+                                    <!--<CheckBox Color="#031926" IsVisible="{Binding Deleteisvis}" Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Start" />-->
 
                                 </Grid>
                             </StackLayout>
