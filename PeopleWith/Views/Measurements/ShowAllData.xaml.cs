@@ -18,6 +18,7 @@ public partial class ShowAllData : ContentPage
     private const int PageSize = 30;
     private int currentPage = 0;
     bool isLoading = false;
+    bool IsNavigating = false; 
     APICalls aPICalls = new APICalls();
 
     ObservableCollection<usermeasurement> allusermeasurements = new ObservableCollection<usermeasurement>();
@@ -42,33 +43,33 @@ public partial class ShowAllData : ContentPage
         }
     }
 
-    protected override void OnDisappearing()
-    {
-        try
-        {
-            //Clear the Toolbar item on Back Pressed and reset to Original
-            this.ToolbarItems.Clear();
-            ToolbarItem item = new ToolbarItem
-            {
-                Text = "Edit"
+    //protected override void OnDisappearing()
+    //{
+    //    try
+    //    {
+    //        //Clear the Toolbar item on Back Pressed and reset to Original
+    //        this.ToolbarItems.Clear();
+    //        ToolbarItem item = new ToolbarItem
+    //        {
+    //            Text = "Edit"
 
-            };
+    //        };
 
-            item.Clicked += ToolbarItem_Clicked;
-            this.ToolbarItems.Add(item);
-            //edit button clicked
-            usermeasurementlist.IsEnabled = false;
-           deletelbl.IsVisible = false;
-            foreach (var items in displayedMeasurements)
-            {
-                items.Deleteisvis = false;
-            }
-        }
-        catch (Exception Ex)
-        {
-            NotasyncMethod(Ex);
-        }
-    }
+    //        item.Clicked += ToolbarItem_Clicked;
+    //        this.ToolbarItems.Add(item);
+    //        //edit button clicked
+    //        usermeasurementlist.IsEnabled = false;
+    //       deletelbl.IsVisible = false;
+    //        foreach (var items in displayedMeasurements)
+    //        {
+    //            items.Deleteisvis = false;
+    //        }
+    //    }
+    //    catch (Exception Ex)
+    //    {
+    //        NotasyncMethod(Ex);
+    //    }
+    //}
 
     public ShowAllData()
 	{
@@ -539,35 +540,35 @@ public partial class ShowAllData : ContentPage
         }
     }
 
-    private void usermeasurementlist_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private async void usermeasurementlist_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         try
         {
+            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            if (accessType == NetworkAccess.Internet)
+            {
+                if (IsNavigating) return;
+                IsNavigating = true;
+                var SelectedItem = e.CurrentSelection.FirstOrDefault() as usermeasurement;
+                if (SelectedItem != null)
+                {
+                    bool IsEditPage = true;
+                    await Navigation.PushAsync(new AddMeasurement(SelectedItem, allusermeasurements, allmeasurementlist, userfeedbacklistpassed, IsEditPage));
+                    IsNavigating = false;
+                }
+                IsNavigating = false;
 
-            //if (deletelbl.IsVisible)
-            //{
-            //    var selectedItems = e.CurrentSelection;
-
-
-            //    foreach (var selectedItem in selectedItems)
-            //    {
-            //        var item = selectedItem as usermeasurement;
-            //        if (item == null)
-            //            continue;
-
-            //        if (deleeteusermeasurementlistpassed.Contains(item))
-            //        {
-            //            deleeteusermeasurementlistpassed.Remove(item);
-            //        }
-            //        else
-            //        {
-            //            deleeteusermeasurementlistpassed.Add(item);
-            //        }
-            //    }
-            //}
+            }
+            else
+            {
+                IsNavigating = false;
+                var isConnected = accessType == NetworkAccess.Internet;
+                ConnectivityChanged?.Invoke(this, isConnected);
+            }
         }
         catch (Exception ex)
         {
+            IsNavigating = false;
             NotasyncMethod(ex);
         }
     }

@@ -21,6 +21,7 @@ public partial class AddMeasurement : ContentPage
     bool validinput;
     int HourInput = 0;
     int MinInput = 0;
+    public bool IsEditFeedback = false; 
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
@@ -186,6 +187,200 @@ public partial class AddMeasurement : ContentPage
             adddatepicker.Date = DateTime.Now;
             adddatepicker.MaximumDate = DateTime.Now;
             addtimepicker.Time = DateTime.Now.TimeOfDay;
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    public AddMeasurement(usermeasurement usermeasurementp, ObservableCollection<usermeasurement> usermeasurementsp, ObservableCollection<measurement> measurementlistpassed, userfeedback userfeedbacklist, bool EditFeedback)
+    {
+        try
+        {
+            InitializeComponent();
+
+            usermeasurementpassed = usermeasurementp;
+            usermeasurementlistpassed = usermeasurementsp;
+            measurementlist = measurementlistpassed;
+            userfeedbacklistpassed = userfeedbacklist;
+            IsEditFeedback = EditFeedback;
+
+            //Hide Unit Select. Not Needed
+            UnitGrid.IsVisible = false;
+            MeasurementReadTitle.Margin = new Thickness(0, 20, 0, 0);
+
+            measurementname.Text = "Edit " + usermeasurementpassed.measurementname;
+            measurementnamestring = usermeasurementpassed.measurementname;
+            measurementid = usermeasurementpassed.measurementid;
+
+            if (measurementnamestring == "Blood Pressure")
+            {
+                unitentryframe.IsVisible = false;
+                bpsysframe.IsVisible = true;
+                bpdiaframe.IsVisible = true;
+
+                var Value = String.Empty;
+                // Use numconverted if not null else user value
+                bool CheckBoth = usermeasurementpassed.numconverted != 0 || usermeasurementpassed.numconvertedtwo != 0;
+
+                if (CheckBoth)
+                {
+                    sysentry.Text = usermeasurementpassed.numconverted.ToString();
+                    diaentry.Text = usermeasurementpassed.numconvertedtwo.ToString();
+                }
+                else
+                {
+                    Value = usermeasurementpassed.value;
+
+                    if (!string.IsNullOrEmpty(Value))
+                    {
+                        if (Value.Contains("/"))
+                        {
+                            var splitstring = Value.Split('/');
+                            if (splitstring.Length >= 2)
+                            {
+                                sysentry.Text = splitstring[0];
+                                diaentry.Text = splitstring[1];
+                            }
+                        }
+                        else
+                        {
+                            // Do Something 
+                        }
+                    }
+                }
+            }
+
+            if (measurementnamestring == "Weight" && usermeasurementpassed.unit == "Stones/Pounds")
+            {
+                unitentryframe.IsVisible = false;
+                StonesPoundsframe.IsVisible = true;
+                stlbl.Text = "St";
+                lbslbl.Text = "lbs";
+
+                var Value = String.Empty;
+
+                // Use numconverted if not null else user value
+                Value = usermeasurementpassed.value ?? string.Empty;
+
+                if(!string.IsNullOrEmpty(Value))
+                {
+                    if (Value.Contains("."))
+                    {
+                        var splitstring = Value.Split('.');
+                        if (splitstring.Length >= 2)
+                        {
+                            Stonesentry.Text = splitstring[0];
+                            Poundsentry.Text = splitstring[1];
+                        }
+                    }
+                    else if (Value.Contains("st") && Value.Contains("lbs"))
+                    {
+                        var RemoveItems = Value.Replace("st", "").Replace("lbs", "");
+                        var splitstring = RemoveItems.Split(' ');
+                        if (splitstring.Length >= 2)
+                        {
+                            Stonesentry.Text = splitstring[0];
+                            Poundsentry.Text = splitstring[1];
+                        }
+                    }
+                    else
+                    {
+                        // Do Something 
+                    }
+                }
+               
+            }
+
+            if (measurementnamestring == "Sleep Duration")
+            {
+                unitentryframe.IsVisible = false;
+                SleepDurationFrame.IsVisible = true;
+                SleepQualFrame.IsVisible = true;
+
+                //Sleep Quality List 
+
+                List<string> SleepQual = new List<string>();
+                SleepQual.Add("Excellent");
+                SleepQual.Add("Good");
+                SleepQual.Add("Fair");
+                SleepQual.Add("Poor");
+                SleepQualitySelect.ItemsSource = SleepQual;
+
+                //Duration 
+
+                var Value = String.Empty;
+
+                // Use numconverted if not null else user value
+                Value = usermeasurementpassed.numconverted?.ToString() ?? usermeasurementpassed.value;
+
+                if (!string.IsNullOrEmpty(Value))
+                {
+                    if (Value.Contains("."))
+                    {
+                        var splitstring = Value.Split('.');
+                        if (splitstring.Length >= 2)
+                        {
+                            hoursentry.Text = splitstring[0].PadLeft(2, '0');
+                            minsentry.Text = splitstring[1].PadLeft(2, '0');
+                        }
+                    }
+                    else if (Value.Contains("h") && Value.Contains("m"))
+                    {
+                        var RemoveItems = Value.Replace("h", "").Replace("m", "");
+                        var splitstring = RemoveItems.Split(' ');
+                        if (splitstring.Length >= 2)
+                        {
+                            hoursentry.Text = splitstring[0].PadLeft(2, '0');
+                            minsentry.Text = splitstring[1].PadLeft(2, '0');
+                        }
+                    }
+                    else
+                    {
+                        // Do Something 
+                    }
+                }
+
+                //Sleep Quality if Applicable 
+                if (!string.IsNullOrEmpty(usermeasurementpassed.inputmethod))
+                {
+                    SleepQualitySelect.SelectedItem = SleepQual.FirstOrDefault(usermeasurementpassed.inputmethod); 
+                }
+
+            }
+
+            if (unitentryframe.IsVisible != false)
+            {
+                unitentry.Text = usermeasurementpassed.value; 
+            }
+            var unitstringlist = new List<string>();
+
+            unitstringlist.Add(usermeasurementpassed.unit);
+
+            unitlist.ItemsSource = unitstringlist;
+            unitlist.SelectedItem = unitstringlist[0];
+
+            inputvalue = unitstringlist[0];
+            lblentryunit.Text = unitstringlist[0];
+
+            unitentry.IsEnabled = true;
+
+
+            //Set to Date Time of Item 
+            adddatepicker.Date = DateTime.Parse(usermeasurementpassed.inputdatetime).Date;
+            adddatepicker.MaximumDate = DateTime.Now;
+            addtimepicker.Time = DateTime.Parse(usermeasurementpassed.inputdatetime).TimeOfDay;
+
+            //Update Selected items
+            SubmitBtn.Text = "Update";
+            DeleteBtn.IsVisible = true;
+
+            SubmitBtn.BackgroundColor = Color.FromArgb("#031926");
+            SubmitBtn.TextColor = Colors.White;
+            validinput = true;
+
+            //Show Delete Button
         }
         catch (Exception Ex)
         {
@@ -4809,134 +5004,139 @@ public partial class AddMeasurement : ContentPage
                 }
                 else
                 {
-                    //add new usermeasurement 
-                    var newmeasurment = new usermeasurement();
-                    string userid = Preferences.Default.Get("userid", "Unknown");
-                    newmeasurment.userid = userid;
-                    newmeasurment.measurementid = measurementid;
-                    newmeasurment.measurementname = measurementnamestring;
 
-                    if (measurementnamestring == "Blood Pressure")
+                    if (IsEditFeedback)
                     {
-                        newmeasurment.value = sysentry.Text + "/" + diaentry.Text;
-                    }
-                    else if (measurementnamestring == "Weight" && inputvalue == "Stones/Pounds")
-                    {
-
-                        newmeasurment.value = Stonesentry.Text + "." + Poundsentry.Text;
-                        //newmeasurment.value = Stonesinput + "st " + Poundsinput + "lbs";
-
-                    }
-                    else if (measurementnamestring == "Height" && inputvalue == "Feet/Inches")
-                    {
-
-                        var height = unitentry.Text.ToString();
-                        string cleanInput = height.Replace("'", "").Replace("\"", "").Trim();
-                        string[] parts = cleanInput.Split(' ');
-
-                        var feet = parts[0];
-                        var inch = parts[1];
-
-                        //Max 9' 11" 
-
-                        newmeasurment.value = feet + "." + inch;
-                    }
-                    else if (measurementnamestring == "Sleep Duration")
-                    {
-                        //Add Sleep Duration 
-                        // Add Sleep Duration
-                        int hours = int.TryParse(hoursentry.Text, out int h) ? h : 0;
-                        int minutes = int.TryParse(minsentry.Text, out int m) ? m : 00;
-
-                        string formattedHours = hours.ToString();
-
-                        // Format time as decimal string
-                        string timeString = $"{formattedHours}.{minutes:D2}";
-
-                        // Assign to measurement value
-                        newmeasurment.value = timeString;
-
-                        if (SleepQualitySelect.SelectedItem != null)
-                        {
-                            newmeasurment.inputmethod = SleepQualitySelect.SelectedItem.ToString();
-                        }
-
-                        //Add Input Value 
-                        inputvalue = "Hours/Minutes";
+                        //Edit Existing UserMeasurement
+                        EditMeasurementData();
                     }
                     else
                     {
+                        //add new usermeasurement 
+                        var newmeasurment = new usermeasurement();
+                        string userid = Preferences.Default.Get("userid", "Unknown");
+                        newmeasurment.userid = userid;
+                        newmeasurment.measurementid = measurementid;
+                        newmeasurment.measurementname = measurementnamestring;
 
-                        newmeasurment.value = unitentry.Text.ToString();
-                    }
-                    newmeasurment.unit = inputvalue;
-                    newmeasurment.status = "Active";
-                    var dt = adddatepicker.Date + addtimepicker.Time;
-                    newmeasurment.inputdatetime = dt.ToString("dd/MM/yyyy HH:mm:ss");
-
-                    //insert to db
-                    var returnedmeasurement = await aPICalls.InsertUsermeasurement(newmeasurment);
-
-                    //insert to local collection
-                    newmeasurment.id = returnedmeasurement.id;
-                    usermeasurementlistpassed.Add(newmeasurment);
-
-                    // Find the item in the measurementlist based on a condition
-                    var checkitem = measurementlist.FirstOrDefault(x => x.measurementid == newmeasurment.measurementid);
-
-                    // Check if the item exists before attempting to remove it
-                    if (checkitem != null)
-                    {
-                        // Remove the item directly from the measurementlist
-                        measurementlist.Remove(checkitem);
-                    }
-
-                    var newsym = new feedbackdata();
-                    newsym.id = newmeasurment.id;
-                    newsym.value = newmeasurment.value;
-                    newsym.datetime = newmeasurment.inputdatetime;
-                    newsym.action = "update";
-                    newsym.label = newmeasurment.measurementname;
-                    newsym.unit = inputvalue;
-
-                    if (userfeedbacklistpassed.measurementfeedbacklist == null)
-                    {
-                        userfeedbacklistpassed.measurementfeedbacklist = new ObservableCollection<feedbackdata>();
-                    }
-
-                    userfeedbacklistpassed.measurementfeedbacklist.Add(newsym);
-
-                    string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.measurementfeedbacklist);
-                    userfeedbacklistpassed.measurementfeedback = newsymJson;
-
-
-                    await aPICalls.UserfeedbackUpdateMeasurementData(userfeedbacklistpassed);
-
-
-
-
-                    await MopupService.Instance.PushAsync(new PopupPageHelper("Measurement Added") { });
-                    await Task.Delay(1500);
-                    await Navigation.PushAsync(new MeasurementsPage(usermeasurementlistpassed, measurementlist, userfeedbacklistpassed), false);
-
-                    await MopupService.Instance.PopAllAsync(false);
-
-                    var pages = Navigation.NavigationStack.ToList();
-                    int i = 0;
-                    foreach (var page in pages)
-                    {
-                        if (i == 0)
+                        if (measurementnamestring == "Blood Pressure")
                         {
+                            newmeasurment.value = sysentry.Text + "/" + diaentry.Text;
                         }
-                        else if (i == 1 || i == 2 || i == 3)
+                        else if (measurementnamestring == "Weight" && inputvalue == "Stones/Pounds")
                         {
-                            Navigation.RemovePage(page);
+
+                            newmeasurment.value = Stonesentry.Text + "." + Poundsentry.Text;
+                            //newmeasurment.value = Stonesinput + "st " + Poundsinput + "lbs";
+
+                        }
+                        else if (measurementnamestring == "Height" && inputvalue == "Feet/Inches")
+                        {
+
+                            var height = unitentry.Text.ToString();
+                            string cleanInput = height.Replace("'", "").Replace("\"", "").Trim();
+                            string[] parts = cleanInput.Split(' ');
+
+                            var feet = parts[0];
+                            var inch = parts[1];
+
+                            //Max 9' 11" 
+
+                            newmeasurment.value = feet + "." + inch;
+                        }
+                        else if (measurementnamestring == "Sleep Duration")
+                        {
+                            //Add Sleep Duration 
+                            // Add Sleep Duration
+                            int hours = int.TryParse(hoursentry.Text, out int h) ? h : 0;
+                            int minutes = int.TryParse(minsentry.Text, out int m) ? m : 00;
+
+                            string formattedHours = hours.ToString();
+
+                            // Format time as decimal string
+                            string timeString = $"{formattedHours}.{minutes:D2}";
+
+                            // Assign to measurement value
+                            newmeasurment.value = timeString;
+
+                            if (SleepQualitySelect.SelectedItem != null)
+                            {
+                                newmeasurment.inputmethod = SleepQualitySelect.SelectedItem.ToString();
+                            }
+
+                            //Add Input Value 
+                            inputvalue = "Hours/Minutes";
                         }
                         else
                         {
-                            //Navigation.RemovePage(page);
+
+                            newmeasurment.value = unitentry.Text.ToString();
                         }
-                        i++;
+                        newmeasurment.unit = inputvalue;
+                        newmeasurment.status = "Active";
+                        var dt = adddatepicker.Date + addtimepicker.Time;
+                        newmeasurment.inputdatetime = dt.ToString("dd/MM/yyyy HH:mm:ss");
+
+                        //insert to db
+                        var returnedmeasurement = await aPICalls.InsertUsermeasurement(newmeasurment);
+
+                        //insert to local collection
+                        newmeasurment.id = returnedmeasurement.id;
+                        usermeasurementlistpassed.Add(newmeasurment);
+
+                        // Find the item in the measurementlist based on a condition
+                        var checkitem = measurementlist.FirstOrDefault(x => x.measurementid == newmeasurment.measurementid);
+
+                        // Check if the item exists before attempting to remove it
+                        if (checkitem != null)
+                        {
+                            // Remove the item directly from the measurementlist
+                            measurementlist.Remove(checkitem);
+                        }
+
+                        var newsym = new feedbackdata();
+                        newsym.id = newmeasurment.id;
+                        newsym.value = newmeasurment.value;
+                        newsym.datetime = newmeasurment.inputdatetime;
+                        newsym.action = "update";
+                        newsym.label = newmeasurment.measurementname;
+                        newsym.unit = inputvalue;
+
+                        if (userfeedbacklistpassed.measurementfeedbacklist == null)
+                        {
+                            userfeedbacklistpassed.measurementfeedbacklist = new ObservableCollection<feedbackdata>();
+                        }
+
+                        userfeedbacklistpassed.measurementfeedbacklist.Add(newsym);
+
+                        string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.measurementfeedbacklist);
+                        userfeedbacklistpassed.measurementfeedback = newsymJson;
+
+                        await aPICalls.UserfeedbackUpdateMeasurementData(userfeedbacklistpassed);
+
+                        await MopupService.Instance.PushAsync(new PopupPageHelper("Measurement Added") { });
+                        await Task.Delay(1500);
+                        await Navigation.PushAsync(new MeasurementsPage(usermeasurementlistpassed, measurementlist, userfeedbacklistpassed), false);
+
+                        await MopupService.Instance.PopAllAsync(false);
+
+                        var pages = Navigation.NavigationStack.ToList();
+                        int i = 0;
+                        foreach (var page in pages)
+                        {
+                            if (i == 0)
+                            {
+                            }
+                            else if (i == 1 || i == 2 || i == 3)
+                            {
+                                Navigation.RemovePage(page);
+                            }
+                            else
+                            {
+                                //Navigation.RemovePage(page);
+                            }
+                            i++;
+                        }
                     }
                 }
 
@@ -4947,6 +5147,136 @@ public partial class AddMeasurement : ContentPage
                 var isConnected = accessType == NetworkAccess.Internet;
                 ConnectivityChanged?.Invoke(this, isConnected);
             }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    private async void EditMeasurementData()
+    {
+        try
+        {
+            //add new usermeasurement 
+            var newmeasurment = new usermeasurement();
+            string userid = Preferences.Default.Get("userid", "Unknown");
+            newmeasurment.userid = userid;
+            newmeasurment.measurementid = usermeasurementpassed.id;
+            newmeasurment.measurementname = usermeasurementpassed.measurementname;
+
+            if (measurementnamestring == "Blood Pressure")
+            {
+                newmeasurment.value = sysentry.Text + "/" + diaentry.Text;
+            }
+            else if (measurementnamestring == "Weight" && inputvalue == "Stones/Pounds")
+            {
+
+                newmeasurment.value = Stonesentry.Text + "." + Poundsentry.Text;
+                //newmeasurment.value = Stonesinput + "st " + Poundsinput + "lbs";
+
+            }
+            else if (measurementnamestring == "Height" && inputvalue == "Feet/Inches")
+            {
+
+                var height = unitentry.Text.ToString();
+                string cleanInput = height.Replace("'", "").Replace("\"", "").Trim();
+                string[] parts = cleanInput.Split(' ');
+
+                var feet = parts[0];
+                var inch = parts[1];
+
+                //Max 9' 11" 
+
+                newmeasurment.value = feet + "." + inch;
+            }
+            else if (measurementnamestring == "Sleep Duration")
+            {
+                //Add Sleep Duration 
+                // Add Sleep Duration
+                int hours = int.TryParse(hoursentry.Text, out int h) ? h : 0;
+                int minutes = int.TryParse(minsentry.Text, out int m) ? m : 00;
+
+                string formattedHours = hours.ToString();
+
+                // Format time as decimal string
+                string timeString = $"{formattedHours}.{minutes:D2}";
+
+                // Assign to measurement value
+                newmeasurment.value = timeString;
+
+                if (SleepQualitySelect.SelectedItem != null)
+                {
+                    newmeasurment.inputmethod = SleepQualitySelect.SelectedItem.ToString();
+                }
+                //Add Input Value 
+                inputvalue = "Hours/Minutes";
+            }
+            else
+            {
+
+                newmeasurment.value = unitentry.Text.ToString();
+            }
+
+            newmeasurment.status = "Active";
+            var dt = adddatepicker.Date + addtimepicker.Time;
+
+            //Update the 3 possible changes 
+            newmeasurment.inputdatetime = dt.ToString("dd/MM/yyyy HH:mm:ss");
+
+            usermeasurementpassed.value = newmeasurment.value;
+            usermeasurementpassed.inputmethod = newmeasurment.inputmethod;
+            usermeasurementpassed.inputdatetime = newmeasurment.inputdatetime;
+
+
+
+            //Update UserFeedback 
+
+            APICalls database = new APICalls();
+            //Set Deleted to True in UserMedication
+            await database.UpdateSingleMeasurement(usermeasurementpassed);
+
+
+            //Update UserFeedback
+            var Feedbacktoupdate = userfeedbacklistpassed.measurementfeedbacklist.FirstOrDefault(x => x.id == usermeasurementpassed.id);
+
+            if (Feedbacktoupdate != null)
+            {
+                Feedbacktoupdate.datetime = usermeasurementpassed.inputdatetime;
+                Feedbacktoupdate.value = usermeasurementpassed.value; 
+            }
+
+            string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.measurementfeedbacklist);
+            userfeedbacklistpassed.measurementfeedback = newsymJson;
+
+            await database.UserfeedbackUpdateMeasurementData(userfeedbacklistpassed);
+
+            await MopupService.Instance.PushAsync(new PopupPageHelper("Measurement Feedback Updated") { });
+
+            await Task.Delay(1000);
+            await Navigation.PushAsync(new MeasurementsPage());
+            await MopupService.Instance.PopAllAsync(false);
+
+            var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is SingleMeasurement);
+            var pageToRemove = Navigation.NavigationStack.FirstOrDefault(x => x is MeasurementsPage);
+            var pageToRemovess = Navigation.NavigationStack.FirstOrDefault(x => x is ShowAllData);
+
+            if (pageToRemoves != null)
+            {
+                Navigation.RemovePage(pageToRemoves);
+            }
+            if (pageToRemove != null)
+            {
+                Navigation.RemovePage(pageToRemove);
+            }
+            if (pageToRemovess != null)
+            {
+                Navigation.RemovePage(pageToRemovess);
+            }
+
+            //Removes Show All 
+            Navigation.RemovePage(this);
+
         }
         catch (Exception Ex)
         {
@@ -5505,5 +5835,75 @@ public partial class AddMeasurement : ContentPage
     private void SleepQualitySelect_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
     {
 
+    }
+
+    private async void DeleteBtn_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            //Remove item from [usermeasurement]
+
+            var userresponse = await DisplayAlert("Confirm Delete", "Are you sure you want to delete this Measurement Feedback? Once deleted it cannot be retrieved", "Cancel", "Delete");
+
+            if (!userresponse)
+            {
+
+                usermeasurementpassed.deleted = true;
+
+                APICalls database = new APICalls();
+                //Set Deleted to True in UserMedication
+                await database.DeleteSingleMeasurement(usermeasurementpassed);
+
+                var remove = userfeedbacklistpassed.measurementfeedbacklist.FirstOrDefault(x => x.id == usermeasurementpassed.id);
+
+                if (remove != null)
+                {
+                    remove.action = "deleted";
+                }
+
+                //Set Deleted to True in UserFeedback measurementfeedback
+                string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.measurementfeedbacklist);
+                userfeedbacklistpassed.measurementfeedback = newsymJson;
+
+
+                await database.UserfeedbackUpdateMeasurementData(userfeedbacklistpassed);
+
+                await MopupService.Instance.PushAsync(new PopupPageHelper("Measurement Feedback Deleted") { });
+
+                await Task.Delay(1000);
+                await Navigation.PushAsync(new MeasurementsPage());
+                await MopupService.Instance.PopAllAsync(false);
+
+                var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is SingleMeasurement);
+                var pageToRemove = Navigation.NavigationStack.FirstOrDefault(x => x is MeasurementsPage);
+                var pageToRemovess = Navigation.NavigationStack.FirstOrDefault(x => x is ShowAllData);
+
+                if (pageToRemoves != null)
+                {
+                    Navigation.RemovePage(pageToRemoves);
+                }
+                if (pageToRemove != null)
+                {
+                    Navigation.RemovePage(pageToRemove);
+                }
+                if (pageToRemovess != null)
+                {
+                    Navigation.RemovePage(pageToRemovess);
+                }
+
+                //Removes Show All 
+                Navigation.RemovePage(this);
+
+            }
+            else
+            {
+                return; 
+            }
+        }
+
+        catch (Exception ex)
+        {
+
+        }
     }
 }
