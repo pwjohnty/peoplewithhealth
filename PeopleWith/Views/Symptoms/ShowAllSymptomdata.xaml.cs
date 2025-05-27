@@ -12,6 +12,12 @@ public partial class ShowAllSymptomData : ContentPage
     ObservableCollection<symptomfeedback> SymptomFeedback = new ObservableCollection<symptomfeedback>();
     ObservableCollection<symptomfeedback> Feedbacksymptom = new ObservableCollection<symptomfeedback>();
     ObservableCollection<symptomfeedback> itemstoremove = new ObservableCollection<symptomfeedback>();
+    ObservableCollection<symptomfeedback> CollectionViewData = new ObservableCollection<symptomfeedback>();
+    ObservableCollection<symptomfeedback> DatatoDisplay = new ObservableCollection<symptomfeedback>();
+
+    private const int PageSize = 30;
+    private int currentPage = 0;
+    int currentIndex = 0;
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
@@ -158,9 +164,18 @@ public partial class ShowAllSymptomData : ContentPage
                 }
             }
 
-            AllDataLV.ItemsSource = orderlist;
+           // AllDataLV.ItemsSource = orderlist;
+            CollectionViewData = orderlist.ToObservable();
+
+            DatatoDisplay.Clear();
+            currentIndex = 0;
+            LoadMoreItems(); // load the first batch
+            AllDataLV.ItemsSource = DatatoDisplay;
+
             Task.Delay(2000);
             ShowAllloading.IsVisible = false;
+
+
             //AllDataLV.HeightRequest = SymptomFeedback.Count * 120; 
         }
         catch (Exception Ex)
@@ -449,6 +464,90 @@ public partial class ShowAllSymptomData : ContentPage
         catch (Exception Ex)
         {
             NotasyncMethod(Ex);
+        }
+    }
+
+    private async void AllDataLV_SelectionChanged(object sender, Microsoft.Maui.Controls.SelectionChangedEventArgs e)
+    {
+        try
+        {
+            var Symptom = e.CurrentSelection.FirstOrDefault() as symptomfeedback;
+            bool DeleteVisible = SymptomFeedback.Any(f => f.DeleteCheck);
+            if (DeleteVisible == true)
+            {
+                foreach (var item in SymptomFeedback)
+                {
+                    if (SymptomFeedback[0].symptomfeedbackid == Symptom.symptomfeedbackid)
+                    {
+                        await DisplayAlert("Inital Feedback", "This Feedback cannot be Edited or Deleted", "Close");
+                        return;
+                    }
+                    if (item.symptomfeedbackid == Symptom.symptomfeedbackid)
+                    {
+                        if (item.DeleteSelected == true)
+                        {
+                            item.DeleteSelected = false;
+                        }
+                        else
+                        {
+                            item.DeleteSelected = true;
+                        }
+
+                    }
+                }
+            }
+            else
+            {
+                if (SymptomFeedback[0].symptomfeedbackid == Symptom.symptomfeedbackid)
+                {
+                    await DisplayAlert("Inital Feedback", "This Feedback cannot be Edited or Deleted", "Close");
+                    return;
+                }
+                else
+                {
+                    await Navigation.PushAsync(new UpdateSingleSymptom(SymptomPassed, Symptom.symptomfeedbackid, AllSymptomsData, userfeedbacklistpassed, "editpage"));
+                    return;
+                }
+            }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    void LoadMoreItems()
+    {
+        try
+        {
+
+            var itemsToLoad = CollectionViewData.Skip(currentPage * PageSize).Take(PageSize).ToList();
+
+            foreach (var item in itemsToLoad)
+                DatatoDisplay.Add(item);
+
+            currentPage++;
+
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    private void AllDataLV_RemainingItemsThresholdReached(object sender, EventArgs e)
+    {
+        try
+        {
+            // Load next page
+            if ((currentPage * PageSize) < CollectionViewData.Count)
+            {
+                LoadMoreItems();
+            }
+        }
+        catch (Exception ex)
+        {
+
         }
     }
 }

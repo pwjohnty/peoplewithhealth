@@ -445,8 +445,16 @@ public partial class UpdateSingleSymptom : ContentPage
                     }
                     else
                     {
+                        //Set it to the same URL 
                         var SingleFeedback = PassedSymptom[0].feedback.FirstOrDefault(item => item.symptomfeedbackid == EditAdd) ?? new symptomfeedback();                     
                         ImageFileName = SingleFeedback.symptomimage; 
+
+                        //else if null, New item to add
+                        if(ImageFileName == null)
+                        {
+                            ImageFileName = Filename;
+                        }
+                      
                     }
                   
                     TakeImageStack.IsVisible = false;
