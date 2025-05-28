@@ -15,15 +15,9 @@
         <Label Text="Select Unit" FontSize="20" Margin="0,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
         <Label Text="Please select the unit of measurement from the options" FontSize="12" Margin="0,0,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
 
-            <Grid VerticalOptions="Center" HorizontalOptions="StartAndExpand">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="80"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/> 
-                </Grid.ColumnDefinitions>
-    
-            <syncfusion:SfListView x:Name="unitlist" Grid.Row="0" Grid.Column="0" ItemTapped="unitlist_ItemTapped" AutoFitMode="Height" ScrollBarVisibility="Never" IsVisible="True" BackgroundColor="Transparent" 
+                <Grid VerticalOptions="Center" Margin="-5,35,0,0" HorizontalOptions="StartAndExpand" Grid.RowDefinitions="80" Grid.ColumnDefinitions="*">
+
+                    <syncfusion:SfListView x:Name="unitlist" Grid.Row="0" Grid.Column="0" ItemTapped="unitlist_ItemTapped" AutoFitMode="Height" ScrollBarVisibility="Never" IsVisible="True" BackgroundColor="Transparent" 
                        SelectionMode="Single" Orientation="Horizontal" HorizontalOptions="StartAndExpand" VerticalOptions="Start" Padding="5" Margin="0">
                 <syncfusion:SfListView.ItemTemplate>
                     <DataTemplate>

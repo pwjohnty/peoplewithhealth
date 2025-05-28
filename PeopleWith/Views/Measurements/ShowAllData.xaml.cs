@@ -550,6 +550,17 @@ public partial class ShowAllData : ContentPage
                 if (IsNavigating) return;
                 IsNavigating = true;
                 var SelectedItem = e.CurrentSelection.FirstOrDefault() as usermeasurement;
+
+                //Stops Code Running again when selected
+                if (SelectedItem == null)
+                {
+                    IsNavigating = false;
+                    return;
+                }
+
+                // Stops code from running again 
+                usermeasurementlist.SelectedItem = null;
+
                 if (SelectedItem != null)
                 {
                     bool IsEditPage = true;

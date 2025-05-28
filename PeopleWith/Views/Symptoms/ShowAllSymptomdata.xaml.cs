@@ -4,6 +4,7 @@ using Syncfusion.Maui.Core.Carousel;
 using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
 using Microsoft.Maui.Networking;
+using Microsoft.Maui.Controls.PlatformConfiguration;
 namespace PeopleWith;
 public partial class ShowAllSymptomData : ContentPage
 {
@@ -94,7 +95,7 @@ public partial class ShowAllSymptomData : ContentPage
             AllSymptomsData = AllSymptoms;
             ShowAllTitle.Text = SymptomPassed[0].Shorttitle;
             userfeedbacklistpassed = userfeedbacklist;
-            ShowAllloading.IsVisible = true; 
+            ShowAllloading.IsVisible = true;
             foreach (var item in SymptomFeedback)
             {
                 item.OtherBool = false;
@@ -150,12 +151,13 @@ public partial class ShowAllSymptomData : ContentPage
             ShowImageHeader.IsVisible = CheckForTrue;
             GalleryBtn.IsVisible = CheckForTrue;
 
-           foreach(var item in orderlist)
+            foreach (var item in orderlist)
             {
                 if (CheckForTrue)
                 {
                     item.ImageShowAll = true;
                     item.NormalShowAll = false;
+
                 }
                 else
                 {
@@ -164,7 +166,7 @@ public partial class ShowAllSymptomData : ContentPage
                 }
             }
 
-           // AllDataLV.ItemsSource = orderlist;
+            // AllDataLV.ItemsSource = orderlist;
             CollectionViewData = orderlist.ToObservable();
 
             DatatoDisplay.Clear();
@@ -174,6 +176,20 @@ public partial class ShowAllSymptomData : ContentPage
 
             Task.Delay(2000);
             ShowAllloading.IsVisible = false;
+
+            //Check All is true Resize 
+
+            if (CheckForTrue)
+            {
+                if (DeviceInfo.Platform == DevicePlatform.iOS)
+                {
+                    AllDataLV.HeightRequest = 580;
+                }
+                else if (DeviceInfo.Platform == DevicePlatform.Android)
+                {
+                    AllDataLV.HeightRequest = 515;
+                }
+            }
 
 
             //AllDataLV.HeightRequest = SymptomFeedback.Count * 120; 
@@ -472,6 +488,10 @@ public partial class ShowAllSymptomData : ContentPage
         try
         {
             var Symptom = e.CurrentSelection.FirstOrDefault() as symptomfeedback;
+
+            //Stops Code Running again when selected items set to null
+            if (Symptom == null)  return;
+
             bool DeleteVisible = SymptomFeedback.Any(f => f.DeleteCheck);
             if (DeleteVisible == true)
             {
@@ -480,6 +500,8 @@ public partial class ShowAllSymptomData : ContentPage
                     if (SymptomFeedback[0].symptomfeedbackid == Symptom.symptomfeedbackid)
                     {
                         await DisplayAlert("Inital Feedback", "This Feedback cannot be Edited or Deleted", "Close");
+                        // So user can click on same item
+                        AllDataLV.SelectedItem = null;
                         return;
                     }
                     if (item.symptomfeedbackid == Symptom.symptomfeedbackid)
@@ -500,11 +522,15 @@ public partial class ShowAllSymptomData : ContentPage
             {
                 if (SymptomFeedback[0].symptomfeedbackid == Symptom.symptomfeedbackid)
                 {
+                    // So user can click on same item
+                    AllDataLV.SelectedItem = null;
                     await DisplayAlert("Inital Feedback", "This Feedback cannot be Edited or Deleted", "Close");
                     return;
                 }
                 else
                 {
+                    // Stops Code from Running again
+                    AllDataLV.SelectedItem = null;
                     await Navigation.PushAsync(new UpdateSingleSymptom(SymptomPassed, Symptom.symptomfeedbackid, AllSymptomsData, userfeedbacklistpassed, "editpage"));
                     return;
                 }
