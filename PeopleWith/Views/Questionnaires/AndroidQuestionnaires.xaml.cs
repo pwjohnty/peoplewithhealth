@@ -424,6 +424,7 @@ public partial class AndroidQuestionnaires : ContentPage
                 completedquestionnaire.IsVisible = true;
                 CompletedQuestionView.IsVisible = true; 
                 completedquestionnaire.ItemsSource = questionnairefromlist.questionanswerjsonlist;
+                completedquestionnaire.HeightRequest = questionnairefromlist.questionanswerjsonlist.Count * 180;
                 //completedquestionnaire.MaximumHeightRequest = 1500;
                 //completedquestionnaire.HeightRequest = CalculateHeight();
 

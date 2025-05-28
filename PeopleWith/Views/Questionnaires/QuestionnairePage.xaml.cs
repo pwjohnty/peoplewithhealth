@@ -368,7 +368,7 @@ public partial class QuestionnairePage : ContentPage
             {
                 completedquestionnaire.IsVisible = true;
                 completedquestionnaire.ItemsSource = questionnairefromlist.questionanswerjsonlist;
-
+                completedquestionnaire.HeightRequest = questionnairefromlist.questionanswerjsonlist.Count * 100;
             }
             else
             {

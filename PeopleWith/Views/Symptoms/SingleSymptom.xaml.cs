@@ -630,7 +630,7 @@ public partial class SingleSymptom : ContentPage
             // Open the popup and pass the TaskCompletionSource
             string Data = "Loading Symptom Data...";
             string Orange = "Orange";
-            await MopupService.Instance.PushAsync(new GettingReady(Data, Orange));
+         //   await MopupService.Instance.PushAsync(new GettingReady(Data, Orange));
             var allfeedback = new ObservableCollection<symptomfeedback>();
 
             foreach (var item in PassedSymptom[0].feedback)
@@ -645,7 +645,7 @@ public partial class SingleSymptom : ContentPage
             await Navigation.PushAsync(new ShowAllSymptomData(PassedSymptom, allfeedback, AllSymptomData, userfeedbacklistpassed), false);
 
 
-            await MopupService.Instance.PopAllAsync(false);
+        //    await MopupService.Instance.PopAllAsync(false);
             //MainStack.Opacity = 1;
             //MainStack.IsEnabled = true;
             //ShowAllloading.IsVisible = false;
