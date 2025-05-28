@@ -257,7 +257,7 @@ HorizontalOptions="FillAndExpand">
                 </CollectionView>
             </ScrollView>
           
-                <ScrollView x:Name="CompletedQuestionView" IsVisible="False" Orientation="Vertical" InputTransparent="False" VerticalScrollBarVisibility="Never">
+                <ScrollView x:Name="CompletedQuestionView" IsVisible="False" BackgroundColor="Transparent" Orientation="Vertical" InputTransparent="False" VerticalScrollBarVisibility="Never">
                 <CollectionView  x:Name="completedquestionnaire" SizeChanged="completedquestionnaire_SizeChanged" MaximumHeightRequest="680" IsVisible="False" SelectionMode="None"  BackgroundColor="#f5f5f5"  VerticalScrollBarVisibility="Never" VerticalOptions="FillAndExpand"  Margin="10,0,10,20"  HorizontalOptions="FillAndExpand" >
                     <!-- ListView Header -->
                     <CollectionView.Header>
