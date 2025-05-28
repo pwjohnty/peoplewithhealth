@@ -227,14 +227,15 @@ public partial class MainDashboard : ContentPage
 
             signupcodecollection = await database.GetUserSignUpCodeInfo(Helpers.Settings.SignUp);
 
-
-            if (signupcodecollection != null)
+            if (signupcodecollection.Count > 0)
             {
+
                 var getimagesource = new Uri("https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/" + signupcodecollection[0].dashboardimage);
 
                 maindashimage.Source = ImageSource.FromUri(getimagesource);
                 maindashimage2.Source = ImageSource.FromUri(getimagesource);
 
+               
                 signuptitlelbl.Text = signupcodecollection[0].title;
 
                 if (signupcodecollection[0].appdescription.Length > 600)
@@ -319,7 +320,13 @@ public partial class MainDashboard : ContentPage
             }
             else
             {
-                //infotab.IsVisible = false;
+                infotab.IsVisible = false;
+
+                var getimagesource = new Uri("https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/PeopleWithApp-AppImage-TemplateNov24.png");
+
+                maindashimage.Source = ImageSource.FromUri(getimagesource);
+
+                return;
             }
 
 

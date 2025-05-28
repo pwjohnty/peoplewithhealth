@@ -5254,7 +5254,7 @@ public partial class AddMeasurement : ContentPage
             await MopupService.Instance.PushAsync(new PopupPageHelper("Measurement Feedback Updated") { });
 
             await Task.Delay(1000);
-            await Navigation.PushAsync(new MeasurementsPage());
+            await Navigation.PushAsync(new MeasurementsPage(usermeasurementlistpassed, measurementlist, userfeedbacklistpassed), false);
             await MopupService.Instance.PopAllAsync(false);
 
             var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is SingleMeasurement);
@@ -5871,7 +5871,8 @@ public partial class AddMeasurement : ContentPage
                 await MopupService.Instance.PushAsync(new PopupPageHelper("Measurement Feedback Deleted") { });
 
                 await Task.Delay(1000);
-                await Navigation.PushAsync(new MeasurementsPage());
+
+                await Navigation.PushAsync(new MeasurementsPage(usermeasurementlistpassed, measurementlist, userfeedbacklistpassed), false);
                 await MopupService.Instance.PopAllAsync(false);
 
                 var pageToRemoves = Navigation.NavigationStack.FirstOrDefault(x => x is SingleMeasurement);
