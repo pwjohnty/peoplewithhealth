@@ -355,6 +355,12 @@ namespace PeopleWith
         [System.Text.Json.Serialization.JsonIgnore]
         public Color ListBackgroundColor { get; set; }
 
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool ARrecordedlbl { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string ARdosagelbl { get; set; }
+
 
 
         // event handler for updating the list views

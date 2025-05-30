@@ -152,6 +152,7 @@ Text="As Required Medications/Supplements" />
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="80*"/>
@@ -188,6 +189,9 @@ Text="As Required Medications/Supplements" />
                                                 <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1"/>
                                             </local:ExtendedImage.GestureRecognizers>
                                         </local:ExtendedImage>
+
+                                        <Label Text="{Binding ARdosagelbl}" IsVisible="{Binding ARrecordedlbl}" HorizontalOptions="Start" VerticalOptions="Start" FontFamily="HankenGroteskBold"  FontSize="14" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" Margin="10,0,0,0" TextColor="Teal" />
+
 
                                     </Grid>
                                 </Frame>

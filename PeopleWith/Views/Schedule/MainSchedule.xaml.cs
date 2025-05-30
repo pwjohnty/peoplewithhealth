@@ -1208,6 +1208,7 @@ public partial class MainSchedule : ContentPage
                                     med.Buttonop = 1;
                                     med.Buttonntop = 0.2;
                                     med.AsReqHidelbl = true;
+                                    med.ARrecordedlbl = false;
                                 }
                                 else if(getfeedbackitem.Recorded == "Not Taken")
                                 {
@@ -1216,6 +1217,7 @@ public partial class MainSchedule : ContentPage
                                     med.Buttonop = 0.2;
                                     med.Buttonntop = 1;
                                     med.AsReqHidelbl = true;
+                                    med.ARrecordedlbl = false;
                                 }
                                 else
                                 {
@@ -1223,6 +1225,9 @@ public partial class MainSchedule : ContentPage
                                     med.Buttonop = 1;
                                     med.Buttonntop = 0;
                                     med.AsReqHidelbl = false;
+                                    med.ARrecordedlbl = true;
+                                    string timePart = getfeedbackitem.datetime.Substring(0, 5);
+                                    med.ARdosagelbl = "Recorded at: " + timePart;
                                 }
                             }
                             else
@@ -1231,6 +1236,7 @@ public partial class MainSchedule : ContentPage
                                 med.Buttonop = 0.2;
                                 med.Buttonntop = 0.2;
                                 med.AsReqHidelbl = true;
+                                med.ARrecordedlbl = false;
                             }
                         }
                         else
@@ -1239,6 +1245,7 @@ public partial class MainSchedule : ContentPage
                             med.Buttonop = 0.2;
                             med.Buttonntop = 0.2;
                             med.AsReqHidelbl = true;
+                            med.ARrecordedlbl = false;
                         }
                     }
                     else
@@ -1271,6 +1278,7 @@ public partial class MainSchedule : ContentPage
                                     med.Buttonop = 1;
                                     med.Buttonntop = 0.2;
                                     med.AsReqHidelbl = true;
+                                    med.ARrecordedlbl = false;
                                 }
                                 else if(getfeedbackitemsupp.Recorded == "Not Taken")
                                 {
@@ -1278,6 +1286,7 @@ public partial class MainSchedule : ContentPage
                                     med.Buttonop = 0.2;
                                     med.Buttonntop = 1;
                                     med.AsReqHidelbl = true;
+                                    med.ARrecordedlbl = false;
                                 }
                                 else
                                 {
@@ -1285,6 +1294,9 @@ public partial class MainSchedule : ContentPage
                                     med.Buttonop = 1;
                                     med.Buttonntop = 0;
                                     med.AsReqHidelbl = false;
+                                    med.ARrecordedlbl = true;
+                                    string timePart = getfeedbackitemsupp.datetime.Substring(0, 5);
+                                    med.ARdosagelbl = "Recorded at: " + timePart;
                                 }
                             }
                             else
@@ -1293,6 +1305,7 @@ public partial class MainSchedule : ContentPage
                                 med.Buttonop = 0.2;
                                 med.Buttonntop = 0.2;
                                 med.AsReqHidelbl = true;
+                                med.ARrecordedlbl = false;
                             }
                         }
                         else
@@ -1301,6 +1314,7 @@ public partial class MainSchedule : ContentPage
                             med.Buttonop = 0.2;
                             med.Buttonntop = 0.2;
                             med.AsReqHidelbl = true;
+                            med.ARrecordedlbl = false;
                         }
                     }
 
@@ -3627,6 +3641,7 @@ item.schedule
                                     med.Buttonop = 1;
                                     med.Buttonntop = 0.2;
                                     med.AsReqHidelbl = true;
+                                    med.ARrecordedlbl = false;
                                 }
                                 else if (getfeedbackitem.Recorded == "Not Taken")
                                 {
@@ -3635,6 +3650,7 @@ item.schedule
                                     med.Buttonop = 0.2;
                                     med.Buttonntop = 1;
                                     med.AsReqHidelbl = true;
+                                    med.ARrecordedlbl = false;
                                 }
                                 else
                                 {
@@ -3642,6 +3658,9 @@ item.schedule
                                     med.Buttonop = 1;
                                     med.Buttonntop = 0;
                                     med.AsReqHidelbl = false;
+                                    med.ARrecordedlbl = true;
+                                    string timePart = getfeedbackitem.datetime.Substring(0, 5);
+                                    med.ARdosagelbl = "Recorded at: " + timePart;
                                 }
                             }
                             else
@@ -3650,6 +3669,7 @@ item.schedule
                                 med.Buttonop = 0.2;
                                 med.Buttonntop = 0.2;
                                 med.AsReqHidelbl = true;
+                                med.ARrecordedlbl = false;
                             }
                         }
                         else
@@ -3658,6 +3678,7 @@ item.schedule
                             med.Buttonop = 0.2;
                             med.Buttonntop = 0.2;
                             med.AsReqHidelbl = true;
+                            med.ARrecordedlbl = false;
                         }
                     }
                     else
@@ -3690,6 +3711,7 @@ item.schedule
                                     med.Buttonop = 1;
                                     med.Buttonntop = 0.2;
                                     med.AsReqHidelbl = true;
+                                    med.ARrecordedlbl = false;
                                 }
                                 else if (getfeedbackitemsupp.Recorded == "Not Taken")
                                 {
@@ -3697,6 +3719,7 @@ item.schedule
                                     med.Buttonop = 0.2;
                                     med.Buttonntop = 1;
                                     med.AsReqHidelbl = true;
+                                    med.ARrecordedlbl = false;
                                 }
                                 else
                                 {
@@ -3704,6 +3727,9 @@ item.schedule
                                     med.Buttonop = 1;
                                     med.Buttonntop = 0;
                                     med.AsReqHidelbl = false;
+                                    med.ARrecordedlbl = true;
+                                    string timePart = getfeedbackitemsupp.datetime.Substring(0, 5);
+                                    med.ARdosagelbl = "Recorded at: " + timePart;
                                 }
                             }
                             else
@@ -3712,6 +3738,7 @@ item.schedule
                                 med.Buttonop = 0.2;
                                 med.Buttonntop = 0.2;
                                 med.AsReqHidelbl = true;
+                                med.ARrecordedlbl = false;
                             }
                         }
                         else
@@ -3720,6 +3747,7 @@ item.schedule
                             med.Buttonop = 0.2;
                             med.Buttonntop = 0.2;
                             med.AsReqHidelbl = true;
+                            med.ARrecordedlbl = false;
                         }
                     }
 
