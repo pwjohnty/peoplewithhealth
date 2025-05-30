@@ -60,6 +60,9 @@ public partial class WH : ContentPage
     ObservableCollection<answer> GetAnswers = new ObservableCollection<answer>();
     ObservableCollection<answer> GetCommPref = new ObservableCollection<answer>();
 
+    private List<symptom> previousSelection = new();
+    private List<medication> Selectionprevious = new();
+
     ObservableCollection<usermeasurement> addusermeasurements = new ObservableCollection<usermeasurement>();
     userfeedback UserFeedbackToAdd = new userfeedback();
     userdiet DietToAdd = new userdiet(); 
@@ -1767,46 +1770,46 @@ public partial class WH : ContentPage
         }
     }
 
-    private void additionlsymlist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
-    {
-        try
-        {
-            //additional symptom list tapped
+    //private void additionlsymlist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
+    //{
+    //    try
+    //    {
+    //        //additional symptom list tapped
 
-            var item = e.DataItem as symptom;
+    //        var item = e.DataItem as symptom;
 
-            searchsymsentry.IsEnabled = false;
-            searchsymsentry.IsEnabled = true;
+    //        searchsymsentry.IsEnabled = false;
+    //        searchsymsentry.IsEnabled = true;
 
-            // Convert the selected item to a ChipItem
-            if (additionalfilteredsymptomlist.Contains(item))
-            {
-                additionalfilteredsymptomlist.Remove(item);
-                symptomchipselectedlist.Remove(item);
-            }
-            else
-            {
+    //        // Convert the selected item to a ChipItem
+    //        if (additionalfilteredsymptomlist.Contains(item))
+    //        {
+    //            additionalfilteredsymptomlist.Remove(item);
+    //            symptomchipselectedlist.Remove(item);
+    //        }
+    //        else
+    //        {
 
-                additionalfilteredsymptomlist.Add(item);
-                symptomchipselectedlist.Add(item);
-            }
+    //            additionalfilteredsymptomlist.Add(item);
+    //            symptomchipselectedlist.Add(item);
+    //        }
 
-            if (additionalfilteredsymptomlist.Count == 0)
-            {
-                addlbl1.IsVisible = false;
-                additionalsymptomchiplistnrat.IsVisible = false;
-            }
-            else
-            {
-                addlbl1.IsVisible = true;
-                additionalsymptomchiplistnrat.IsVisible = true;
-            }
-        }
-        catch (Exception Ex)
-        {
-            NotasyncMethod(Ex);
-        }
-    }
+    //        if (additionalfilteredsymptomlist.Count == 0)
+    //        {
+    //            addlbl1.IsVisible = false;
+    //            additionalsymptomchiplistnrat.IsVisible = false;
+    //        }
+    //        else
+    //        {
+    //            addlbl1.IsVisible = true;
+    //            additionalsymptomchiplistnrat.IsVisible = true;
+    //        }
+    //    }
+    //    catch (Exception Ex)
+    //    {
+    //        NotasyncMethod(Ex);
+    //    }
+    //}
 
     private void searchmedentry_TextChanged(object sender, TextChangedEventArgs e)
     {
@@ -1857,48 +1860,48 @@ public partial class WH : ContentPage
         }
     }
 
-    private async void additionlmedlist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
-    {
-        try
-        {
-            //additional symptom list tapped
+    //private async void additionlmedlist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
+    //{
+    //    try
+    //    {
+    //        //additional symptom list tapped
 
-            var item = e.DataItem as medication;
+    //        var item = e.DataItem as medication;
 
-            searchmedentry.IsEnabled = false;
-            searchmedentry.IsEnabled = true;
+    //        searchmedentry.IsEnabled = false;
+    //        searchmedentry.IsEnabled = true;
 
-            // Convert the selected item to a ChipItem
-            if (additionalfilteredmedicationlist.Contains(item))
-            {
-                additionalfilteredmedicationlist.Remove(item);
-                medicationchipselectedlist.Remove(item);
-            }
-            else
-            {
+    //        // Convert the selected item to a ChipItem
+    //        if (additionalfilteredmedicationlist.Contains(item))
+    //        {
+    //            additionalfilteredmedicationlist.Remove(item);
+    //            medicationchipselectedlist.Remove(item);
+    //        }
+    //        else
+    //        {
 
-                additionalfilteredmedicationlist.Add(item);
-                medicationchipselectedlist.Add(item);
-            }
+    //            additionalfilteredmedicationlist.Add(item);
+    //            medicationchipselectedlist.Add(item);
+    //        }
 
-            if (additionalfilteredmedicationlist.Count == 0)
-            {
-                addmedlbl1.IsVisible = false;
-                additionalmedicationchiplistnrat.IsVisible = false;
-            }
-            else
-            {
-                addmedlbl1.IsVisible = true;
-                additionalmedicationchiplistnrat.ItemsSource = additionalfilteredmedicationlist;
-                additionalmedicationchiplistnrat.IsVisible = true;
-            }
-            await Task.Delay(500);
-        }
-        catch (Exception Ex)
-        {
-            NotasyncMethod(Ex);
-        }
-    }
+    //        if (additionalfilteredmedicationlist.Count == 0)
+    //        {
+    //            addmedlbl1.IsVisible = false;
+    //            additionalmedicationchiplistnrat.IsVisible = false;
+    //        }
+    //        else
+    //        {
+    //            addmedlbl1.IsVisible = true;
+    //            additionalmedicationchiplistnrat.ItemsSource = additionalfilteredmedicationlist;
+    //            additionalmedicationchiplistnrat.IsVisible = true;
+    //        }
+    //        await Task.Delay(500);
+    //    }
+    //    catch (Exception Ex)
+    //    {
+    //        NotasyncMethod(Ex);
+    //    }
+    //}
 
     private void postcodetext_TextChanged(object sender, TextChangedEventArgs e)
     {
@@ -1907,6 +1910,23 @@ public partial class WH : ContentPage
             PostCodeLoading.IsVisible = true;
             postcodelist.IsVisible = false;
             NoResultslblPost.IsVisible = false;
+
+            //Check if itemsource count is greater than 1 then remove selceted item
+
+            if (postcodelist.ItemsSource is ObservableCollection<postcode> items && items.Count == 1)
+            {
+                postcodelist.SelectedItem = null;
+            }
+
+            //if (postcodelist.ItemsSource?.Cast <ObservableCollection>().Count() == 1)
+            //{
+            //    if (postcodelist.SelectedItem != null)
+            //    {
+            //        postcodelist.SelectedItem = null;
+            //    }
+            //}
+
+
             if (string.IsNullOrEmpty(e.NewTextValue))
             {
                // FilterResults.Clear();
@@ -2400,5 +2420,215 @@ public partial class WH : ContentPage
         {
             //Ignore
         }     
+    }
+
+    private void postcodelist_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        try
+        {
+
+            var item = e.CurrentSelection.FirstOrDefault() as postcode;
+
+            if (item != null)
+            {
+                var NewItem = new ObservableCollection<postcode>();
+                NewItem.Add(item);
+                //postcodelist.SelectedItem = null;
+                postcodetext.Text = item.postcodebrick;
+                postcodelist.ItemsSource = NewItem;
+                postcodelist.HeightRequest = 65;
+            }
+
+         
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    private void additionlsymlist_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        try
+        {
+
+            //var currentSelection = e.CurrentSelection.Cast<symptom>().ToList();
+
+            //// Determine newly selected items
+            //var SelectedItem = currentSelection.Except(previousSelection).FirstOrDefault();
+
+            //// Update the previous selection list
+            //if (currentSelection != null)
+            //{
+            //    previousSelection = currentSelection;
+            //}
+            //else
+            //{
+            //    SelectedItem = previousSelection;
+            //}
+
+            //// Find newly selected (added) item
+            //var newlySelected = currentSelection.Except(previousSelection).FirstOrDefault();
+
+            //// Find deselected (removed) item
+            //var deselected = previousSelection.Except(currentSelection).FirstOrDefault();
+
+            //// Update previous selection for next event
+            //previousSelection = currentSelection;
+
+            //// Pick whichever changed (selected or deselected)
+            //var selectedItem = newlySelected ?? deselected;
+
+            //if (selectedItem == null)
+            //    return; // No change, nothing to do
+
+
+            //searchsymsentry.IsEnabled = false;
+            //searchsymsentry.IsEnabled = true;
+
+            //// Convert the selected item to a ChipItem
+            //if (additionalfilteredsymptomlist.Contains(SelectedItem))
+            //{
+            //    additionalfilteredsymptomlist.Remove(SelectedItem);
+            //    symptomchipselectedlist.Remove(SelectedItem);
+            //}
+            //else
+            //{
+
+            //    additionalfilteredsymptomlist.Add(SelectedItem);
+            //    symptomchipselectedlist.Add(SelectedItem);
+            //}
+
+            //if (additionalfilteredsymptomlist.Count == 0)
+            //{
+            //    addlbl1.IsVisible = false;
+            //    additionalsymptomchiplistnrat.IsVisible = false;
+            //}
+            //else
+            //{
+            //    addlbl1.IsVisible = true;
+            //    additionalsymptomchiplistnrat.IsVisible = true;
+            //}
+
+            var currentSelection = e.CurrentSelection.Cast<symptom>().ToList();
+
+            var newlySelectedItems = currentSelection.Except(previousSelection).ToList();
+            var deselectedItems = previousSelection.Except(currentSelection).ToList();
+
+            previousSelection = currentSelection;
+
+            searchsymsentry.IsEnabled = false;
+            searchsymsentry.IsEnabled = true;
+
+            foreach (var item in newlySelectedItems)
+            {
+                if (!additionalfilteredsymptomlist.Contains(item))
+                {
+                    additionalfilteredsymptomlist.Add(item);
+                    symptomchipselectedlist.Add(item);
+                }
+            }
+
+            foreach (var item in deselectedItems)
+            {
+                if (additionalfilteredsymptomlist.Contains(item))
+                {
+                    additionalfilteredsymptomlist.Remove(item);
+                    symptomchipselectedlist.Remove(item);
+                }
+            }
+
+            bool hasItems = additionalfilteredsymptomlist.Count > 0;
+            addlbl1.IsVisible = hasItems;
+            additionalsymptomchiplistnrat.IsVisible = hasItems;
+
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    private void additionlmedlist_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        try
+        {
+
+            //var currentSelection = e.CurrentSelection.Cast<medication>().ToList();
+
+            //// Determine newly selected items
+            //var SelectedItem = currentSelection.Except(Selectionprevious).FirstOrDefault();
+
+            //// Update the previous selection list
+            //Selectionprevious = currentSelection;
+
+            //searchsymsentry.IsEnabled = false;
+            //searchsymsentry.IsEnabled = true;
+
+            //searchmedentry.IsEnabled = false;
+            //searchmedentry.IsEnabled = true;
+
+            //// Convert the selected item to a ChipItem
+            //if (additionalfilteredmedicationlist.Contains(SelectedItem))
+            //{
+            //    additionalfilteredmedicationlist.Remove(SelectedItem);
+            //    medicationchipselectedlist.Remove(SelectedItem);
+            //}
+            //else
+            //{
+
+            //    additionalfilteredmedicationlist.Add(SelectedItem);
+            //    medicationchipselectedlist.Add(SelectedItem);
+            //}
+
+            //if (additionalfilteredmedicationlist.Count == 0)
+            //{
+            //    addmedlbl1.IsVisible = false;
+            //    additionalmedicationchiplistnrat.IsVisible = false;
+            //}
+            //else
+            //{
+            //    addmedlbl1.IsVisible = true;
+            //    additionalmedicationchiplistnrat.ItemsSource = additionalfilteredmedicationlist;
+            //    additionalmedicationchiplistnrat.IsVisible = true;
+            //}
+
+
+            var currentSelection = e.CurrentSelection.Cast<medication>().ToList();
+
+            var newlySelectedItems = currentSelection.Except(Selectionprevious).ToList();
+            var deselectedItems = Selectionprevious.Except(currentSelection).ToList();
+
+            Selectionprevious = currentSelection;
+
+            searchmedentry.IsEnabled = false;
+            searchmedentry.IsEnabled = true;
+
+            foreach (var item in newlySelectedItems)
+            {
+                if (!additionalfilteredmedicationlist.Contains(item))
+                {
+                    additionalfilteredmedicationlist.Add(item);
+                    medicationchipselectedlist.Add(item);
+                }
+            }
+
+            foreach (var item in deselectedItems)
+            {
+                if (additionalfilteredmedicationlist.Contains(item))
+                {
+                    additionalfilteredmedicationlist.Remove(item);
+                    medicationchipselectedlist.Remove(item);
+                }
+            }
+
+            bool hasItems = additionalfilteredmedicationlist.Count > 0;
+            addlbl1.IsVisible = hasItems;
+            additionalmedicationchiplistnrat.IsVisible = hasItems;
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 }

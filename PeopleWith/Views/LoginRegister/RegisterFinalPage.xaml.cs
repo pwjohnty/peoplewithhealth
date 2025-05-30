@@ -15,6 +15,7 @@ using Microsoft.Maui.Storage;
 using Microsoft.Maui.Networking;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Devices;
+using Newtonsoft.Json.Linq;
 
 namespace PeopleWith;
 
@@ -750,14 +751,19 @@ public partial class RegisterFinalPage : ContentPage
                             string jsonn = System.Text.Json.JsonSerializer.Serialize<usermeasurement>(item, serializerOptions);
                             StringContent contenttt = new StringContent(jsonn, Encoding.UTF8, "application/json");
                             response = await Client.PostAsync(url, contenttt);
-
+                            string ID = String.Empty; 
                             if (response.IsSuccessStatusCode)
                             {
+                                // Read the response content as a string
+                                string responseContent = await response.Content.ReadAsStringAsync();
+                                var jsonResponse = JObject.Parse(responseContent);
+                                ID = jsonResponse["value"]?[0]?["id"]?.ToString();
+
                             }
 
                             //add to feedback list
                             var newmeas = new feedbackdata();
-                            newmeas.id = item.id;
+                            newmeas.id = ID;
                             newmeas.value = item.value;
                             newmeas.datetime = item.inputdatetime;
                             newmeas.action = "update";

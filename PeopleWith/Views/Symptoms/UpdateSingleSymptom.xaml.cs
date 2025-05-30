@@ -42,6 +42,7 @@ public partial class UpdateSingleSymptom : ContentPage
     public event EventHandler<bool> ConnectivityChanged;
     string triggorinterstring;
     string ImageFileName = string.Empty;
+    string PassedSymptomImage = string.Empty; 
     ImageSource ImagetoShow;
     bool BorderClickable = true; 
     //Crash Handler
@@ -138,6 +139,8 @@ public partial class UpdateSingleSymptom : ContentPage
                             {
                                 TakeImageStack.IsVisible = false;
                                 ShowImagestack.IsVisible = true;
+                                ImageFileName = x.symptomimage;
+                                PassedSymptomImage = x.symptomimage; 
                             }
 
                             if (string.IsNullOrEmpty(x.duration) || x.duration == "No Duration")
@@ -487,17 +490,20 @@ public partial class UpdateSingleSymptom : ContentPage
         try
         {
             // Parse the connection string and create a blob client
-            BlobServiceClient blobServiceClient = new BlobServiceClient(StorageConnectionString);
+            //Checks that the image hasn't changed so doesn't need updated 
+            if(ResizedImage != null)
+            {
+                BlobServiceClient blobServiceClient = new BlobServiceClient(StorageConnectionString);
 
-            // Get a reference to the container
-            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(Container);
+                // Get a reference to the container
+                BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(Container);
 
-            // Get a reference to the blob
-            BlobClient blobClient = containerClient.GetBlobClient(ImageFileName);
+                // Get a reference to the blob
+                BlobClient blobClient = containerClient.GetBlobClient(ImageFileName);
 
-            using var stream = new MemoryStream(ResizedImage);
-            var response = await blobClient.UploadAsync(stream, overwrite: true);
-           
+                using var stream = new MemoryStream(ResizedImage);
+                var response = await blobClient.UploadAsync(stream, overwrite: true);
+            }    
         }
         catch (Exception Ex)
         {
@@ -1108,7 +1114,11 @@ public partial class UpdateSingleSymptom : ContentPage
 
             if (!String.IsNullOrEmpty(ImageFileName))
             {
-                UploadtoBlobStorage();
+                //Check if item name already exisits then no need to upload again
+                //if (string.IsNullOrEmpty(PassedSymptomImage))
+                //{
+                        UploadtoBlobStorage();
+                //}       
             }
                 
             APICalls database = new APICalls();

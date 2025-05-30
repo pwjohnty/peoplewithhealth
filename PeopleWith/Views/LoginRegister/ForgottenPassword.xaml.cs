@@ -175,12 +175,12 @@ public partial class ForgottenPassword : ContentPage
                 //Valid Email Address
                 //Temporary Check
                 await MopupService.Instance.PushAsync(new PopupPageHelper("Email Verification Sent") { });
-                //await Task.Delay(1500);
+                    //await Task.Delay(1500);
 
                     //email generate Update URL
                     //StringContent mail_content = new StringContent(emailentry.Text, System.Text.Encoding.UTF8, "application/json");
 
-                    //var emailresponse = await client.PostAsync("https://peoplewithwebapp.azurewebsites.net/hub/email-validation.php?uid=" + emailentry.Text, mail_content);
+                    //var emailresponse = await client.PostAsync("https://portal.peoplewith.com/hub/email-validation.php?uid=" + emailentry.Text, mail_content);
                     HttpClient hTTPClient = new HttpClient();
 
                     String json = String.Format(@"{{""Email"":""{0}""}}", emailentry.Text);

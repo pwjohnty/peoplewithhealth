@@ -21,6 +21,8 @@ using Microsoft.Maui;
 using Android.Runtime;
 using AndroidX.Activity;
 using Android.Provider;
+using Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;
+
 
 namespace PeopleWith
 {
@@ -74,6 +76,9 @@ namespace PeopleWith
             // Set the screen orientation to portrait
             RequestedOrientation = ScreenOrientation.Portrait;
             initFontScale();
+
+            // Set keyboard behavior (Fix this on reg, Fine everywhere else) 
+            //App.Current.On<Microsoft.Maui.Controls.PlatformConfiguration.Android>().UseWindowSoftInputModeAdjust(WindowSoftInputModeAdjust.Resize);
 
             AppCompatDelegate.DefaultNightMode = AppCompatDelegate.ModeNightNo;
 
