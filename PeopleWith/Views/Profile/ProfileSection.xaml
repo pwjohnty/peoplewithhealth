@@ -15,7 +15,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Border Grid.Row="0" StrokeShape="RoundRectangle 40" BackgroundColor="#E5F0FB" HeightRequest="80" WidthRequest="80" Stroke="Transparent">
-                    <Label x:Name="Initals" Padding="0" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" FontFamily="HankenGroteskBold" FontSize="22" TextColor="#031926"/>
+                    <Label x:Name="Initals" Padding="0" TextTransform="Uppercase" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" FontFamily="HankenGroteskBold" FontSize="22" TextColor="#031926"/>
                 </Border>
                 <Label Grid.Row="1" Text="Your Profile" HorizontalOptions="Center" Margin="0,5,0,0" FontFamily="HankenGroteskBold" FontSize="26" TextColor="#031926"/>
             </Grid>

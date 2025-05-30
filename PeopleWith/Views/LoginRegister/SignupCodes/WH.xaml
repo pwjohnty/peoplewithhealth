@@ -200,17 +200,51 @@ HorizontalOptions="Start" />
                     </inputLayout:SfTextInputLayout>
 
 
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100*"/>
+                    <Grid Grid.RowDefinitions="Auto"  Grid.ColumnDefinitions="100*">
 
-                        </Grid.ColumnDefinitions>
+                        <CollectionView x:Name="postcodelist" Grid.Row="0" 
+                 VerticalScrollBarVisibility="Never" SelectionMode="Single" 
+                 IsEnabled="False" Margin="0,10,1,100" HeightRequest="{OnPlatform iOS='650', Android='610'}"
+                 RemainingItemsThreshold="5" SelectionChanged="postcodelist_SelectionChanged" >
+                            
+                            <CollectionView.ItemsLayout>
+                                <GridItemsLayout Orientation="Vertical" Span="4" />
+                            </CollectionView.ItemsLayout>
+
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border x:Name="borderBackground" StrokeShape="RoundRectangle 10" Margin="5,0,5,5" Padding="20" Stroke="LightGray" BackgroundColor="Transparent" InputTransparent="True">
+
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup Name="CommonStates">
+                                                <VisualState Name="Normal">
+                                                    <VisualState.Setters>
+                                                        <Setter TargetName="borderBackground" Property="BackgroundColor" Value="Transparent" />
+                                                        <Setter TargetName="postcodeLabel" Property="Label.TextColor" Value="Gray" />
+                                                        <Setter TargetName="postcodeLabel" Property="Label.FontFamily" Value="HankenGroteskRegular" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState Name="Selected">
+                                                    <VisualState.Setters>
+                                                        <Setter TargetName="borderBackground" Property="BackgroundColor" Value="#BFDBF7" />
+                                                        <Setter TargetName="postcodeLabel" Property="Label.TextColor" Value="#031926" />
+                                                        <Setter TargetName="postcodeLabel" Property="Label.FontFamily" Value="HankenGroteskBold" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+
+                                        <Grid HorizontalOptions="Fill"  Padding="0"  ColumnDefinitions="100*">
+                                            <Label x:Name="postcodeLabel" Text="{Binding postcodebrick}" Grid.Column="0" HorizontalOptions="Center" VerticalOptions="Center" FontSize="14" Margin="0" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
 
 
-                        <syncfusion:SfListView x:Name="postcodelist"                                                                                             
+                        <!-- Old Postcode Listview --> 
+                        <!--<syncfusion:SfListView x:Name="postcodelist"                                                                                             
              AutoFitMode="DynamicHeight" SizeChanged="postcodelist_SizeChanged"
         Margin="0,10,0,0" VerticalOptions="FillAndExpand"
                               BackgroundColor="Transparent"
@@ -225,12 +259,12 @@ HorizontalOptions="Start" />
                             <syncfusion:SfListView.ItemsLayout>
                                 <syncfusion:GridLayout SpanCount="4"/>
                             </syncfusion:SfListView.ItemsLayout>
-                            <!--<syncfusion:SfListView.HeightRequest>
+                            --><!--<syncfusion:SfListView.HeightRequest>
                                 <OnPlatform x:TypeArguments="x:Double">
                                     <On Platform="Android" Value="2300" />
                                     <On Platform="iOS" Value="2300" />
                                 </OnPlatform>
-                            </syncfusion:SfListView.HeightRequest>-->
+                            </syncfusion:SfListView.HeightRequest>--><!--
 
                             <syncfusion:SfListView.ItemTemplate>
                                 <DataTemplate>
@@ -274,7 +308,7 @@ BorderColor="LightGray">
                                     </ViewCell>
                                 </DataTemplate>
                             </syncfusion:SfListView.SelectedItemTemplate>
-                        </syncfusion:SfListView>
+                        </syncfusion:SfListView>-->
 
                         <Label x:Name="NoResultslblPost" Text="No results matching your search" Margin="0,60,0,0" Grid.Row="0" Grid.Column="0" IsVisible="False" HorizontalOptions="Center" VerticalOptions="Start" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskBold" />
 
@@ -1589,19 +1623,53 @@ HorizontalOptions="Start" />
                     </Frame>
 
 
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100*"/>
+                    <Grid Grid.RowDefinitions="Auto" Grid.ColumnDefinitions="100*" >
 
-                        </Grid.ColumnDefinitions>
+                        
+                        <!-- New CollectionView -->
+                        <CollectionView x:Name="additionlsymlist" Grid.Row="0" 
+VerticalScrollBarVisibility="Never" SelectionMode="Multiple" IsVisible="False"
+IsEnabled="False" Margin="0,10,1,100" HeightRequest="{OnPlatform iOS='650', Android='610'}"
+RemainingItemsThreshold="5" SelectionChanged="additionlsymlist_SelectionChanged" >
 
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout  Orientation="Vertical" ItemSpacing="4" />
+                            </CollectionView.ItemsLayout>
 
-                        <syncfusion:SfListView x:Name="additionlsymlist"                                                                                             
-             AutoFitMode="Height"
-        Margin="0,10,0,0"
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border x:Name="borderBackground" StrokeShape="RoundRectangle 10" Margin="5,0,5,5" Padding="10" Stroke="LightGray" BackgroundColor="Transparent" InputTransparent="True">
+
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup Name="CommonStates">
+                                                <VisualState Name="Normal">
+                                                    <VisualState.Setters>
+                                                        <Setter TargetName="borderBackground" Property="BackgroundColor" Value="Transparent" />
+                                                        <Setter TargetName="AddSymplbl" Property="Label.TextColor" Value="Gray" />
+                                                        <Setter TargetName="AddSymplbl" Property="Label.FontFamily" Value="HankenGroteskRegular" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState Name="Selected">
+                                                    <VisualState.Setters>
+                                                        <Setter TargetName="borderBackground" Property="BackgroundColor" Value="#BFDBF7" />
+                                                        <Setter TargetName="AddSymplbl" Property="Label.TextColor" Value="#031926" />
+                                                        <Setter TargetName="AddSymplbl" Property="Label.FontFamily" Value="HankenGroteskBold" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+
+                                        <Grid HorizontalOptions="Fill"  Padding="0"  ColumnDefinitions="100*">
+                                            <Label x:Name="AddSymplbl" Text="{Binding title}" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="12" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                        <!--<syncfusion:SfListView x:Name="additionlsymlist"                                                                                             
+                                               AutoFitMode="Height"
+                                               Margin="0,10,0,0"
                               BackgroundColor="Transparent"
                               Grid.Column="0"
      Grid.Row="0" ItemTapped="additionlsymlist_ItemTapped"
@@ -1609,20 +1677,13 @@ HorizontalOptions="Start" />
                IsVisible="False"
                        ScrollBarVisibility="Never"
              SelectionBackground="Transparent"
-             Orientation="Vertical"                                                                                                                       
-             >
-                            <!--<syncfusion:SfListView.HeightRequest>
-                                <OnPlatform x:TypeArguments="x:Double">
-                                    <On Platform="Android" Value="500" />
-                                    <On Platform="iOS" Value="300" />
-                                </OnPlatform>
-                            </syncfusion:SfListView.HeightRequest>-->
+             Orientation="Vertical" >
+
 
                             <syncfusion:SfListView.ItemTemplate>
                                 <DataTemplate>
                                     <ViewCell>
-                                        <Frame CornerRadius="10" InputTransparent="True" Padding="10"  Margin="5,5,5,5"  HasShadow="False" Opacity="1" BackgroundColor="Transparent"
-BorderColor="LightGray">
+                                        <Frame CornerRadius="10" InputTransparent="True" Padding="10"  Margin="5,5,5,5"  HasShadow="False" Opacity="1" BackgroundColor="Transparent" BorderColor="LightGray">
                                             <Grid HorizontalOptions="FillAndExpand" Margin="0" Padding="0"  >
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="Auto"/>
@@ -1660,7 +1721,7 @@ BorderColor="LightGray">
                                     </ViewCell>
                                 </DataTemplate>
                             </syncfusion:SfListView.SelectedItemTemplate>
-                        </syncfusion:SfListView>
+                        </syncfusion:SfListView>-->
 
                         <ActivityIndicator x:Name="SympAInd" IsVisible="False" IsRunning="True" Grid.Row="0" Margin="0,20,0,0" Color="#BFDBF7"  HorizontalOptions="Center" VerticalOptions="Center" />
 
@@ -1826,17 +1887,51 @@ HorizontalOptions="Start" />
                     </Frame>
 
 
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100*"/>
+                    <Grid Grid.RowDefinitions="Auto" Grid.ColumnDefinitions="100*" >
 
-                        </Grid.ColumnDefinitions>
+                        <!-- New CollectionView -->
+                        <CollectionView x:Name="additionlmedlist" Grid.Row="0" 
+VerticalScrollBarVisibility="Never" SelectionMode="Multiple" IsVisible="False"
+IsEnabled="False" Margin="0,10,1,100" HeightRequest="{OnPlatform iOS='650', Android='610'}"
+RemainingItemsThreshold="5" SelectionChanged="additionlmedlist_SelectionChanged" >
+
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout  Orientation="Vertical" ItemSpacing="4" />
+                            </CollectionView.ItemsLayout>
+
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border x:Name="Backgroundborder" StrokeShape="RoundRectangle 10" Margin="5,0,5,5" Padding="10" Stroke="LightGray" BackgroundColor="Transparent" InputTransparent="True">
+
+                                        <VisualStateManager.VisualStateGroups>
+                                            <VisualStateGroup Name="CommonStates">
+                                                <VisualState Name="Normal">
+                                                    <VisualState.Setters>
+                                                        <Setter TargetName="Backgroundborder" Property="BackgroundColor" Value="Transparent" />
+                                                        <Setter TargetName="AddMedlbl" Property="Label.TextColor" Value="Gray" />
+                                                        <Setter TargetName="AddMedlbl" Property="Label.FontFamily" Value="HankenGroteskRegular" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                                <VisualState Name="Selected">
+                                                    <VisualState.Setters>
+                                                        <Setter TargetName="Backgroundborder" Property="BackgroundColor" Value="#BFDBF7" />
+                                                        <Setter TargetName="AddMedlbl" Property="Label.TextColor" Value="#031926" />
+                                                        <Setter TargetName="AddMedlbl" Property="Label.FontFamily" Value="HankenGroteskBold" />
+                                                    </VisualState.Setters>
+                                                </VisualState>
+                                            </VisualStateGroup>
+                                        </VisualStateManager.VisualStateGroups>
+
+                                        <Grid HorizontalOptions="Fill"  Padding="0"  ColumnDefinitions="100*">
+                                            <Label x:Name="AddMedlbl" Text="{Binding title}" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="12" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
 
 
-                        <syncfusion:SfListView x:Name="additionlmedlist"                                                                                             
+                        <!--<syncfusion:SfListView x:Name="additionlmedlist"                                                                                             
              AutoFitMode="Height"
         Margin="0,10,0,0"
                               BackgroundColor="Transparent"
@@ -1897,7 +1992,7 @@ BorderColor="LightGray">
                                     </ViewCell>
                                 </DataTemplate>
                             </syncfusion:SfListView.SelectedItemTemplate>
-                        </syncfusion:SfListView>
+                        </syncfusion:SfListView>-->
 
                         <ActivityIndicator x:Name="MedAInd" IsRunning="True" IsVisible="False" Grid.Row="0" Margin="0,20,0,0" Color="#BFDBF7"  HorizontalOptions="Center" VerticalOptions="Center" />
 

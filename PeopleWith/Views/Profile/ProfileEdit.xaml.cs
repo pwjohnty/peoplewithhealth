@@ -1807,7 +1807,7 @@ public partial class ProfileEdit : ContentPage
             //email generate
             StringContent mail_content = new StringContent(newuser.email, System.Text.Encoding.UTF8, "application/json");
 
-            var emailresponse = await Client.PostAsync("https://peoplewithwebapp.azurewebsites.net/hub/email-validation.php?uid=" + newuser.email, mail_content);
+            var emailresponse = await Client.PostAsync("https://portal.peoplewith.com/hub/email-validation.php?uid=" + newuser.email, mail_content);
 
             // check if the response is successful
             if (emailresponse.IsSuccessStatusCode)

@@ -9,9 +9,8 @@
              xmlns:chart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"
              xmlns:tabView="clr-namespace:Syncfusion.Maui.TabView;assembly=Syncfusion.Maui.TabView"
              xmlns:progressBar="clr-namespace:Syncfusion.Maui.ProgressBar;assembly=Syncfusion.Maui.ProgressBar"
-             x:Class="PeopleWith.MainDashboard" BackgroundColor="White"
-             >
-    <ContentPage.Content>
+             x:Class="PeopleWith.MainDashboard" BackgroundColor="White" >
+
         <tabView:SfTabView 
                      
                   IndicatorBackground="#031926"
@@ -1826,5 +1825,5 @@ HorizontalOptions="Center" />
 
 
 
-    </ContentPage.Content>
+
 </ContentPage>
