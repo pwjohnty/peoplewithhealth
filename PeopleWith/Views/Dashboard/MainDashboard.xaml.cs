@@ -98,7 +98,7 @@ public partial class MainDashboard : ContentPage
 
             NavigationPage.SetHasNavigationBar(this, false);
 
-            string firstName = Preferences.Default.Get("userid", "Unknown");
+            //string firstName = Preferences.Default.Get("userid", "Unknown");
 
             loadcatergories();
 
@@ -135,7 +135,7 @@ public partial class MainDashboard : ContentPage
 
         NavigationPage.SetHasNavigationBar(this, false);
 
-        string firstName = Preferences.Default.Get("userid", "Unknown");
+        //string firstName = Preferences.Default.Get("userid", "Unknown");
 
         loadcatergories();
 
@@ -155,60 +155,23 @@ public partial class MainDashboard : ContentPage
         //lbl.Text = firstName;
     }
 
-    protected override void OnAppearing()
+    protected async override void OnAppearing()
     {
         base.OnAppearing();
-        getuserfeedbackdata();
-        //PageReady.TrySetResult(true);
-        //testNotification();
 
-        //Check Prefernces saves?
-
-        //string retrievedId = Preferences.Get("NsatNotID", string.Empty);
-
-        //checknotificationsEnabled(); 
-    }
-
-//    private void testNotification()
-//    {
-//        try
-//        {
-//            //Remove (Only, To Test)
-//            var notification = new NotificationRequest
-//            {
-//                NotificationId = new Random().Next(1, int.MaxValue),
-//                Title = "Complete your EQ-5D Questionnaire",
-//                Description = "Please take a moment to complete your EQ-5D questionnaire",
-//                BadgeNumber = 0,
-//                Schedule = new NotificationRequestSchedule
-//                {
-//                    NotifyTime = DateTime.Now.AddMinutes(1),
-//                    RepeatType = NotificationRepeat.No,
-//                    NotifyRepeatInterval = null
-//                }
-//            };
-
-//            LocalNotificationCenter.Current.Show(notification);
-//        }
-
-//        catch (Exception Ex)
-//        {
-
-//        }
-//}
-    private void IsNavigatingTo()
-    {
         try
         {
-            if (IsNavigating) return;
-            IsNavigating = true;
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                getuserfeedbackdata();
+            });
+            
         }
-        catch
+        catch (Exception ex)
         {
-            IsNavigating = false;
+            NotasyncMethod(ex);
         }
     }
-
 
     async void checksignupinfo()
     {
