@@ -47,6 +47,11 @@ public partial class MainDashboard : ContentPage
     ObservableCollection<signupcode> signupcodecollection = new ObservableCollection<signupcode>();
     public ObservableCollection<questionnaire> questionnaires = new ObservableCollection<questionnaire>();
 
+    //Update Null id's
+    public ObservableCollection<usermeasurement> UserMeasurementUpdate = new ObservableCollection<usermeasurement>();
+    public ObservableCollection<usersymptom> UserSymptomsUpdate = new ObservableCollection<usersymptom>();
+    public ObservableCollection<usermood> UserMoodUpdate = new ObservableCollection<usermood>();
+
     bool setnotificationsfromlogin;
     bool IsNavigating = false;
     bool NoficiationsActive = false;
@@ -167,9 +172,9 @@ public partial class MainDashboard : ContentPage
             });
             
         }
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-            NotasyncMethod(ex);
+            NotasyncMethod(Ex);
         }
     }
 
@@ -189,6 +194,8 @@ public partial class MainDashboard : ContentPage
             }
 
             signupcodecollection = await database.GetUserSignUpCodeInfo(Helpers.Settings.SignUp);
+
+
 
             if (signupcodecollection.Count > 0)
             {
@@ -382,6 +389,7 @@ public partial class MainDashboard : ContentPage
 
             // Retrieve all user feedback data
             userfeedbacklist = await database.GetUserFeedback();
+      
             AllUserMedications = await database.GetUserMedicationsAsync();
             AllUserSupplements = await database.GetUserSupplementsAsync();
 
@@ -394,7 +402,9 @@ public partial class MainDashboard : ContentPage
 
             updateyourhealthdata();
 
-           // getfitnesshealthdata();
+            fixnulluserfeedback();
+
+            // getfitnesshealthdata();
 
             // Stop the stopwatch after retrieval
             // stopwatch.Stop();
@@ -1346,6 +1356,125 @@ public partial class MainDashboard : ContentPage
         }
     }
 
+    async void fixnulluserfeedback()
+    {
+        try
+        {
+            if (userfeedbacklist != null)
+            {
+                bool CheckForNull = userfeedbacklist[0].measurementfeedbacklist.Any(x => string.IsNullOrEmpty(x.id));
+
+                if (CheckForNull)
+                {
+                    //Get Usermeasurements 
+                    UserMeasurementUpdate = await database.GetUserMeasurements();
+
+                    foreach (var item in userfeedbacklist[0].measurementfeedbacklist)
+                    {
+                        if (string.IsNullOrEmpty(item.id))
+                        {
+                            //match user measurement to Value && inputdateTime 
+
+                            var selectedMeasurement = UserMeasurementUpdate.Where(x => x.value == item.value && DateTime.Parse(x.inputdatetime) == DateTime.Parse(item.datetime)).FirstOrDefault();
+
+                            if (selectedMeasurement != null)
+                            {
+                                item.id = selectedMeasurement.id;
+                            }
+                        }
+                    }
+
+                    //update userfeedback table (Measurement Data)
+                    if (userfeedbacklist[0].measurementfeedbacklist == null)
+                    {
+                        userfeedbacklist[0].measurementfeedbacklist = new ObservableCollection<feedbackdata>();
+                    }
+
+                    string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklist[0].measurementfeedbacklist);
+                    userfeedbacklist[0].measurementfeedback = newsymJson;
+
+                    await database.UserfeedbackUpdateMeasurementData(userfeedbacklist[0]);
+                }
+
+                //Check Symptoms 
+                bool CheckisNull = userfeedbacklist[0].symptomfeedbacklist.Any(x => string.IsNullOrEmpty(x.id));
+
+                if (CheckisNull)
+                {
+                    //Get Usersymptoms 
+                    UserSymptomsUpdate = await database.GetUserSymptomAsync();
+
+                    foreach (var item in userfeedbacklist[0].symptomfeedbacklist)
+                    {
+                        if (string.IsNullOrEmpty(item.id))
+                        {
+                            //match user Mood to label && datetime 
+
+                            var SelectedSymptom = UserSymptomsUpdate[0].feedback.Where(x => x.intensity == item.value && DateTime.Parse(x.timestamp) == DateTime.Parse(item.datetime)).FirstOrDefault();
+
+                            if (SelectedSymptom != null)
+                            {
+                                item.id = SelectedSymptom.symptomfeedbackid;
+                            }
+                        }
+                    }
+
+                    //update userfeedback table (Symptom Data)
+                    if (userfeedbacklist[0].symptomfeedbacklist == null)
+                    {
+                        userfeedbacklist[0].symptomfeedbacklist = new ObservableCollection<feedbackdata>();
+                    }
+
+                    string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklist[0].symptomfeedbacklist);
+                    userfeedbacklist[0].symptomfeedback = newsymJson;
+
+                    await database.UserfeedbackUpdateSymptomData(userfeedbacklist[0]);
+
+                }
+
+                //Check mood 
+                bool CheckNull = userfeedbacklist[0].moodfeedbacklist.Any(x => string.IsNullOrEmpty(x.id));
+
+                if (CheckNull)
+                {
+                    //Get UserMood 
+                    string userid = Preferences.Default.Get("userid", "Unknown");
+                    UserMoodUpdate = await database.GetUserMoodsAsync(userid);
+
+                    foreach (var item in userfeedbacklist[0].moodfeedbacklist)
+                    {
+                        if (string.IsNullOrEmpty(item.id))
+                        {
+                            //match user Mood to label && datetime 
+
+                            var SelectedMood = UserMoodUpdate.Where(x => x.title == item.label && DateTime.Parse(x.datetime) == DateTime.Parse(item.datetime)).FirstOrDefault();
+
+                            if (SelectedMood != null)
+                            {
+                                item.id = SelectedMood.id;
+                            }
+                        }
+                    }
+
+                    //update userfeedback table (Mood Data)
+                    if (userfeedbacklist[0].moodfeedbacklist == null)
+                    {
+                        userfeedbacklist[0].moodfeedbacklist = new ObservableCollection<feedbackdata>();
+                    }
+
+                    string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklist[0].moodfeedbacklist);
+                    userfeedbacklist[0].moodfeedback = newsymJson;
+
+                    await database.UserfeedbackUpdateMoodData(userfeedbacklist[0]);
+                }
+
+            }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
 
     async void getfitnesshealthdata()
     {
