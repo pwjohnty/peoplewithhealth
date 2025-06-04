@@ -698,6 +698,12 @@ public partial class HealthDataPage : ContentPage
 
         try
         {
+            if(stepsbtn.IsVisible == true && hrbtn.IsVisible == true && resbtn.IsVisible == true)
+            {
+                Vibration.Vibrate();
+                return;
+            }
+
             if(sourcestack.IsVisible)
             {
                 sourcestack.IsVisible = false;

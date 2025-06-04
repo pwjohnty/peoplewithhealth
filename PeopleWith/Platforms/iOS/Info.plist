@@ -19,8 +19,6 @@
 	<array>
 		<string>remote-notification</string>
 	</array>
-	<key>NSUserTrackingUsageDescription</key>
-	<string>We use notifications to keep you informed.</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>arm64</string>
@@ -53,8 +51,8 @@
 	<key>UIUserInterfaceStyle</key>
 	<string>Light</string>
 	<key>CFBundleShortVersionString</key>
-	<string>12.6</string>
+	<string>12.9.2</string>
 	<key>CFBundleVersion</key>
-	<string>12.6</string>
+	<string>12.9</string>
 </dict>
 </plist>
