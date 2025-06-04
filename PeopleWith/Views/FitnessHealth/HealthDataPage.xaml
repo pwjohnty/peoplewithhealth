@@ -882,7 +882,7 @@ HorizontalOptions="Center" />
                 <Button
    BackgroundColor="#031926"
    HorizontalOptions="EndAndExpand"
-   TextColor="White"
+   TextColor="White" 
          x:Name="nextbtn" Clicked="nextbtn_Clicked"
    FontAttributes="None" Grid.Row="0" Grid.Column="1"
         Margin="20,10,20,10"

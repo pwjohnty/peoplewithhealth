@@ -391,10 +391,12 @@ public partial class MainDashboard : ContentPage
 
             findsymptomdata();
 
-
             updateyourhealthdata();
 
-           // getfitnesshealthdata();
+            if (DeviceInfo.Current.Platform == DevicePlatform.iOS)
+            {
+              //  getfitnesshealthdata();
+            }
 
             // Stop the stopwatch after retrieval
             // stopwatch.Stop();
@@ -1351,6 +1353,18 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
+
+            //check if user has activated wearables
+
+            // Retrieve all user feedback data
+            var userfitnesslist = await database.GetUserFitnessData();
+
+            if(userfitnesslist.Count == 0 || userfitnesslist == null)
+            {
+                healthdatagrid.IsVisible = true;
+                return;
+            }
+
 
             //check if they have any fitness health data added
 
