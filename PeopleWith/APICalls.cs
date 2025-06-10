@@ -116,6 +116,11 @@ namespace PeopleWith
         //Fitness
         public const string GetUserFitness = "https://pwapi.peoplewith.com/api/userfitnessdata";
 
+        //registryDataInputs
+        public const string GetDashQuestionnaire = "https://pwapi.peoplewith.com/api/registryDataInputs";
+
+        //registryData
+        public const string DashQuestionAnswers = "https://pwapi.peoplewith.com/api/registryData";
 
         //Authentication Test
         public const string GetAuth = "https://pwapicontainer.thankfulground-b43b4106.ukwest.azurecontainerapps.io/api/registryConfig";
@@ -446,6 +451,7 @@ namespace PeopleWith
             }
 
         }
+
 
         //Delete User Symptom 
         public async Task DeleteSymptom(ObservableCollection<usersymptom> Updatefeedback)
@@ -997,7 +1003,7 @@ namespace PeopleWith
                             preparation = rawSymptom.preparation,
                             unit = rawSymptom.unit,
                             schedule = new ObservableCollection<MedtimesDosages>(),
-                            medicationquestions = rawSymptom.medicationquestions, 
+                            medicationquestions = rawSymptom.medicationquestions,
                             groupscheduleid = rawSymptom.groupscheduleid
                         };
                         if (rawSymptom.schedule == null)
@@ -2618,7 +2624,7 @@ namespace PeopleWith
                     foreach (var item in consent)
                     {
                         //Return All items Including SignupCode 
-                        if(ReturnType == "All")
+                        if (ReturnType == "All")
                         {
                             if (item.deleted == true)
                             {
@@ -3409,8 +3415,14 @@ namespace PeopleWith
                         try
                         {
                             // Attempt to deserialize as an array
-                            item.signupcodeinfolist = JsonConvert.DeserializeObject<ObservableCollection<signupcodeinformation>>(item.signupcodeinformation);
+                            //if(item.signupcodeinformation == null)
+                            //{
 
+                            //}
+                            //else
+                            //{
+                            item.signupcodeinfolist = JsonConvert.DeserializeObject<ObservableCollection<signupcodeinformation>>(item.signupcodeinformation);
+                            //}
                         }
                         catch (JsonSerializationException)
                         {
@@ -4977,38 +4989,116 @@ namespace PeopleWith
             }
         }
 
-        //Used to Test HttpClient Auth
-        //public async Task<ObservableCollection<registryconfig>> GetAuthTest()
-        //{
-        //    try
-        //    {
-        //        var url = APICalls.GetAuth;
-        //        HttpClient client = new HttpClient();
-        //        client.DefaultRequestHeaders.Add("X-MS-CLIENT-PRINCIPAL", "eyAgCiAgImlkZW50aXR5UHJvdmlkZXIiOiAidGVzdCIsCiAgInVzZXJJZCI6ICIxMjM0NSIsCiAgInVzZXJEZXRhaWxzIjogImpvaG5AY29udG9zby5jb20iLAogICJ1c2VyUm9sZXMiOiBbIjFFMzNDMEFDLTMzOTMtNEMzNC04MzRBLURFNUZEQkNCQjNDQyJdCn0=");
-        //        client.DefaultRequestHeaders.Add("X-MS-API-ROLE", "1E33C0AC-3393-4C34-834A-DE5FDBCBB3CC");
-        //        HttpResponseMessage responseconsent = await client.GetAsync(url);
+        //Get DashQuestionnaire Data 
+        public async Task<ObservableCollection<registryDataInputs>> GetDashQuestions()
+        {
+            try
+            {
+                var userid = Helpers.Settings.UserKey;
+                var signupcode = Helpers.Settings.SignUp;
+                if (string.IsNullOrEmpty(signupcode)) return null;
 
-        //        if (responseconsent.IsSuccessStatusCode)
-        //        {
-        //            string contentconsent = await responseconsent.Content.ReadAsStringAsync();
-        //            var userResponseconsent = JsonConvert.DeserializeObject<ApiRegConfig>(contentconsent);
-        //            var consent = userResponseconsent.Value;
+                //Change only for SFECORE00
+                if(signupcode == "SFECORE00")
+                {
+                    signupcode = "CORE01";
+                }
 
-        //            return new ObservableCollection<registryconfig>(consent);
+                string urlWithQuery = $"{GetDashQuestionnaire}?$filter=dataInputs eq '{signupcode}'";
+                ConfigureClient();
+                HttpResponseMessage responseconsent = await Client.GetAsync(urlWithQuery);
+                var newcollection = new ObservableCollection<registryDataInputs>();
 
-        //        }
-        //        else
-        //        {
+                if (responseconsent.IsSuccessStatusCode)
+                {
+                    string contentconsent = await responseconsent.Content.ReadAsStringAsync();
+                    var userResponseconsent = JsonConvert.DeserializeObject<ApiResponseregistyDataInputs>(contentconsent);
+                    var consent = userResponseconsent.Value;
 
-        //            return null;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return null;
-        //    }
-        //}
+                    newcollection = new ObservableCollection<registryDataInputs>(consent.Where(x => x.deleted != true && x.apporder != null));
+                    //var GroupedData = newcollection.GroupBy(s => s.dataTab).ToObservableCollection();
+                    return new ObservableCollection<registryDataInputs>(newcollection);
+                }
+                else
+                {
+                    string errorcontent = await responseconsent.Content.ReadAsStringAsync();
+                    var s = errorcontent;
+                    return null;
+                }
+               
+            }
+            catch (Exception ex)
+            {
+                return new ObservableCollection<registryDataInputs>();
+            }
+        }
 
+        //PostDashQuestionnaire 
+        public async Task PostDashQuestionnaire(ObservableCollection<registryData> RegistryAnswers)
+        {
+            try
+            {
+                for (int i = 0; i < RegistryAnswers.Count; i++)
+                {
+                    var urls = APICalls.DashQuestionAnswers;
+                    ConfigureClient();
+                    string jsonns = System.Text.Json.JsonSerializer.Serialize<registryData>(RegistryAnswers[i]);
+                    StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
+                    var response = await Client.PostAsync(urls, contenttts);
+                    var errorResponse = await response.Content.ReadAsStringAsync();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        //Success
+                        string responseContent = await response.Content.ReadAsStringAsync();
+                    }
+                    else
+                    {
+                        //Failed
+                        string errorcontent = await response.Content.ReadAsStringAsync();
+                        var s = errorcontent;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+
+        //GetDashQuestioAnswers 
+        public async Task<ObservableCollection<registryData>> GetDashQuestionAnswers()
+        {
+            try
+            {
+                var userid = Helpers.Settings.UserKey;
+                string urlWithQuery = $"{DashQuestionAnswers}?$filter=userid eq '{userid}'";
+                ConfigureClient();
+                HttpResponseMessage responseconsent = await Client.GetAsync(urlWithQuery);
+                var newcollection = new ObservableCollection<registryData>();
+
+                if (responseconsent.IsSuccessStatusCode)
+                {
+                    string contentconsent = await responseconsent.Content.ReadAsStringAsync();
+                    var userResponseconsent = JsonConvert.DeserializeObject<ApiResponseregistyData>(contentconsent);
+                    var consent = userResponseconsent.Value;
+                    newcollection = new ObservableCollection<registryData>(consent.Where(x => x.deleted != true));
+
+                    return new ObservableCollection<registryData>(newcollection);
+
+                }
+                else
+                {
+                    string errorcontent = await responseconsent.Content.ReadAsStringAsync();
+                    var s = errorcontent;
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ObservableCollection<registryData>();
+            }
+        }
 
 
     }

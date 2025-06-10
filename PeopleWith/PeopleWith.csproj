@@ -575,6 +575,9 @@
     <MauiXaml Update="Views\Questionnaires\DashQuestionnaire.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
+    <MauiXaml Update="Views\Questionnaires\DashStudyQuestions.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
     <MauiXaml Update="Views\Questionnaires\QuestionnairePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>

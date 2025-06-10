@@ -265,6 +265,46 @@ public partial class RegisterFinalPage : ContentPage
         }
     }
 
+    public RegisterFinalPage(user userpass, double progress, ObservableCollection<userresponse> userresponsep, consent additonalcon, ObservableCollection<usersymptom> usersymptompassed, ObservableCollection<usermedication> usermedicationspassed, ObservableCollection<userdiagnosis> userdiagpassed, ObservableCollection<usermeasurement> usermeasurementspass)
+    {
+        try
+        {
+            InitializeComponent();
+
+            //user with SFECORE code
+
+            newuser = userpass;
+            userresponsepassed = userresponsep;
+
+            symptomstoadd = usersymptompassed;
+            medicationstoadd = usermedicationspassed;
+            //userdiag = userdiagpassed;
+            usermeasurementpassed = usermeasurementspass;
+            userdiagnosispassed = userdiagpassed;
+
+            if (additonalcon != null)
+            {
+                Additonalconsentinfostack.IsVisible = true;
+                additonalconsent = additonalcon;
+
+                actitle.Text = additonalconsent.title;
+                acsubtitle.Text = additonalconsent.subtitle;
+                accontent.Text = additonalconsent.content;
+            }
+
+            topprogress.SetProgress(progress, 0);
+            //find out the amount left - only 2 pages left after this amount
+
+            progressamount = (100 - progress) / 2;
+
+            faceidstack.IsVisible = true;
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
     async Task HandleNotificationframe()
     {
         try
@@ -921,6 +961,37 @@ public partial class RegisterFinalPage : ContentPage
                         //Save NotificationiD to local Storage
                         Preferences.Set("NsatNotID", notification.NotificationId.ToString());
                         
+                    }
+                    else if (newuser.signupcodeid.Contains("SFECORE"))
+                    {
+                        var notification = new NotificationRequest
+                        {
+                            NotificationId = new Random().Next(1, int.MaxValue),
+                            Title = "Complete your SF-36 General Health Questionnaire",
+                            Description = "Please take a moment to complete your SF-36 questionnaire",
+                            BadgeNumber = 0,
+
+                            Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
+                            {
+                                Priority = Plugin.LocalNotification.AndroidOption.AndroidPriority.High, // ?? Set priority here
+                            },
+
+                            // Add any custom data you need to retrieve when the notification is tapped
+                            //ReturningData = "action=questionnaire&studyid=IID3",
+
+                            Schedule = new NotificationRequestSchedule
+                            {
+                                NotifyTime = DateTime.Now.AddDays(1),
+                                RepeatType = NotificationRepeat.No,
+                                NotifyRepeatInterval = null,
+
+                            }
+                        };
+
+                        LocalNotificationCenter.Current.Show(notification);
+
+                        //Save NotificationiD to local Storage
+                        Preferences.Set("SFEcoreNotID", notification.NotificationId.ToString());
                     }
                 }
 

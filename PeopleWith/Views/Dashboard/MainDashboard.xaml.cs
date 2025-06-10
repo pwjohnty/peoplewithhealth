@@ -21,6 +21,8 @@ using Microsoft.Maui.Controls;
 using Plugin.Maui.Health.Enums;
 using Plugin.Maui.Health;
 using System.Globalization;
+using CommunityToolkit.Maui.Core.Extensions;
+using System.Threading.Tasks;
 //using Xamarin.Google.Crypto.Tink.Subtle;
 
 namespace PeopleWith;
@@ -39,10 +41,16 @@ public partial class MainDashboard : ContentPage
     List<object> foryouuserlistsymptom = new List<object>();
     List<object> foryouuserlistmeds = new List<object>();
     List<object> foryouuserlistsupps = new List<object>();
+    List<object> PopulateDashQuestions = new List<object>();
     ObservableCollection<userfeedback> userfeedbacklist = new ObservableCollection<userfeedback>();
     ObservableCollection<usermedication> AllUserMedications = new ObservableCollection<usermedication>();
     ObservableCollection<usersupplement> AllUserSupplements = new ObservableCollection<usersupplement>();
     public ObservableCollection<usersymptom> UserSymptomPassed = new ObservableCollection<usersymptom>();
+    //DashQuestions Answers
+    public ObservableCollection<registryData> DashQuestionAnswers = new ObservableCollection<registryData>();
+    //DashQuestions Inputs
+    public ObservableCollection<registryDataInputs> DashQuestionInputs = new ObservableCollection<registryDataInputs>();
+    public ObservableCollection<IGrouping<string, registryDataInputs>> GroupedDashQuestions = new ObservableCollection<IGrouping<string, registryDataInputs>>(); 
 
     ObservableCollection<signupcode> signupcodecollection = new ObservableCollection<signupcode>();
     public ObservableCollection<questionnaire> questionnaires = new ObservableCollection<questionnaire>();
@@ -287,6 +295,12 @@ public partial class MainDashboard : ContentPage
                     Preferences.Default.Set("NovoContent", CleanString);
                 }
 
+                //Additional Dash Questions  SFEWH && SFECORE 
+                if (signupcodecollection[0].referral == "SFEWH" || signupcodecollection[0].referral == "SFECORE")
+                {
+                    DashQuestions();
+                }
+
             }
             else
             {
@@ -335,6 +349,166 @@ public partial class MainDashboard : ContentPage
             NotasyncMethod(Ex);
         }
     }
+
+    async void DashQuestions()
+    {
+        try
+        {
+            //GetDashQuestions
+            DashQuestionInputs = await database.GetDashQuestions();
+            DashQuestionAnswers = await database.GetDashQuestionAnswers();
+
+
+            foreach (var items in DashQuestionInputs)
+            {
+                //Set all initially to false
+                items.Dropdown = false;
+                items.Multiple = false;
+                items.Weight = false;
+                items.WeightYear = false;
+                items.Number = false;
+                items.MultipleDate = false;
+                items.DateDate = false;
+                items.Date = false;
+                items.WeightEntry = false; 
+
+                //Add quesorder
+                if (!string.IsNullOrEmpty(items.apporder))
+                {
+                    items.quesorder = Int32.Parse(items.apporder) - 1;
+                }
+
+                var SetBool = new Dictionary<string, Action>
+                {
+                    { "dropdown", () => items.Dropdown = true },
+                    { "multiple", () => items.Multiple = true },
+                    { "weight", () => items.Weight = true },
+                    { "weight,year", () => items.WeightYear = true },
+                    { "number", () => items.Number = true },
+                    { "multiple,date", () => items.MultipleDate = true },
+                    { "date,date", () => items.DateDate = true },
+                    { "date", () => items.Date = true },
+
+                };
+
+                if (SetBool.TryGetValue(items.type.ToLower(), out var setter))
+                {
+                    setter();
+                }
+
+                //Split Values 
+                if (!string.IsNullOrEmpty(items.values))
+                {
+                    if (items.values.Contains(","))
+                    {
+                        items.ValueInputs = items.values
+                            .Split(',').Select(value => new CheckBoxOption
+                            {
+                                Text = value.Trim(),
+                                questionid = items.id,
+                                IsChecked = false 
+                            }).ToList();
+                    }
+                }
+
+                //Split Values 
+                //if (!string.IsNullOrEmpty(items.values))
+                //{
+                //    if (items.values.Contains(","))
+                //    {
+                //        items.ValueInputs = items.values.Split(',').ToList();
+                //    }
+                //}
+            }
+
+            string DescTemplate = "Please complete the questionnaire related to your ";
+
+            // Group DashQuestionInputs by dataTab
+            GroupedDashQuestions = new ObservableCollection<IGrouping<string, registryDataInputs>>(
+                DashQuestionInputs
+                    .Where(x => !string.IsNullOrEmpty(x.dataTab))
+                    .GroupBy(x => x.dataTab)
+            );
+
+            // Initialize the collection for dash items
+            var PopulateDashQuestions = new ObservableCollection<dashitem>();
+
+            // Populate dash items with the first item from each group
+            foreach (var group in GroupedDashQuestions)
+            {
+                var firstItem = group.FirstOrDefault();
+                if (firstItem != null)
+                {
+                    var Data = new dashitem
+                    {
+                        Title = group.Key,
+                        Type = $"{DescTemplate}{group.Key}"
+                    };
+                    PopulateDashQuestions.Add(Data);
+                }
+            }
+
+            DashQuestionItems.ItemsSource = PopulateDashQuestions;
+
+            string AddItems = string.Empty;
+            var titles = PopulateDashQuestions.Select(g => g.Title).ToList();
+
+            if (titles.Count == 1)
+            {
+                AddItems = titles[0];
+            }
+            else if (titles.Count > 1)
+            {
+                AddItems = string.Join(", ", titles.Take(titles.Count - 1)) + ", and " + titles.Last();
+            }
+
+            Descriptionlbl.Text = $"We capture additional questions based on your {AddItems}. Please complete the following sections.";
+
+
+
+            //// Clear and populate the list
+            //var uniqueTabs = DashQuestionInputs
+            //    .Where(x => !string.IsNullOrEmpty(x.dataTab))
+            //    .GroupBy(x => x.dataTab)
+            //    .Select(g => g.First());
+
+            //var PopulateDashQuestions = new ObservableCollection<dashitem>();
+
+            //foreach (var item in uniqueTabs)
+            //{
+            //    var Data = new dashitem
+            //    {
+            //        Title = item.dataTab,
+            //        Type = $"{DescTemplate}{item.dataTab}"
+            //    };
+
+            //    PopulateDashQuestions.Add(Data);
+            //}
+
+            //// Assign to the ListView
+            //DashQuestionItems.ItemsSource = PopulateDashQuestions;
+
+            //string AddItems = string.Empty;
+            //var titles = PopulateDashQuestions.Select(g => g.Title).ToList();
+
+            //if (titles.Count == 1)
+            //{
+            //    AddItems = titles[0];
+            //}
+            //else if (titles.Count > 1)
+            //{
+            //    AddItems = string.Join(", ", titles.Take(titles.Count - 1)) + ", and " + titles.Last();
+            //}
+
+            //Descriptionlbl.Text = "We capture additional questions based on your "  + AddItems +  " . Please complete the following sections.";
+
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
 
     async void checknotificationsEnabled()
     {
@@ -1293,6 +1467,41 @@ public partial class MainDashboard : ContentPage
 
 
             }
+            else if (signup.Contains("SFECORE"))
+            {
+                var QuestionList = new ObservableCollection<questionnaire>();
+                completequestionnaireborder.IsVisible = false;
+                additionalquestionstab.IsVisible = true;
+
+                //SF-36
+                string QID = "DC6A9FD7-242B-4299-9672-D745669FEAF0";
+                if (questionnaires != null)
+                {
+                    QuestionList = new ObservableCollection<questionnaire>(questionnaires.Where(q => QID.Contains(q.questionnaireid)));
+                }
+
+                QuestionsIndicator.IsVisible = false;
+                QuestionsPrompt.ItemsSource = QuestionList;
+                QuestionsPrompt.IsSwipeEnabled = false;
+                QuestionnairePrompt.IsVisible = true;
+
+
+                if (userfeedbacklist[0].initialquestionnairefeedbacklist != null)
+                {
+                    QuestionnairePrompt.IsVisible = false;
+                    completequestionnaireborder.IsVisible = false;
+
+                    string retrievedId = Preferences.Get("SFEcoreNotID", string.Empty);
+
+                    if (!string.IsNullOrEmpty(retrievedId) && int.TryParse(retrievedId, out int notificationId))
+                    {
+                        LocalNotificationCenter.Current.Cancel(notificationId);
+
+                        //Delete SFEcoreNotID. No Longer Needed
+                        Preferences.Remove("SFEcoreNotID");
+                    }
+                }
+            }
             else if (signup.Contains("SFEAT"))
             {
                 var QuestionList = new ObservableCollection<questionnaire>();
@@ -1323,7 +1532,8 @@ public partial class MainDashboard : ContentPage
                         Preferences.Remove("NsatNotID");
                     }
                 }
-                else
+              
+               else
                 {
                     completequestionnaireborder.IsVisible = false;
 
@@ -1340,7 +1550,7 @@ public partial class MainDashboard : ContentPage
                     QuestionnairePrompt.IsVisible = true;
 
                     questionnaireinfotext.Text = "Complete EQ-5D 5L General Health Questionnaire";
-                
+
 
                 }
 
@@ -1362,112 +1572,120 @@ public partial class MainDashboard : ContentPage
         {
             if (userfeedbacklist != null)
             {
-                bool CheckForNull = userfeedbacklist[0].measurementfeedbacklist.Any(x => string.IsNullOrEmpty(x.id));
-
-                if (CheckForNull)
+                if (userfeedbacklist[0].measurementfeedbacklist != null)
                 {
-                    //Get Usermeasurements 
-                    UserMeasurementUpdate = await database.GetUserMeasurements();
+                    bool CheckForNull = userfeedbacklist[0].measurementfeedbacklist.Any(x => string.IsNullOrEmpty(x.id));
 
-                    foreach (var item in userfeedbacklist[0].measurementfeedbacklist)
+                    if (CheckForNull)
                     {
-                        if (string.IsNullOrEmpty(item.id))
+                        //Get Usermeasurements 
+                        UserMeasurementUpdate = await database.GetUserMeasurements();
+
+                        foreach (var item in userfeedbacklist[0].measurementfeedbacklist)
                         {
-                            //match user measurement to Value && inputdateTime 
-
-                            var selectedMeasurement = UserMeasurementUpdate.Where(x => x.value == item.value && DateTime.Parse(x.inputdatetime) == DateTime.Parse(item.datetime)).FirstOrDefault();
-
-                            if (selectedMeasurement != null)
+                            if (string.IsNullOrEmpty(item.id))
                             {
-                                item.id = selectedMeasurement.id;
+                                //match user measurement to Value && inputdateTime 
+
+                                var selectedMeasurement = UserMeasurementUpdate.Where(x => x.value == item.value && DateTime.Parse(x.inputdatetime) == DateTime.Parse(item.datetime)).FirstOrDefault();
+
+                                if (selectedMeasurement != null)
+                                {
+                                    item.id = selectedMeasurement.id;
+                                }
                             }
                         }
+
+                        //update userfeedback table (Measurement Data)
+                        if (userfeedbacklist[0].measurementfeedbacklist == null)
+                        {
+                            userfeedbacklist[0].measurementfeedbacklist = new ObservableCollection<feedbackdata>();
+                        }
+
+                        string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklist[0].measurementfeedbacklist);
+                        userfeedbacklist[0].measurementfeedback = newsymJson;
+
+                        await database.UserfeedbackUpdateMeasurementData(userfeedbacklist[0]);
                     }
-
-                    //update userfeedback table (Measurement Data)
-                    if (userfeedbacklist[0].measurementfeedbacklist == null)
-                    {
-                        userfeedbacklist[0].measurementfeedbacklist = new ObservableCollection<feedbackdata>();
-                    }
-
-                    string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklist[0].measurementfeedbacklist);
-                    userfeedbacklist[0].measurementfeedback = newsymJson;
-
-                    await database.UserfeedbackUpdateMeasurementData(userfeedbacklist[0]);
                 }
 
-                //Check Symptoms 
-                bool CheckisNull = userfeedbacklist[0].symptomfeedbacklist.Any(x => string.IsNullOrEmpty(x.id));
-
-                if (CheckisNull)
+                if (userfeedbacklist[0].symptomfeedbacklist != null)
                 {
-                    //Get Usersymptoms 
-                    UserSymptomsUpdate = await database.GetUserSymptomAsync();
+                    //Check Symptoms 
+                    bool CheckisNull = userfeedbacklist[0].symptomfeedbacklist.Any(x => string.IsNullOrEmpty(x.id));
 
-                    foreach (var item in userfeedbacklist[0].symptomfeedbacklist)
+                    if (CheckisNull)
                     {
-                        if (string.IsNullOrEmpty(item.id))
+                        //Get Usersymptoms 
+                        UserSymptomsUpdate = await database.GetUserSymptomAsync();
+
+                        foreach (var item in userfeedbacklist[0].symptomfeedbacklist)
                         {
-                            //match user Mood to label && datetime 
-
-                            var SelectedSymptom = UserSymptomsUpdate[0].feedback.Where(x => x.intensity == item.value && DateTime.Parse(x.timestamp) == DateTime.Parse(item.datetime)).FirstOrDefault();
-
-                            if (SelectedSymptom != null)
+                            if (string.IsNullOrEmpty(item.id))
                             {
-                                item.id = SelectedSymptom.symptomfeedbackid;
+                                //match user Mood to label && datetime 
+
+                                var SelectedSymptom = UserSymptomsUpdate[0].feedback.Where(x => x.intensity == item.value && DateTime.Parse(x.timestamp) == DateTime.Parse(item.datetime)).FirstOrDefault();
+
+                                if (SelectedSymptom != null)
+                                {
+                                    item.id = SelectedSymptom.symptomfeedbackid;
+                                }
                             }
                         }
+
+                        //update userfeedback table (Symptom Data)
+                        if (userfeedbacklist[0].symptomfeedbacklist == null)
+                        {
+                            userfeedbacklist[0].symptomfeedbacklist = new ObservableCollection<feedbackdata>();
+                        }
+
+                        string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklist[0].symptomfeedbacklist);
+                        userfeedbacklist[0].symptomfeedback = newsymJson;
+
+                        await database.UserfeedbackUpdateSymptomData(userfeedbacklist[0]);
+
                     }
-
-                    //update userfeedback table (Symptom Data)
-                    if (userfeedbacklist[0].symptomfeedbacklist == null)
-                    {
-                        userfeedbacklist[0].symptomfeedbacklist = new ObservableCollection<feedbackdata>();
-                    }
-
-                    string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklist[0].symptomfeedbacklist);
-                    userfeedbacklist[0].symptomfeedback = newsymJson;
-
-                    await database.UserfeedbackUpdateSymptomData(userfeedbacklist[0]);
-
                 }
 
-                //Check mood 
-                bool CheckNull = userfeedbacklist[0].moodfeedbacklist.Any(x => string.IsNullOrEmpty(x.id));
-
-                if (CheckNull)
+                if (userfeedbacklist[0].moodfeedbacklist != null)
                 {
-                    //Get UserMood 
-                    string userid = Preferences.Default.Get("userid", "Unknown");
-                    UserMoodUpdate = await database.GetUserMoodsAsync(userid);
+                    //Check mood 
+                    bool CheckNull = userfeedbacklist[0].moodfeedbacklist.Any(x => string.IsNullOrEmpty(x.id));
 
-                    foreach (var item in userfeedbacklist[0].moodfeedbacklist)
+                    if (CheckNull)
                     {
-                        if (string.IsNullOrEmpty(item.id))
+                        //Get UserMood 
+                        string userid = Preferences.Default.Get("userid", "Unknown");
+                        UserMoodUpdate = await database.GetUserMoodsAsync(userid);
+
+                        foreach (var item in userfeedbacklist[0].moodfeedbacklist)
                         {
-                            //match user Mood to label && datetime 
-
-                            var SelectedMood = UserMoodUpdate.Where(x => x.title == item.label && DateTime.Parse(x.datetime) == DateTime.Parse(item.datetime)).FirstOrDefault();
-
-                            if (SelectedMood != null)
+                            if (string.IsNullOrEmpty(item.id))
                             {
-                                item.id = SelectedMood.id;
+                                //match user Mood to label && datetime 
+
+                                var SelectedMood = UserMoodUpdate.Where(x => x.title == item.label && DateTime.Parse(x.datetime) == DateTime.Parse(item.datetime)).FirstOrDefault();
+
+                                if (SelectedMood != null)
+                                {
+                                    item.id = SelectedMood.id;
+                                }
                             }
                         }
+
+                        //update userfeedback table (Mood Data)
+                        if (userfeedbacklist[0].moodfeedbacklist == null)
+                        {
+                            userfeedbacklist[0].moodfeedbacklist = new ObservableCollection<feedbackdata>();
+                        }
+
+                        string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklist[0].moodfeedbacklist);
+                        userfeedbacklist[0].moodfeedback = newsymJson;
+
+                        await database.UserfeedbackUpdateMoodData(userfeedbacklist[0]);
                     }
-
-                    //update userfeedback table (Mood Data)
-                    if (userfeedbacklist[0].moodfeedbacklist == null)
-                    {
-                        userfeedbacklist[0].moodfeedbacklist = new ObservableCollection<feedbackdata>();
-                    }
-
-                    string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklist[0].moodfeedbacklist);
-                    userfeedbacklist[0].moodfeedback = newsymJson;
-
-                    await database.UserfeedbackUpdateMoodData(userfeedbacklist[0]);
                 }
-
             }
         }
         catch (Exception Ex)
@@ -4727,6 +4945,27 @@ public partial class MainDashboard : ContentPage
 
         }
     }
+
+    private async void DashQuestionItems_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
+    {
+        try
+        {
+            var item = e.DataItem as dashitem;
+
+            var selectedGroup = GroupedDashQuestions.FirstOrDefault(g => g.Key == item.Title);
+
+            ObservableCollection<registryDataInputs> selectedItems = selectedGroup != null
+                ? new ObservableCollection<registryDataInputs>(selectedGroup)
+                : new ObservableCollection<registryDataInputs>();
+
+           // await Navigation.PushAsync(new DashStudyQuestions(selectedItems), false); 
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
 
     //private async void Button_Clicked_6(object sender, EventArgs e)
     //{
