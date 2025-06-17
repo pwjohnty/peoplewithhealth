@@ -340,32 +340,32 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
-            if(DeviceInfo.Current.Platform == DevicePlatform.Android)
-            {
-                PermissionStatus status = await Permissions.CheckStatusAsync<Permissions.PostNotifications>();
-                if (status == PermissionStatus.Granted)
-                {
-                    EnableNotifStack.IsVisible = false;
-                }
-                else
-                {
-                    EnableNotifStack.IsVisible = true;
-                }
-            }
-            else if (DeviceInfo.Current.Platform == DevicePlatform.iOS)
-            {
-                var notificationService = DependencyService.Get<INotificationService>();
-                bool notificationsEnabled = await notificationService.CheckRequestNotificationPermissionAsync();
+            //if(DeviceInfo.Current.Platform == DevicePlatform.Android)
+            //{
+            //    PermissionStatus status = await Permissions.CheckStatusAsync<Permissions.PostNotifications>();
+            //    if (status == PermissionStatus.Granted)
+            //    {
+            //        EnableNotifStack.IsVisible = false;
+            //    }
+            //    else
+            //    {
+            //        EnableNotifStack.IsVisible = true;
+            //    }
+            //}
+            //else if (DeviceInfo.Current.Platform == DevicePlatform.iOS)
+            //{
+            //    var notificationService = DependencyService.Get<INotificationService>();
+            //    bool notificationsEnabled = await notificationService.CheckRequestNotificationPermissionAsync();
 
-                if (notificationsEnabled)
-                {
-                    EnableNotifStack.IsVisible = false;
-                }
-                else
-                {
-                    EnableNotifStack.IsVisible = true;
-                }
-            }
+            //    if (notificationsEnabled)
+            //    {
+            //        EnableNotifStack.IsVisible = false;
+            //    }
+            //    else
+            //    {
+            //        EnableNotifStack.IsVisible = true;
+            //    }
+          //  }
            
         }
         catch (Exception Ex)
@@ -405,7 +405,7 @@ public partial class MainDashboard : ContentPage
 
             if (DeviceInfo.Current.Platform == DevicePlatform.iOS)
             {
-              //  getfitnesshealthdata();
+               getfitnesshealthdata();
             }
 
             // Stop the stopwatch after retrieval
@@ -1034,57 +1034,111 @@ public partial class MainDashboard : ContentPage
 
                 var mooddata = new List<feedbackdata>();
 
-                foreach (var item in filteredMoods)
-                {
-                    var countForDay = userfeedbacklist[0].moodfeedbacklist
-                        .Where(x => x.label == item.label && DateTime.Parse(x.datetime) >= sevenDaysAgo && x.action != "deleted") // Apply date filter again
-                        .Count();
 
-                    mooddata.Add(new feedbackdata
+                //new mood data listview
+
+               // var sevenDaysAgo = DateTime.Now.AddDays(-6).Date; // last 7 days, inclusive of today
+                var today = DateTime.Now.Date;
+
+                var moodSummaryPerDay = new List<feedbackdata>();
+
+                for (int i = 0; i < 7; i++)
+                {
+                    var currentDay = sevenDaysAgo.AddDays(i).Date;
+
+                    var moodsForDay1 = userfeedbacklist[0].moodfeedbacklist
+                        .Where(x =>
+                        {
+                            var moodDate = DateTime.Parse(x.datetime).Date;
+                            return moodDate == currentDay && x.action != "deleted";
+                        })
+                        .ToList();
+
+                    if (moodsForDay1.Count == 0)
                     {
-                        label = item.label,
-                        Count = countForDay
-                    });
-                }
-
-                if(mooddata.Count > 0)
-                {
-                    int GetCount = mooddata.Sum(item => item.Count);
-                    TotalCountlbl.Text = GetCount.ToString();
-
-                    var DateTimeNOW = DateTime.Now.ToString("dd/MM/yy");
-                    var Weekago = DateTime.Now.AddDays(-7).ToString("dd/MM/yy");
-                    var Timeline = Weekago + " - " + DateTimeNOW;
-                    MoodTimelinelbl.Text = Timeline;
-                    moodchart.ItemsSource = mooddata;
-
-                    moodlbl.IsVisible = true;
-                    measlbl2.IsVisible = true;
-                    moodframe.IsVisible = true;
-                    nomooddataframe.IsVisible = false;
-                }
-                else
-                {
-                    moodlbl.IsVisible = true;
-                    measlbl2.IsVisible = true;
-                    moodframe.IsVisible = true;
-                    nomooddataframe.IsVisible = false;
-
-                    mooddata.Add(new feedbackdata
+                        // No mood entry for that day
+                        moodSummaryPerDay.Add(new feedbackdata
+                        {
+                            shortlabel = currentDay.ToString("dd MMM"),
+                            title = "close.png",
+                            avgstring = "No Mood"
+                        });
+                    }
+                    else
                     {
-                        label = "No Data",
-                        Count = 1
-                    });
+                        // Find the most common mood label
+                        var topMood = moodsForDay1
+                            .GroupBy(m => m.label)
+                            .OrderByDescending(g => g.Count())
+                            .First().Key;
 
-                    var DateTimeNOW = DateTime.Now.ToString("dd/MM/yy");
-                    var Weekago = DateTime.Now.AddDays(-7).ToString("dd/MM/yy");
-                    var Timeline = Weekago + " - " + DateTimeNOW;
-                    MoodTimelinelbl.Text = Timeline;
+                        moodSummaryPerDay.Add(new feedbackdata
+                        {
+                            shortlabel = currentDay.ToString("dd MMM"),
+                            title = topMood.ToLower() + ".png",
+                            avgstring = topMood
+                        });
 
-                    TotalCountlbl.Text = "0";
 
-                    moodchart.ItemsSource = mooddata;
+                       
+                    }
                 }
+
+                moodSummaryPerDay.Reverse();
+
+                moodlistsummary.ItemsSource = moodSummaryPerDay;
+
+                //foreach (var item in filteredMoods)
+                //{
+                //    var countForDay = userfeedbacklist[0].moodfeedbacklist
+                //        .Where(x => x.label == item.label && DateTime.Parse(x.datetime) >= sevenDaysAgo && x.action != "deleted") // Apply date filter again
+                //        .Count();
+
+                //    mooddata.Add(new feedbackdata
+                //    {
+                //        label = item.label,
+                //        Count = countForDay
+                //    });
+                //}
+
+                //if(mooddata.Count > 0)
+                //{
+                //    int GetCount = mooddata.Sum(item => item.Count);
+                //    TotalCountlbl.Text = GetCount.ToString();
+
+                //    var DateTimeNOW = DateTime.Now.ToString("dd/MM/yy");
+                //    var Weekago = DateTime.Now.AddDays(-7).ToString("dd/MM/yy");
+                //    var Timeline = Weekago + " - " + DateTimeNOW;
+                //    MoodTimelinelbl.Text = Timeline;
+                //    moodchart.ItemsSource = mooddata;
+
+                //    moodlbl.IsVisible = true;
+                //    measlbl2.IsVisible = true;
+                //    moodframe.IsVisible = true;
+                //    nomooddataframe.IsVisible = false;
+                //}
+                //else
+                //{
+                //    moodlbl.IsVisible = true;
+                //    measlbl2.IsVisible = true;
+                //    moodframe.IsVisible = true;
+                //    nomooddataframe.IsVisible = false;
+
+                //    mooddata.Add(new feedbackdata
+                //    {
+                //        label = "No Data",
+                //        Count = 1
+                //    });
+
+                //    var DateTimeNOW = DateTime.Now.ToString("dd/MM/yy");
+                //    var Weekago = DateTime.Now.AddDays(-7).ToString("dd/MM/yy");
+                //    var Timeline = Weekago + " - " + DateTimeNOW;
+                //    MoodTimelinelbl.Text = Timeline;
+
+                //    TotalCountlbl.Text = "0";
+
+                //    moodchart.ItemsSource = mooddata;
+                //}
 
 
                 var targetDate = DateTime.Today;
@@ -1364,110 +1418,125 @@ public partial class MainDashboard : ContentPage
         {
             if (userfeedbacklist != null)
             {
-                bool CheckForNull = userfeedbacklist[0].measurementfeedbacklist.Any(x => string.IsNullOrEmpty(x.id));
 
-                if (CheckForNull)
+                if (userfeedbacklist[0].measurementfeedbacklist != null)
                 {
-                    //Get Usermeasurements 
-                    UserMeasurementUpdate = await database.GetUserMeasurements();
 
-                    foreach (var item in userfeedbacklist[0].measurementfeedbacklist)
+                    bool CheckForNull = userfeedbacklist[0].measurementfeedbacklist.Any(x => string.IsNullOrEmpty(x.id));
+
+                    if (CheckForNull)
                     {
-                        if (string.IsNullOrEmpty(item.id))
+                        //Get Usermeasurements 
+                        UserMeasurementUpdate = await database.GetUserMeasurements();
+
+                        foreach (var item in userfeedbacklist[0].measurementfeedbacklist)
                         {
-                            //match user measurement to Value && inputdateTime 
-
-                            var selectedMeasurement = UserMeasurementUpdate.Where(x => x.value == item.value && DateTime.Parse(x.inputdatetime) == DateTime.Parse(item.datetime)).FirstOrDefault();
-
-                            if (selectedMeasurement != null)
+                            if (string.IsNullOrEmpty(item.id))
                             {
-                                item.id = selectedMeasurement.id;
+                                //match user measurement to Value && inputdateTime 
+
+                                var selectedMeasurement = UserMeasurementUpdate.Where(x => x.value == item.value && DateTime.Parse(x.inputdatetime) == DateTime.Parse(item.datetime)).FirstOrDefault();
+
+                                if (selectedMeasurement != null)
+                                {
+                                    item.id = selectedMeasurement.id;
+                                }
                             }
                         }
+
+                        //update userfeedback table (Measurement Data)
+                        if (userfeedbacklist[0].measurementfeedbacklist == null)
+                        {
+                            userfeedbacklist[0].measurementfeedbacklist = new ObservableCollection<feedbackdata>();
+                        }
+
+                        string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklist[0].measurementfeedbacklist);
+                        userfeedbacklist[0].measurementfeedback = newsymJson;
+
+                        await database.UserfeedbackUpdateMeasurementData(userfeedbacklist[0]);
                     }
-
-                    //update userfeedback table (Measurement Data)
-                    if (userfeedbacklist[0].measurementfeedbacklist == null)
-                    {
-                        userfeedbacklist[0].measurementfeedbacklist = new ObservableCollection<feedbackdata>();
-                    }
-
-                    string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklist[0].measurementfeedbacklist);
-                    userfeedbacklist[0].measurementfeedback = newsymJson;
-
-                    await database.UserfeedbackUpdateMeasurementData(userfeedbacklist[0]);
                 }
 
-                //Check Symptoms 
-                bool CheckisNull = userfeedbacklist[0].symptomfeedbacklist.Any(x => string.IsNullOrEmpty(x.id));
 
-                if (CheckisNull)
+                if (userfeedbacklist[0].symptomfeedbacklist != null)
                 {
-                    //Get Usersymptoms 
-                    UserSymptomsUpdate = await database.GetUserSymptomAsync();
 
-                    foreach (var item in userfeedbacklist[0].symptomfeedbacklist)
+                    //Check Symptoms 
+                    bool CheckisNull = userfeedbacklist[0].symptomfeedbacklist.Any(x => string.IsNullOrEmpty(x.id));
+
+                    if (CheckisNull)
                     {
-                        if (string.IsNullOrEmpty(item.id))
+                        //Get Usersymptoms 
+                        UserSymptomsUpdate = await database.GetUserSymptomAsync();
+
+                        foreach (var item in userfeedbacklist[0].symptomfeedbacklist)
                         {
-                            //match user Mood to label && datetime 
-
-                            var SelectedSymptom = UserSymptomsUpdate[0].feedback.Where(x => x.intensity == item.value && DateTime.Parse(x.timestamp) == DateTime.Parse(item.datetime)).FirstOrDefault();
-
-                            if (SelectedSymptom != null)
+                            if (string.IsNullOrEmpty(item.id))
                             {
-                                item.id = SelectedSymptom.symptomfeedbackid;
+                                //match user Mood to label && datetime 
+
+                                var SelectedSymptom = UserSymptomsUpdate[0].feedback.Where(x => x.intensity == item.value && DateTime.Parse(x.timestamp) == DateTime.Parse(item.datetime)).FirstOrDefault();
+
+                                if (SelectedSymptom != null)
+                                {
+                                    item.id = SelectedSymptom.symptomfeedbackid;
+                                }
                             }
                         }
+
+                        //update userfeedback table (Symptom Data)
+                        if (userfeedbacklist[0].symptomfeedbacklist == null)
+                        {
+                            userfeedbacklist[0].symptomfeedbacklist = new ObservableCollection<feedbackdata>();
+                        }
+
+                        string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklist[0].symptomfeedbacklist);
+                        userfeedbacklist[0].symptomfeedback = newsymJson;
+
+                        await database.UserfeedbackUpdateSymptomData(userfeedbacklist[0]);
+
                     }
-
-                    //update userfeedback table (Symptom Data)
-                    if (userfeedbacklist[0].symptomfeedbacklist == null)
-                    {
-                        userfeedbacklist[0].symptomfeedbacklist = new ObservableCollection<feedbackdata>();
-                    }
-
-                    string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklist[0].symptomfeedbacklist);
-                    userfeedbacklist[0].symptomfeedback = newsymJson;
-
-                    await database.UserfeedbackUpdateSymptomData(userfeedbacklist[0]);
-
                 }
 
-                //Check mood 
-                bool CheckNull = userfeedbacklist[0].moodfeedbacklist.Any(x => string.IsNullOrEmpty(x.id));
 
-                if (CheckNull)
+                if (userfeedbacklist[0].moodfeedbacklist != null)
                 {
-                    //Get UserMood 
-                    string userid = Preferences.Default.Get("userid", "Unknown");
-                    UserMoodUpdate = await database.GetUserMoodsAsync(userid);
 
-                    foreach (var item in userfeedbacklist[0].moodfeedbacklist)
+                    //Check mood 
+                    bool CheckNull = userfeedbacklist[0].moodfeedbacklist.Any(x => string.IsNullOrEmpty(x.id));
+
+                    if (CheckNull)
                     {
-                        if (string.IsNullOrEmpty(item.id))
+                        //Get UserMood 
+                        string userid = Preferences.Default.Get("userid", "Unknown");
+                        UserMoodUpdate = await database.GetUserMoodsAsync(userid);
+
+                        foreach (var item in userfeedbacklist[0].moodfeedbacklist)
                         {
-                            //match user Mood to label && datetime 
-
-                            var SelectedMood = UserMoodUpdate.Where(x => x.title == item.label && DateTime.Parse(x.datetime) == DateTime.Parse(item.datetime)).FirstOrDefault();
-
-                            if (SelectedMood != null)
+                            if (string.IsNullOrEmpty(item.id))
                             {
-                                item.id = SelectedMood.id;
+                                //match user Mood to label && datetime 
+
+                                var SelectedMood = UserMoodUpdate.Where(x => x.title == item.label && DateTime.Parse(x.datetime) == DateTime.Parse(item.datetime)).FirstOrDefault();
+
+                                if (SelectedMood != null)
+                                {
+                                    item.id = SelectedMood.id;
+                                }
                             }
                         }
+
+                        //update userfeedback table (Mood Data)
+                        if (userfeedbacklist[0].moodfeedbacklist == null)
+                        {
+                            userfeedbacklist[0].moodfeedbacklist = new ObservableCollection<feedbackdata>();
+                        }
+
+                        string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklist[0].moodfeedbacklist);
+                        userfeedbacklist[0].moodfeedback = newsymJson;
+
+                        await database.UserfeedbackUpdateMoodData(userfeedbacklist[0]);
                     }
-
-                    //update userfeedback table (Mood Data)
-                    if (userfeedbacklist[0].moodfeedbacklist == null)
-                    {
-                        userfeedbacklist[0].moodfeedbacklist = new ObservableCollection<feedbackdata>();
-                    }
-
-                    string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklist[0].moodfeedbacklist);
-                    userfeedbacklist[0].moodfeedback = newsymJson;
-
-                    await database.UserfeedbackUpdateMoodData(userfeedbacklist[0]);
                 }
 
             }
@@ -1486,14 +1555,20 @@ public partial class MainDashboard : ContentPage
             //check if user has activated wearables
 
             // Retrieve all user feedback data
-            var userfitnesslist = await database.GetUserFitnessData();
+          //  var userfitnesslist = await database.GetUserFitnessData();
 
-            if(userfitnesslist.Count == 0 || userfitnesslist == null)
+            //if(userfitnesslist.Count == 0 || userfitnesslist == null)
+            //{
+            //    healthdatagrid.IsVisible = true;
+            //    return;
+            //}
+
+
+            if(string.IsNullOrEmpty(Helpers.Settings.FitnessData))
             {
                 healthdatagrid.IsVisible = true;
                 return;
             }
-
 
             //check if they have any fitness health data added
 
@@ -1507,9 +1582,17 @@ public partial class MainDashboard : ContentPage
 
                 var stepsCount = await health.ReadCountAsync(HealthParameter.StepCount, startOfDay, now);
 
-                int roundedSteps = (int)Math.Round(stepsCount);
+                if (stepsCount == null)
+                {
+                    stepcountlbl.Text = "--";
+                }
+                else
+                {
 
-                stepcountlbl.Text = roundedSteps.ToString();
+                    int roundedSteps = (int)Math.Round(stepsCount);
+
+                    stepcountlbl.Text = roundedSteps.ToString();
+                }
             }
             else
             {
@@ -1517,26 +1600,26 @@ public partial class MainDashboard : ContentPage
             }
 
 
-            var hasPermission2 = await health.CheckPermissionAsync(HealthParameter.DistanceWalkingRunning, PermissionType.Read);
-            if (hasPermission2)
-            {
+            //var hasPermission2 = await health.CheckPermissionAsync(HealthParameter.DistanceWalkingRunning, PermissionType.Read);
+            //if (hasPermission2)
+            //{
 
 
-                var startOfDay = DateTime.Today;
-                var now = DateTime.Now;
+            //    var startOfDay = DateTime.Today;
+            //    var now = DateTime.Now;
 
-                var walkingdistance = await health.ReadLatestAvailableAsync(HealthParameter.DistanceWalkingRunning, "m");
+            //    var walkingdistance = await health.ReadLatestAvailableAsync(HealthParameter.DistanceWalkingRunning, "m");
 
-                //int roundedDistance = (int)Math.Round(walkingdistance);
+            //    //int roundedDistance = (int)Math.Round(walkingdistance);
 
-                double distanceKm = Math.Round(walkingdistance.Value.Value / 10, 1);
+            //    double distanceKm = Math.Round(walkingdistance.Value.Value / 10, 1);
 
-                distancelbl.Text = distanceKm.ToString();
-            }
-            else
-            {
-                distancelbl.Text = "--";
-            }
+            //    distancelbl.Text = distanceKm.ToString();
+            //}
+            //else
+            //{
+            //    distancelbl.Text = "--";
+            //}
 
 
             var hasPermission3 = await health.CheckPermissionAsync(HealthParameter.HeartRate, PermissionType.Read);
@@ -1553,7 +1636,17 @@ public partial class MainDashboard : ContentPage
 
                 // double heartrateround = Math.Round(heartrate.Value.Value);
 
-                heartratelbl.Text = hr.Value.Value.ToString();
+                if (hr == null)
+                {
+                    heartratelbl.Text = "--";
+                }
+                else
+                {
+
+                    int roundedhr = (int)Math.Round(hr.Value.Value);
+
+                    heartratelbl.Text = roundedhr.ToString();
+                }
             }
             else
             {
@@ -1575,13 +1668,24 @@ public partial class MainDashboard : ContentPage
 
                 // double heartrateround = Math.Round(heartrate.Value.Value);
 
-                resplbl.Text = hr.Value.Value.ToString();
+                if (hr == null)
+                {
+                    resplbl.Text = "--";
+                }
+                else
+                {
+
+                    resplbl.Text = hr.Value.Value.ToString();
+                }
             }
             else
             {
                 resplbl.Text = "--";
             }
 
+
+            healthdatagrid.IsVisible = false;
+            healthgrid.IsVisible = true;
 
 
         }
@@ -3052,7 +3156,7 @@ public partial class MainDashboard : ContentPage
             {
                 if(SettingstoShow.Count > 1)
                 {
-                    SettingsIND.IsVisible = true;
+                   SettingsIND.IsVisible = true;
                     SettingsCarousel.IsSwipeEnabled = true;
                 }
                 else
@@ -3065,7 +3169,7 @@ public partial class MainDashboard : ContentPage
             }
             else
             {
-                SettingsPrompt.IsVisible = true;
+                SettingsPrompt.IsVisible = false;
                 SettingsIND.IsVisible = false;
             }
 
@@ -4739,6 +4843,33 @@ public partial class MainDashboard : ContentPage
         catch(Exception ex)
         {
 
+        }
+    }
+
+    private async void moodlistsummary_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
+    {
+        try
+        {
+            if (IsNavigating) return;
+            IsNavigating = true;
+            string Area = "Mood";
+            bool Check = Preferences.Default.Get("NovoMood", false);
+            var signup = Helpers.Settings.SignUp;
+            bool NovoSignup = !string.IsNullOrEmpty(signup) && signup.Contains("SAX");
+            if (Check && NovoSignup)
+            {
+                await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+            }
+            else
+            {
+                await Navigation.PushAsync(new AllMood(userfeedbacklist[0]), false);
+            }
+            IsNavigating = false;
+        }
+        catch (Exception Ex)
+        {
+            IsNavigating = false;
+            NotasyncMethod(Ex);
         }
     }
 
