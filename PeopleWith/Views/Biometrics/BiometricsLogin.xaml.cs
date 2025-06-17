@@ -119,7 +119,7 @@ public partial class BiometricsLogin : ContentPage
                         await Task.Run(async () =>
                         {
                             // Simulate some processing that may take up to 2 seconds
-                            await Task.Delay(2000);
+                            await Task.Delay(500);
                         });
 
                         MainThread.BeginInvokeOnMainThread(() =>
