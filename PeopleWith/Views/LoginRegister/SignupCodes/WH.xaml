@@ -1597,7 +1597,7 @@ Text="Other Symptoms"
  HorizontalOptions="Start" />
 
                     <Label
-Text="Please search for other symptoms below, Tap to Add and Remove a symptom."
+Text="Search for symptoms below. Type 3 or more characters to see results, then tap to add or remove a symptom."
 TextColor="#031926"
 FontFamily="HankenGroteskRegular"
 FontAttributes="None"
@@ -1627,7 +1627,7 @@ HorizontalOptions="Start" />
 
                         
                         <!-- New CollectionView -->
-                        <CollectionView x:Name="additionlsymlist" Grid.Row="0" 
+                        <CollectionView x:Name="additionlsymlist" Grid.Row="0" RemainingItemsThresholdReached="SympSearchList_RemainingItemsThresholdReached"
 VerticalScrollBarVisibility="Never" SelectionMode="Multiple" IsVisible="False"
 IsEnabled="False" Margin="0,10,1,100" HeightRequest="{OnPlatform iOS='650', Android='610'}"
 RemainingItemsThreshold="5" SelectionChanged="additionlsymlist_SelectionChanged" >
@@ -1862,7 +1862,7 @@ Text="Other Medications"
  HorizontalOptions="Start" />
 
                     <Label
-Text="Please search for other medications below, Tap to Add and Remove a Medication."
+Text="Search for medications below. Type 3 or more characters to see results, then tap to add or remove a medications."
 TextColor="#031926"
 FontFamily="HankenGroteskRegular"
 FontAttributes="None"
@@ -1890,7 +1890,7 @@ HorizontalOptions="Start" />
                     <Grid Grid.RowDefinitions="Auto" Grid.ColumnDefinitions="100*" >
 
                         <!-- New CollectionView -->
-                        <CollectionView x:Name="additionlmedlist" Grid.Row="0" 
+                        <CollectionView x:Name="additionlmedlist" Grid.Row="0" RemainingItemsThresholdReached="MedSearchList_RemainingItemsThresholdReached"
 VerticalScrollBarVisibility="Never" SelectionMode="Multiple" IsVisible="False"
 IsEnabled="False" Margin="0,10,1,100" HeightRequest="{OnPlatform iOS='650', Android='610'}"
 RemainingItemsThreshold="5" SelectionChanged="additionlmedlist_SelectionChanged" >

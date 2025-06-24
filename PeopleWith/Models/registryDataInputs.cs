@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PeopleWith
 {
-    public class registryDataInputs
+    public class registryDataInputs : INotifyPropertyChanged
     {
 
         //[JsonIgnore]
@@ -66,8 +66,17 @@ namespace PeopleWith
 
         [System.Text.Json.Serialization.JsonIgnore]
         public int quesorder { get; set; }
-        
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public int groupkey { get; set; }
+
+
+        [System.Text.Json.Serialization.JsonIgnore]
         public List<CheckBoxOption> ValueInputs { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public TextOption TextInput { get; set; }
+        //public ObservableCollection<CheckBoxOption> ValueInputs { get; set; }
 
         //Set Single Selection Visibility 
         private bool dropdown;
@@ -81,6 +90,22 @@ namespace PeopleWith
                 if (PropertyChanged != null)
                 {
                     PropertyChanged(this, new PropertyChangedEventArgs(nameof(Dropdown)));
+                }
+            }
+        }
+
+        //Set Single Selection Visibility 
+        private bool dropdownwother;
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool DropDownwOther
+        {
+            get { return dropdownwother; }
+            set
+            {
+                dropdownwother = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(DropDownwOther)));
                 }
             }
         }
@@ -164,6 +189,22 @@ namespace PeopleWith
                 if (PropertyChanged != null)
                 {
                     PropertyChanged(this, new PropertyChangedEventArgs(nameof(WeightYear)));
+                }
+            }
+        }
+
+        //Show hide/Specify Text 
+        private bool weightyearentry;
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool WeightYearEntry
+        {
+            get { return weightyearentry; }
+            set
+            {
+                weightyearentry = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(WeightYearEntry)));
                 }
             }
         }
@@ -252,6 +293,199 @@ namespace PeopleWith
             }
         }
 
+        //Free Text Entry 
+        private string freetextentry;
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string FreeTextEntry
+        {
+            get { return freetextentry; }
+            set
+            {
+                freetextentry = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(FreeTextEntry)));
+                }
+            }
+        }
+
+
+        //Number freeText
+        private string numberentry;
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string NumberEntry
+        {
+            get { return numberentry; }
+            set
+            {
+                numberentry = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(NumberEntry)));
+                }
+            }
+        }
+
+        //Weight,Year (year Entry) 
+        private string weightentrytext;
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string WeightEntryText
+        {
+            get { return weightentrytext; }
+            set
+            {
+                weightentrytext = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(WeightEntryText)));
+                }
+            }
+        }
+
+        //Weight,Year (Weight Entry) 
+        private string weightyearone;
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string WeightYearOne
+        {
+            get { return weightyearone; }
+            set
+            {
+                weightyearone = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(WeightYearOne)));
+                }
+            }
+        }
+
+        //Weight,Year (year Entry) 
+        private string weightyeartwo;
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string WeightYearTwo
+        {
+            get { return weightyeartwo; }
+            set
+            {
+                weightyeartwo = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(WeightYearTwo)));
+                }
+            }
+        }
+
+        //date (Months) 
+        private string dateEntry;
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string DateEntry
+        {
+            get { return dateEntry; }
+            set
+            {
+                dateEntry = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(DateEntry)));
+                }
+            }
+        }
+
+
+        private Color numbercolour;
+        [System.Text.Json.Serialization.JsonIgnore]
+        public Color NumberColour
+        {
+            get { return numbercolour; }
+            set
+            {
+                numbercolour = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(NumberColour)));
+                }
+            }
+        }
+
+        private Color datecolour;
+        [System.Text.Json.Serialization.JsonIgnore]
+        public Color DateColour
+        {
+            get { return datecolour; }
+            set
+            {
+                datecolour = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(DateColour)));
+                }
+            }
+        }
+
+
+        //datedate (Start) 
+        private string datedatestart;
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string DateDateStart
+        {
+            get { return datedatestart; }
+            set
+            {
+                datedatestart = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(DateDateStart)));
+                }
+            }
+        }
+
+        //datedate (End) 
+        private string datedateend;
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string DateDateEnd
+        {
+            get { return datedateend; }
+            set
+            {
+                datedateend = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(DateDateEnd)));
+                }
+            }
+        }
+
+
+        private Color datestartcolour;
+        [System.Text.Json.Serialization.JsonIgnore]
+        public Color DateStartColour
+        {
+            get { return datestartcolour; }
+            set
+            {
+                datestartcolour = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(DateStartColour)));
+                }
+            }
+        }
+
+
+        private Color dateendcolour;
+        [System.Text.Json.Serialization.JsonIgnore]
+        public Color DateEndColour
+        {
+            get { return dateendcolour; }
+            set
+            {
+                dateendcolour = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(DateEndColour)));
+                }
+            }
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -261,23 +495,69 @@ namespace PeopleWith
         }
     }
 
-    public class CheckBoxOption
+    public class CheckBoxOption : INotifyPropertyChanged
     {
-        private bool isChecked;
+
         public string Text { get; set; }
         public string questionid { get; set; }
-        public bool IsChecked
+
+        private bool itemselected;
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool ItemSelected
         {
-            get => isChecked;
+            get { return itemselected; }
             set
             {
-                if (isChecked != value)
+                itemselected = value;
+                if (PropertyChanged != null)
                 {
-                    isChecked = value;
-                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(IsChecked)));
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(ItemSelected)));
                 }
             }
         }
+
+        private string datevalue;
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string DateValue
+        {
+            get { return datevalue; }
+            set
+            {
+                datevalue = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(DateValue)));
+                }
+            }
+        }
+
+        private Color setdatecolour;
+        [System.Text.Json.Serialization.JsonIgnore]
+        public Color SetDateColour
+        {
+            get { return setdatecolour; }
+            set
+            {
+                setdatecolour = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(nameof(SetDateColour)));
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+    }
+
+    public class TextOption : INotifyPropertyChanged
+    {
+
+        public string TextValue { get; set; }
+        public string questionid { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string name)

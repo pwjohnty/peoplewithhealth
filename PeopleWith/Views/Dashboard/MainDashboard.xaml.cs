@@ -23,6 +23,11 @@ using Plugin.Maui.Health;
 using System.Globalization;
 using CommunityToolkit.Maui.Core.Extensions;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
+using System.Text.Json;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Syncfusion.Maui.DataSource.Extensions;
 //using Xamarin.Google.Crypto.Tink.Subtle;
 
 namespace PeopleWith;
@@ -68,7 +73,7 @@ public partial class MainDashboard : ContentPage
     public bool SuppNotifAdded = false; 
     ObservableCollection<SettingsOn> SettingstoShow = new ObservableCollection<SettingsOn>();
     MedSuppNotifications ScheduleNotifications = new MedSuppNotifications();
-
+    public HttpClient Client = new HttpClient();
     public event EventHandler<bool> ConnectivityChanged;
     ObservableCollection<dashitem> dailytasklist = new ObservableCollection<dashitem>();
    // public TaskCompletionSource<bool> PageReady { get; set; } = new();
@@ -87,6 +92,20 @@ public partial class MainDashboard : ContentPage
         catch (Exception ex)
         {
             //Dunno 
+        }
+    }
+
+    private void ConfigureClient()
+    {
+        try
+        {
+            Client = new HttpClient();
+            Client.DefaultRequestHeaders.Add("X-MS-CLIENT-PRINCIPAL", "eyAgCiAgImlkZW50aXR5UHJvdmlkZXIiOiAidGVzdCIsCiAgInVzZXJJZCI6ICIxMjM0NSIsCiAgInVzZXJEZXRhaWxzIjogImpvaG5AY29udG9zby5jb20iLAogICJ1c2VyUm9sZXMiOiBbIjFFMzNDMEFDLTMzOTMtNEMzNC04MzRBLURFNUZEQkNCQjNDQyJdCn0=");
+            Client.DefaultRequestHeaders.Add("X-MS-API-ROLE", "1E33C0AC-3393-4C34-834A-DE5FDBCBB3CC");
+        }
+        catch (Exception Ex)
+        {
+            //Empty
         }
     }
 
@@ -120,6 +139,18 @@ public partial class MainDashboard : ContentPage
             checksignupinfo();
 
             MessagingCenter.Subscribe<App>(this, "CheckUserSettings", (sender) => { UserSettingsCheck(); });
+
+
+            WeakReferenceMessenger.Default.Register<UpdateDashAnswers>(this, (r, m) =>
+            {
+                DashQuestionAnswers = m.Value;
+            });
+
+
+            //MessagingCenter.Subscribe<App>(this, "UpdateQuestionAnswers", (sender) => {
+
+            //    DashQuestionAnswers =
+            //});
             //MessagingCenter.Subscribe<App>(this, "CallNotifications", (sender) => { checknotifications(); });
 
             //MessagingCenter.Subscribe<App>(this, "CallBatterySaver", (sender) => { CheckbatterySaverON(); });
@@ -178,14 +209,13 @@ public partial class MainDashboard : ContentPage
             {
                 getuserfeedbackdata();
             });
-            
+
         }
         catch (Exception Ex)
         {
             NotasyncMethod(Ex);
         }
     }
-
     async void checksignupinfo()
     {
         try
@@ -358,69 +388,19 @@ public partial class MainDashboard : ContentPage
             DashQuestionInputs = await database.GetDashQuestions();
             DashQuestionAnswers = await database.GetDashQuestionAnswers();
 
-
-            foreach (var items in DashQuestionInputs)
+            foreach(var item in DashQuestionAnswers)
             {
-                //Set all initially to false
-                items.Dropdown = false;
-                items.Multiple = false;
-                items.Weight = false;
-                items.WeightYear = false;
-                items.Number = false;
-                items.MultipleDate = false;
-                items.DateDate = false;
-                items.Date = false;
-                items.WeightEntry = false; 
+                var dt = item.createdAt;
+                string NewFormat = dt.ToString("dd/MM/yy");
+                item.DateConverted = NewFormat;
 
-                //Add quesorder
-                if (!string.IsNullOrEmpty(items.apporder))
-                {
-                    items.quesorder = Int32.Parse(items.apporder) - 1;
-                }
+                item.Title = DashQuestionInputs.Where(x => x.id == item.inputid).FirstOrDefault().dataTab;
+                item.Question = DashQuestionInputs.Where(x => x.id == item.inputid).FirstOrDefault().label;
 
-                var SetBool = new Dictionary<string, Action>
-                {
-                    { "dropdown", () => items.Dropdown = true },
-                    { "multiple", () => items.Multiple = true },
-                    { "weight", () => items.Weight = true },
-                    { "weight,year", () => items.WeightYear = true },
-                    { "number", () => items.Number = true },
-                    { "multiple,date", () => items.MultipleDate = true },
-                    { "date,date", () => items.DateDate = true },
-                    { "date", () => items.Date = true },
+                item.HasNotes = !String.IsNullOrEmpty(item.notes); 
 
-                };
-
-                if (SetBool.TryGetValue(items.type.ToLower(), out var setter))
-                {
-                    setter();
-                }
-
-                //Split Values 
-                if (!string.IsNullOrEmpty(items.values))
-                {
-                    if (items.values.Contains(","))
-                    {
-                        items.ValueInputs = items.values
-                            .Split(',').Select(value => new CheckBoxOption
-                            {
-                                Text = value.Trim(),
-                                questionid = items.id,
-                                IsChecked = false 
-                            }).ToList();
-                    }
-                }
-
-                //Split Values 
-                //if (!string.IsNullOrEmpty(items.values))
-                //{
-                //    if (items.values.Contains(","))
-                //    {
-                //        items.ValueInputs = items.values.Split(',').ToList();
-                //    }
-                //}
             }
-
+         
             string DescTemplate = "Please complete the questionnaire related to your ";
 
             // Group DashQuestionInputs by dataTab
@@ -1354,6 +1334,7 @@ public partial class MainDashboard : ContentPage
                 {
 
                 var QuestionList = new ObservableCollection<questionnaire>();
+                SFEWHStudy.IsVisible = true; 
 
                 var ItemstoRemove = new List<string>();                  
                 additionalquestionstab.IsVisible = true;
@@ -1472,6 +1453,7 @@ public partial class MainDashboard : ContentPage
                 var QuestionList = new ObservableCollection<questionnaire>();
                 completequestionnaireborder.IsVisible = false;
                 additionalquestionstab.IsVisible = true;
+                SFECoreStudy.IsVisible = true;
 
                 //SF-36
                 string QID = "DC6A9FD7-242B-4299-9672-D745669FEAF0";
@@ -4828,7 +4810,18 @@ public partial class MainDashboard : ContentPage
         {
             if (IsNavigating) return;
             IsNavigating = true;
-            await Navigation.PushAsync(new DashQuestionnaire("Previous Responses", "list"), false);
+            var signupcode = Helpers.Settings.SignUp;
+            if (signupcode.Contains("SFEWH"))
+            {
+                await Navigation.PushAsync(new DashQuestionnaire("Previous Responses", "list"), false);
+            }
+            else if(signupcode.Contains("SFECORE"))
+            {
+                //Get title 
+                //var targetId = DashQuestionAnswers[0].inputid;
+                //var GetTitle = DashQuestionInputs.Where(x => x.id == targetId).FirstOrDefault().dataTab; 
+                await Navigation.PushAsync(new DashStudyQuestions(DashQuestionAnswers), false);
+            }
             IsNavigating = false;
 
         }
@@ -4958,7 +4951,7 @@ public partial class MainDashboard : ContentPage
                 ? new ObservableCollection<registryDataInputs>(selectedGroup)
                 : new ObservableCollection<registryDataInputs>();
 
-           // await Navigation.PushAsync(new DashStudyQuestions(selectedItems), false); 
+            await Navigation.PushAsync(new DashStudyQuestions(selectedItems, DashQuestionAnswers), false); 
         }
         catch (Exception Ex)
         {

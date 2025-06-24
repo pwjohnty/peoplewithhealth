@@ -63,14 +63,15 @@ namespace PeopleWith
                     // and are viewable in your IDE's debug console or with 'adb logcat', etc.
                     // Debug Mode = True/ Release = False;
 
-                    #if ANDROID
+#if ANDROID
                     options.Native.EnableActivityLifecycleBreadcrumbs = false;
                     options.Native.EnableAppComponentBreadcrumbs = false;
                     options.Native.EnableAppLifecycleBreadcrumbs = false;
                     options.Native.EnableNetworkEventBreadcrumbs = false; 
                     options.Native.EnableSystemEventBreadcrumbs = false;
                     options.Native.EnableUserInteractionBreadcrumbs = false;
-                    #endif
+                    options.Android.SuppressSegfaults = true;
+#endif
 
 
                     options.Debug = false;
@@ -219,7 +220,6 @@ namespace PeopleWith
                 SentrySdk.CaptureException(e.Exception);
                 SentrySdk.FlushAsync(TimeSpan.FromSeconds(2)).Wait(); // Ensure it's sent
             };
-
 
             return builder.Build();
         }

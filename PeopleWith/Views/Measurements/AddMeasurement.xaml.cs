@@ -5852,6 +5852,7 @@ public partial class AddMeasurement : ContentPage
 
                 APICalls database = new APICalls();
                 //Set Deleted to True in UserMedication
+                //Delete Item From UserMedication
                 await database.DeleteSingleMeasurement(usermeasurementpassed);
 
                 var remove = userfeedbacklistpassed.measurementfeedbacklist.FirstOrDefault(x => x.id == usermeasurementpassed.id);
@@ -5859,18 +5860,26 @@ public partial class AddMeasurement : ContentPage
                 if (remove != null)
                 {
                     remove.action = "deleted";
+
                 }
 
                 //Set Deleted to True in UserFeedback measurementfeedback
                 string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.measurementfeedbacklist);
                 userfeedbacklistpassed.measurementfeedback = newsymJson;
 
-
+                //Update userFeedback 
                 await database.UserfeedbackUpdateMeasurementData(userfeedbacklistpassed);
 
                 await MopupService.Instance.PushAsync(new PopupPageHelper("Measurement Feedback Deleted") { });
 
                 await Task.Delay(1000);
+
+                //Update Item 
+                var UpdateItem = usermeasurementlistpassed.Where(x => x.id == usermeasurementpassed.id).FirstOrDefault();
+                if (UpdateItem != null)
+                {
+                    usermeasurementlistpassed.Remove(UpdateItem); 
+                }
 
                 await Navigation.PushAsync(new MeasurementsPage(usermeasurementlistpassed, measurementlist, userfeedbacklistpassed), false);
                 await MopupService.Instance.PopAllAsync(false);
@@ -5902,9 +5911,9 @@ public partial class AddMeasurement : ContentPage
             }
         }
 
-        catch (Exception ex)
+        catch (Exception Ex)
         {
-
+            NotasyncMethod(Ex);
         }
     }
 }

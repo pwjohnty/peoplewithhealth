@@ -35,6 +35,14 @@ public partial class SFEOB : ContentPage
     ObservableCollection<usersymptom> symptomstoadd = new ObservableCollection<usersymptom>();
     List<string> commprefaddedlist = new List<string>();
 
+    //Medication Lazy loader Data
+    private int MedpageSize = 50;
+    private int MedcurrentPage = 0;
+    private bool MedisLoading = false;
+    private bool MEdhasMoreItems = true;
+    ObservableCollection<medication> SearchMedicationsList = new ObservableCollection<medication>();
+    ObservableCollection<medication> FilterMedicationsList = new ObservableCollection<medication>();
+
     //Questions 
     question maritalstatusquestion;
     question occupationquestion;
@@ -1267,49 +1275,85 @@ public partial class SFEOB : ContentPage
         {
         }
     }
-
-    private void searchmedentry_TextChanged(object sender, TextChangedEventArgs e)
+    private async void MedSearchList_RemainingItemsThresholdReached(object sender, EventArgs e)
     {
         try
         {
+            if (MedisLoading || !MEdhasMoreItems) return;
 
-            if (string.IsNullOrEmpty(e.NewTextValue))
+            MedisLoading = true;
+
+            await LoadNextPagetwoAsync();
+
+            MedisLoading = false;
+        }
+        catch (Exception ex)
+        {
+        }
+    }
+
+    private async Task LoadNextPagetwoAsync()
+    {
+        try
+        {
+            var startIndex = MedcurrentPage * MedpageSize;
+            var nextItems = FilterMedicationsList
+                .Skip(startIndex)
+                .Take(MedpageSize)
+                .ToList();
+
+            foreach (var item in nextItems)
+            {
+                SearchMedicationsList.Add(item);
+            }
+
+            MedcurrentPage++;
+
+            if (nextItems.Count < MedpageSize)
+            {
+                MEdhasMoreItems = false;
+            }
+
+            await Task.CompletedTask;
+        }
+        catch (Exception ex)
+        {
+        }
+    }
+    private async void searchmedentry_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        try
+        {
+            var MedText = e.NewTextValue?.Trim();
+
+            if (string.IsNullOrEmpty(MedText) || MedText.Length < 3)
             {
                 additionlmedlist.IsVisible = false;
-                searchmedentry.IsEnabled = false;
-                searchmedentry.IsEnabled = true;
-                Medsloading.IsVisible = false;
                 NoResultslbl2.IsVisible = false;
-
+                return;
             }
-            else
+
+            // Filter the list based on the search
+            FilterMedicationsList = new ObservableCollection<medication>(allmedicationlist.Where(s => s.title.Contains(MedText, StringComparison.OrdinalIgnoreCase)))
+                .OrderBy(m => m.title).ToObservableCollection();
+
+            if (FilterMedicationsList.Count == 0)
             {
-
-                Medsloading.IsVisible = true;
                 additionlmedlist.IsVisible = false;
-                NoResultslbl2.IsVisible = false;
-                var countofcharacters = e.NewTextValue.Length;
-
-                if (countofcharacters > 2)
-                {
-                    var collectionone = allmedicationlist.Where(x => x.title.ToLowerInvariant().StartsWith(e.NewTextValue.ToLowerInvariant()));
-                    var count = collectionone.Count();
-                    Medsloading.IsVisible = false;
-                    if (count == 0)
-                    {
-                        additionlmedlist.IsVisible = false;
-                        NoResultslbl2.IsVisible = true;
-                    }
-                    else
-                    {
-                        additionlmedlist.ItemsSource = collectionone;
-                        additionlmedlist.HeightRequest = count * 60;
-                        additionlmedlist.IsVisible = true;
-                        NoResultslbl2.IsVisible = false;
-
-                    }
-                }
+                NoResultslbl2.IsVisible = true;
+                additionlmedlist.ItemsSource = null;
+                return;
             }
+
+            MedcurrentPage = 0;
+            MEdhasMoreItems = true;
+            SearchMedicationsList.Clear();
+
+            await LoadNextPagetwoAsync();
+
+            additionlmedlist.ItemsSource = SearchMedicationsList;
+            additionlmedlist.IsVisible = true;
+            NoResultslbl2.IsVisible = false;      
         }
         catch (Exception Ex)
         {

@@ -11,6 +11,7 @@ namespace PeopleWith
         public string IDValue { get; set; } // Name property for the entry
         public string IDRecord { get; set; }
         public string questionid { get; set; } // Updated to lowercase
+        public string TextValue { get; set; }
 
         // Bindable properties
         public static readonly BindableProperty IDValueProperty = BindableProperty.Create(
@@ -37,6 +38,15 @@ namespace PeopleWith
             BindingMode.TwoWay,
             propertyChanged: QuestionIdPropertyChanged);
 
+
+        public static readonly BindableProperty textProperty = BindableProperty.Create(
+           nameof(TextValue), // Updated to lowercase
+           typeof(string),
+           typeof(ExtendedEditor),
+           string.Empty,
+           BindingMode.TwoWay,
+           propertyChanged: TextPropertyChanged);
+
         // Property changed handlers
         private static void IDValuePropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
@@ -54,6 +64,12 @@ namespace PeopleWith
         {
             var control = (ExtendedEditor)bindable;
             control.questionid = newValue?.ToString(); // Updated to lowercase
+        }
+
+        private static void TextPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            var control = (ExtendedEditor)bindable;
+            control.TextValue = newValue?.ToString();
         }
     }
 }

@@ -87,6 +87,8 @@ namespace PeopleWith
             {
                 base.OnResume();
 
+                //NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+
                 // Ensure MainPage and Navigation are not null
                 if (MainPage?.Navigation?.NavigationStack == null)
                     return;

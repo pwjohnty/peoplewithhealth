@@ -355,7 +355,7 @@
 
                     <Grid Grid.RowDefinitions="Auto" Grid.ColumnDefinitions="100*" >
 
-                        <CollectionView x:Name="additionlmedlist" Grid.Row="0" 
+                        <CollectionView x:Name="additionlmedlist" Grid.Row="0" RemainingItemsThresholdReached="MedSearchList_RemainingItemsThresholdReached"
                             VerticalScrollBarVisibility="Never" SelectionMode="Multiple" IsVisible="False"
                             IsEnabled="False" Margin="0,10,1,100" HeightRequest="{OnPlatform iOS='650', Android='610'}"
                             RemainingItemsThreshold="5" SelectionChanged="additionlmedlist_SelectionChanged" >

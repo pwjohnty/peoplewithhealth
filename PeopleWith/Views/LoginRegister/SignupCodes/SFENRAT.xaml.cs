@@ -15,7 +15,7 @@ namespace PeopleWith;
 
 public partial class SFENRAT : ContentPage
 {
-	public List<string> primaryconditionlist = new List<string>();
+    public List<string> primaryconditionlist = new List<string>();
     bool isEditing;
     bool validdob;
     bool isEditingsurgery;
@@ -41,9 +41,28 @@ public partial class SFENRAT : ContentPage
     question ctquestion;
     question commprefquestion;
     string CommandPassed;
-    ObservableCollection<answer> GetAnswers = new ObservableCollection<answer>(); 
+    ObservableCollection<answer> GetAnswers = new ObservableCollection<answer>();
     ObservableCollection<answer> GetCommPref = new ObservableCollection<answer>();
     public ObservableCollection<medication> MedFilteredItems = new ObservableCollection<medication>();
+
+    private List<symptom> previousSelection = new();
+    private List<medication> Selectionprevious = new();
+
+    //Symptoms list lazy loader
+    private int SympageSize = 50;
+    private int SymcurrentPage = 0;
+    private bool SymisLoading = false;
+    private bool SymhasMoreItems = true;
+    ObservableCollection<symptom> SearchSymptomsList = new ObservableCollection<symptom>();
+    ObservableCollection<symptom> FilterSymptomsList = new ObservableCollection<symptom>();
+
+    //Medications list lazy loader
+    private int MedpageSize = 50;
+    private int MedcurrentPage = 0;
+    private bool MedisLoading = false;
+    private bool MEdhasMoreItems = true;
+    ObservableCollection<medication> SearchMedicationsList = new ObservableCollection<medication>();
+    ObservableCollection<medication> FilterMedicationsList = new ObservableCollection<medication>();
 
     List<string> commprefaddedlist = new List<string>();
 
@@ -71,7 +90,7 @@ public partial class SFENRAT : ContentPage
     }
 
     public SFENRAT()
-	{
+    {
         try
         {
             InitializeComponent();
@@ -86,29 +105,29 @@ public partial class SFENRAT : ContentPage
         {
             NotasyncMethod(Ex);
         }
-	}
+    }
 
     public SFENRAT(user userp, ObservableCollection<symptom> symtpomsp, ObservableCollection<medication> medicationsp, signupcode signupcodeinfop, double progressp, ObservableCollection<question> requestions, ObservableCollection<answer> reganswers, consent addtionalcon)
     {
         try
         {
 
-        InitializeComponent();
+            InitializeComponent();
 
-        topprogress.SetProgress(progressp + 6, 0);
+            topprogress.SetProgress(progressp + 6, 0);
 
-        //additionalsymptomchiplistnrat.SelectionChanged += additionalsymptomchiplistnrat_SelectionChanged;
-        primaryconditionlist.Add("Adrenal Cortical Cancer (ACC)");
-        primaryconditionlist.Add("Phaeo Para Syndromes (Paraganglioma or Phaeochromocytoma (PPGL))");
+            //additionalsymptomchiplistnrat.SelectionChanged += additionalsymptomchiplistnrat_SelectionChanged;
+            primaryconditionlist.Add("Adrenal Cortical Cancer (ACC)");
+            primaryconditionlist.Add("Phaeo Para Syndromes (Paraganglioma or Phaeochromocytoma (PPGL))");
 
-        pclist.ItemsSource = primaryconditionlist;
+            pclist.ItemsSource = primaryconditionlist;
 
-        newuser = userp;
-        allsymptomlist = symtpomsp;
-        allmedicationlist = medicationsp;
-        signupcodeinfo = signupcodeinfop;
+            newuser = userp;
+            allsymptomlist = symtpomsp;
+            allmedicationlist = medicationsp;
+            signupcodeinfo = signupcodeinfop;
 
-        additonalconsent = addtionalcon;
+            additonalconsent = addtionalcon;
 
             if (!string.IsNullOrEmpty(signupcodeinfo.externalidentifier))
             {
@@ -117,97 +136,97 @@ public partial class SFENRAT : ContentPage
 
             var splitlist = signupcodeinfo.symptoms.Split(',').ToList();
 
-        foreach(var item in splitlist)
-        {
-            var symptom = allsymptomlist.Where(x => x.symptomid == item).SingleOrDefault();
-
-            if(symptom != null)
+            foreach (var item in splitlist)
             {
-                filteredsymptomlist.Add(symptom);
+                var symptom = allsymptomlist.Where(x => x.symptomid == item).SingleOrDefault();
+
+                if (symptom != null)
+                {
+                    filteredsymptomlist.Add(symptom);
+                }
+
+
             }
 
+            symptomchiplistnrat.ItemsSource = filteredsymptomlist;
+            additionlsymlist.ItemsSource = allsymptomlist;
 
-        }
-
-        symptomchiplistnrat.ItemsSource = filteredsymptomlist;
-        additionlsymlist.ItemsSource = allsymptomlist;
-
-        additionalsymptomchiplistnrat.ItemsSource = additionalfilteredsymptomlist;
+            additionalsymptomchiplistnrat.ItemsSource = additionalfilteredsymptomlist;
 
 
-        var splitmedlist = signupcodeinfo.medications.Split(',').ToList();
+            var splitmedlist = signupcodeinfo.medications.Split(',').ToList();
 
-        foreach(var item in splitmedlist)
-        {
-            var med = allmedicationlist.Where(x => x.medicationid == item).SingleOrDefault();
-
-            if (med != null)
+            foreach (var item in splitmedlist)
             {
-                filteredmedicationlist.Add(med);
+                var med = allmedicationlist.Where(x => x.medicationid == item).SingleOrDefault();
+
+                if (med != null)
+                {
+                    filteredmedicationlist.Add(med);
+                }
+            }
+
+            medicationchiplistnrat.ItemsSource = filteredmedicationlist;
+            additionlmedlist.ItemsSource = allmedicationlist;
+            additionalmedicationchiplistnrat.ItemsSource = additionalfilteredmedicationlist;
+
+
+            ctquestion = requestions.Where(x => x.title.Contains("Clinical Trials")).SingleOrDefault();
+
+            if (ctquestion != null)
+            {
+
+                ctnamequestion.Text = ctquestion.title;
+                ctquestiondes.Text = ctquestion.directions;
+
+                GetAnswers = reganswers.Where(x => x.questionid == ctquestion.questionid).ToObservableCollection();
+
+                ctlist.ItemsSource = GetAnswers;
+            }
+
+            commprefquestion = requestions.Where(x => x.title.Contains("Communication Preferences")).SingleOrDefault();
+
+            if (commprefquestion != null)
+            {
+
+                commtitlequestion.Text = commprefquestion.title;
+                commprefquestiondes.Text = commprefquestion.directions;
+
+                var getanswers = reganswers.Where(x => x.questionid == commprefquestion.questionid).ToList();
+                GetCommPref = getanswers.OrderBy(x => Convert.ToInt32(x.order)).ToObservableCollection();
+
+                compreflist.ItemsSource = GetCommPref;
             }
         }
-
-        medicationchiplistnrat.ItemsSource = filteredmedicationlist;
-        additionlmedlist.ItemsSource = allmedicationlist;
-        additionalmedicationchiplistnrat.ItemsSource = additionalfilteredmedicationlist;
-
-
-        ctquestion = requestions.Where(x => x.title.Contains("Clinical Trials")).SingleOrDefault();
-
-        if(ctquestion != null)
+        catch (Exception Ex)
         {
-
-            ctnamequestion.Text = ctquestion.title;
-            ctquestiondes.Text = ctquestion.directions;
-
-            GetAnswers = reganswers.Where(x => x.questionid == ctquestion.questionid).ToObservableCollection();
-
-            ctlist.ItemsSource = GetAnswers;
-        }
-
-        commprefquestion = requestions.Where(x => x.title.Contains("Communication Preferences")).SingleOrDefault();
-
-        if (commprefquestion != null)
-        {
-
-            commtitlequestion.Text = commprefquestion.title;
-            commprefquestiondes.Text = commprefquestion.directions;
-
-            var getanswers = reganswers.Where(x => x.questionid == commprefquestion.questionid).ToList();
-            GetCommPref = getanswers.OrderBy(x => Convert.ToInt32(x.order)).ToObservableCollection();
-
-            compreflist.ItemsSource = GetCommPref;
-        }
-       }
-       catch (Exception Ex)
-       {
             NotasyncMethod(Ex);
-       }
+        }
     }
 
 
     private void Button_Clicked(object sender, EventArgs e)
     {
-		//yes to surgery button
-		try
-		{
+        //yes to surgery button
+        try
+        {
             surgery = "Yes";
 
-			yesbtn.BorderColor = Colors.Transparent;
-			yesbtn.Background = Color.FromArgb("#BFDBF7");
-			yesbtn.TextColor = Color.FromArgb("#03192");
-			yesbtn.FontFamily = "HankenGroteskBold";
+            yesbtn.BorderColor = Colors.Transparent;
+            yesbtn.Background = Color.FromArgb("#BFDBF7");
+            yesbtn.TextColor = Color.FromArgb("#03192");
+            yesbtn.FontFamily = "HankenGroteskBold";
 
-			doslbl.IsVisible = true;
-			dateofsurgeryEntry.IsVisible = true;
-			dosgrid.IsVisible = true;
-			dosfloat.IsVisible = true;
+            doslbl.IsVisible = true;
+            dateofsurgeryEntry.IsVisible = true;
+            dosgrid.IsVisible = true;
+            dosfloat.IsVisible = true;
 
 
             notbtn.BorderColor = Colors.LightGray;
-			notbtn.Background = Colors.Transparent;
-			notbtn.TextColor = Colors.Gray;
-			notbtn.FontFamily = "HankenGroteskRegular";
+            notbtn.Background = Colors.Transparent;
+            notbtn.TextColor = Colors.Gray;
+            notbtn.FontFamily = "HankenGroteskRegular";
 
         }
         catch (Exception Ex)
@@ -218,9 +237,9 @@ public partial class SFENRAT : ContentPage
 
     private void notbtn_Clicked(object sender, EventArgs e)
     {
-		//no to surgery button
-		try
-		{
+        //no to surgery button
+        try
+        {
             surgery = "No";
 
             notbtn.BorderColor = Colors.Transparent;
@@ -231,7 +250,7 @@ public partial class SFENRAT : ContentPage
             doslbl.IsVisible = false;
             dateofsurgeryEntry.IsVisible = false;
             dosgrid.IsVisible = false;
-			dosfloat.IsVisible = false;
+            dosfloat.IsVisible = false;
 
             yesbtn.BorderColor = Colors.LightGray;
             yesbtn.Background = Colors.Transparent;
@@ -277,7 +296,7 @@ public partial class SFENRAT : ContentPage
                 input = input.Substring(0, 8);
                 dateEntry.IsEnabled = false;
                 dateEntry.IsEnabled = true;
-            
+
             }
 
             // Insert slashes at the appropriate positions
@@ -339,7 +358,7 @@ public partial class SFENRAT : ContentPage
 
             isEditing = false;
 
-            if(validdob)
+            if (validdob)
             {
                 DateTime dateofdiag = DateTime.Parse(dateEntry.Text);
                 DateTime dob = DateTime.Parse(newuser.dateofbirth);
@@ -357,19 +376,19 @@ public partial class SFENRAT : ContentPage
                 DateTime ageDateTime = DateTime.MinValue + timeSpan;
 
                 // Check for potential overflow
-              
-                
-                    int age = ageDateTime.Year - 1;
 
-                    if (age >= 0)
-                    {
-                        ageentry.Text = age.ToString();
-                    }
-                    else
-                    {
-                        ageentry.Text = "Invalid age"; // Or handle it as per your requirement
-                    }
-                
+
+                int age = ageDateTime.Year - 1;
+
+                if (age >= 0)
+                {
+                    ageentry.Text = age.ToString();
+                }
+                else
+                {
+                    ageentry.Text = "Invalid age"; // Or handle it as per your requirement
+                }
+
             }
         }
         catch (Exception ex)
@@ -393,7 +412,7 @@ public partial class SFENRAT : ContentPage
                 if (!symptomchipselectedlist.Contains(Item))
                 {
                     symptomchipselectedlist.Add(Item);
-                }                 
+                }
             }
 
             // Remove Item Clicked
@@ -408,7 +427,7 @@ public partial class SFENRAT : ContentPage
             }
 
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             //Leave Empty
         }
@@ -421,9 +440,9 @@ public partial class SFENRAT : ContentPage
 
             var item = e.AddedItem as symptom;
 
-            if(item == null)
+            if (item == null)
             {
-                item = e.RemovedItem as symptom; 
+                item = e.RemovedItem as symptom;
             }
 
             searchsymsentry.IsEnabled = false;
@@ -459,101 +478,140 @@ public partial class SFENRAT : ContentPage
         }
     }
 
-    private void Entry_TextChanged(object sender, TextChangedEventArgs e)
+    private async void SympSearchList_RemainingItemsThresholdReached(object sender, EventArgs e)
+    {
+        try
+        {
+            if (SymisLoading || !SymhasMoreItems) return;
+
+            SymisLoading = true;
+
+            await LoadNextPageAsync();
+
+            SymisLoading = false;
+        }
+        catch (Exception ex)
+        {
+        }
+    }
+
+    private async Task LoadNextPageAsync()
+    {
+        try
+        {
+            var startIndex = SymcurrentPage * SympageSize;
+            var nextItems = FilterSymptomsList
+                .Skip(startIndex)
+                .Take(SympageSize)
+                .ToList();
+
+            foreach (var item in nextItems)
+            {
+                SearchSymptomsList.Add(item);
+            }
+
+            SymcurrentPage++;
+
+            if (nextItems.Count < SympageSize)
+            {
+                SymhasMoreItems = false;
+            }
+
+            await Task.CompletedTask;
+        }
+        catch (Exception ex)
+        {
+        }
+    }
+    private async void Entry_TextChanged(object sender, TextChangedEventArgs e)
     {
         try
         {
 
-            //symptom search entry
-            SympAInd.IsVisible = true;
+            var SymptomText = e.NewTextValue?.Trim();
 
-            if (string.IsNullOrEmpty(e.NewTextValue))
+            if (string.IsNullOrEmpty(SymptomText) || SymptomText.Length < 3)
             {
-                SympAInd.IsVisible = false;
                 additionlsymlist.IsVisible = false;
-                searchsymsentry.IsEnabled = false;
-                searchsymsentry.IsEnabled = true;
                 NoSymResultslbl.IsVisible = false;
-
+                return;
             }
-            else
+
+            // Filter the list based on the search
+            FilterSymptomsList = new ObservableCollection<symptom>(allsymptomlist.Where(s => s.title.Contains(SymptomText, StringComparison.OrdinalIgnoreCase)))
+                .OrderBy(m => m.title).ToObservableCollection();
+
+            if (FilterSymptomsList.Count == 0)
             {
-                var collectionone = allsymptomlist.Where(x => x.title.ToLowerInvariant().StartsWith(e.NewTextValue.ToLowerInvariant()));
-                var count = collectionone.Count();
-                if (count == 0)
-                {
-                    additionlsymlist.IsVisible = false;
-                    NoSymResultslbl.IsVisible = true;
-
-                }
-                else
-                {
-                    // emptyframe.IsVisible = false;
-                    // resultsframe.IsVisible = true;
-                    additionlsymlist.ItemsSource = collectionone;
-                    additionlsymlist.HeightRequest = count * 60;
-                    additionlsymlist.IsVisible = true;
-                    NoSymResultslbl.IsVisible = false;
-
-                }
-
-                SympAInd.IsVisible = false;
-
+                additionlsymlist.IsVisible = false;
+                NoSymResultslbl.IsVisible = true;
+                additionlsymlist.ItemsSource = null;
+                return;
             }
+
+            SymcurrentPage = 0;
+            SymhasMoreItems = true;
+            SearchSymptomsList.Clear();
+
+            await LoadNextPageAsync();
+
+            additionlsymlist.ItemsSource = SearchSymptomsList;
+            additionlsymlist.IsVisible = true;
+            NoSymResultslbl.IsVisible = false;
 
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             //Leave Empty
         }
     }
 
-    private void additionlsymlist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
-    {
-        try
-        {
-            //additional symptom list tapped
+    //private void additionlsymlist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
+    //{
+    //    try
+    //    {
+    //        //additional symptom list tapped
 
-            var item = e.DataItem as symptom;
+    //        var item = e.DataItem as symptom;
 
-            searchsymsentry.IsEnabled = false;
-            searchsymsentry.IsEnabled = true;
+    //        searchsymsentry.IsEnabled = false;
+    //        searchsymsentry.IsEnabled = true;
 
-            // Convert the selected item to a ChipItem
-            if (additionalfilteredsymptomlist.Contains(item))
-            {
-                additionalfilteredsymptomlist.Remove(item);
-                symptomchipselectedlist.Remove(item);
-            }
-            else
-            {
+    //        // Convert the selected item to a ChipItem
+    //        if (additionalfilteredsymptomlist.Contains(item))
+    //        {
+    //            additionalfilteredsymptomlist.Remove(item);
+    //            symptomchipselectedlist.Remove(item);
+    //        }
+    //        else
+    //        {
 
-                additionalfilteredsymptomlist.Add(item);
-                symptomchipselectedlist.Add(item);
-            }
+    //            additionalfilteredsymptomlist.Add(item);
+    //            symptomchipselectedlist.Add(item);
+    //        }
 
-            if(additionalfilteredsymptomlist.Count == 0)
-            {
-                addlbl1.IsVisible = false;
-                additionalsymptomchiplistnrat.IsVisible = false;
-            }
-            else
-            {
-                addlbl1.IsVisible = true;
-                additionalsymptomchiplistnrat.IsVisible = true;
-            }           
-        }
-        catch (Exception Ex)
-        {
-            NotasyncMethod(Ex);
-        }
-    }
+    //        if(additionalfilteredsymptomlist.Count == 0)
+    //        {
+    //            addlbl1.IsVisible = false;
+    //            additionalsymptomchiplistnrat.IsVisible = false;
+    //        }
+    //        else
+    //        {
+    //            addlbl1.IsVisible = true;
+    //            additionalsymptomchiplistnrat.IsVisible = true;
+    //        }           
+    //    }
+    //    catch (Exception Ex)
+    //    {
+    //        NotasyncMethod(Ex);
+    //    }
+    //}
 
     private void CheckBox_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
         try
         {
-            if(e.Value)
+            if (e.Value)
             {
                 dateEntry.IsEnabled = false;
                 dateEntry.Text = string.Empty;
@@ -572,7 +630,7 @@ public partial class SFENRAT : ContentPage
                 agelbl.Opacity = 1;
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             //Leave Empty
         }
@@ -700,7 +758,7 @@ public partial class SFENRAT : ContentPage
             {
                 //Limit No. of Taps 
                 nextbtn.IsEnabled = false;
-                skipbtn.IsEnabled = false; 
+                skipbtn.IsEnabled = false;
                 var GetCommand = (sender) as Button;
                 CommandPassed = GetCommand.CommandParameter.ToString();
 
@@ -709,7 +767,7 @@ public partial class SFENRAT : ContentPage
                 {
                     Handleprimaryconframe();
                     nextbtn.IsEnabled = true;
-                    skipbtn.IsEnabled = true; 
+                    skipbtn.IsEnabled = true;
                 }
                 else if (dateofdiagframe.IsVisible == true)
                 {
@@ -740,7 +798,7 @@ public partial class SFENRAT : ContentPage
                     Handlecomprefframe();
                     nextbtn.IsEnabled = true;
                     skipbtn.IsEnabled = true;
-                }               
+                }
             }
             else
             {
@@ -748,7 +806,7 @@ public partial class SFENRAT : ContentPage
                 ConnectivityChanged?.Invoke(this, isConnected);
             }
 
-            
+
 
         }
         catch (Exception Ex)
@@ -761,7 +819,7 @@ public partial class SFENRAT : ContentPage
     {
         try
         {
-            if(pclist.SelectedItems.Count == 0)
+            if (pclist.SelectedItems.Count == 0)
             {
                 Vibration.Vibrate();
                 return;
@@ -783,14 +841,14 @@ public partial class SFENRAT : ContentPage
         {
 
             //check if unknown date is selected
-            if(diagdatecheckbox.IsChecked)
+            if (diagdatecheckbox.IsChecked)
             {
                 //unknown date
             }
             else
             {
                 //check if date is valid
-                if(dateEntry.TextColor != Colors.Red)
+                if (dateEntry.TextColor != Colors.Red)
                 {
 
                     if (ageentry.Text == "Invalid age")
@@ -810,9 +868,9 @@ public partial class SFENRAT : ContentPage
                 }
             }
 
-  
 
-            if(string.IsNullOrEmpty(surgery))
+
+            if (string.IsNullOrEmpty(surgery))
             {
                 Vibration.Vibrate();
                 return;
@@ -821,7 +879,7 @@ public partial class SFENRAT : ContentPage
             {
                 var agestring = "";
 
-                if(string.IsNullOrEmpty(ageentry.Text))
+                if (string.IsNullOrEmpty(ageentry.Text))
                 {
                     agestring = "Unknown";
                 }
@@ -830,15 +888,15 @@ public partial class SFENRAT : ContentPage
                     agestring = ageentry.Text;
                 }
 
-                if(surgery == "Yes")
+                if (surgery == "Yes")
                 {
-                    if(datesurgerycheckbox.IsChecked)
+                    if (datesurgerycheckbox.IsChecked)
                     {
                         userdiag.additionalparameters = agestring + "|" + surgery + "|" + "Unknown";
                     }
                     else
                     {
-                        if(dateofsurgeryEntry.TextColor  != Colors.Red)
+                        if (dateofsurgeryEntry.TextColor != Colors.Red)
                         {
                             userdiag.additionalparameters = agestring + "|" + surgery + "|" + dateofsurgeryEntry.Text;
                         }
@@ -851,7 +909,7 @@ public partial class SFENRAT : ContentPage
                     }
 
 
-                    
+
                 }
                 else
                 {
@@ -883,7 +941,7 @@ public partial class SFENRAT : ContentPage
 
             //check if there are any symptoms added and add them into a collection
 
-            symptomstoadd.Clear(); 
+            symptomstoadd.Clear();
             foreach (var item in symptomchipselectedlist)
             {
                 var neewitem = new usersymptom();
@@ -931,8 +989,8 @@ public partial class SFENRAT : ContentPage
     {
         try
         {
-            medicationstoadd.Clear(); 
-            foreach(var item in medicationchipselectedlist)
+            medicationstoadd.Clear();
+            foreach (var item in medicationchipselectedlist)
             {
 
                 var newitem = new usermedication();
@@ -1011,7 +1069,7 @@ public partial class SFENRAT : ContentPage
     {
         try
         {
-            if(CommandPassed == "Next")
+            if (CommandPassed == "Next")
             {
                 if (compreflist.SelectedItem == null)
                 {
@@ -1032,12 +1090,12 @@ public partial class SFENRAT : ContentPage
             {
                 //Skip Clicked 
             }
-           
+
 
 
             UpdateProgress();
 
-            await Navigation.PushAsync(new RegisterFinalPage(newuser, topprogress.Progress, userresponselist, additonalconsent, symptomstoadd, medicationstoadd, userdiag), false);
+            await Navigation.PushAsync(new RegisterFinalPage(newuser, topprogress.Progress, userresponselist, additonalconsent, symptomstoadd, medicationstoadd, userdiag, signupcodeinfo), false);
 
         }
         catch (Exception Ex)
@@ -1053,7 +1111,7 @@ public partial class SFENRAT : ContentPage
 
             userdiag.diagnosistitle = item;
 
-            if(item.Contains("ACC"))
+            if (item.Contains("ACC"))
             {
                 newuser.registrycondition = "ACC";
                 userdiag.diagnosisid = "38AC079A-ECF4-473A-82A1-932EB839EA42";
@@ -1064,7 +1122,7 @@ public partial class SFENRAT : ContentPage
                 userdiag.diagnosisid = "4561A0CB-7536-4712-9DF9-CE0E4FA5BEC9";
             }
 
-            userdiag.userid = newuser.userid; 
+            userdiag.userid = newuser.userid;
         }
         catch (Exception Ex)
         {
@@ -1084,52 +1142,86 @@ public partial class SFENRAT : ContentPage
         }
     }
 
-    private void searchmedentry_TextChanged(object sender, TextChangedEventArgs e)
+    private async void MedSearchList_RemainingItemsThresholdReached(object sender, EventArgs e)
     {
         try
         {
-            //Updated to Sort List not Loading in Properly 
-            MedAInd.IsVisible = true;
-            additionlmedlist.IsVisible = false;
+            if (MedisLoading || !MEdhasMoreItems) return;
 
-            if (string.IsNullOrEmpty(e.NewTextValue))
+            MedisLoading = true;
+
+            await LoadNextPagetwoAsync();
+
+            MedisLoading = false;
+        }
+        catch (Exception ex)
+        {
+        }
+    }
+
+    private async Task LoadNextPagetwoAsync()
+    {
+        try
+        {
+            var startIndex = MedcurrentPage * MedpageSize;
+            var nextItems = FilterMedicationsList
+                .Skip(startIndex)
+                .Take(MedpageSize)
+                .ToList();
+
+            foreach (var item in nextItems)
             {
-                MedFilteredItems.Clear();
+                SearchMedicationsList.Add(item);
+            }
+
+            MedcurrentPage++;
+
+            if (nextItems.Count < MedpageSize)
+            {
+                MEdhasMoreItems = false;
+            }
+
+            await Task.CompletedTask;
+        }
+        catch (Exception ex)
+        {
+        }
+    }
+
+    private async void searchmedentry_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        try
+        {
+            var MedText = e.NewTextValue?.Trim();
+
+            if (string.IsNullOrEmpty(MedText) || MedText.Length < 3)
+            {
                 additionlmedlist.IsVisible = false;
-                MedAInd.IsVisible = false;
                 NoResultslbl.IsVisible = false;
+                return;
             }
-            else
+
+            // Filter the list based on the search
+            FilterMedicationsList = new ObservableCollection<medication>(allmedicationlist.Where(s => s.title.Contains(MedText, StringComparison.OrdinalIgnoreCase)))
+                .OrderBy(m => m.title).ToObservableCollection();
+
+            if (FilterMedicationsList.Count == 0)
             {
-                MedAInd.IsVisible = true;
-                NoResultslbl.IsVisible = false;
-
-                var countofcharacters = e.NewTextValue.Length;
-
-                if (countofcharacters > 2)
-                {
-                    var Characters = e.NewTextValue;
-                    var filteredmeds = new ObservableCollection<medication>(allmedicationlist.Where(s => s.title.Contains(Characters, StringComparison.OrdinalIgnoreCase))).OrderBy(m => m.title);
-
-                    additionlmedlist.ItemsSource = filteredmeds;
-                    additionlmedlist.IsVisible = true;
-
-                    MedAInd.IsVisible = false;
-
-                    if (filteredmeds.Count() == 0)
-                    {
-                        NoResultslbl.IsVisible = true;
-                    }
-                    else
-                    {
-                        additionlmedlist.IsVisible = true;
-                        additionlmedlist.HeightRequest = filteredmeds.Count() * 60;
-                        NoResultslbl.IsVisible = false;
-                    }
-
-                }
-
+                additionlmedlist.IsVisible = false;
+                NoResultslbl.IsVisible = true;
+                additionlmedlist.ItemsSource = null;
+                return;
             }
+
+            MedcurrentPage = 0;
+            MEdhasMoreItems = true;
+            SearchMedicationsList.Clear();
+
+            await LoadNextPagetwoAsync();
+
+            additionlmedlist.ItemsSource = SearchMedicationsList;
+            additionlmedlist.IsVisible = true;
+            NoResultslbl.IsVisible = false;
         }
         catch (Exception Ex)
         {
@@ -1137,48 +1229,48 @@ public partial class SFENRAT : ContentPage
         }
     }
 
-    private async void additionlmedlist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
-    {
-        try
-        {
-            //additional symptom list tapped
+    //private async void additionlmedlist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
+    //{
+    //    try
+    //    {
+    //        //additional symptom list tapped
 
-            var item = e.DataItem as medication;
+    //        var item = e.DataItem as medication;
 
-            searchmedentry.IsEnabled = false;
-            searchmedentry.IsEnabled = true;
+    //        searchmedentry.IsEnabled = false;
+    //        searchmedentry.IsEnabled = true;
 
-            // Convert the selected item to a ChipItem
-            if (additionalfilteredmedicationlist.Contains(item))
-            {
-                additionalfilteredmedicationlist.Remove(item);
-                medicationchipselectedlist.Remove(item);
-            }
-            else
-            {
+    //        // Convert the selected item to a ChipItem
+    //        if (additionalfilteredmedicationlist.Contains(item))
+    //        {
+    //            additionalfilteredmedicationlist.Remove(item);
+    //            medicationchipselectedlist.Remove(item);
+    //        }
+    //        else
+    //        {
 
-                additionalfilteredmedicationlist.Add(item);
-                medicationchipselectedlist.Add(item);
-            }
+    //            additionalfilteredmedicationlist.Add(item);
+    //            medicationchipselectedlist.Add(item);
+    //        }
 
-            if (additionalfilteredmedicationlist.Count == 0)
-            {
-                addmedlbl1.IsVisible = false;
-                additionalmedicationchiplistnrat.IsVisible = false;
-            }
-            else
-            {
-                addmedlbl1.IsVisible = true;
-                additionalmedicationchiplistnrat.ItemsSource = additionalfilteredmedicationlist; 
-                additionalmedicationchiplistnrat.IsVisible = true;
-            }
-            await Task.Delay(500); 
-        }
-        catch (Exception Ex)
-        {
-            NotasyncMethod(Ex);
-        }
-    }
+    //        if (additionalfilteredmedicationlist.Count == 0)
+    //        {
+    //            addmedlbl1.IsVisible = false;
+    //            additionalmedicationchiplistnrat.IsVisible = false;
+    //        }
+    //        else
+    //        {
+    //            addmedlbl1.IsVisible = true;
+    //            additionalmedicationchiplistnrat.ItemsSource = additionalfilteredmedicationlist;
+    //            additionalmedicationchiplistnrat.IsVisible = true;
+    //        }
+    //        await Task.Delay(500);
+    //    }
+    //    catch (Exception Ex)
+    //    {
+    //        NotasyncMethod(Ex);
+    //    }
+    //}
 
     private void medicationchiplistnrat_SelectionChanged(object sender, Syncfusion.Maui.Core.Chips.SelectionChangedEventArgs e)
     {
@@ -1206,7 +1298,7 @@ public partial class SFENRAT : ContentPage
                 {
                     medicationchipselectedlist.Remove(Item);
                 }
-            }         
+            }
         }
         catch (Exception Ex)
         {
@@ -1279,14 +1371,14 @@ public partial class SFENRAT : ContentPage
                     symptomsframe.IsVisible = false;
                     dateofdiagframe.IsVisible = true;
                     //skipbtn.IsEnabled = false;
-                    skipbtn.IsVisible = false; 
+                    skipbtn.IsVisible = false;
 
                 }
                 else if (dateofdiagframe.IsVisible == true)
                 {
                     dateofdiagframe.IsVisible = false;
                     primaryconframe.IsVisible = true;
-                   
+
 
                 }
                 else if (primaryconframe.IsVisible == true)
@@ -1381,8 +1473,97 @@ public partial class SFENRAT : ContentPage
         }
         catch (Exception Ex)
         {
-          //Leave Empty
+            //Leave Empty
         }
-        
+
+    }
+
+
+    private void additionlsymlist_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        try
+        {
+
+            var currentSelection = e.CurrentSelection.Cast<symptom>().ToList();
+
+            var newlySelectedItems = currentSelection.Except(previousSelection).ToList();
+            var deselectedItems = previousSelection.Except(currentSelection).ToList();
+
+            previousSelection = currentSelection;
+
+            searchsymsentry.IsEnabled = false;
+            searchsymsentry.IsEnabled = true;
+
+            foreach (var item in newlySelectedItems)
+            {
+                if (!additionalfilteredsymptomlist.Contains(item))
+                {
+                    additionalfilteredsymptomlist.Add(item);
+                    symptomchipselectedlist.Add(item);
+                }
+            }
+
+            foreach (var item in deselectedItems)
+            {
+                if (additionalfilteredsymptomlist.Contains(item))
+                {
+                    additionalfilteredsymptomlist.Remove(item);
+                    symptomchipselectedlist.Remove(item);
+                }
+            }
+
+            bool hasItems = additionalfilteredsymptomlist.Count > 0;
+            addlbl1.IsVisible = hasItems;
+            additionalsymptomchiplistnrat.IsVisible = hasItems;
+
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    private void additionlmedlist_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        try
+        {
+
+            var currentSelection = e.CurrentSelection.Cast<medication>().ToList();
+
+            var newlySelectedItems = currentSelection.Except(Selectionprevious).ToList();
+            var deselectedItems = Selectionprevious.Except(currentSelection).ToList();
+
+            Selectionprevious = currentSelection;
+
+            searchmedentry.IsEnabled = false;
+            searchmedentry.IsEnabled = true;
+
+            foreach (var item in newlySelectedItems)
+            {
+                if (!additionalfilteredmedicationlist.Contains(item))
+                {
+                    additionalfilteredmedicationlist.Add(item);
+                    medicationchipselectedlist.Add(item);
+                }
+            }
+
+            foreach (var item in deselectedItems)
+            {
+                if (additionalfilteredmedicationlist.Contains(item))
+                {
+                    additionalfilteredmedicationlist.Remove(item);
+                    medicationchipselectedlist.Remove(item);
+                }
+            }
+
+            bool hasItems = additionalfilteredmedicationlist.Count > 0;
+            addlbl1.IsVisible = hasItems;
+            additionalmedicationchiplistnrat.IsVisible = hasItems;
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 }
+

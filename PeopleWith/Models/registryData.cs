@@ -13,6 +13,9 @@ namespace PeopleWith
     {
         //[JsonIgnore]
         public string id { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public DateTime createdAt { get; set; }
         public bool deleted { get; set; }
         public string userid { get; set; }
         public string webuserid { get; set; }
@@ -29,6 +32,19 @@ namespace PeopleWith
         public string firstDataPoint { get; set; }
 
         public bool currentDataPoint { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string Title { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string Question { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool HasNotes { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string DateConverted { get; set; }
+
 
     }
 

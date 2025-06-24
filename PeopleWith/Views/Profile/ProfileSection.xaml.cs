@@ -661,80 +661,94 @@ public partial class ProfileSection : ContentPage
             if (accessType == NetworkAccess.Internet)
             {
                 //Limit No. of Taps 
-                DeleteAccount.IsEnabled = false; 
-                bool Answer = await DisplayAlert("Delete Account", "Are you sure you want to delete this Account? Once deleted it cannot be retrieved", "Delete Account", "Cancel");
+                DeleteAccount.IsEnabled = false;
+
+                bool Answer = await DisplayAlert("Delete Account","Are you sure you want to delete this account?","Yes, Delete","Cancel");
+
+                //bool Answer = await DisplayAlert("Delete Account", "Are you sure you want to delete this Account? Once deleted it cannot be retrieved", "Delete Account", "Cancel");
                 if (Answer)
                 {
-                    //Delete Account
-                    bool delete = true;
-                    bool Success = false;
-                    string id = Helpers.Settings.UserKey;
-                    var url = $"https://pwapi.peoplewith.com/api/user/userid/{id}";
 
-                    string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = delete });
-                    StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-                    ConfigureClient();
-                    using (var client = new HttpClient())
+                    bool Confirm = await DisplayAlert("This Action is Permanent", "Once your account is deleted, it cannot be recovered.\n\nDo you really wish to proceed?", "Delete Permanently","Cancel");
+
+                    if (Confirm) 
                     {
-                        var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                        //Delete Account
+                        bool delete = true;
+                        bool Success = false;
+                        string id = Helpers.Settings.UserKey;
+                        var url = $"https://pwapi.peoplewith.com/api/user/userid/{id}";
+
+                        string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = delete });
+                        StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                        ConfigureClient();
+                        using (var client = new HttpClient())
                         {
-                            Content = content
-                        };
+                            var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                            {
+                                Content = content
+                            };
 
-                        var response = await Client.SendAsync(request);
+                            var response = await Client.SendAsync(request);
 
-                        if (!response.IsSuccessStatusCode)
-                        {
-                            var errorResponse = await response.Content.ReadAsStringAsync();
-                        }
-                        else
-                        {
-                            Success = true;
-                        }
-                    }
-
-
-                    if (Success == true)
-                    {
-
-                        //Remove The Following Novo Preferences if Neccesary 
-                        if (!String.IsNullOrEmpty(Helpers.Settings.SignUp))
-                        {
-                            var signup = Helpers.Settings.SignUp;
-                            if (signup.Contains("SAX"))
-                            {   //Remove the Following 
-                                Preferences.Default.Remove("NovoMeds");
-                                Preferences.Default.Remove("NovoSyms");
-                                Preferences.Default.Remove("NovoSupps");
-                                Preferences.Default.Remove("NovoMeas");
-                                Preferences.Default.Remove("NovoDiag");
-                                Preferences.Default.Remove("NovoMood");
-                                Preferences.Default.Remove("NovoAppt");
-                                Preferences.Default.Remove("NovoHcp");
-                                Preferences.Default.Remove("NovoQues");
-                                Preferences.Default.Remove("NovoAllerg"); 
-                                Preferences.Default.Remove("NovoHeRep");
-                                Preferences.Default.Remove("NovoSched");
-                                Preferences.Default.Remove("NovoFood");
-                                Preferences.Default.Remove("NovoDiet");
-                                Preferences.Default.Remove("NovoInvest");
-                                Preferences.Default.Remove("NovoActivity");
-                                
+                            if (!response.IsSuccessStatusCode)
+                            {
+                                var errorResponse = await response.Content.ReadAsStringAsync();
+                            }
+                            else
+                            {
+                                Success = true;
                             }
                         }
-                       
 
-                        await MopupService.Instance.PushAsync(new PopupPageHelper("Account Deleted") { });
-                        await Task.Delay(1500);
-                        //Logout of Account 
-                        Logout HandleLogout = new Logout();
-                        await MopupService.Instance.PopAllAsync(false);
+
+                        if (Success == true)
+                        {
+
+                            //Remove The Following Novo Preferences if Neccesary 
+                            if (!String.IsNullOrEmpty(Helpers.Settings.SignUp))
+                            {
+                                var signup = Helpers.Settings.SignUp;
+                                if (signup.Contains("SAX"))
+                                {   //Remove the Following 
+                                    Preferences.Default.Remove("NovoMeds");
+                                    Preferences.Default.Remove("NovoSyms");
+                                    Preferences.Default.Remove("NovoSupps");
+                                    Preferences.Default.Remove("NovoMeas");
+                                    Preferences.Default.Remove("NovoDiag");
+                                    Preferences.Default.Remove("NovoMood");
+                                    Preferences.Default.Remove("NovoAppt");
+                                    Preferences.Default.Remove("NovoHcp");
+                                    Preferences.Default.Remove("NovoQues");
+                                    Preferences.Default.Remove("NovoAllerg");
+                                    Preferences.Default.Remove("NovoHeRep");
+                                    Preferences.Default.Remove("NovoSched");
+                                    Preferences.Default.Remove("NovoFood");
+                                    Preferences.Default.Remove("NovoDiet");
+                                    Preferences.Default.Remove("NovoInvest");
+                                    Preferences.Default.Remove("NovoActivity");
+
+                                }
+                            }
+
+
+                            await MopupService.Instance.PushAsync(new PopupPageHelper("Account Deleted") { });
+                            await Task.Delay(1500);
+                            //Logout of Account 
+                            Logout HandleLogout = new Logout();
+                            await MopupService.Instance.PopAllAsync(false);
+                        }
                     }
+                    else
+                    {
+                        DeleteAccount.IsEnabled = true;
+                        return; 
+                    }                
                 }
                 else
                 {
-                    DeleteAccount.IsEnabled = true; 
-                    //Do Nothing
+                    DeleteAccount.IsEnabled = true;
+                    return; 
                 }
             }
             else
