@@ -60,6 +60,8 @@ namespace PeopleWith.Helpers
         }
 
 
+     
+
         private const string UserVC = "validationcode";
         private static readonly string UserVCDefault = string.Empty;
         public static string ValidationCode
@@ -391,6 +393,15 @@ namespace PeopleWith.Helpers
         {
             get => Preferences.Get(DeviceIDKey, DeviceIDDefault);
             set => Preferences.Set(DeviceIDKey, value);
+        }
+
+
+        private const string FitnessDataKey = "fitnessdata";
+        private static readonly string FitnessDataDefault = string.Empty;
+        public static string FitnessData
+        {
+            get => Preferences.Get(FitnessDataKey, FitnessDataDefault);
+            set => Preferences.Set(FitnessDataKey, value);
         }
 
         //NovoConsent Page Accepted 

@@ -146,7 +146,7 @@ public partial class AllMood : ContentPage
                 item.datetime = GetDate.ToString("dd/MM/yyyy HH:mm");
                 if (item.title == "S**t")
                 {
-                    item.source = "Shit.png";
+                    item.source = "shit.png";
                 }
 
                 if (item.deleted == true)
@@ -171,7 +171,7 @@ public partial class AllMood : ContentPage
     .OrderByDescending(f => DateTime.Parse(f.datetime)) 
     .ToList();
                 //AllMoodView.ItemsSource = AllMoods.OrderByDescending(f => DateTime.Parse(f.datetime)).ToList();
-                //AllMoodView.HeightRequest = AllMoods.Count * 80;
+                AllMoodView.HeightRequest = AllMoods.Count * 80;
                // NovoConsent.Margin = new Thickness(20, 300, 20, 10);
             }
             else

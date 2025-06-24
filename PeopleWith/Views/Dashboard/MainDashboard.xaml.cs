@@ -4842,7 +4842,7 @@ public partial class MainDashboard : ContentPage
         }
         catch(Exception ex)
         {
-
+           // await DisplayAlert(ex.Message.ToString(), ex.StackTrace.ToString(), "Ok");
         }
     }
 

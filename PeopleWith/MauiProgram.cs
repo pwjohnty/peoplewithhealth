@@ -18,6 +18,7 @@ using Microsoft.Maui.Handlers;
 using Sentry;
 using System.Globalization;
 using Plugin.Maui.Health;
+using Microsoft.Extensions.Options;
 
 
 
@@ -70,9 +71,10 @@ namespace PeopleWith
                     options.Native.EnableNetworkEventBreadcrumbs = false; 
                     options.Native.EnableSystemEventBreadcrumbs = false;
                     options.Native.EnableUserInteractionBreadcrumbs = false;
-                    #endif
+                    options.Android.SuppressSegfaults = true;
+#endif
 
-
+               
                     options.Debug = false;
                     //options.EnableAndroidNativeNdk = true;
                     //options.EnableXamarinSupport = true;

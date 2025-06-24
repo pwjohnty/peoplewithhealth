@@ -43,7 +43,7 @@
 
                 </Grid>
 
-        <ScrollView Grid.Row="1" Margin="0,0,0,0" VerticalScrollBarVisibility="Never" BackgroundColor="Transparent">
+        <ScrollView Grid.Row="1" x:Name="mainscrollview" Margin="0,0,0,0" VerticalScrollBarVisibility="Never" BackgroundColor="Transparent">
 
             <StackLayout Margin="0">
                 
@@ -356,7 +356,7 @@
   HorizontalOptions="Start" />
 
                     <Label
- Text="Answer a few questions about your current fitness and lifestyle."
+ Text="Answer a few questions about your current fitness and lifestyle"
  TextColor="#031926"
  FontFamily="HankenGroteskRegular"
  FontAttributes="None"
@@ -378,9 +378,9 @@
                             </Grid.ColumnDefinitions>
 
 
-                            <Label Text="What is your main fitness focus right now?" Grid.Row="0" Grid.Column="0" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
+                            <Label Text="What is your main fitness focus right now?" Grid.Row="0" Grid.Column="0" FontFamily="HankenGroteskBold"  FontSize="16" Margin="10,10,0,0" TextColor="#031926" />
 
-                            <Label Text="Please choose an option from below" Grid.Row="1" Grid.Column="0"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+                            <Label Text="Please choose an option from below" Grid.Row="1" Grid.Column="0"  FontFamily="HankenGroteskRegular"  FontSize="12" Margin="10,0,0,0" TextColor="Gray" />
 
 
                             <syncfusion:SfListView x:Name="q1"                                                                                             
@@ -398,7 +398,7 @@
                                 <syncfusion:SfListView.HeightRequest>
                                     <OnPlatform x:TypeArguments="x:Double">
                                         <On Platform="Android" Value="220" />
-                                        <On Platform="iOS" Value="200" />
+                                        <On Platform="iOS" Value="240" />
                                     </OnPlatform>
                                 </syncfusion:SfListView.HeightRequest>
 
@@ -465,9 +465,9 @@ Stroke="LightGray">
                             </Grid.ColumnDefinitions>
 
 
-                            <Label Text="How many steps on average are you getting per day?" Grid.Row="0" Grid.Column="0" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
+                            <Label Text="How many steps on average are you getting per day?" Grid.Row="0" Grid.Column="0" FontFamily="HankenGroteskBold"  FontSize="16" Margin="10,10,0,0" TextColor="#031926" />
 
-                            <Label Text="Please choose an option from below" Grid.Row="1" Grid.Column="0"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+                            <Label Text="Please choose an option from below" Grid.Row="1" Grid.Column="0"  FontFamily="HankenGroteskRegular"  FontSize="12" Margin="10,0,0,0" TextColor="Gray" />
 
 
                             <syncfusion:SfListView x:Name="q2"                                                                                             
@@ -551,9 +551,9 @@ Stroke="LightGray">
                             </Grid.ColumnDefinitions>
 
 
-                            <Label Text="How many hours of sleep do you get per night?" Grid.Row="0" Grid.Column="0" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
+                            <Label Text="How many hours of sleep do you get per night?" Grid.Row="0" Grid.Column="0" FontFamily="HankenGroteskBold"  FontSize="16" Margin="10,10,5,0" TextColor="#031926" />
 
-                            <Label Text="Please choose an option from below" Grid.Row="1" Grid.Column="0"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+                            <Label Text="Please choose an option from below" Grid.Row="1" Grid.Column="0"  FontFamily="HankenGroteskRegular"  FontSize="12" Margin="10,0,0,0" TextColor="Gray" />
 
 
                             <syncfusion:SfListView x:Name="q3"                                                                                             
@@ -637,9 +637,9 @@ Stroke="LightGray">
                             </Grid.ColumnDefinitions>
 
 
-                            <Label Text="Would tracking your water intake be insightful for you?" Grid.Row="0" Grid.Column="0" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
+                            <Label Text="Would tracking your water intake be insightful for you?" Grid.Row="0" Grid.Column="0" FontFamily="HankenGroteskBold"  FontSize="16" Margin="10,10,10,0" TextColor="#031926" />
 
-                            <Label Text="Please choose an option from below" Grid.Row="1" Grid.Column="0"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+                            <Label Text="Please choose an option from below" Grid.Row="1" Grid.Column="0"  FontFamily="HankenGroteskRegular"  FontSize="12" Margin="10,0,0,0" TextColor="Gray" />
 
 
                             <syncfusion:SfListView x:Name="q4"                                                                                             
@@ -723,9 +723,9 @@ Stroke="LightGray">
                             </Grid.ColumnDefinitions>
 
 
-                            <Label Text="Would receiving notifications about your fitness data be of interest to you?" Grid.Row="0" Grid.Column="0" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
+                            <Label Text="Would receiving notifications about your fitness data be of interest to you?" Grid.Row="0" Grid.Column="0" FontFamily="HankenGroteskBold"  FontSize="16" Margin="10,10,0,0" TextColor="#031926" />
 
-                            <Label Text="Please choose an option from below" Grid.Row="1" Grid.Column="0"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
+                            <Label Text="Please choose an option from below" Grid.Row="1" Grid.Column="0"  FontFamily="HankenGroteskRegular"  FontSize="12" Margin="10,0,0,0" TextColor="Gray" />
 
 
                             <syncfusion:SfListView x:Name="q5"                                                                                             
@@ -803,10 +803,139 @@ Stroke="LightGray">
                 </StackLayout>
 
 
+                <StackLayout x:Name="infostack" IsVisible="False" HorizontalOptions="FillAndExpand" VerticalOptions="Fill">
+
+                    <Label
+ Text="Learn more about Your Health Metrics"
+ FontSize="26"
+ Margin="20,0,10,0"
+ TextColor="#031926"
+ FontFamily="HankenGroteskBold"
+ FontAttributes="Bold"
+ HorizontalOptions="Start" />
+
+                    <Label
+Text="Find out more about how you can track your health metrics, monitor your progress, and make informed decisions to support your overall wellness"
+TextColor="#031926"
+FontFamily="HankenGroteskRegular"
+FontAttributes="None"
+Margin="20,10,10,0"
+FontSize="15"
+HorizontalOptions="Start" ></Label>
+
+
+                    <Border StrokeShape="RoundRectangle 10" BackgroundColor="White" Stroke="Transparent" Padding="0" Margin="20,10,20,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100*"/>
+
+                            </Grid.ColumnDefinitions>
+
+                            <Image Grid.Row="0" Grid.RowSpan="0" Margin="0,10,0,0" Grid.Column="0" Source="steps.png" HeightRequest="50" WidthRequest="80"  HorizontalOptions="Start" VerticalOptions="Fill" />
+
+
+                            <Label Text="Step Count - A Window into Your Daily Activity" Grid.Row="1" Grid.Column="0" FontFamily="HankenGroteskBold"  FontSize="18" Margin="10,10,0,0" TextColor="#031926" />
+
+                            <Label Text="Your step count is a simple but powerful measure of how active you are throughout the day. It’s an easy-to-understand metric that can motivate you to incorporate more movement into your daily routine. Even small increases in your daily steps—like taking the stairs instead of the elevator or going for a short walk after lunch—can have a positive impact on your health.
+
+Regularly tracking your step count can help you set achievable goals, see patterns over time, and notice how lifestyle changes affect your activity level. Higher step counts are linked to lower risks of obesity, diabetes, heart disease, and even depression. In addition, seeing your step count improve can give you a sense of accomplishment and keep you motivated to stay active." Grid.Row="2" Grid.Column="0"  FontFamily="HankenGroteskRegular"  FontSize="13" Margin="10,10,10,10" TextColor="Gray" />
+
+
+
+
+
+                        </Grid>
+                    </Border>
+
+
+                    <Border StrokeShape="RoundRectangle 10" BackgroundColor="White" Stroke="Transparent" Padding="0" Margin="20,10,20,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100*"/>
+
+                            </Grid.ColumnDefinitions>
+
+                            <Image Grid.Row="0" Grid.RowSpan="0" Margin="0,10,0,0" Grid.Column="0" Source="heartrate.png" HeightRequest="50" WidthRequest="80"  HorizontalOptions="Start" VerticalOptions="Fill" />
+
+
+                            <Label Text="Heart Rate - Your Body’s Internal Barometer" Grid.Row="1" Grid.Column="0" FontFamily="HankenGroteskBold"  FontSize="18" Margin="10,10,0,0" TextColor="#031926" />
+
+                            <Label Text="Your heart rate reflects how your cardiovascular system is functioning. By tracking your resting heart rate and your heart rate during exercise, you can get important clues about your fitness level and overall heart health.
+
+A lower resting heart rate usually suggests better cardiovascular fitness. Regularly checking your heart rate helps you understand how your body responds to stress, exercise, and even emotions. Sudden changes—like an unusually high resting heart rate—can sometimes signal stress, dehydration, overtraining, or even an underlying illness.
+
+Tracking your heart rate during workouts also helps you optimize your exercise routine. It lets you see whether you’re working in your target heart rate zone, which can improve your endurance, help you burn more calories, and reduce the risk of injury." Grid.Row="2" Grid.Column="0"  FontFamily="HankenGroteskRegular"  FontSize="13" Margin="10,10,10,10" TextColor="Gray" />
+
+
+
+
+
+                        </Grid>
+                    </Border>
+
+                    <Border StrokeShape="RoundRectangle 10" BackgroundColor="White" Stroke="Transparent" Padding="0" Margin="20,10,20,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100*"/>
+
+                            </Grid.ColumnDefinitions>
+
+                            <Image Grid.Row="0" Grid.RowSpan="0" Margin="0,10,0,0" Grid.Column="0" Source="lungs.png" HeightRequest="50" WidthRequest="80"  HorizontalOptions="Start" VerticalOptions="Fill" />
+
+
+                            <Label Text="Respiratory Rate - Breathing as a Clue to Your Health" Grid.Row="1" Grid.Column="0" FontFamily="HankenGroteskBold"  FontSize="18" Margin="10,10,0,0" TextColor="#031926" />
+
+                            <Label Text="Your respiratory rate—the number of breaths you take per minute—can reveal valuable information about your health and well-being. While you might not think about your breathing rate every day, it can be an early indicator of how your body is handling exercise, stress, or illness.
+
+A normal breathing rate means your lungs and heart are working efficiently to supply your body with oxygen. Tracking it regularly can help you spot when something’s off—like during a respiratory infection, an asthma flare-up, or even a stressful day.
+
+When you’re exercising, your breathing rate will naturally increase to supply your muscles with more oxygen. Observing how quickly your breathing returns to normal after exercise can give you insight into your fitness level and how well your cardiovascular system recovers." Grid.Row="2" Grid.Column="0"  FontFamily="HankenGroteskRegular"  FontSize="13" Margin="10,10,10,10" TextColor="Gray" />
+
+
+
+
+
+                        </Grid>
+                    </Border>
+
+
+                    <Button
+  BackgroundColor="#031926"
+  HorizontalOptions="FillAndExpand"
+  TextColor="White" Clicked="Button_Clicked_2"
+      
+  FontAttributes="None" 
+       Margin="20,20,20,10"
+  FontFamily="HankenGroteskBold"
+  Text="Get Started" />
+
+
+                </StackLayout>
+
+
+
                 <StackLayout x:Name="loadingstack" IsVisible="False" HorizontalOptions="Fill" VerticalOptions="Center">
 
 
                     <Image Source="successtick.png" IsVisible="False" x:Name="migimg" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,50,0,0" HeightRequest="60" WidthRequest="60"/>
+
+                    <Image Source="close.png" IsVisible="False" x:Name="migimgwrong" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,50,0,0" HeightRequest="60" WidthRequest="60"/>
+
 
                     <progressBar:SfLinearProgressBar  x:Name="topprogress" IsVisible="False"
                         TrackHeight="8"  TrackFill="#BFDBF7" ProgressFill="#031926"

@@ -2111,12 +2111,14 @@ namespace PeopleWith
                 string data = await response.Content.ReadAsStringAsync();
                 var userResponse = JsonConvert.DeserializeObject<GetUserMood>(data);
                 ObservableCollection<usermood> users = userResponse.Value;
-                foreach (var item in userResponse.Value)
+                foreach (var item in users)
                 {
                     if (item.title != null)
                     {
                         string GetSource = item.title.ToLower();
                         item.source = GetSource + ".png";
+
+                    
                     }
 
                 }
@@ -4962,11 +4964,14 @@ namespace PeopleWith
 
                 if (response.IsSuccessStatusCode)
                 {
-                    //Nothing to return
-                    return null;
+                    var responseJson = await response.Content.ReadAsStringAsync();
+                    // Deserialize response to your userfitnessdata object
+                    var insertedItem = System.Text.Json.JsonSerializer.Deserialize<userfitnessdata>(responseJson);
+                    return insertedItem;
                 }
                 else
                 {
+                    var errorResponse = await response.Content.ReadAsStringAsync();
                     return null;
                 }
             }

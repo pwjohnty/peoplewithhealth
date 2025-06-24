@@ -39,6 +39,7 @@ public partial class HealthDataPage : ContentPage
         q1list.Add("Weight Loss");
         q1list.Add("Better Sleep");
         q1list.Add("See Insights and Trends");
+        q1list.Add("No Reason");
 
         q1.ItemsSource = q1list;
 
@@ -500,171 +501,517 @@ public partial class HealthDataPage : ContentPage
         }
     }
 
+    private async Task<List<fitnessfeedback>> FetchFitnessFeedback(
+    HealthParameter parameter, DateTime start, DateTime end, string unit)
+    {
+        try
+        {
+            var list = new List<fitnessfeedback>();
+
+            var hasPermission = await health.CheckPermissionAsync(parameter, PermissionType.Read);
+            if (!hasPermission) return list;
+
+
+            var data = await health.ReadAllAsync(parameter, start, end, unit);
+
+            list = data.Select(item => new fitnessfeedback
+            {
+                value = item.Value.ToString(),
+                unit = item.Unit,
+                source = item.Source,
+                datetime = item.From.ToString()
+            }).ToList();
+
+            //foreach (var item in data)
+            //{
+            //    list.Add(new fitnessfeedback
+            //    {
+            //        value = item.Value.ToString(),
+            //        unit = item.Unit,
+            //        source = item.Source,
+            //        datetime = item.From.ToString()
+            //    });
+            //}
+
+            return list;
+        }
+        catch(Exception ex)
+        {
+            return null;
+        }
+    }
+
+
+    private async Task<userfitnessdata> CreateUserFitnessData(DateTime startDate, DateTime endDate)
+    {
+        try
+        {
+
+            var stopwatch = Stopwatch.StartNew();
+
+            var stepTask = FetchFitnessFeedback(HealthParameter.StepCount, startDate, endDate, "");
+            var hrTask = FetchFitnessFeedback(HealthParameter.HeartRate, startDate, endDate, "count/min");
+            var rrTask = FetchFitnessFeedback(HealthParameter.RespiratoryRate, startDate, endDate, "count/min");
+
+            await Task.WhenAll(stepTask, hrTask, rrTask);
+
+            var userfitness = new userfitnessdata
+            {
+                userid = Helpers.Settings.UserKey,
+                //   stepfeedbacklist = stepTask.Result,
+                //   heartratefeedbacklist = hrTask.Result,
+                //   respiratoryratefeedbacklist = rrTask.Result,
+                stepfeedback = System.Text.Json.JsonSerializer.Serialize(stepTask.Result),
+                heartratefeedback = System.Text.Json.JsonSerializer.Serialize(hrTask.Result),
+                respiratoryratefeedback = System.Text.Json.JsonSerializer.Serialize(rrTask.Result)
+            };
+
+
+            stopwatch.Stop();
+            await Application.Current.MainPage.DisplayAlert(
+                "Step Data Loaded",
+                $"loading data {stopwatch.Elapsed.TotalSeconds:F2} seconds.",
+                "OK"
+            );
+
+            //var userfitness = new userfitnessdata
+            //{
+            //    userid = Helpers.Settings.UserKey,
+            //    stepfeedbacklist = await FetchFitnessFeedback(HealthParameter.StepCount, startDate, endDate, ""),
+            //    heartratefeedbacklist = await FetchFitnessFeedback(HealthParameter.HeartRate, startDate, endDate, "count/min"),
+            //    respiratoryratefeedbacklist = await FetchFitnessFeedback(HealthParameter.RespiratoryRate, startDate, endDate, "count/min")
+            //};
+
+            //userfitness.stepfeedback = System.Text.Json.JsonSerializer.Serialize(userfitness.stepfeedbacklist);
+            //userfitness.heartratefeedback = System.Text.Json.JsonSerializer.Serialize(userfitness.heartratefeedbacklist);
+            //userfitness.respiratoryratefeedback = System.Text.Json.JsonSerializer.Serialize(userfitness.respiratoryratefeedbacklist);
+
+            return userfitness;
+        }
+        catch(Exception ex)
+        {
+            return null;
+        }
+    }
+
+
     async void uploadallfitnessdata()
     {
         try
         {
-            //check if there is any user fitness 
-
-            // Retrieve all user feedback data
-           // userfitnesslist = await database.GetUserFitnessData();
-
-
 
             if (userfitnesslist == null || userfitnesslist.Count == 0)
             {
                 NavigationPage.SetHasNavigationBar(this, false);
-             //   syncstack.IsVisible = true;
-            //    mainstack.IsVisible = false;
+                var stopwatch = Stopwatch.StartNew();
 
-                //add it a new user fitness
+                var endDate = DateTime.UtcNow;
+                var startDate = endDate.Date.AddMonths(-6);
 
-
-                var newuserfitness = new userfitnessdata();
-
-                newuserfitness.userid = Helpers.Settings.UserKey;
+                var userFitness = await CreateUserFitnessData(startDate, endDate);
 
 
-                //step data
+                //add in questions and date time 
+                userFitness.distancefeedback = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
 
-                var hasPermission = await health.CheckPermissionAsync(HealthParameter.StepCount, PermissionType.Read);
-                if (hasPermission)
+
+                var result = await database.InsertUserFitness(userFitness);
+
+                if (result == null)
                 {
-                    // StepsCount = await health.ReadCountAsync(Enums.HealthParameter.StepCount, DateTime.Now.AddDays(-1), DateTime.Now);
-                    var stopwatch = Stopwatch.StartNew();
-
-                    var endDate = DateTime.UtcNow;
-                    var startDate = endDate.Date.AddYears(-1); // start of today (00:00 UTC)
-                    var unit = "";
-
-                    // Query step count data
-                    //  var data = await health.ReadLatestAsync(HealthParameter.StepCount, startDate, endDate, unit);
-
-                    //   syncstack.IsVisible = true;
-                    //  syncProgress.Progress = 0;
-
-                    // Start fake progress animation
-
-
-                    // Run the actual health sync
-                    await Task.Run(async () =>
-                    {
-                      //  var steps = await health.ReadAllAsync(HealthParameter.StepCount, startDate, endDate, unit);
-                        //  var distance = await health.ReadAllAsync(HealthParameter.DistanceWalkingRunning, startDate, endDate, "m");
-                       // var heartRate = await health.ReadAllAsync(HealthParameter.HeartRate, startDate, endDate, "count/min");
-                    });
-
-                    // Stop and hide progress
-                    ////  syncProgress.AbortAnimation("ProgressTo");
-                    // syncProgress.Progress = 1;
-                    // syncstack.IsVisible = false;
-
-
-                    var data1 = await health.ReadAllAsync(HealthParameter.StepCount, startDate, endDate, unit);
-
-                    newuserfitness.stepfeedbacklist = new ObservableCollection<fitnessfeedback>();
-                    newuserfitness.heartratefeedbacklist = new ObservableCollection<fitnessfeedback>();
-                    newuserfitness.respiratoryratefeedbacklist = new ObservableCollection<fitnessfeedback>();
-
-                    foreach (var item in data1)
-                    {
-                        newuserfitness.stepfeedbacklist.Add(new fitnessfeedback
-                        {
-                            // Map properties from `item` to `fitnessfeedback`
-                            // e.g., Steps = item.Value, Time = item.Date
-
-                            value = item.Value.ToString(),
-                            unit = item.Unit,
-                            source = item.Source,
-                          //  name = item.Description,
-                            datetime = item.From.ToString()
-
-                        });
-                    }
-
-                    string json = System.Text.Json.JsonSerializer.Serialize(newuserfitness.stepfeedbacklist);
-                    newuserfitness.stepfeedback = json;
-
-                    //   var walkingdistance = await health.ReadAllAsync(HealthParameter.DistanceWalkingRunning, startDate, endDate, "m");
-
-                    var hr = await health.ReadAllAsync(HealthParameter.HeartRate, startDate, endDate, "count/min");
-
-         
-
-                    foreach (var item in hr)
-                    {
-                        newuserfitness.heartratefeedbacklist.Add(new fitnessfeedback
-                        {
-                            // Map properties from `item` to `fitnessfeedback`
-                            // e.g., Steps = item.Value, Time = item.Date
-
-                            value = item.Value.ToString(),
-                            unit = item.Unit,
-                            source = item.Source,
-                            //  name = item.Description,
-                            datetime = item.From.ToString()
-
-                        });
-                    }
-
-                    string jsonhr = System.Text.Json.JsonSerializer.Serialize(newuserfitness.heartratefeedbacklist);
-                    newuserfitness.heartratefeedback = jsonhr;
-
-
-
-                    var resp = await health.ReadAllAsync(HealthParameter.RespiratoryRate, startDate, endDate, "count/min");
-
-                    foreach (var item in resp)
-                    {
-                        newuserfitness.respiratoryratefeedbacklist.Add(new fitnessfeedback
-                        {
-                            // Map properties from `item` to `fitnessfeedback`
-                            // e.g., Steps = item.Value, Time = item.Date
-
-                            value = item.Value.ToString(),
-                            unit = item.Unit,
-                            source = item.Source,
-                            //  name = item.Description,
-                            datetime = item.From.ToString()
-
-                        });
-                    }
-
-
-                    string jsonres = System.Text.Json.JsonSerializer.Serialize(newuserfitness.respiratoryratefeedbacklist);
-                    newuserfitness.respiratoryratefeedback = jsonres;
-
-
-
-                    // string newsymJson = System.Text.Json.JsonSerializer.Serialize(data1);
-                    // newuserfitness.stepfeedback = newsymJson;
-
-
-                    // string newsymJsonhr = System.Text.Json.JsonSerializer.Serialize(hr);
-                    // newuserfitness.heartratefeedback = newsymJsonhr;
-
-
-
-
-                    await database.InsertUserFitness(newuserfitness);
-
-
-                    loader.IsVisible = false;
-                    migimg.IsVisible = true;
+                    // Try again with smaller range
+                    startDate = endDate.Date.AddYears(-1);
+                    userFitness = await CreateUserFitnessData(startDate, endDate);
 
                     stopwatch.Stop();
-
                     await Application.Current.MainPage.DisplayAlert(
-    "Step Data Loaded",
-    $"Retrieved entries in {stopwatch.Elapsed.TotalSeconds:F2} seconds.",
-    "OK"
-    );
+                        "Step Data Loaded",
+                        $"Retrieved entries in {stopwatch.Elapsed.TotalSeconds:F2} seconds.",
+                        "OK"
+                    );
 
+                    stopwatch.Start();
 
+                    result = await database.InsertUserFitness(userFitness);
                 }
 
+                if (result != null)
+                {
+                    loader.IsVisible = false;
+                    migimg.IsVisible = true;
+                    mdlbl.Text = "Successfully Uploaded";
+                    md2lbl.Text = "Data successfully uploaded";
+                    Preferences.Set("fitnessdata", "Activated");
 
+                    await Task.Delay(2000);
+                    Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                }
+                else
+                {
+                    loader.IsVisible = false;
+                    migimgwrong.IsVisible = true;
+                    mdlbl.Text = "Something went wrong";
+                    md2lbl.Text = "There seems to be an issue with uploading your data please contact support at PeopleWith";
+
+                    await Task.Delay(2000);
+                    Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                }
+
+                stopwatch.Stop();
+                await Application.Current.MainPage.DisplayAlert(
+                    "Step Data Loaded",
+                    $"Retrieved entries in {stopwatch.Elapsed.TotalSeconds:F2} seconds.",
+                    "OK"
+                );
             }
+
+
+
+
+
+            //check if there is any user fitness 
+
+            // Retrieve all user feedback data
+            // userfitnesslist = await database.GetUserFitnessData();
+
+
+
+            //        if (userfitnesslist == null || userfitnesslist.Count == 0)
+            //        {
+            //            NavigationPage.SetHasNavigationBar(this, false);
+            //         //   syncstack.IsVisible = true;
+            //        //    mainstack.IsVisible = false;
+
+            //            //add it a new user fitness
+
+
+            //            var newuserfitness = new userfitnessdata();
+
+            //            newuserfitness.userid = Helpers.Settings.UserKey;
+
+            //            var stopwatch = Stopwatch.StartNew();
+
+            //            var endDate = DateTime.UtcNow;
+            //            var startDate = endDate.Date.AddYears(-10); // start of today (00:00 UTC)
+            //            var unit = "";
+
+            //            newuserfitness.stepfeedbacklist = new ObservableCollection<fitnessfeedback>();
+            //            newuserfitness.heartratefeedbacklist = new ObservableCollection<fitnessfeedback>();
+            //            newuserfitness.respiratoryratefeedbacklist = new ObservableCollection<fitnessfeedback>();
+
+
+            //            //step data
+
+            //            var hasPermission = await health.CheckPermissionAsync(HealthParameter.StepCount, PermissionType.Read);
+            //            if (hasPermission)
+            //            {
+            //                // StepsCount = await health.ReadCountAsync(Enums.HealthParameter.StepCount, DateTime.Now.AddDays(-1), DateTime.Now);
+
+            //                // Query step count data
+            //                //  var data = await health.ReadLatestAsync(HealthParameter.StepCount, startDate, endDate, unit);
+
+            //                //   syncstack.IsVisible = true;
+            //                //  syncProgress.Progress = 0;
+
+            //                // Start fake progress animation
+
+
+            //                // Run the actual health sync
+            //                await Task.Run(async () =>
+            //                {
+            //                    //  var steps = await health.ReadAllAsync(HealthParameter.StepCount, startDate, endDate, unit);
+            //                    //  var distance = await health.ReadAllAsync(HealthParameter.DistanceWalkingRunning, startDate, endDate, "m");
+            //                    // var heartRate = await health.ReadAllAsync(HealthParameter.HeartRate, startDate, endDate, "count/min");
+            //                });
+
+            //                // Stop and hide progress
+            //                ////  syncProgress.AbortAnimation("ProgressTo");
+            //                // syncProgress.Progress = 1;
+            //                // syncstack.IsVisible = false;
+
+
+            //                var data1 = await health.ReadAllAsync(HealthParameter.StepCount, startDate, endDate, unit);
+
+
+
+            //                foreach (var item in data1)
+            //                {
+            //                    newuserfitness.stepfeedbacklist.Add(new fitnessfeedback
+            //                    {
+            //                        // Map properties from `item` to `fitnessfeedback`
+            //                        // e.g., Steps = item.Value, Time = item.Date
+
+            //                        value = item.Value.ToString(),
+            //                        unit = item.Unit,
+            //                        source = item.Source,
+            //                        //  name = item.Description,
+            //                        datetime = item.From.ToString()
+
+            //                    });
+            //                }
+
+            //                string json = System.Text.Json.JsonSerializer.Serialize(newuserfitness.stepfeedbacklist);
+            //                newuserfitness.stepfeedback = json;
+
+            //            }
+
+            //            var hasPermissionhr = await health.CheckPermissionAsync(HealthParameter.HeartRate, PermissionType.Read);
+
+            //            if (hasPermissionhr)
+            //            {
+
+
+            //                var hr = await health.ReadAllAsync(HealthParameter.HeartRate, startDate, endDate, "count/min");
+
+
+
+            //                foreach (var item in hr)
+            //                {
+            //                    newuserfitness.heartratefeedbacklist.Add(new fitnessfeedback
+            //                    {
+            //                        // Map properties from `item` to `fitnessfeedback`
+            //                        // e.g., Steps = item.Value, Time = item.Date
+
+            //                        value = item.Value.ToString(),
+            //                        unit = item.Unit,
+            //                        source = item.Source,
+            //                        //  name = item.Description,
+            //                        datetime = item.From.ToString()
+
+            //                    });
+            //                }
+
+            //                string jsonhr = System.Text.Json.JsonSerializer.Serialize(newuserfitness.heartratefeedbacklist);
+            //                newuserfitness.heartratefeedback = jsonhr;
+            //            }
+
+            //            ////   var walkingdistance = await health.ReadAllAsync(HealthParameter.DistanceWalkingRunning, startDate, endDate, "m");
+
+
+            //            var hasPermissionrr = await health.CheckPermissionAsync(HealthParameter.RespiratoryRate, PermissionType.Read);
+
+
+            //            if (hasPermissionrr)
+            //            {
+            //                var resp = await health.ReadAllAsync(HealthParameter.RespiratoryRate, startDate, endDate, "count/min");
+
+            //                foreach (var item in resp)
+            //                {
+            //                    newuserfitness.respiratoryratefeedbacklist.Add(new fitnessfeedback
+            //                    {
+            //                        // Map properties from `item` to `fitnessfeedback`
+            //                        // e.g., Steps = item.Value, Time = item.Date
+
+            //                        value = item.Value.ToString(),
+            //                        unit = item.Unit,
+            //                        source = item.Source,
+            //                        //  name = item.Description,
+            //                        datetime = item.From.ToString()
+
+            //                    });
+            //                }
+
+
+            //                string jsonres = System.Text.Json.JsonSerializer.Serialize(newuserfitness.respiratoryratefeedbacklist);
+            //                newuserfitness.respiratoryratefeedback = jsonres;
+            //            }
+
+
+
+
+
+
+
+            //            // string newsymJson = System.Text.Json.JsonSerializer.Serialize(data1);
+            //            // newuserfitness.stepfeedback = newsymJson;
+
+
+            //            // string newsymJsonhr = System.Text.Json.JsonSerializer.Serialize(hr);
+            //            // newuserfitness.heartratefeedback = newsymJsonhr;
+
+
+
+
+            //            var result = await database.InsertUserFitness(newuserfitness);
+
+
+
+            //            if (result == null)
+            //            {
+
+            //                //try it again with less years
+
+            //                var newuserfitness1 = new userfitnessdata();
+
+            //                newuserfitness1.userid = Helpers.Settings.UserKey;
+
+
+
+            //                var endDate1 = DateTime.UtcNow;
+            //                var startDate1 = endDate1.Date.AddYears(-2); // start of today (00:00 UTC)
+            //                var unit1 = "";
+
+            //                newuserfitness1.stepfeedbacklist = new ObservableCollection<fitnessfeedback>();
+            //                newuserfitness1.heartratefeedbacklist = new ObservableCollection<fitnessfeedback>();
+            //                newuserfitness1.respiratoryratefeedbacklist = new ObservableCollection<fitnessfeedback>();
+
+
+            //                //step data
+
+            //                var hasPermission1 = await health.CheckPermissionAsync(HealthParameter.StepCount, PermissionType.Read);
+            //                if (hasPermission1)
+            //                {
+
+            //                    var data1 = await health.ReadAllAsync(HealthParameter.StepCount, startDate, endDate, unit);
+
+
+
+            //                    foreach (var item in data1)
+            //                    {
+            //                        newuserfitness1.stepfeedbacklist.Add(new fitnessfeedback
+            //                        {
+            //                            // Map properties from `item` to `fitnessfeedback`
+            //                            // e.g., Steps = item.Value, Time = item.Date
+
+            //                            value = item.Value.ToString(),
+            //                            unit = item.Unit,
+            //                            source = item.Source,
+            //                            //  name = item.Description,
+            //                            datetime = item.From.ToString()
+
+            //                        });
+            //                    }
+
+            //                    string json = System.Text.Json.JsonSerializer.Serialize(newuserfitness1.stepfeedbacklist);
+            //                    newuserfitness1.stepfeedback = json;
+
+            //                }
+
+            //                var hasPermissionhr1 = await health.CheckPermissionAsync(HealthParameter.HeartRate, PermissionType.Read);
+
+            //                if (hasPermissionhr1)
+            //                {
+
+
+            //                    var hr = await health.ReadAllAsync(HealthParameter.HeartRate, startDate, endDate, "count/min");
+
+
+
+            //                    foreach (var item in hr)
+            //                    {
+            //                        newuserfitness1.heartratefeedbacklist.Add(new fitnessfeedback
+            //                        {
+            //                            // Map properties from `item` to `fitnessfeedback`
+            //                            // e.g., Steps = item.Value, Time = item.Date
+
+            //                            value = item.Value.ToString(),
+            //                            unit = item.Unit,
+            //                            source = item.Source,
+            //                            //  name = item.Description,
+            //                            datetime = item.From.ToString()
+
+            //                        });
+            //                    }
+
+            //                    string jsonhr = System.Text.Json.JsonSerializer.Serialize(newuserfitness1.heartratefeedbacklist);
+            //                    newuserfitness1.heartratefeedback = jsonhr;
+            //                }
+
+            //                ////   var walkingdistance = await health.ReadAllAsync(HealthParameter.DistanceWalkingRunning, startDate, endDate, "m");
+
+
+            //                var hasPermissionrr1 = await health.CheckPermissionAsync(HealthParameter.RespiratoryRate, PermissionType.Read);
+
+
+            //                if (hasPermissionrr1)
+            //                {
+            //                    var resp = await health.ReadAllAsync(HealthParameter.RespiratoryRate, startDate, endDate, "count/min");
+
+            //                    foreach (var item in resp)
+            //                    {
+            //                        newuserfitness1.respiratoryratefeedbacklist.Add(new fitnessfeedback
+            //                        {
+            //                            // Map properties from `item` to `fitnessfeedback`
+            //                            // e.g., Steps = item.Value, Time = item.Date
+
+            //                            value = item.Value.ToString(),
+            //                            unit = item.Unit,
+            //                            source = item.Source,
+            //                            //  name = item.Description,
+            //                            datetime = item.From.ToString()
+
+            //                        });
+            //                    }
+
+
+            //                    string jsonres = System.Text.Json.JsonSerializer.Serialize(newuserfitness1.respiratoryratefeedbacklist);
+            //                    newuserfitness1.respiratoryratefeedback = jsonres;
+            //                }
+
+
+
+
+
+            //                var result1 = await database.InsertUserFitness(newuserfitness1);
+
+            //                if (result1 != null)
+            //                {
+            //                    loader.IsVisible = false;
+            //                    migimg.IsVisible = true;
+            //                    mdlbl.Text = "Successfully Uploaded";
+            //                    md2lbl.Text = "Data successfully uploaded";
+            //                    Preferences.Set("fitnessdata", "Activated");
+
+
+            //                    await Task.Delay(2000);
+            //                    Application.Current.MainPage = new NavigationPage(new MainDashboard());
+            //                }
+            //                else
+            //                {
+
+            //                    loader.IsVisible = false;
+            //                    migimgwrong.IsVisible = true;
+            //                    mdlbl.Text = "Something went wrong";
+            //                    md2lbl.Text = "There seems to be an issue with uploading your data please contact support at PeopleWith";
+
+            //                    await Task.Delay(2000);
+            //                    Application.Current.MainPage = new NavigationPage(new MainDashboard());
+            //                }
+
+            //            }
+            //            else
+            //            {
+
+            //                loader.IsVisible = false;
+            //                migimg.IsVisible = true;
+            //                mdlbl.Text = "Successfully Uploaded";
+            //                md2lbl.Text = "Data successfully uploaded";
+            //                Preferences.Set("fitnessdata", "Activated");
+
+
+            //                await Task.Delay(2000);
+            //                Application.Current.MainPage = new NavigationPage(new MainDashboard());
+
+            //            }
+
+
+
+
+
+
+            //                stopwatch.Stop();
+
+            //                await Application.Current.MainPage.DisplayAlert(
+            //"Step Data Loaded",
+            //$"Retrieved entries in {stopwatch.Elapsed.TotalSeconds:F2} seconds.",
+            //"OK"
+            //);
+
+
+
+
+
+            //        }
 
 
 
@@ -709,18 +1056,42 @@ public partial class HealthDataPage : ContentPage
                 sourcestack.IsVisible = false;
                 syncstack.IsVisible = true;
                 stepbar.ActiveStepIndex = 1;
-                 uploadallfitnessdata();
+                uploadallfitnessdata();
             }
             else if(syncstack.IsVisible)
             {
                 syncstack.IsVisible = false;
+
+                stepbar.ActiveStepIndex = 2;
+                infostack.IsVisible = true;
+                mainscrollview.ScrollToAsync(0, 0, false);
+                nextbtn.IsVisible = false;
+
+            }
+            else if(infostack.IsVisible)
+            {
+                infostack.IsVisible = false;
                 topgrid.IsVisible = false;
                 bottomstack.IsVisible = false;
 
                 loadingstack.IsVisible = true;
-         
-
             }
+        }
+        catch(Exception ex)
+        {
+
+        }
+    }
+
+    private void Button_Clicked_2(object sender, EventArgs e)
+    {
+        try
+        {
+            infostack.IsVisible = false;
+            topgrid.IsVisible = false;
+            bottomstack.IsVisible = false;
+
+            loadingstack.IsVisible = true;
         }
         catch(Exception ex)
         {

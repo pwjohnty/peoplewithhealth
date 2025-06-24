@@ -15,538 +15,57 @@
         <ToolbarItem  x:Name="accessbtn" Clicked="accessbtn_Clicked" Text="" />
     </ContentPage.ToolbarItems>
     <ScrollView>
-    <VerticalStackLayout Margin="20,20,20,0">
+    <VerticalStackLayout Margin="10,0,10,0">
 
-            <StackLayout x:Name="syncstack" IsVisible="True" VerticalOptions="Fill">
 
 
-                <Label
-  Text="Get your Fitness Data journey started"
-  FontSize="26"
-  Margin="0,0,0,0"
-  TextColor="#031926"
-  FontFamily="HankenGroteskBold"
-  FontAttributes="Bold"
-  HorizontalOptions="Start" />
-
-                <Label
- Text="Answer a few questions about your current fitness and lifestyle."
- TextColor="#031926"
- FontFamily="HankenGroteskRegular"
- FontAttributes="None"
- Margin="0,10,0,0"
- FontSize="15"
- HorizontalOptions="Start" ></Label>
-
-
-                <Border StrokeShape="RoundRectangle 10" BackgroundColor="#ecf9e5" Stroke="Transparent" Padding="0" Margin="0,10,0,0">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100*"/>
-                
-                        </Grid.ColumnDefinitions>
-
-
-                        <Label Text="What is your main fitness focus right now?" Grid.Row="0" Grid.Column="0" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
-
-                        <Label Text="Please choose an option from below" Grid.Row="1" Grid.Column="0"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
-
-
-                        <syncfusion:SfListView x:Name="q1"                                                                                             
-             AutoFitMode="Height"
-        Margin="5,5,5,0"
-                              BackgroundColor="Transparent"
-                              Grid.Column="0"
-     Grid.Row="2" 
-                      SelectionMode="Single"
-                
-                       ScrollBarVisibility="Never"
-             SelectionBackground="Transparent"
-             Orientation="Vertical"                                                                                                                       
-             >
-                            <syncfusion:SfListView.HeightRequest>
-                                <OnPlatform x:TypeArguments="x:Double">
-                                    <On Platform="Android" Value="220" />
-                                    <On Platform="iOS" Value="200" />
-                                </OnPlatform>
-                            </syncfusion:SfListView.HeightRequest>
-
-                            <syncfusion:SfListView.ItemTemplate>
-                                <DataTemplate>
-                                    <ViewCell>
-                                        <Border StrokeShape="RoundRectangle 10" InputTransparent="True"   Margin="5,5,5,5"  Opacity="1" BackgroundColor="Transparent"
-Stroke="LightGray">
-                                            <Grid HorizontalOptions="Fill" Margin="0" Padding="10"  >
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto"/>
-                                                </Grid.RowDefinitions>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="100*"/>
-
-                                                </Grid.ColumnDefinitions>
-
-                                                <Label Text="{Binding .}" FontFamily="HankenGroteskRegular" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="12" />
-
-
-
-                                            </Grid>
-                                        </Border>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </syncfusion:SfListView.ItemTemplate>
-                            <syncfusion:SfListView.SelectedItemTemplate>
-                                <DataTemplate>
-                                    <ViewCell>
-                                        <Border StrokeShape="RoundRectangle 10" Margin="5,5,5,5" InputTransparent="True" BackgroundColor="#42c501"  Stroke="White">
-                                            <Grid HorizontalOptions="Fill"  Margin="0" Padding="10">
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto"/>
-                                                </Grid.RowDefinitions>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="100*"/>
-
-                                                </Grid.ColumnDefinitions>
-                                                <Label Text="{Binding .}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" FontAttributes="Bold"  TextColor="White" FontSize="12" />
-
-                                            </Grid>
-                                        </Border>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </syncfusion:SfListView.SelectedItemTemplate>
-                        </syncfusion:SfListView>
-
-                        
-
-                    </Grid>
-                </Border>
-
-
-                <Border StrokeShape="RoundRectangle 10" BackgroundColor="#ecf9e5" Stroke="Transparent" Padding="0" Margin="0,10,0,0">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100*"/>
-
-                        </Grid.ColumnDefinitions>
-
-
-                        <Label Text="How many steps on average are you getting per day?" Grid.Row="0" Grid.Column="0" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
-
-                        <Label Text="Please choose an option from below" Grid.Row="1" Grid.Column="0"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
-
-
-                        <syncfusion:SfListView x:Name="q2"                                                                                             
-             AutoFitMode="Height"
-        Margin="5,5,5,0"
-                              BackgroundColor="Transparent"
-                              Grid.Column="0"
-     Grid.Row="2" 
-                      SelectionMode="Single"
-                
-                       ScrollBarVisibility="Never"
-             SelectionBackground="Transparent"
-             Orientation="Vertical"                                                                                                                       
-             >
-                            <syncfusion:SfListView.HeightRequest>
-                                <OnPlatform x:TypeArguments="x:Double">
-                                    <On Platform="Android" Value="220" />
-                                    <On Platform="iOS" Value="390" />
-                                </OnPlatform>
-                            </syncfusion:SfListView.HeightRequest>
-
-                            <syncfusion:SfListView.ItemTemplate>
-                                <DataTemplate>
-                                    <ViewCell>
-                                        <Border StrokeShape="RoundRectangle 10" InputTransparent="True"   Margin="5,5,5,5"  Opacity="1" BackgroundColor="Transparent"
-Stroke="LightGray">
-                                            <Grid HorizontalOptions="Fill" Margin="0" Padding="10"  >
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto"/>
-                                                </Grid.RowDefinitions>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="100*"/>
-
-                                                </Grid.ColumnDefinitions>
-
-                                                <Label Text="{Binding .}" FontFamily="HankenGroteskRegular" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="12" />
-
-
-
-                                            </Grid>
-                                        </Border>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </syncfusion:SfListView.ItemTemplate>
-                            <syncfusion:SfListView.SelectedItemTemplate>
-                                <DataTemplate>
-                                    <ViewCell>
-                                        <Border StrokeShape="RoundRectangle 10" Margin="5,5,5,5" InputTransparent="True" BackgroundColor="#42c501"  Stroke="White">
-                                            <Grid HorizontalOptions="Fill"  Margin="0" Padding="10">
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto"/>
-                                                </Grid.RowDefinitions>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="100*"/>
-
-                                                </Grid.ColumnDefinitions>
-                                                <Label Text="{Binding .}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" FontAttributes="Bold"  TextColor="White" FontSize="12" />
-
-                                            </Grid>
-                                        </Border>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </syncfusion:SfListView.SelectedItemTemplate>
-                        </syncfusion:SfListView>
-
-
-
-                    </Grid>
-                </Border>
-
-                <Border StrokeShape="RoundRectangle 10" BackgroundColor="#ecf9e5" Stroke="Transparent" Padding="0" Margin="0,10,0,0">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100*"/>
-
-                        </Grid.ColumnDefinitions>
-
-
-                        <Label Text="How many hours of sleep do you get per night?" Grid.Row="0" Grid.Column="0" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
-
-                        <Label Text="Please choose an option from below" Grid.Row="1" Grid.Column="0"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
-
-
-                        <syncfusion:SfListView x:Name="q3"                                                                                             
-             AutoFitMode="Height"
-        Margin="5,5,5,0"
-                              BackgroundColor="Transparent"
-                              Grid.Column="0"
-     Grid.Row="2" 
-                      SelectionMode="Single"
-                
-                       ScrollBarVisibility="Never"
-             SelectionBackground="Transparent"
-             Orientation="Vertical"                                                                                                                       
-             >
-                            <syncfusion:SfListView.HeightRequest>
-                                <OnPlatform x:TypeArguments="x:Double">
-                                    <On Platform="Android" Value="220" />
-                                    <On Platform="iOS" Value="240" />
-                                </OnPlatform>
-                            </syncfusion:SfListView.HeightRequest>
-
-                            <syncfusion:SfListView.ItemTemplate>
-                                <DataTemplate>
-                                    <ViewCell>
-                                        <Border StrokeShape="RoundRectangle 10" InputTransparent="True"   Margin="5,5,5,5"  Opacity="1" BackgroundColor="Transparent"
-Stroke="LightGray">
-                                            <Grid HorizontalOptions="Fill" Margin="0" Padding="10"  >
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto"/>
-                                                </Grid.RowDefinitions>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="100*"/>
-
-                                                </Grid.ColumnDefinitions>
-
-                                                <Label Text="{Binding .}" FontFamily="HankenGroteskRegular" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="12" />
-
-
-
-                                            </Grid>
-                                        </Border>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </syncfusion:SfListView.ItemTemplate>
-                            <syncfusion:SfListView.SelectedItemTemplate>
-                                <DataTemplate>
-                                    <ViewCell>
-                                        <Border StrokeShape="RoundRectangle 10" Margin="5,5,5,5" InputTransparent="True" BackgroundColor="#42c501"  Stroke="White">
-                                            <Grid HorizontalOptions="Fill"  Margin="0" Padding="10">
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto"/>
-                                                </Grid.RowDefinitions>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="100*"/>
-
-                                                </Grid.ColumnDefinitions>
-                                                <Label Text="{Binding .}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" FontAttributes="Bold"  TextColor="White" FontSize="12" />
-
-                                            </Grid>
-                                        </Border>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </syncfusion:SfListView.SelectedItemTemplate>
-                        </syncfusion:SfListView>
-
-
-
-                    </Grid>
-                </Border>
-
-                <Border StrokeShape="RoundRectangle 10" BackgroundColor="#ecf9e5" Stroke="Transparent" Padding="0" Margin="0,10,0,0">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100*"/>
-
-                        </Grid.ColumnDefinitions>
-
-
-                        <Label Text="Would tracking your water intake be insightful for you?" Grid.Row="0" Grid.Column="0" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
-
-                        <Label Text="Please choose an option from below" Grid.Row="1" Grid.Column="0"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
-
-
-                        <syncfusion:SfListView x:Name="q4"                                                                                             
-             AutoFitMode="Height"
-        Margin="5,5,5,0"
-                              BackgroundColor="Transparent"
-                              Grid.Column="0"
-     Grid.Row="2" 
-                      SelectionMode="Single"
-                
-                       ScrollBarVisibility="Never"
-             SelectionBackground="Transparent"
-             Orientation="Vertical"                                                                                                                       
-             >
-                            <syncfusion:SfListView.HeightRequest>
-                                <OnPlatform x:TypeArguments="x:Double">
-                                    <On Platform="Android" Value="220" />
-                                    <On Platform="iOS" Value="100" />
-                                </OnPlatform>
-                            </syncfusion:SfListView.HeightRequest>
-
-                            <syncfusion:SfListView.ItemTemplate>
-                                <DataTemplate>
-                                    <ViewCell>
-                                        <Border StrokeShape="RoundRectangle 10" InputTransparent="True"   Margin="5,5,5,5"  Opacity="1" BackgroundColor="Transparent"
-Stroke="LightGray">
-                                            <Grid HorizontalOptions="Fill" Margin="0" Padding="10"  >
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto"/>
-                                                </Grid.RowDefinitions>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="100*"/>
-
-                                                </Grid.ColumnDefinitions>
-
-                                                <Label Text="{Binding .}" FontFamily="HankenGroteskRegular" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="12" />
-
-
-
-                                            </Grid>
-                                        </Border>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </syncfusion:SfListView.ItemTemplate>
-                            <syncfusion:SfListView.SelectedItemTemplate>
-                                <DataTemplate>
-                                    <ViewCell>
-                                        <Border StrokeShape="RoundRectangle 10" Margin="5,5,5,5" InputTransparent="True" BackgroundColor="#42c501"  Stroke="White">
-                                            <Grid HorizontalOptions="Fill"  Margin="0" Padding="10">
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto"/>
-                                                </Grid.RowDefinitions>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="100*"/>
-
-                                                </Grid.ColumnDefinitions>
-                                                <Label Text="{Binding .}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" FontAttributes="Bold"  TextColor="White" FontSize="12" />
-
-                                            </Grid>
-                                        </Border>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </syncfusion:SfListView.SelectedItemTemplate>
-                        </syncfusion:SfListView>
-
-
-
-                    </Grid>
-                </Border>
-
-                <Border StrokeShape="RoundRectangle 10" BackgroundColor="#ecf9e5" Stroke="Transparent" Padding="0" Margin="0,10,0,0">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100*"/>
-
-                        </Grid.ColumnDefinitions>
-
-
-                        <Label Text="Would receiving notifications about your fitness data be of interest to you?" Grid.Row="0" Grid.Column="0" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,10,0,0" TextColor="#031926" />
-
-                        <Label Text="Please choose an option from below" Grid.Row="1" Grid.Column="0"  FontFamily="HankenGroteskRegular"  FontSize="10" Margin="10,0,0,0" TextColor="Gray" />
-
-
-                        <syncfusion:SfListView x:Name="q5"                                                                                             
-             AutoFitMode="Height"
-        Margin="5,5,5,0"
-                              BackgroundColor="Transparent"
-                              Grid.Column="0"
-     Grid.Row="2" 
-                      SelectionMode="Single"
-                
-                       ScrollBarVisibility="Never"
-             SelectionBackground="Transparent"
-             Orientation="Vertical"                                                                                                                       
-             >
-                            <syncfusion:SfListView.HeightRequest>
-                                <OnPlatform x:TypeArguments="x:Double">
-                                    <On Platform="Android" Value="220" />
-                                    <On Platform="iOS" Value="100" />
-                                </OnPlatform>
-                            </syncfusion:SfListView.HeightRequest>
-
-                            <syncfusion:SfListView.ItemTemplate>
-                                <DataTemplate>
-                                    <ViewCell>
-                                        <Border StrokeShape="RoundRectangle 10" InputTransparent="True"   Margin="5,5,5,5"  Opacity="1" BackgroundColor="Transparent"
-Stroke="LightGray">
-                                            <Grid HorizontalOptions="Fill" Margin="0" Padding="10"  >
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto"/>
-                                                </Grid.RowDefinitions>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="100*"/>
-
-                                                </Grid.ColumnDefinitions>
-
-                                                <Label Text="{Binding .}" FontFamily="HankenGroteskRegular" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="12" />
-
-
-
-                                            </Grid>
-                                        </Border>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </syncfusion:SfListView.ItemTemplate>
-                            <syncfusion:SfListView.SelectedItemTemplate>
-                                <DataTemplate>
-                                    <ViewCell>
-                                        <Border StrokeShape="RoundRectangle 10" Margin="5,5,5,5" InputTransparent="True" BackgroundColor="#42c501"  Stroke="White">
-                                            <Grid HorizontalOptions="Fill"  Margin="0" Padding="10">
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto"/>
-                                                </Grid.RowDefinitions>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="100*"/>
-
-                                                </Grid.ColumnDefinitions>
-                                                <Label Text="{Binding .}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" FontAttributes="Bold"  TextColor="White" FontSize="12" />
-
-                                            </Grid>
-                                        </Border>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </syncfusion:SfListView.SelectedItemTemplate>
-                        </syncfusion:SfListView>
-
-
-
-                    </Grid>
-                </Border>
-
-
-                <Button
-BackgroundColor="#42c501"
-HorizontalOptions="Fill"
-TextColor="White"
-      x:Name="nextbtn"
-FontAttributes="None"
-     Margin="0,40,0,20"
-FontFamily="HankenGroteskBold"
-Text="Get Started" />
-
-                <ProgressBar x:Name="syncProgress" IsVisible="False" Progress="0" HeightRequest="6" BackgroundColor="#e0e0e0" ProgressColor="DodgerBlue" />
-           
-            <Label Text="Syncing health data..." IsVisible="False" FontSize="Medium" TextColor="Gray" HorizontalOptions="Center" Margin="0,10,0,0"/>
-
-            </StackLayout>
-
-            <StackLayout x:Name="migratestack" VerticalOptions="Center" Margin="20,0,20,0" IsVisible="False">
-
-
-                <Image Source="migration.png" x:Name="migimg" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,0,0,50" HeightRequest="120" WidthRequest="120"/>
-
-
-
-                <progressBar:SfLinearProgressBar  x:Name="topprogress"
-                        TrackHeight="8"  TrackFill="#BFDBF7" ProgressFill="#031926"
-                        TrackCornerRadius="5" SecondaryProgressFill="#BFDBF7" Maximum="100"
-                        ProgressHeight="8" Margin="30,0,30,30" AnimationEasing="{x:Static Easing.CubicInOut}"
-                         VerticalOptions="Center" IsIndeterminate="False" AnimationDuration="60000"
-                                    BackgroundColor="Transparent"
-                        ProgressCornerRadius="5" />
-
-
-
-                <Label
- Text="Syncing Health Data"
- FontSize="26"
- Margin="0,20,0,0" x:Name="mdlbl"
- TextColor="#031926"
- FontFamily="HankenGroteskBold"
- FontAttributes="Bold"
- HorizontalOptions="Center" />
-
-                <Label
-Text="Please bare with us as this may take a few minutes..."
-TextColor="#031926" x:Name="md2lbl"
-FontFamily="HankenGroteskRegular"
-FontAttributes="None"
-Margin="0,5,0,0"
-FontSize="15" HorizontalTextAlignment="Center"
-HorizontalOptions="Center" />
-
-
-
-
-
-
-
-
-
-
-            </StackLayout>
-
-
-            <StackLayout x:Name="mainstack" IsVisible="False">
+            <StackLayout x:Name="mainstack" IsVisible="True">
                 
           
             <Label Text="Fitness Data" FontSize="26" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
 
-            <Border StrokeShape="RoundRectangle 10" BackgroundColor="#ecf9e5" Stroke="Transparent" Padding="10" Margin="10,20,10,0">
+
+                <Border StrokeShape="RoundRectangle 10" BackgroundColor="#e5f5fc" Stroke="Transparent" Padding="10" Margin="10,20,10,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                   
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="90*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Image Grid.Row="0" Grid.RowSpan="1" IsVisible="False" Grid.Column="0" Source="reload.png" HeightRequest="50" HorizontalOptions="Fill" VerticalOptions="Center" />
+                        <Label Text="Last synced on Thursday, 21 Nov 2024 at 9:01 PM" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="12" Margin="0,0,0,0" VerticalOptions="Center" HorizontalOptions="Center" />
+
+
+                        <Button
+BackgroundColor="#031926"
+HorizontalOptions="Fill" VerticalOptions="Center"
+    Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+FontAttributes="None" CornerRadius="10"
+     Margin="10,10,10,0"
+FontFamily="HankenGroteskBold"
+Text="Sync" />
+
+                    </Grid>
+                </Border>
+
+
+
+
+                <Border StrokeShape="RoundRectangle 10" x:Name="stepsborder" BackgroundColor="#ecf9e5" Stroke="Transparent" Padding="10" Margin="10,20,10,0">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="10*"/>
                         <ColumnDefinition Width="90*"/>
@@ -558,15 +77,75 @@ HorizontalOptions="Center" />
                     <Label x:Name="stepcountlbl" IsVisible="False" Text="1234" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="26" Margin="10,10,0,0" HorizontalOptions="Start" />
 
 
-                    <chart:SfCartesianChart Margin="10" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" BackgroundColor="Transparent" x:Name="stepchart">
+                        <buttons:SfSegmentedControl SelectedIndex="0" IsVisible="True" SelectionChanged="segmentedControl_SelectionChanged" x:Name="segmentedControl"  Stroke="#E6E6E6" SegmentWidth="50"
+                                                                StrokeThickness="1" HeightRequest="40"  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                                                                Margin="5,0,5,0" CornerRadius="15" HorizontalOptions="Center">
+                            <buttons:SfSegmentedControl.TextStyle>
+                                <buttons:SegmentTextStyle TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" FontSize="12"/>
+                            </buttons:SfSegmentedControl.TextStyle>
+                            <buttons:SfSegmentedControl.SelectionIndicatorSettings>
+                                <buttons:SelectionIndicatorSettings Background="#42c501" TextColor="White" />
+                            </buttons:SfSegmentedControl.SelectionIndicatorSettings>
+                            <buttons:SfSegmentedControl.ItemsSource>
+                                <x:Array  Type="{x:Type x:String}">
+                                    <x:String>1D</x:String>
+                                    <x:String>1W</x:String>
+                                    <x:String>1M</x:String>
+                      
+                                </x:Array>
+                            </buttons:SfSegmentedControl.ItemsSource>
+                        </buttons:SfSegmentedControl>
+
+
+                        <syncfusion:SfListView x:Name="stepsmonthlist" IsVisible="False" ItemTapped="stepsmonthlist_ItemTapped" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" BackgroundColor="Transparent"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Horizontal" ItemSize="100" HeightRequest="25" Margin="5,10,5,0" >
+                            <syncfusion:SfListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Border StrokeShape="RoundRectangle 10" BackgroundColor="Transparent" InputTransparent="True" Stroke="LightGrey" Padding="5" Margin="10,0,0,0">
+                                            <Grid Grid.RowDefinitions="Auto,Auto" Grid.ColumnDefinitions="*">
+                                      
+                                                <Label VerticalOptions="Fill" HorizontalOptions="Center" LineBreakMode="NoWrap" HorizontalTextAlignment="Center" Text="{Binding .}" FontSize="10" Margin="0"  Padding="0" TextColor="#031926" FontFamily="HankenGroteskRegular"   Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1"/>
+                                            </Grid>
+                                        </Border>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </syncfusion:SfListView.ItemTemplate>
+                            <syncfusion:SfListView.SelectedItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Border StrokeShape="RoundRectangle 10" BackgroundColor="#42c501" InputTransparent="True" Stroke="#42c501" Padding="5" Margin="10,0,0,0">
+                                            <Grid Grid.RowDefinitions="Auto,Auto" Grid.ColumnDefinitions="*">
+
+                                                <Label VerticalOptions="Fill" HorizontalOptions="Center" LineBreakMode="NoWrap" HorizontalTextAlignment="Center" Text="{Binding .}" FontSize="10" Margin="0"  Padding="0" TextColor="White" FontFamily="HankenGroteskBold"   Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1"/>
+                                            </Grid>
+                                        </Border>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </syncfusion:SfListView.SelectedItemTemplate>
+                        </syncfusion:SfListView>
+
+
+                        <Label Text="No Data" Grid.Row="4" x:Name="stepsnodata" IsVisible="False" Grid.Column="0" Grid.ColumnSpan="2" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="24" Margin="0,50,0,0" HorizontalOptions="Center" />
+
+
+
+
+                        <chart:SfCartesianChart Margin="10" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" BackgroundColor="Transparent" x:Name="stepchart">
                         <chart:SfCartesianChart.HeightRequest>
                             <OnPlatform x:TypeArguments="x:Double">
                                 <On Platform="iOS" Value="150" />
                                 <On Platform="Android" Value="150" />
                             </OnPlatform>
                         </chart:SfCartesianChart.HeightRequest>
+                            <chart:SfCartesianChart.ZoomPanBehavior>
+                                <chart:ChartZoomPanBehavior
+EnablePinchZooming="True"
+EnableDoubleTap="True"
+EnablePanning="True"
+ZoomMode="XY" />
+                            </chart:SfCartesianChart.ZoomPanBehavior>
 
-                        <chart:SfCartesianChart.Resources>
+                            <chart:SfCartesianChart.Resources>
                             <DataTemplate x:Key="labelTemplate">
                                 <Grid VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"  Padding="0">
                                     <Label Text="{Binding Item.TotalSteps}" FontFamily="HankenGroteskBold" Padding="0"  TextColor="Black" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" FontSize="7"/>
@@ -602,7 +181,7 @@ HorizontalOptions="Center" />
                     </chart:SfCartesianChart>
 
 
-                    <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+                    <Grid Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
@@ -610,25 +189,21 @@ HorizontalOptions="Center" />
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="33*"/>
-                            <ColumnDefinition Width="33*"/>
-                            <ColumnDefinition Width="33*"/>
+                            <ColumnDefinition Width="50*"/>
+                            <ColumnDefinition Width="50*"/>
+                
                         </Grid.ColumnDefinitions>
 
                         <Label Text="Avg. Per Day" Grid.Row="0" Grid.Column="0" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="10" Margin="0,5,0,0" HorizontalOptions="Center" />
 
-                        <Label Text="7789" Grid.Row="1" Grid.Column="0" TextColor="#42c501" FontFamily="HankenGroteskBold" FontSize="26" Margin="0,0,0,0" HorizontalOptions="Center" />
+                        <Label x:Name="stepscountlbl" Grid.Row="1" Grid.Column="0" TextColor="#42c501" FontFamily="HankenGroteskBold" FontSize="26" Margin="0,0,0,0" HorizontalOptions="Center" />
 
 
                         <Label Text="Total" Grid.Row="0" Grid.Column="1" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="10" Margin="0,5,0,0" HorizontalOptions="Center" />
 
-                        <Label Text="47789" Grid.Row="1" Grid.Column="1" TextColor="#42c501" FontFamily="HankenGroteskBold" FontSize="26" Margin="0,0,0,0" HorizontalOptions="Center" />
+                        <Label x:Name="totallbl" Grid.Row="1" Grid.Column="1" TextColor="#42c501" FontFamily="HankenGroteskBold" FontSize="26" Margin="0,0,0,0" HorizontalOptions="Center" />
 
-                        <Label Text="Active Time" Grid.Row="0" Grid.Column="2" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="10" Margin="0,5,0,0" HorizontalOptions="Center" />
-
-                        <Label Text="8:32 h" Grid.Row="1" Grid.Column="2" TextColor="#42c501" FontFamily="HankenGroteskBold" FontSize="26" Margin="0,0,0,0" HorizontalOptions="Center" />
-
-
+                     
 
 
 
@@ -637,6 +212,322 @@ HorizontalOptions="Center" />
 
                 </Grid>
             </Border>
+
+
+
+                <Border StrokeShape="RoundRectangle 10" x:Name="hrborder" BackgroundColor="#fff0f7" Stroke="Transparent" Padding="10" Margin="10,20,10,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="90*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Image Grid.Row="0" Grid.RowSpan="1" Grid.Column="0" Source="heartrate.png" HeightRequest="25" WidthRequest="80"  HorizontalOptions="Fill" VerticalOptions="Center" />
+                        <Label Text="Heart Rate" Grid.Row="0" Grid.Column="1" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="12" Margin="5,5,0,0" HorizontalOptions="Start" />
+
+                        <Label x:Name="hrlbl" IsVisible="False" Text="1234" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="26" Margin="10,10,0,0" HorizontalOptions="Start" />
+
+
+                        <buttons:SfSegmentedControl SelectedIndex="0" SelectionChanged="SfSegmentedControl_SelectionChanged" IsVisible="True"  Stroke="#E6E6E6" SegmentWidth="50"
+                                            StrokeThickness="1" HeightRequest="40"  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                                            Margin="5,10,5,0" CornerRadius="15" HorizontalOptions="Center">
+                            <buttons:SfSegmentedControl.TextStyle>
+                                <buttons:SegmentTextStyle TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" FontSize="12"/>
+                            </buttons:SfSegmentedControl.TextStyle>
+                            <buttons:SfSegmentedControl.SelectionIndicatorSettings>
+                                <buttons:SelectionIndicatorSettings Background="Red" TextColor="White" />
+                            </buttons:SfSegmentedControl.SelectionIndicatorSettings>
+                            <buttons:SfSegmentedControl.ItemsSource>
+                                <x:Array  Type="{x:Type x:String}">
+                                    <x:String>1D</x:String>
+                                    <x:String>1W</x:String>
+                                    <x:String>1M</x:String>
+
+                                </x:Array>
+                            </buttons:SfSegmentedControl.ItemsSource>
+                        </buttons:SfSegmentedControl>
+
+                        <Label Text="No Data" Grid.Row="3" x:Name="hrnodata" IsVisible="False" Grid.Column="0" Grid.ColumnSpan="2" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="24" Margin="0,50,0,0" HorizontalOptions="Center" />
+
+
+
+                        <chart:SfCartesianChart  Margin="10" x:Name="hrweekchart"  IsVisible="False" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" BackgroundColor="Transparent"   HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                            <!--Setting BindingContext-->
+                         
+
+                            <chart:SfCartesianChart.HeightRequest>
+                                <OnPlatform x:TypeArguments="x:Double">
+                                    <On Platform="iOS" Value="200" />
+                                    <On Platform="Android" Value="150" />
+                                </OnPlatform>
+                            </chart:SfCartesianChart.HeightRequest>
+                            <chart:SfCartesianChart.XAxes>
+                                <chart:CategoryAxis EdgeLabelsDrawingMode="Center" ShowMajorGridLines="False">
+                                    <chart:CategoryAxis.LabelStyle>
+                                        <chart:ChartAxisLabelStyle FontSize="8" FontFamily="HankenGroteskRegular" TextColor="#031926"/>
+                                    </chart:CategoryAxis.LabelStyle>
+                                </chart:CategoryAxis>
+                            </chart:SfCartesianChart.XAxes>
+                       
+
+                            <!--Initialize the vertical axis for the .NET MAUI Cartesian Chart.-->
+                            <chart:SfCartesianChart.YAxes>
+                                <chart:NumericalAxis EdgeLabelsDrawingMode="Center" RangePadding="Normal" ShowMajorGridLines="False">
+                                    <chart:NumericalAxis.LabelStyle>
+                                        <chart:ChartAxisLabelStyle FontSize="8" FontFamily="HankenGroteskRegular" TextColor="#031926"/>
+                                    </chart:NumericalAxis.LabelStyle>
+                                </chart:NumericalAxis>
+                            </chart:SfCartesianChart.YAxes>
+
+                            <!--Adding Range Column Series to the .NET MAUI Cartesian Chart.-->
+                            <chart:RangeColumnSeries 
+                          x:Name="heartratechart" ShowDataLabels="True"
+    XBindingPath="Date" CornerRadius="5" Spacing="0.3" Stroke="White" Fill="Red"
+    High="Max"
+    Low="Min">
+                                <chart:RangeColumnSeries.DataLabelSettings>
+                                    <chart:CartesianDataLabelSettings  BarAlignment="Top"  LabelPlacement="Outer" UseSeriesPalette="False">
+                                        <chart:CartesianDataLabelSettings.LabelStyle>
+                                            <chart:ChartDataLabelStyle 
+                FontSize="7"
+                FontFamily="HankenGroteskBold"
+                TextColor="Black" />
+                                        </chart:CartesianDataLabelSettings.LabelStyle>
+                             
+                                    </chart:CartesianDataLabelSettings>
+
+                                </chart:RangeColumnSeries.DataLabelSettings>
+
+                            </chart:RangeColumnSeries>
+                        </chart:SfCartesianChart>
+
+
+                        <chart:SfCartesianChart Margin="10" x:Name="hrdaychart" IsVisible="False" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" BackgroundColor="Transparent"
+                        HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                            <chart:SfCartesianChart.ZoomPanBehavior>
+                                <chart:ChartZoomPanBehavior
+            EnablePinchZooming="True"
+            EnableDoubleTap="True"
+            EnablePanning="True"
+            ZoomMode="XY" />
+                            </chart:SfCartesianChart.ZoomPanBehavior>
+
+                            <chart:SfCartesianChart.HeightRequest>
+                                <OnPlatform x:TypeArguments="x:Double">
+                                    <On Platform="iOS" Value="200" />
+                                    <On Platform="Android" Value="150" />
+                                </OnPlatform>
+                            </chart:SfCartesianChart.HeightRequest>
+
+                            <chart:SfCartesianChart.XAxes>
+                                <chart:CategoryAxis EdgeLabelsDrawingMode="Center" ShowMajorGridLines="False">
+                                    <chart:CategoryAxis.LabelStyle>
+                                        <chart:ChartAxisLabelStyle FontSize="8" FontFamily="HankenGroteskRegular" TextColor="#031926"/>
+                                    </chart:CategoryAxis.LabelStyle>
+                                </chart:CategoryAxis>
+                            </chart:SfCartesianChart.XAxes>
+
+                            <chart:SfCartesianChart.YAxes>
+                                <chart:NumericalAxis EdgeLabelsDrawingMode="Center" RangePadding="Round" ShowMajorGridLines="False">
+                                    <chart:NumericalAxis.LabelStyle>
+                                        <chart:ChartAxisLabelStyle FontSize="8" FontFamily="HankenGroteskRegular" TextColor="#031926"/>
+                                    </chart:NumericalAxis.LabelStyle>
+                                </chart:NumericalAxis>
+                            </chart:SfCartesianChart.YAxes>
+
+                            <!-- Changed to SplineSeries -->
+                            <chart:SplineSeries 
+        x:Name="heartratechartdayonly"
+        XBindingPath="Date"
+        YBindingPath="Min" Fill="Red" StrokeDashArray="1"
+        StrokeWidth="2" ShowMarkers="False"
+        ShowDataLabels="False">
+
+                                <chart:SplineSeries.DataLabelSettings>
+                                    <chart:CartesianDataLabelSettings LabelPlacement="Inner" UseSeriesPalette="False">
+                                        <chart:CartesianDataLabelSettings.LabelStyle>
+                                            <chart:ChartDataLabelStyle 
+                        FontSize="7" 
+                        FontFamily="HankenGroteskBold"
+                        TextColor="Black" />
+                                        </chart:CartesianDataLabelSettings.LabelStyle>
+                                    </chart:CartesianDataLabelSettings>
+                                </chart:SplineSeries.DataLabelSettings>
+
+                            </chart:SplineSeries>
+                        </chart:SfCartesianChart>
+
+
+
+
+                        <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50*"/>
+                                <ColumnDefinition Width="50*"/>
+                                
+                            </Grid.ColumnDefinitions>
+
+                            <Label Text="Lowest" Grid.Row="0" Grid.Column="0" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="10" Margin="0,5,0,0" HorizontalOptions="Center" />
+
+                            <Label x:Name="hrcountlbl" Grid.Row="1" Grid.Column="0" TextColor="Red" FontFamily="HankenGroteskBold" FontSize="26" Margin="0,0,0,0" HorizontalOptions="Center" />
+
+
+                            <Label Text="Highest" Grid.Row="0" Grid.Column="1" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="10" Margin="0,5,0,0" HorizontalOptions="Center" />
+
+                            <Label x:Name="hrtotalbl" Grid.Row="1" Grid.Column="1" TextColor="Red" FontFamily="HankenGroteskBold" FontSize="26" Margin="0,0,0,0" HorizontalOptions="Center" />
+
+    
+
+
+
+                        </Grid>
+
+
+                    </Grid>
+                </Border>
+
+
+                <Border StrokeShape="RoundRectangle 10" x:Name="rrborder" BackgroundColor="#e5f5fc" Stroke="Transparent" Padding="10" Margin="10,20,10,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="90*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Image Grid.Row="0" Grid.RowSpan="1" Grid.Column="0" Source="lungs.png" HeightRequest="25" WidthRequest="80"  HorizontalOptions="Fill" VerticalOptions="Center" />
+                        <Label Text="Respiratory Rate" Grid.Row="0" Grid.Column="1" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="12" Margin="5,5,0,0" HorizontalOptions="Start" />
+
+                        <Label x:Name="rrlbl" IsVisible="False" Text="1234" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="26" Margin="10,10,0,0" HorizontalOptions="Start" />
+
+                        <buttons:SfSegmentedControl SelectedIndex="0" IsVisible="True"  Stroke="#E6E6E6" SegmentWidth="50" SelectionChanged="SfSegmentedControl_SelectionChanged_1"
+                        StrokeThickness="1" HeightRequest="40"  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                        Margin="5,10,5,0" CornerRadius="15" HorizontalOptions="Center">
+                            <buttons:SfSegmentedControl.TextStyle>
+                                <buttons:SegmentTextStyle TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" FontSize="12"/>
+                            </buttons:SfSegmentedControl.TextStyle>
+                            <buttons:SfSegmentedControl.SelectionIndicatorSettings>
+                                <buttons:SelectionIndicatorSettings Background="#009fe3" TextColor="White" />
+                            </buttons:SfSegmentedControl.SelectionIndicatorSettings>
+                            <buttons:SfSegmentedControl.ItemsSource>
+                                <x:Array  Type="{x:Type x:String}">
+                                    <x:String>1D</x:String>
+                                    <x:String>1W</x:String>
+                                    <x:String>1M</x:String>
+
+                                </x:Array>
+                            </buttons:SfSegmentedControl.ItemsSource>
+                        </buttons:SfSegmentedControl>
+
+
+                        <Label Text="No Data" Grid.Row="3" x:Name="rrnodata" IsVisible="False" Grid.Column="0" Grid.ColumnSpan="2" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="24" Margin="0,50,0,0" HorizontalOptions="Center" />
+
+
+
+                        <chart:SfCartesianChart  Margin="10" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" BackgroundColor="Transparent"   HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                            <!--Setting BindingContext-->
+
+                            <chart:SfCartesianChart.HeightRequest>
+                                <OnPlatform x:TypeArguments="x:Double">
+                                    <On Platform="iOS" Value="200" />
+                                    <On Platform="Android" Value="150" />
+                                </OnPlatform>
+                            </chart:SfCartesianChart.HeightRequest>
+                            <chart:SfCartesianChart.XAxes>
+                                <chart:CategoryAxis EdgeLabelsDrawingMode="Center" ShowMajorGridLines="False">
+                                    <chart:CategoryAxis.LabelStyle>
+                                        <chart:ChartAxisLabelStyle FontSize="8" FontFamily="HankenGroteskRegular" TextColor="#031926"/>
+                                    </chart:CategoryAxis.LabelStyle>
+                                </chart:CategoryAxis>
+                            </chart:SfCartesianChart.XAxes>
+
+
+                            <!--Initialize the vertical axis for the .NET MAUI Cartesian Chart.-->
+                            <chart:SfCartesianChart.YAxes>
+                                <chart:NumericalAxis EdgeLabelsDrawingMode="Center" RangePadding="Additional" ShowMajorGridLines="False">
+                                    <chart:NumericalAxis.LabelStyle>
+                                        <chart:ChartAxisLabelStyle FontSize="8" FontFamily="HankenGroteskRegular" TextColor="#031926"/>
+                                    </chart:NumericalAxis.LabelStyle>
+                                </chart:NumericalAxis>
+                            </chart:SfCartesianChart.YAxes>
+
+                            <!--Adding Range Column Series to the .NET MAUI Cartesian Chart.-->
+                            <chart:RangeColumnSeries 
+                      x:Name="rrchart" ShowDataLabels="True"
+XBindingPath="Date" CornerRadius="5" Spacing="0.3" Stroke="White" Fill="#009fe3"
+High="Max"
+Low="Min">
+                                <chart:RangeColumnSeries.DataLabelSettings>
+                                    <chart:CartesianDataLabelSettings  BarAlignment="Top"  LabelPlacement="Outer" UseSeriesPalette="False">
+                                        <chart:CartesianDataLabelSettings.LabelStyle>
+                                            <chart:ChartDataLabelStyle 
+            FontSize="7"
+            FontFamily="HankenGroteskBold"
+            TextColor="Black" />
+                                        </chart:CartesianDataLabelSettings.LabelStyle>
+
+                                    </chart:CartesianDataLabelSettings>
+
+                                </chart:RangeColumnSeries.DataLabelSettings>
+
+                            </chart:RangeColumnSeries>
+                        </chart:SfCartesianChart>
+
+
+
+                        <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50*"/>
+                                <ColumnDefinition Width="50*"/>
+                               
+                            </Grid.ColumnDefinitions>
+
+                            <Label Text="Lowest" Grid.Row="0" Grid.Column="0" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="10" Margin="0,5,0,0" HorizontalOptions="Center" />
+
+                            <Label x:Name="rrcountlbl" Grid.Row="1" Grid.Column="0" TextColor="#009fe3" FontFamily="HankenGroteskBold" FontSize="26" Margin="0,0,0,0" HorizontalOptions="Center" />
+
+
+                            <Label Text="Highest" Grid.Row="0" Grid.Column="1" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="10" Margin="0,5,0,0" HorizontalOptions="Center" />
+
+                            <Label x:Name="rrtotalbl" Grid.Row="1" Grid.Column="1" TextColor="#009fe3" FontFamily="HankenGroteskBold" FontSize="26" Margin="0,0,0,0" HorizontalOptions="Center" />
+
+                  
+
+
+
+                        </Grid>
+
+
+
+
+                    </Grid>
+                </Border>
+
 
 
 

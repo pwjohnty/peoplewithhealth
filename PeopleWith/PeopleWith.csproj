@@ -50,7 +50,7 @@
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</SupportedOSPlatformVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)'=='net9.0-ios'">
-    <CodesignKey>Apple Development: Created via API (QB732BRMZC)</CodesignKey>
+    <CodesignKey>Apple Development: Created via API (9AF7WV24ZX)</CodesignKey>
     <CodesignProvision>VS: com.peoplewith.peoplewith Development</CodesignProvision>
     <ProvisioningType>manual</ProvisioningType>
   </PropertyGroup>
