@@ -10,6 +10,7 @@ namespace PeopleWith
 {
     public class feedbackdata
     {
+        //Made nullable to handle null items steralise
         public string id { get; set; }
 
         public string datetime { get; set; }

@@ -21,6 +21,13 @@ using Microsoft.Maui.Controls;
 using Plugin.Maui.Health.Enums;
 using Plugin.Maui.Health;
 using System.Globalization;
+using CommunityToolkit.Maui.Core.Extensions;
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
+using System.Text.Json;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Syncfusion.Maui.DataSource.Extensions;
 //using Xamarin.Google.Crypto.Tink.Subtle;
 
 namespace PeopleWith;
@@ -39,10 +46,16 @@ public partial class MainDashboard : ContentPage
     List<object> foryouuserlistsymptom = new List<object>();
     List<object> foryouuserlistmeds = new List<object>();
     List<object> foryouuserlistsupps = new List<object>();
+    List<object> PopulateDashQuestions = new List<object>();
     ObservableCollection<userfeedback> userfeedbacklist = new ObservableCollection<userfeedback>();
     ObservableCollection<usermedication> AllUserMedications = new ObservableCollection<usermedication>();
     ObservableCollection<usersupplement> AllUserSupplements = new ObservableCollection<usersupplement>();
     public ObservableCollection<usersymptom> UserSymptomPassed = new ObservableCollection<usersymptom>();
+    //DashQuestions Answers
+    public ObservableCollection<registryData> DashQuestionAnswers = new ObservableCollection<registryData>();
+    //DashQuestions Inputs
+    public ObservableCollection<registryDataInputs> DashQuestionInputs = new ObservableCollection<registryDataInputs>();
+    public ObservableCollection<IGrouping<string, registryDataInputs>> GroupedDashQuestions = new ObservableCollection<IGrouping<string, registryDataInputs>>();
 
     ObservableCollection<signupcode> signupcodecollection = new ObservableCollection<signupcode>();
     public ObservableCollection<questionnaire> questionnaires = new ObservableCollection<questionnaire>();
@@ -57,13 +70,13 @@ public partial class MainDashboard : ContentPage
     bool NoficiationsActive = false;
     bool BatterySaverOff = false;
     public bool MedNotifAdded = false;
-    public bool SuppNotifAdded = false; 
+    public bool SuppNotifAdded = false;
     ObservableCollection<SettingsOn> SettingstoShow = new ObservableCollection<SettingsOn>();
     MedSuppNotifications ScheduleNotifications = new MedSuppNotifications();
-
+    public HttpClient Client = new HttpClient();
     public event EventHandler<bool> ConnectivityChanged;
     ObservableCollection<dashitem> dailytasklist = new ObservableCollection<dashitem>();
-   // public TaskCompletionSource<bool> PageReady { get; set; } = new();
+    // public TaskCompletionSource<bool> PageReady { get; set; } = new();
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
     private readonly IHealth health;
@@ -79,6 +92,20 @@ public partial class MainDashboard : ContentPage
         catch (Exception ex)
         {
             //Dunno 
+        }
+    }
+
+    private void ConfigureClient()
+    {
+        try
+        {
+            Client = new HttpClient();
+            Client.DefaultRequestHeaders.Add("X-MS-CLIENT-PRINCIPAL", "eyAgCiAgImlkZW50aXR5UHJvdmlkZXIiOiAidGVzdCIsCiAgInVzZXJJZCI6ICIxMjM0NSIsCiAgInVzZXJEZXRhaWxzIjogImpvaG5AY29udG9zby5jb20iLAogICJ1c2VyUm9sZXMiOiBbIjFFMzNDMEFDLTMzOTMtNEMzNC04MzRBLURFNUZEQkNCQjNDQyJdCn0=");
+            Client.DefaultRequestHeaders.Add("X-MS-API-ROLE", "1E33C0AC-3393-4C34-834A-DE5FDBCBB3CC");
+        }
+        catch (Exception Ex)
+        {
+            //Empty
         }
     }
 
@@ -112,6 +139,18 @@ public partial class MainDashboard : ContentPage
             checksignupinfo();
 
             MessagingCenter.Subscribe<App>(this, "CheckUserSettings", (sender) => { UserSettingsCheck(); });
+
+
+            WeakReferenceMessenger.Default.Register<UpdateDashAnswers>(this, (r, m) =>
+            {
+                DashQuestionAnswers = m.Value;
+            });
+
+
+            //MessagingCenter.Subscribe<App>(this, "UpdateQuestionAnswers", (sender) => {
+
+            //    DashQuestionAnswers =
+            //});
             //MessagingCenter.Subscribe<App>(this, "CallNotifications", (sender) => { checknotifications(); });
 
             //MessagingCenter.Subscribe<App>(this, "CallBatterySaver", (sender) => { CheckbatterySaverON(); });
@@ -131,22 +170,22 @@ public partial class MainDashboard : ContentPage
         try
         {
 
-        InitializeComponent();
+            InitializeComponent();
 
-        setnotificationsfromlogin = fromlogin;
+            setnotificationsfromlogin = fromlogin;
 
-        //Get All user Details & Set Helpers.Settings
-        Checkifuserhasmigrated();
+            //Get All user Details & Set Helpers.Settings
+            Checkifuserhasmigrated();
 
-        NavigationPage.SetHasNavigationBar(this, false);
+            NavigationPage.SetHasNavigationBar(this, false);
 
-        //string firstName = Preferences.Default.Get("userid", "Unknown");
+            //string firstName = Preferences.Default.Get("userid", "Unknown");
 
-        loadcatergories();
+            loadcatergories();
 
-        // getuserfeedbackdata();
+            // getuserfeedbackdata();
 
-        checksignupinfo();
+            checksignupinfo();
 
             MessagingCenter.Subscribe<App>(this, "CheckUserSettings", (sender) => { UserSettingsCheck(); });
             //MessagingCenter.Subscribe<App>(this, "CallNotifications", (sender) => { checknotifications(); });
@@ -170,19 +209,18 @@ public partial class MainDashboard : ContentPage
             {
                 getuserfeedbackdata();
             });
-            
+
         }
         catch (Exception Ex)
         {
             NotasyncMethod(Ex);
         }
     }
-
     async void checksignupinfo()
     {
         try
         {
-            if(string.IsNullOrEmpty(Helpers.Settings.SignUp))
+            if (string.IsNullOrEmpty(Helpers.Settings.SignUp))
             {
                 infotab.IsVisible = false;
 
@@ -205,7 +243,7 @@ public partial class MainDashboard : ContentPage
                 maindashimage.Source = ImageSource.FromUri(getimagesource);
                 maindashimage2.Source = ImageSource.FromUri(getimagesource);
 
-               
+
                 signuptitlelbl.Text = signupcodecollection[0].title;
 
                 if (signupcodecollection[0].appdescription.Length > 600)
@@ -220,7 +258,7 @@ public partial class MainDashboard : ContentPage
 
 
 
-                foreach(var item in signupcodecollection[0].signupcodeinfolist)
+                foreach (var item in signupcodecollection[0].signupcodeinfolist)
                 {
                     if (item.type == "pdf")
                     {
@@ -268,7 +306,7 @@ public partial class MainDashboard : ContentPage
                     SecondDashimgFrame.IsVisible = true;
                     exitidHome.IsVisible = true;
                     exitidbrowse.IsVisible = true;
-                    exitidexplore.IsVisible = true; 
+                    exitidexplore.IsVisible = true;
 
                     exitidHome.Text = signupcodecollection[0].externalidentifier;
                     exitidbrowse.Text = signupcodecollection[0].externalidentifier;
@@ -277,14 +315,20 @@ public partial class MainDashboard : ContentPage
                     //Get Consent 
                     NovoConsent = await database.GetConsentAsync();
                     NovoConsent.exitid = signupcodecollection[0].externalidentifier;
-                    var CleanString = String.Empty; 
+                    var CleanString = String.Empty;
                     if (!String.IsNullOrEmpty(NovoConsent.content))
                     {
                         CleanString = NovoConsent.content.Replace("IE24SX00005", "");
                     }
-                   
+
                     Preferences.Default.Set("NovoExitid", NovoConsent.exitid);
                     Preferences.Default.Set("NovoContent", CleanString);
+                }
+
+                //Additional Dash Questions  SFEWH && SFECORE 
+                if (signupcodecollection[0].referral == "SFEWH" || signupcodecollection[0].referral == "SFECORE")
+                {
+                    DashQuestions();
                 }
 
             }
@@ -303,7 +347,7 @@ public partial class MainDashboard : ContentPage
             //get video support 
             if (!string.IsNullOrEmpty(Helpers.Settings.SignUp))
             {
-                string ReturnType = "Filter"; 
+                string ReturnType = "Filter";
                 var allvideos = await database.GetAllVideos(ReturnType);
                 var signupid = Helpers.Settings.SignUp;
                 var FilterVidoes = new ObservableCollection<videos>(allvideos.Where(x =>
@@ -316,7 +360,7 @@ public partial class MainDashboard : ContentPage
                 //videoslist.HeightRequest = 180 * FilterVidoes.Count;
 
 
-                if (FilterVidoes.Count == 0) 
+                if (FilterVidoes.Count == 0)
                 {
                     novidimg.IsVisible = true;
                     novidlbl.IsVisible = true;
@@ -335,6 +379,116 @@ public partial class MainDashboard : ContentPage
             NotasyncMethod(Ex);
         }
     }
+
+    async void DashQuestions()
+    {
+        try
+        {
+            //GetDashQuestions
+            DashQuestionInputs = await database.GetDashQuestions();
+            DashQuestionAnswers = await database.GetDashQuestionAnswers();
+
+            foreach (var item in DashQuestionAnswers)
+            {
+                var dt = item.createdAt;
+                string NewFormat = dt.ToString("dd/MM/yy");
+                item.DateConverted = NewFormat;
+
+                item.Title = DashQuestionInputs.Where(x => x.id == item.inputid).FirstOrDefault().dataTab;
+                item.Question = DashQuestionInputs.Where(x => x.id == item.inputid).FirstOrDefault().label;
+
+                item.HasNotes = !String.IsNullOrEmpty(item.notes);
+
+            }
+
+            string DescTemplate = "Please complete the questionnaire related to your ";
+
+            // Group DashQuestionInputs by dataTab
+            GroupedDashQuestions = new ObservableCollection<IGrouping<string, registryDataInputs>>(
+                DashQuestionInputs
+                    .Where(x => !string.IsNullOrEmpty(x.dataTab))
+                    .GroupBy(x => x.dataTab)
+            );
+
+            // Initialize the collection for dash items
+            var PopulateDashQuestions = new ObservableCollection<dashitem>();
+
+            // Populate dash items with the first item from each group
+            foreach (var group in GroupedDashQuestions)
+            {
+                var firstItem = group.FirstOrDefault();
+                if (firstItem != null)
+                {
+                    var Data = new dashitem
+                    {
+                        Title = group.Key,
+                        Type = $"{DescTemplate}{group.Key}"
+                    };
+                    PopulateDashQuestions.Add(Data);
+                }
+            }
+
+            DashQuestionItems.ItemsSource = PopulateDashQuestions;
+
+            string AddItems = string.Empty;
+            var titles = PopulateDashQuestions.Select(g => g.Title).ToList();
+
+            if (titles.Count == 1)
+            {
+                AddItems = titles[0];
+            }
+            else if (titles.Count > 1)
+            {
+                AddItems = string.Join(", ", titles.Take(titles.Count - 1)) + ", and " + titles.Last();
+            }
+
+            Descriptionlbl.Text = $"We capture additional questions based on your {AddItems}. Please complete the following sections.";
+
+
+
+            //// Clear and populate the list
+            //var uniqueTabs = DashQuestionInputs
+            //    .Where(x => !string.IsNullOrEmpty(x.dataTab))
+            //    .GroupBy(x => x.dataTab)
+            //    .Select(g => g.First());
+
+            //var PopulateDashQuestions = new ObservableCollection<dashitem>();
+
+            //foreach (var item in uniqueTabs)
+            //{
+            //    var Data = new dashitem
+            //    {
+            //        Title = item.dataTab,
+            //        Type = $"{DescTemplate}{item.dataTab}"
+            //    };
+
+            //    PopulateDashQuestions.Add(Data);
+            //}
+
+            //// Assign to the ListView
+            //DashQuestionItems.ItemsSource = PopulateDashQuestions;
+
+            //string AddItems = string.Empty;
+            //var titles = PopulateDashQuestions.Select(g => g.Title).ToList();
+
+            //if (titles.Count == 1)
+            //{
+            //    AddItems = titles[0];
+            //}
+            //else if (titles.Count > 1)
+            //{
+            //    AddItems = string.Join(", ", titles.Take(titles.Count - 1)) + ", and " + titles.Last();
+            //}
+
+            //Descriptionlbl.Text = "We capture additional questions based on your "  + AddItems +  " . Please complete the following sections.";
+
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
 
     async void checknotificationsEnabled()
     {
@@ -365,8 +519,8 @@ public partial class MainDashboard : ContentPage
             //    {
             //        EnableNotifStack.IsVisible = true;
             //    }
-          //  }
-           
+            //  }
+
         }
         catch (Exception Ex)
         {
@@ -389,7 +543,7 @@ public partial class MainDashboard : ContentPage
 
             // Retrieve all user feedback data
             userfeedbacklist = await database.GetUserFeedback();
-      
+
             AllUserMedications = await database.GetUserMedicationsAsync();
             AllUserSupplements = await database.GetUserSupplementsAsync();
 
@@ -405,7 +559,7 @@ public partial class MainDashboard : ContentPage
 
             if (DeviceInfo.Current.Platform == DevicePlatform.iOS)
             {
-               getfitnesshealthdata();
+                getfitnesshealthdata();
             }
 
             // Stop the stopwatch after retrieval
@@ -427,7 +581,7 @@ public partial class MainDashboard : ContentPage
 
             // Set the randomized list as the ItemsSource
             activitylist.ItemsSource = randomizedList;
-            
+
 
             listloader.IsVisible = false;
             activitylist.IsVisible = true;
@@ -439,7 +593,7 @@ public partial class MainDashboard : ContentPage
             //    "OK"
             //);
         }
-        catch(Exception Ex)
+        catch (Exception Ex)
         {
             NotasyncMethod(Ex);
         }
@@ -536,8 +690,8 @@ public partial class MainDashboard : ContentPage
                         var newestScore = double.IsNaN(value0) ? 0 : Convert.ToInt32(value0);
                         var previousScore = double.IsNaN(value1) ? 0 : Convert.ToInt32(value1);
                         // Compare the newest and the previous score
-                     //   var newestScore = Convert.ToInt32(sl[0].value);      // Assuming .value represents the score
-                     //   var previousScore = Convert.ToInt32(sl[1].value);
+                        //   var newestScore = Convert.ToInt32(sl[0].value);      // Assuming .value represents the score
+                        //   var previousScore = Convert.ToInt32(sl[1].value);
 
                         if (newestScore > previousScore)
                         {
@@ -739,7 +893,7 @@ public partial class MainDashboard : ContentPage
                 symprogressbar.Progress = progress;
 
                 var SuppsLeft = filteredSymptoms.Count - symptomrecordedcount;
-                if(SuppsLeft > 0)
+                if (SuppsLeft > 0)
                 {
                     var SuppsRem = SuppsLeft + " " + "Symptoms to Record";
                     SympRemain.Text = SuppsRem;
@@ -754,14 +908,14 @@ public partial class MainDashboard : ContentPage
                     var SuppsRem = "All Symptoms Updated";
                     SympRemain.Text = SuppsRem;
                 }
-              
+
                 //symptom Name too long Trim 
 
-                foreach(var item in filteredSymptoms)
+                foreach (var item in filteredSymptoms)
                 {
                     item.title = item.label;
 
-                    if(item.label.Length > 21)
+                    if (item.label.Length > 21)
                     {
                         item.shortlabel = item.label.Substring(0, 18) + "...";
                     }
@@ -799,12 +953,12 @@ public partial class MainDashboard : ContentPage
                 chartnumaxis.Maximum = maxCount;
                 // Bind the data to your chart
 
-                
+
                 symptomprogresschart.ItemsSource = lastSevenDaysData;
             }
             else
             {
-                
+
                 RecentHealthlbl.IsVisible = false;
                 recentsymlbl.IsVisible = false;
                 symptomdetaillist.IsVisible = false;
@@ -814,7 +968,7 @@ public partial class MainDashboard : ContentPage
                 nosymdataframe.IsVisible = true;
                 SympRemain.Text = "No Symptoms Added";
             }
-           
+
 
 
 
@@ -897,7 +1051,7 @@ public partial class MainDashboard : ContentPage
                             item.value = Newlbl;
                         }
                     }
-                    else if(item.unit == "Hours/Minutes")
+                    else if (item.unit == "Hours/Minutes")
                     {
                         if (!String.IsNullOrEmpty(item.value))
                         {
@@ -923,7 +1077,7 @@ public partial class MainDashboard : ContentPage
                     // measurementdetaillist.ItemsSource = takefivemeasurements;
                     // measurementdetaillist.HeightRequest = 152 * takefivemeasurements.Count;
                     measlbl.IsVisible = true;
-                    measlblsub.IsVisible = true; 
+                    measlblsub.IsVisible = true;
                     measurementnochartdetaillist.IsVisible = true;
                     nomeasurementdataframe.IsVisible = false;
 
@@ -962,7 +1116,7 @@ public partial class MainDashboard : ContentPage
                 var random = new Random();
                 var selectedMeasurement = userfeedbacklist[0].measurementfeedbacklist[random.Next(userfeedbacklist[0].measurementfeedbacklist.Count)];
 
-                if(selectedMeasurement != null)
+                if (selectedMeasurement != null)
                 {
                     // var mostCommonMood = moodsForDay.MoodLabel;
                     if (selectedMeasurement.label == "Height")
@@ -1004,7 +1158,7 @@ public partial class MainDashboard : ContentPage
             {
                 measlbl.IsVisible = false;
                 measlblsub.IsVisible = false;
-               // measurementdetaillist.IsVisible = false;
+                // measurementdetaillist.IsVisible = false;
                 measurementnochartdetaillist.IsVisible = false;
                 nomeasurementdataframe.IsVisible = true;
 
@@ -1037,7 +1191,7 @@ public partial class MainDashboard : ContentPage
 
                 //new mood data listview
 
-               // var sevenDaysAgo = DateTime.Now.AddDays(-6).Date; // last 7 days, inclusive of today
+                // var sevenDaysAgo = DateTime.Now.AddDays(-6).Date; // last 7 days, inclusive of today
                 var today = DateTime.Now.Date;
 
                 var moodSummaryPerDay = new List<feedbackdata>();
@@ -1080,7 +1234,7 @@ public partial class MainDashboard : ContentPage
                         });
 
 
-                       
+
                     }
                 }
 
@@ -1203,7 +1357,7 @@ public partial class MainDashboard : ContentPage
             else
             {
                 moodlbl.IsVisible = false;
-                measlbl2.IsVisible = false; 
+                measlbl2.IsVisible = false;
                 moodframe.IsVisible = false;
                 nomooddataframe.IsVisible = true;
 
@@ -1232,12 +1386,13 @@ public partial class MainDashboard : ContentPage
 
 
 
-                if (signup.Contains("SFEWH"))
-                {
+            if (signup.Contains("SFEWH"))
+            {
 
                 var QuestionList = new ObservableCollection<questionnaire>();
+                SFEWHStudy.IsVisible = true;
 
-                var ItemstoRemove = new List<string>();                  
+                var ItemstoRemove = new List<string>();
                 additionalquestionstab.IsVisible = true;
 
                 if (signup.Contains("SFEWHA1"))
@@ -1317,7 +1472,7 @@ public partial class MainDashboard : ContentPage
                     //check dates
                     completequestionnaireborder.IsVisible = false;
 
-                    if(userfeedbacklist[0].initialquestionnairefeedbacklist.Count > 1)
+                    if (userfeedbacklist[0].initialquestionnairefeedbacklist.Count > 1)
                     {
                         QuestionnairePrompt.IsVisible = false;
                     }
@@ -1325,7 +1480,7 @@ public partial class MainDashboard : ContentPage
                     {
                         //Item to Remove 
                         ItemstoRemove.Add(userfeedbacklist[0].initialquestionnairefeedbacklist[0].label);
-                        QuestionsIndicator.IsVisible = false; 
+                        QuestionsIndicator.IsVisible = false;
                         var Filter = new ObservableCollection<questionnaire>(QuestionList.Where(q => !ItemstoRemove.Contains(q.title)));
                         QuestionsPrompt.ItemsSource = Filter;
                         QuestionsPrompt.IsSwipeEnabled = false;
@@ -1345,9 +1500,45 @@ public partial class MainDashboard : ContentPage
 
                 //Check once complete 
 
-               
 
 
+
+            }
+            else if (signup.Contains("SFECORE"))
+            {
+                var QuestionList = new ObservableCollection<questionnaire>();
+                completequestionnaireborder.IsVisible = false;
+                additionalquestionstab.IsVisible = true;
+                SFECoreStudy.IsVisible = true;
+
+                //SF-36
+                string QID = "DC6A9FD7-242B-4299-9672-D745669FEAF0";
+                if (questionnaires != null)
+                {
+                    QuestionList = new ObservableCollection<questionnaire>(questionnaires.Where(q => QID.Contains(q.questionnaireid)));
+                }
+
+                QuestionsIndicator.IsVisible = false;
+                QuestionsPrompt.ItemsSource = QuestionList;
+                QuestionsPrompt.IsSwipeEnabled = false;
+                QuestionnairePrompt.IsVisible = true;
+
+
+                if (userfeedbacklist[0].initialquestionnairefeedbacklist != null)
+                {
+                    QuestionnairePrompt.IsVisible = false;
+                    completequestionnaireborder.IsVisible = false;
+
+                    string retrievedId = Preferences.Get("SFEcoreNotID", string.Empty);
+
+                    if (!string.IsNullOrEmpty(retrievedId) && int.TryParse(retrievedId, out int notificationId))
+                    {
+                        LocalNotificationCenter.Current.Cancel(notificationId);
+
+                        //Delete SFEcoreNotID. No Longer Needed
+                        Preferences.Remove("SFEcoreNotID");
+                    }
+                }
             }
             else if (signup.Contains("SFEAT"))
             {
@@ -1379,6 +1570,7 @@ public partial class MainDashboard : ContentPage
                         Preferences.Remove("NsatNotID");
                     }
                 }
+
                 else
                 {
                     completequestionnaireborder.IsVisible = false;
@@ -1396,7 +1588,7 @@ public partial class MainDashboard : ContentPage
                     QuestionnairePrompt.IsVisible = true;
 
                     questionnaireinfotext.Text = "Complete EQ-5D 5L General Health Questionnaire";
-                
+
 
                 }
 
@@ -1406,7 +1598,7 @@ public partial class MainDashboard : ContentPage
 
 
         }
-        catch(Exception Ex)
+        catch (Exception Ex)
         {
             NotasyncMethod(Ex);
         }
@@ -1538,7 +1730,6 @@ public partial class MainDashboard : ContentPage
                         await database.UserfeedbackUpdateMoodData(userfeedbacklist[0]);
                     }
                 }
-
             }
         }
         catch (Exception Ex)
@@ -1555,7 +1746,7 @@ public partial class MainDashboard : ContentPage
             //check if user has activated wearables
 
             // Retrieve all user feedback data
-          //  var userfitnesslist = await database.GetUserFitnessData();
+            //  var userfitnesslist = await database.GetUserFitnessData();
 
             //if(userfitnesslist.Count == 0 || userfitnesslist == null)
             //{
@@ -1564,7 +1755,7 @@ public partial class MainDashboard : ContentPage
             //}
 
 
-            if(string.IsNullOrEmpty(Helpers.Settings.FitnessData))
+            if (string.IsNullOrEmpty(Helpers.Settings.FitnessData))
             {
                 healthdatagrid.IsVisible = true;
                 return;
@@ -1689,7 +1880,7 @@ public partial class MainDashboard : ContentPage
 
 
         }
-        catch(Exception Ex)
+        catch (Exception Ex)
         {
             NotasyncMethod(Ex);
         }
@@ -1727,7 +1918,7 @@ public partial class MainDashboard : ContentPage
 
                 recentsymlbl.IsVisible = false;
                 symptomdetaillist.IsVisible = false;
-                
+
                 symdataframelbl1.IsVisible = false;
                 symdataframelbl2.IsVisible = false;
                 SymptomProgChart.IsVisible = false;
@@ -1978,7 +2169,7 @@ public partial class MainDashboard : ContentPage
                         foryouuserlistsymptom.Add(newItem);
                     }
                 }
-            
+
             }
 
             // 1. Display the most recorded symptom in the last 3 days
@@ -2029,7 +2220,7 @@ public partial class MainDashboard : ContentPage
 
 
         }
-        catch(Exception Ex)
+        catch (Exception Ex)
         {
             NotasyncMethod(Ex);
         }
@@ -2349,13 +2540,13 @@ public partial class MainDashboard : ContentPage
 
                         //Handle Edited Supplement with Active true 
 
-                        if (it.active != null) 
+                        if (it.active != null)
 
-                        { 
-                            if(it.active != "true")
+                        {
+                            if (it.active != "true")
                             {
                                 //Skip as its the Previous Version
-                                continue; 
+                                continue;
                             }
                         }
 
@@ -2443,7 +2634,7 @@ public partial class MainDashboard : ContentPage
 
 
         }
-        catch(Exception Ex)
+        catch (Exception Ex)
         {
             NotasyncMethod(Ex);
         }
@@ -2462,7 +2653,7 @@ public partial class MainDashboard : ContentPage
             int medicationsDueToday = 0;
             int recordedMedicationsToday = 0;
 
-            if(AllUserMedications.Count == 0)
+            if (AllUserMedications.Count == 0)
             {
                 var newItem = new dashitem
                 {
@@ -2727,7 +2918,7 @@ public partial class MainDashboard : ContentPage
 
                         // Create a new item to add
                         var newItem = new dashitem
-                        { 
+                        {
                             ContactImage = "medicinehome.png",
                             Type = "Medications",
                             Title = "Record your " + nextDueTime.Value.ToString("HH:mm") + " Medications",
@@ -2803,9 +2994,9 @@ public partial class MainDashboard : ContentPage
 
 
             //add the med notifications if they have logged in again
-            if(setnotificationsfromlogin)
+            if (setnotificationsfromlogin)
             {
-                if (MedNotifAdded == true) return; 
+                if (MedNotifAdded == true) return;
                 var daycount = 0;
                 var mednottitle = "Medication Reminder";
 
@@ -2846,7 +3037,7 @@ public partial class MainDashboard : ContentPage
 
                         var timeconverted = TimeSpan.Parse(it.time);
 
-                        
+
 
                         if (item.frequency.Contains("Daily"))
                         {
@@ -2878,7 +3069,7 @@ public partial class MainDashboard : ContentPage
                                 await ScheduleNotifications.DaysIntervalWithEndDateNotifications(mednottitle, it.id, item.medicationtitle, it.Dosage, it.dosageunit, timeconverted, item.startdate, item.enddate, DIdaycount);
                             }
                         }
-                        else if(item.frequency.Contains("Weekly"))
+                        else if (item.frequency.Contains("Weekly"))
                         {
                             var splitfrequency = item.frequency.Split("|");
 
@@ -2921,10 +3112,10 @@ public partial class MainDashboard : ContentPage
                 }
 
                 //Added to Stop Supps from Activiting Again 
-                 MedNotifAdded = true;
+                MedNotifAdded = true;
             }
         }
-        catch(Exception Ex)
+        catch (Exception Ex)
         {
             NotasyncMethod(Ex);
         }
@@ -2958,10 +3149,10 @@ public partial class MainDashboard : ContentPage
                 new dashitem { Type = "Questionnaires", ContactImage = "questionnairehome.png", Title = "Questionnaires", BackgroundColor = Color.FromArgb("#fff9ec") },
                 new dashitem { Type = "Allergy",  ContactImage = "allergenhome.png", Title = "Allergens", BackgroundColor = Color.FromArgb("#FFF5EE") },
                 new dashitem { Type = "Health Report",  ContactImage = "healthreporticon.png", Title = "Health Report", BackgroundColor = Color.FromArgb("#ededed") },
-               
+
             };
 
-            
+
 
             allhelpvideocatlist.ItemsSource = allcatvideolist;
 
@@ -3002,20 +3193,20 @@ public partial class MainDashboard : ContentPage
             //if (DeviceInfo.Platform == DevicePlatform.Android)
             //{
             //    CheckbatterySaverON(); 
-                
+
             //}
             UserSettingsCheck();
 
             if (DeviceInfo.Platform == DevicePlatform.Android)
             {
-                healthgrid.IsVisible = false; 
+                healthgrid.IsVisible = false;
             }
-            else 
+            else
             {
                 //hidden for now
                 healthgrid.IsVisible = false;
             }
-            
+
 
             //CreateSettings();
 
@@ -3055,7 +3246,7 @@ public partial class MainDashboard : ContentPage
     //{
     //    try
     //    {
-    
+
     //        var status = Battery.EnergySaverStatus;
 
     //        if (status == EnergySaverStatus.On)
@@ -3135,11 +3326,11 @@ public partial class MainDashboard : ContentPage
                     BatterySaverOff = false;
                 }
             }
-          
+
             //Add To Settings List 
             if (NoficiationsActive == false)
             {
-                SettingstoShow.Add(Alerts); 
+                SettingstoShow.Add(Alerts);
             }
 
             if (DeviceInfo.Platform == DevicePlatform.Android)
@@ -3149,14 +3340,14 @@ public partial class MainDashboard : ContentPage
                     SettingstoShow.Add(Saver);
                 }
             }
-          
+
 
             //Show hide Items 
-            if(SettingstoShow.Count > 0)
+            if (SettingstoShow.Count > 0)
             {
-                if(SettingstoShow.Count > 1)
+                if (SettingstoShow.Count > 1)
                 {
-                   SettingsIND.IsVisible = true;
+                    SettingsIND.IsVisible = true;
                     SettingsCarousel.IsSwipeEnabled = true;
                 }
                 else
@@ -3190,17 +3381,17 @@ public partial class MainDashboard : ContentPage
 
             //if (um == "True" || string.IsNullOrEmpty(um) || um == "False")
             //{
-                
+
             //        //go to migration assitant
 
             //        await Navigation.PushAsync(new MigrationAssistant(), false);
             //        return;                              
             //}
-                 
+
             // Assuming UserDetails[0].dateofbirth is a string in a format like "yyyy-MM-dd"
             string dateOfBirthString = Helpers.Settings.Age;
 
-            if(string.IsNullOrEmpty(dateOfBirthString) || dateOfBirthString == "")
+            if (string.IsNullOrEmpty(dateOfBirthString) || dateOfBirthString == "")
             {
                 // Display the age in the label
                 agelbl.Text = "--";
@@ -3210,7 +3401,7 @@ public partial class MainDashboard : ContentPage
                 // Convert the string to DateTime
                 DateTime dateOfBirth = DateTime.Parse(dateOfBirthString);
 
-                if(dateOfBirth.Date.ToString("dd/MM/yyyy") == "01/01/1900")
+                if (dateOfBirth.Date.ToString("dd/MM/yyyy") == "01/01/1900")
                 {
                     agelbl.Text = "--";
                 }
@@ -3228,7 +3419,7 @@ public partial class MainDashboard : ContentPage
                     // Display the age in the label
                     agelbl.Text = age.ToString();
                 }
-               
+
             }
 
 
@@ -3257,7 +3448,7 @@ public partial class MainDashboard : ContentPage
                 ethlbl.Text = Helpers.Settings.Ethnicity;
             }
 
-          
+
 
         }
         catch (Exception Ex)
@@ -3282,7 +3473,7 @@ public partial class MainDashboard : ContentPage
                 infotab.TextColor = Color.FromArgb("#b3babd");
                 profiletab.TextColor = Color.FromArgb("#b3babd");
                 additionalquestionstab.TextColor = Color.FromArgb("#b3babd");
-                
+
 
                 hometab.FontFamily = "HankenGroteskBold";
                 infotab.FontFamily = "HankenGroteskRegular";
@@ -3326,7 +3517,7 @@ public partial class MainDashboard : ContentPage
 
 
             }
-            else if(e.TabItem.Header == "Questions")
+            else if (e.TabItem.Header == "Questions")
             {
                 profiletab.TextColor = Color.FromArgb("#b3babd");
                 infotab.TextColor = Color.FromArgb("#b3babd");
@@ -3345,7 +3536,7 @@ public partial class MainDashboard : ContentPage
                 profiletab.ImageSource = ImageSource.FromFile("dashbrowseinactive.png");
                 additionalquestionstab.ImageSource = ImageSource.FromFile("questiondashblack.png");
             }
- 
+
         }
         catch (Exception Ex)
         {
@@ -3382,389 +3573,6 @@ public partial class MainDashboard : ContentPage
                 string Area = item.Title;
                 bool Check = Preferences.Default.Get("NovoSyms", false);
                 if (Check && NovoSignup)
-                {
-                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
-                }
-                else
-                {
-                    await Navigation.PushAsync(new AllSymptoms(userfeedbacklist[0]), false);
-                }         
-            }
-            else if(item != null && item.Title == "Supplements")
-            {
-                string Area = item.Title;
-                bool Check = Preferences.Default.Get("NovoSupps", false);
-                if (Check && NovoSignup)
-                {
-                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
-                }
-                else
-                {
-                    await Navigation.PushAsync(new AllSupplements(), false);
-                }                
-            }
-            else if (item != null && item.Title == "Measurements")
-            {
-                string Area = item.Title;
-                bool Check = Preferences.Default.Get("NovoMeas", false);
-                if (Check && NovoSignup)
-                {
-                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
-                }
-                else
-                {
-                    await Navigation.PushAsync(new MeasurementsPage(userfeedbacklist[0]), false);
-                }
-            }
-            else if (item != null && item.Title == "Diagnosis")
-            {
-                string Area = item.Title;
-                bool Check = Preferences.Default.Get("NovoDiag", false);
-                if (Check && NovoSignup)
-                {
-                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
-                }
-                else
-                {
-                    await Navigation.PushAsync(new AllDiagnosis(), false);
-                }  
-            }
-            else if (item != null && item.Title == "Mood")
-            {
-                string Area = item.Title;
-                bool Check = Preferences.Default.Get("NovoMood", false);
-                if (Check && NovoSignup)
-                {
-                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
-                }
-                else
-                {
-                    await Navigation.PushAsync(new AllMood(userfeedbacklist[0]), false);
-                }
-            }
-            else if (item != null && item.Title == "Appointments")
-            {
-                string Area = item.Title;
-                bool Check = Preferences.Default.Get("NovoAppt", false);
-                if (Check && NovoSignup)
-                {
-                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
-                }
-                else
-                {
-                    await Navigation.PushAsync(new AllAppointments(), false);
-                }
-            }
-            else if (item != null && item.Title == "HCPs")
-            {
-                string Area = item.Title;
-                bool Check = Preferences.Default.Get("NovoHcp", false);
-                if (Check && NovoSignup)
-                {
-                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
-                }
-                else
-                {
-                    await Navigation.PushAsync(new HCPs(), false);
-                }
-            }
-            else if (item != null && item.Title == "Questionnaires")
-            {
-                string Area = item.Title;
-                bool Check = Preferences.Default.Get("NovoQues", false);
-                if (Check && NovoSignup)
-                {
-                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
-                }
-                else
-                {
-                    await Navigation.PushAsync(new AllQuestionnaires(), false);
-                }          
-            }
-            else if (item != null && item.Title == "Allergens")
-            {
-                string Area = item.Title;
-                bool Check = Preferences.Default.Get("NovoAllerg", false);
-                if (Check && NovoSignup)
-                {
-                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
-                }
-                else
-                {
-                    await Navigation.PushAsync(new AllAllergies(), false);
-                }
-            }
-            else if (item != null && item.Title == "Health Report") 
-            {
-                string Area = item.Title;
-                bool Check = Preferences.Default.Get("NovoHeRep", false);
-                if (Check && NovoSignup)
-                {
-                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
-                }
-                else
-                {
-                    await Navigation.PushAsync(new HealthReport(), false);
-                }
-            }
-            else if (item != null && item.Title == "Schedule")
-            {
-                string Area = item.Title;
-                bool Check = Preferences.Default.Get("NovoSched", false);
-                if (Check && NovoSignup)
-                {
-                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
-                }
-                else
-                {
-                    await Navigation.PushAsync(new MainSchedule(), false);
-                }
-                
-            }
-            else if (item != null && item.Title == "Food Diary")
-            {
-                string Area = item.Title;
-                bool Check = Preferences.Default.Get("NovoFood", false);
-                if (Check && NovoSignup)
-                {
-                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
-                }
-                else
-                {
-                    await Navigation.PushAsync(new AllFoodDiary(), false);
-                }
-
-            }
-            else if (item != null && item.Title == "Diet")
-            {
-                string Area = item.Title;
-                bool Check = Preferences.Default.Get("NovoDiet", false);
-                if (Check && NovoSignup)
-                {
-                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
-                }
-                else
-                {
-                    await Navigation.PushAsync(new AllDiet(), false);
-                }
-
-            }
-            else if (item != null && item.Title == "Investigations")
-            {
-                string Area = item.Title;
-                bool Check = Preferences.Default.Get("NovoInvest", false);
-                if (Check && NovoSignup)
-                {
-                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
-                }
-                else
-                {
-                    await Navigation.PushAsync(new AllInvestigations(), false);
-                }
-
-            }
-            else if (item != null && item.Title == "Daily Activity")
-            {
-                string Area = item.Title;
-                bool Check = Preferences.Default.Get("NovoActivity", false);
-                if (Check && NovoSignup)
-                {
-                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
-                }
-                else
-                {
-                    await Navigation.PushAsync(new ActivitySchedule(), false);
-                }
-
-            }
-            IsNavigating = false;
-        }
-        catch (Exception Ex)
-        {
-            IsNavigating = false;
-            NotasyncMethod(Ex);
-            //await Navigation.PushAsync(new ErrorPage()) ,false);  
-        }
-    }
-
-    private void Button_Clicked(object sender, EventArgs e)
-    {
-        try
-        {
-
-            //see more button
-            if(morebtn.Text == "See more")
-            {
-                signupdetailslbl.Text = signupcodecollection[0].appdescription;
-                morebtn.Text = "See less";
-
-            }
-            else
-            {
-                signupdetailslbl.Text = signupcodecollection[0].shortdescription;
-                morebtn.Text = "See more";
-            }
-
-        }
-        catch(Exception Ex)
-        {
-            NotasyncMethod(Ex);
-        }
-    }
-
-    private async void infolist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
-    {
-        try
-        {
-            var item = e.DataItem as signupcodeinformation;
-            if (IsNavigating) return;
-            IsNavigating = true;
-            item.type = item.type.ToLower();
-
-            if (item.type == "pdf")
-            {
-                var pdflink = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/" + item.link;
-                await Browser.OpenAsync(pdflink, new BrowserLaunchOptions
-                {
-                    LaunchMode = BrowserLaunchMode.SystemPreferred,
-                    TitleMode = BrowserTitleMode.Hide
-                });
-            }
-            else if (item.type == "video")
-            {
-                var pdflink = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/" + item.link;
-                string imgPath = pdflink + ".mp4";
-                //  var launchvid = new videosupport();
-                // launchvid.URL = item.Filename;
-                // await Navigation.PushAsync(new AllVideos(), false);
-
-                // var vid = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/DiagnosisFirstAdd.mp4";
-                bool FromDash = true; 
-                await Navigation.PushAsync(new NewPageVideoPlayer(item, FromDash), false);
-            }
-            else if(item.type == "image")
-            {
-                var pdflink = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/" + item.link;
-
-                await MopupService.Instance.PushAsync(new imagePopUp(pdflink) { });
-
-            }
-            else
-            {
-                await Browser.OpenAsync(item.link, BrowserLaunchMode.SystemPreferred);
-            }
-            IsNavigating = false;
-        }
-        catch (Exception Ex)
-        {
-            IsNavigating = false;
-            NotasyncMethod(Ex);
-        }
-    }
-
-    async private void HealthReportBtn_Clicked(object sender, EventArgs e)
-    {
-        try
-        {
-            if (IsNavigating) return;
-            IsNavigating = true;
-            string Area = "Health Report";
-                var signup = Helpers.Settings.SignUp;
-                bool NovoSignup = !string.IsNullOrEmpty(signup) && signup.Contains("SAX");
-                bool Check = Preferences.Default.Get("NovoHeRep", false);
-                if (Check && NovoSignup)
-                {
-                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
-                }
-                else
-                {
-                    await Navigation.PushAsync(new HealthReport(), false);
-                }
-            IsNavigating = false;
-        }
-        catch (Exception Ex)
-        {
-            IsNavigating = false;
-            NotasyncMethod(Ex);
-        }
-    }
-
-   async  private void QuestionBtn_Clicked(object sender, EventArgs e)
-    {
-        try
-        {
-            if (IsNavigating) return;
-            IsNavigating = true;
-            string Area = "Questionnaires";
-                var signup = Helpers.Settings.SignUp;
-                bool NovoSignup = !string.IsNullOrEmpty(signup) && signup.Contains("SAX");
-                bool Check = Preferences.Default.Get("NovoQues", false);
-                if (Check && NovoSignup)
-                {
-                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
-                }
-                else
-                {
-                    await Navigation.PushAsync(new AllQuestionnaires(), false);
-                }
-            IsNavigating = false;
-        }
-        catch (Exception Ex)
-        {
-            IsNavigating = false;
-            NotasyncMethod(Ex);
-        }
-    }
-
-    private async  void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
-    {
-        //profile section tapped 
-
-        try
-        {
-            if (IsNavigating) return;
-            IsNavigating = true;
-            await Navigation.PushAsync(new ProfileSection(), false);
-            IsNavigating = false;
-        }
-        catch(Exception Ex)
-        {
-            IsNavigating = false;
-            NotasyncMethod(Ex);
-        }
-    }
-
-    private async void catergorieslist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
-    {
-        try
-        {
-
-            var item = e.DataItem as dashitem;
-
-            var signup = Helpers.Settings.SignUp;
-            bool NovoSignup = !string.IsNullOrEmpty(signup) && signup.Contains("SAX");
-            if (IsNavigating) return;
-            IsNavigating = true;
-
-            if (item != null && item.Title == "Medications")
-            {
-                string Area = item.Title;
-                bool Check = Preferences.Default.Get("NovoMeds", false);
-                if (Check && NovoSignup)
-                {
-                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
-                }
-                else
-                {
-                    await Navigation.PushAsync(new AllMedications(), false);
-                }
-            }
-
-            else if (item != null && item.Title == "Symptoms")
-            {
-                string Area = item.Title;
-                bool Check = Preferences.Default.Get("NovoSyms", false);
-                if(Check && NovoSignup)
                 {
                     await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
                 }
@@ -3881,7 +3689,7 @@ public partial class MainDashboard : ContentPage
             {
                 string Area = item.Title;
                 bool Check = Preferences.Default.Get("NovoHeRep", false);
-                if(Check && NovoSignup)
+                if (Check && NovoSignup)
                 {
                     await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
                 }
@@ -3904,7 +3712,390 @@ public partial class MainDashboard : ContentPage
                 }
 
             }
-            else if(item != null && item.Title == "Help Videos")
+            else if (item != null && item.Title == "Food Diary")
+            {
+                string Area = item.Title;
+                bool Check = Preferences.Default.Get("NovoFood", false);
+                if (Check && NovoSignup)
+                {
+                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                }
+                else
+                {
+                    await Navigation.PushAsync(new AllFoodDiary(), false);
+                }
+
+            }
+            else if (item != null && item.Title == "Diet")
+            {
+                string Area = item.Title;
+                bool Check = Preferences.Default.Get("NovoDiet", false);
+                if (Check && NovoSignup)
+                {
+                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                }
+                else
+                {
+                    await Navigation.PushAsync(new AllDiet(), false);
+                }
+
+            }
+            else if (item != null && item.Title == "Investigations")
+            {
+                string Area = item.Title;
+                bool Check = Preferences.Default.Get("NovoInvest", false);
+                if (Check && NovoSignup)
+                {
+                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                }
+                else
+                {
+                    await Navigation.PushAsync(new AllInvestigations(), false);
+                }
+
+            }
+            else if (item != null && item.Title == "Daily Activity")
+            {
+                string Area = item.Title;
+                bool Check = Preferences.Default.Get("NovoActivity", false);
+                if (Check && NovoSignup)
+                {
+                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                }
+                else
+                {
+                    await Navigation.PushAsync(new ActivitySchedule(), false);
+                }
+
+            }
+            IsNavigating = false;
+        }
+        catch (Exception Ex)
+        {
+            IsNavigating = false;
+            NotasyncMethod(Ex);
+            //await Navigation.PushAsync(new ErrorPage()) ,false);  
+        }
+    }
+
+    private void Button_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+
+            //see more button
+            if (morebtn.Text == "See more")
+            {
+                signupdetailslbl.Text = signupcodecollection[0].appdescription;
+                morebtn.Text = "See less";
+
+            }
+            else
+            {
+                signupdetailslbl.Text = signupcodecollection[0].shortdescription;
+                morebtn.Text = "See more";
+            }
+
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    private async void infolist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
+    {
+        try
+        {
+            var item = e.DataItem as signupcodeinformation;
+            if (IsNavigating) return;
+            IsNavigating = true;
+            item.type = item.type.ToLower();
+
+            if (item.type == "pdf")
+            {
+                var pdflink = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/" + item.link;
+                await Browser.OpenAsync(pdflink, new BrowserLaunchOptions
+                {
+                    LaunchMode = BrowserLaunchMode.SystemPreferred,
+                    TitleMode = BrowserTitleMode.Hide
+                });
+            }
+            else if (item.type == "video")
+            {
+                var pdflink = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/" + item.link;
+                string imgPath = pdflink + ".mp4";
+                //  var launchvid = new videosupport();
+                // launchvid.URL = item.Filename;
+                // await Navigation.PushAsync(new AllVideos(), false);
+
+                // var vid = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/DiagnosisFirstAdd.mp4";
+                bool FromDash = true;
+                await Navigation.PushAsync(new NewPageVideoPlayer(item, FromDash), false);
+            }
+            else if (item.type == "image")
+            {
+                var pdflink = "https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/" + item.link;
+
+                await MopupService.Instance.PushAsync(new imagePopUp(pdflink) { });
+
+            }
+            else
+            {
+                await Browser.OpenAsync(item.link, BrowserLaunchMode.SystemPreferred);
+            }
+            IsNavigating = false;
+        }
+        catch (Exception Ex)
+        {
+            IsNavigating = false;
+            NotasyncMethod(Ex);
+        }
+    }
+
+    async private void HealthReportBtn_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            if (IsNavigating) return;
+            IsNavigating = true;
+            string Area = "Health Report";
+            var signup = Helpers.Settings.SignUp;
+            bool NovoSignup = !string.IsNullOrEmpty(signup) && signup.Contains("SAX");
+            bool Check = Preferences.Default.Get("NovoHeRep", false);
+            if (Check && NovoSignup)
+            {
+                await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+            }
+            else
+            {
+                await Navigation.PushAsync(new HealthReport(), false);
+            }
+            IsNavigating = false;
+        }
+        catch (Exception Ex)
+        {
+            IsNavigating = false;
+            NotasyncMethod(Ex);
+        }
+    }
+
+    async private void QuestionBtn_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            if (IsNavigating) return;
+            IsNavigating = true;
+            string Area = "Questionnaires";
+            var signup = Helpers.Settings.SignUp;
+            bool NovoSignup = !string.IsNullOrEmpty(signup) && signup.Contains("SAX");
+            bool Check = Preferences.Default.Get("NovoQues", false);
+            if (Check && NovoSignup)
+            {
+                await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+            }
+            else
+            {
+                await Navigation.PushAsync(new AllQuestionnaires(), false);
+            }
+            IsNavigating = false;
+        }
+        catch (Exception Ex)
+        {
+            IsNavigating = false;
+            NotasyncMethod(Ex);
+        }
+    }
+
+    private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+        //profile section tapped 
+
+        try
+        {
+            if (IsNavigating) return;
+            IsNavigating = true;
+            await Navigation.PushAsync(new ProfileSection(), false);
+            IsNavigating = false;
+        }
+        catch (Exception Ex)
+        {
+            IsNavigating = false;
+            NotasyncMethod(Ex);
+        }
+    }
+
+    private async void catergorieslist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
+    {
+        try
+        {
+
+            var item = e.DataItem as dashitem;
+
+            var signup = Helpers.Settings.SignUp;
+            bool NovoSignup = !string.IsNullOrEmpty(signup) && signup.Contains("SAX");
+            if (IsNavigating) return;
+            IsNavigating = true;
+
+            if (item != null && item.Title == "Medications")
+            {
+                string Area = item.Title;
+                bool Check = Preferences.Default.Get("NovoMeds", false);
+                if (Check && NovoSignup)
+                {
+                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                }
+                else
+                {
+                    await Navigation.PushAsync(new AllMedications(), false);
+                }
+            }
+
+            else if (item != null && item.Title == "Symptoms")
+            {
+                string Area = item.Title;
+                bool Check = Preferences.Default.Get("NovoSyms", false);
+                if (Check && NovoSignup)
+                {
+                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                }
+                else
+                {
+                    await Navigation.PushAsync(new AllSymptoms(userfeedbacklist[0]), false);
+                }
+            }
+            else if (item != null && item.Title == "Supplements")
+            {
+                string Area = item.Title;
+                bool Check = Preferences.Default.Get("NovoSupps", false);
+                if (Check && NovoSignup)
+                {
+                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                }
+                else
+                {
+                    await Navigation.PushAsync(new AllSupplements(), false);
+                }
+            }
+            else if (item != null && item.Title == "Measurements")
+            {
+                string Area = item.Title;
+                bool Check = Preferences.Default.Get("NovoMeas", false);
+                if (Check && NovoSignup)
+                {
+                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                }
+                else
+                {
+                    await Navigation.PushAsync(new MeasurementsPage(userfeedbacklist[0]), false);
+                }
+            }
+            else if (item != null && item.Title == "Diagnosis")
+            {
+                string Area = item.Title;
+                bool Check = Preferences.Default.Get("NovoDiag", false);
+                if (Check && NovoSignup)
+                {
+                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                }
+                else
+                {
+                    await Navigation.PushAsync(new AllDiagnosis(), false);
+                }
+            }
+            else if (item != null && item.Title == "Mood")
+            {
+                string Area = item.Title;
+                bool Check = Preferences.Default.Get("NovoMood", false);
+                if (Check && NovoSignup)
+                {
+                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                }
+                else
+                {
+                    await Navigation.PushAsync(new AllMood(userfeedbacklist[0]), false);
+                }
+            }
+            else if (item != null && item.Title == "Appointments")
+            {
+                string Area = item.Title;
+                bool Check = Preferences.Default.Get("NovoAppt", false);
+                if (Check && NovoSignup)
+                {
+                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                }
+                else
+                {
+                    await Navigation.PushAsync(new AllAppointments(), false);
+                }
+            }
+            else if (item != null && item.Title == "HCPs")
+            {
+                string Area = item.Title;
+                bool Check = Preferences.Default.Get("NovoHcp", false);
+                if (Check && NovoSignup)
+                {
+                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                }
+                else
+                {
+                    await Navigation.PushAsync(new HCPs(), false);
+                }
+            }
+            else if (item != null && item.Title == "Questionnaires")
+            {
+                string Area = item.Title;
+                bool Check = Preferences.Default.Get("NovoQues", false);
+                if (Check && NovoSignup)
+                {
+                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                }
+                else
+                {
+                    await Navigation.PushAsync(new AllQuestionnaires(), false);
+                }
+            }
+            else if (item != null && item.Title == "Allergens")
+            {
+                string Area = item.Title;
+                bool Check = Preferences.Default.Get("NovoAllerg", false);
+                if (Check && NovoSignup)
+                {
+                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                }
+                else
+                {
+                    await Navigation.PushAsync(new AllAllergies(), false);
+                }
+            }
+            else if (item != null && item.Title == "Health Report")
+            {
+                string Area = item.Title;
+                bool Check = Preferences.Default.Get("NovoHeRep", false);
+                if (Check && NovoSignup)
+                {
+                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                }
+                else
+                {
+                    await Navigation.PushAsync(new HealthReport(), false);
+                }
+            }
+            else if (item != null && item.Title == "Schedule")
+            {
+                string Area = item.Title;
+                bool Check = Preferences.Default.Get("NovoSched", false);
+                if (Check && NovoSignup)
+                {
+                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+                }
+                else
+                {
+                    await Navigation.PushAsync(new MainSchedule(), false);
+                }
+
+            }
+            else if (item != null && item.Title == "Help Videos")
             {
                 await Navigation.PushAsync(new AllVideos(), false);
             }
@@ -4002,7 +4193,7 @@ public partial class MainDashboard : ContentPage
             }
             IsNavigating = false;
         }
-        catch(Exception Ex)
+        catch (Exception Ex)
         {
             IsNavigating = false;
             NotasyncMethod(Ex);
@@ -4050,7 +4241,7 @@ public partial class MainDashboard : ContentPage
             {
                 await Navigation.PushAsync(new ProfileSection(), false);
             }
-            else if(item != null && item.Title == "Developer Feedback & Support")
+            else if (item != null && item.Title == "Developer Feedback & Support")
             {
                 if (Email.Default.IsComposeSupported)
                 {
@@ -4070,14 +4261,14 @@ public partial class MainDashboard : ContentPage
                     await Email.Default.ComposeAsync(message);
                 }
             }
-            else if(item != null && item.Title == "Terms Of Use")
+            else if (item != null && item.Title == "Terms Of Use")
             {
                 await Navigation.PushAsync(new PrivacyPolicy(), false);
             }
 
             IsNavigating = false;
         }
-        catch(Exception Ex)
+        catch (Exception Ex)
         {
             IsNavigating = false;
         }
@@ -4103,7 +4294,7 @@ public partial class MainDashboard : ContentPage
             }
             IsNavigating = false;
         }
-        catch(Exception Ex)
+        catch (Exception Ex)
         {
             IsNavigating = false;
             NotasyncMethod(Ex);
@@ -4119,7 +4310,7 @@ public partial class MainDashboard : ContentPage
             await Navigation.PushAsync(new SearchPage(), false);
             IsNavigating = false;
         }
-        catch(Exception Ex)
+        catch (Exception Ex)
         {
             IsNavigating = false;
         }
@@ -4132,20 +4323,20 @@ public partial class MainDashboard : ContentPage
             if (IsNavigating) return;
             IsNavigating = true;
             string Area = "Measurements";
-                var signup = Helpers.Settings.SignUp;
-                bool NovoSignup = !string.IsNullOrEmpty(signup) && signup.Contains("SAX");
-                bool Check = Preferences.Default.Get("NovoMeas", false);
-                if (Check && NovoSignup)
-                {
-                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
-                }
-                else
-                {
-                    await Navigation.PushAsync(new MeasurementsPage(userfeedbacklist[0]), false);
-                }
+            var signup = Helpers.Settings.SignUp;
+            bool NovoSignup = !string.IsNullOrEmpty(signup) && signup.Contains("SAX");
+            bool Check = Preferences.Default.Get("NovoMeas", false);
+            if (Check && NovoSignup)
+            {
+                await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+            }
+            else
+            {
+                await Navigation.PushAsync(new MeasurementsPage(userfeedbacklist[0]), false);
+            }
             IsNavigating = false;
         }
-        catch(Exception Ex)
+        catch (Exception Ex)
         {
             IsNavigating = false;
             NotasyncMethod(Ex);
@@ -4183,7 +4374,7 @@ public partial class MainDashboard : ContentPage
                         await Navigation.PushAsync(new HealthReport(), false);
                     }
                 }
-                else if(bc == "Diagnosis")
+                else if (bc == "Diagnosis")
                 {
                     string Area = text;
                     bool Check = Preferences.Default.Get("NovoDiag", false);
@@ -4196,7 +4387,7 @@ public partial class MainDashboard : ContentPage
                         await Navigation.PushAsync(new AllDiagnosis(), false);
                     }
                 }
-                else if(bc == "Appointments")
+                else if (bc == "Appointments")
                 {
                     bool Check = Preferences.Default.Get("NovoAppt", false);
                     if (Check && NovoSignup)
@@ -4309,7 +4500,7 @@ public partial class MainDashboard : ContentPage
 
 
         }
-        catch(Exception Ex)
+        catch (Exception Ex)
         {
             IsNavigating = false;
             NotasyncMethod(Ex);
@@ -4336,7 +4527,7 @@ public partial class MainDashboard : ContentPage
             }
             IsNavigating = false;
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             IsNavigating = false;
         }
@@ -4352,7 +4543,7 @@ public partial class MainDashboard : ContentPage
             IsNavigating = true;
             var item = e.DataItem as feedbackdata;
 
-           // UserSymptomPassed.Add(item);
+            // UserSymptomPassed.Add(item);
 
             await Navigation.PushAsync(new UpdateSingleSymptom(userfeedbacklist[0], item.title, item.value), false);
             IsNavigating = false;
@@ -4363,7 +4554,7 @@ public partial class MainDashboard : ContentPage
         {
             IsNavigating = false;
             NotasyncMethod(Ex);
-        }      
+        }
     }
 
     async private void TapGestureRecognizer_Tapped_2(object sender, TappedEventArgs e)
@@ -4373,17 +4564,17 @@ public partial class MainDashboard : ContentPage
             if (IsNavigating) return;
             IsNavigating = true;
             string Area = "Measurements";
-                var signup = Helpers.Settings.SignUp;
-                bool NovoSignup = !string.IsNullOrEmpty(signup) && signup.Contains("SAX");
-                bool Check = Preferences.Default.Get("NovoMeas", false);
-                if (Check && NovoSignup)
-                {
-                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
-                }
-                else
-                {
-                    await Navigation.PushAsync(new MeasurementsPage(userfeedbacklist[0]), false);
-                }
+            var signup = Helpers.Settings.SignUp;
+            bool NovoSignup = !string.IsNullOrEmpty(signup) && signup.Contains("SAX");
+            bool Check = Preferences.Default.Get("NovoMeas", false);
+            if (Check && NovoSignup)
+            {
+                await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+            }
+            else
+            {
+                await Navigation.PushAsync(new MeasurementsPage(userfeedbacklist[0]), false);
+            }
             IsNavigating = false;
         }
         catch (Exception Ex)
@@ -4465,14 +4656,14 @@ public partial class MainDashboard : ContentPage
             {
                 await Navigation.PushAsync(new MainSchedule(), false);
             }
-            IsNavigating = false; 
+            IsNavigating = false;
         }
         catch (Exception Ex)
         {
             IsNavigating = false;
             NotasyncMethod(Ex);
         }
-       
+
     }
 
     private async void measurementnochartdetaillist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
@@ -4483,21 +4674,21 @@ public partial class MainDashboard : ContentPage
             if (IsNavigating) return;
             IsNavigating = true;
 
-                string Area = "Measurements";
-                var signup = Helpers.Settings.SignUp;
-                bool NovoSignup = !string.IsNullOrEmpty(signup) && signup.Contains("SAX");
-                bool Check = Preferences.Default.Get("NovoMeas", false);
-                if (Check && NovoSignup)
-                {
-                    await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
-                }
-                else
-                {
-                    await Navigation.PushAsync(new MeasurementsPage(userfeedbacklist[0]), false);
-                }
+            string Area = "Measurements";
+            var signup = Helpers.Settings.SignUp;
+            bool NovoSignup = !string.IsNullOrEmpty(signup) && signup.Contains("SAX");
+            bool Check = Preferences.Default.Get("NovoMeas", false);
+            if (Check && NovoSignup)
+            {
+                await MopupService.Instance.PushAsync(new NovoConsentScreen(NovoConsent, Area, userfeedbacklist[0]) { });
+            }
+            else
+            {
+                await Navigation.PushAsync(new MeasurementsPage(userfeedbacklist[0]), false);
+            }
             IsNavigating = false;
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             IsNavigating = false;
         }
@@ -4552,9 +4743,9 @@ public partial class MainDashboard : ContentPage
         try
         {
 
-            #if ANDROID
+#if ANDROID
                         BatterySettingsOpener.OpenBatterySettings();
-            #endif
+#endif
         }
         catch (Exception ex)
         {
@@ -4638,7 +4829,7 @@ public partial class MainDashboard : ContentPage
 
             IsNavigating = false;
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             IsNavigating = false;
         }
@@ -4666,7 +4857,7 @@ public partial class MainDashboard : ContentPage
             if (IsNavigating) return;
             IsNavigating = true;
             var Getitem = e.DataItem as videos;
-            bool FromDash = true; 
+            bool FromDash = true;
 
             await Navigation.PushAsync(new NewPageVideoPlayer(Getitem, FromDash), false);
             IsNavigating = false;
@@ -4683,16 +4874,16 @@ public partial class MainDashboard : ContentPage
         {
             if (IsNavigating) return;
             IsNavigating = true;
-            await Navigation.PushAsync(new DashQuestionnaire("Medical History"),false);
+            await Navigation.PushAsync(new DashQuestionnaire("Medical History"), false);
             IsNavigating = false;
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             IsNavigating = false;
         }
     }
 
-    private async  void TapGestureRecognizer_Tapped_9(object sender, TappedEventArgs e)
+    private async void TapGestureRecognizer_Tapped_9(object sender, TappedEventArgs e)
     {
         try
         {
@@ -4701,7 +4892,7 @@ public partial class MainDashboard : ContentPage
             await Navigation.PushAsync(new DashQuestionnaire("Menstural Cycle"), false);
             IsNavigating = false;
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             IsNavigating = false;
         }
@@ -4716,7 +4907,7 @@ public partial class MainDashboard : ContentPage
             await Navigation.PushAsync(new DashQuestionnaire("Treatment"), false);
             IsNavigating = false;
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             IsNavigating = false;
         }
@@ -4728,11 +4919,22 @@ public partial class MainDashboard : ContentPage
         {
             if (IsNavigating) return;
             IsNavigating = true;
-            await Navigation.PushAsync(new DashQuestionnaire("Previous Responses", "list"), false);
+            var signupcode = Helpers.Settings.SignUp;
+            if (signupcode.Contains("SFEWH"))
+            {
+                await Navigation.PushAsync(new DashQuestionnaire("Previous Responses", "list"), false);
+            }
+            else if (signupcode.Contains("SFECORE"))
+            {
+                //Get title 
+                //var targetId = DashQuestionAnswers[0].inputid;
+                //var GetTitle = DashQuestionInputs.Where(x => x.id == targetId).FirstOrDefault().dataTab; 
+                await Navigation.PushAsync(new DashStudyQuestions(DashQuestionAnswers), false);
+            }
             IsNavigating = false;
 
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             IsNavigating = false;
         }
@@ -4747,7 +4949,7 @@ public partial class MainDashboard : ContentPage
             await Navigation.PushAsync(new HealthDataPage(), false);
             IsNavigating = false;
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             IsNavigating = false;
         }
@@ -4784,13 +4986,13 @@ public partial class MainDashboard : ContentPage
             if (IsNavigating) return;
             IsNavigating = true;
 
-            SettingsOn GetItem = new SettingsOn(); 
+            SettingsOn GetItem = new SettingsOn();
             var btnTapped = sender as Border;
             if (btnTapped?.BindingContext is SettingsOn TappedItem)
             {
                 GetItem = TappedItem;
             }
-            if (GetItem == null) return; 
+            if (GetItem == null) return;
 
             if (GetItem.title == "Turn On Notifications")
             {
@@ -4817,9 +5019,9 @@ public partial class MainDashboard : ContentPage
             }
             else
             {
-                #if ANDROID
+#if ANDROID
                       BatterySettingsOpener.OpenBatterySettings();
-                #endif
+#endif
             }
             IsNavigating = false;
         }
@@ -4840,7 +5042,7 @@ public partial class MainDashboard : ContentPage
 
             await Navigation.PushAsync(new AllFitness(), false);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
 
         }
@@ -4873,35 +5075,58 @@ public partial class MainDashboard : ContentPage
         }
     }
 
+
+    private async void DashQuestionItems_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
+    {
+        try
+        {
+            var item = e.DataItem as dashitem;
+
+            var selectedGroup = GroupedDashQuestions.FirstOrDefault(g => g.Key == item.Title);
+
+            ObservableCollection<registryDataInputs> selectedItems = selectedGroup != null
+                ? new ObservableCollection<registryDataInputs>(selectedGroup)
+                : new ObservableCollection<registryDataInputs>();
+
+            await Navigation.PushAsync(new DashStudyQuestions(selectedItems, DashQuestionAnswers), false);
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+
+    }
+
+
     //private async void Button_Clicked_6(object sender, EventArgs e)
-    //{
-    //    try
-    //    {
-    //        //update button on symptom list clicked
-    //       // Show the elapsed time in a DisplayAlert
-    //        await Application.Current.MainPage.DisplayAlert(
-    //            "Test buttton click",
-    //            $"Data retrieval took",
-    //            "OK"
-    //        );
+        //{
+        //    try
+        //    {
+        //        //update button on symptom list clicked
+        //       // Show the elapsed time in a DisplayAlert
+        //        await Application.Current.MainPage.DisplayAlert(
+        //            "Test buttton click",
+        //            $"Data retrieval took",
+        //            "OK"
+        //        );
 
 
-    //    }
-    //    catch (Exception ex)
-    //    {
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-    //    }
-    //}
+        //    }
+        //}
 
-    //async private void measurementdetaillist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
-    //{
-    //    try
-    //    {
-    //        await Navigation.PushAsync(new MeasurementsPage(userfeedbacklist[0]), false);
-    //    }
-    //    catch (Exception Ex)
-    //    {
-    //        NotasyncMethod(Ex);
-    //    }
-    //}
-}
+        //async private void measurementdetaillist_ItemTapped(object sender, Syncfusion.Maui.ListView.ItemTappedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        await Navigation.PushAsync(new MeasurementsPage(userfeedbacklist[0]), false);
+        //    }
+        //    catch (Exception Ex)
+        //    {
+        //        NotasyncMethod(Ex);
+        //    }
+        //}
+    }

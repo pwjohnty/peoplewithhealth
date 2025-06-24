@@ -146,7 +146,7 @@ public partial class AllMood : ContentPage
                 item.datetime = GetDate.ToString("dd/MM/yyyy HH:mm");
                 if (item.title == "S**t")
                 {
-                    item.source = "Shit.png";
+                    item.source = "shit.png";
                 }
 
                 if (item.deleted == true)
