@@ -283,11 +283,18 @@ public partial class LoginPage : ContentPage
                         await DisplayAlert("Account Deleted", "Your account has been deleted", "OK");
                         Signinload.IsVisible = false;
                         Signin.IsVisible = true;
-                        return; 
+                        return;
                     }
                     else if (users[0].registrationstatus == "Onboarding")
                     {
                         await DisplayAlert("Account Onboarding", "Please use your email to continue registering", "OK");
+                        Signinload.IsVisible = false;
+                        Signin.IsVisible = true;
+                        return;
+                    }
+                    else if (users[0].registrationstatus == "Withdrawn")
+                    {
+                        await DisplayAlert("Withdrawn from Study", "You have withdrawn from the study and can no longer access your account", "OK");
                         Signinload.IsVisible = false;
                         Signin.IsVisible = true;
                         return;
