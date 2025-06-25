@@ -685,7 +685,7 @@ public partial class RegisterPage : ContentPage
                         });
 
                         //has medications and symptoms to get
-                        if(signupcodeinfo.referral == "SFEAT" || signupcodeinfo.referral == "SFEWH")
+                        if(signupcodeinfo.referral == "SFEAT" || signupcodeinfo.referral == "SFEWH" || signupcodeinfo.referral == "RBHTHCM")
                         {
                             getmedandsymptoms();
                         }
@@ -694,6 +694,7 @@ public partial class RegisterPage : ContentPage
                         {
                             getjustmeds();
                         }
+
                        
                     }
                   
@@ -818,8 +819,6 @@ public partial class RegisterPage : ContentPage
                     //check signup code and go to page
                     if(signupcodeinfo.referral == "SFEAT")
                     {
-                       
-                       // UpdateProgress();
                         await Navigation.PushAsync(new SFENRAT(newuser, allsymptomlist, allmedicationlist, signupcodeinfo, topprogress.Progress, regquestionlist, reganswerlist, additionalconsent), false);
                     }
                     else if(signupcodeinfo.referral == "SFEWH")
@@ -830,13 +829,14 @@ public partial class RegisterPage : ContentPage
                     {
                         await Navigation.PushAsync(new SFEOB(newuser, allsymptomlist, allmedicationlist, signupcodeinfo, topprogress.Progress, regquestionlist, reganswerlist, additionalconsent), false);
                     }
-
+                    else if (signupcodeinfo.referral == "RBHTHCM")
+                    {
+                        await Navigation.PushAsync(new BMS(newuser, allsymptomlist, allmedicationlist, signupcodeinfo, topprogress.Progress, regquestionlist, reganswerlist, additionalconsent), false);
+                    }
                 }
                 else
                 {
-
                     //pass user and page progress
-
                     UpdateProgress();
                     await Navigation.PushAsync(new RegisterFinalPage(newuser, topprogress.Progress, additionalconsent), false);
                 }
