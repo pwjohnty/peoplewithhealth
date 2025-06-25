@@ -827,13 +827,19 @@ public partial class ProfileSection : ContentPage
 
                                 }
 
-                                await MopupService.Instance.PushAsync(new PopupPageHelper("Withdrawn from Study") { });
+                                if (signup.Contains("RBHTHCM"))
+                                {
+                                    await MopupService.Instance.PushAsync(new PopupPageHelper("Withdrawn from Project") { });
+                                }
+                                else
+                                {
+                                    await MopupService.Instance.PushAsync(new PopupPageHelper("Withdrawn from Study") { });
+                                }
                             }
                             else
                             {
                                 await MopupService.Instance.PushAsync(new PopupPageHelper("Account Deleted") { });
                             }
-
 
                             await Task.Delay(1500);
                             //Logout of Account 
