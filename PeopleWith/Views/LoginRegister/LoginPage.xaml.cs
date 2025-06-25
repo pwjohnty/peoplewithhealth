@@ -294,7 +294,16 @@ public partial class LoginPage : ContentPage
                     }
                     else if (users[0].registrationstatus == "Withdrawn")
                     {
-                        await DisplayAlert("Withdrawn from Study", "You have withdrawn from the study and can no longer access your account", "OK");
+                        //Royal Brompton Prject 
+                        if (users[0].signupcodeid.Contains("RBHTHCM"))
+                        {
+                            await DisplayAlert("Withdrawn from Project", "You have withdrawn from the project and can no longer access your account", "OK");
+                        }
+                        else
+                        {
+                            //All Other Studies
+                            await DisplayAlert("Withdrawn from Study", "You have withdrawn from the study and can no longer access your account", "OK");
+                        }
                         Signinload.IsVisible = false;
                         Signin.IsVisible = true;
                         return;

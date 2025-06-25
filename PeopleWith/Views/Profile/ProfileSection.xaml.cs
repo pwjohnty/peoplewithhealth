@@ -123,29 +123,59 @@ public partial class ProfileSection : ContentPage
             //}
             if (!string.IsNullOrEmpty(Helpers.Settings.SignUp))
             {
-                DeleteAccount.Text = "Withdraw from study";
-
-                var ItemOne = new AlertContent
+                //Royal Brompton (Project) 
+                if (Helpers.Settings.SignUp.Contains("RBHTHCM"))
                 {
-                    Title = "Withdraw from Study",
-                    Message = "Are you sure you want to withdraw from this study?",
-                    Accept = "Yes, Withdraw",
-                    Cancel = "Cancel"
-                };
+                    DeleteAccount.Text = "Withdraw from project";
 
-                var ItemTwo = new AlertContent
+                    var ItemOne = new AlertContent
+                    {
+                        Title = "Withdraw from Project",
+                        Message = "Are you sure you want to withdraw from this project?",
+                        Accept = "Yes, Withdraw",
+                        Cancel = "Cancel"
+                    };
+
+                    var ItemTwo = new AlertContent
+                    {
+                        Title = "This Action is Permanent",
+                        Message = "Once you withdraw from the project, your participant will end, and your associated data may be removed in alignment to the project consent given when registering. This action cannot be reversed and your account cannot be recovered.\n\nDo you really wish to proceed?",
+                        Accept = "Withdraw Permanently",
+                        Cancel = "Cancel"
+                    };
+
+                    InitialQuestion = ItemOne;
+                    SecondQuestion = ItemTwo;
+
+                    DeleteDetails.Text = "Once you withdraw from the project, your participation and associated data cannot be retrieved. Ensure you no longer wish to take part before proceeding with withdrawal.";
+
+                }
+                else
                 {
-                    Title = "This Action is Permanent",
-                    Message = "Once you withdraw from the study, your participation and associated data may be removed and cannot be recovered.\n\nDo you really wish to proceed?",
-                    Accept = "Withdraw Permanently",
-                    Cancel = "Cancel"
-                };
+                    //All Other Signup Codes 
+                    DeleteAccount.Text = "Withdraw from study";
 
-                InitialQuestion = ItemOne;
-                SecondQuestion = ItemTwo;
+                    var ItemOne = new AlertContent
+                    {
+                        Title = "Withdraw from Study",
+                        Message = "Are you sure you want to withdraw from this study?",
+                        Accept = "Yes, Withdraw",
+                        Cancel = "Cancel"
+                    };
 
-                DeleteDetails.Text = "Once you withdraw from the study, your participation and associated data cannot be retrieved. Ensure you no longer wish to take part before proceeding with withdrawal.";
+                    var ItemTwo = new AlertContent
+                    {
+                        Title = "This Action is Permanent",
+                        Message = "Once you withdraw from the study, your participant will end, and your associated data may be removed in alignment to the study consent given when registering. This action cannot be reversed and your account cannot be recovered.\n\nDo you really wish to proceed?",
+                        Accept = "Withdraw Permanently",
+                        Cancel = "Cancel"
+                    };
 
+                    InitialQuestion = ItemOne;
+                    SecondQuestion = ItemTwo;
+
+                    DeleteDetails.Text = "Once you withdraw from the study, your participation and associated data cannot be retrieved. Ensure you no longer wish to take part before proceeding with withdrawal.";
+                }
             }
             else
             {
