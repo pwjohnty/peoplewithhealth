@@ -417,6 +417,7 @@ public partial class DashStudyQuestions : ContentPage
                 if(Nextbtn.Opacity == 0.2)
                 {
                     Vibration.Vibrate();
+                    IsNavigating = false;
                     return;
                 }
 
@@ -465,8 +466,9 @@ public partial class DashStudyQuestions : ContentPage
                 else if (CurrentQuestion.type == "multiple,date")
                 {
                     //CurrentQuestion.ValueInputs.Where(x => x.Text == CheckBoxText).FirstOrDefault().SetDateColour = Color.FromArgb("#031926");
-                    bool CheckValue = CurrentQuestion.ValueInputs.Any(x => x.SetDateColour == Color.FromArgb("#FF0000"));
-                    if(CheckValue)
+                    bool CheckValue = CurrentQuestion.ValueInputs.Any(x => x.SetDateColour != null && x.SetDateColour.ToHex() == "#FF0000");
+
+                    if (CheckValue)
                     {
                         Nextbtn.Opacity = 0.2;
                         Vibration.Vibrate();
@@ -649,8 +651,21 @@ public partial class DashStudyQuestions : ContentPage
                     {
                         if (!string.IsNullOrEmpty(items.DateEntry))
                         {
-                            //Single Date (Should already be validated) Change to Selected Format
-                            var ChangeDate = DateTime.Parse(items.NumberEntry).ToString("yyyy-MM-dd");
+                            string ChangeDate;
+
+                            if (string.IsNullOrWhiteSpace(items.DateEntry) || items.DateEntry == "__/__/____")
+                            {
+                                ChangeDate = Missing;
+                            }
+                            else if (DateTime.TryParse(items.DateEntry, out var parsedDate))
+                            {
+                                ChangeDate = parsedDate.ToString("yyyy-MM-dd");
+                            }
+                            else
+                            {
+                                ChangeDate = Missing; // fallback if parsing fails
+                            }
+
                             UpdateQuestion.inputValue = ChangeDate;
                         }
                     }
@@ -659,23 +674,36 @@ public partial class DashStudyQuestions : ContentPage
                         //Check initally Both items contain a value
                         if (!string.IsNullOrEmpty(items.DateDateStart) || !string.IsNullOrEmpty(items.DateDateEnd))
                         {
-                            if (string.IsNullOrEmpty(items.DateDateStart) || items.DateDateStart == "__/__/____")
+
+                            //Run through DateDateStart
+                            if (string.IsNullOrWhiteSpace(items.DateDateStart) || items.DateDateStart == "__/__/____")
                             {
                                 items.DateDateStart = Missing;
                             }
-                            else
+                            else if (DateTime.TryParse(items.DateDateStart, out var parsedDate))
                             {
-                                items.DateDateStart = DateTime.Parse(items.DateDateStart).ToString("yyyy-MM-dd");
-                            }
-                            if (string.IsNullOrEmpty(items.DateDateEnd) || items.DateDateEnd == "__/__/____")
-                            {
-                                items.DateDateStart = Missing;
+                                items.DateDateStart = parsedDate.ToString("yyyy-MM-dd");
                             }
                             else
                             {
-                                items.DateDateEnd = DateTime.Parse(items.DateDateEnd).ToString("yyyy-MM-dd");
+                                items.DateDateStart = Missing; // fallback if parsing fails
                             }
 
+                            //Run through DateDateEnd
+                            if (string.IsNullOrWhiteSpace(items.DateDateEnd) || items.DateDateEnd == "__/__/____")
+                            {
+                                items.DateDateEnd = Missing;
+                            }
+                            else if (DateTime.TryParse(items.DateDateEnd, out var parsedDate))
+                            {
+                                items.DateDateEnd = parsedDate.ToString("yyyy-MM-dd");
+                            }
+                            else
+                            {
+                                items.DateDateEnd = Missing; // fallback if parsing fails
+                            }
+                           
+                              //Update Value Accordinly 
                               UpdateQuestion.inputValue = $"{items.DateDateStart}*{items.DateDateEnd}";
 
                         }
@@ -722,6 +750,9 @@ public partial class DashStudyQuestions : ContentPage
                         }
                     }
                 }
+
+                //Remove Any items with null input value (Not Answered Questions)
+                QuestionAnswers = QuestionAnswers.Where(x => !String.IsNullOrEmpty(x.inputValue)).ToObservableCollection(); 
 
                 await database.PostDashQuestionnaire(QuestionAnswers);
 
@@ -856,15 +887,15 @@ public partial class DashStudyQuestions : ContentPage
         {
 
             var TextValue = (ExtendedEditor)sender;
-#if ANDROID
-                var handler = TextValue.Handler as Microsoft.Maui.Handlers.EntryHandler;
-                var editText = handler?.PlatformView as AndroidX.AppCompat.Widget.AppCompatEditText;
-                if (editText != null)
-                {
-                    editText.EmojiCompatEnabled = false;
-                    editText.SetTextKeepState(TextValue.Text);
-                }
-#endif
+//#if ANDROID
+//                var handler = TextValue.Handler as Microsoft.Maui.Handlers.EntryHandler;
+//                var editText = handler?.PlatformView as AndroidX.AppCompat.Widget.AppCompatEditText;
+//                if (editText != null)
+//                {
+//                    editText.EmojiCompatEnabled = false;
+//                    editText.SetTextKeepState(TextValue.Text);
+//                }
+//#endif
 
             var selectedValue = TextValue.questionid;
             var CurrentQuestion = SelectedDashQuestions.Where(x => x.id == selectedValue).FirstOrDefault();
@@ -993,15 +1024,15 @@ public partial class DashStudyQuestions : ContentPage
         {
             var TextValue = (ExtendedEntry)sender;
 
-#if ANDROID
-                var handler = TextValue.Handler as Microsoft.Maui.Handlers.EntryHandler;
-                var editText = handler?.PlatformView as AndroidX.AppCompat.Widget.AppCompatEditText;
-                if (editText != null)
-                {
-                    editText.EmojiCompatEnabled = false;
-                    editText.SetTextKeepState(TextValue.Text);
-                }
-#endif
+//#if ANDROID
+//                var handler = TextValue.Handler as Microsoft.Maui.Handlers.EntryHandler;
+//                var editText = handler?.PlatformView as AndroidX.AppCompat.Widget.AppCompatEditText;
+//                if (editText != null)
+//                {
+//                    editText.EmojiCompatEnabled = false;
+//                    editText.SetTextKeepState(TextValue.Text);
+//                }
+//#endif
 
             var selectedValue = TextValue.questionid;
             var Selectedweight = TextValue.IDValue;
@@ -1115,15 +1146,15 @@ public partial class DashStudyQuestions : ContentPage
         {
             var TextValue = (ExtendedEntry)sender;
 
-#if ANDROID
-                var handler = TextValue.Handler as Microsoft.Maui.Handlers.EntryHandler;
-                var editText = handler?.PlatformView as AndroidX.AppCompat.Widget.AppCompatEditText;
-                if (editText != null)
-                {
-                    editText.EmojiCompatEnabled = false;
-                    editText.SetTextKeepState(TextValue.Text);
-                }
-#endif
+//#if ANDROID
+//                var handler = TextValue.Handler as Microsoft.Maui.Handlers.EntryHandler;
+//                var editText = handler?.PlatformView as AndroidX.AppCompat.Widget.AppCompatEditText;
+//                if (editText != null)
+//                {
+//                    editText.EmojiCompatEnabled = false;
+//                    editText.SetTextKeepState(TextValue.Text);
+//                }
+//#endif
 
             var selectedValue = TextValue.questionid;
             var CurrentQuestion = SelectedDashQuestions.Where(x => x.id == selectedValue).FirstOrDefault();
@@ -1158,15 +1189,15 @@ public partial class DashStudyQuestions : ContentPage
         {
             var TextValue = (ExtendedEntry)sender;
 
-#if ANDROID
-                var handler = TextValue.Handler as Microsoft.Maui.Handlers.EntryHandler;
-                var editText = handler?.PlatformView as AndroidX.AppCompat.Widget.AppCompatEditText;
-                if (editText != null)
-                {
-                    editText.EmojiCompatEnabled = false;
-                    editText.SetTextKeepState(TextValue.Text);
-                }
-#endif
+//#if ANDROID
+//                var handler = TextValue.Handler as Microsoft.Maui.Handlers.EntryHandler;
+//                var editText = handler?.PlatformView as AndroidX.AppCompat.Widget.AppCompatEditText;
+//                if (editText != null)
+//                {
+//                    editText.EmojiCompatEnabled = false;
+//                    editText.SetTextKeepState(TextValue.Text);
+//                }
+//#endif
             var selectedValue = TextValue.questionid;
             var Selectedweight = TextValue.IDValue;
             var CurrentQuestion = SelectedDashQuestions.Where(x => x.id == selectedValue).FirstOrDefault();
@@ -1207,15 +1238,15 @@ public partial class DashStudyQuestions : ContentPage
         {
             var TextValue = (ExtendedMaskedEntry)sender;
 
-#if ANDROID
-                var handler = TextValue.Handler as Microsoft.Maui.Handlers.EntryHandler;
-                var editText = handler?.PlatformView as AndroidX.AppCompat.Widget.AppCompatEditText;
-                if (editText != null)
-                {
-                    editText.EmojiCompatEnabled = false;
-                    editText.SetTextKeepState(TextValue.Text);
-                }
-#endif
+//#if ANDROID
+//                var handler = TextValue.Handler as Microsoft.Maui.Handlers.EntryHandler;
+//                var editText = handler?.PlatformView as AndroidX.AppCompat.Widget.AppCompatEditText;
+//                if (editText != null)
+//                {
+//                    editText.EmojiCompatEnabled = false;
+//                    editText.SetTextKeepState(TextValue.Text);
+//                }
+//#endif
 
             var selectedValue = TextValue.questionid;
             var CurrentQuestion = SelectedDashQuestions.Where(x => x.id == selectedValue).FirstOrDefault();
@@ -1288,15 +1319,15 @@ public partial class DashStudyQuestions : ContentPage
         {
             var TextValue = (ExtendedEntry)sender;
 
-#if ANDROID
-                var handler = TextValue.Handler as Microsoft.Maui.Handlers.EntryHandler;
-                var editText = handler?.PlatformView as AndroidX.AppCompat.Widget.AppCompatEditText;
-                if (editText != null)
-                {
-                    editText.EmojiCompatEnabled = false;
-                    editText.SetTextKeepState(TextValue.Text);
-                }
-#endif
+//#if ANDROID
+//                var handler = TextValue.Handler as Microsoft.Maui.Handlers.EntryHandler;
+//                var editText = handler?.PlatformView as AndroidX.AppCompat.Widget.AppCompatEditText;
+//                if (editText != null)
+//                {
+//                    editText.EmojiCompatEnabled = false;
+//                    editText.SetTextKeepState(TextValue.Text);
+//                }
+//#endif
 
             var selectedValue = TextValue.questionid;
             var CurrentQuestion = SelectedDashQuestions.Where(x => x.id == selectedValue).FirstOrDefault();
@@ -1515,15 +1546,15 @@ public partial class DashStudyQuestions : ContentPage
         {
             var TextValue = (ExtendedMaskedEntry)sender;
 
-#if ANDROID
-                var handler = TextValue.Handler as Microsoft.Maui.Handlers.EntryHandler;
-                var editText = handler?.PlatformView as AndroidX.AppCompat.Widget.AppCompatEditText;
-                if (editText != null)
-                {
-                    editText.EmojiCompatEnabled = false;
-                    editText.SetTextKeepState(TextValue.Text);
-                }
-#endif
+//#if ANDROID
+//                var handler = TextValue.Handler as Microsoft.Maui.Handlers.EntryHandler;
+//                var editText = handler?.PlatformView as AndroidX.AppCompat.Widget.AppCompatEditText;
+//                if (editText != null)
+//                {
+//                    editText.EmojiCompatEnabled = false;
+//                    editText.SetTextKeepState(TextValue.Text);
+//                }
+//#endif
 
             var selectedValue = TextValue.questionid;
             var CurrentQuestion = SelectedDashQuestions.Where(x => x.id == selectedValue).FirstOrDefault();
@@ -1598,15 +1629,15 @@ public partial class DashStudyQuestions : ContentPage
         {
             var TextValue = (ExtendedMaskedEntry)sender;
 
-#if ANDROID
-                var handler = TextValue.Handler as Microsoft.Maui.Handlers.EntryHandler;
-                var editText = handler?.PlatformView as AndroidX.AppCompat.Widget.AppCompatEditText;
-                if (editText != null)
-                {
-                    editText.EmojiCompatEnabled = false;
-                    editText.SetTextKeepState(TextValue.Text);
-                }
-#endif
+//#if ANDROID
+//                var handler = TextValue.Handler as Microsoft.Maui.Handlers.EntryHandler;
+//                var editText = handler?.PlatformView as AndroidX.AppCompat.Widget.AppCompatEditText;
+//                if (editText != null)
+//                {
+//                    editText.EmojiCompatEnabled = false;
+//                    editText.SetTextKeepState(TextValue.Text);
+//                }
+//#endif
 
             var selectedValue = TextValue.questionid;
             var CurrentQuestion = SelectedDashQuestions.Where(x => x.id == selectedValue).FirstOrDefault();
@@ -1763,15 +1794,15 @@ public partial class DashStudyQuestions : ContentPage
         {
             var TextValue = (ExtendedMaskedEntry)sender;
 
-#if ANDROID
-                var handler = TextValue.Handler as Microsoft.Maui.Handlers.EntryHandler;
-                var editText = handler?.PlatformView as AndroidX.AppCompat.Widget.AppCompatEditText;
-                if (editText != null)
-                {
-                    editText.EmojiCompatEnabled = false;
-                    editText.SetTextKeepState(TextValue.Text);
-                }
-#endif
+//#if ANDROID
+//                var handler = TextValue.Handler as Microsoft.Maui.Handlers.EntryHandler;
+//                var editText = handler?.PlatformView as AndroidX.AppCompat.Widget.AppCompatEditText;
+//                if (editText != null)
+//                {
+//                    editText.EmojiCompatEnabled = false;
+//                    editText.SetTextKeepState(TextValue.Text);
+//                }
+//#endif
 
             var selectedValue = TextValue.questionid;
             var CheckBoxText = TextValue.IDValue;
