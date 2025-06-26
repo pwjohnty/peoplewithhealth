@@ -5983,7 +5983,9 @@ ex is TaskCanceledException)
         {
             try
             {
-                string url = "https://core.peoplewith.com/sql-update-user.php?uid=" + UpdateUser.userid + "&sid=" + UpdateUser.signupcodeid;
+                string url = "https://portal.peoplewith.com/migration/sql-update-user.php?uid=" + UpdateUser.userid + "&sid=" + UpdateUser.signupcodeid;
+                //Old 
+                //string url = "https://core.peoplewith.com/sql-update-user.php?uid=" + UpdateUser.userid + "&sid=" + UpdateUser.signupcodeid;
                 using (HttpClient client = new HttpClient())
                 {
                     try
