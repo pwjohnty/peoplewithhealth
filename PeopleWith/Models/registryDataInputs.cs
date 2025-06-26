@@ -72,7 +72,7 @@ namespace PeopleWith
 
 
         [System.Text.Json.Serialization.JsonIgnore]
-        public List<CheckBoxOption> ValueInputs { get; set; }
+        public ObservableCollection<CheckBoxOption> ValueInputs { get; set; }
 
         [System.Text.Json.Serialization.JsonIgnore]
         public TextOption TextInput { get; set; }

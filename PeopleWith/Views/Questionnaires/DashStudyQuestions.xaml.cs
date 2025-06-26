@@ -9,6 +9,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using Syncfusion.Maui.Graphics.Internals;
 using CommunityToolkit.Mvvm.Messaging;
+using System.Linq;
+using CommunityToolkit.Maui.Core.Extensions;
 
 namespace PeopleWith;
 
@@ -34,6 +36,7 @@ public partial class DashStudyQuestions : ContentPage
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
+    bool firstloadforiOS;
 
 
     async public void NotasyncMethod(Exception Ex)
@@ -129,7 +132,11 @@ public partial class DashStudyQuestions : ContentPage
                     trigger = data.trigger,
                 };
 
-                SelectedDashQuestions.Add(New);
+                //if (New.type.Contains("multiple"))
+               // {
+
+                    SelectedDashQuestions.Add(New);
+               // }
             }
 
             foreach (var items in SelectedDashQuestions)
@@ -176,13 +183,26 @@ public partial class DashStudyQuestions : ContentPage
                 {
                     if (items.values.Contains(","))
                     {
-                        items.ValueInputs = items.values
-                            .Split(',').Select(value => new CheckBoxOption
+                        items.ValueInputs = new ObservableCollection<CheckBoxOption>();
+
+                        foreach (var value in items.values.Split(','))
+                        {
+                            items.ValueInputs.Add(new CheckBoxOption
                             {
                                 Text = value.Trim(),
                                 questionid = items.id,
                                 ItemSelected = false
-                            }).ToList();
+                            });
+                        }
+
+
+                        //items.ValueInputs = items.values
+                        //    .Split(',').Select(value => new CheckBoxOption
+                        //    {
+                        //        Text = value.Trim(),
+                        //        questionid = items.id,
+                        //        ItemSelected = false
+                        //    }).ToList();
                     }
 
                     if (items.type == "dropdown" && items.values.Contains("Other (Specify)"))
@@ -228,8 +248,13 @@ public partial class DashStudyQuestions : ContentPage
 
             titlelbl.Text = SelectedDashQuestions[0].dataTab;
             sublabel.IsVisible = true;
-            RetrieveDashQuestions = SelectedDashQuestions; 
-            SetItemSource("+");
+
+            firstloadforiOS = true;
+
+         //   RetrieveDashQuestions = SelectedDashQuestions; 
+             SetItemSource("+");
+             DataStack.IsVisible = true;
+            //DataStack.IsVisible = true;
 
         }
         catch (Exception Ex)
@@ -242,18 +267,63 @@ public partial class DashStudyQuestions : ContentPage
     {
         try
         {
-    
+
+            SelectedQuestion.Clear();
+
                 var QuestionSelected = SelectedDashQuestions
           .Where(x => x.quesorder == Order)
           .ToList();
+
                 if (QuestionSelected.Count > 0)
                 {
                     SelectedQuestion = new ObservableCollection<registryDataInputs>(QuestionSelected);
 
-                    await MainThread.InvokeOnMainThreadAsync(() =>
+
+                if (DeviceInfo.Platform == DevicePlatform.iOS)
+                {
+                    if (firstloadforiOS)
                     {
-                        DashQuestionsCollection.ItemsSource = null;
+            //            var QuestionSelectedd = SelectedDashQuestions
+            //.Where(x => x.type.Contains("multiple")).ToObservableCollection();
+
+                        var oneitem = new ObservableCollection<registryDataInputs>();
+
+                        var newitem = new registryDataInputs();
+
+                        newitem.Dropdown = true;
+                        newitem.DropDownwOther = true;
+                        newitem.Multiple = true;
+                        newitem.Weight = true;
+                        newitem .WeightEntry = true;
+                        newitem.WeightYear = true;
+                        newitem.WeightYearEntry = true;
+                        newitem.MultipleDate = true;
+                        newitem.DateDate = true;
+                        newitem.Date = true;
+                        newitem.Number = true;
+
+                      
+                        oneitem.Add(newitem);
+
+                        DashQuestionsCollection.ItemsSource = oneitem;
+                        DashQuestionsCollection.IsEnabled = false;
+                        DashQuestionsCollection.Opacity = 0;
+                        DataStack.IsVisible = true;
+                        await Task.Delay(500);
+                        firstloadforiOS = false;
+                    }
+                }
+
+
+                await MainThread.InvokeOnMainThreadAsync(() =>
+                    {
+
+
+                        DashQuestionsCollection.Opacity = 1;
+                        DashQuestionsCollection.IsEnabled = true;
+                        // DashQuestionsCollection.ItemsSource = null;
                         DashQuestionsCollection.ItemsSource = SelectedQuestion;
+
 
                         //Update Nav Btn's
                         Updatebtns();
@@ -268,11 +338,11 @@ public partial class DashStudyQuestions : ContentPage
                 SelectedQuestion = new ObservableCollection<registryDataInputs>(NextQuestion);
                 await MainThread.InvokeOnMainThreadAsync(() =>
                 {
-                    DashQuestionsCollection.ItemsSource = null;
+                   // DashQuestionsCollection.ItemsSource = null;
                     DashQuestionsCollection.ItemsSource = SelectedQuestion;
 
                     Order = Navigation;
-
+                   
                     //Update Nav Btn's
                     Updatebtns();
 
@@ -291,6 +361,8 @@ public partial class DashStudyQuestions : ContentPage
 
         try
         {
+            MaxOrder = SelectedDashQuestions.Max(x => x.quesorder);
+
             backbtn.IsVisible = Order > 1;
             Nextbtn.IsVisible = Order < MaxOrder;
             submitbtn.IsVisible = Order == MaxOrder;
@@ -560,11 +632,11 @@ public partial class DashStudyQuestions : ContentPage
                             }
                             else
                             {
-                                if (string.IsNullOrEmpty(items.WeightYearOne))
+                                if (string.IsNullOrEmpty(items.WeightYearOne) || items.WeightYearOne == "__/__/____")
                                 {
                                     items.WeightYearOne = Missing;
                                 }
-                                if (string.IsNullOrEmpty(items.WeightYearTwo))
+                                if (string.IsNullOrEmpty(items.WeightYearTwo) || items.WeightYearTwo == "__/__/____")
                                 {
                                     items.WeightYearTwo = Missing;
                                 }
@@ -587,7 +659,7 @@ public partial class DashStudyQuestions : ContentPage
                         //Check initally Both items contain a value
                         if (!string.IsNullOrEmpty(items.DateDateStart) || !string.IsNullOrEmpty(items.DateDateEnd))
                         {
-                            if (string.IsNullOrEmpty(items.DateDateStart))
+                            if (string.IsNullOrEmpty(items.DateDateStart) || items.DateDateStart == "__/__/____")
                             {
                                 items.DateDateStart = Missing;
                             }
@@ -595,7 +667,7 @@ public partial class DashStudyQuestions : ContentPage
                             {
                                 items.DateDateStart = DateTime.Parse(items.DateDateStart).ToString("yyyy-MM-dd");
                             }
-                            if (string.IsNullOrEmpty(items.DateDateEnd))
+                            if (string.IsNullOrEmpty(items.DateDateEnd) || items.DateDateEnd == "__/__/____")
                             {
                                 items.DateDateStart = Missing;
                             }
@@ -617,7 +689,7 @@ public partial class DashStudyQuestions : ContentPage
                             {
                                 string formattedDate;
 
-                                if (string.IsNullOrWhiteSpace(x.DateValue))
+                                if (string.IsNullOrWhiteSpace(x.DateValue) || x.DateValue == "__/__/____")
                                 {
                                     formattedDate = "Unknown";
                                 }
@@ -853,6 +925,12 @@ public partial class DashStudyQuestions : ContentPage
 
             var CurrentQuestion = SelectedDashQuestions.Where(x => x.id == selectedValue).FirstOrDefault();
 
+            if(CurrentQuestion == null)
+            {
+                IsEdit = false;
+                return;
+            }
+
             if (CurrentQuestion.type != "weight")
             {
                 IsEdit = false;
@@ -970,6 +1048,11 @@ public partial class DashStudyQuestions : ContentPage
             string selectedText = selectedCheckbox?.Content?.ToString();
 
             var CurrentQuestion = SelectedDashQuestions.Where(x => x.id == selectedValue).FirstOrDefault();
+
+            if(CurrentQuestion == null)
+            {
+                return;
+            }
 
             if (CurrentQuestion.type != "weight,year")
             {
@@ -1277,6 +1360,12 @@ public partial class DashStudyQuestions : ContentPage
                 return;
             }
 
+            if (string.IsNullOrEmpty(selectedValue))
+            {
+                IsEdit = false;
+                return;
+            }
+
             var CurrentQuestion = SelectedDashQuestions.Where(x => x.id == selectedValue).FirstOrDefault();
 
             if (CurrentQuestion.type != "dropdown")
@@ -1306,7 +1395,11 @@ public partial class DashStudyQuestions : ContentPage
 
                 if (NextQuestion != null && selectedText != "Yes")
                 {
-                    MainThread.BeginInvokeOnMainThread(() => SelectedDashQuestions.Remove(NextQuestion));
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        SelectedDashQuestions.Remove(NextQuestion);
+                        RetrieveDashQuestions.Add(NextQuestion);
+                    });
                 }
             }
             else
@@ -1321,8 +1414,11 @@ public partial class DashStudyQuestions : ContentPage
                         NextQuestion.DropDownwOther = true;
                     }
 
-                    SelectedDashQuestions.Add(NextQuestion);
-                    MainThread.BeginInvokeOnMainThread(() => SelectedDashQuestions.Add(NextQuestion));
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        SelectedDashQuestions.Add(NextQuestion);
+                        RetrieveDashQuestions.Remove(NextQuestion);
+                    });
                 }
             }
 
@@ -1340,34 +1436,6 @@ public partial class DashStudyQuestions : ContentPage
                 submitbtn.IsVisible = false;
             }
 
-            //check orinigal item not updating 
-
-            var SelecteOriginal = QuestionsPassed.Where(x=> x.id == CurrentQuestion.id).FirstOrDefault();
-
-            //// bool Exisits = SelectedDashQuestions.Where(x => x.quesorder == NextOrder).FirstOrDefault();
-            ////Check not null, then procced 
-            //if (!string.IsNullOrEmpty(CurrentQuestion.trigger))
-            //{
-            //    if (NextQuestion != null)
-            //    {
-            //        //Add item back in if Removed 
-            //        if (selectedText == "Yes")
-            //        {
-
-            //        }
-            //        else
-            //        {
-            //            //Remove items from list 
-            //            //Trigger && Inputgroup 
-            //            //Ignore if null
-            //        }
-
-            //        string[] parts = NextQuestionDI.Split('|');
-            //        var CheckTrigger = parts[1];
-            //    }
-            //}
-            //Get Selected item 
-
             IsEdit = false;
         }
         catch (Exception Ex)
@@ -1375,6 +1443,7 @@ public partial class DashStudyQuestions : ContentPage
             IsEdit = false;
             NotasyncMethod(Ex);
         }
+    
     }
 
     private void dropdownWother_CheckedChanged(object sender, CheckedChangedEventArgs e)
@@ -1394,6 +1463,11 @@ public partial class DashStudyQuestions : ContentPage
             }
 
             var CurrentQuestion = SelectedDashQuestions.Where(x => x.id == selectedValue).FirstOrDefault();
+
+            if(CurrentQuestion == null)
+            {
+                return;
+            }
 
             if (CurrentQuestion.type != "dropdownwother")
             {

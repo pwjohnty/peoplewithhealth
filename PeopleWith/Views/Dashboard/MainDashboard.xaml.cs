@@ -559,7 +559,7 @@ public partial class MainDashboard : ContentPage
 
             if (DeviceInfo.Current.Platform == DevicePlatform.iOS)
             {
-                getfitnesshealthdata();
+               // getfitnesshealthdata();
             }
 
             // Stop the stopwatch after retrieval
@@ -1755,11 +1755,11 @@ public partial class MainDashboard : ContentPage
             //}
 
 
-            if (string.IsNullOrEmpty(Helpers.Settings.FitnessData))
-            {
-                healthdatagrid.IsVisible = true;
-                return;
-            }
+        //    if (string.IsNullOrEmpty(Helpers.Settings.FitnessData))
+          //  {
+            //    healthdatagrid.IsVisible = true;
+              //  return;
+           // }
 
             //check if they have any fitness health data added
 

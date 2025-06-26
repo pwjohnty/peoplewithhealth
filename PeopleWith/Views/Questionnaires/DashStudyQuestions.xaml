@@ -8,25 +8,27 @@
              xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
              xmlns:data="clr-namespace:Syncfusion.Maui.DataSource;assembly=Syncfusion.Maui.DataSource" >
     <!--<ScrollView Orientation="Vertical" IsClippedToBounds="True" InputTransparent="False" x:Name="MainScroll">-->
-        <StackLayout x:Name="MainStack" VerticalOptions="Fill" HorizontalOptions="Fill">
-            
+    <ScrollView VerticalScrollBarVisibility="Never">
+        <StackLayout x:Name="MainStack" VerticalOptions="FillAndExpand" HorizontalOptions="Fill">
+
             <StackLayout x:Name="loadingstack" VerticalOptions="CenterAndExpand" IsVisible="False">
                 <ActivityIndicator IsRunning="True"/>
                 <Label Text="Uploading Responses..." IsVisible="False" x:Name="loadinglbl" HorizontalOptions="Center" Margin="0,0,0,0" TextColor="Black" FontSize="12" FontAttributes="Bold"></Label>
             </StackLayout>
- 
 
-            <StackLayout IsVisible="True" x:Name="DataStack">
-                <CollectionView x:Name="DashQuestionsCollection"  VerticalScrollBarVisibility="Never" ItemsUpdatingScrollMode="KeepScrollOffset"
-                 SelectionMode="None" Margin="0,0,1,100" HeightRequest="{OnPlatform iOS='650', Android='700'}" ItemSizingStrategy="MeasureAllItems"
-                 RemainingItemsThreshold="5" SizeChanged="DashQuestionsCollection_SizeChanged" >
-                    <CollectionView.ItemsLayout>
+
+            <StackLayout IsVisible="False" BackgroundColor="Transparent"  VerticalOptions="FillAndExpand"  x:Name="DataStack">
+
+                <CollectionView x:Name="DashQuestionsCollection" HorizontalOptions="FillAndExpand"  VerticalScrollBarVisibility="Never" VerticalOptions="FillAndExpand"
+                 SelectionMode="None" Margin="0,0,1,20" HeightRequest="{OnPlatform iOS=-1, Default=-1}" ItemSizingStrategy="MeasureAllItems"
+                 SizeChanged="DashQuestionsCollection_SizeChanged" >
+                    <!--<CollectionView.ItemsLayout>
                         <LinearItemsLayout Orientation="Vertical" ItemSpacing="4"/>
-                    </CollectionView.ItemsLayout>
+                    </CollectionView.ItemsLayout>-->
 
                     <!-- Footer -->
                     <CollectionView.Footer>
-                        <StackLayout Orientation="Vertical" HeightRequest="{OnPlatform iOS='65'}" Margin="0,10,0,50">
+                        <StackLayout Orientation="Vertical" BackgroundColor="Transparent" HeightRequest="{OnPlatform iOS='125'}" Margin="0,10,0,50">
                             <Grid Margin="10,0,10,0" Grid.ColumnDefinitions="*,*"  x:Name="NavigationStack">
                                 <Button Text="Back" Clicked="backbtn_Clicked" x:Name="backbtn" IsVisible="False" WidthRequest="60" Margin="0,0,0,0" Grid.Column="0" HorizontalOptions="Start" BackgroundColor="#009fe3" TextColor="White" />
                                 <Button Text="Next" Clicked="Nextbtn_Clicked" x:Name="Nextbtn"  WidthRequest="60" Margin="0,0,0,0" Grid.Column="1" HorizontalOptions="End" BackgroundColor="#009fe3" TextColor="White" />
@@ -35,73 +37,73 @@
                         </StackLayout>
                     </CollectionView.Footer>
 
-                <CollectionView.Header>
-                    <Border Stroke="Transparent"  BackgroundColor="Transparent" StrokeThickness="1" Margin="10,10,10,0" Padding="0" StrokeShape="RoundRectangle 10" VerticalOptions="Fill" HorizontalOptions="Fill">
-                        <Grid Grid.RowDefinitions="Auto,Auto" Grid.ColumnDefinitions="*">
-                            <Label x:Name="titlelbl" IsVisible="true" FontFamily="HankenGroteskBold" Grid.Row="0" FontSize="26" Margin="20,20,0,0" TextColor="#031926" />
-                            <Label Text="All data inputs are optional" IsVisible="False" x:Name="sublabel" Grid.Row="1" FontFamily="HankenGroteskRegular"  FontSize="12" Margin="20,0,10,10" TextColor="#031926" />
-                        </Grid>
-                    </Border>
-                </CollectionView.Header>
+                    <CollectionView.Header>
+                        <Border Stroke="Transparent"  BackgroundColor="Transparent" StrokeThickness="1" Margin="10,10,10,0" Padding="0" StrokeShape="RoundRectangle 10" VerticalOptions="Fill" HorizontalOptions="Fill">
+                            <Grid Grid.RowDefinitions="Auto,Auto" Grid.ColumnDefinitions="*">
+                                <Label x:Name="titlelbl" IsVisible="true" FontFamily="HankenGroteskBold" Grid.Row="0" FontSize="26" Margin="20,20,0,0" TextColor="#031926" />
+                                <Label Text="All data inputs are optional" IsVisible="False" x:Name="sublabel" Grid.Row="1" FontFamily="HankenGroteskRegular"  FontSize="12" Margin="20,0,10,10" TextColor="#031926" />
+                            </Grid>
+                        </Border>
+                    </CollectionView.Header>
 
                     <!-- ITemTemplate -->
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <StackLayout Margin="10,0,10,0">
+                            <StackLayout Margin="10,0,10,0" BackgroundColor="Transparent" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
 
-                                <!-- Header-->                
+                                <!-- Header-->
                                 <!-- Overall Border -->
-                                <Border Stroke="{Binding Bordercolor}" BackgroundColor="White" StrokeThickness="2" Margin="0,0,0,10" VerticalOptions="FillAndExpand" StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
-                        
+                                <Border Stroke="{Binding Bordercolor}" BackgroundColor="Transparent" StrokeThickness="2" Margin="0,0,0,10" VerticalOptions="FillAndExpand" StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
+
                                     <StackLayout Margin="0,0,0,10" VerticalOptions="FillAndExpand" BackgroundColor="White">
 
-                                    <Border Stroke="Transparent" HeightRequest="{OnPlatform iOS='140'}" BackgroundColor="Transparent" StrokeThickness="1" Margin="0" StrokeShape="RoundRectangle 10" VerticalOptions="Fill" HorizontalOptions="Fill">
-                                        <Grid Grid.RowDefinitions="Auto,Auto" Grid.ColumnDefinitions="*"  HorizontalOptions="Fill" VerticalOptions="Fill" BackgroundColor="Transparent" Margin="0,0,0,0" Padding="0,0,0,10">
-                                            <Label Text="{Binding label}" Grid.Row="0" Grid.Column="0" FontFamily="HankenGroteskBold" HorizontalOptions="Start" HorizontalTextAlignment="Start" FontSize="18" Margin="10,10,10,0" TextColor="#031926" LineBreakMode="WordWrap" />
-                                            <Label Text="{Binding labelDirections}" Grid.Row="1" Grid.Column="0" FontFamily="HankenGroteskRegular" HorizontalOptions="Start" HorizontalTextAlignment="Start" FontSize="14" Margin="10,0,10,0" TextColor="Gray" LineBreakMode="WordWrap" />
-                                            <!--<Label Text="{Binding questionnum}" FontFamily="HankenGroteskBold"  FontSize="10" Margin="10,0,0,0" TextColor="#009fe3" />
+
+                                        <Label Text="{Binding label}"  FontFamily="HankenGroteskBold" HorizontalOptions="Start" HorizontalTextAlignment="Start" FontSize="18" Margin="10,10,10,0" TextColor="#031926" LineBreakMode="WordWrap" />
+                                        <Label Text="{Binding labelDirections}"  FontFamily="HankenGroteskRegular" HorizontalOptions="Start" HorizontalTextAlignment="Start" FontSize="14" Margin="10,0,10,0" TextColor="Gray" LineBreakMode="WordWrap" />
+                                        <!--<Label Text="{Binding questionnum}" FontFamily="HankenGroteskBold"  FontSize="10" Margin="10,0,0,0" TextColor="#009fe3" />
                                             <Label Text="{Binding questiontitle}" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,0,0,0" TextColor="#031926" />-->
-                                        </Grid>
-                                    </Border>
 
 
-                                    <!-- dropdown (Single Selection) -->
+
+                                        <!-- dropdown (Single Selection) -->
                                         <StackLayout IsVisible="{Binding Dropdown}" >
-                                        <FlexLayout Wrap="Wrap" AlignItems="Start"   AlignContent="Start" Margin="10,0,10,0">
-                                            <CollectionView ItemsSource="{Binding ValueInputs}" ItemsUpdatingScrollMode="KeepScrollOffset">
-                                                <CollectionView.ItemsLayout>
-                                                    <LinearItemsLayout SnapPointsType="None" ItemSpacing="10" Orientation="Horizontal" />
-                                                </CollectionView.ItemsLayout>
-                                                <CollectionView.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Border Stroke="Transparent"  StrokeThickness="1" Margin="0,5,0,5" StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
-                                                            <local:ExtendedRadioButton 
-                              
+                                            <FlexLayout Wrap="Wrap" AlignItems="Start" HorizontalOptions="FillAndExpand"  AlignContent="Start" Margin="10,10,10,10">
+
+                                                <CollectionView ItemsSource="{Binding ValueInputs}" BackgroundColor="Transparent">
+                                                    <CollectionView.ItemsLayout>
+                                                        <LinearItemsLayout Orientation="Vertical" />
+                                                    </CollectionView.ItemsLayout>
+                                                    <CollectionView.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Border Stroke="#f1f1f1"  StrokeThickness="1" Margin="0,0,0,0" StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
+                                                                <local:ExtendedRadioButton 
+                            
                                                         FontSize="12"  questionid="{Binding questionid}" IsChecked="{Binding ItemSelected}"
                                                         BackgroundColor="Transparent" CheckedChanged="SingleSelection_CheckedChanged"
                                                         TextColor="#031926" FontFamily="HankenGroteskRegular"
-                                                        Margin="0,5,5,5" 
+                                                        Margin="0,05,5,5" 
                                                         Content="{Binding Text}"  />
 
-                                                        </Border>
-                                                  </DataTemplate>
-                                             </CollectionView.ItemTemplate>
-                                           </CollectionView>
-                                        </FlexLayout>
-                                    </StackLayout>
-                                        
-                                        
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </CollectionView.ItemTemplate>
+                                                </CollectionView>
+
+                                            </FlexLayout>
+                                        </StackLayout>
+
+
                                         <!-- New New dropdownwother -->
-                                    <StackLayout IsVisible="{Binding DropDownwOther}" >
-                                        <FlexLayout Wrap="Wrap" AlignItems="Start"   AlignContent="Start" Margin="10,0,10,0">
-                                            <CollectionView  ItemsSource="{Binding ValueInputs}" ItemsUpdatingScrollMode="KeepScrollOffset">
-                                                <CollectionView.ItemsLayout>
-                                                    <LinearItemsLayout SnapPointsType="None" Orientation="Vertical" />
-                                                </CollectionView.ItemsLayout>
-                                                <CollectionView.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Border Stroke="#f1f1f1"  StrokeThickness="1" Margin="0,5,0,5" StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
-                                                            <local:ExtendedRadioButton 
+                                        <StackLayout IsVisible="{Binding DropDownwOther}" >
+                                            <FlexLayout Wrap="Wrap" AlignItems="Start"   AlignContent="Start" Margin="10,0,10,0">
+                                                <CollectionView  ItemsSource="{Binding ValueInputs}" ItemsUpdatingScrollMode="KeepScrollOffset">
+                                                    <CollectionView.ItemsLayout>
+                                                        <LinearItemsLayout SnapPointsType="None" Orientation="Vertical" />
+                                                    </CollectionView.ItemsLayout>
+                                                    <CollectionView.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Border Stroke="#f1f1f1"  StrokeThickness="1" Margin="0,5,0,5" StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
+                                                                <local:ExtendedRadioButton 
                               
                                                                 FontSize="12"  questionid="{Binding questionid}" IsChecked="{Binding ItemSelected}"
                                                                 BackgroundColor="Transparent" CheckedChanged="dropdownWother_CheckedChanged"
@@ -109,25 +111,25 @@
                                                                 Margin="0,5,5,5" 
                                                                 Content="{Binding Text}"  />
 
-                                                        </Border>
-                                                    </DataTemplate>
-                                                </CollectionView.ItemTemplate>
-                                            </CollectionView>
-                                        </FlexLayout>
-                                    </StackLayout>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </CollectionView.ItemTemplate>
+                                                </CollectionView>
+                                            </FlexLayout>
+                                        </StackLayout>
 
 
-                                    <!-- multiple (Multiple Selection Checkboxes) -->
+                                        <!-- multiple (Multiple Selection Checkboxes) -->
                                         <StackLayout IsVisible="{Binding Multiple}">
-                                        <FlexLayout Wrap="Wrap" AlignItems="Start"  AlignContent="Start" Margin="10,0,10,0">
-                                            <CollectionView ItemsSource="{Binding ValueInputs}" ItemsUpdatingScrollMode="KeepScrollOffset">
-                                                <CollectionView.ItemsLayout>
-                                                    <LinearItemsLayout SnapPointsType="None" Orientation="Vertical" />
-                                                </CollectionView.ItemsLayout>
-                                                <CollectionView.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Border Stroke="#f1f1f1" StrokeThickness="1" Margin="0,5,0,5" StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
-                                                            <local:ExtendedCheckbox 
+                                            <FlexLayout Wrap="Wrap" AlignItems="Start"  AlignContent="Start" Margin="10,10,10,10">
+                                                <CollectionView ItemsSource="{Binding ValueInputs}" ItemsUpdatingScrollMode="KeepScrollOffset">
+                                                    <CollectionView.ItemsLayout>
+                                                        <LinearItemsLayout SnapPointsType="None" Orientation="Vertical" />
+                                                    </CollectionView.ItemsLayout>
+                                                    <CollectionView.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Border Stroke="#f1f1f1" StrokeThickness="1" Margin="0,5,0,5" StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
+                                                                <local:ExtendedCheckbox 
                                                                  questionid="{Binding questionid}"    
                                                                  CornerRadius="5" IsChecked="{Binding ItemSelected}"            
                                                                  FontSize="12" 
@@ -138,64 +140,65 @@
                                                                  Margin="0,5,5,5" 
                                                                  Text="{Binding Text}" >
 
-                                                            </local:ExtendedCheckbox>
-                                                        </Border>
-                                                    </DataTemplate>
-                                                </CollectionView.ItemTemplate>
-                                            </CollectionView>
-                                        </FlexLayout>
-                                    </StackLayout>
+                                                                </local:ExtendedCheckbox>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </CollectionView.ItemTemplate>
+                                                </CollectionView>
+                                            </FlexLayout>
+                                        </StackLayout>
 
-                                       
+
                                         <!-- weight (Weight Inputs) -->
                                         <StackLayout IsVisible="{Binding Weight}">
-                                        <FlexLayout Wrap="Wrap" AlignItems="Start"  AlignContent="Start" Margin="10,0,10,0">
-                                            <CollectionView ItemsSource="{Binding ValueInputs}" ItemsUpdatingScrollMode="KeepScrollOffset">
-                                                <CollectionView.ItemsLayout>
-                                                    <LinearItemsLayout SnapPointsType="None" ItemSpacing="10" Orientation="Horizontal" />
-                                                </CollectionView.ItemsLayout>
-                                                <CollectionView.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Border Stroke="Transparent" StrokeThickness="1" Margin="0,5,0,5" StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
-                                                            <local:ExtendedRadioButton         
+                                            <FlexLayout Wrap="Wrap" AlignItems="Start"  AlignContent="Start" Margin="10,10,10,10">
+                                                <CollectionView ItemsSource="{Binding ValueInputs}">
+                                                    <CollectionView.ItemsLayout>
+                                                        <LinearItemsLayout Orientation="Vertical" />
+                                                    </CollectionView.ItemsLayout>
+                                                    <CollectionView.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Border Stroke="#f1f1f1" StrokeThickness="1" Margin="0,0,0,0" StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
+                                                                <local:ExtendedRadioButton         
                                                                 FontSize="12" questionid="{Binding questionid}"  IsChecked="{Binding ItemSelected}"
                                                                 BackgroundColor="Transparent" CheckedChanged="WeightSelection_CheckedChanged"
                                                                 TextColor="#031926" FontFamily="HankenGroteskRegular"
                                                                 Margin="0,5,5,5" 
                                                                 Content="{Binding Text}" />
 
-                                                        </Border>
-                                                    </DataTemplate>
-                                                </CollectionView.ItemTemplate>
-                                            </CollectionView>
-                                        </FlexLayout>
-                                    </StackLayout>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </CollectionView.ItemTemplate>
+                                                </CollectionView>
+                                            </FlexLayout>
+                                        </StackLayout>
 
-                                        
-                                     <!-- Enter Weight -->
-                                    <StackLayout IsVisible="{Binding WeightEntry}">
-                                        <Border Stroke="#f1f1f1" StrokeThickness="1" Margin="10,5,10,5" StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
-                                            <Grid  Grid.RowDefinitions="Auto" Margin="10,0,10,0" Grid.ColumnDefinitions="50*,50*">
 
-                                                <local:ExtendedEntry x:Name="EntryWeight" Text="{Binding WeightEntryText}" TextColor="#031926" TextChanged="EntryWeight_TextChanged" questionid="{Binding id}" IDValue="{Binding UpdateLabel}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" Grid.Row="0" Grid.Column="0"/>
-                                                <Label Text="{Binding UpdateLabel}" FontFamily="HankenGroteskBold" VerticalOptions="Center" Grid.Row="0" Grid.Column="1"  FontSize="10"  Margin="10,0,0,0" TextColor="#031926" />
+                                        <!-- Enter Weight -->
+                                        <StackLayout IsVisible="{Binding WeightEntry}">
+                                            <Label Text="Enter Weight"  FontFamily="HankenGroteskRegular" HorizontalOptions="Start" HorizontalTextAlignment="Start" FontSize="14" Margin="10,10,10,0" TextColor="Gray" LineBreakMode="WordWrap" />
+                                            <Border Stroke="#f1f1f1" StrokeThickness="1" Margin="10,5,10,5" StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
+                                                <Grid  Grid.RowDefinitions="Auto" Margin="10,0,10,0" Grid.ColumnDefinitions="50*,50*">
 
-                                            </Grid>
-                                        </Border>
-                                    </StackLayout>
+                                                    <local:ExtendedEntry x:Name="EntryWeight" Margin="0,5,0,5" Text="{Binding WeightEntryText}" TextColor="#031926" TextChanged="EntryWeight_TextChanged" questionid="{Binding id}" IDValue="{Binding UpdateLabel}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="28" Grid.Row="0" Grid.Column="0"/>
+                                                    <Label Text="{Binding UpdateLabel}" FontFamily="HankenGroteskBold" VerticalOptions="Center" Grid.Row="0" Grid.Column="1"  FontSize="14"  Margin="10,0,0,0" TextColor="#031926" />
 
-                                       <!-- weight,year  (Dual input) -->
-                                    <StackLayout IsVisible="{Binding WeightYear}">
-                                        <FlexLayout Wrap="Wrap" AlignItems="Start"  AlignContent="Start" Margin="10,0,10,0">
-                                            <CollectionView ItemsSource="{Binding ValueInputs}" ItemsUpdatingScrollMode="KeepScrollOffset">
-                                                <CollectionView.ItemsLayout>
-                                                    <LinearItemsLayout SnapPointsType="None" ItemSpacing="10" Orientation="Horizontal" />
-                                                </CollectionView.ItemsLayout>
-                                                <CollectionView.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Border Stroke="Transparent" StrokeThickness="1" Margin="0,5,0,5" StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
+                                                </Grid>
+                                            </Border>
+                                        </StackLayout>
 
-                                                            <local:ExtendedRadioButton 
+                                        <!-- weight,year  (Dual input) -->
+                                        <StackLayout IsVisible="{Binding WeightYear}">
+                                            <FlexLayout Wrap="Wrap" AlignItems="Start"  AlignContent="Start" Margin="10,10,10,10">
+                                                <CollectionView ItemsSource="{Binding ValueInputs}" ItemsUpdatingScrollMode="KeepScrollOffset">
+                                                    <CollectionView.ItemsLayout>
+                                                        <LinearItemsLayout  Orientation="Vertical" />
+                                                    </CollectionView.ItemsLayout>
+                                                    <CollectionView.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Border Stroke="#f1f1f1" StrokeThickness="1" Margin="0,0,0,0" StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
+
+                                                                <local:ExtendedRadioButton 
                                                                  questionid="{Binding questionid}"   
                                                                  CornerRadius="5"             
                                                                  FontSize="12"  IsChecked="{Binding ItemSelected}"
@@ -205,44 +208,46 @@
                                                                  Margin="0,5,5,5" 
                                                                  Content="{Binding Text}" />
 
-                                                        </Border>
-                                                    </DataTemplate>
-                                                </CollectionView.ItemTemplate>
-                                            </CollectionView>
-                                        </FlexLayout>
-                                    </StackLayout>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </CollectionView.ItemTemplate>
+                                                </CollectionView>
+                                            </FlexLayout>
+                                        </StackLayout>
 
-                                    <!-- Enter Weight And year -->
-                                    <StackLayout IsVisible="{Binding WeightYearEntry}">
-                                        <Border Stroke="#f1f1f1" StrokeThickness="1" Margin="0,5,0,5" StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
-                                            <Grid  Grid.RowDefinitions="Auto" Margin="10,0,10,0" Grid.ColumnDefinitions="40*,20*,30*,20*">
-                                                <!-- Update Inputvalue-->
-                                                <local:ExtendedEntry  TextColor="#031926"  TextChanged="ExtendedEntryWeight_TextChanged" questionid="{Binding id}" Text="{Binding WeightYearOne}" IDValue="{Binding UpdateLabel}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" Grid.Row="0" Grid.Column="0"/>
-                                                <!--<local:ExtendedMaskedEntry TextValue="{Binding WeightYearOne, Mode=TwoWay}" Grid.Column="0" MaskType="Simple"  Mask="000lb 00oz" questionid="{Binding id}" IDValue="{Binding UpdateLabel}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" />-->
-                                                <Label Text="{Binding UpdateLabel}" FontFamily="HankenGroteskBold" VerticalOptions="Center" Grid.Row="0" Grid.Column="1"  FontSize="10"  Margin="10,0,0,0" TextColor="#031926" />
+                                        <!-- Enter Weight And year -->
+                                        <StackLayout IsVisible="{Binding WeightYearEntry}">
+                                            <Label Text="Enter Weight and Year"  FontFamily="HankenGroteskRegular" HorizontalOptions="Start" HorizontalTextAlignment="Start" FontSize="14" Margin="10,10,10,0" TextColor="Gray" LineBreakMode="WordWrap" />
+                                            <Border Stroke="#f1f1f1" StrokeThickness="1" Margin="0,5,0,5" StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
+                                                <Grid  Grid.RowDefinitions="Auto" Margin="10,0,10,0" Grid.ColumnDefinitions="25*,35*,25*,15*">
+                                                    <!-- Update Inputvalue-->
+                                                    <local:ExtendedEntry  TextColor="#031926" Margin="0,5,0,5"  TextChanged="ExtendedEntryWeight_TextChanged" questionid="{Binding id}" Text="{Binding WeightYearOne}" IDValue="{Binding UpdateLabel}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="28" Grid.Row="0" Grid.Column="0"/>
+                                                    <!--<local:ExtendedMaskedEntry TextValue="{Binding WeightYearOne, Mode=TwoWay}" Grid.Column="0" MaskType="Simple"  Mask="000lb 00oz" questionid="{Binding id}" IDValue="{Binding UpdateLabel}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" />-->
+                                                    <Label Text="{Binding UpdateLabel}" FontFamily="HankenGroteskBold" VerticalOptions="Center" Grid.Row="0" Grid.Column="1"  FontSize="12"  Margin="10,0,0,0" TextColor="#031926" />
 
-                                                <!-- Update DateTime-->
-                                                <local:ExtendedEntry questionid="{Binding id}"  Text="{Binding WeightYearTwo}"  TextColor="#031926" Placeholder="yyyy" TextChanged="ExtendedEntryYear_TextChanged" MaxLength="4" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" Grid.Row="0" Grid.Column="2"/>
-                                                <Label Text="Year" FontFamily="HankenGroteskBold" VerticalOptions="Center" Grid.Row="0" Grid.Column="3"  FontSize="10"  Margin="10,0,0,0" TextColor="#031926" />
+                                                    <!-- Update DateTime-->
+                                                    <local:ExtendedEntry questionid="{Binding id}" Margin="0,5,0,5"  Text="{Binding WeightYearTwo}"  TextColor="#031926" Placeholder="yyyy" TextChanged="ExtendedEntryYear_TextChanged" MaxLength="4" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="28" Grid.Row="0" Grid.Column="2"/>
+                                                    <Label Text="Year" FontFamily="HankenGroteskBold" VerticalOptions="Center" Grid.Row="0" Grid.Column="3"  FontSize="12"  Margin="10,0,0,0" TextColor="#031926" />
 
-                                            </Grid>
-                                        </Border>
-                                    </StackLayout>
+                                                </Grid>
+                                            </Border>
+                                        </StackLayout>
 
 
-                                    <!-- multiple,date  (Multiple Selection Checkboxes - once an option is selected, then the option to input "Month and Year" for each selected item is shown) -->
-                                    <StackLayout IsVisible="{Binding MultipleDate}">
-                                        <FlexLayout Wrap="Wrap" AlignItems="Start"  AlignContent="Start" Margin="10,0,10,0">
-                                            <CollectionView ItemsSource="{Binding ValueInputs}" ItemsUpdatingScrollMode="KeepScrollOffset">
-                                                <CollectionView.ItemsLayout>
-                                                    <LinearItemsLayout SnapPointsType="None" Orientation="Vertical" />
-                                                </CollectionView.ItemsLayout>
-                                                <CollectionView.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Grid RowDefinitions="Auto,Auto" Grid.ColumnDefinitions="*" ColumnSpacing="10" Padding="0">
+                                        <!-- multiple,date  (Multiple Selection Checkboxes - once an option is selected, then the option to input "Month and Year" for each selected item is shown) -->
+                                        <StackLayout IsVisible="{Binding MultipleDate}" BackgroundColor="Transparent">
+                                            <FlexLayout Wrap="Wrap" AlignItems="Start" Direction="Row" AlignContent="Start" Margin="10,0,10,0">
 
-                                                            <Border Stroke="#f1f1f1"  Grid.Row="0" Grid.Column="0" StrokeThickness="1" Margin="0,5,0,5" StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
-                                                                <local:ExtendedCheckbox 
+                                                <CollectionView ItemsSource="{Binding ValueInputs}" BackgroundColor="Transparent">
+                                                    <CollectionView.ItemsLayout>
+                                                        <LinearItemsLayout Orientation="Vertical" />
+                                                    </CollectionView.ItemsLayout>
+                                                    <CollectionView.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Grid RowDefinitions="Auto,Auto" Grid.ColumnDefinitions="*" BackgroundColor="Transparent" ColumnSpacing="10" Padding="0">
+
+                                                                <Border Stroke="#f1f1f1"  Grid.Row="0" Grid.Column="0" StrokeThickness="1" Margin="0,5,0,5" StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
+                                                                    <local:ExtendedCheckbox 
                              questionid="{Binding questionid}"    
                              CornerRadius="5" IsChecked="{Binding ItemSelected}"            
                              FontSize="12" 
@@ -252,17 +257,17 @@
                              FontFamily="HankenGroteskRegular"
                              Margin="0,5,5,5" 
                              Text="{Binding Text}" />
-                                                            </Border>
-                                                            <!-- MaskedEntry shown only when selected -->
+                                                                </Border>
+                                                                <!-- MaskedEntry shown only when selected -->
 
-                                                            <Grid RowDefinitions="Auto" IsVisible="{Binding ItemSelected}" Grid.Row="1" Margin="10,0,10,0" Grid.ColumnDefinitions="25*,75*" ColumnSpacing="10" Padding="0">
-                                                                
+                                                                <Grid RowDefinitions="Auto" IsVisible="{Binding ItemSelected}" Grid.Row="1" Margin="10,0,10,0" Grid.ColumnDefinitions="25*,75*" ColumnSpacing="10" Padding="0">
 
-                                                            <Label Text="Enter Date" TextColor="LightGray" VerticalOptions="Center" Grid.Column="0" FontFamily="HankenGroteskRegular" FontSize="14" />
-                                                            <Border  Stroke="#f1f1f1"  StrokeThickness="1" Margin="0"  Grid.Column="1"  StrokeShape="RoundRectangle 10"  HorizontalOptions="Start" VerticalOptions="Center" >
-                                                                <!-- Visibility based on selection -->
 
-                                                                <local:ExtendedMaskedEntry 
+                                                                    <Label Text="Enter Date" TextColor="LightGray" VerticalOptions="Center" Grid.Column="0" FontFamily="HankenGroteskRegular" FontSize="14" />
+                                                                    <Border  Stroke="#f1f1f1"  StrokeThickness="1" Margin="0"  Grid.Column="1"  StrokeShape="RoundRectangle 10"  HorizontalOptions="Start" VerticalOptions="Center" >
+
+
+                                                                        <local:ExtendedMaskedEntry 
                     TextValue="{Binding DateValue, Mode=TwoWay}"
                     ValueChanged="multipledate_ValueChanged" Grid.Column="1" 
                     TextColor="{Binding SetDateColour}"
@@ -275,49 +280,53 @@
                     FontSize="18"  Margin="0,5,5,5" WidthRequest="180"
                      />
 
-                                                       
-                                                            </Border>
+
+                                                                    </Border>
+                                                                </Grid>
                                                             </Grid>
-                                                        </Grid>
-                                                    </DataTemplate>
-                                                </CollectionView.ItemTemplate>
-                                            </CollectionView>
-                                        </FlexLayout>
-                                    </StackLayout>
+                                                        </DataTemplate>
+                                                    </CollectionView.ItemTemplate>
+                                                </CollectionView>
+
+                                            </FlexLayout>
+                                        </StackLayout>
 
 
-                                    <!-- date,date  ("Month and Year" for Start and End Data) #f1f1f1 -->
+                                        <!-- date,date  ("Month and Year" for Start and End Data) #f1f1f1 -->
                                         <Border Stroke="Transparent" StrokeThickness="1" Margin="10,5,10,5" IsVisible="{Binding DateDate}" StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
                                             <Grid  Grid.RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="5" Grid.ColumnDefinitions="50*,50*">
 
-                                             <!--Start Date -->
-                                            <Label Text="Start Date" VerticalOptions="Center" Grid.Row="0" Grid.Column="0" FontSize="14" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" TextColor="Gray" />
-                                            <Border Stroke="#f1f1f1" StrokeThickness="1" Margin="0"  Grid.Row="1" Grid.Column="0" StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
-                                                <local:ExtendedMaskedEntry TextValue="{Binding DateDateStart, Mode=TwoWay}"  MaskType="Simple" Mask="00/00/0000" Placeholder="dd/mm/yyyy"  ValueChanged="datedatestart_ValueChanged" Grid.Row="1" Grid.Column="1"  TextColor="{Binding DateStartColour}" PlaceholderColor="lightgray"  questionid="{Binding id}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" />
-                                            </Border>
-                                            <!-- End Date -->
-                                            <Label Text="End Date" VerticalOptions="Center" Grid.Row="0" Grid.Column="1"  FontSize="14" HorizontalTextAlignment="Center"   TextColor="Gray" />
-                                            <Border Stroke="#f1f1f1" StrokeThickness="1" Margin="0"  Grid.Row="1" Grid.Column="1"  StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
-                                                <local:ExtendedMaskedEntry TextValue="{Binding DateDateEnd, Mode=TwoWay}" Grid.Row="1" Grid.Column="1" MaskType="Simple" Placeholder="dd/mm/yyyy"  Mask="00/00/0000" ValueChanged="datedateend_ValueChanged"  TextColor="{Binding DateEndColour}" PlaceholderColor="lightgray"  questionid="{Binding id}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" />
-                                            </Border>
-                                        </Grid>
+                                                <!--Start Date -->
+                                                <Label Text="Start Date" VerticalOptions="Center" Grid.Row="0" Grid.Column="0" FontSize="14" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" TextColor="Gray" />
+                                                <Border Stroke="#f1f1f1" StrokeThickness="1" Margin="0"  Grid.Row="1" Grid.Column="0" StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
+                                                    <local:ExtendedMaskedEntry TextValue="{Binding DateDateStart, Mode=TwoWay}"  MaskType="Simple" Mask="00/00/0000" Placeholder="dd/mm/yyyy"  ValueChanged="datedatestart_ValueChanged" Grid.Row="1" Grid.Column="1"  TextColor="{Binding DateStartColour}" PlaceholderColor="lightgray"  questionid="{Binding id}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" />
+                                                </Border>
+                                                <!-- End Date -->
+                                                <Label Text="End Date" VerticalOptions="Center" Grid.Row="0" Grid.Column="1"  FontSize="14" HorizontalTextAlignment="Center"   TextColor="Gray" />
+                                                <Border Stroke="#f1f1f1" StrokeThickness="1" Margin="0"  Grid.Row="1" Grid.Column="1"  StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
+                                                    <local:ExtendedMaskedEntry TextValue="{Binding DateDateEnd, Mode=TwoWay}" Grid.Row="1" Grid.Column="1" MaskType="Simple" Placeholder="dd/mm/yyyy"  Mask="00/00/0000" ValueChanged="datedateend_ValueChanged"  TextColor="{Binding DateEndColour}" PlaceholderColor="lightgray"  questionid="{Binding id}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" />
+                                                </Border>
+                                            </Grid>
                                         </Border>
 
                                         <!-- date (Month and Year) -->
-                                    <Border Stroke="#f1f1f1" StrokeThickness="1" Margin="10,5,10,5" IsVisible="{Binding Date}" StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
-                                        <local:ExtendedMaskedEntry TextValue="{Binding DateEntry, Mode=TwoWay}" MaskType="Simple" Mask="00/00/0000" ValueChanged="date_TextChanged"  TextColor="{Binding DateColour}" Placeholder="dd/mm/yyyy"  PlaceholderColor="lightgray"  questionid="{Binding id}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" />
-                                        <!--<local:ExtendedEntry Text="{Binding DateEntry}"  TextColor="{Binding DateColour}" Placeholder="DD/MM/YYYY" PlaceholderColor="lightgray" MaxLength="10" TextChanged="date_TextChanged" questionid="{Binding id}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" />-->
-                                    </Border>
+                                        <Border Stroke="#f1f1f1" StrokeThickness="1" Margin="10,5,10,5" IsVisible="{Binding Date}" StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
+                                            <local:ExtendedMaskedEntry TextValue="{Binding DateEntry, Mode=TwoWay}" MaskType="Simple" Mask="00/00/0000" ValueChanged="date_TextChanged"  TextColor="{Binding DateColour}" Placeholder="dd/mm/yyyy"  PlaceholderColor="lightgray"  questionid="{Binding id}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" />
+                                            <!--<local:ExtendedEntry Text="{Binding DateEntry}"  TextColor="{Binding DateColour}" Placeholder="DD/MM/YYYY" PlaceholderColor="lightgray" MaxLength="10" TextChanged="date_TextChanged" questionid="{Binding id}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" />-->
+                                        </Border>
 
                                         <!-- Other (Specify) Add Text-->
                                         <Border Stroke="#f1f1f1" StrokeThickness="1" Margin="10,5,10,5" IsVisible="{Binding SpecifyText}" StrokeShape="RoundRectangle 10" Opacity="1" HorizontalOptions="FillAndExpand">
-                                        <local:ExtendedEditor x:Name="TextField" Text="{Binding FreeTextEntry}" TextChanged="SpecifyText_TextChanged"  questionid="{Binding id}"  BackgroundColor="Transparent" Margin="10,0,10,0" AutoSize="TextChanges" HeightRequest="100"  TextColor="#031926" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Add text here...." />
+                                            <local:ExtendedEditor x:Name="TextField" Text="{Binding FreeTextEntry}" TextChanged="SpecifyText_TextChanged"  questionid="{Binding id}"  BackgroundColor="Transparent" Margin="10,0,10,0" AutoSize="TextChanges" HeightRequest="100"  TextColor="#031926" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Add text here...." />
                                         </Border>
 
                                         <!-- number  (entry) -->
-                                        <Border Stroke="#f1f1f1" StrokeThickness="1" Margin="10,5,10,5" IsVisible="{Binding Number}" StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
-                                        <local:ExtendedEntry Text="{Binding NumberEntry}" TextColor="{Binding NumberColour}" questionid="{Binding id}" MaxLength="3" TextChanged="number_TextChanged" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" HorizontalOptions="FillAndExpand"/>
+                                        <StackLayout IsVisible="{Binding Number}">
+
+                                            <Border Stroke="#f1f1f1" StrokeThickness="1" Margin="10,5,10,5"  StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
+                                            <local:ExtendedEntry Text="{Binding NumberEntry}" Margin="0,5,0,5" TextColor="{Binding NumberColour}" questionid="{Binding id}" MaxLength="3" TextChanged="number_TextChanged" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="28" HorizontalOptions="FillAndExpand"/>
                                         </Border>
+                                        </StackLayout>
 
                                     </StackLayout>
                                 </Border>
@@ -327,33 +336,33 @@
                 </CollectionView>
 
             </StackLayout>
-        <!--<ScrollView>-->
+            <!--<ScrollView>-->
             <StackLayout x:Name="ViewResponses" IsVisible="False">
-   
+
                 <StackLayout>
                     <Label FontSize="26" x:Name="Responsetitle" Text="Previous Responses"  Margin="20,10,0,0" FontAttributes="None" FontFamily="HankenGroteskBold" TextColor="#031926" HorizontalOptions="Start" />
 
-                <!--<CollectionView  Margin="10,10,10,100" HeightRequest="{OnPlatform iOS='650', Android='700'}" x:Name="previouslist" SelectionMode="None" BackgroundColor="#f5f5f5"  VerticalScrollBarVisibility="Never" VerticalOptions="FillAndExpand"  HorizontalOptions="FillAndExpand" >-->
-                <ListView  x:Name="previouslist" HeightRequest="{OnPlatform iOS='620', Android='620'}" SelectionMode="None" BackgroundColor="#f5f5f5"  SeparatorVisibility="None" SeparatorColor="#031926" VerticalScrollBarVisibility="Always" VerticalOptions="FillAndExpand" HasUnevenRows="True" Margin="10,20,10,100" HorizontalOptions="FillAndExpand" >
-                    <!-- ListView Header -->
+                    <!--<CollectionView  Margin="10,10,10,100" HeightRequest="{OnPlatform iOS='650', Android='700'}" x:Name="previouslist" SelectionMode="None" BackgroundColor="#f5f5f5"  VerticalScrollBarVisibility="Never" VerticalOptions="FillAndExpand"  HorizontalOptions="FillAndExpand" >-->
+                    <ListView  x:Name="previouslist" HeightRequest="{OnPlatform iOS='620', Android='620'}" SelectionMode="None" BackgroundColor="#f5f5f5"  SeparatorVisibility="None" SeparatorColor="#031926" VerticalScrollBarVisibility="Always" VerticalOptions="FillAndExpand" HasUnevenRows="True" Margin="10,20,10,100" HorizontalOptions="FillAndExpand" >
+                        <!-- ListView Header -->
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
                                     <Border Stroke="White" StrokeThickness="1" Margin="10,0,10,5" Background="White" StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
                                         <StackLayout Margin="0,10,0,10" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" BackgroundColor="White">
 
-                                           <Label Text="{Binding Question}" FontFamily="HankenGroteskRegular"  FontSize="12" Margin="10,0,0,0" TextColor="#031926" />
+                                            <Label Text="{Binding Question}" FontFamily="HankenGroteskRegular"  FontSize="12" Margin="10,0,0,0" TextColor="#031926" />
 
-                                           <Label Text="{Binding inputValue}"  FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,5,0,0" TextColor="#031926" />
+                                            <Label Text="{Binding inputValue}"  FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,5,0,0" TextColor="#031926" />
 
-                                           <Label Text="{Binding notes}"  IsVisible="{Binding HasNotes}" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,5,0,0" TextColor="#031926" />
+                                            <Label Text="{Binding notes}"  IsVisible="{Binding HasNotes}" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,5,0,0" TextColor="#031926" />
 
-                                    <Grid Grid.RowDefinitions="Auto,Auto">
+                                            <Grid Grid.RowDefinitions="Auto,Auto">
 
-                                        <Label Text="{Binding DateConverted}"  FontFamily="HankenGroteskBold" HorizontalOptions="End" Grid.Row="0" FontSize="10" Margin="10,5,20,0" TextColor="#009fe3" />
+                                                <Label Text="{Binding DateConverted}"  FontFamily="HankenGroteskBold" HorizontalOptions="End" Grid.Row="0" FontSize="10" Margin="10,5,20,0" TextColor="#009fe3" />
 
-                                        <Label Text="{Binding Title}"  FontFamily="HankenGroteskBold" HorizontalOptions="End" Grid.Row="1" FontSize="8" Margin="10,2,20,0" TextColor="#0c2d48" />
-                                    </Grid>
+                                                <Label Text="{Binding Title}"  FontFamily="HankenGroteskBold" HorizontalOptions="End" Grid.Row="1" FontSize="8" Margin="10,2,20,0" TextColor="#0c2d48" />
+                                            </Grid>
 
                                         </StackLayout>
                                     </Border>
@@ -363,18 +372,18 @@
                         </ListView.ItemTemplate>
                     </ListView>
                 </StackLayout>
-       
-            <!-- Empty Stack-->
-            <StackLayout x:Name="nodatastack" IsVisible="False" HorizontalOptions="Fill" Margin="0,150,0,0" VerticalOptions="Fill">
-                <Image Source="nodataicon.png" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="70" WidthRequest="70"/>
-                <Label  FontSize="18" Text="No Responses Added" Margin="0,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Center" />
+
+                <!-- Empty Stack-->
+                <StackLayout x:Name="nodatastack" IsVisible="False" HorizontalOptions="Fill" Margin="0,150,0,0" VerticalOptions="Fill">
+                    <Image Source="nodataicon.png" VerticalOptions="Start" HorizontalOptions="Center" HeightRequest="70" WidthRequest="70"/>
+                    <Label  FontSize="18" Text="No Responses Added" Margin="0,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Center" />
+                </StackLayout>
+
+
             </StackLayout>
+            <!--</ScrollView>-->
 
-           
         </StackLayout>
-        <!--</ScrollView>-->
 
-    </StackLayout>
-
-    <!--</ScrollView>-->
+    </ScrollView>
 </ContentPage>
