@@ -95,14 +95,14 @@
 
                                         <!-- New New dropdownwother -->
                                         <StackLayout IsVisible="{Binding DropDownwOther}" >
-                                            <FlexLayout Wrap="Wrap" AlignItems="Start"   AlignContent="Start" Margin="10,0,10,0">
+                                            <FlexLayout Wrap="Wrap" AlignItems="Start"   AlignContent="Start" Margin="10,10,10,10">
                                                 <CollectionView  ItemsSource="{Binding ValueInputs}" ItemsUpdatingScrollMode="KeepScrollOffset">
                                                     <CollectionView.ItemsLayout>
-                                                        <LinearItemsLayout SnapPointsType="None" Orientation="Vertical" />
+                                                        <LinearItemsLayout Orientation="Vertical" />
                                                     </CollectionView.ItemsLayout>
                                                     <CollectionView.ItemTemplate>
                                                         <DataTemplate>
-                                                            <Border Stroke="#f1f1f1"  StrokeThickness="1" Margin="0,5,0,5" StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
+                                                            <Border Stroke="#f1f1f1"  StrokeThickness="1" Margin="0,0,0,0" StrokeShape="RoundRectangle 10" HorizontalOptions="FillAndExpand">
                                                                 <local:ExtendedRadioButton 
                               
                                                                 FontSize="12"  questionid="{Binding questionid}" IsChecked="{Binding ItemSelected}"
