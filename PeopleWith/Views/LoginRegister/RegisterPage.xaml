@@ -257,7 +257,7 @@ HorizontalOptions="Start" />
                             <Entry.Keyboard>
                                 <Keyboard x:FactoryMethod="Create">
                                     <x:Arguments>
-                                        <KeyboardFlags>Suggestions,CapitalizeCharacter</KeyboardFlags>
+                                        <KeyboardFlags>CapitalizeCharacter</KeyboardFlags>
                                     </x:Arguments>
                                 </Keyboard>
                             </Entry.Keyboard>
