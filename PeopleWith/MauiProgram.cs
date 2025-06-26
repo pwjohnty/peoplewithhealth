@@ -74,7 +74,11 @@ namespace PeopleWith
 #endif
 
 
+#if DEBUG
+                    options.Debug = true;
+#else
                     options.Debug = false;
+#endif
                     //options.EnableAndroidNativeNdk = true;
                     //options.EnableXamarinSupport = true;
                     options.AttachStacktrace = true;

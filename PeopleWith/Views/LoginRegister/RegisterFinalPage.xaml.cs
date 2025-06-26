@@ -42,7 +42,7 @@ public partial class RegisterFinalPage : ContentPage
     CrashDetected crashHandler = new CrashDetected();
     userfeedback userfeedbacklistpassed = new userfeedback();
     userfeedback UserFeedbackToAdd = new userfeedback();
-    userdiet DietToAdd = new userdiet();
+    userdiet DietToAdd;
 
     async public void NotasyncMethod(Exception Ex)
     {
@@ -683,6 +683,7 @@ public partial class RegisterFinalPage : ContentPage
                         if (DietToAdd != null)
                         {
                             DietToAdd.userid = newuser.userid;
+                            //DietToAdd.datestarted = DateTime.Now.ToString("dd/MM/yyyy");
                         }
 
                         //Update usermeasurementpassed        

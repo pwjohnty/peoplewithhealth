@@ -133,7 +133,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <!--<sync:SfMaskedEntry  x:Name="DateEntry"  Margin="10,0,0,0" ShowBorder="False" Placeholder="DD/MM/YYYY"  Keyboard="Numeric" PropertyChanged="SfMaskedEntry_PropertyChanged" HorizontalOptions="Start" Grid.Row="0" HeightRequest="40" WidthRequest="100" FontFamily="HankenGroteskRegualar" TextColor="#031926"
+                <!--<sync:SfMaskedEntry  x:Name="DateEntry"  Margin="10,0,0,0" ShowBorder="False" Placeholder="DD/MM/YYYY"  Keyboard="Numeric" PropertyChanged="SfMaskedEntry_PropertyChanged" HorizontalOptions="Start" Grid.Row="0" HeightRequest="40" WidthRequest="100" FontFamily="HankenGroteskRegular" TextColor="#031926"
                            Mask="00/00/0000" PromptChar="_" MaskType="Simple" ValueMaskFormat="IncludePromptAndLiterals" />-->
                 <inputLayout:SfTextInputLayout Grid.Row="0" Padding="0" x:Name="DOBHelper" InputViewPadding="10" IsHintAlwaysFloated="True" HorizontalOptions="Center" BackgroundColor="Transparent" ShowHint="False" Margin="5,10,5,0" UnfocusedStrokeThickness="1" Stroke="LightGray" ContainerBackground="Transparent" ContainerType="Outlined" OutlineCornerRadius="5">
                     <Entry FontSize="12" PlaceholderColor="Gray" Keyboard="Numeric" FontFamily="HankenGroteskRegular" VerticalOptions="Center" x:Name="DateEntry" TextChanged="DateEntry_TextChanged" Placeholder="DD/MM/YYYY" TextColor="#031926"/>
@@ -141,7 +141,7 @@
                         <inputLayout:LabelStyle TextColor="Red" FontFamily="HankenGroteskBold" />
                     </inputLayout:SfTextInputLayout.ErrorLabelStyle>
                 </inputLayout:SfTextInputLayout>
-                <Label x:Name="EntryError" IsVisible="False" Margin="0,0,0,0"  FontFamily="HankenGroteskRegualar" FontSize="12" HorizontalOptions="Center" HorizontalTextAlignment="Center" TextColor="Red" />
+                <Label x:Name="EntryError" IsVisible="False" Margin="0,0,0,0"  FontFamily="HankenGroteskRegular" FontSize="12" HorizontalOptions="Center" HorizontalTextAlignment="Center" TextColor="Red" />
 
                 <Grid Grid.Row="1" Margin="0,-10,0,0">
                     <Grid.RowDefinitions>
@@ -166,7 +166,7 @@ HorizontalOptions="End" />
 
 
             </Grid>
-            <Button x:Name="AddBtn" Text="Add Diagnosis" IsEnabled="False" FontFamily="HankenGroteskBold" Clicked="AddBtn_Clicked" BackgroundColor="#E6E6FA" TextColor="#702963" Margin="20,10,20,5" HorizontalOptions="Fill"  />
+            <Button x:Name="AddBtn" Text="Add Diagnosis"  FontFamily="HankenGroteskBold" Clicked="AddBtn_Clicked" BackgroundColor="#E6E6FA" TextColor="#702963" Margin="20,10,20,5" HorizontalOptions="Fill"  />
         </StackLayout>
 
         <!--<StackLayout x:Name="SuccessScreen" VerticalOptions="Center" HorizontalOptions="Center" IsVisible="False">
