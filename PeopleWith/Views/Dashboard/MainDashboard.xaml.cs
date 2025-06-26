@@ -326,7 +326,8 @@ public partial class MainDashboard : ContentPage
                 }
 
                 //Additional Dash Questions  SFEWH && SFECORE 
-                if (signupcodecollection[0].referral == "SFEWH" || signupcodecollection[0].referral == "SFECORE")
+                //if (signupcodecollection[0].referral == "SFEWH" || signupcodecollection[0].referral == "SFECORE" || signupcodecollection[0].referral == "RBHTHCM")
+                if (signupcodecollection[0].referral == "SFECORE" )
                 {
                     DashQuestions();
                 }
@@ -1466,7 +1467,6 @@ public partial class MainDashboard : ContentPage
                     questionnaireinfotext.Text = "Complete SF36 Questionnaire";
                 }
 
-
                 if (userfeedbacklist[0].initialquestionnairefeedbacklist != null)
                 {
                     //check dates
@@ -1537,6 +1537,50 @@ public partial class MainDashboard : ContentPage
 
                         //Delete SFEcoreNotID. No Longer Needed
                         Preferences.Remove("SFEcoreNotID");
+                    }
+                }
+            }
+            else if (signup.Contains("RBHTHCM"))
+            {
+                var QuestionList = new ObservableCollection<questionnaire>();
+                completequestionnaireborder.IsVisible = false;
+                //additionalquestionstab.IsVisible = true;
+                //SFECoreStudy.IsVisible = true;
+
+                //Hypertrophic Obstructive Cardiomyopathy Baseline Questionnaire
+                string QID = "BE72B2A1-0707-4E8D-8E82-022BA4F959F4";
+                if (questionnaires != null)
+                {
+                    QuestionList = new ObservableCollection<questionnaire>(questionnaires.Where(q => QID.Contains(q.questionnaireid)));
+                }
+
+                foreach(var item in QuestionList)
+                {
+                    item.title = "HOCM Baseline Questionnaire";
+                    item.description = item.description.Replace(" completely, honestly, and without interruptions to the best of your ability.", "");
+                }
+
+                QuestionsIndicator.IsVisible = false;
+                QuestionsPrompt.ItemsSource = QuestionList;
+                QuestionsPrompt.IsSwipeEnabled = false;
+                QuestionnairePrompt.IsVisible = true;
+
+                //QuestionsPrompt.HeightRequest = 120;
+
+
+                if (userfeedbacklist[0].initialquestionnairefeedbacklist != null)
+                {
+                    QuestionnairePrompt.IsVisible = false;
+                    completequestionnaireborder.IsVisible = false;
+
+                    string retrievedId = Preferences.Get("HOCMNotID", string.Empty);
+
+                    if (!string.IsNullOrEmpty(retrievedId) && int.TryParse(retrievedId, out int notificationId))
+                    {
+                        LocalNotificationCenter.Current.Cancel(notificationId);
+
+                        //Delete SFEcoreNotID. No Longer Needed
+                        Preferences.Remove("BMSNotID");
                     }
                 }
             }
@@ -3151,6 +3195,18 @@ public partial class MainDashboard : ContentPage
                 new dashitem { Type = "Health Report",  ContactImage = "healthreporticon.png", Title = "Health Report", BackgroundColor = Color.FromArgb("#ededed") },
 
             };
+
+            if (!string.IsNullOrEmpty(Helpers.Settings.SignUp))
+            {
+                var signup = Helpers.Settings.SignUp;
+
+                var Array = new List<string>{ "Appointments", "HCP"};
+
+                if (signup.Contains("RBHTHCM"))
+                {
+                    allcatvideolist = allcatvideolist.Where(x => !Array.Contains(x.Type)).ToList();
+                }
+            }
 
 
 

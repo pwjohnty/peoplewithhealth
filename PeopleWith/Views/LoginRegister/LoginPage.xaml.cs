@@ -283,11 +283,27 @@ public partial class LoginPage : ContentPage
                         await DisplayAlert("Account Deleted", "Your account has been deleted", "OK");
                         Signinload.IsVisible = false;
                         Signin.IsVisible = true;
-                        return; 
+                        return;
                     }
                     else if (users[0].registrationstatus == "Onboarding")
                     {
                         await DisplayAlert("Account Onboarding", "Please use your email to continue registering", "OK");
+                        Signinload.IsVisible = false;
+                        Signin.IsVisible = true;
+                        return;
+                    }
+                    else if (users[0].registrationstatus == "Withdrawn")
+                    {
+                        //Royal Brompton Prject 
+                        if (users[0].signupcodeid.Contains("RBHTHCM"))
+                        {
+                            await DisplayAlert("Withdrawn from Project", "You have withdrawn from the project and can no longer access your account", "OK");
+                        }
+                        else
+                        {
+                            //All Other Studies
+                            await DisplayAlert("Withdrawn from Study", "You have withdrawn from the study and can no longer access your account", "OK");
+                        }
                         Signinload.IsVisible = false;
                         Signin.IsVisible = true;
                         return;

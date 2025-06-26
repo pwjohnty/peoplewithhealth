@@ -77,13 +77,19 @@ public partial class AllDiet : ContentPage
 
                         EmptyStack.IsVisible = false;
                         DietOverview.IsVisible = true;
-                        AllDietView.ItemsSource = AllUserDiets
-                        .GroupBy(m => m.diettitle)
-                        .Select(g => g.OrderByDescending(f => DateTime.Parse(f.datestarted)).First())
-                        .OrderByDescending(f => DateTime.Parse(f.datestarted))
-                        .ToList();
 
-                       AllDietView.HeightRequest = AllUserDiets.Count * 80;
+                        AllDietView.ItemsSource = AllUserDiets
+                       .OrderByDescending(f => string.IsNullOrEmpty(f.datestarted) ? DateTime.MinValue :
+                       DateTime.Parse(f.datestarted)).ToList();
+
+                        //Original 
+                        //AllDietView.ItemsSource = AllUserDiets
+                        //.GroupBy(m => m.diettitle)
+                        //.Select(g => g.OrderByDescending(f => DateTime.Parse(f.datestarted)).First())
+                        //.OrderByDescending(f => DateTime.Parse(f.datestarted))
+                        //.ToList();
+
+                AllDietView.HeightRequest = AllUserDiets.Count * 80;
                     }
                     else
                     {

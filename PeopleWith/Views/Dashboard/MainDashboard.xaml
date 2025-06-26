@@ -105,7 +105,7 @@
                                     <CarouselView.ItemTemplate>
                                         <DataTemplate>
                                             <StackLayout>
-                                                <Border StrokeShape="RoundRectangle 10" HeightRequest="80" Background="#f9f9fb" Stroke="#e74c3c" StrokeThickness="1" InputTransparent="False" Padding="0,5,0,5">
+                                            <Border StrokeShape="RoundRectangle 10" HeightRequest="80" Background="#f9f9fb" Stroke="#e74c3c" StrokeThickness="1" InputTransparent="False" Padding="0,5,0,5">
                                                     <Grid Margin="0,5,0,5" Grid.RowDefinitions="Auto,Auto" Grid.ColumnDefinitions="15*,85*">
                                                         <Image Grid.Row="0"  Grid.Column="0" BackgroundColor="Transparent" Margin="0,10,0,0" Grid.RowSpan="2" HeightRequest="30" WidthRequest="30" Source="alert.png" HorizontalOptions="Center" VerticalOptions="Start"  />
                                                         <Label Text="{Binding title}" FontFamily="HankenGroteskBold"  FontSize="14" Grid.Row="0" Grid.Column="1" Margin="5,0,5,0" TextColor="#e74c3c" />

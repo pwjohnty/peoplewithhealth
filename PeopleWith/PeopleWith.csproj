@@ -506,6 +506,9 @@
     <MauiXaml Update="Views\LoginRegister\RegisterWithSignUpCodePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
+    <MauiXaml Update="Views\LoginRegister\SignupCodes\BMS.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
     <MauiXaml Update="Views\LoginRegister\SignupCodes\NOVO.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>

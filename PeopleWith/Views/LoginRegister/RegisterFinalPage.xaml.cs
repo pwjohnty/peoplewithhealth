@@ -42,7 +42,7 @@ public partial class RegisterFinalPage : ContentPage
     CrashDetected crashHandler = new CrashDetected();
     userfeedback userfeedbacklistpassed = new userfeedback();
     userfeedback UserFeedbackToAdd = new userfeedback();
-    userdiet DietToAdd = new userdiet();
+    userdiet DietToAdd;
 
     async public void NotasyncMethod(Exception Ex)
     {
@@ -683,6 +683,7 @@ public partial class RegisterFinalPage : ContentPage
                         if (DietToAdd != null)
                         {
                             DietToAdd.userid = newuser.userid;
+                            //DietToAdd.datestarted = DateTime.Now.ToString("dd/MM/yyyy");
                         }
 
                         //Update usermeasurementpassed        
@@ -1073,11 +1074,42 @@ public partial class RegisterFinalPage : ContentPage
                         //Save NotificationiD to local Storage
                         Preferences.Set("SFEcoreNotID", notification.NotificationId.ToString());
                     }
+                //BMS Study 
+                else if (newuser.signupcodeid.Contains("RBHTHCM"))
+                {
+                    var notification = new NotificationRequest
+                    {
+                        NotificationId = new Random().Next(1, int.MaxValue),
+                        Title = "Complete Your HOCM Baseline Questionnaire",
+                        Description = "Please take a moment to complete the Hypertrophic Obstructive Cardiomyopathy Baseline Questionnaire",
+                        BadgeNumber = 0,
+
+                        Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
+                        {
+                            Priority = Plugin.LocalNotification.AndroidOption.AndroidPriority.High, // ?? Set priority here
+                        },
+
+                        // Add any custom data you need to retrieve when the notification is tapped
+                        //ReturningData = "action=questionnaire&studyid=IID3",
+
+                        Schedule = new NotificationRequestSchedule
+                        {
+                            NotifyTime = DateTime.Now.AddDays(1),
+                            RepeatType = NotificationRepeat.No,
+                            NotifyRepeatInterval = null,
+                        }
+                    };
+
+                    LocalNotificationCenter.Current.Show(notification);
+
+                    //Save NotificationiD to local Storage
+                    Preferences.Set("HOCMNotID", notification.NotificationId.ToString());
                 }
+            }
 
 
-                // Preferences.Default.Set("validationcode", newuser.validationcode);
-                await Task.Run(async () =>
+            // Preferences.Default.Set("validationcode", newuser.validationcode);
+            await Task.Run(async () =>
                 {
                     // Simulate some processing that may take up to seconds
                     await Task.Delay(100);

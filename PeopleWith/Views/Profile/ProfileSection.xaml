@@ -131,7 +131,7 @@
             <!-- Delete Account  Button-->
             <Button Margin="20,440,20,5" x:Name="DeleteAccount" Text="Delete Account" Clicked="DeleteAccount_Clicked" FontFamily="HankenGroteskBold" HeightRequest="45" FontSize="14" Padding="5" CornerRadius="10" BorderColor="Transparent" BorderWidth="1" BackgroundColor="#ffe5e5" TextColor="red"/>
 
-            <Label HorizontalOptions="Fill" HorizontalTextAlignment="Center" Text="Once your Account is Deleted, it cannot be retrieved. Ensure you no longer require access to this Account before Deletion." FontFamily="HankenGroteskBold"  FontSize="10" VerticalOptions="Center" Margin="20,0,20,20" TextColor="DarkGray" />
+            <Label HorizontalOptions="Fill" x:Name="DeleteDetails" HorizontalTextAlignment="Center" Text="Once your Account is Deleted, it cannot be retrieved. Ensure you no longer require access to this Account before Deletion." FontFamily="HankenGroteskBold"  FontSize="10" VerticalOptions="Center" Margin="20,0,20,20" TextColor="DarkGray" />
 
         </VerticalStackLayout>
     </ScrollView>

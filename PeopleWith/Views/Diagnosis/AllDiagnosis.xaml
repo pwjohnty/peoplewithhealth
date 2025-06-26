@@ -17,77 +17,34 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Text="Diagnosis" FontFamily="HankenGroteskBold" FontSize="26"  Margin="20,20,0,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" />
-                <Frame x:Name="DiagInfo" HasShadow="False" Padding="0" CornerRadius="15" Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,0,20,0" BorderColor="#702963" BackgroundColor="Transparent">
+                <Border x:Name="DiagInfo" Padding="0" StrokeShape="RoundRectangle 15" Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,0,20,0" Stroke="#702963" BackgroundColor="Transparent">
                     <Label Text="i" FontFamily="HankenGroteskBold" HorizontalOptions="Center" TextColor="#702963" FontSize="12"  Grid.Column="1" VerticalOptions="Center" />
-                    <Frame.GestureRecognizers>
+                    <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="DiagInfoTapped" NumberOfTapsRequired="1"/>
-                    </Frame.GestureRecognizers>
-                </Frame>
+                    </Border.GestureRecognizers>
+                </Border>
 
             </Grid>
          
             <!-- All Diagnosis Listview -->
             <Grid x:Name="DiagnosisOverview" IsVisible="True" >
 
-
-                <syncfusion:SfListView  x:Name="AllDiagnosisView" Padding="0" Margin="0,10,0,0" AutoFitMode="Height" ItemSpacing="0" BackgroundColor="Transparent" HorizontalOptions="FillAndExpand" ItemTapped="AllDiagnosisView_ItemTapped" IsScrollingEnabled="True"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
+                <syncfusion:SfListView  x:Name="AllDiagnosisView" Padding="0" Margin="0,10,0,0" AutoFitMode="Height" ItemSpacing="0" BackgroundColor="Transparent" HorizontalOptions="Fill" ItemTapped="AllDiagnosisView_ItemTapped" IsScrollingEnabled="True"  SelectionBackground="Transparent" ScrollBarVisibility="Never" Orientation="Vertical" >
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
                                 <StackLayout>
-                                    <Frame HasShadow="False" CornerRadius="10" IsVisible="{Binding ActiveDiag}"  InputTransparent="True" Padding="5" BorderColor="Transparent" BackgroundColor="#E6E6FA"  Margin="10,0,10,5">
-                                        <Grid >
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="25"/>
-                                                <RowDefinition Height="25"/>
+                                        <Border StrokeShape="RoundRectangle 10" IsVisible="{Binding ActiveDiag}"  InputTransparent="True" Padding="5" Stroke="Transparent" BackgroundColor="#E6E6FA"  Margin="10,0,10,5">
+                                            <Grid Grid.RowDefinitions="Auto,25" Grid.ColumnDefinitions="90*,10*">
 
-                                            </Grid.RowDefinitions>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="90*"/>
-                                                <ColumnDefinition Width="10*"/>
-                                            </Grid.ColumnDefinitions>
+                                                <Label Text="{Binding diagnosistitle}" Margin="10,0,0,0" LineBreakMode="CharacterWrap" FontFamily="HankenGroteskBold"  FontSize="14" VerticalOptions="End" Grid.Row="0" Grid.Column="0"  TextColor="#702963" />
+                                                <Label Text="{Binding dateofdiagnosis}" FontFamily="HankenGroteskBold" VerticalOptions="Start" Margin="10,0,0,0" HorizontalOptions="Start" FontSize="12" Grid.Row="1" Grid.Column="0"  TextColor="DarkGray" />
 
-                                            <Label Text="{Binding diagnosistitle}" Margin="10,0,0,0" LineBreakMode="TailTruncation" FontFamily="HankenGroteskBold"  FontSize="14" VerticalOptions="End" Grid.Row="0" Grid.Column="0"  TextColor="#702963" />
-                                            <Label Text="{Binding dateofdiagnosis}" FontFamily="HankenGroteskBold" VerticalOptions="Start" Margin="10,0,0,0" HorizontalOptions="Start" FontSize="12" Grid.Row="1" Grid.Column="0"  TextColor="DarkGray" />
+                                                <Image Source="nextdarker.png" Grid.Row="0" Grid.Column="2"  Grid.RowSpan="2"  Margin="0,0,0,0"  HeightRequest="12" WidthRequest="12" VerticalOptions="Center" HorizontalOptions="End" />
 
-                                            <Image Source="nextdarker.png" Grid.Row="0" Grid.Column="2"  Grid.RowSpan="2"  Margin="0,0,0,0"  HeightRequest="12" WidthRequest="12" VerticalOptions="Center" HorizontalOptions="End" />
-
-                                        </Grid>
-                                    </Frame>
-
-                                    <!-- Changed to Include Unknown/Forgot -->
-
-                                    <!--<Grid IsVisible="{Binding PendingDiag}">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="15*"/>
-                                        <ColumnDefinition Width="85*"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <Image Opacity="1" Source="warningicon.png" Margin="0,0,0,0" Grid.Row="0" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="30" WidthRequest="30"/>
-                                    <Frame HasShadow="False" CornerRadius="10"  Grid.Row="0" Grid.Column="1" InputTransparent="True" Padding="5" BorderColor="Transparent" BackgroundColor="#E6E6FA"  Margin="10,0,10,5">
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="25"/>
-                                                <RowDefinition Height="25"/>
-
-                                            </Grid.RowDefinitions>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="90*"/>
-                                                <ColumnDefinition Width="10*"/>
-                                            </Grid.ColumnDefinitions>
-
-                                            <Label Text="{Binding diagnosistitle}" Margin="10,0,0,0" FontFamily="HankenGroteskBold"  FontSize="14" VerticalOptions="End" Grid.Row="0" Grid.Column="0"  TextColor="#702963" />
-                                            <Label Text="Finish Setting up Diagnosis" FontFamily="HankenGroteskBold" VerticalOptions="Start" Margin="10,0,0,0" HorizontalOptions="Start" FontSize="12" Grid.Row="1" Grid.Column="0"  TextColor="DarkGray" />
-
-                                            <Image Source="nextdarker.png" Grid.Row="0" Grid.Column="2"  Grid.RowSpan="2"  Margin="0,0,0,0"  HeightRequest="12" WidthRequest="12" VerticalOptions="Center" HorizontalOptions="End" />
-
-                                        </Grid>
-                                    </Frame>
-                                </Grid>-->
-                                </StackLayout>
+                                            </Grid>
+                                        </Border>
+                                    </StackLayout>
                             </ViewCell>
                         </DataTemplate>
                     </syncfusion:SfListView.ItemTemplate>

@@ -113,7 +113,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <!--<sync:SfMaskedEntry  x:Name="DateEntry"  Margin="10,0,0,0" ShowBorder="False" Placeholder="DD/MM/YYYY"  Keyboard="Numeric" PropertyChanged="SfMaskedEntry_PropertyChanged" HorizontalOptions="Start" Grid.Row="0" HeightRequest="40" WidthRequest="100" FontFamily="HankenGroteskRegualar" TextColor="#031926"
+                <!--<sync:SfMaskedEntry  x:Name="DateEntry"  Margin="10,0,0,0" ShowBorder="False" Placeholder="DD/MM/YYYY"  Keyboard="Numeric" PropertyChanged="SfMaskedEntry_PropertyChanged" HorizontalOptions="Start" Grid.Row="0" HeightRequest="40" WidthRequest="100" FontFamily="HankenGroteskRegular" TextColor="#031926"
                    Mask="00/00/0000" PromptChar="_" MaskType="Simple" ValueMaskFormat="IncludePromptAndLiterals" />-->
                 <inputLayout:SfTextInputLayout Grid.Row="0"  x:Name="DOBHelper" HorizontalOptions="Center" InputViewPadding="10" IsHintAlwaysFloated="True" BackgroundColor="Transparent" ShowHint="False" Margin="5,10,5,0" UnfocusedStrokeThickness="1" Stroke="LightGray" ContainerBackground="Transparent" ContainerType="Outlined" OutlineCornerRadius="5">
                     <Entry FontSize="12" PlaceholderColor="Gray" Keyboard="Numeric" FontFamily="HankenGroteskRegular" VerticalOptions="CenterAndExpand" x:Name="DateEntry" TextChanged="DateEntry_TextChanged" Placeholder="DD/MM/YYYY" TextColor="#031926"/>
@@ -142,7 +142,7 @@ HorizontalOptions="End" />
                     <CheckBox Grid.Row="0" Grid.Column="1" x:Name="diagdatecheckbox" CheckedChanged="diagdatecheckbox_CheckedChanged" VerticalOptions="Center" Color="#031926" HorizontalOptions="Start"/>
                 </Grid>
             </Grid>
-            <Label x:Name="EntryError" IsVisible="False" Margin="25,0,25,0"  FontFamily="HankenGroteskRegualar" HorizontalOptions="Center" HorizontalTextAlignment="Center" FontSize="12" TextColor="Red" />
+            <Label x:Name="EntryError" IsVisible="False" Margin="25,0,25,0"  FontFamily="HankenGroteskRegular" HorizontalOptions="Center" HorizontalTextAlignment="Center" FontSize="12" TextColor="Red" />
             <Button x:Name="AddBtn" Text="Update Diagnosis" IsEnabled="False" FontFamily="HankenGroteskBold" Clicked="UpdateBtn_Clicked" BackgroundColor="#E6E6FA" TextColor="#702963" Margin="20,10,20,5" HorizontalOptions="Fill" />
         </StackLayout>
         <!--<StackLayout x:Name="SuccessScreen" VerticalOptions="Center" HorizontalOptions="Center" IsVisible="False">
