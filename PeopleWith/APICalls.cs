@@ -5853,7 +5853,7 @@ ex is TaskCanceledException)
                 if (string.IsNullOrEmpty(signupcode)) return null;
 
                 //Change only for SFECORE00
-                if (signupcode == "SFECORE00")
+                if (signupcode.Contains("SFECORE"))
                 {
                     signupcode = "CORE01";
                 }

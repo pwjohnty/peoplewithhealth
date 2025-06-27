@@ -136,13 +136,14 @@ public partial class AndroidQuestionnaires : ContentPage
         }
     }
 
-    public AndroidQuestionnaires(questionnaire questionnairepassed)
+    public AndroidQuestionnaires(questionnaire questionnairepassed, userfeedback userfeedbacklist)
     {
         try
         {
             InitializeComponent();
             InitalLoad = true;
 
+            userfeedbacklistpassed = userfeedbacklist;
             questionnairefromlist = questionnairepassed;
 
             loadingstack.IsVisible = true;
@@ -917,7 +918,35 @@ public partial class AndroidQuestionnaires : ContentPage
                 }
             }
 
+            //Added the following Foreach to Set Item Selection
+            foreach(var item in QuestionsInOrder)
+            {
+                if (item.Selectedansweridlist == null) continue;
 
+                if(item.Selectedansweridlist.Count > 0)
+                {
+                    var answerid = item.Selectedansweridlist[0];
+
+                    var selectedanswer = item.AnswerOptions.Where(x => x.answerid == answerid).FirstOrDefault();
+
+                    var selectedIndex = item.AnswerOptions.IndexOf(selectedanswer);
+
+                    if (selectedIndex != -1)
+                    {
+                        if (item.singleselection == true)
+                        {
+                            item.AnswerOptions[selectedIndex].selectedss = true;
+
+                        }
+                        if (item.mulitpleselection == true)
+                        {
+                            item.AnswerOptions[selectedIndex].selectedms = true;
+                        }
+                    }
+
+                }
+            }
+         
             mainquestionnaire.ItemsSource = QuestionsInOrder;
 
         }
@@ -970,8 +999,16 @@ public partial class AndroidQuestionnaires : ContentPage
 
                     if (selectedIndex != -1)
                     {
+                        //Missing .selectedss and check for each item
+                        if(item.singleselection == true)
+                        {
+                            item.AnswerOptions[selectedIndex].selectedss = true;
 
-                        item.AnswerOptions[selectedIndex].selectedms = true;
+                        }
+                        if (item.mulitpleselection == true)
+                        {
+                            item.AnswerOptions[selectedIndex].selectedms = true;
+                        }
                     }
                 }
 
@@ -1251,8 +1288,9 @@ public partial class AndroidQuestionnaires : ContentPage
 
                 submitbtn.IsEnabled = true;
 
-                if (fromdash)
-                {
+                //Removed to also update From Normal navigation
+                //if (fromdash)
+                //{
 
                     var newfd = new feedbackdata();
 
@@ -1267,20 +1305,85 @@ public partial class AndroidQuestionnaires : ContentPage
                         userfeedbacklistpassed.initialquestionnairefeedbacklist = new ObservableCollection<feedbackdata>();
                     }
 
-                    userfeedbacklistpassed.initialquestionnairefeedbacklist.Add(newfd);
+                //Only add the first instance of the questionnaire to remove the prompt on dash 
+                bool exists = userfeedbacklistpassed.initialquestionnairefeedbacklist.Any(item => item.label == newfd.label);
 
-                    string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.initialquestionnairefeedbacklist);
-                    userfeedbacklistpassed.initialquestionnairefeedback = newsymJson;
+                if (!exists)
+                {
+                    var Signup = Helpers.Settings.SignUp;
+                    var ListArray = new List<string>(); 
+                    if(!string.IsNullOrEmpty(Signup)) 
+                    {
+                        if (Signup.Contains("SFEWH"))
+                        {
+                            ListArray = new List<string>
+                        {   //SF36 ID 
+                            "DC6A9FD7-242B-4299-9672-D745669FEAF0",
+                            //Diabetes ID
+                            "73D47262-1B2C-4451-A4FC-978582D77FE0"
+                        };
+                        }
+                        else if (Signup.Contains("SFEWHA2"))
+                        {
+                            ListArray = new List<string>
+                        {   //SF36 ID 
+                            "DC6A9FD7-242B-4299-9672-D745669FEAF0",
+                            //Breast cancer ID
+                            "F7FB770B-286F-4300-814D-E76AACB6DACF"
+                        };
+                        }
+                        else if (Signup.Contains("SFEWHA3"))
+                        {
+                            ListArray = new List<string>
+                        {    //SF36 ID 
+                            "DC6A9FD7-242B-4299-9672-D745669FEAF0",
+                            //Stress ID
+                            "4A27076A-A2A3-45DD-A061-34A4F1799B20"
+                        };
+                        }
+                        else if (Signup.Contains("SFEWHA4"))
+                        {
+                            ListArray = new List<string>
+                        {    //SF36 ID 
+                            "DC6A9FD7-242B-4299-9672-D745669FEAF0",
+                            //Stress ID
+                            "4A27076A-A2A3-45DD-A061-34A4F1799B20"
+                        };
+                        }
+                        else if (Signup.Contains("SFECORE"))
+                        {
+                            ListArray = new List<string>
+                        {    //SF36 ID 
+                            "DC6A9FD7-242B-4299-9672-D745669FEAF0"
+                        };
+                        }
+                        else if (Signup.Contains("RBHTHCM"))
+                        {
+                            ListArray = new List<string>
+                        {    //HOCM Baseline 
+                            "BE72B2A1-0707-4E8D-8E82-022BA4F959F4"
+                        };
+                        }
 
+                        //only adds the required questionnaires to the Feedback 
+                        bool CheckSame = ListArray.Any(L => L == newitem.questionnaireid);
 
-                    await aPICalls.UserfeedbackUpdateQuestionnaireData(userfeedbacklistpassed);
+                        if (CheckSame)
+                        {
+                            userfeedbacklistpassed.initialquestionnairefeedbacklist.Add(newfd);
 
+                            string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.initialquestionnairefeedbacklist);
+                            userfeedbacklistpassed.initialquestionnairefeedback = newsymJson;
+
+                            await aPICalls.UserfeedbackUpdateQuestionnaireData(userfeedbacklistpassed);
+                        }            
+                    }          
                 }
+               
+                //}
+                //   alluserquestionnaires.Add(newitem);
 
-
-                    //   alluserquestionnaires.Add(newitem);
-
-                await Navigation.PushAsync(new AllQuestionnaires(), false);
+                await Navigation.PushAsync(new AllQuestionnaires(userfeedbacklistpassed), false);
 
                 await MopupService.Instance.PopAllAsync(false);
 

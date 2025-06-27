@@ -415,6 +415,21 @@ public partial class WH : ContentPage
         }
     }
 
+    async void Fixscrollview()
+    {
+        try
+        {
+            if (MainScrollView.ScrollY > 0)
+            {
+                await MainScrollView.ScrollToAsync(0, 0, true);
+            }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
     private void nextbtn_Clicked(object sender, EventArgs e)
     {
         try
@@ -711,6 +726,8 @@ public partial class WH : ContentPage
                 return;
             }
 
+            //ScrolltoTop to fix swithcing page issue 
+            Fixscrollview();
 
             var itemToRemove = userresponselist.FirstOrDefault(q => q.questionid == occupationquestion.questionid);
 
@@ -754,6 +771,9 @@ public partial class WH : ContentPage
                 return;
             }
 
+            //ScrolltoTop to fix swithcing page issue 
+            Fixscrollview();
+
             newuser.postcode = postcodetext.Text.TrimEnd();
 
             postcodeframe.IsVisible = false;
@@ -781,6 +801,9 @@ public partial class WH : ContentPage
                 Vibration.Vibrate();
                 return;
             }
+
+            //ScrolltoTop to fix swithcing page issue 
+            Fixscrollview();
 
             addusermeasurements.Clear();
             //add height, weight as measurment and calulate bmi and add it as a measurement
@@ -851,6 +874,9 @@ public partial class WH : ContentPage
                 return;
             }
 
+            //ScrolltoTop to fix swithcing page issue 
+            Fixscrollview();
+
             var itemToRemove = userresponselist.FirstOrDefault(q => q.questionid == genderatbirthquestion.questionid);
 
             if (itemToRemove != null)
@@ -891,6 +917,9 @@ public partial class WH : ContentPage
                 Vibration.Vibrate();
                 return;
             }
+
+            //ScrolltoTop to fix swithcing page issue 
+            Fixscrollview();
 
             var itemToRemove = userresponselist.FirstOrDefault(q => q.questionid == dietquestion.questionid);
 
@@ -949,6 +978,9 @@ public partial class WH : ContentPage
                 return;
             }
 
+            //ScrolltoTop to fix swithcing page issue 
+            Fixscrollview();
+
             var itemToRemove = userresponselist.FirstOrDefault(q => q.questionid == alcoholquestion.questionid);
 
             if (itemToRemove != null)
@@ -988,6 +1020,9 @@ public partial class WH : ContentPage
                 Vibration.Vibrate();
                 return;
             }
+
+            //ScrolltoTop to fix swithcing page issue 
+            Fixscrollview();
 
             var itemToRemove = userresponselist.FirstOrDefault(q => q.questionid == stressquestion.questionid);
 
@@ -1054,8 +1089,11 @@ public partial class WH : ContentPage
                 }
             }
 
+            //ScrolltoTop to fix swithcing page issue 
+            Fixscrollview();
 
-                var itemToRemove = userresponselist.FirstOrDefault(q => q.questionid == smokingquestion.questionid);
+
+            var itemToRemove = userresponselist.FirstOrDefault(q => q.questionid == smokingquestion.questionid);
 
                 if (itemToRemove != null)
                 {
@@ -1174,6 +1212,9 @@ public partial class WH : ContentPage
                 return;
             }
 
+
+            //ScrolltoTop to fix swithcing page issue 
+            Fixscrollview();
 
             //all validation done start adding now
 
@@ -1324,6 +1365,8 @@ public partial class WH : ContentPage
 
             //add the diagnosis menopause
 
+            //ScrolltoTop to fix swithcing page issue 
+            Fixscrollview();
 
             var newuserdiag = new userdiagnosis();
 
@@ -1354,6 +1397,9 @@ public partial class WH : ContentPage
         try
         {
             //check if there are any symptoms added and add them into a collection
+
+            //ScrolltoTop to fix swithcing page issue 
+            Fixscrollview();
 
             symptomstoadd.Clear();
             foreach (var item in symptomchipselectedlist)
@@ -1404,6 +1450,10 @@ public partial class WH : ContentPage
     {
         try
         {
+
+            //ScrolltoTop to fix swithcing page issue 
+            Fixscrollview();
+
             medicationstoadd.Clear();
             foreach (var item in medicationchipselectedlist)
             {
@@ -1450,6 +1500,9 @@ public partial class WH : ContentPage
                 userresponselist.Remove(itemToRemove);
             }
 
+            //ScrolltoTop to fix swithcing page issue 
+            Fixscrollview();
+
 
             //add the question
             var response = new userresponse();
@@ -1481,6 +1534,9 @@ public partial class WH : ContentPage
                 Vibration.Vibrate();
                 return;
             }
+
+            //ScrolltoTop to fix swithcing page issue 
+            Fixscrollview();
 
             var item = ctlist.SelectedItem as answer;
 
@@ -1545,6 +1601,9 @@ public partial class WH : ContentPage
                 Vibration.Vibrate();
                 return;
             }
+
+            //ScrolltoTop to fix swithcing page issue 
+            Fixscrollview();
 
             var item = hotFlushlist.SelectedItem as answer;
 
