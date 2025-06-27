@@ -1743,7 +1743,7 @@ HorizontalOptions="Center" />
                                         <Label x:Name="agelbl" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="16" Grid.Row="0" Grid.Column="0" HorizontalOptions="Center" />
                                         <Label Text="Age" TextColor="Gray" FontFamily="HankenGroteskRegular" FontSize="12" Grid.Row="1" Grid.Column="0" HorizontalOptions="Center" />
 
-                                            <Label x:Name="ethlbl" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="16" Grid.Row="0" Grid.Column="1" HorizontalOptions="Center" />
+                                            <Label x:Name="ethlbl" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="16" Grid.Row="0" Grid.Column="1" HorizontalTextAlignment="Center" HorizontalOptions="Center" />
                                             <Label Text="Ethnicity" TextColor="Gray" FontFamily="HankenGroteskRegular" FontSize="12" Grid.Row="1" Grid.Column="1" HorizontalOptions="Center" />
 
 

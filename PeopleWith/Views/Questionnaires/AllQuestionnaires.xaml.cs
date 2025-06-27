@@ -14,6 +14,7 @@ public partial class AllQuestionnaires : ContentPage
 	public ObservableCollection<questionnaire> questionnaires = new ObservableCollection<questionnaire>();
     public ObservableCollection<userquestionnaire> userQuestionnaires = new ObservableCollection<userquestionnaire>();
     APICalls aPICalls = new APICalls();
+    userfeedback userfeedbacklistpassed = new userfeedback();
 
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
@@ -33,11 +34,12 @@ public partial class AllQuestionnaires : ContentPage
         }
     }
 
-    public AllQuestionnaires()
-	{
+    public AllQuestionnaires(userfeedback userfeedbacklist)
+    {
         try
         {
             InitializeComponent();
+            userfeedbacklistpassed = userfeedbacklist; 
             getquestionnaires();
             //getuserquestionnaires();
         }
@@ -162,7 +164,7 @@ public partial class AllQuestionnaires : ContentPage
 
                 if(DeviceInfo.Current.Platform == DevicePlatform.Android)
                 {
-                    await Navigation.PushAsync(new AndroidQuestionnaires(item), false);
+                    await Navigation.PushAsync(new AndroidQuestionnaires(item, userfeedbacklistpassed), false);
                 }
                 else
                 {
@@ -171,7 +173,7 @@ public partial class AllQuestionnaires : ContentPage
                     //await Navigation.PushAsync(new AndroidQuestionnaires(item), false);
 
                    //  await Navigation.PushAsync(new QuestionnairePage(item), false);
-                    await Navigation.PushAsync(new AndroidQuestionnaires(item), false);
+                    await Navigation.PushAsync(new AndroidQuestionnaires(item, userfeedbacklistpassed), false);
                 }
                
             }

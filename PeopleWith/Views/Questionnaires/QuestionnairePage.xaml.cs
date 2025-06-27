@@ -869,7 +869,7 @@ public partial class QuestionnairePage : ContentPage
 
                 //   alluserquestionnaires.Add(newitem);
 
-                await Navigation.PushAsync(new AllQuestionnaires(), false);
+                await Navigation.PushAsync(new AllQuestionnaires(userfeedbacklistpassed), false);
 
                 await MopupService.Instance.PopAllAsync(false);
 

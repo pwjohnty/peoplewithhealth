@@ -773,16 +773,17 @@ public partial class RegisterFinalPage : ContentPage
                             }
 
 
-                            //add to feedback list
-                            var newsym = new feedbackdata();
-                            newsym.value = "50";
-                            newsym.datetime = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
-                            newsym.action = "add";
-                            newsym.label = item.symptomtitle;
-                            newsym.id = item.feedback[0].symptomfeedbackid;
-                            
+                            var newsym = new feedbackdata
+                            {
+                                value = "50",
+                                datetime = DateTime.Now.ToString("dd/MM/yyyy HH:mm"),
+                                action = "add",
+                                label = item.symptomtitle,
+                                id = item.feedback[0].symptomfeedbackid
+                            };
 
                             userfeedbacklistpassed.symptomfeedbacklist.Add(newsym);
+
                         }
 
                         string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.symptomfeedbacklist);
@@ -883,13 +884,25 @@ public partial class RegisterFinalPage : ContentPage
                             }
 
                             //add to feedback list
-                            var newmeas = new feedbackdata();
-                            newmeas.id = ID;
-                            newmeas.value = item.value;
-                            newmeas.datetime = item.inputdatetime;
-                            newmeas.action = "update";
-                            newmeas.label = item.measurementname;
-                            newmeas.unit = item.unit;
+
+                            var newmeas = new feedbackdata
+                            {
+                                id = ID,
+                                value = item.value,
+                                datetime = item.inputdatetime,
+                                action = "update",
+                                label = item.measurementname,
+                                unit = item.unit
+                            };
+
+                            //Old
+                            //var newmeas = new feedbackdata();
+                            //newmeas.id = ID;
+                            //newmeas.value = item.value;
+                            //newmeas.datetime = item.inputdatetime;
+                            //newmeas.action = "update";
+                            //newmeas.label = item.measurementname;
+                            //newmeas.unit = item.unit;
 
                             userfeedbacklistpassed.measurementfeedbacklist.Add(newmeas);
                         }
@@ -965,7 +978,7 @@ public partial class RegisterFinalPage : ContentPage
                 //add the user settings
                 Preferences.Default.Set("userid", newuser.userid);
                 Preferences.Default.Set("signupcode", newuser.signupcodeid);
-                Preferences.Set("email", newuser.email);
+                Preferences.Default.Set("email", newuser.email);
                 Preferences.Default.Set("pincode", newuser.userpin);
                 Preferences.Default.Set("gender", newuser.gender);
                 Preferences.Default.Set("ethnicity", newuser.ethnicity);

@@ -79,7 +79,7 @@ public partial class NovoConsentScreen : PopupPage
         else if (GetArea == "Questionnaires")
         {
             Preferences.Default.Set("NovoQues", false);
-            await Navigation.PushAsync(new AllQuestionnaires(), false);
+            await Navigation.PushAsync(new AllQuestionnaires(userfeedbacklist), false);
         }
         else if (GetArea == "Allergens")
         {

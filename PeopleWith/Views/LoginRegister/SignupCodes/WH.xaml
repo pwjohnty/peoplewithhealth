@@ -54,7 +54,7 @@
 
 
 
-        <ScrollView Grid.Row="1" Margin="0,30,0,0" VerticalScrollBarVisibility="Never" BackgroundColor="Transparent">
+        <ScrollView x:Name="MainScrollView" Grid.Row="1" Margin="0,30,0,0" VerticalScrollBarVisibility="Never" BackgroundColor="Transparent">
 
             <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
 

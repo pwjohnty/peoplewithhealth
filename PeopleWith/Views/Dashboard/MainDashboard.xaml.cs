@@ -3488,7 +3488,22 @@ public partial class MainDashboard : ContentPage
             }
             else
             {
-                genderlbl.Text = Helpers.Settings.Gender;
+                var Gender = Helpers.Settings.Gender;
+                if (Gender == "Prefer not to disclose")
+                {
+                    genderlbl.Text = "PNTD";
+                }
+                else
+                {
+                    if(Gender.Length > 7)
+                    {
+                        genderlbl.Text = "Other";
+                    }
+                    else
+                    {
+                        genderlbl.Text = Gender;
+                    }
+                }
             }
 
 
@@ -3725,7 +3740,7 @@ public partial class MainDashboard : ContentPage
                 }
                 else
                 {
-                    await Navigation.PushAsync(new AllQuestionnaires(), false);
+                    await Navigation.PushAsync(new AllQuestionnaires(userfeedbacklist[0]), false);
                 }
             }
             else if (item != null && item.Title == "Allergens")
@@ -3952,7 +3967,7 @@ public partial class MainDashboard : ContentPage
             }
             else
             {
-                await Navigation.PushAsync(new AllQuestionnaires(), false);
+                await Navigation.PushAsync(new AllQuestionnaires(userfeedbacklist[0]), false);
             }
             IsNavigating = false;
         }
@@ -4108,7 +4123,7 @@ public partial class MainDashboard : ContentPage
                 }
                 else
                 {
-                    await Navigation.PushAsync(new AllQuestionnaires(), false);
+                    await Navigation.PushAsync(new AllQuestionnaires(userfeedbacklist[0]), false);
                 }
             }
             else if (item != null && item.Title == "Allergens")

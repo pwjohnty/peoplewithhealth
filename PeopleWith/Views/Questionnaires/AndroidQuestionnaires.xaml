@@ -107,7 +107,7 @@ HorizontalOptions="FillAndExpand">
                                                                         <StackLayout RadioButtonGroup.GroupName="{Binding questionid}">
 
 
-                                                                        <local:ExtendedRadioButton  IsChecked="{Binding selectedss}"
+                                                                        <local:ExtendedRadioButton  IsChecked="{Binding selectedss, Mode=TwoWay}"
                                                         IsVisible="{Binding isVisible}" questionid="{Binding questionid}" 
                                                         FontSize="12" IDValue="{Binding answerid}" IDRecord="{Binding answeroptions}"
                                                         BackgroundColor="Transparent" CheckedChanged="ExtendedRadioButton_CheckedChanged"
