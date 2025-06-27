@@ -92,7 +92,7 @@ HorizontalOptions="FillAndExpand">
                                                     <buttons:SfRadioGroup >
                                                         <CollectionView ItemsSource="{Binding AnswerOptions}" >
                                                             <CollectionView.ItemsLayout>
-                                                            <LinearItemsLayout  Orientation="Vertical" />
+                                                            <LinearItemsLayout Orientation="Vertical" />
                                                             </CollectionView.ItemsLayout>
                                                             <CollectionView.ItemTemplate>
                                                                 <DataTemplate>

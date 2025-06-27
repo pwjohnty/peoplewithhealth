@@ -267,13 +267,21 @@ public partial class AndroidQuestionnaires : ContentPage
 
                     foreach (var it in userquestionanswer.answer)
                     {
-                        item.AnswerOptions[0].selectedms = true;
-                        item.AnswerOptions[0].isVisible = true;
-                        item.AnswerOptions[0].bordervis = true;
-                        item.AnswerOptions[0].ImgSource = "radiobutton.png"; 
-                        if (!string.IsNullOrEmpty(it.answervalue))
+                        if (item.AnswerOptions.Count == 0)
                         {
-                            item.freetextentry = it.answervalue;
+                           
+
+                        }
+                        else
+                        {
+                            item.AnswerOptions[0].selectedms = true;
+                            item.AnswerOptions[0].isVisible = true;
+                            item.AnswerOptions[0].bordervis = true;
+                            item.AnswerOptions[0].ImgSource = "radiobutton.png";
+                            if (!string.IsNullOrEmpty(it.answervalue))
+                            {
+                                item.freetextentry = it.answervalue;
+                            }
                         }
                         //if (!string.IsNullOrEmpty(userquestionanswer.answer[0].answervalue))
                         //{
@@ -878,9 +886,11 @@ public partial class AndroidQuestionnaires : ContentPage
                 {
                     if (item.Hasanswered == false)
                     {
-                        item.Bordercolor = Colors.Red;
-                        item.Isrequired = true;
-                        return;
+
+                            item.Bordercolor = Colors.Red;
+                            item.Isrequired = true;
+                            return;
+                        
                     }
 
                 }
@@ -1502,31 +1512,34 @@ public partial class AndroidQuestionnaires : ContentPage
 
             if (getitem != null)
             {
-
-                if (getitem.SliderValue != 0)
+                if (getitem.questiontype == "scale110singleselection")
                 {
-                    //getitem.selectedtextvalue = QuestionsInOrder[0].selectedtextvalue;
-                    //getitem.SliderValue = QuestionsInOrder[0].slidervalue; 
-                }
-                else
-                {
-                    getitem.selectedtextvalue = e.NewValue.ToString();
-                    getitem.SliderValue = e.NewValue;
 
-                }
+                    if (getitem.SliderValue != 0)
+                    {
+                        //getitem.selectedtextvalue = QuestionsInOrder[0].selectedtextvalue;
+                        //getitem.SliderValue = QuestionsInOrder[0].slidervalue; 
+                    }
+                    else
+                    {
+                        getitem.selectedtextvalue = e.NewValue.ToString();
+                        getitem.SliderValue = e.NewValue;
+
+                    }
 
 
 
-                if (!string.IsNullOrEmpty(e.NewValue.ToString()))
-                {
-                    getitem.Bordercolor = Colors.White;
-                    getitem.Isrequired = false;
-                    getitem.Hasanswered = true;
+                    if (!string.IsNullOrEmpty(e.NewValue.ToString()))
+                    {
+                        getitem.Bordercolor = Colors.White;
+                        getitem.Isrequired = false;
+                        getitem.Hasanswered = true;
 
-                }
-                else
-                {
-                    getitem.Hasanswered = false;
+                    }
+                    else
+                    {
+                        getitem.Hasanswered = false;
+                    }
                 }
             }
         }
