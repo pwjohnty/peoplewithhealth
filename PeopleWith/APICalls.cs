@@ -3983,88 +3983,60 @@ ex is TaskCanceledException)
         {
             try
             {
-                ObservableCollection<signupcode> itemstoremove = new ObservableCollection<signupcode>();
-                var userid = Helpers.Settings.SignUp;
-                string urlWithQuery = $"{signupcode}?$filter=signupcodeid eq '{signupcodepassed}'";
+                //Ensure SignupCode Is not Null When Passed
+                if (String.IsNullOrEmpty(signupcodepassed)) { signupcodepassed = Helpers.Settings.SignUp; }
+                var SignupPathway = "https://pwapi.peoplewith.com/api/signupcode";
+                string urlWithQuery = $"{SignupPathway}?$filter=signupcodeid eq '{signupcodepassed}'";
                 ConfigureClient();
                 HttpResponseMessage responseconsent = await Client.GetAsync(urlWithQuery);
-
                 if (responseconsent.IsSuccessStatusCode)
                 {
                     string contentconsent = await responseconsent.Content.ReadAsStringAsync();
-                    // Add Feedback Converter
-                    //  var settings = new JsonSerializerSettings();
-                    //  settings.Converters.Add(new AppointmentFeedbackConverter());
-
                     var userResponseconsent = JsonConvert.DeserializeObject<ApiResponseSignUpCode>(contentconsent);
                     var consent = userResponseconsent.Value;
-
                     var newcollection = new ObservableCollection<signupcode>();
-
-                    //Remove All Deleted Items 
                     foreach (var item in consent)
                     {
-
-                        //string EncodeTrademark(string input)
-                        //{
-                        //    return input?.Replace("�", "\\u00AE");  // Replace "�" with Unicode escape sequence
-                        //}
-
-                        //string cleanedJson = EncodeTrademark(item.signupcodeinformation);
-                        //item.moodfeedbacklist = JsonConvert.DeserializeObject<ObservableCollection<feedbackdata>>(item.moodfeedback);
-
                         try
                         {
-                            // Attempt to deserialize as an array
-                            //if(item.signupcodeinformation == null)
-                            //{
-
-                            //}
-                            //else
-                            //{
-                            item.signupcodeinfolist = JsonConvert.DeserializeObject<ObservableCollection<signupcodeinformation>>(item.signupcodeinformation);
-                            //}
+                            if (!string.IsNullOrWhiteSpace(item.signupcodeinformation))
+                            {
+                                item.signupcodeinfolist = JsonConvert.DeserializeObject<ObservableCollection<signupcodeinformation>>(item.signupcodeinformation);
+                            }
+                            else
+                            {
+                                item.signupcodeinfolist = new ObservableCollection<signupcodeinformation>();
+                            }
                         }
                         catch (JsonSerializationException)
                         {
-                            // If the JSON is a single object, deserialize it as such and wrap it in a collection
                             var singleItem = JsonConvert.DeserializeObject<signupcodeinformation>(item.signupcodeinformation);
                             item.signupcodeinfolist = new ObservableCollection<signupcodeinformation> { singleItem };
                         }
-
-
-
                         newcollection.Add(item);
+
                     }
-
-
-
                     return new ObservableCollection<signupcode>(newcollection);
-
                 }
                 else
                 {
-                    return null;
+                    return new ObservableCollection<signupcode>();
                 }
-
-
-
             }
             catch (Exception ex) when (
- ex is HttpRequestException ||
- ex is WebException ||
- ex is TaskCanceledException)
+             ex is HttpRequestException ||
+             ex is WebException ||
+             ex is TaskCanceledException)
             {
                 await NotasyncMethod(ex);
-                return null;
+                return new ObservableCollection<signupcode>();
             }
             catch (Exception ex)
             {
                 await NotasyncMethod(ex);
-                return null;
+                return new ObservableCollection<signupcode>();
             }
         }
-
         public async Task UserfeedbackUpdateSymptomData(userfeedback Updatefeedback)
         {
             try

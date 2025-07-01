@@ -164,7 +164,7 @@ public partial class AllQuestionnaires : ContentPage
 
                 if(DeviceInfo.Current.Platform == DevicePlatform.Android)
                 {
-                    await Navigation.PushAsync(new AndroidQuestionnaires(item, userfeedbacklistpassed), false);
+                    await Navigation.PushAsync(new AndroidQuestionnaires(item.questionnaireid, userfeedbacklistpassed), false);
                 }
                 else
                 {
@@ -173,7 +173,7 @@ public partial class AllQuestionnaires : ContentPage
                     //await Navigation.PushAsync(new AndroidQuestionnaires(item), false);
 
                    //  await Navigation.PushAsync(new QuestionnairePage(item), false);
-                    await Navigation.PushAsync(new AndroidQuestionnaires(item, userfeedbacklistpassed), false);
+                    await Navigation.PushAsync(new AndroidQuestionnaires(item.questionnaireid, userfeedbacklistpassed), false);
                 }
                
             }

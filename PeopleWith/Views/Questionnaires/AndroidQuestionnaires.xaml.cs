@@ -6,6 +6,7 @@ using System.IO.Pipes;
 using Microsoft.Maui.Networking;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Devices;
+using System.Threading.Tasks;
 
 namespace PeopleWith;
 
@@ -21,7 +22,7 @@ public partial class AndroidQuestionnaires : ContentPage
     public ObservableCollection<questionanswerinfo> SelectedAnswerList = new ObservableCollection<questionanswerinfo>();
     public int OrderNumber = 1;
     public double ValueofSlider = 0; 
-    List<string> answerid = null;
+    ObservableCollection<string> answerid = new ObservableCollection<string>();
     String RecordID = null;
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
@@ -279,9 +280,16 @@ public partial class AndroidQuestionnaires : ContentPage
                             item.AnswerOptions[0].isVisible = true;
                             item.AnswerOptions[0].bordervis = true;
                             item.AnswerOptions[0].ImgSource = "radiobutton.png";
+
+
                             if (!string.IsNullOrEmpty(it.answervalue))
                             {
                                 item.freetextentry = it.answervalue;
+                            }
+                            else
+                            {
+                                item.freetextentry = null;
+                                item.Addfreetext = false;
                             }
                         }
                         //if (!string.IsNullOrEmpty(userquestionanswer.answer[0].answervalue))
@@ -294,9 +302,16 @@ public partial class AndroidQuestionnaires : ContentPage
 
                     if (item.questionanswers.Any(x => x.answeroptions == "specifyfreetext"))
                     {
-                        item.Addfreetext = true;
-                        item.Addfreetextopacity = 0.5;
-                        item.Addfreetextenabled = false;
+                        if (string.IsNullOrEmpty(userquestionanswer.answer[0].answervalue))
+                        {
+                            item.Addfreetext = false;
+                        }
+                        else
+                        {
+                            item.Addfreetext = true;
+                            item.Addfreetextopacity = 0.5;
+                            item.Addfreetextenabled = false;
+                        }
                     }
 
                 }
@@ -811,6 +826,8 @@ public partial class AndroidQuestionnaires : ContentPage
 
                     if (getitem == null)
                     {
+                        //check on iOS
+                        return;
                         getitem = QuestionsInOrder[0];
                         item.IDValue = QuestionsInOrder[0].answerid;
                         item.IDRecord = RecordID;
@@ -966,23 +983,41 @@ public partial class AndroidQuestionnaires : ContentPage
         }
     }
 
-    private void backbtn_Clicked(object sender, EventArgs e)
+    private async void backbtn_Clicked(object sender, EventArgs e)
     {
         try
         {
+
+
+            foreach (var x in questionnairefromlist.questionanswerjsonlist)
+            {
+                if (x.questionorder == OrderNumber.ToString())
+                {
+                    //x.SliderValue = ValueofSlider;
+               
+                    answerid = x.Selectedansweridlist;
+                
+                }
+          
+            }
 
             answerid = null;
             OrderNumber--;
 
             QuestionsInOrder.Clear();
+
             foreach (var x in questionnairefromlist.questionanswerjsonlist)
             {
                 if (x.questionorder == OrderNumber.ToString())
                 {
                     //x.SliderValue = ValueofSlider;
                     x.Hasanswered = true;
-                    QuestionsInOrder.Add(x);
                     answerid = x.Selectedansweridlist;
+
+                   // x.Selectedansweridlist = new List<string>();
+                   // x.Selectedansweridlist = answerid;
+                    QuestionsInOrder.Add(x);
+                    
                     if (x.AnswerOptions != null)
                     {
                         RecordID = x.AnswerOptions[0].answeroptions;
@@ -1125,7 +1160,13 @@ public partial class AndroidQuestionnaires : ContentPage
                 backbtn.IsVisible = false;
             }
 
+           // mainquestionnaire.ItemsSource = null;
+
+          
+
             mainquestionnaire.ItemsSource = QuestionsInOrder;
+
+          
 
         }
         catch (Exception Ex)
@@ -1686,6 +1727,74 @@ public partial class AndroidQuestionnaires : ContentPage
         catch (Exception Ex)
         {
 
+        }
+    }
+
+    private void ExtendedSFRadioButton_StateChanged(object sender, Syncfusion.Maui.Buttons.StateChangedEventArgs e)
+    {
+        try
+        {
+            //single selection
+
+            if (e.IsChecked == true)
+            {
+                var item = (ExtendedSFRadioButton)sender;
+
+                if (item != null)
+                {
+                    var getitem = questionnairefromlist.questionanswerjsonlist.Where(x => x.questionid == item.questionid).FirstOrDefault();
+
+                    if (getitem == null)
+                    {
+                        //check on iOS
+                        return;
+                        getitem = QuestionsInOrder[0];
+                        item.IDValue = QuestionsInOrder[0].answerid;
+                        item.IDRecord = RecordID;
+                    }
+
+                    getitem.Bordercolor = Colors.White;
+
+
+                    getitem.Isrequired = false;
+
+                    //clear list every time as only one allowed
+                    getitem.Selectedansweridlist.Clear();
+
+                    if (!getitem.Selectedansweridlist.Contains(item.IDValue))
+                    {
+                        getitem.Selectedansweridlist.Add(item.IDValue);
+                    }
+
+                    if (item.IDRecord == "specifyfreetext")
+                    {
+                        getitem.Addfreetextenabled = true;
+                        getitem.Addfreetextopacity = 1;
+
+                        if (getitem.freetextentry == null)
+                        {
+                            getitem.Hasanswered = false;
+                        }
+                        else
+                        {
+                            getitem.Hasanswered = true;
+                        }
+                    }
+                    else
+                    {
+                        getitem.Addfreetextenabled = false;
+                        getitem.Addfreetextopacity = 0.5;
+
+                        //this is an option like yes, no etc with no extra text added
+                        getitem.Hasanswered = true;
+                    }
+
+                }
+            }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
         }
     }
 }

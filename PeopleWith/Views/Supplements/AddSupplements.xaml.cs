@@ -1736,7 +1736,19 @@ public partial class AddSupplement : ContentPage
                 }
                 else if (fourthstack.IsVisible == true)
                 {
-                    topprogress.Progress = 80;
+
+                        //Check Dosages not null 
+                        foreach (var item in selectedDosages)
+                        {
+                            if (string.IsNullOrEmpty(item.Dosage))
+                            {
+                                Vibration.Vibrate();
+                                await DisplayAlert("Enter Dosage Unit", "Please Enter a dosage unit from this list", "Ok");
+                                return;
+                            }
+                        }
+
+                        topprogress.Progress = 80;
                     fourthstack.IsVisible = false;
                     detailsstack.IsVisible = true;
                     medname4lbl.Text = SelectedMed.supplementtitle;
