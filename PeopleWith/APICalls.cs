@@ -3702,7 +3702,7 @@ ex is TaskCanceledException)
                     {
                         if (item.deleted == true)
                         {
-
+                            continue;
                         }
                         else
                         {
