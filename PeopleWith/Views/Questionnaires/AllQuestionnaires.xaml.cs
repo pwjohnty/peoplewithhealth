@@ -164,7 +164,7 @@ public partial class AllQuestionnaires : ContentPage
 
                 if(DeviceInfo.Current.Platform == DevicePlatform.Android)
                 {
-                    await Navigation.PushAsync(new AndroidQuestionnaires(item.questionnaireid, userfeedbacklistpassed), false);
+                    await Navigation.PushAsync(new AndroidONLYQuestionnaires(item.questionnaireid, userfeedbacklistpassed), false);
                 }
                 else
                 {

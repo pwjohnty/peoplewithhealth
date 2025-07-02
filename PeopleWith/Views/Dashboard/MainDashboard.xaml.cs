@@ -4836,7 +4836,7 @@ public partial class MainDashboard : ContentPage
             {
                 if (DeviceInfo.Current.Platform == DevicePlatform.Android)
                 {
-                    await Navigation.PushAsync(new AndroidQuestionnaires("73D47262-1B2C-4451-A4FC-978582D77FE0", userfeedbacklist[0]), false);
+                    await Navigation.PushAsync(new AndroidONLYQuestionnaires("73D47262-1B2C-4451-A4FC-978582D77FE0", userfeedbacklist[0]), false);
                 }
                 else
                 {
@@ -4851,7 +4851,7 @@ public partial class MainDashboard : ContentPage
             {
                 if (DeviceInfo.Current.Platform == DevicePlatform.Android)
                 {
-                    await Navigation.PushAsync(new AndroidQuestionnaires("F7FB770B-286F-4300-814D-E76AACB6DACF", userfeedbacklist[0]), false);
+                    await Navigation.PushAsync(new AndroidONLYQuestionnaires("F7FB770B-286F-4300-814D-E76AACB6DACF", userfeedbacklist[0]), false);
                 }
                 else
                 {
@@ -4867,7 +4867,7 @@ public partial class MainDashboard : ContentPage
             {
                 if (DeviceInfo.Current.Platform == DevicePlatform.Android)
                 {
-                    await Navigation.PushAsync(new AndroidQuestionnaires("DC6A9FD7-242B-4299-9672-D745669FEAF0", userfeedbacklist[0]), false);
+                    await Navigation.PushAsync(new AndroidONLYQuestionnaires("DC6A9FD7-242B-4299-9672-D745669FEAF0", userfeedbacklist[0]), false);
                 }
                 else
                 {
@@ -4883,7 +4883,7 @@ public partial class MainDashboard : ContentPage
             {
                 if (DeviceInfo.Current.Platform == DevicePlatform.Android)
                 {
-                    await Navigation.PushAsync(new AndroidQuestionnaires("DC6A9FD7-242B-4299-9672-D745669FEAF0", userfeedbacklist[0]), false);
+                    await Navigation.PushAsync(new AndroidONLYQuestionnaires("DC6A9FD7-242B-4299-9672-D745669FEAF0", userfeedbacklist[0]), false);
                 }
                 else
                 {
@@ -5038,7 +5038,14 @@ public partial class MainDashboard : ContentPage
 
                 if (!string.IsNullOrEmpty(signup))
                 {
-                    await Navigation.PushAsync(new AndroidQuestionnaires(tappedItem.questionnaireid, userfeedbacklist[0]), false);
+                    if (DeviceInfo.Current.Platform == DevicePlatform.Android)
+                    {
+                        await Navigation.PushAsync(new AndroidONLYQuestionnaires(tappedItem.questionnaireid, userfeedbacklist[0]), false);
+                    }
+                    else
+                    {
+                        await Navigation.PushAsync(new AndroidQuestionnaires(tappedItem.questionnaireid, userfeedbacklist[0]), false);
+                    }
                 }
 
             }

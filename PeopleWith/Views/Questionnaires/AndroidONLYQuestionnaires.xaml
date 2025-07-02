@@ -6,24 +6,24 @@
              xmlns:data="clr-namespace:Syncfusion.Maui.DataSource;assembly=Syncfusion.Maui.DataSource"
              xmlns:sliders="clr-namespace:Syncfusion.Maui.Sliders;assembly=Syncfusion.Maui.Sliders"
              HideSoftInputOnTapped="True" xmlns:local="clr-namespace:PeopleWith"
-             x:Class="PeopleWith.AndroidQuestionnaires" BackgroundColor="#f5f5f5" >
+             x:Class="PeopleWith.AndroidONLYQuestionnaires" BackgroundColor="#f5f5f5" >
     <!--<ScrollView VerticalScrollBarVisibility="Never">-->
 
-        <StackLayout x:Name="maintack" VerticalOptions="FillAndExpand" BackgroundColor="Transparent">
+    <StackLayout x:Name="maintack" VerticalOptions="FillAndExpand" BackgroundColor="Transparent">
 
 
-            <StackLayout x:Name="loadingstack" VerticalOptions="CenterAndExpand" IsVisible="false">
-                <ActivityIndicator IsRunning="True"/>
-                <Label Text="Loading Questionnaire..." HorizontalOptions="Center" Margin="0,0,0,0" TextColor="Black" FontSize="12" FontAttributes="Bold"></Label>
-            </StackLayout>
+        <StackLayout x:Name="loadingstack" VerticalOptions="CenterAndExpand" IsVisible="false">
+            <ActivityIndicator IsRunning="True"/>
+            <Label Text="Loading Questionnaire..." HorizontalOptions="Center" Margin="0,0,0,0" TextColor="Black" FontSize="12" FontAttributes="Bold"></Label>
+        </StackLayout>
 
-            <StackLayout x:Name="datastack" IsVisible="False">
+        <StackLayout x:Name="datastack" IsVisible="False">
 
 
 
             <ScrollView x:Name="MainQuestionScroll" VerticalScrollBarVisibility="Never" IsVisible="False">
                 <CollectionView x:Name="mainquestionnaire" HeightRequest="{OnPlatform iOS=3000, Default=-1}" SizeChanged="mainquestionnaire_SizeChanged" IsVisible="False" MaximumHeightRequest="690" SelectionMode="None" BackgroundColor="#f5f5f5" ItemSizingStrategy="MeasureAllItems" VerticalScrollBarVisibility="Never" VerticalOptions="FillAndExpand" Margin="10,0,10,20"  HorizontalOptions="FillAndExpand" >
-                     <!--ListView Header--> 
+                    <!--ListView Header-->
                     <CollectionView.Header>
                         <Border Stroke="Transparent" HeightRequest="{OnPlatform iOS='140'}" BackgroundColor="Transparent"
 StrokeThickness="1" Margin="0,0,0,0" 
@@ -62,7 +62,7 @@ HorizontalOptions="FillAndExpand">
                                 <Button Text="Next" Clicked="Nextbtn_Clicked" x:Name="Nextbtn" WidthRequest="60" Margin="0,0,0,0" Grid.Column="1" HorizontalOptions="End" BackgroundColor="#766647" TextColor="White" />
 
                             </Grid>
-                       
+
                             <Button Text="Submit" Clicked="Button_Clicked" IsVisible="False" x:Name="submitbtn" BackgroundColor="#766647" TextColor="White" />
                         </StackLayout>
                     </CollectionView.Footer>
@@ -72,185 +72,138 @@ HorizontalOptions="FillAndExpand">
                             <StackLayout>
 
 
-                                    <Border Stroke="{Binding Bordercolor}" BackgroundColor="White"
+                                <Border Stroke="{Binding Bordercolor}" BackgroundColor="White"
 StrokeThickness="2" Margin="0,10,0,10" VerticalOptions="FillAndExpand"
 StrokeShape="RoundRectangle 10,10,10,10"
 HorizontalOptions="FillAndExpand">
-                                        <StackLayout Margin="0,10,0,10" VerticalOptions="FillAndExpand" BackgroundColor="White">
+                                    <StackLayout Margin="0,10,0,10" VerticalOptions="FillAndExpand" BackgroundColor="White">
 
                                         <Label Text="{Binding questionnum}" FontFamily="HankenGroteskBold"  FontSize="10" Margin="10,0,0,0" TextColor="#009fe3" />
 
                                         <Label Text="{Binding questiontitle}" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,0,0,0" TextColor="#031926" />
 
 
-                                            <Label Text="{Binding questiondirections}" FontFamily="HankenGroteskRegular"  FontSize="12"  Margin="10,0,0,10" TextColor="Gray" />
+                                        <Label Text="{Binding questiondirections}" FontFamily="HankenGroteskRegular"  FontSize="12"  Margin="10,0,0,10" TextColor="Gray" />
 
-                                            <StackLayout IsVisible="{Binding singleselection}">
+                                        <StackLayout IsVisible="{Binding singleselection}">
 
-                                            <buttons:SfRadioGroupKey x:Name="RadioGroupKey" Spacing="5" >
-                                                <buttons:SfRadioGroup BindableLayout.ItemsSource="{Binding AnswerOptions}">
-                                                    <BindableLayout.ItemTemplate>
+                                            <FlexLayout IsVisible="{OnPlatform Android=True, iOS=False}" IsEnabled="{OnPlatform Android=True, iOS=False}" Wrap="Wrap" AlignItems="Start" AlignContent="Start" Margin="10,0,10,0" >
+
+                                                <CollectionView ItemsSource="{Binding AnswerOptions}" SelectionMode="None"  ItemSizingStrategy="MeasureAllItems" >
+                                                    <CollectionView.ItemsLayout>
+                                                        <LinearItemsLayout Orientation="Vertical" />
+                                                    </CollectionView.ItemsLayout>
+                                                    <CollectionView.ItemTemplate>
                                                         <DataTemplate>
-                                                            <Border Stroke="#f1f1f1" x:Name="ParentQuestion"
-StrokeThickness="1" Margin="0,5,0,5" 
-StrokeShape="RoundRectangle 10,10,10,10"
-HorizontalOptions="FillAndExpand">
-
-                                                                <local:ExtendedSFRadioButton  IsChecked="{Binding selectedss, Mode=TwoWay}"
-IsVisible="{Binding isVisible}" questionid="{Binding questionid}" CheckedColor="#031926"
-FontSize="12" IDValue="{Binding answerid}" IDRecord="{Binding answeroptions}" GroupKey="{Binding Source={x:Reference RadioGroupKey}}"
-BackgroundColor="Transparent" StateChanged="ExtendedSFRadioButton_StateChanged"
-TextColor="#031926" FontFamily="HankenGroteskRegular"
-Margin="0,5,5,5"
-Text="{Binding answertitle}"/>
 
 
-                                                                <!--<local:ExtendedSFRadioButton Margin="0,5,5,5" GroupKey="{Binding Source={x:Reference RadioGroupKey}}" LineBreakMode="WordWrap" TextColor="#031926" FontFamily="HankenGroteskRegular" CheckedColor="#031926" Text="{Binding answertitle}" />-->
-                                                            </Border>
-
-                                                        </DataTemplate>
-                                                    </BindableLayout.ItemTemplate>
-                                                </buttons:SfRadioGroup>
-                                            </buttons:SfRadioGroupKey>
-
-                            
-
-
-                                            <!--<FlexLayout IsVisible="False"  Wrap="Wrap" AlignItems="Start" AlignContent="Start" Margin="10,0,10,0" >
-                                              
-                                                    <CollectionView ItemsSource="{Binding AnswerOptions}" SelectionMode="None"  ItemSizingStrategy="MeasureAllItems" >
-                                                            <CollectionView.ItemsLayout>
-                                                            <LinearItemsLayout Orientation="Vertical" />
-                                                            </CollectionView.ItemsLayout>
-                                                            <CollectionView.ItemTemplate>
-                                                                <DataTemplate>
-                                                                    
-                                                                 
                                                             <Border Stroke="#f1f1f1" x:Name="ParentQuestion"
          StrokeThickness="1" Margin="0,5,0,5" 
          StrokeShape="RoundRectangle 10,10,10,10"
          HorizontalOptions="FillAndExpand">
 
-                                                                
-                                                                
-                                                                <StackLayout  RadioButtonGroup.GroupName="{Binding questionid}">
-                                                                 
 
-                                                                            --><!--<local:ExtendedRadioButton  IsChecked="{Binding selectedss, Mode=TwoWay}"
+                                                                <StackLayout  RadioButtonGroup.GroupName="{Binding questionid}">
+                                                                    <local:ExtendedRadioButton  IsChecked="{Binding selectedss, Mode=TwoWay}"
                                                         IsVisible="{Binding isVisible}" questionid="{Binding questionid}" 
                                                         FontSize="12" IDValue="{Binding answerid}" IDRecord="{Binding answeroptions}"
-                                                        BackgroundColor="Transparent" CheckedChanged="ExtendedRadioButton_CheckedChanged"
+                                                        BackgroundColor="Transparent" CheckedChanged="ExtendedRadioButton_CheckedChanged" 
                                                         TextColor="#031926" FontFamily="HankenGroteskRegular"
                                                         Margin="0,5,5,5"
-                                                        Content="{Binding answertitle}" >--><!--
+                                                        Content="{Binding answertitle}" />
+                                                                </StackLayout>
+                                                            </Border>
 
-                                                                            <local:ExtendedSFRadioButton  IsChecked="{Binding selectedss, Mode=TwoWay}"
-IsVisible="{Binding isVisible}" questionid="{Binding questionid}" CheckedColor="#031926"
-FontSize="12" IDValue="{Binding answerid}" IDRecord="{Binding answeroptions}"
-BackgroundColor="Transparent" StateChanged="ExtendedSFRadioButton_StateChanged"
-TextColor="#031926" FontFamily="HankenGroteskRegular"
-Margin="0,5,5,5"
-Text="{Binding answertitle}" >
+                                                        </DataTemplate>
+                                                    </CollectionView.ItemTemplate>
+                                                </CollectionView>
 
-
-
-                                                                            </local:ExtendedSFRadioButton>
-                                                                     
-                                                                    </StackLayout>
-
-                                                                    </Border>
-                                                             
-                                                            </DataTemplate>
-
-                                                            </CollectionView.ItemTemplate>
-                                                        </CollectionView>
-                                               
-                                                </FlexLayout>-->
+                                            </FlexLayout>
 
 
-                                            </StackLayout>
+                                        </StackLayout>
 
-                                            <StackLayout IsVisible="{Binding mulitpleselection}">
+                                        <StackLayout IsVisible="{Binding mulitpleselection}">
 
                                             <FlexLayout Wrap="Wrap" Direction="Row" AlignItems="Start" AlignContent="Start" Margin="10,0,10,0" >
-                                                    <buttons:SfRadioGroup>
-                                                        <CollectionView ItemsSource="{Binding AnswerOptions}" >
-                                                            <CollectionView.ItemsLayout>
+                                                <buttons:SfRadioGroup>
+                                                    <CollectionView ItemsSource="{Binding AnswerOptions}" >
+                                                        <CollectionView.ItemsLayout>
                                                             <LinearItemsLayout  Orientation="Vertical" />
-                                                            </CollectionView.ItemsLayout>
-                                                            <CollectionView.ItemTemplate>
-                                                                <DataTemplate>
+                                                        </CollectionView.ItemsLayout>
+                                                        <CollectionView.ItemTemplate>
+                                                            <DataTemplate>
                                                                 <Border Stroke="#f1f1f1" 
 StrokeThickness="1" Margin="0,5,0,5"
 StrokeShape="RoundRectangle 10,10,10,10"
 HorizontalOptions="FillAndExpand">
-                                                                        <local:ExtendedCheckbox CornerRadius="5" 
+                                                                    <local:ExtendedCheckbox CornerRadius="5" 
                                                IsVisible="{Binding isVisible}" questionid="{Binding questionid}" IsChecked="{Binding selectedms}"
                                                FontSize="12" IDValue="{Binding answerid}" IDRecord="{Binding answeroptions}"
                                                CheckedColor="#031926" StateChanged="ExtendedCheckbox_StateChanged"
                                                TextColor="#031926" FontFamily="HankenGroteskRegular"
                                                Margin="0,0,5,0"
                                                Text="{Binding answertitle}" />
-                                                                    </Border>
-                                                                </DataTemplate>
-                                                            </CollectionView.ItemTemplate>
-                                                        </CollectionView>
-                                                    </buttons:SfRadioGroup>
-                                                </FlexLayout>
+                                                                </Border>
+                                                            </DataTemplate>
+                                                        </CollectionView.ItemTemplate>
+                                                    </CollectionView>
+                                                </buttons:SfRadioGroup>
+                                            </FlexLayout>
 
 
-                                            </StackLayout>
+                                        </StackLayout>
 
 
-                                            <Border Stroke="#f1f1f1"
+                                        <Border Stroke="#f1f1f1"
 StrokeThickness="1" Margin="10,5,10,5" IsVisible="{Binding Addfreetext}"
 StrokeShape="RoundRectangle 10,10,10,10" Opacity="{Binding Addfreetextopacity}"
 HorizontalOptions="FillAndExpand">
                                             <local:ExtendedEditor Text="{Binding freetextentry}" Opacity="{Binding Addfreetextopacity}" TextChanged="ExtendedEditor_TextChanged" IsEnabled="{Binding Addfreetextenabled}" questionid="{Binding questionid}"  BackgroundColor="Transparent" Margin="10,0,10,0" AutoSize="TextChanges" IDValue="{Binding answerid}" HeightRequest="100" IsVisible="{Binding Addfreetext}" TextColor="#031926" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Add text here...." />
-                                            </Border>
+                                        </Border>
 
 
 
-                                            <Border Stroke="#f1f1f1"
+                                        <Border Stroke="#f1f1f1"
 StrokeThickness="1" Margin="10,5,10,5" IsVisible="{Binding Doublenumentry}"
 StrokeShape="RoundRectangle 10,10,10,10"
 HorizontalOptions="FillAndExpand">
-                                                <Grid IsVisible="{Binding Doublenumentry}">
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="Auto"/>
-                                                    </Grid.RowDefinitions>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="30*"/>
-                                                        <ColumnDefinition Width="20*"/>
-                                                        <ColumnDefinition Width="30*"/>
-                                                        <ColumnDefinition Width="20*"/>
-                                                    </Grid.ColumnDefinitions>
+                                            <Grid IsVisible="{Binding Doublenumentry}">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="30*"/>
+                                                    <ColumnDefinition Width="20*"/>
+                                                    <ColumnDefinition Width="30*"/>
+                                                    <ColumnDefinition Width="20*"/>
+                                                </Grid.ColumnDefinitions>
 
                                                 <local:ExtendedEntry IDValue="{Binding answerid}" TextColor="#031926" TextChanged="ExtendedEntry_TextChanged" questionid="{Binding questionid}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" Grid.Row="0" Grid.Column="0"/>
-                                                    <Label Text="Months" FontFamily="HankenGroteskBold" VerticalOptions="Center" Grid.Row="0" Grid.Column="1"  FontSize="10"  Margin="10,0,0,0" TextColor="#031926" />
+                                                <Label Text="Months" FontFamily="HankenGroteskBold" VerticalOptions="Center" Grid.Row="0" Grid.Column="1"  FontSize="10"  Margin="10,0,0,0" TextColor="#031926" />
 
                                                 <local:ExtendedEntry IDValue="{Binding answerid}" TextColor="#031926" TextChanged="ExtendedEntry_TextChanged_1" questionid="{Binding questionid}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" Grid.Row="0" Grid.Column="2"/>
-                                                    <Label Text="Years" FontFamily="HankenGroteskBold" VerticalOptions="Center" Grid.Row="0" Grid.Column="3"  FontSize="10"  Margin="10,0,0,0" TextColor="#031926" />
+                                                <Label Text="Years" FontFamily="HankenGroteskBold" VerticalOptions="Center" Grid.Row="0" Grid.Column="3"  FontSize="10"  Margin="10,0,0,0" TextColor="#031926" />
 
 
-                                                </Grid>
-                                            </Border>
+                                            </Grid>
+                                        </Border>
 
 
-                                            <Border Stroke="#f1f1f1"
+                                        <Border Stroke="#f1f1f1"
 StrokeThickness="1" Margin="10,5,10,5" IsVisible="{Binding Numericentry}"
 StrokeShape="RoundRectangle 10,10,10,10"
 HorizontalOptions="FillAndExpand">
                                             <local:ExtendedEntry IDValue="{Binding answerid}" TextColor="#031926" Text="{Binding numericentrytext}" questionid="{Binding questionid}" TextChanged="ExtendedEntry_TextChanged_2" Keyboard="Numeric" IsVisible="{Binding Numericentry}" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" HorizontalOptions="FillAndExpand"/>
 
 
-                                            </Border>
+                                        </Border>
 
-                                            <Border Stroke="#f1f1f1"
+                                        <Border Stroke="#f1f1f1"
 StrokeThickness="1" Margin="10,5,10,5" IsVisible="{Binding Sliderscale}"
 StrokeShape="RoundRectangle 10,10,10,10"
 HorizontalOptions="FillAndExpand">
-                                                <StackLayout>
+                                            <StackLayout>
                                                 <local:ExtendedSlider Minimum="1" Value="{Binding SliderValue}"
                   Maximum="10" Margin="0,0,0,10" ValueChanged="ExtendedSlider_ValueChanged"
                   Orientation="Horizontal" IDValue="{Binding answerid}" questionid="{Binding questionid}"
@@ -258,44 +211,44 @@ HorizontalOptions="FillAndExpand">
                   ShowTicks="True" StepSize="1"
                   ShowLabels="True" ShowDividers="False"
                   MinorTicksPerInterval="0" >
-                                                        <local:ExtendedSlider.ThumbStyle>
-                                                            <sliders:SliderThumbStyle Radius="10" Stroke="#031926" Fill="#031926"/>
-                                                        </local:ExtendedSlider.ThumbStyle>
-                                                        <local:ExtendedSlider.LabelStyle>
-                                                            <sliders:SliderLabelStyle ActiveFontFamily="HankenGroteskRegular" InactiveFontFamily="HankenGroteskRegular" ActiveFontSize="12" InactiveFontSize="12" />
-                                                        </local:ExtendedSlider.LabelStyle>
-                                                        <local:ExtendedSlider.TrackStyle>
-                                                            <sliders:SliderTrackStyle ActiveFill="#031926"
+                                                    <local:ExtendedSlider.ThumbStyle>
+                                                        <sliders:SliderThumbStyle Radius="10" Stroke="#031926" Fill="#031926"/>
+                                                    </local:ExtendedSlider.ThumbStyle>
+                                                    <local:ExtendedSlider.LabelStyle>
+                                                        <sliders:SliderLabelStyle ActiveFontFamily="HankenGroteskRegular" InactiveFontFamily="HankenGroteskRegular" ActiveFontSize="12" InactiveFontSize="12" />
+                                                    </local:ExtendedSlider.LabelStyle>
+                                                    <local:ExtendedSlider.TrackStyle>
+                                                        <sliders:SliderTrackStyle ActiveFill="#031926"
                                   InactiveFill="LightGray" />
-                                                        </local:ExtendedSlider.TrackStyle>
-                                                        <local:ExtendedSlider.ThumbOverlayStyle>
-                                                            <sliders:SliderThumbOverlayStyle Radius="18"/>
-                                                        </local:ExtendedSlider.ThumbOverlayStyle>
-                                                    </local:ExtendedSlider>
+                                                    </local:ExtendedSlider.TrackStyle>
+                                                    <local:ExtendedSlider.ThumbOverlayStyle>
+                                                        <sliders:SliderThumbOverlayStyle Radius="18"/>
+                                                    </local:ExtendedSlider.ThumbOverlayStyle>
+                                                </local:ExtendedSlider>
 
-                                                    <Label Text="{Binding answertitle}" HorizontalOptions="Center" HorizontalTextAlignment="Center" FontFamily="HankenGroteskRegular"  FontSize="8"  Margin="10,0,10,5" TextColor="Gray" />
+                                                <Label Text="{Binding answertitle}" HorizontalOptions="Center" HorizontalTextAlignment="Center" FontFamily="HankenGroteskRegular"  FontSize="8"  Margin="10,0,10,5" TextColor="Gray" />
 
-                                                </StackLayout>
-                                            </Border>
-
-
-                                            <BoxView Color="#009fe3" BackgroundColor="#009fe3" IsVisible="False" WidthRequest="150" HeightRequest="2" Margin="0,10,0,0" />
-
-                                        </StackLayout>
+                                            </StackLayout>
+                                        </Border>
 
 
-                                    </Border>
+                                        <BoxView Color="#009fe3" BackgroundColor="#009fe3" IsVisible="False" WidthRequest="150" HeightRequest="2" Margin="0,10,0,0" />
 
-                                    <Label Text="*Question Required" IsVisible="{Binding Isrequired}" HorizontalOptions="EndAndExpand" FontFamily="HankenGroteskBold"  FontSize="12" Margin="0,0,10,0" TextColor="Red" />
+                                    </StackLayout>
 
-                                </StackLayout>
+
+                                </Border>
+
+                                <Label Text="*Question Required" IsVisible="{Binding Isrequired}" HorizontalOptions="EndAndExpand" FontFamily="HankenGroteskBold"  FontSize="12" Margin="0,0,10,0" TextColor="Red" />
+
+                            </StackLayout>
 
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </ScrollView>
-          
-                <ScrollView x:Name="CompletedQuestionView" IsVisible="False" BackgroundColor="Transparent" Orientation="Vertical" InputTransparent="False" VerticalScrollBarVisibility="Never">
+
+            <ScrollView x:Name="CompletedQuestionView" IsVisible="False" BackgroundColor="Transparent" Orientation="Vertical" InputTransparent="False" VerticalScrollBarVisibility="Never">
                 <CollectionView  x:Name="completedquestionnaire" MinimumHeightRequest="680" SizeChanged="completedquestionnaire_SizeChanged" MaximumHeightRequest="680" IsVisible="False" SelectionMode="None"  BackgroundColor="#f5f5f5"  VerticalScrollBarVisibility="Never" VerticalOptions="FillAndExpand"  Margin="10,0,10,20"  HorizontalOptions="FillAndExpand" >
                     <!-- ListView Header -->
                     <CollectionView.Header>
@@ -330,15 +283,15 @@ HorizontalOptions="FillAndExpand">
                             <StackLayout>
 
 
-                                    <Border Stroke="{Binding Bordercolor}" BackgroundColor="White"
+                                <Border Stroke="{Binding Bordercolor}" BackgroundColor="White"
 StrokeThickness="2" Margin="0,10,0,10" VerticalOptions="FillAndExpand" 
 StrokeShape="RoundRectangle 10,10,10,10"
 HorizontalOptions="FillAndExpand">
-                                        <StackLayout Margin="0,10,0,10" VerticalOptions="FillAndExpand" BackgroundColor="White">
+                                    <StackLayout Margin="0,10,0,10" VerticalOptions="FillAndExpand" BackgroundColor="White">
 
-                                            <Label Text="{Binding questiontitle}" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,0,0,0" TextColor="#031926" />
+                                        <Label Text="{Binding questiontitle}" FontFamily="HankenGroteskBold"  FontSize="14" Margin="10,0,0,0" TextColor="#031926" />
 
-                                            <StackLayout IsVisible="{Binding singleselection}" IsEnabled="true">
+                                        <StackLayout IsVisible="{Binding singleselection}" IsEnabled="true">
 
                                             <FlexLayout Wrap="Wrap" AlignItems="Start"  AlignContent="Start" Margin="10,0,10,0">
                                                 <CollectionView ItemsSource="{Binding AnswerOptions}">
@@ -379,7 +332,7 @@ HorizontalOptions="FillAndExpand">
 
                                         </StackLayout>
 
-                                            <StackLayout  IsVisible="{Binding mulitpleselection}" IsEnabled="False">
+                                        <StackLayout  IsVisible="{Binding mulitpleselection}" IsEnabled="False">
 
                                             <FlexLayout Wrap="Wrap" AlignItems="Start" AlignContent="Start" Margin="10,0,10,0">
                                                 <CollectionView ItemsSource="{Binding AnswerOptions}">
@@ -417,59 +370,59 @@ HorizontalOptions="FillAndExpand">
                                                     </CollectionView.ItemTemplate>
                                                 </CollectionView>
                                             </FlexLayout>
-                                                
+
                                         </StackLayout>
 
 
-                                            <Border Stroke="#f1f1f1"
+                                        <Border Stroke="#f1f1f1"
 StrokeThickness="1" Margin="10,5,10,5" IsVisible="{Binding Addfreetext}"
 StrokeShape="RoundRectangle 10,10,10,10" Opacity="1"
 HorizontalOptions="FillAndExpand">
                                             <local:ExtendedEditor Opacity="1" IsEnabled="False" Text="{Binding freetextentry}" TextChanged="ExtendedEditor_TextChanged" questionid="{Binding questionid}"  BackgroundColor="Transparent" Margin="10,0,10,0" AutoSize="TextChanges" IDValue="{Binding answerid}" HeightRequest="100" IsVisible="{Binding Addfreetext}" TextColor="#031926" PlaceholderColor="Gray" FontFamily="HankenGroteskRegular" Placeholder="Add text here...." />
-                                            </Border>
+                                        </Border>
 
 
 
-                                            <Border Stroke="#f1f1f1"
+                                        <Border Stroke="#f1f1f1"
 StrokeThickness="1" Margin="10,5,10,5" IsVisible="{Binding Doublenumentry}"
 StrokeShape="RoundRectangle 10,10,10,10"
 HorizontalOptions="FillAndExpand">
-                                                <Grid IsVisible="{Binding Doublenumentry}" IsEnabled="False">
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="Auto"/>
-                                                    </Grid.RowDefinitions>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="30*"/>
-                                                        <ColumnDefinition Width="20*"/>
-                                                        <ColumnDefinition Width="30*"/>
-                                                        <ColumnDefinition Width="20*"/>
-                                                    </Grid.ColumnDefinitions>
+                                            <Grid IsVisible="{Binding Doublenumentry}" IsEnabled="False">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="30*"/>
+                                                    <ColumnDefinition Width="20*"/>
+                                                    <ColumnDefinition Width="30*"/>
+                                                    <ColumnDefinition Width="20*"/>
+                                                </Grid.ColumnDefinitions>
 
                                                 <local:ExtendedEntry Text="{Binding doubleentry1}" TextColor="#031926" IDValue="{Binding answerid}" TextChanged="ExtendedEntry_TextChanged" questionid="{Binding questionid}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" Grid.Row="0" Grid.Column="0"/>
-                                                    <Label Text="Months" FontFamily="HankenGroteskBold" VerticalOptions="Center" Grid.Row="0" Grid.Column="1"  FontSize="10"  Margin="10,0,0,0" TextColor="#031926" />
+                                                <Label Text="Months" FontFamily="HankenGroteskBold" VerticalOptions="Center" Grid.Row="0" Grid.Column="1"  FontSize="10"  Margin="10,0,0,0" TextColor="#031926" />
 
                                                 <local:ExtendedEntry Text="{Binding doubleentry2}" TextColor="#031926" IDValue="{Binding answerid}" TextChanged="ExtendedEntry_TextChanged_1" questionid="{Binding questionid}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" Grid.Row="0" Grid.Column="2"/>
-                                                    <Label Text="Years" FontFamily="HankenGroteskBold" VerticalOptions="Center" Grid.Row="0" Grid.Column="3"  FontSize="10"  Margin="10,0,0,0" TextColor="#031926" />
+                                                <Label Text="Years" FontFamily="HankenGroteskBold" VerticalOptions="Center" Grid.Row="0" Grid.Column="3"  FontSize="10"  Margin="10,0,0,0" TextColor="#031926" />
 
 
-                                                </Grid>
-                                            </Border>
+                                            </Grid>
+                                        </Border>
 
 
-                                            <Border Stroke="#f1f1f1"
+                                        <Border Stroke="#f1f1f1"
 StrokeThickness="1" Margin="10,5,10,5" IsVisible="{Binding Numericentry}"
 StrokeShape="RoundRectangle 10,10,10,10"
 HorizontalOptions="FillAndExpand">
                                             <local:ExtendedEntry IDValue="{Binding answerid}" TextColor="#031926" IsEnabled="False" Text="{Binding numericentrytext}" questionid="{Binding questionid}" TextChanged="ExtendedEntry_TextChanged_2" Keyboard="Numeric" IsVisible="{Binding Numericentry}" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" HorizontalOptions="FillAndExpand"/>
 
 
-                                            </Border>
+                                        </Border>
 
-                                            <Border Stroke="#f1f1f1"
+                                        <Border Stroke="#f1f1f1"
 StrokeThickness="1" Margin="10,5,10,5" IsVisible="{Binding Sliderscale}"
 StrokeShape="RoundRectangle 10,10,10,10"
 HorizontalOptions="FillAndExpand">
-                                                <StackLayout>
+                                            <StackLayout>
                                                 <local:ExtendedSlider Minimum="1"
                   Maximum="10" Margin="0,0,0,10" ValueChanged="ExtendedSlider_ValueChanged"
                    Orientation="Horizontal" IDValue="{Binding answerid}" questionid="{Binding questionid}"
@@ -477,49 +430,49 @@ HorizontalOptions="FillAndExpand">
                   ShowTicks="True" StepSize="1" Value="{Binding SliderValue}"
                   ShowLabels="True" ShowDividers="False"
                   MinorTicksPerInterval="0" >
-                                                        <local:ExtendedSlider.ThumbStyle>
-                                                            <sliders:SliderThumbStyle Radius="10" Stroke="#031926" Fill="#031926"/>
-                                                        </local:ExtendedSlider.ThumbStyle>
-                                                        <local:ExtendedSlider.LabelStyle>
-                                                            <sliders:SliderLabelStyle ActiveFontFamily="HankenGroteskRegular" InactiveFontFamily="HankenGroteskRegular" ActiveFontSize="12" InactiveFontSize="12" />
-                                                        </local:ExtendedSlider.LabelStyle>
-                                                        <local:ExtendedSlider.TrackStyle>
-                                                            <sliders:SliderTrackStyle ActiveFill="#031926"
+                                                    <local:ExtendedSlider.ThumbStyle>
+                                                        <sliders:SliderThumbStyle Radius="10" Stroke="#031926" Fill="#031926"/>
+                                                    </local:ExtendedSlider.ThumbStyle>
+                                                    <local:ExtendedSlider.LabelStyle>
+                                                        <sliders:SliderLabelStyle ActiveFontFamily="HankenGroteskRegular" InactiveFontFamily="HankenGroteskRegular" ActiveFontSize="12" InactiveFontSize="12" />
+                                                    </local:ExtendedSlider.LabelStyle>
+                                                    <local:ExtendedSlider.TrackStyle>
+                                                        <sliders:SliderTrackStyle ActiveFill="#031926"
                                   InactiveFill="LightGray" />
-                                                        </local:ExtendedSlider.TrackStyle>
-                                                        <local:ExtendedSlider.ThumbOverlayStyle>
-                                                            <sliders:SliderThumbOverlayStyle Radius="18"/>
-                                                        </local:ExtendedSlider.ThumbOverlayStyle>
-                                                    </local:ExtendedSlider>
+                                                    </local:ExtendedSlider.TrackStyle>
+                                                    <local:ExtendedSlider.ThumbOverlayStyle>
+                                                        <sliders:SliderThumbOverlayStyle Radius="18"/>
+                                                    </local:ExtendedSlider.ThumbOverlayStyle>
+                                                </local:ExtendedSlider>
 
-                                                    <Label Text="{Binding answertitle}" HorizontalOptions="Center" HorizontalTextAlignment="Center" FontFamily="HankenGroteskRegular"  FontSize="8"  Margin="10,0,10,5" TextColor="Gray" />
+                                                <Label Text="{Binding answertitle}" HorizontalOptions="Center" HorizontalTextAlignment="Center" FontFamily="HankenGroteskRegular"  FontSize="8"  Margin="10,0,10,5" TextColor="Gray" />
 
-                                                </StackLayout>
-                                            </Border>
-
-
-                                            <BoxView Color="#009fe3" BackgroundColor="#009fe3" IsVisible="False" WidthRequest="150" HeightRequest="2" Margin="0,10,0,0" />
-
-                                        </StackLayout>
+                                            </StackLayout>
+                                        </Border>
 
 
-                                    </Border>
+                                        <BoxView Color="#009fe3" BackgroundColor="#009fe3" IsVisible="False" WidthRequest="150" HeightRequest="2" Margin="0,10,0,0" />
 
-                                    <Label Text="*Question Required" IsVisible="{Binding Isrequired}" HorizontalOptions="EndAndExpand" FontFamily="HankenGroteskBold"  FontSize="12" Margin="0,0,10,0" TextColor="Red" />
+                                    </StackLayout>
 
-                                </StackLayout>
+
+                                </Border>
+
+                                <Label Text="*Question Required" IsVisible="{Binding Isrequired}" HorizontalOptions="EndAndExpand" FontFamily="HankenGroteskBold"  FontSize="12" Margin="0,0,10,0" TextColor="Red" />
+
+                            </StackLayout>
 
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
 
-                </ScrollView>
+            </ScrollView>
 
-
-            </StackLayout>
 
         </StackLayout>
+
+    </StackLayout>
 
     <!--</ScrollView>-->
 

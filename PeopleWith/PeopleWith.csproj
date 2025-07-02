@@ -572,6 +572,9 @@
     <MauiXaml Update="Views\Questionnaires\AllQuestionnaires.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
+    <MauiXaml Update="Views\Questionnaires\AndroidONLYQuestionnaires.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
     <MauiXaml Update="Views\Questionnaires\AndroidQuestionnaires.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>

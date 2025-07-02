@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace PeopleWith;
 
-public partial class AndroidQuestionnaires : ContentPage
+public partial class AndroidONLYQuestionnaires : ContentPage
 {
     public questionnaire questionnairefromlist = new questionnaire();
     public int rownumber = 0;
@@ -21,7 +21,7 @@ public partial class AndroidQuestionnaires : ContentPage
     public ObservableCollection<questionanswerinfo> QuestionsInOrder = new ObservableCollection<questionanswerinfo>();
     public ObservableCollection<questionanswerinfo> SelectedAnswerList = new ObservableCollection<questionanswerinfo>();
     public int OrderNumber = 1;
-    public double ValueofSlider = 0; 
+    public double ValueofSlider = 0;
     ObservableCollection<string> answerid = new ObservableCollection<string>();
     String RecordID = null;
     //Connectivity Changed 
@@ -46,7 +46,7 @@ public partial class AndroidQuestionnaires : ContentPage
         }
     }
 
-    public AndroidQuestionnaires()
+    public AndroidONLYQuestionnaires()
     {
         try
         {
@@ -58,7 +58,7 @@ public partial class AndroidQuestionnaires : ContentPage
         }
     }
 
-    public AndroidQuestionnaires(string questionnaireid, userfeedback userfeedbacklist)
+    public AndroidONLYQuestionnaires(string questionnaireid, userfeedback userfeedbacklist)
     {
         try
         {
@@ -82,14 +82,14 @@ public partial class AndroidQuestionnaires : ContentPage
         }
     }
 
-    public AndroidQuestionnaires(string questionnaireid)
+    public AndroidONLYQuestionnaires(string questionnaireid)
     {
         try
         {
             InitializeComponent();
 
             //notification tap
-           
+
 
             //get questionnaire detais
             getquestionnairedetails(questionnaireid);
@@ -107,7 +107,7 @@ public partial class AndroidQuestionnaires : ContentPage
         try
         {
             InitalLoad = true;
- 
+
             loadingstack.IsVisible = true;
 
             var uq = await aPICalls.GetSingleQuestionnaire(questionnaireid);
@@ -137,7 +137,7 @@ public partial class AndroidQuestionnaires : ContentPage
         }
     }
 
-    public AndroidQuestionnaires(questionnaire questionnairepassed, userfeedback userfeedbacklist)
+    public AndroidONLYQuestionnaires(questionnaire questionnairepassed, userfeedback userfeedbacklist)
     {
         try
         {
@@ -169,7 +169,7 @@ public partial class AndroidQuestionnaires : ContentPage
     }
 
 
-    public AndroidQuestionnaires(userquestionnaire userquestionnairepassed, questionnaire questionnairepassed)
+    public AndroidONLYQuestionnaires(userquestionnaire userquestionnairepassed, questionnaire questionnairepassed)
     {
         try
         {
@@ -271,7 +271,7 @@ public partial class AndroidQuestionnaires : ContentPage
                     {
                         if (item.AnswerOptions.Count == 0)
                         {
-                           
+
 
                         }
                         else
@@ -298,7 +298,7 @@ public partial class AndroidQuestionnaires : ContentPage
                         //}
                     }
 
-                       
+
 
                     if (item.questionanswers.Any(x => x.answeroptions == "specifyfreetext"))
                     {
@@ -352,10 +352,10 @@ public partial class AndroidQuestionnaires : ContentPage
                             option.ImgSource = "radiobutton.png";
                         }
 
-                       // item.AnswerOptions[0].selectedms = true;
-                       // item.AnswerOptions[0].isVisible = true;
-                       // item.AnswerOptions[0].bordervis = true;
-                      //  item.AnswerOptions[0].ImgSource = "radiobutton.png";
+                        // item.AnswerOptions[0].selectedms = true;
+                        // item.AnswerOptions[0].isVisible = true;
+                        // item.AnswerOptions[0].bordervis = true;
+                        //  item.AnswerOptions[0].ImgSource = "radiobutton.png";
 
                         if (!string.IsNullOrEmpty(it.answervalue))
                         {
@@ -373,7 +373,7 @@ public partial class AndroidQuestionnaires : ContentPage
                     {
                         if (string.IsNullOrEmpty(userquestionanswer.answer[0].answervalue))
                         {
-                            item.Addfreetext = false; 
+                            item.Addfreetext = false;
                         }
                         else
                         {
@@ -446,7 +446,7 @@ public partial class AndroidQuestionnaires : ContentPage
             if (completeduserquestionnaire)
             {
                 completedquestionnaire.IsVisible = true;
-                CompletedQuestionView.IsVisible = true; 
+                CompletedQuestionView.IsVisible = true;
                 completedquestionnaire.ItemsSource = questionnairefromlist.questionanswerjsonlist;
                 completedquestionnaire.HeightRequest = questionnairefromlist.questionanswerjsonlist.Count * 180;
                 //completedquestionnaire.MaximumHeightRequest = 1500;
@@ -456,14 +456,14 @@ public partial class AndroidQuestionnaires : ContentPage
             else
             {
                 mainquestionnaire.IsVisible = true;
-                MainQuestionScroll.IsVisible = true; 
+                MainQuestionScroll.IsVisible = true;
 
                 mainquestionnaire.ItemsSource = questionnairefromlist.questionanswerjsonlist;
 
 
-                if(DeviceInfo.Platform == DevicePlatform.iOS)
+                if (DeviceInfo.Platform == DevicePlatform.iOS)
                 {
-                  //  mainquestionnaire.HeightRequest = 3000;
+                    //  mainquestionnaire.HeightRequest = 3000;
                 }
 
             }
@@ -542,7 +542,7 @@ public partial class AndroidQuestionnaires : ContentPage
                 item.Isrequired = false;
                 item.Bordercolor = Colors.White;
                 item.questionnum = "Question " + item.questionorder + " of " + GetCount;
-                item.Hasanswered = false; 
+                item.Hasanswered = false;
 
                 if (item.questiontype == "singleselection")
                 {
@@ -642,7 +642,7 @@ public partial class AndroidQuestionnaires : ContentPage
             if (completeduserquestionnaire)
             {
                 completedquestionnaire.IsVisible = true;
-                CompletedQuestionView.IsVisible = true; 
+                CompletedQuestionView.IsVisible = true;
                 //Dont Forget to Remove this ([0]);
                 ObservableCollection<questionanswerinfo> Answer = new ObservableCollection<questionanswerinfo>();
 
@@ -655,7 +655,7 @@ public partial class AndroidQuestionnaires : ContentPage
             else
             {
                 mainquestionnaire.IsVisible = true;
-                MainQuestionScroll.IsVisible = true; 
+                MainQuestionScroll.IsVisible = true;
                 ObservableCollection<questionanswerinfo> Answer = new ObservableCollection<questionanswerinfo>();
 
                 var getitem = questionnairefromlist.questionanswerjsonlist.First();
@@ -734,7 +734,7 @@ public partial class AndroidQuestionnaires : ContentPage
 
             if (getitem == null)
             {
-                if(QuestionsInOrder == null || QuestionsInOrder.Count == 0)
+                if (QuestionsInOrder == null || QuestionsInOrder.Count == 0)
                 {
                     return;
                 }
@@ -760,7 +760,7 @@ public partial class AndroidQuestionnaires : ContentPage
 
             if (e.IsChecked == true)
             {
-                
+
                 if (!getitem.Selectedansweridlist.Contains(item.IDValue))
                 {
                     getitem.Selectedansweridlist.Add(item.IDValue);
@@ -908,10 +908,10 @@ public partial class AndroidQuestionnaires : ContentPage
                     if (item.Hasanswered == false)
                     {
 
-                            item.Bordercolor = Colors.Red;
-                            item.Isrequired = true;
-                            return;
-                        
+                        item.Bordercolor = Colors.Red;
+                        item.Isrequired = true;
+                        return;
+
                     }
 
                 }
@@ -949,11 +949,11 @@ public partial class AndroidQuestionnaires : ContentPage
             }
 
             //Added the following Foreach to Set Item Selection
-            foreach(var item in QuestionsInOrder)
+            foreach (var item in QuestionsInOrder)
             {
                 if (item.Selectedansweridlist == null) continue;
 
-                if(item.Selectedansweridlist.Count > 0)
+                if (item.Selectedansweridlist.Count > 0)
                 {
                     var answerid = item.Selectedansweridlist[0];
 
@@ -976,7 +976,7 @@ public partial class AndroidQuestionnaires : ContentPage
 
                 }
             }
-         
+
             mainquestionnaire.ItemsSource = QuestionsInOrder;
 
         }
@@ -997,11 +997,11 @@ public partial class AndroidQuestionnaires : ContentPage
                 if (x.questionorder == OrderNumber.ToString())
                 {
                     //x.SliderValue = ValueofSlider;
-               
+
                     answerid = x.Selectedansweridlist;
-                
+
                 }
-          
+
             }
 
             answerid = null;
@@ -1017,10 +1017,10 @@ public partial class AndroidQuestionnaires : ContentPage
                     x.Hasanswered = true;
                     answerid = x.Selectedansweridlist;
 
-                   // x.Selectedansweridlist = new List<string>();
-                   // x.Selectedansweridlist = answerid;
+                    // x.Selectedansweridlist = new List<string>();
+                    // x.Selectedansweridlist = answerid;
                     QuestionsInOrder.Add(x);
-                    
+
                     if (x.AnswerOptions != null)
                     {
                         RecordID = x.AnswerOptions[0].answeroptions;
@@ -1048,7 +1048,7 @@ public partial class AndroidQuestionnaires : ContentPage
                     if (selectedIndex != -1)
                     {
                         //Missing .selectedss and check for each item
-                        if(item.singleselection == true)
+                        if (item.singleselection == true)
                         {
                             item.AnswerOptions[selectedIndex].selectedss = true;
 
@@ -1068,7 +1068,7 @@ public partial class AndroidQuestionnaires : ContentPage
 
                 if (item.Sliderscale == true)
                 {
-                    if(item.SliderValue == null || item.SliderValue == 0)
+                    if (item.SliderValue == null || item.SliderValue == 0)
                     {
                         //if(ValueofSlider != 0)
                         //{
@@ -1163,13 +1163,13 @@ public partial class AndroidQuestionnaires : ContentPage
                 backbtn.IsVisible = false;
             }
 
-           // mainquestionnaire.ItemsSource = null;
+            // mainquestionnaire.ItemsSource = null;
 
-          
+
 
             mainquestionnaire.ItemsSource = QuestionsInOrder;
 
-          
+
 
         }
         catch (Exception Ex)
@@ -1310,9 +1310,9 @@ public partial class AndroidQuestionnaires : ContentPage
                             }
                             else if (item.questiontype == "scale110singleselection")
                             {
-                                if(item.SliderValue == 0)
+                                if (item.SliderValue == 0)
                                 {
-                                    item.SliderValue = 1; 
+                                    item.SliderValue = 1;
                                 }
                                 newanswer.answervalue = item.SliderValue.ToString();
                             }
@@ -1346,18 +1346,18 @@ public partial class AndroidQuestionnaires : ContentPage
                 //if (fromdash)
                 //{
 
-                    var newfd = new feedbackdata();
+                var newfd = new feedbackdata();
 
-                    newfd.datetime = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
-                    newfd.action = "Completed Questionnaire";
-                    newfd.label = questionnairetitlelbl.Text;
+                newfd.datetime = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+                newfd.action = "Completed Questionnaire";
+                newfd.label = questionnairetitlelbl.Text;
 
-                    //add questionnaire details in feedback data
+                //add questionnaire details in feedback data
 
-                    if (userfeedbacklistpassed.initialquestionnairefeedbacklist == null)
-                    {
-                        userfeedbacklistpassed.initialquestionnairefeedbacklist = new ObservableCollection<feedbackdata>();
-                    }
+                if (userfeedbacklistpassed.initialquestionnairefeedbacklist == null)
+                {
+                    userfeedbacklistpassed.initialquestionnairefeedbacklist = new ObservableCollection<feedbackdata>();
+                }
 
                 //Only add the first instance of the questionnaire to remove the prompt on dash 
                 bool exists = userfeedbacklistpassed.initialquestionnairefeedbacklist.Any(item => item.label == newfd.label);
@@ -1365,8 +1365,8 @@ public partial class AndroidQuestionnaires : ContentPage
                 if (!exists)
                 {
                     var Signup = Helpers.Settings.SignUp;
-                    var ListArray = new List<string>(); 
-                    if(!string.IsNullOrEmpty(Signup)) 
+                    var ListArray = new List<string>();
+                    if (!string.IsNullOrEmpty(Signup))
                     {
                         if (Signup.Contains("SFEWH"))
                         {
@@ -1430,10 +1430,10 @@ public partial class AndroidQuestionnaires : ContentPage
                             userfeedbacklistpassed.initialquestionnairefeedback = newsymJson;
 
                             await aPICalls.UserfeedbackUpdateQuestionnaireData(userfeedbacklistpassed);
-                        }            
-                    }          
+                        }
+                    }
                 }
-               
+
                 //}
                 //   alluserquestionnaires.Add(newitem);
 
@@ -1713,7 +1713,7 @@ public partial class AndroidQuestionnaires : ContentPage
 
         }
 
-     }
+    }
 
     private void mainquestionnaire_SizeChanged(object sender, EventArgs e)
     {

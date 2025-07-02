@@ -3918,7 +3918,7 @@ ex is TaskCanceledException)
                 }
                 else
                 {
-                    return null;
+                    return new ObservableCollection<userfeedback>();
                 }
 
             }
@@ -3928,12 +3928,12 @@ ex is TaskCanceledException)
    ex is TaskCanceledException)
             {
                 await NotasyncMethod(ex);
-                return null;
+                return new ObservableCollection<userfeedback>();
             }
             catch (Exception ex)
             {
                 await NotasyncMethod(ex);
-                return null;
+                return new ObservableCollection<userfeedback>();
             }
         }
 
