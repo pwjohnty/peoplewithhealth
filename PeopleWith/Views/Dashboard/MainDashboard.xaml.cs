@@ -124,6 +124,7 @@ public partial class MainDashboard : ContentPage
         {
             InitializeComponent();
 
+            hometab.IsEnabled = false;
             health = HealthDataProvider.Default;
             //Get All user Details & Set Helpers.Settings
             Checkifuserhasmigrated();
@@ -154,12 +155,13 @@ public partial class MainDashboard : ContentPage
             //MessagingCenter.Subscribe<App>(this, "CallNotifications", (sender) => { checknotifications(); });
 
             //MessagingCenter.Subscribe<App>(this, "CallBatterySaver", (sender) => { CheckbatterySaverON(); });
-
+            hometab.IsEnabled = true;
 
         }
         catch (Exception Ex)
         {
             NotasyncMethod(Ex);
+            hometab.IsEnabled = true;
         }
 
         //lbl.Text = firstName;
@@ -171,6 +173,7 @@ public partial class MainDashboard : ContentPage
         {
 
             InitializeComponent();
+            hometab.IsEnabled = false;
 
             setnotificationsfromlogin = fromlogin;
 
@@ -191,10 +194,12 @@ public partial class MainDashboard : ContentPage
             //MessagingCenter.Subscribe<App>(this, "CallNotifications", (sender) => { checknotifications(); });
 
             //MessagingCenter.Subscribe<App>(this, "CallBatterySaver", (sender) => { CheckbatterySaverON(); });
+            hometab.IsEnabled = true;
         }
         catch (Exception Ex)
         {
             NotasyncMethod(Ex);
+            hometab.IsEnabled = true;
         }
         //lbl.Text = firstName;
     }

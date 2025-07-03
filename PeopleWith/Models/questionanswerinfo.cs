@@ -300,6 +300,11 @@ namespace PeopleWith
         public string doubleentry2 { get; set; }
 
 
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string questionanswerstring { get; set; }
+
+
         public event PropertyChangedEventHandler PropertyChanged;
         //  public void OnPropertyChanged()
         //{

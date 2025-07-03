@@ -179,10 +179,10 @@ HorizontalOptions="FillAndExpand">
                                                     <ColumnDefinition Width="20*"/>
                                                 </Grid.ColumnDefinitions>
 
-                                                <local:ExtendedEntry IDValue="{Binding answerid}" TextColor="#031926" TextChanged="ExtendedEntry_TextChanged" questionid="{Binding questionid}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" Grid.Row="0" Grid.Column="0"/>
+                                                <local:ExtendedEntry IDValue="{Binding answerid}" Text="{Binding doubleentryone}" TextColor="#031926" TextChanged="ExtendedEntry_TextChanged" questionid="{Binding questionid}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" Grid.Row="0" Grid.Column="0"/>
                                                 <Label Text="Months" FontFamily="HankenGroteskBold" VerticalOptions="Center" Grid.Row="0" Grid.Column="1"  FontSize="10"  Margin="10,0,0,0" TextColor="#031926" />
 
-                                                <local:ExtendedEntry IDValue="{Binding answerid}" TextColor="#031926" TextChanged="ExtendedEntry_TextChanged_1" questionid="{Binding questionid}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" Grid.Row="0" Grid.Column="2"/>
+                                                <local:ExtendedEntry IDValue="{Binding answerid}" Text="{Binding doubleentrytwo}" TextColor="#031926" TextChanged="ExtendedEntry_TextChanged_1" questionid="{Binding questionid}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" Grid.Row="0" Grid.Column="2"/>
                                                 <Label Text="Years" FontFamily="HankenGroteskBold" VerticalOptions="Center" Grid.Row="0" Grid.Column="3"  FontSize="10"  Margin="10,0,0,0" TextColor="#031926" />
 
 

@@ -746,13 +746,6 @@ public partial class AndroidONLYQuestionnaires : ContentPage
 
             }
 
-            getitem.Bordercolor = Colors.White;
-            getitem.Isrequired = false;
-            //if (item.IDValue == null) 
-            //{
-            //    item.IDValue = answerid[0];
-            //}
-
             if (item.IDValue == null)
             {
                 item.IDValue = QuestionsInOrder[0].answerid;
@@ -768,8 +761,15 @@ public partial class AndroidONLYQuestionnaires : ContentPage
 
                 if (item != null)
                 {
-                    if (item.IDRecord == "specifyfreetext")
+                    getitem.Bordercolor = Colors.White;
+                    getitem.Isrequired = false;
+
+                    bool Check = getitem.AnswerOptions
+     .Any(x => !string.IsNullOrEmpty(x?.answeroptions) && x.answeroptions.Contains("specifyfreetext"));
+
+                    if (Check)
                     {
+                        //Item Contains Other Specify 
                         getitem.Addfreetextenabled = true;
                         getitem.Addfreetextopacity = 1;
                         getitem.Hasanswered = false;
@@ -779,8 +779,6 @@ public partial class AndroidONLYQuestionnaires : ContentPage
                         //  getitem.Addfreetext = false;
                         getitem.Hasanswered = true;
                     }
-
-
                 }
             }
             else
@@ -799,8 +797,11 @@ public partial class AndroidONLYQuestionnaires : ContentPage
                         getitem.Addfreetextopacity = 0.3;
                     }
 
-
-
+                    bool check = getitem.Selectedansweridlist == null || getitem.Selectedansweridlist.Count == 0 || getitem.Selectedansweridlist[0] == null;
+                    if (check)
+                    {
+                        getitem.Hasanswered = false;
+                    }
                 }
             }
         }
@@ -974,6 +975,17 @@ public partial class AndroidONLYQuestionnaires : ContentPage
                         }
                     }
 
+                    //Update if Has Answered if False
+                    if (item.questionrequired)
+                    {
+                        if (item.Hasanswered == false)
+                        {
+                            item.Bordercolor = Colors.White;
+                            item.questionrequired = true;
+                            item.Isrequired = false;
+                            item.Hasanswered = false;
+                        }
+                    }
                 }
             }
 
@@ -1272,20 +1284,21 @@ public partial class AndroidONLYQuestionnaires : ContentPage
 
                             if (item.questiontype == "multipleselection")
                             {
-                                var getansweroptions = item.questionanswers.Where(x => x.answerid == item.Selectedansweridlist[i]).FirstOrDefault();
+                                var getansweroptions = item.questionanswers.FirstOrDefault(x => x.answerid == item.Selectedansweridlist[i]);
 
-                                if (getansweroptions.answeroptions == "specifyfreetext")
+                                if (getansweroptions.answeroptions != null || !string.IsNullOrEmpty(getansweroptions.answeroptions))
                                 {
-                                    if (!string.IsNullOrEmpty(item.selectedtextvalue))
+                                    if (getansweroptions.answeroptions == "specifyfreetext")
                                     {
-                                        if (item.Addfreetextenabled)
+                                        if (!string.IsNullOrEmpty(item.selectedtextvalue))
                                         {
-                                            newanswer.answervalue = item.selectedtextvalue.TrimEnd();
+                                            if (item.Addfreetextenabled)
+                                            {
+                                                newanswer.answervalue = item.selectedtextvalue.TrimEnd();
+                                            }
                                         }
                                     }
                                 }
-
-
                             }
                             else if (item.questiontype == "freetext" || item.questiontype == "numeric")
                             {
@@ -1478,37 +1491,61 @@ public partial class AndroidONLYQuestionnaires : ContentPage
     {
         try
         {
-            var item = (ExtendedEditor)sender;
 
-            var getitem = questionnairefromlist.questionanswerjsonlist.Where(x => x.questionid == item.questionid).FirstOrDefault();
+            //New
+            if (e.NewTextValue == null) return;
 
-            if (!string.IsNullOrEmpty(e.NewTextValue))
+            var Item = (ExtendedEditor)sender;
+
+            if (Item.BindingContext is questionanswerinfo getitem)
             {
-                if (getitem != null)
+                if (!getitem.Addfreetext) return;
+
+                getitem.selectedtextvalue = e.NewTextValue;
+                getitem.numericentrytext = e.NewTextValue;
+
+                if (!string.IsNullOrEmpty(e.NewTextValue))
                 {
                     getitem.Bordercolor = Colors.White;
                     getitem.Isrequired = false;
                     getitem.Hasanswered = true;
-
-                    getitem.selectedtextvalue = e.NewTextValue;
-                    getitem.numericentrytext = e.NewTextValue;
-                }
-
-            }
-            else
-            {
-                if (!string.IsNullOrEmpty(getitem.selectedtextvalue))
-                {
-                    //Do Nothing 
                 }
                 else
                 {
                     getitem.Hasanswered = false;
-
+                    getitem.Isrequired = false;
                     getitem.selectedtextvalue = string.Empty;
                 }
             }
 
+            //Old 
+            //var item = (ExtendedEditor)sender;
+
+            //if (e.NewTextValue == null) return;
+
+            //var getitem = questionnairefromlist.questionanswerjsonlist.FirstOrDefault(x => x.questionid == item.questionid);
+
+            //if (getitem != null)
+            //    {
+            //        if (!getitem.Addfreetext) return;
+
+            //        getitem.selectedtextvalue = e.NewTextValue;
+            //        getitem.numericentrytext = e.NewTextValue;
+
+            //        if (!string.IsNullOrEmpty(e.NewTextValue))
+            //        {
+            //            getitem.Bordercolor = Colors.White;
+            //            getitem.Isrequired = false;
+            //            getitem.Hasanswered = true;
+            //        }
+            //        else
+            //        {
+            //            getitem.Hasanswered = false;
+            //            getitem.Isrequired = false;
+            //            getitem.selectedtextvalue = string.Empty;
+            //            //getitem.numericentrytext = string.Empty;
+            //        }
+            //    }                     
         }
         catch (Exception Ex)
         {
@@ -1522,28 +1559,27 @@ public partial class AndroidONLYQuestionnaires : ContentPage
         {
             //double numeric entry , first entry
 
-            var item = (ExtendedEntry)sender;
+            //New
+            if (e.NewTextValue == null) return;
 
-            var getitem = questionnairefromlist.questionanswerjsonlist.Where(x => x.questionid == item.questionid).FirstOrDefault();
+            var Item = (ExtendedEntry)sender;
 
-            if (getitem != null)
+            if (Item.BindingContext is questionanswerinfo getitem)
             {
+                if (!getitem.Doublenumentry) return;
+
+                getitem.doubleentryone = e.NewTextValue.ToString();
 
                 if (!string.IsNullOrEmpty(e.NewTextValue))
                 {
-
                     getitem.Bordercolor = Colors.White;
                     getitem.Isrequired = false;
                     getitem.Answerednumericentryone = true;
-
-                    getitem.doubleentryone = e.NewTextValue.ToString();
 
                     if (getitem.Answerednumericentryone == true && getitem.Answerednumericentrytwo == true)
                     {
                         getitem.Hasanswered = true;
                     }
-
-
                 }
                 else
                 {
@@ -1552,6 +1588,36 @@ public partial class AndroidONLYQuestionnaires : ContentPage
                     getitem.doubleentryone = string.Empty;
                 }
             }
+
+            //Old
+            //var item = (ExtendedEntry)sender;
+
+            //if (e.NewTextValue == null) return;
+
+            //var getitem = questionnairefromlist.questionanswerjsonlist.Where(x => x.questionid == item.questionid).FirstOrDefault();
+
+            //if (getitem != null)
+            //{
+            //    getitem.doubleentryone = e.NewTextValue.ToString();
+
+            //    if (!string.IsNullOrEmpty(e.NewTextValue))
+            //    {
+            //        getitem.Bordercolor = Colors.White;
+            //        getitem.Isrequired = false;
+            //        getitem.Answerednumericentryone = true;
+
+            //        if (getitem.Answerednumericentryone == true && getitem.Answerednumericentrytwo == true)
+            //        {
+            //            getitem.Hasanswered = true;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        getitem.Answerednumericentryone = false;
+            //        getitem.Hasanswered = false;
+            //        getitem.doubleentryone = string.Empty;
+            //    }
+            //}
         }
         catch (Exception Ex)
         {
@@ -1564,13 +1630,16 @@ public partial class AndroidONLYQuestionnaires : ContentPage
         try
         {
             //double numeric entry , second entry
+            //New
+            if (e.NewTextValue == null) return;
 
-            var item = (ExtendedEntry)sender;
+            var Item = (ExtendedEntry)sender;
 
-            var getitem = questionnairefromlist.questionanswerjsonlist.Where(x => x.questionid == item.questionid).FirstOrDefault();
-
-            if (getitem != null)
+            if (Item.BindingContext is questionanswerinfo getitem)
             {
+                if (!getitem.Doublenumentry) return;
+
+                getitem.doubleentrytwo = e.NewTextValue.ToString();
 
                 if (!string.IsNullOrEmpty(e.NewTextValue))
                 {
@@ -1578,14 +1647,11 @@ public partial class AndroidONLYQuestionnaires : ContentPage
                     getitem.Bordercolor = Colors.White;
                     getitem.Isrequired = false;
                     getitem.Answerednumericentrytwo = true;
-                    getitem.doubleentrytwo = e.NewTextValue.ToString();
 
                     if (getitem.Answerednumericentryone == true && getitem.Answerednumericentrytwo == true)
                     {
                         getitem.Hasanswered = true;
                     }
-
-
                 }
                 else
                 {
@@ -1594,6 +1660,37 @@ public partial class AndroidONLYQuestionnaires : ContentPage
                     getitem.doubleentrytwo = string.Empty;
                 }
             }
+
+            //Old
+            //var item = (ExtendedEntry)sender;
+
+            //if (e.NewTextValue == null) return;
+
+            //var getitem = questionnairefromlist.questionanswerjsonlist.Where(x => x.questionid == item.questionid).FirstOrDefault();
+
+            //if (getitem != null)
+            //{
+            //    getitem.doubleentrytwo = e.NewTextValue.ToString();
+
+            //    if (!string.IsNullOrEmpty(e.NewTextValue))
+            //    {
+
+            //        getitem.Bordercolor = Colors.White;
+            //        getitem.Isrequired = false;
+            //        getitem.Answerednumericentrytwo = true;
+
+            //        if (getitem.Answerednumericentryone == true && getitem.Answerednumericentrytwo == true)
+            //        {
+            //            getitem.Hasanswered = true;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        getitem.Answerednumericentrytwo = false;
+            //        getitem.Hasanswered = false;
+            //        getitem.doubleentrytwo = string.Empty;
+            //    }
+            //}
         }
         catch (Exception Ex)
         {
@@ -1606,40 +1703,61 @@ public partial class AndroidONLYQuestionnaires : ContentPage
         try
         {
             //numeric entry
-            var item = (ExtendedEntry)sender;
+            //New
+            if (e.NewTextValue == null) return;
 
-            var getitem = questionnairefromlist.questionanswerjsonlist.Where(x => x.questionid == item.questionid).FirstOrDefault();
+            var Item = (ExtendedEntry)sender;
 
-            if (getitem != null)
+            if (Item.BindingContext is questionanswerinfo getitem)
             {
+                if (!getitem.Numericentry) return;
+
+                getitem.selectedtextvalue = e.NewTextValue;
+                getitem.numericentrytext = e.NewTextValue;
 
                 if (!string.IsNullOrEmpty(e.NewTextValue))
                 {
-                    if (getitem != null)
-                    {
-                        getitem.Bordercolor = Colors.White;
-                        getitem.Isrequired = false;
-                        getitem.Hasanswered = true;
-
-                        getitem.selectedtextvalue = e.NewTextValue;
-                        getitem.numericentrytext = e.NewTextValue;
-                    }
+                    getitem.Bordercolor = Colors.White;
+                    getitem.Isrequired = false;
+                    getitem.Hasanswered = true;
                 }
                 else
                 {
-                    if (!string.IsNullOrEmpty(getitem.selectedtextvalue))
-                    {
-                        //Do Nothing 
-                    }
-                    else
-                    {
-                        getitem.Hasanswered = false;
-
-                        getitem.selectedtextvalue = string.Empty;
-                    }
+                    getitem.Hasanswered = false;
+                    getitem.Isrequired = false;
+                    getitem.selectedtextvalue = string.Empty;
+                    //getitem.numericentrytext = string.Empty;
                 }
             }
 
+            //Old
+            //var item = (ExtendedEntry)sender;
+
+            //if (e.NewTextValue == null) return;
+
+            //var getitem = questionnairefromlist.questionanswerjsonlist.Where(x => x.questionid == item.questionid).FirstOrDefault();
+
+            //if (getitem != null)
+            //{
+            //    if (getitem.Numericentry == false) return;
+
+            //    getitem.selectedtextvalue = e.NewTextValue;
+            //    getitem.numericentrytext = e.NewTextValue;
+
+            //    if (!string.IsNullOrEmpty(e.NewTextValue))
+            //    {
+            //        getitem.Bordercolor = Colors.White;
+            //        getitem.Isrequired = false;
+            //        getitem.Hasanswered = true;
+            //    }
+            //    else
+            //    {
+            //        getitem.Hasanswered = false;
+            //        getitem.Isrequired = false;
+            //        getitem.selectedtextvalue = string.Empty;
+            //        //getitem.numericentrytext = string.Empty;
+            //    }
+            //}
         }
         catch (Exception Ex)
         {
@@ -1653,12 +1771,14 @@ public partial class AndroidONLYQuestionnaires : ContentPage
         {
 
             //slider changed 
-            var item = (ExtendedSlider)sender;
+            //New
 
-            var getitem = questionnairefromlist.questionanswerjsonlist.Where(x => x.questionid == item.questionid).FirstOrDefault();
+            var Item = (ExtendedSlider)sender;
 
-            if (getitem != null)
+            if (Item.BindingContext is questionanswerinfo getitem)
             {
+                if (!getitem.Sliderscale) return;
+
                 if (getitem.questiontype == "scale110singleselection")
                 {
 
@@ -1674,8 +1794,6 @@ public partial class AndroidONLYQuestionnaires : ContentPage
 
                     }
 
-
-
                     if (!string.IsNullOrEmpty(e.NewValue.ToString()))
                     {
                         getitem.Bordercolor = Colors.White;
@@ -1689,6 +1807,45 @@ public partial class AndroidONLYQuestionnaires : ContentPage
                     }
                 }
             }
+
+
+            //Old 
+            //var item = (ExtendedSlider)sender;
+
+            //var getitem = questionnairefromlist.questionanswerjsonlist.Where(x => x.questionid == item.questionid).FirstOrDefault();
+
+            //if (getitem != null)
+            //{
+            //    if (getitem.questiontype == "scale110singleselection")
+            //    {
+
+            //        if (getitem.SliderValue != 0)
+            //        {
+            //            //getitem.selectedtextvalue = QuestionsInOrder[0].selectedtextvalue;
+            //            //getitem.SliderValue = QuestionsInOrder[0].slidervalue; 
+            //        }
+            //        else
+            //        {
+            //            getitem.selectedtextvalue = e.NewValue.ToString();
+            //            getitem.SliderValue = e.NewValue;
+
+            //        }
+
+
+
+            //        if (!string.IsNullOrEmpty(e.NewValue.ToString()))
+            //        {
+            //            getitem.Bordercolor = Colors.White;
+            //            getitem.Isrequired = false;
+            //            getitem.Hasanswered = true;
+
+            //        }
+            //        else
+            //        {
+            //            getitem.Hasanswered = false;
+            //        }
+            //    }
+            //}
         }
         catch (Exception Ex)
         {
