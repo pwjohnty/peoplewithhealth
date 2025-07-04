@@ -358,10 +358,7 @@ public partial class AndroidQuestionnaires : ContentPage
                     // Update AnswerOptions with the filtered answers
                     item.AnswerOptions = new ObservableCollection<AnswerViewModel>(filteredAnswers);
 
-                    if (item.AnswerOptions != null || item.AnswerOptions.Count == 0)
-                    {
-                        item.questionanswerstring = string.Join(", ", item.AnswerOptions.Select(a => a.answertitle));
-                    }
+           
 
                     foreach (var it in userquestionanswer.answer)
                     {
@@ -389,6 +386,18 @@ public partial class AndroidQuestionnaires : ContentPage
                             item.Addfreetext = false;
                         }
 
+                    }
+
+                    if (item.AnswerOptions != null || item.AnswerOptions.Count == 0)
+                    {
+                        if (!string.IsNullOrEmpty(item.freetextentry))
+                        {
+                            item.questionanswerstring = string.Join(" , ", item.AnswerOptions.Select(a => a.answertitle)) + Environment.NewLine + Environment.NewLine + item.freetextentry;
+                        }
+                        else
+                        {
+                            item.questionanswerstring = string.Join(" , ", item.AnswerOptions.Select(a => a.answertitle));
+                        }
                     }
 
                     if (item.questionanswers.Any(x => x.answeroptions == "specifyfreetext"))
@@ -791,11 +800,16 @@ public partial class AndroidQuestionnaires : ContentPage
                     getitem.Bordercolor = Colors.White;
                     getitem.Isrequired = false;
 
-                    bool Check = getitem.AnswerOptions
-     .Any(x => !string.IsNullOrEmpty(x?.answeroptions) && x.answeroptions.Contains("specifyfreetext"));
-
-                    if (Check)
+                    if(item.IDRecord == "specifyfreetext")
                     {
+
+     //               }
+
+     //               bool Check = getitem.AnswerOptions
+     //.Any(x => !string.IsNullOrEmpty(x?.answeroptions) && x.answeroptions.Contains("specifyfreetext"));
+
+     //               if (Check)
+     //               {
                         //Item Contains Other Specify 
                         getitem.Addfreetextenabled = true;
                         getitem.Addfreetextopacity = 1;
@@ -1314,7 +1328,7 @@ public partial class AndroidQuestionnaires : ContentPage
                             {
                                 var getansweroptions = item.questionanswers.Where(x => x.answerid == item.Selectedansweridlist[i]).FirstOrDefault();
 
-                                if (getansweroptions.answeroptions != null || !string.IsNullOrEmpty(getansweroptions.answeroptions))
+                                if (getansweroptions != null && !string.IsNullOrEmpty(getansweroptions.answeroptions))
                                 {
                                     if (getansweroptions.answeroptions == "specifyfreetext")
                                     {

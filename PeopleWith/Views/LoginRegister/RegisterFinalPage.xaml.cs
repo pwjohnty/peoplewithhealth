@@ -143,7 +143,7 @@ public partial class RegisterFinalPage : ContentPage
 
     }
 
-    public RegisterFinalPage(user userpass, double progress, ObservableCollection<userresponse> userresponsep, ObservableCollection<usermeasurement> usermeasurementp, consent additonalcon)
+    public RegisterFinalPage(user userpass, double progress, ObservableCollection<userresponse> userresponsep, ObservableCollection<usermeasurement> usermeasurementp, consent additonalcon, signupcode signupcodeinfop)
     {
         try
         {
@@ -165,9 +165,15 @@ public partial class RegisterFinalPage : ContentPage
             accontent.Text = additonalconsent.content;
         }
 
-        
+            signupcodeinfo = signupcodeinfop;
 
-        topprogress.SetProgress(progress, 0);
+            if (!string.IsNullOrEmpty(signupcodeinfo.externalidentifier))
+            {
+                extidlbl.Text = signupcodeinfo.externalidentifier;
+            }
+
+
+            topprogress.SetProgress(progress, 0);
 
 
         //find out the amount left - only 2 pages left after this amount
@@ -230,7 +236,7 @@ public partial class RegisterFinalPage : ContentPage
         }
     }
 
-    public RegisterFinalPage(user userpass, double progress, ObservableCollection<userresponse> userresponsep, consent additonalcon, ObservableCollection<usersymptom> usersymptompassed, ObservableCollection<usermedication> usermedicationspassed, ObservableCollection<userdiagnosis> userdiagpassed, ObservableCollection<usermeasurement> usermeasurementspass, userdiet DietPassed)
+    public RegisterFinalPage(user userpass, double progress, ObservableCollection<userresponse> userresponsep, consent additonalcon, ObservableCollection<usersymptom> usersymptompassed, ObservableCollection<usermedication> usermedicationspassed, ObservableCollection<userdiagnosis> userdiagpassed, ObservableCollection<usermeasurement> usermeasurementspass, userdiet DietPassed, signupcode signupcodeinfop)
     {
         try
         {
@@ -258,7 +264,12 @@ public partial class RegisterFinalPage : ContentPage
                 accontent.Text = additonalconsent.content;
             }
 
+            signupcodeinfo = signupcodeinfop;
 
+            if (!string.IsNullOrEmpty(signupcodeinfo.externalidentifier))
+            {
+                extidlbl.Text = signupcodeinfo.externalidentifier;
+            }
 
             topprogress.SetProgress(progress, 0);
 
@@ -275,7 +286,7 @@ public partial class RegisterFinalPage : ContentPage
         }
     }
 
-    public RegisterFinalPage(user userpass, double progress, ObservableCollection<userresponse> userresponsep, consent additonalcon, ObservableCollection<usersymptom> usersymptompassed, ObservableCollection<usermedication> usermedicationspassed, ObservableCollection<userdiagnosis> userdiagpassed, ObservableCollection<usermeasurement> usermeasurementspass)
+    public RegisterFinalPage(user userpass, double progress, ObservableCollection<userresponse> userresponsep, consent additonalcon, ObservableCollection<usersymptom> usersymptompassed, ObservableCollection<usermedication> usermedicationspassed, ObservableCollection<userdiagnosis> userdiagpassed, ObservableCollection<usermeasurement> usermeasurementspass, signupcode signupcodeinfop)
     {
         try
         {
@@ -300,6 +311,13 @@ public partial class RegisterFinalPage : ContentPage
                 actitle.Text = additonalconsent.title;
                 acsubtitle.Text = additonalconsent.subtitle;
                 accontent.Text = additonalconsent.content;
+            }
+
+            signupcodeinfo = signupcodeinfop;
+
+            if (!string.IsNullOrEmpty(signupcodeinfo.externalidentifier))
+            {
+                extidlbl.Text = signupcodeinfo.externalidentifier;
             }
 
             topprogress.SetProgress(progress, 0);
@@ -442,7 +460,7 @@ public partial class RegisterFinalPage : ContentPage
                     if (additonalconsent.signaturepad == false)
                     {
 
-                        HandleTCframe();
+                        await HandleTCframe();
                         nextbtn.IsEnabled = true;
                     }
                     else
@@ -473,12 +491,12 @@ public partial class RegisterFinalPage : ContentPage
                                 return;
                             }
 
-                            HandleTCframe();
+                           await HandleTCframe();
                             nextbtn.IsEnabled = true;
                         }
                         else
                         {
-                            HandleTCframe();
+                           await HandleTCframe();
                             nextbtn.IsEnabled = true;
                         }
                     }
@@ -538,7 +556,7 @@ public partial class RegisterFinalPage : ContentPage
         }
     }
 
-    async void HandleTCframe()
+    async Task HandleTCframe()
     {
         try
         {
@@ -745,7 +763,7 @@ public partial class RegisterFinalPage : ContentPage
 
                     }
 
-                    if (symptomstoadd != null || symptomstoadd.Count != 0)
+                    if (symptomstoadd != null && symptomstoadd.Count != 0)
                     {
                         if (userfeedbacklistpassed.symptomfeedbacklist == null)
                         {
@@ -794,7 +812,7 @@ public partial class RegisterFinalPage : ContentPage
 
                     }
 
-                    if (medicationstoadd != null || medicationstoadd.Count != 0)
+                    if (medicationstoadd != null && medicationstoadd.Count != 0)
                     {
                         //add the medications
                         //Ensures the same Diagnosis isnt added twice
@@ -827,7 +845,7 @@ public partial class RegisterFinalPage : ContentPage
                         }
                     }
 
-                    if (userdiagnosispassed != null || userdiagnosispassed.Count != 0)
+                    if (userdiagnosispassed != null && userdiagnosispassed.Count != 0)
                     {
                         //Ensures the same Diagnosis isnt added twice
                         var distinctDiagnoses = userdiagnosispassed.GroupBy(x => x.diagnosisid).Select(g => g.First());
@@ -1131,6 +1149,7 @@ public partial class RegisterFinalPage : ContentPage
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
                     Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                   
                 });
 
                 //Task.Run(async () =>
@@ -1164,9 +1183,16 @@ public partial class RegisterFinalPage : ContentPage
                 return;
             }
         }
-        catch (Exception Ex)
+        catch (Exception ex) when (
+   ex is HttpRequestException ||
+   ex is WebException ||
+   ex is TaskCanceledException)
         {
-            NotasyncMethod(Ex);
+            NotasyncMethod(ex);
+        }
+        catch (Exception ex)
+        {
+            NotasyncMethod(ex);
         }
     }
     //private async Task CheckUserID()

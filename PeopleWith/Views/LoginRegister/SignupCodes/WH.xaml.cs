@@ -1582,7 +1582,7 @@ public partial class WH : ContentPage
                 newuser.registrycondition = "WHA4";
             }
 
-            await Navigation.PushAsync(new RegisterFinalPage(newuser, topprogress.Progress, userresponselist, additonalconsent, symptomstoadd, medicationstoadd, adduserdiagnosis, addusermeasurements, DietToAdd), false);
+            await Navigation.PushAsync(new RegisterFinalPage(newuser, topprogress.Progress, userresponselist, additonalconsent, symptomstoadd, medicationstoadd, adduserdiagnosis, addusermeasurements, DietToAdd, signupcodeinfo), false);
 
 
         }

@@ -1389,7 +1389,7 @@ public partial class BMS : ContentPage
                 newuser.registrycondition = "";
             }
 
-            await Navigation.PushAsync(new RegisterFinalPage(newuser, topprogress.Progress, userresponselist, additonalconsent, symptomstoadd, medicationstoadd, adduserdiagnosis, addusermeasurements), false);
+            await Navigation.PushAsync(new RegisterFinalPage(newuser, topprogress.Progress, userresponselist, additonalconsent, symptomstoadd, medicationstoadd, adduserdiagnosis, addusermeasurements, signupcodeinfo), false);
         }
         catch (Exception Ex)
         {

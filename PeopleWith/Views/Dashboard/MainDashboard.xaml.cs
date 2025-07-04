@@ -28,6 +28,7 @@ using System.Text.Json;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Syncfusion.Maui.DataSource.Extensions;
+using System.Net;
 //using Xamarin.Google.Crypto.Tink.Subtle;
 
 namespace PeopleWith;
@@ -174,6 +175,7 @@ public partial class MainDashboard : ContentPage
 
             InitializeComponent();
             hometab.IsEnabled = false;
+            health = HealthDataProvider.Default;
 
             setnotificationsfromlogin = fromlogin;
 
@@ -204,17 +206,23 @@ public partial class MainDashboard : ContentPage
         //lbl.Text = firstName;
     }
 
+
+
+
+
+
+
+
     protected async override void OnAppearing()
     {
         base.OnAppearing();
 
         try
         {
-            MainThread.BeginInvokeOnMainThread(() =>
+            await MainThread.InvokeOnMainThreadAsync(async () =>
             {
-                getuserfeedbackdata();
+                await getuserfeedbackdata();
             });
-
         }
         catch (Exception Ex)
         {
@@ -380,9 +388,16 @@ public partial class MainDashboard : ContentPage
             }
 
         }
-        catch (Exception Ex)
+        catch (Exception ex) when (
+   ex is HttpRequestException ||
+   ex is WebException ||
+   ex is TaskCanceledException)
         {
-            NotasyncMethod(Ex);
+            NotasyncMethod(ex);
+        }
+        catch (Exception ex)
+        {
+            NotasyncMethod(ex);
         }
     }
 
@@ -534,7 +549,7 @@ public partial class MainDashboard : ContentPage
         }
     }
 
-    async void getuserfeedbackdata()
+    async Task getuserfeedbackdata()
     {
         try
         {
@@ -599,9 +614,16 @@ public partial class MainDashboard : ContentPage
             //    "OK"
             //);
         }
-        catch (Exception Ex)
+        catch (Exception ex) when (
+  ex is HttpRequestException ||
+  ex is WebException ||
+  ex is TaskCanceledException)
         {
-            NotasyncMethod(Ex);
+            NotasyncMethod(ex);
+        }
+        catch (Exception ex)
+        {
+            NotasyncMethod(ex);
         }
     }
 
@@ -1183,7 +1205,7 @@ public partial class MainDashboard : ContentPage
             if (userfeedbacklist[0].moodfeedbacklist != null)
             {
 
-                var sevenDaysAgo = DateTime.Now.AddDays(-7);
+                var sevenDaysAgo = DateTime.Now.AddDays(-6);
 
                 var filteredMoods = userfeedbacklist[0].moodfeedbacklist
                     .Where(x => DateTime.Parse(x.datetime).Date >= sevenDaysAgo.Date && x.action != "deleted") // Filter last 7 days

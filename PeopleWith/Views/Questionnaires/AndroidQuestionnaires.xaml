@@ -25,7 +25,7 @@
                 <CollectionView x:Name="mainquestionnaire" HeightRequest="{OnPlatform iOS=3000, Default=-1}" SizeChanged="mainquestionnaire_SizeChanged" IsVisible="False" MaximumHeightRequest="690" SelectionMode="None" BackgroundColor="#f5f5f5" ItemSizingStrategy="MeasureAllItems" VerticalScrollBarVisibility="Never" VerticalOptions="FillAndExpand" Margin="10,0,10,20"  HorizontalOptions="FillAndExpand" >
                      <!--ListView Header--> 
                     <CollectionView.Header>
-                        <Border Stroke="Transparent" HeightRequest="{OnPlatform iOS='140'}" BackgroundColor="Transparent"
+                        <Border Stroke="Transparent" BackgroundColor="Transparent"
 StrokeThickness="1" Margin="0,0,0,0" 
 StrokeShape="RoundRectangle 10" VerticalOptions="FillAndExpand"
 HorizontalOptions="FillAndExpand">
@@ -85,7 +85,7 @@ HorizontalOptions="FillAndExpand">
 
                                             <Label Text="{Binding questiondirections}" FontFamily="HankenGroteskRegular"  FontSize="12"  Margin="10,0,0,10" TextColor="Gray" />
 
-                                            <StackLayout IsVisible="{Binding singleselection}">
+                                            <StackLayout IsVisible="{Binding singleselection}" Margin="10,0,10,0">
 
                                             <buttons:SfRadioGroupKey x:Name="RadioGroupKey" Spacing="5" >
                                                 <buttons:SfRadioGroup BindableLayout.ItemsSource="{Binding AnswerOptions}">
@@ -229,7 +229,7 @@ HorizontalOptions="FillAndExpand">
                                                         <ColumnDefinition Width="20*"/>
                                                     </Grid.ColumnDefinitions>
 
-                                                <local:ExtendedEntry IDValue="{Binding answerid}" Text="{Binding doubleentryone}" TextColor="#031926" TextChanged="ExtendedEntry_TextChanged" questionid="{Binding questionid}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" Grid.Row="0" Grid.Column="0"/>
+                                                <local:ExtendedEntry IDValue="{Binding answerid}" Text="{Binding doubleentryone}" TextColor="#031926" TextChanged="ExtendedEntry_TextChanged" questionid="{Binding questionid}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" Margin="0,5,0,5" HorizontalTextAlignment="Center" FontSize="18" Grid.Row="0" Grid.Column="0"/>
                                                     <Label Text="Months" FontFamily="HankenGroteskBold" VerticalOptions="Center" Grid.Row="0" Grid.Column="1"  FontSize="10"  Margin="10,0,0,0" TextColor="#031926" />
 
                                                 <local:ExtendedEntry IDValue="{Binding answerid}" Text="{Binding doubleentrytwo}" TextColor="#031926" TextChanged="ExtendedEntry_TextChanged_1" questionid="{Binding questionid}" Keyboard="Numeric" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" Grid.Row="0" Grid.Column="2"/>
@@ -244,7 +244,7 @@ HorizontalOptions="FillAndExpand">
 StrokeThickness="1" Margin="10,5,10,5" IsVisible="{Binding Numericentry}"
 StrokeShape="RoundRectangle 10,10,10,10"
 HorizontalOptions="FillAndExpand">
-                                            <local:ExtendedEntry IDValue="{Binding answerid}" TextColor="#031926" Text="{Binding numericentrytext}" questionid="{Binding questionid}" TextChanged="ExtendedEntry_TextChanged_2" Keyboard="Numeric" IsVisible="{Binding Numericentry}" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="25" HorizontalOptions="FillAndExpand"/>
+                                            <local:ExtendedEntry IDValue="{Binding answerid}" Margin="0,5,0,5" TextColor="#031926" Text="{Binding numericentrytext}" questionid="{Binding questionid}" TextChanged="ExtendedEntry_TextChanged_2" Keyboard="Numeric" IsVisible="{Binding Numericentry}" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="18" HorizontalOptions="FillAndExpand"/>
 
 
                                             </Border>

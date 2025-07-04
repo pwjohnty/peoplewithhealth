@@ -764,11 +764,16 @@ public partial class AndroidONLYQuestionnaires : ContentPage
                     getitem.Bordercolor = Colors.White;
                     getitem.Isrequired = false;
 
-                    bool Check = getitem.AnswerOptions
-     .Any(x => !string.IsNullOrEmpty(x?.answeroptions) && x.answeroptions.Contains("specifyfreetext"));
-
-                    if (Check)
+                    if (item.IDRecord == "specifyfreetext")
                     {
+
+                        //               }
+
+                        //               bool Check = getitem.AnswerOptions
+                        //.Any(x => !string.IsNullOrEmpty(x?.answeroptions) && x.answeroptions.Contains("specifyfreetext"));
+
+                        //               if (Check)
+                        //               {
                         //Item Contains Other Specify 
                         getitem.Addfreetextenabled = true;
                         getitem.Addfreetextopacity = 1;
@@ -1286,7 +1291,7 @@ public partial class AndroidONLYQuestionnaires : ContentPage
                             {
                                 var getansweroptions = item.questionanswers.FirstOrDefault(x => x.answerid == item.Selectedansweridlist[i]);
 
-                                if (getansweroptions.answeroptions != null || !string.IsNullOrEmpty(getansweroptions.answeroptions))
+                                if (getansweroptions != null && !string.IsNullOrEmpty(getansweroptions.answeroptions))
                                 {
                                     if (getansweroptions.answeroptions == "specifyfreetext")
                                     {
