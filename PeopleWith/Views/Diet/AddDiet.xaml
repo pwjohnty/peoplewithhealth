@@ -142,7 +142,7 @@
 
 
                 <Label Text="Diet Duration" FontSize="20" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
-                <Label Text="Please select a start date for the diet. If you wish to set an end date, enable the checkbox and choose an end date." FontSize="12" Margin="20,0,0,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
+                <Label Text="Please select a start date for the diet. If you wish to set an end date, enable the checkbox and choose an end date." FontSize="12" Margin="20,0,10,0" VerticalOptions="Start" TextColor="#031926" FontFamily="HankenGroteskRegular" FontAttributes="None" HorizontalOptions="Start" />
 
 
                 <Border Stroke="LightGray"

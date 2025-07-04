@@ -1436,6 +1436,13 @@ public partial class AndroidONLYQuestionnaires : ContentPage
                             "BE72B2A1-0707-4E8D-8E82-022BA4F959F4"
                         };
                         }
+                        else if (Signup.Contains("SFEAT"))
+                        {
+                            ListArray = new List<string>
+ {    //EQ-5D 5L
+     "A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF"
+ };
+                        }
 
                         //only adds the required questionnaires to the Feedback 
                         bool CheckSame = ListArray.Any(L => L == newitem.questionnaireid);
