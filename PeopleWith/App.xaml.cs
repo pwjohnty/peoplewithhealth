@@ -96,8 +96,9 @@ namespace PeopleWith
         {
             try
             {
-                App.SetMainPage(new NavigationPage(new MainDashboard()));
+                //App.SetMainPage(new NavigationPage(new MainDashboard()));
                 string QuestionnaireID = string.Empty;
+                var userfeedbacklist = await aPICalls.GetUserFeedback();
                 if (e.Request.Title == "Complete your EQ-5D Questionnaire")
                 {
                     QuestionnaireID = "A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF";
@@ -114,11 +115,13 @@ namespace PeopleWith
                 {
                     if (DeviceInfo.Platform == DevicePlatform.iOS)
                     {
-                        await (Application.Current.MainPage as NavigationPage)?.Navigation.PushAsync(new AndroidQuestionnaires(QuestionnaireID), false);
+                        SetMainPageWithStack(new MainDashboard(),new AndroidQuestionnaires(QuestionnaireID, userfeedbacklist[0]));
+                        //await (Application.Current.Windows[0].Page)?.Navigation.PushAsync(new AndroidQuestionnaires(QuestionnaireID), false);
                     }
                     else
                     {
-                        await (Application.Current.MainPage as NavigationPage)?.Navigation.PushAsync(new AndroidONLYQuestionnaires(QuestionnaireID), false);
+                        SetMainPageWithStack(new MainDashboard(), new AndroidONLYQuestionnaires(QuestionnaireID, userfeedbacklist[0]));
+                        //await (Application.Current.MainPage as NavigationPage)?.Navigation.PushAsync(new AndroidONLYQuestionnaires(QuestionnaireID), false);
                     }
                 }
             }
@@ -127,6 +130,21 @@ namespace PeopleWith
                 ConfigureSentryUserScope();
                 SentrySdk.CaptureException(Ex);
             }
+        }
+
+
+        public static void SetMainPageWithStack(params Page[] pages)
+        {
+            if (Application.Current?.Windows.Any() != true || pages == null || pages.Length == 0) return;
+
+            var navPage = new NavigationPage(pages[0]);
+
+            for (int i = 1; i < pages.Length; i++)
+            {
+                navPage.Navigation.PushAsync(pages[i], false);
+            }
+
+            Application.Current.Windows[0].Page = navPage;
         }
 
         protected override void OnResume()

@@ -375,8 +375,9 @@ public partial class LoginPage : ContentPage
 
                 //Add Push Notification Tags
                 var setnotificationloginbool = true;
-                await Task.Delay(2000); 
-                Application.Current.MainPage = new NavigationPage(new MainDashboard(setnotificationloginbool));
+                await Task.Delay(500);
+                //Application.Current.MainPage = new NavigationPage(new MainDashboard(setnotificationloginbool));
+                App.SetMainPage(new NavigationPage(new MainDashboard(setnotificationloginbool)));
 
             }
             else

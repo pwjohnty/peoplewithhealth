@@ -15,10 +15,10 @@ namespace PeopleWith
         {
             InitializeComponent();
 
-           // checkuser();
-            // Checkifappisupdated();
+           // checkuser();   
             checkifuserisloggedin();
-            checkwifion(); 
+            checkwifion();
+            Checkifappisupdated();
         }
 
         private async void checkwifion()
@@ -133,16 +133,16 @@ namespace PeopleWith
             }
         }
 
-        public async Task Checkifappisupdated()
+        public async void Checkifappisupdated()
         {
             try
             {
-                //  await SharedNotificationService.AddTagsAsync(new string[] { "NewMarkTag" });
-
                 var versionCheckService = new VersionCheckService();
-                await versionCheckService.CheckForUpdate();
-
-
+                bool Check = await versionCheckService.CheckForUpdate();
+                if (Check)
+                {
+                   await Navigation.PushAsync(new UpdatePage(), false);
+                }
             }
             catch (Exception ex)
             {

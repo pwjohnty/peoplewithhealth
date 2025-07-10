@@ -157,7 +157,6 @@ public partial class MainDashboard : ContentPage
 
             //MessagingCenter.Subscribe<App>(this, "CallBatterySaver", (sender) => { CheckbatterySaverON(); });
             hometab.IsEnabled = true;
-            TestNotif(); 
 
         }
         catch (Exception Ex)
@@ -206,38 +205,6 @@ public partial class MainDashboard : ContentPage
         }
         //lbl.Text = firstName;
     }
-
-
-
-    private void TestNotif()
-    {
-
-        var notification = new NotificationRequest
-        {
-            NotificationId = new Random().Next(1, int.MaxValue),
-            Title = "Complete your EQ-5D Questionnaire",
-            Description = "Please take a moment to complete your EQ-5D questionnaire",
-            BadgeNumber = 0,
-
-            Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
-            {
-                Priority = Plugin.LocalNotification.AndroidOption.AndroidPriority.High, // ?? Set priority here
-            },
-
-            Schedule = new NotificationRequestSchedule
-            {
-                NotifyTime = DateTime.Now.AddSeconds(30),
-                RepeatType = NotificationRepeat.No,
-                NotifyRepeatInterval = null,
-
-            }
-        };
-
-        LocalNotificationCenter.Current.Show(notification);
-    }
-
-
-
 
     protected async override void OnAppearing()
     {
