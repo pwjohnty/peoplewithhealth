@@ -157,7 +157,7 @@ public partial class MainDashboard : ContentPage
 
             //MessagingCenter.Subscribe<App>(this, "CallBatterySaver", (sender) => { CheckbatterySaverON(); });
             hometab.IsEnabled = true;
-            TestNotif(); 
+           
 
         }
         catch (Exception Ex)
@@ -206,36 +206,6 @@ public partial class MainDashboard : ContentPage
         }
         //lbl.Text = firstName;
     }
-
-
-
-    private void TestNotif()
-    {
-
-        var notification = new NotificationRequest
-        {
-            NotificationId = new Random().Next(1, int.MaxValue),
-            Title = "Complete your EQ-5D Questionnaire",
-            Description = "Please take a moment to complete your EQ-5D questionnaire",
-            BadgeNumber = 0,
-
-            Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
-            {
-                Priority = Plugin.LocalNotification.AndroidOption.AndroidPriority.High, // ?? Set priority here
-            },
-
-            Schedule = new NotificationRequestSchedule
-            {
-                NotifyTime = DateTime.Now.AddSeconds(30),
-                RepeatType = NotificationRepeat.No,
-                NotifyRepeatInterval = null,
-
-            }
-        };
-
-        LocalNotificationCenter.Current.Show(notification);
-    }
-
 
 
 
@@ -2470,6 +2440,23 @@ public partial class MainDashboard : ContentPage
                                     recordedMedicationsToday++;
                                 }
                             }
+                            else if (scheduledTimeToday > DateTime.Now)
+                            {
+                                var dt = scheduledTimeToday.ToString("dd/MM/yyyy");
+
+                                bool hasBeenRecorded = item.feedback != null && item.feedback
+                            .Any(x => x.id == medTime.id.ToString() && x.datetime.Contains(dt));
+
+                                // If not recorded, update nextDueTime
+                                if (!hasBeenRecorded)
+                                {
+                                   // nextDueTime = scheduledTimeToday;
+                                }
+                                else
+                                {
+                                    recordedMedicationsToday++;
+                                }
+                            }
 
                         }
                     }
@@ -2877,6 +2864,23 @@ public partial class MainDashboard : ContentPage
                                 if (!hasBeenRecorded)
                                 {
                                     nextDueTime = scheduledTimeToday;
+                                }
+                                else
+                                {
+                                    recordedMedicationsToday++;
+                                }
+                            }
+                            else if (scheduledTimeToday > DateTime.Now)
+                            {
+                                var dt = scheduledTimeToday.ToString("dd/MM/yyyy");
+
+                                bool hasBeenRecorded = item.feedback != null && item.feedback
+                            .Any(x => x.id == medTime.id.ToString() && x.datetime.Contains(dt));
+
+                                // If not recorded, update nextDueTime
+                                if (!hasBeenRecorded)
+                                {
+                                    // nextDueTime = scheduledTimeToday;
                                 }
                                 else
                                 {

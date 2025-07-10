@@ -5843,7 +5843,7 @@ public partial class AddMeasurement : ContentPage
         {
             //Remove item from [usermeasurement]
 
-            var userresponse = await DisplayAlert("Confirm Delete", "Are you sure you want to delete this Measurement Feedback? Once deleted it cannot be retrieved", "Cancel", "Delete");
+            var userresponse = await DisplayAlert("Confirm Delete", "Are you sure you want to delete this Measurement Entry? Once deleted it cannot be retrieved", "Cancel", "Delete");
 
             if (!userresponse)
             {
@@ -5870,7 +5870,7 @@ public partial class AddMeasurement : ContentPage
                 //Update userFeedback 
                 await database.UserfeedbackUpdateMeasurementData(userfeedbacklistpassed);
 
-                await MopupService.Instance.PushAsync(new PopupPageHelper("Measurement Feedback Deleted") { });
+                await MopupService.Instance.PushAsync(new PopupPageHelper("Measurement Entry Deleted") { });
 
                 await Task.Delay(1000);
 

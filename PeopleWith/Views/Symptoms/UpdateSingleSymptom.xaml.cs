@@ -1582,7 +1582,7 @@ public partial class UpdateSingleSymptom : ContentPage
         try
         {
 
-            var userresponse = await DisplayAlert("Confirm Delete", "Are you sure you want to delete this Symptom Feedback? Once deleted it cannot be retrieved", "Cancel", "Delete");
+            var userresponse = await DisplayAlert("Confirm Delete", "Are you sure you want to delete this Symptom Entry? Once deleted it cannot be retrieved", "Cancel", "Delete");
 
             if (!userresponse)
             {
@@ -1630,7 +1630,7 @@ public partial class UpdateSingleSymptom : ContentPage
                 // Add the updated symptom
                 AllSymptomDataPassed.Add(PassedSymptom[0]);
 
-                await MopupService.Instance.PushAsync(new PopupPageHelper("Symptom Feedback Deleted") { });
+                await MopupService.Instance.PushAsync(new PopupPageHelper("Symptom Entry Deleted") { });
                 
                 //   await Navigation.PushAsync(new SingleSymptom(PassedSymptom, AllSymptomDataPassed));
 
