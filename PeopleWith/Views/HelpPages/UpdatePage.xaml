@@ -20,24 +20,12 @@
     AbsoluteLayout.LayoutBounds="0,0,1,1"
     AbsoluteLayout.LayoutFlags="All">
 
-            <Frame 
-    Padding="0"   HeightRequest="70" WidthRequest="70" Margin="20,70,20,0" 
-    BorderColor="#f0f7fd"   HorizontalOptions="Start"
-    CornerRadius="10"
-    HasShadow="False">
-
-
-                <Image
-      Source="pwicon.png" 
-      Aspect="AspectFill"     
-                    HorizontalOptions="Center"
-      VerticalOptions="Center" />
-            </Frame>
+     
 
             <Label
-        Text="Update your application to the latest version"
-        FontSize="36"
-        Margin="20,10,0,0"
+        Text="Update your app to the latest version"
+        FontSize="36" 
+        Margin="{OnPlatform Android='20,50,20,0', iOS='0,50,20,0'}" LineBreakMode="WordWrap"
         TextColor="#031926"
         FontFamily="HankenGroteskBold"
         FontAttributes="Bold"
@@ -48,7 +36,7 @@
         FontFamily="HankenGroteskRegular"
         FontAttributes="None"
         Margin="20,20,20,0"
-        FontSize="20" 
+        FontSize="16" 
         HorizontalOptions="Center" />
 
 

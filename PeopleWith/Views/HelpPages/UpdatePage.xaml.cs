@@ -8,7 +8,7 @@ public partial class UpdatePage : ContentPage
 		InitializeComponent();
 
         string storeName = DeviceInfo.Platform == DevicePlatform.iOS ? "App Store" : "Google Play Store";
-        string message = $"A new version of the app is available on the {storeName}. Please update to enjoy the latest features, improvements, and fixes.";
+        string message = $"A new version of the app is available on the {storeName}. Please update to enjoy the latest features, improvements and fixes.";
         lblBody.Text = message;
     }
 
@@ -22,6 +22,7 @@ public partial class UpdatePage : ContentPage
 
                 await Launcher.Default.OpenAsync(new Uri(appStoreUrl));
 
+                Navigation.RemovePage(this);
         }
         catch
 		{ 
