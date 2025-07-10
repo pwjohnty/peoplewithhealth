@@ -1053,6 +1053,7 @@ public partial class RegisterFinalPage : ContentPage
                              Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
                              {
                                  Priority = Plugin.LocalNotification.AndroidOption.AndroidPriority.High, // ?? Set priority here
+                                 Ongoing = true,
                              },
 
                             // Add any custom data you need to retrieve when the notification is tapped
@@ -1086,6 +1087,7 @@ public partial class RegisterFinalPage : ContentPage
                             Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
                             {
                                 Priority = Plugin.LocalNotification.AndroidOption.AndroidPriority.High, // ?? Set priority here
+                                Ongoing = true,
                             },
 
                             // Add any custom data you need to retrieve when the notification is tapped
@@ -1118,6 +1120,7 @@ public partial class RegisterFinalPage : ContentPage
                         Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
                         {
                             Priority = Plugin.LocalNotification.AndroidOption.AndroidPriority.High, // ?? Set priority here
+                            Ongoing = true,
                         },
 
                         // Add any custom data you need to retrieve when the notification is tapped

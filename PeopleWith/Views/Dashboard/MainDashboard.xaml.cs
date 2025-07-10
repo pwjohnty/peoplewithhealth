@@ -157,7 +157,6 @@ public partial class MainDashboard : ContentPage
 
             //MessagingCenter.Subscribe<App>(this, "CallBatterySaver", (sender) => { CheckbatterySaverON(); });
             hometab.IsEnabled = true;
-           
 
         }
         catch (Exception Ex)
@@ -206,8 +205,6 @@ public partial class MainDashboard : ContentPage
         }
         //lbl.Text = firstName;
     }
-
-
 
     protected async override void OnAppearing()
     {

@@ -76,6 +76,7 @@ namespace PeopleWith
                     Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
                     {
                         Priority = Plugin.LocalNotification.AndroidOption.AndroidPriority.High, // 🔥 Set priority here
+                        Ongoing = true,
                     },
                     Schedule = new NotificationRequestSchedule
                     {

@@ -141,7 +141,7 @@ namespace PeopleWith
         //                //Toast.MakeText(activity, "Close", ToastLength.Long)?.Show();
         //                //backPressed = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         //            }
-        //        }
+        //        
         //    }
         //}
 
@@ -151,7 +151,11 @@ namespace PeopleWith
         protected override void OnNewIntent(Intent intent)
         {
             base.OnNewIntent(intent);
-            HandleIntent(intent);
+            //HandleIntent(intent);
+            if (intent?.Extras != null)
+            {
+                HandleNotificationTap(intent);
+            }
         }
 
         private static void HandleIntent(Intent intent)
