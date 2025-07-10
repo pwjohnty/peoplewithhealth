@@ -22,6 +22,7 @@ using Android.Runtime;
 using AndroidX.Activity;
 using Android.Provider;
 using Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;
+using Plugin.Firebase.CloudMessaging;
 
 
 namespace PeopleWith
@@ -97,18 +98,22 @@ namespace PeopleWith
                 //var connectionString = "Endpoint=sb://PWDevelopment.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=ZiwsFi5CJVNru6prZMix/55OIDEZJvXumOSBkRjU4gM="; // Can be found in Access policy. Use Listen connection
 
                 hub = NotificationHubClient.CreateClientFromConnectionString(Constants.ListenConnectionString, Constants.NotificationHubName);
-
-                CreateNotificationChannel();
+                NotificationChanelCreate();
+                //CreateNotificationChannel();
             }
             catch (Exception ex)
             {
             }
 
-            // Handle notification tap if the activity was launched from a notification
             if (Intent?.Extras != null)
             {
-                HandleNotificationTap(Intent);
+                HandleIntent(Intent);
             }
+            // Handle notification tap if the activity was launched from a notification
+            //if (Intent?.Extras != null)
+            //{
+            //    HandleNotificationTap(Intent);
+            //}
         }
 
         //internal class BackPressed : OnBackPressedCallback
@@ -140,6 +145,69 @@ namespace PeopleWith
         //    }
         //}
 
+
+        //New Intent Code 
+
+        protected override void OnNewIntent(Intent intent)
+        {
+            base.OnNewIntent(intent);
+            HandleIntent(intent);
+        }
+
+        private static void HandleIntent(Intent intent)
+        {
+            FirebaseCloudMessagingImplementation.OnNewIntent(intent);
+        }
+
+        private async void NotificationChanelCreate()
+        {
+            var token = await CrossFirebaseCloudMessaging.Current.GetTokenAsync();
+
+            IList<string> tags = new List<string>();
+
+            if (!string.IsNullOrEmpty(Helpers.Settings.UserKey))
+            {
+                tags.Add(Helpers.Settings.UserKey);
+            }
+
+            if (!string.IsNullOrEmpty(Helpers.Settings.SignUp))
+            {
+                tags.Add(Helpers.Settings.SignUp);
+            }
+
+            var installation = new Microsoft.Azure.NotificationHubs.Installation
+            {
+                InstallationId = GetDeviceId(),
+                PushChannel = token,
+                Platform = NotificationPlatform.FcmV1,
+                Tags = tags
+            };
+            await hub.CreateOrUpdateInstallationAsync(installation);
+
+
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
+            {
+                CreateNotificationChannel();
+            }
+        }
+
+        private void CreateNotificationChannel()
+        {
+            //var channelName = "default";
+            ////var channelId = $"{PackageName}.general";
+            //var notificationManager = (NotificationManager)GetSystemService(NotificationService);
+            //var channel = new NotificationChannel(channelName, channelName, NotificationImportance.High);
+            //notificationManager.CreateNotificationChannel(channel);
+            //FirebaseCloudMessagingImplementation.ChannelId = channelId;
+
+            var channelId = $"{PackageName}.general";
+            var notificationManager = (NotificationManager)GetSystemService(NotificationService);
+            var channel = new NotificationChannel(channelId, "General", NotificationImportance.Default);
+            notificationManager.CreateNotificationChannel(channel);
+            FirebaseCloudMessagingImplementation.ChannelId = channelId;
+
+        }
+
         private void initFontScale()
         {
 
@@ -157,77 +225,77 @@ namespace PeopleWith
 
         }
 
-        private async void CreateNotificationChannel()
-        {
-            try
-            {
-                var token = await SecureStorage.GetAsync("FireBaseToken");
+        //private async void CreateNotificationChannel()
+        //{
+        //    try
+        //    {
+        //        var token = await SecureStorage.GetAsync("FireBaseToken");
 
-                if (token == null)
-                {
-                   // token = FirebaseMessaging.Instance.GetToken().ToString();
-                }
+        //        if (token == null)
+        //        {
+        //           // token = FirebaseMessaging.Instance.GetToken().ToString();
+        //        }
 
-                Helpers.Settings.Token = token;
-                Helpers.Settings.DeviceID = GetDeviceId();
+        //        Helpers.Settings.Token = token;
+        //        Helpers.Settings.DeviceID = GetDeviceId();
 
-                //List<string> tags = new List<string>();
+        //        //List<string> tags = new List<string>();
 
-                //if (!string.IsNullOrEmpty(Helpers.Settings.UserKey))
-                //{
-                //    tags.Add(Helpers.Settings.UserKey);
-                //}
+        //        //if (!string.IsNullOrEmpty(Helpers.Settings.UserKey))
+        //        //{
+        //        //    tags.Add(Helpers.Settings.UserKey);
+        //        //}
 
-                //if (!string.IsNullOrEmpty(Helpers.Settings.SignUp))
-                //{
-                //    tags.Add(Helpers.Settings.SignUp);
-                //}
+        //        //if (!string.IsNullOrEmpty(Helpers.Settings.SignUp))
+        //        //{
+        //        //    tags.Add(Helpers.Settings.SignUp);
+        //        //}
 
-                //tags.Add("IID3");
-                IList<string> tags = new List<string>();
+        //        //tags.Add("IID3");
+        //        IList<string> tags = new List<string>();
 
-                if (!string.IsNullOrEmpty(Helpers.Settings.UserKey))
-                {
-                    tags.Add(Helpers.Settings.UserKey);
-                }
+        //        if (!string.IsNullOrEmpty(Helpers.Settings.UserKey))
+        //        {
+        //            tags.Add(Helpers.Settings.UserKey);
+        //        }
 
-                if (!string.IsNullOrEmpty(Helpers.Settings.SignUp))
-                {
-                    tags.Add(Helpers.Settings.SignUp);
-                }
+        //        if (!string.IsNullOrEmpty(Helpers.Settings.SignUp))
+        //        {
+        //            tags.Add(Helpers.Settings.SignUp);
+        //        }
 
-                //tags.Add("MARK");
+        //        //tags.Add("MARK");
 
-                var installation = new Microsoft.Azure.NotificationHubs.Installation
-                {
-                    InstallationId = GetDeviceId(),
-                    PushChannel = token,
-                    Platform = NotificationPlatform.FcmV1,
-                    Tags = tags
-                };
-                await hub.CreateOrUpdateInstallationAsync(installation);
+        //        var installation = new Microsoft.Azure.NotificationHubs.Installation
+        //        {
+        //            InstallationId = GetDeviceId(),
+        //            PushChannel = token,
+        //            Platform = NotificationPlatform.FcmV1,
+        //            Tags = tags
+        //        };
+        //        await hub.CreateOrUpdateInstallationAsync(installation);
 
-                //await SharedNotificationService.RegisterDeviceAsync(token, NotificationPlatform.Fcm, new string[] { "InitialTag" });
+        //        //await SharedNotificationService.RegisterDeviceAsync(token, NotificationPlatform.Fcm, new string[] { "InitialTag" });
 
 
-                if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
-                {
-                    var channelName = "default";
-                    var channelDescription = string.Empty;
-                    var channel = new NotificationChannel(channelName, channelName, NotificationImportance.High)
-                    {
-                        Description = channelDescription
-                    };
+        //        if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
+        //        {
+        //            var channelName = "default";
+        //            var channelDescription = string.Empty;
+        //            var channel = new NotificationChannel(channelName, channelName, NotificationImportance.High)
+        //            {
+        //                Description = channelDescription
+        //            };
 
-                    var notificationManager = (NotificationManager)GetSystemService(NotificationService);
-                    notificationManager.CreateNotificationChannel(channel);
-                }
-            }
-            catch(Exception ex) 
-            { 
+        //            var notificationManager = (NotificationManager)GetSystemService(NotificationService);
+        //            notificationManager.CreateNotificationChannel(channel);
+        //        }
+        //    }
+        //    catch(Exception ex) 
+        //    { 
 
-            }
-        }
+        //    }
+        //}
 
         //public static void OpenBatterySettings(Activity activity)
         //{
@@ -258,24 +326,24 @@ namespace PeopleWith
         }
 
         // Add this method to handle the navigation
-        protected override void OnNewIntent(Intent intent)
-        {
-            try
-            {
-                base.OnNewIntent(intent);
+        //protected override void OnNewIntent(Intent intent)
+        //{
+        //    try
+        //    {
+        //        base.OnNewIntent(intent);
 
-                // Handle notification tap if a new intent is received
-                if (intent?.Extras != null)
-                {
-                    HandleNotificationTap(intent);
-                }
-            }
-            catch (Exception ex)
-            {
+        //        // Handle notification tap if a new intent is received
+        //        if (intent?.Extras != null)
+        //        {
+        //            HandleNotificationTap(intent);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-            }
+        //    }
 
-        }
+        //}
 
         private void HandleNotificationTap(Intent intent)
         {
