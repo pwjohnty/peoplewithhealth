@@ -31,9 +31,15 @@ namespace PeopleWith
             }
             else
             {
-                var currentPage = Application.Current.MainPage.Navigation.NavigationStack.LastOrDefault();
-                if (!(currentPage is NoInternetPage))
+                //var currentPage = Application.Current.MainPage.Navigation.NavigationStack.LastOrDefault();
+                //if (!(currentPage is NoInternetPage))
+                //{
+                //    await Application.Current.MainPage.Navigation.PushAsync(new NoInternetPage());
+                //}
+
+                if (!(Application.Current.MainPage is NoInternetPage))
                 {
+                    //SetMainPage(new NoInternetPage());
                     await Application.Current.MainPage.Navigation.PushAsync(new NoInternetPage());
                 }
             }

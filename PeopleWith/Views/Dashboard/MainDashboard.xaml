@@ -1128,7 +1128,7 @@ Text="Get Started" />
 
 
                                 <Label Text="Recent Mood Updates" x:Name="moodlbl" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="12" Margin="15,20,0,0" HorizontalOptions="Start" />
-                                <Label Text="Most common mood over the last 7 days" x:Name="measlbl2" TextColor="Gray" FontFamily="HankenGroteskRegular" FontSize="12" Margin="15,0,0,0" HorizontalOptions="Start" />
+                                <Label Text="Most common mood over the last 7 days" x:Name="moodlbl2" TextColor="Gray" FontFamily="HankenGroteskRegular" FontSize="12" Margin="15,0,0,0" HorizontalOptions="Start" />
 
                                 <Label Text="Mood Activity" TextColor="#031926" IsVisible="False" FontFamily="HankenGroteskBold" FontSize="14" Margin="10,10,0,0" HorizontalOptions="Start" />
 

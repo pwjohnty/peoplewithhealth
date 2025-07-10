@@ -60,7 +60,9 @@ namespace PeopleWith
                 Preferences.Set("token", string.Empty);
 
                 await Task.Delay(300);
-                Application.Current.MainPage = new NavigationPage(new MainPage());
+                //Application.Current.MainPage = new NavigationPage(new MainPage());
+                App.SetMainPage(new NavigationPage(new MainPage()));
+                // await Shell.Current.GoToAsync("MainPage");
 
 
                 //Application.Current.MainPage = new NavigationPage(new MainPage());

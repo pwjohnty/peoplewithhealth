@@ -1139,17 +1139,28 @@ public partial class RegisterFinalPage : ContentPage
             }
 
 
-            // Preferences.Default.Set("validationcode", newuser.validationcode);
-            await Task.Run(async () =>
-                {
-                    // Simulate some processing that may take up to seconds
-                    await Task.Delay(100);
-                });
+                // Preferences.Default.Set("validationcode", newuser.validationcode);
+                //await Task.Run(async () =>
+                //    {
+                //        // Simulate some processing that may take up to seconds
+                //        await Task.Delay(100);
+                //    });
 
+                //    MainThread.BeginInvokeOnMainThread(() =>
+                //    {
+                //        Application.Current.MainPage = new NavigationPage(new MainDashboard());
+
+                //    });
+
+                //await Task.Run(async () =>
+                //{
+                // Simulate some processing that may take up to seconds
+                await Task.Delay(500);
+                //});
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    Application.Current.MainPage = new NavigationPage(new MainDashboard());
-                   
+                    App.SetMainPage(new NavigationPage(new MainDashboard()));
+                    //Application.Current.MainPage = new NavigationPage(new MainDashboard());
                 });
 
                 //Task.Run(async () =>

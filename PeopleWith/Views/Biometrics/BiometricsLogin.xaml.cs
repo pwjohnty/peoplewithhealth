@@ -124,7 +124,7 @@ public partial class BiometricsLogin : ContentPage
 
                         MainThread.BeginInvokeOnMainThread(() =>
                         {
-                            Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                            App.SetMainPage(new NavigationPage(new MainDashboard()));
                         });
                     }
                     else

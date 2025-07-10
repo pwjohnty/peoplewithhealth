@@ -1269,6 +1269,7 @@ public partial class MainDashboard : ContentPage
                 moodSummaryPerDay.Reverse();
 
                 moodlistsummary.ItemsSource = moodSummaryPerDay;
+                nomooddataframe.IsVisible = false;
 
                 //foreach (var item in filteredMoods)
                 //{
@@ -1385,7 +1386,7 @@ public partial class MainDashboard : ContentPage
             else
             {
                 moodlbl.IsVisible = false;
-                measlbl2.IsVisible = false;
+                moodlbl2.IsVisible = false;
                 moodframe.IsVisible = false;
                 nomooddataframe.IsVisible = true;
 

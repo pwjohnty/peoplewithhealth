@@ -392,11 +392,11 @@ public partial class AndroidQuestionnaires : ContentPage
                     {
                         if (!string.IsNullOrEmpty(item.freetextentry))
                         {
-                            item.questionanswerstring = string.Join(" , ", item.AnswerOptions.Select(a => a.answertitle)) + Environment.NewLine + Environment.NewLine + item.freetextentry;
+                            item.questionanswerstring = string.Join(", ", item.AnswerOptions.Select(a => a.answertitle)) + Environment.NewLine + Environment.NewLine + item.freetextentry;
                         }
                         else
                         {
-                            item.questionanswerstring = string.Join(" , ", item.AnswerOptions.Select(a => a.answertitle));
+                            item.questionanswerstring = string.Join(", ", item.AnswerOptions.Select(a => a.answertitle));
                         }
                     }
 
