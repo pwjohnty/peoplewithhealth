@@ -21,7 +21,7 @@ public partial class UpdatePage : ContentPage
                  : "https://play.google.com/store/apps/details?id=com.peoplewith.peoplewith"; 
 
                 await Launcher.Default.OpenAsync(new Uri(appStoreUrl));
-
+            Navigation.RemovePage(this);
         }
         catch
 		{ 
