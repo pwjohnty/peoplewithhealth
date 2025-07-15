@@ -1155,11 +1155,11 @@ public partial class RegisterFinalPage : ContentPage
 
                 //    });
 
-                //await Task.Run(async () =>
-                //{
+                await Task.Run(async () =>
+                {
                 // Simulate some processing that may take up to seconds
                 await Task.Delay(500);
-                //});
+                });
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
                     App.SetMainPage(new NavigationPage(new MainDashboard()));

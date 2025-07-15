@@ -23,26 +23,33 @@ namespace PeopleWith
 
         private async void checkwifion()
         {
-            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
-
-            if (accessType == NetworkAccess.Internet)
+            try
             {
-               //Do Nothing 
-            }
-            else
-            {
-                //var currentPage = Application.Current.MainPage.Navigation.NavigationStack.LastOrDefault();
-                //if (!(currentPage is NoInternetPage))
-                //{
-                //    await Application.Current.MainPage.Navigation.PushAsync(new NoInternetPage());
-                //}
+                NetworkAccess accessType = Connectivity.Current.NetworkAccess;
 
-                if (!(Application.Current.MainPage is NoInternetPage))
+                if (accessType == NetworkAccess.Internet)
                 {
-                    //SetMainPage(new NoInternetPage());
-                    await Application.Current.MainPage.Navigation.PushAsync(new NoInternetPage());
+                    //Do Nothing 
+                }
+                else
+                {
+                    //var currentPage = Application.Current.MainPage.Navigation.NavigationStack.LastOrDefault();
+                    //if (!(currentPage is NoInternetPage))
+                    //{
+                    //    await Application.Current.MainPage.Navigation.PushAsync(new NoInternetPage());
+                    //}
+
+                    if (!(Application.Current.MainPage is NoInternetPage))
+                    {
+                        //SetMainPage(new NoInternetPage());
+                        await Application.Current.MainPage.Navigation.PushAsync(new NoInternetPage());
+                    }
                 }
             }
+            catch (Exception ex) 
+            {
+                
+            }        
         }
 
         async void checkifuserisloggedin()

@@ -8,10 +8,9 @@
         <Image
     Source="pwregbackgroundlight.png"
     Aspect="AspectFill"
-      Opacity="1" 
+      Opacity="1"
     AbsoluteLayout.LayoutBounds="0,0,1,1"
     AbsoluteLayout.LayoutFlags="All" />
-
         <!-- Overlaying text on the background image -->
         <VerticalStackLayout
     Padding="0,0,0,0"
@@ -30,7 +29,6 @@
         FontFamily="HankenGroteskBold"
         FontAttributes="Bold"
         HorizontalOptions="Center" />
-
             <Label
         TextColor="#031926" x:Name="lblBody"
         FontFamily="HankenGroteskRegular"
@@ -38,10 +36,7 @@
         Margin="20,20,20,0"
         FontSize="16" 
         HorizontalOptions="Center" />
-
-
         </VerticalStackLayout>
-
         <!-- Buttons at the bottom of the screen -->
         <VerticalStackLayout
     Padding="20,0,20,20"
@@ -49,7 +44,6 @@
     Spacing="10"
     AbsoluteLayout.LayoutBounds="0,1,1,AutoSize"
     AbsoluteLayout.LayoutFlags="PositionProportional,WidthProportional">
-
             <Button
         BackgroundColor="#BFDBF7"
         HorizontalOptions="FillAndExpand"
@@ -59,7 +53,6 @@
              Margin="10,0,10,0"
         FontFamily="HankenGroteskBold"
         Text="Update now" />
-
             <Label
            Text="Privacy Policy"
            TextColor="#031926" Opacity="0"
@@ -68,10 +61,6 @@
            Margin="0,10,0,0"
            FontSize="10"
            HorizontalOptions="Center" />
-
-
-
-
         </VerticalStackLayout>
     </AbsoluteLayout>
 </ContentPage>
