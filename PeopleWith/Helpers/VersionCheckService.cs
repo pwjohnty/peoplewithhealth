@@ -13,7 +13,7 @@ namespace PeopleWith
             //Ensure the following is changed
             if (DeviceInfo.Platform == DevicePlatform.iOS)
             {
-                latestVersion = "13.0.0";
+                latestVersion = "13.0.4";
             }
             else
             {

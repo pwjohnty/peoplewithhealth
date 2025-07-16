@@ -52,11 +52,12 @@ namespace PeopleWith
         }
         public static void SetMainPage(Page newRootPage)
         {
-            //Set New RootPage
-            if (Application.Current != null && Application.Current.Windows.Any())
-            {
-                Application.Current.Windows[0].Page = newRootPage;
-            }
+                   //Set New RootPage
+                if (Application.Current != null && Application.Current.Windows.Any())
+                {
+                    Application.Current.Windows[0].Page = newRootPage;
+                }
+       
         }
 
         //private async void OnNotificationTapped(NotificationActionEventArgs e)
