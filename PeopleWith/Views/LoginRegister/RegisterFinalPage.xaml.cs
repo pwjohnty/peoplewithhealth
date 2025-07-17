@@ -32,7 +32,6 @@ public partial class RegisterFinalPage : ContentPage
     public consent additonalconsent = new consent();
     ObservableCollection<usermedication> medicationstoadd = new ObservableCollection<usermedication>();
     ObservableCollection<usersymptom> symptomstoadd = new ObservableCollection<usersymptom>();
-    public HttpClient Client = new HttpClient();
     userdiagnosis userdiag;
     bool SignPadhaddata = false;
     signupcode signupcodeinfo;
@@ -43,7 +42,7 @@ public partial class RegisterFinalPage : ContentPage
     userfeedback userfeedbacklistpassed = new userfeedback();
     userfeedback UserFeedbackToAdd = new userfeedback();
     userdiet DietToAdd;
-
+    private static readonly HttpClient Client = new HttpClient();
     async public void NotasyncMethod(Exception Ex)
     {
         try
@@ -61,9 +60,11 @@ public partial class RegisterFinalPage : ContentPage
     {
         try
         {
-            Client = new HttpClient();
-            Client.DefaultRequestHeaders.Add("X-MS-CLIENT-PRINCIPAL", "eyAgCiAgImlkZW50aXR5UHJvdmlkZXIiOiAidGVzdCIsCiAgInVzZXJJZCI6ICIxMjM0NSIsCiAgInVzZXJEZXRhaWxzIjogImpvaG5AY29udG9zby5jb20iLAogICJ1c2VyUm9sZXMiOiBbIjFFMzNDMEFDLTMzOTMtNEMzNC04MzRBLURFNUZEQkNCQjNDQyJdCn0=");
-            Client.DefaultRequestHeaders.Add("X-MS-API-ROLE", "1E33C0AC-3393-4C34-834A-DE5FDBCBB3CC");
+            if (!Client.DefaultRequestHeaders.Contains("X-MS-CLIENT-PRINCIPAL"))
+            {
+                Client.DefaultRequestHeaders.Add("X-MS-CLIENT-PRINCIPAL", "eyAgCiAgImlkZW50aXR5UHJvdmlkZXIiOiAidGVzdCIsCiAgInVzZXJJZCI6ICIxMjM0NSIsCiAgInVzZXJEZXRhaWxzIjogImpvaG5AY29udG9zby5jb20iLAogICJ1c2VyUm9sZXMiOiBbIjFFMzNDMEFDLTMzOTMtNEMzNC04MzRBLURFNUZEQkNCQjNDQyJdCn0=");
+                Client.DefaultRequestHeaders.Add("X-MS-API-ROLE", "1E33C0AC-3393-4C34-834A-DE5FDBCBB3CC");
+            }
         }
         catch (Exception Ex)
         {
@@ -1080,8 +1081,8 @@ public partial class RegisterFinalPage : ContentPage
                         var notification = new NotificationRequest
                         {
                             NotificationId = new Random().Next(1, int.MaxValue),
-                            Title = "Complete your SF-36 General Health Questionnaire",
-                            Description = "Please take a moment to complete your SF-36 questionnaire",
+                            Title = "EQ-5D-5L General Health Questionnaire",
+                            Description = "Please take a moment to complete your EQ-5D-5L questionnaire",
                             BadgeNumber = 0,
 
                             Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions

@@ -74,7 +74,7 @@ public partial class MainDashboard : ContentPage
     public bool SuppNotifAdded = false;
     ObservableCollection<SettingsOn> SettingstoShow = new ObservableCollection<SettingsOn>();
     MedSuppNotifications ScheduleNotifications = new MedSuppNotifications();
-    public HttpClient Client = new HttpClient();
+    private static readonly HttpClient Client = new HttpClient();
     public event EventHandler<bool> ConnectivityChanged;
     ObservableCollection<dashitem> dailytasklist = new ObservableCollection<dashitem>();
     // public TaskCompletionSource<bool> PageReady { get; set; } = new();
@@ -100,9 +100,11 @@ public partial class MainDashboard : ContentPage
     {
         try
         {
-            Client = new HttpClient();
-            Client.DefaultRequestHeaders.Add("X-MS-CLIENT-PRINCIPAL", "eyAgCiAgImlkZW50aXR5UHJvdmlkZXIiOiAidGVzdCIsCiAgInVzZXJJZCI6ICIxMjM0NSIsCiAgInVzZXJEZXRhaWxzIjogImpvaG5AY29udG9zby5jb20iLAogICJ1c2VyUm9sZXMiOiBbIjFFMzNDMEFDLTMzOTMtNEMzNC04MzRBLURFNUZEQkNCQjNDQyJdCn0=");
-            Client.DefaultRequestHeaders.Add("X-MS-API-ROLE", "1E33C0AC-3393-4C34-834A-DE5FDBCBB3CC");
+            if (!Client.DefaultRequestHeaders.Contains("X-MS-CLIENT-PRINCIPAL"))
+            {
+                Client.DefaultRequestHeaders.Add("X-MS-CLIENT-PRINCIPAL", "eyAgCiAgImlkZW50aXR5UHJvdmlkZXIiOiAidGVzdCIsCiAgInVzZXJJZCI6ICIxMjM0NSIsCiAgInVzZXJEZXRhaWxzIjogImpvaG5AY29udG9zby5jb20iLAogICJ1c2VyUm9sZXMiOiBbIjFFMzNDMEFDLTMzOTMtNEMzNC04MzRBLURFNUZEQkNCQjNDQyJdCn0=");
+                Client.DefaultRequestHeaders.Add("X-MS-API-ROLE", "1E33C0AC-3393-4C34-834A-DE5FDBCBB3CC");
+            }
         }
         catch (Exception Ex)
         {
@@ -1522,8 +1524,6 @@ public partial class MainDashboard : ContentPage
                 //Check once complete 
 
 
-
-
             }
             else if (signup.Contains("SFECORE"))
             {
@@ -1532,8 +1532,8 @@ public partial class MainDashboard : ContentPage
                 additionalquestionstab.IsVisible = true;
                 SFECoreStudy.IsVisible = true;
 
-                //SF-36
-                string QID = "DC6A9FD7-242B-4299-9672-D745669FEAF0";
+                //EQ-5D-5L
+                string QID = "A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF";
                 if (questionnaires != null)
                 {
                     QuestionList = new ObservableCollection<questionnaire>(questionnaires.Where(q => QID.Contains(q.questionnaireid)));

@@ -147,7 +147,7 @@ namespace PeopleWith
             Application.Current.Windows[0].Page = navPage;
         }
 
-        protected override void OnResume()
+        protected async override void OnResume()
         {
             try
             {
@@ -176,6 +176,19 @@ namespace PeopleWith
                     //     MessagingCenter.Send<App>(this, "CallBatterySaver");
                     //#endif
 
+                }
+                NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+                if (accessType == NetworkAccess.Internet)
+                {
+                    //Do Nothing 
+                }
+                else
+                {
+                    if (!(Application.Current.MainPage is NoInternetPage))
+                    {
+                        //SetMainPage(new NoInternetPage());
+                        await Application.Current.MainPage.Navigation.PushAsync(new NoInternetPage());
+                    }
                 }
 
                 //if (currentPage.GetType().Name == "ProfileSection")

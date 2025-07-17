@@ -1464,8 +1464,8 @@ public partial class AndroidQuestionnaires : ContentPage
                         else if (Signup.Contains("SFECORE"))
                         {
                             ListArray = new List<string>
-                        {    //SF36 ID 
-                            "DC6A9FD7-242B-4299-9672-D745669FEAF0"
+                        {    //EQ-5D-5L
+                            "A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF"
                         };
                         }
                         else if (Signup.Contains("RBHTHCM"))
@@ -1478,9 +1478,9 @@ public partial class AndroidQuestionnaires : ContentPage
                         else if (Signup.Contains("SFEAT"))
                         {
                             ListArray = new List<string>
- {    //EQ-5D 5L
-     "A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF"
- };
+                         {    //EQ-5D 5L
+                             "A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF"
+                         };
                         }
 
                         //only adds the required questionnaires to the Feedback 

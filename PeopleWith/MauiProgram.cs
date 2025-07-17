@@ -191,8 +191,8 @@ namespace PeopleWith
 #endif
             });
 
-        //builder.Services.AddSingleton(typeof(IFingerprint), CrossFingerprint.Current);
-        builder.ConfigureSyncfusionCore();
+            //builder.Services.AddSingleton(typeof(IFingerprint), CrossFingerprint.Current);
+            builder.ConfigureSyncfusionCore();
             builder.InitializeFreakyControls();
             builder.Services.AddSingleton(HealthDataProvider.Default);
 
