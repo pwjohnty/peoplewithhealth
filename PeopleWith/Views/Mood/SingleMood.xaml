@@ -91,7 +91,7 @@
             </StackLayout>
 
             <Label Text="Details" Margin="20,20,0,0" FontFamily="HankenGroteskBold"  FontSize="20" VerticalOptions="Center" TextColor="#031926" />
-            <Border  Stroke="#E5E5E5" BackgroundColor="Transparent" Margin="10,10,10,50">
+            <Border  Stroke="#E5E5E5" BackgroundColor="Transparent" Padding="20" StrokeShape="RoundRectangle 10" Margin="10,10,10,50">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="90*"/>

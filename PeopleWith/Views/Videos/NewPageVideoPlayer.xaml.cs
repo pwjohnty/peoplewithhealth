@@ -351,6 +351,29 @@ public partial class NewPageVideoPlayer : ContentPage
     //    }
     //}
 
+    //protected override void OnHandlerChanging(HandlerChangingEventArgs args)
+    //{
+    //    base.OnHandlerChanging(args);
+
+    //    try
+    //    {
+    //        if (args.NewHandler is null && MediaElement?.Handler != null)
+    //        {
+    //            MediaElement.Stop(); // optional but good
+    //            MediaElement.Source = null;
+    //            MediaElement.Handler?.DisconnectHandler();
+    //        }
+    //    }
+    //    catch (ObjectDisposedException)
+    //    {
+    //        // MediaElement was already disposed — safe to ignore
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        NotasyncMethod(ex);
+    //    }
+    //}
+
     private void ContentPage_Unloaded(object sender, EventArgs e)
     {
         try
@@ -359,13 +382,17 @@ public partial class NewPageVideoPlayer : ContentPage
             if (MediaElement.Handler != null)
             {
                 // Stop the video and disconnect the handler
+                MediaElement.Stop(); 
+                MediaElement.Source = null;
                 MediaElement.Handler?.DisconnectHandler();
                 // MediaElement.Stop();
                 // MediaElement.IsVisible = false;
                 //   MediaElement.Handler?.DisconnectHandler();
-
-
             }
+        }
+        catch (ObjectDisposedException)
+        {
+            //leave Blank
         }
         catch (Exception Ex)
         {

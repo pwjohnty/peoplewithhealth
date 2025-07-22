@@ -95,7 +95,7 @@
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                    <Border StrokeShape="RoundRectangle 10" InputTransparent="True"   Margin="5,5,5,5"   Opacity="1" BackgroundColor="Transparent" Stroke="LightGray">
+                                    <Border StrokeShape="RoundRectangle 10" InputTransparent="True" Padding="20"  Margin="5,5,5,5"   Opacity="1" BackgroundColor="Transparent" Stroke="LightGray">
                                     <Grid HorizontalOptions="FillAndExpand" Margin="0" Padding="0"  >
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -116,7 +116,7 @@
                     <syncfusion:SfListView.SelectedItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                    <Border StrokeShape="RoundRectangle 10" Margin="5,5,5,5" InputTransparent="True" BackgroundColor="#BFDBF7"   Stroke="Transparent">
+                                    <Border StrokeShape="RoundRectangle 10" Margin="5,5,5,5" Padding="20" InputTransparent="True" BackgroundColor="#BFDBF7"   Stroke="Transparent">
                                     <Grid HorizontalOptions="FillAndExpand">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -136,7 +136,7 @@
 
                     <Border IsVisible="False" Grid.Row="1" x:Name="SpecifyPrompt" StrokeShape="RoundRectangle 10" InputTransparent="False" Padding="0"  Margin="5" BackgroundColor="Transparent">
                         <Grid HorizontalOptions="FillAndExpand" Grid.RowDefinitions="Auto" Grid.ColumnDefinitions="100*" >
-                            <Editor Keyboard="Text" Grid.Row="0" Grid.Column="0"  x:Name="SpecifyGender" Placeholder="Enter Gender" Margin="15,10,15,5" VerticalOptions="Center" PlaceholderColor="LightGray" TextColor="#031926" FontSize="12"/>
+                            <Editor Keyboard="Text" Grid.Row="0" Grid.Column="0"  x:Name="SpecifyGender" Placeholder="Enter Gender" Margin="15,5,15,5" VerticalTextAlignment="Center" VerticalOptions="Center" PlaceholderColor="LightGray" TextColor="#031926" FontSize="12"/>
                         </Grid>
                     </Border>
 
@@ -166,7 +166,7 @@
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                    <Border StrokeShape="RoundRectangle 10" Margin="5,5,5,5" InputTransparent="True"  Opacity="1" BackgroundColor="Transparent" Stroke="LightGray">
+                                    <Border StrokeShape="RoundRectangle 10" Margin="5,5,5,5" Padding="20" InputTransparent="True"  Opacity="1" BackgroundColor="Transparent" Stroke="LightGray">
                                     <Grid HorizontalOptions="FillAndExpand" Margin="0" Padding="0"  >
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -186,7 +186,7 @@
                     <syncfusion:SfListView.SelectedItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                    <Border StrokeShape="RoundRectangle 10"  Margin="5,5,5,5" InputTransparent="True" BackgroundColor="#BFDBF7"   Stroke="Transparent">
+                                    <Border StrokeShape="RoundRectangle 10" Padding="20" Margin="5,5,5,5" InputTransparent="True" BackgroundColor="#BFDBF7"   Stroke="Transparent">
                                     <Grid HorizontalOptions="FillAndExpand">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>

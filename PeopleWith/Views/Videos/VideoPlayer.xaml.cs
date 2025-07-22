@@ -41,7 +41,7 @@ public partial class VideoPlayer : ContentPage
             SubTitlelbl.Text = SelectedVideo.subtitle;
             Dateandlenthlbl.Text = "Date Added: " + SelectedVideo.dateadded;
             lengthlbl.Text = SelectedVideo.lenght;
-         //   MediaElement.Source = SelectedVideo.filename;
+            //   MediaElement.Source = SelectedVideo.filename;
             VideoEngagement.userid = Helpers.Settings.UserKey;
             VideoEngagement.videoid = VideoSelected.videoid;
             //NavigationPage.SetHasNavigationBar(this, true);
@@ -53,6 +53,22 @@ public partial class VideoPlayer : ContentPage
             NotasyncMethod(Ex);
         }
     }
+
+    //protected override void OnHandlerChanging(HandlerChangingEventArgs args)
+    //{
+    //    try
+    //    {
+    //        base.OnHandlerChanging(args);
+    //        if (args.NewHandler is null)
+    //        {
+    //            MediaElement.Handler?.DisconnectHandler();
+    //        }
+    //    }
+    //    catch (Exception Ex)
+    //    {
+    //        //NotasyncMethod(Ex);
+    //    }
+    //}
 
     public VideoPlayer(signupcodeinformation vidpassed)
     {

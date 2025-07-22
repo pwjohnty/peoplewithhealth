@@ -28,7 +28,7 @@
                             <Image x:Name="ActivityCategory" Grid.Row="0" Grid.Column="0" Margin="0,0,0,0" HeightRequest="40" WidthRequest="40" VerticalOptions="Center" HorizontalOptions="Center" />
                         </Border>
 
-                    <Label FontFamily="HankenGroteskBold" VerticalOptions="End" Margin="10,0,0,0" Grid.Row="0" Grid.Column="1">
+                    <Label  VerticalOptions="End" Margin="10,0,0,0" Grid.Row="0" Grid.Column="1">
                         <Label.FormattedText>
                             <FormattedString>
                                 <Span Text="Date Time: " TextColor="Gray" FontSize="12" FontFamily="HankenGroteskRegular" FontAttributes="None"/>
@@ -37,7 +37,7 @@
                             </FormattedString>
                         </Label.FormattedText>
                     </Label>
-                    <Label FontFamily="HankenGroteskBold"  Margin="10,0,0,0" Grid.Row="1" Grid.Column="1">
+                    <Label  Margin="10,0,0,0" Grid.Row="1" Grid.Column="1">
                         <Label.FormattedText>
                             <FormattedString>
                                 <Span Text="Duration: " TextColor="Gray" FontSize="12" FontFamily="HankenGroteskRegular" FontAttributes="None"/>
@@ -115,7 +115,7 @@
             <!-- Details/ Information Section-->
             <Label Text="Details" x:Name="detailslbl" IsVisible="True" FontSize="20" Margin="10,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
 
-            <Border StrokeShape="RoundRectangle 5"  Margin="10,5,10,5" BackgroundColor="Transparent" Stroke="#fce9d9" Padding="10">
+            <Border StrokeShape="RoundRectangle 10"  Margin="0,5,0,5" BackgroundColor="Transparent" Stroke="#fce9d9" Padding="10">
                 <Grid HorizontalOptions="FillAndExpand" Grid.RowDefinitions="Auto"  Margin="0,10,0,10">
                     <Border Padding="0" Grid.Row="0" Stroke="Transparent" BackgroundColor="Transparent" >
                         <Grid Grid.ColumnDefinitions="90*,10*" >

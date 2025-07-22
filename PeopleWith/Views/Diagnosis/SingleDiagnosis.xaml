@@ -39,7 +39,7 @@
             </Border>
 
             <Label Text="Details" Margin="20,10,0,0" FontFamily="HankenGroteskBold"  FontSize="20" VerticalOptions="Center" TextColor="#031926" />
-            <Border x:Name="NoDiagDetails" Stroke="#E5E5E5" BackgroundColor="Transparent" Margin="10,10,10,0">
+            <Border x:Name="NoDiagDetails" Stroke="#E5E5E5" StrokeShape="RoundRectangle 10" Padding="20" BackgroundColor="Transparent" Margin="10,10,10,0">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="90*"/>

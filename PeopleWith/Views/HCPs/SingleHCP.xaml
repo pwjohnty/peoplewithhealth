@@ -190,7 +190,7 @@
 
 
             <!-- Appointments Assocaited with Doc-->
-            <Border  x:Name="HCPContactFrame" IsVisible="False" Margin="20,5,20,0" Stroke="#CBC3E3" Padding="-2" BackgroundColor="Transparent" >
+            <Border  x:Name="HCPContactFrame" IsVisible="False" Margin="20,5,20,0" StrokeShape="RoundRectangle 5" Stroke="#CBC3E3" Padding="0" BackgroundColor="Transparent" >
                 <syncfusion:SfListView x:Name="HCPContactDetails" SelectionBackground="Transparent" AutoFitMode="Height" >
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>

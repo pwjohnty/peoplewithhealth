@@ -112,7 +112,7 @@ HorizontalOptions="Start" />
                             <syncfusion:SfListView.ItemTemplate>
                                 <DataTemplate>
                                     <ViewCell>
-                                        <Border StrokeShape="RoundRectangle 10" InputTransparent="True"   Margin="5,5,5,5"   Opacity="1" BackgroundColor="Transparent"
+                                        <Border StrokeShape="RoundRectangle 10" InputTransparent="True" Padding="20"  Margin="5,5,5,5"   Opacity="1" BackgroundColor="Transparent"
 Stroke="LightGray">
                                             <Grid HorizontalOptions="FillAndExpand" Margin="0" Padding="0"  >
                                                 <Grid.RowDefinitions>
@@ -135,7 +135,7 @@ Stroke="LightGray">
                             <syncfusion:SfListView.SelectedItemTemplate>
                                 <DataTemplate>
                                     <ViewCell>
-                                        <Border StrokeShape="RoundRectangle 10" Margin="5,5,5,5" InputTransparent="True" BackgroundColor="#BFDBF7"   Stroke="Transparent">
+                                        <Border StrokeShape="RoundRectangle 10" Margin="5,5,5,5" Padding="20" InputTransparent="True" BackgroundColor="#BFDBF7"   Stroke="Transparent">
                                             <Grid HorizontalOptions="FillAndExpand">
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="Auto"/>
@@ -826,7 +826,7 @@ HorizontalOptions="Start" />
                             <syncfusion:SfListView.ItemTemplate>
                                 <DataTemplate>
                                     <ViewCell>
-                                        <Border StrokeShape="RoundRectangle 10" InputTransparent="True"   Margin="5,5,5,5"   Opacity="1" BackgroundColor="Transparent"
+                                        <Border StrokeShape="RoundRectangle 10" InputTransparent="True" Padding="20"  Margin="5,5,5,5"   Opacity="1" BackgroundColor="Transparent"
 Stroke="LightGray">
                                             <Grid HorizontalOptions="FillAndExpand" Margin="0" Padding="0"  >
                                                 <Grid.RowDefinitions>
@@ -849,7 +849,7 @@ Stroke="LightGray">
                             <syncfusion:SfListView.SelectedItemTemplate>
                                 <DataTemplate>
                                     <ViewCell>
-                                        <Border StrokeShape="RoundRectangle 10" Margin="5,5,5,5" InputTransparent="True" BackgroundColor="#BFDBF7"   Stroke="Transparent">
+                                        <Border StrokeShape="RoundRectangle 10" Margin="5,5,5,5" Padding="20" InputTransparent="True" BackgroundColor="#BFDBF7"   Stroke="Transparent">
                                             <Grid HorizontalOptions="FillAndExpand">
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="Auto"/>
@@ -928,7 +928,7 @@ HorizontalOptions="Start" />
                             <syncfusion:SfListView.ItemTemplate>
                                 <DataTemplate>
                                     <ViewCell>
-                                        <Border StrokeShape="RoundRectangle 10" InputTransparent="True"   Margin="5,5,5,5"   Opacity="1" BackgroundColor="Transparent"
+                                        <Border StrokeShape="RoundRectangle 10" InputTransparent="True" Padding="20"  Margin="5,5,5,5"   Opacity="1" BackgroundColor="Transparent"
 Stroke="LightGray">
                                             <Grid HorizontalOptions="FillAndExpand" Margin="0" Padding="0"  >
                                                 <Grid.RowDefinitions>
@@ -951,7 +951,7 @@ Stroke="LightGray">
                             <syncfusion:SfListView.SelectedItemTemplate>
                                 <DataTemplate>
                                     <ViewCell>
-                                        <Border StrokeShape="RoundRectangle 10" Margin="5,5,5,5" InputTransparent="True" BackgroundColor="#BFDBF7"   Stroke="Transparent">
+                                        <Border StrokeShape="RoundRectangle 10" Margin="5,5,5,5" Padding="20" InputTransparent="True" BackgroundColor="#BFDBF7"   Stroke="Transparent">
                                             <Grid HorizontalOptions="FillAndExpand">
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="Auto"/>
