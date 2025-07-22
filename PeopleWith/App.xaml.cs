@@ -225,7 +225,7 @@ namespace PeopleWith
         //        {
         //            await MopupService.Instance.PopAsync();
         //        }
-              
+
         //        if (!isConnected)
         //        {
         //            // Check if NoInternetPage is already on the navigation stack
@@ -256,33 +256,84 @@ namespace PeopleWith
         //    }
         //}
 
+        //private async void OnConnectivityChanged(object sender, bool isConnected)
+        //{
+        //    try
+        //    {
+        //        //Close any popup page
+        //        if (MopupService.Instance.PopupStack.Count > 0)
+        //        {
+        //            await MopupService.Instance.PopAsync();
+        //        }
+        //        if (!isConnected)
+        //        {
+        //            // Check if NoInternetPage is already on the navigation stack
+        //            //New
+        //            if (!(Application.Current.MainPage is NoInternetPage))
+        //            {
+        //                await Application.Current.MainPage.Navigation.PushAsync(new NoInternetPage());
+        //            }
+        //            //Old
+        //            //var currentPage = MainPage.Navigation.NavigationStack.LastOrDefault();
+        //            //if (!(currentPage is NoInternetPage))
+        //            //{
+        //            //    await MainPage.Navigation.PushAsync(new NoInternetPage());
+        //            //}
+        //        }
+        //        else
+        //        {
+        //            //New
+        //            var mainPage = Application.Current?.Windows.FirstOrDefault()?.Page;
+        //            if (mainPage != null)
+        //            {
+        //                var pageToRemove = mainPage.Navigation.NavigationStack.FirstOrDefault(p => p is NoInternetPage);
+        //                if (pageToRemove != null)
+        //                {
+        //                    mainPage.Navigation.RemovePage(pageToRemove);
+        //                }
+        //            }
+        //            //Old
+        //            //var pageToRemove = MainPage.Navigation.NavigationStack.FirstOrDefault(p => p is NoInternetPage);
+        //            //if (pageToRemove != null)
+        //            //{
+        //            //    MainPage.Navigation.RemovePage(pageToRemove);
+        //            //}
+        //            //var noInternetPage = MainPage.Navigation.NavigationStack.FirstOrDefault(p => p is NoInternetPage);
+        //            //if (noInternetPage != null)
+        //            //{
+        //            //    await MainPage.Navigation.PopAsync();
+        //            //}
+        //        }
+        //    }
+        //    catch (Exception Ex)
+        //    {
+        //    }
+        //}
+
+        //Changed For Android issue on resume 
         private async void OnConnectivityChanged(object sender, bool isConnected)
         {
             try
             {
-                //Close any popup page
+                await Task.Delay(500);
+
+                // Close any popup page
                 if (MopupService.Instance.PopupStack.Count > 0)
                 {
                     await MopupService.Instance.PopAsync();
                 }
-                if (!isConnected)
+
+                // Actually check if internet is reachable
+                bool internetIsReachable = await IsInternetAvailable(); 
+                if (!internetIsReachable)
                 {
-                    // Check if NoInternetPage is already on the navigation stack
-                    //New
                     if (!(Application.Current.MainPage is NoInternetPage))
                     {
                         await Application.Current.MainPage.Navigation.PushAsync(new NoInternetPage());
                     }
-                    //Old
-                    //var currentPage = MainPage.Navigation.NavigationStack.LastOrDefault();
-                    //if (!(currentPage is NoInternetPage))
-                    //{
-                    //    await MainPage.Navigation.PushAsync(new NoInternetPage());
-                    //}
                 }
                 else
                 {
-                    //New
                     var mainPage = Application.Current?.Windows.FirstOrDefault()?.Page;
                     if (mainPage != null)
                     {
@@ -292,22 +343,31 @@ namespace PeopleWith
                             mainPage.Navigation.RemovePage(pageToRemove);
                         }
                     }
-                    //Old
-                    //var pageToRemove = MainPage.Navigation.NavigationStack.FirstOrDefault(p => p is NoInternetPage);
-                    //if (pageToRemove != null)
-                    //{
-                    //    MainPage.Navigation.RemovePage(pageToRemove);
-                    //}
-                    //var noInternetPage = MainPage.Navigation.NavigationStack.FirstOrDefault(p => p is NoInternetPage);
-                    //if (noInternetPage != null)
-                    //{
-                    //    await MainPage.Navigation.PopAsync();
-                    //}
                 }
             }
             catch (Exception Ex)
             {
             }
         }
+
+
+        private async Task<bool> IsInternetAvailable()
+        {
+            try
+            {
+                using var httpClient = new HttpClient
+                {
+                    Timeout = TimeSpan.FromSeconds(3)
+                };
+
+                var response = await httpClient.GetAsync("https://clients3.google.com/generate_204");
+                return response.IsSuccessStatusCode;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
     }
 }

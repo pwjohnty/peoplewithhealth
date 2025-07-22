@@ -206,7 +206,7 @@ namespace PeopleWith
             EntryHandler.AddDone();
 
             // Set the MainPage to your navigation page
-            //builder.Services.AddSingleton<MainPage>();
+            builder.Services.AddSingleton<MainPage>();
             builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<MainDashboard>();
 
