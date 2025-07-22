@@ -41,20 +41,20 @@
                 </Grid.ColumnDefinitions>
                 <Label x:Name="symptomlbl" FontSize="20"  Grid.Column="0" Margin="0,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
 
-                <Frame x:Name="SymInfo" HasShadow="False" Padding="0" CornerRadius="15" Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,0,20,0" BorderColor="Orange" BackgroundColor="Transparent">
+                <Border x:Name="SymInfo"  Padding="0" StrokeShape="RoundRectangle 15" Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,0,20,0" Stroke="Orange" BackgroundColor="Transparent">
                     <Label Text="i" FontFamily="HankenGroteskBold" HorizontalOptions="Center" TextColor="Orange" FontSize="12"  Grid.Column="1" VerticalOptions="Center" />
-                    <Frame.GestureRecognizers>
+                    <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
-                    </Frame.GestureRecognizers>
-                </Frame>
+                    </Border.GestureRecognizers>
+                </Border>
 
             </Grid>
 
 
 
-            <Frame CornerRadius="5"  Margin="0,5,0,5"
- BackgroundColor="#fff7ea" HasShadow="False" x:Name="dataframe"
-                BorderColor="Transparent"
+            <Border StrokeShape="RoundRectangle 5"  Margin="0,5,0,5"
+ BackgroundColor="#fff7ea"  x:Name="dataframe"
+                Stroke="Transparent"
 Padding="0">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -82,7 +82,7 @@ Padding="0">
                     <Image Source="charticon.png" x:Name="charticon" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" Grid.ColumnSpan="1" HeightRequest="40" WidthRequest="40" VerticalOptions="Center" HorizontalOptions="Center"/>
 
                 </Grid>
-            </Frame>
+            </Border>
 
   
             <StackLayout x:Name="SymptomInsights" Margin="0,10,0,0" IsVisible="True">
@@ -153,7 +153,7 @@ Padding="0">
 
                 <Label Text="Intensity Metrics" FontFamily="HankenGroteskBold" Margin="0,20,0,0" VerticalOptions="Center"   FontSize="20" TextColor="#031926" />
                 <StackLayout>
-                    <Frame HasShadow="false" Margin="0,10,0,0" InputTransparent="True" Padding="5" BorderColor="#fff7ea" BackgroundColor="Transparent"  CornerRadius="10">
+                    <Border  Margin="0,10,0,0" InputTransparent="True" Padding="5" Stroke="#fff7ea" BackgroundColor="Transparent" StrokeShape="RoundRectangle 10">
 
                         <Grid >
                             <Grid.RowDefinitions>
@@ -184,13 +184,13 @@ Padding="0">
 
 
                         </Grid>
-                    </Frame>
+                    </Border>
                 </StackLayout>
 
 
-                <Frame CornerRadius="5"  Margin="0,20,0,5"
- BackgroundColor="#fff7ea" HasShadow="False" IsVisible="False"
-                BorderColor="Transparent"
+                <Border StrokeShape="RoundRectangle 5" Margin="0,20,0,5"
+ BackgroundColor="#fff7ea"  IsVisible="False"
+                Stroke="Transparent"
 Padding="10">
                     <Grid HorizontalOptions="FillAndExpand" Margin="0,10,0,10">
                         <Grid.RowDefinitions>
@@ -202,14 +202,14 @@ Padding="10">
                         <Switch Margin="0,0,5,0" x:Name="NotifSwitch" HeightRequest="20" Grid.Row="0" Grid.Column="0" BackgroundColor="Transparent" IsEnabled="False" OnColor="ForestGreen" IsToggled="True" ThumbColor="LightGray" Toggled="Switch_Toggled" VerticalOptions="Center" HorizontalOptions="End" />
 
                     </Grid>
-                </Frame>
+                </Border>
 
 
                 <Label Text="Details" x:Name="detailslbl" IsVisible="True" FontSize="20" Margin="0,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
 
-                <Frame CornerRadius="5"  Margin="0,5,0,5"
- BackgroundColor="Transparent" HasShadow="False"
-                BorderColor="#fff7ea"
+                <Border StrokeShape="RoundRectangle 5" Margin="0,5,0,5"
+ BackgroundColor="Transparent" 
+                Stroke="#fff7ea"
 Padding="10">
                     <Grid HorizontalOptions="FillAndExpand" Margin="0,10,0,10">
                         <Grid.RowDefinitions>
@@ -222,7 +222,7 @@ Padding="10">
 
 
                         <BoxView HorizontalOptions="FillAndExpand" Margin="0,20,0,20" Color="#fff7ea" BackgroundColor="#fff7ea" HeightRequest="1" Grid.Row="1" />
-                        <Frame Padding="0" Grid.Row="2" HasShadow="False" BorderColor="Transparent" BackgroundColor="Transparent" >
+                        <Border Padding="0" Grid.Row="2"  Stroke="Transparent" BackgroundColor="Transparent" >
                             <Grid >
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="90*"/>
@@ -231,13 +231,13 @@ Padding="10">
                                 <Label Text="Information and Resources" FontSize="14" Margin="0,0,0,0"  Grid.Column="0" TextColor="#031926" FontFamily="HankenGroteskBold" VerticalOptions="Center" FontAttributes="None" HorizontalOptions="Start" />
                                 <Image Source="nextdarker.png" HeightRequest="15" Margin="0,0,5,0"  Grid.Column="1" VerticalOptions="Center" HorizontalOptions="End" />
                             </Grid>
-                            <Frame.GestureRecognizers>
+                            <Border.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
-                            </Frame.GestureRecognizers>
-                        </Frame>
+                            </Border.GestureRecognizers>
+                        </Border>
 
                     </Grid>
-                </Frame>
+                </Border>
 
 
 
@@ -282,7 +282,7 @@ Padding="10">
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <Frame HasShadow="false" InputTransparent="False" BorderColor="Transparent" BackgroundColor="#E5E5E5" Padding="0" Margin="10,5,10,0" CornerRadius="10">
+                                <Frame  InputTransparent="False" BorderColor="Transparent" BackgroundColor="#E5E5E5" Padding="0" Margin="10,5,10,0" CornerRadius="10">
                                     <Frame.GestureRecognizers>
                                         <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_3" NumberOfTapsRequired="1" />
                                     </Frame.GestureRecognizers>
@@ -301,7 +301,7 @@ Padding="10">
                                                 <ColumnDefinition Width="23*"/>
 
                                             </Grid.ColumnDefinitions>
-                                            <Frame HasShadow="False" Margin="-5,-5,-5,0" Padding="0" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6" BackgroundColor="#BFDBF7" BorderColor="Transparent" HorizontalOptions="FillAndExpand" />
+                                            <Frame  Margin="-5,-5,-5,0" Padding="0" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6" BackgroundColor="#BFDBF7" BorderColor="Transparent" HorizontalOptions="FillAndExpand" />
                                             <Label Text="Date/Time:" FontFamily="HankenGroteskRegular" FontSize="10" TextColor="DarkGray" Grid.Row="0" Grid.Column="0"  VerticalOptions="Center" HorizontalOptions="Center"/>
                                             <Label Text="{Binding timestamp}" FontSize="12" TextColor="#031926" Grid.Row="0" Grid.Column="1"  FontFamily="HankenGroteskBold" VerticalOptions="Center" HorizontalOptions="Center"/>
                                             <Label Text="Intensity:" FontFamily="HankenGroteskRegular"  FontSize="10" TextColor="DarkGray" Grid.Row="0" Grid.Column="2"  VerticalOptions="Center" HorizontalOptions="Center"/>
@@ -339,7 +339,7 @@ Padding="10">
                     </syncfusion:SfListView.ItemTemplate>
                 </syncfusion:SfListView>
 
-                --><!--<Frame x:Name="SeemoreStack" IsVisible="False" HasShadow="False" Margin="120,10,120,0" CornerRadius="10" BackgroundColor="Transparent" BorderColor="#031926" Padding="0">
+                --><!--<Frame x:Name="SeemoreStack" IsVisible="False"  Margin="120,10,120,0" CornerRadius="10" BackgroundColor="Transparent" BorderColor="#031926" Padding="0">
                     <StackLayout>
                         <Label x:Name="seeall" Text="See All" VerticalOptions="Center" HorizontalOptions="Center" FontSize="16" TextColor="#031926" FontFamily="HankenGroteskBold"/>
                         <Image x:Name="arrow" Source="backbutton.png" Rotation="270" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="15" WidthRequest="15" />
@@ -356,7 +356,7 @@ Padding="10">
             <Label Text="Options" FontFamily="HankenGroteskBold" Margin="10,20,0,0" VerticalOptions="Center" IsVisible="False"  FontSize="20" TextColor="#031926" />
 
             <StackLayout IsVisible="False">
-                <Frame HasShadow="false" Margin="15,10,15,0" InputTransparent="True" BorderColor="Transparent" BackgroundColor="#E5E5E5" MaximumHeightRequest="400" CornerRadius="10">
+                <Border  Margin="15,10,15,0" InputTransparent="True" Stroke="Transparent" BackgroundColor="#E5E5E5" MaximumHeightRequest="400" StrokeShape="RoundRectangle 10">
 
                     <Grid >
                         <Grid.RowDefinitions>
@@ -379,7 +379,7 @@ Padding="10">
 
 
 
-                </Frame>
+                </Border>
             </StackLayout>
 
           

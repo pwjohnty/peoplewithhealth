@@ -480,7 +480,14 @@ public partial class LoginPage : ContentPage
     {
         try
         {
-            Navigation.RemovePage(this);
+            //if (DeviceInfo.Current.Platform == DevicePlatform.Android) 
+            //{
+            //    await Navigation.PopAsync();
+            //}
+            //else
+            //{
+                Navigation.RemovePage(this);
+            //}
         }
         catch (Exception Ex)
         {

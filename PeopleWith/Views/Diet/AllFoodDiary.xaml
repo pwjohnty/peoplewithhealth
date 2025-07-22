@@ -16,12 +16,12 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Label Text="Food Diary" FontFamily="HankenGroteskBold" FontSize="26"  Margin="20,20,0,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" />
-                    <Frame x:Name="FoodDiaryInfo" HasShadow="False" Padding="0" CornerRadius="15" Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,0,20,0" BorderColor="#B8860B" BackgroundColor="Transparent">
+                    <Border x:Name="FoodDiaryInfo"  Padding="0" StrokeShape="RoundRectangle 15" Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,0,20,0" Stroke="#B8860B" BackgroundColor="Transparent">
                         <Label Text="i" FontFamily="HankenGroteskBold" HorizontalOptions="Center" TextColor="#B8860B" FontSize="12"  Grid.Column="1" VerticalOptions="Center" />
-                        <Frame.GestureRecognizers>
+                        <Border.GestureRecognizers>
                             <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
-                        </Frame.GestureRecognizers>
-                    </Frame>
+                        </Border.GestureRecognizers>
+                    </Border>
 
                 </Grid>
 
@@ -33,7 +33,7 @@
                         <syncfusion:SfListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
-                                    <Frame HasShadow="False" CornerRadius="10"  InputTransparent="True" Padding="5" BorderColor="Transparent" BackgroundColor="#FFF8DC"  Margin="10,0,10,5">
+                                    <Border  StrokeShape="RoundRectangle 10"  InputTransparent="True" Padding="5" Stroke="Transparent" BackgroundColor="#FFF8DC"  Margin="10,0,10,5">
                                         <Grid>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="25"/>
@@ -53,7 +53,7 @@
                                             <Image Source="nextdarker.png" Grid.Row="0" Grid.Column="3"  Grid.RowSpan="2"  Margin="0,0,0,0"  HeightRequest="12" WidthRequest="12" VerticalOptions="Center" HorizontalOptions="End" />
 
                                         </Grid>
-                                    </Frame>
+                                    </Border>
 
                                 </ViewCell>
                             </DataTemplate>

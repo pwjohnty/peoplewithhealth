@@ -14,15 +14,15 @@
             <ImageButton x:Name="IOSBtn" Clicked="BackButton_Clicked" IsVisible="False" Grid.Row="0" Grid.Column="0" Source="iosback.png" HeightRequest="50" WidthRequest="60" HorizontalOptions="Start" VerticalOptions="Center" Margin="15,5,0,0"/>
         </Grid>
 
-        <Frame x:Name="DiagInfo" HasShadow="False" Padding="0" CornerRadius="15"  VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,10,20,0" BorderColor="#702963" BackgroundColor="Transparent">
+        <Border x:Name="DiagInfo"  Padding="0" StrokeShape="RoundRectangle 15" VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,10,20,0" Stroke="#702963" BackgroundColor="Transparent">
             <Label Text="i" FontFamily="HankenGroteskBold" HorizontalOptions="Center" TextColor="#702963" FontSize="12"  VerticalOptions="Center" />
-            <Frame.GestureRecognizers>
+            <Border.GestureRecognizers>
                 <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1" NumberOfTapsRequired="1"/>
-            </Frame.GestureRecognizers>
-        </Frame>
+            </Border.GestureRecognizers>
+        </Border>
 
         <StackLayout x:Name="DiagnosisSingle" Margin="0,5,0,0">
-            <Frame HasShadow="False" CornerRadius="10"  InputTransparent="False" Padding="5" BorderColor="Transparent" BackgroundColor="#E6E6FA"  Margin="10,0,10,5">
+            <Border StrokeShape="RoundRectangle 10" InputTransparent="False" Padding="5" Stroke="Transparent" BackgroundColor="#E6E6FA"  Margin="10,0,10,5">
                 <Grid Padding="5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -36,10 +36,10 @@
                     <Label x:Name="DiagnosisTitle" Margin="10,0,0,0" FontFamily="HankenGroteskBold"  FontSize="20" VerticalOptions="End" Grid.Row="0" Grid.Column="0"  TextColor="#031926" />
                     <Label x:Name="DiagnosisDate" FontFamily="HankenGroteskBold" VerticalOptions="Start" Margin="10,5,0,0" HorizontalOptions="Start" FontSize="12" Grid.Row="1" Grid.Column="0"  TextColor="DarkGray" />
                 </Grid>
-            </Frame>
+            </Border>
 
             <Label Text="Details" Margin="20,10,0,0" FontFamily="HankenGroteskBold"  FontSize="20" VerticalOptions="Center" TextColor="#031926" />
-            <Frame x:Name="NoDiagDetails"  HasShadow="False" BorderColor="#E5E5E5" BackgroundColor="Transparent" Margin="10,10,10,0">
+            <Border x:Name="NoDiagDetails" Stroke="#E5E5E5" BackgroundColor="Transparent" Margin="10,10,10,0">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="90*"/>
@@ -48,11 +48,11 @@
                     <Label Text="Information and Resources" Margin="0,0,0,0" Grid.Column="0" FontFamily="HankenGroteskBold"  FontSize="16" VerticalOptions="Center" TextColor="#031926" />
                     <Image  Source="backbutton.png" Grid.Column="1" Rotation="180" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="15" WidthRequest="15" />
                 </Grid>
-                <Frame.GestureRecognizers>
+                <Border.GestureRecognizers>
                     <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1" NumberOfTapsRequired="1"/>
-                </Frame.GestureRecognizers>
-            </Frame>
-            <!--<Frame x:Name="DiagDetails" IsVisible="False"  HasShadow="False" BorderColor="#E5E5E5" BackgroundColor="Transparent" Margin="10,10,10,0">
+                </Border.GestureRecognizers>
+            </Border>
+            <!--<Frame x:Name="DiagDetails" IsVisible="False"   BorderColor="#E5E5E5" BackgroundColor="Transparent" Margin="10,10,10,0">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="15*"/>

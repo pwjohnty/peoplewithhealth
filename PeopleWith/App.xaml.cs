@@ -47,15 +47,21 @@ namespace PeopleWith
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
+            //return base.CreateWindow(activationState);
             return new Window(new NavigationPage(new MainPage()));
             //return new Window(new AppShell());
         }
         public static void SetMainPage(Page newRootPage)
         {
             //Set New RootPage
-            if (Application.Current != null && Application.Current.Windows.Any())
+            if (Application.Current?.Windows?.FirstOrDefault() is Window window)
             {
-                Application.Current.Windows[0].Page = newRootPage;
+                if (newRootPage is not NavigationPage && newRootPage is not Shell)
+                {
+                    newRootPage = new NavigationPage(newRootPage);
+                }
+                window.Page = newRootPage;
+                //Application.Current.Windows[0].Page = newRootPage;
             }
         }
 

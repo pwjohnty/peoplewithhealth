@@ -340,11 +340,11 @@ async private void PopulateListView()
                         nodatastack.IsVisible = false;
                         datastack.IsVisible = true;
                         NotTakenFrame.Background = Colors.White;
-                        NotTakenFrame.BorderColor = Colors.White;
+                        NotTakenFrame.Stroke = Colors.White;
                         NotTakenFrame.Opacity = 1;
                         NotTakenFrame.IsEnabled = false;
                         NotRecordedFrame.Background = Colors.White;
-                        NotRecordedFrame.BorderColor = Colors.White;
+                        NotRecordedFrame.Stroke = Colors.White;
                         NotRecordedFrame.Opacity = 1;
                         NotRecordedFrame.IsEnabled = false;
 

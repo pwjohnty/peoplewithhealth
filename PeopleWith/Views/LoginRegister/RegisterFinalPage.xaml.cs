@@ -471,7 +471,7 @@ public partial class RegisterFinalPage : ContentPage
                             if (tccheckbox.IsChecked == false)
                             {
                                 Vibration.Vibrate();
-                                tcframe.BorderColor = Colors.Red;
+                                tcframe.Stroke = Colors.Red;
                                 nextbtn.IsEnabled = true;
                                 return;
                             }
@@ -1193,7 +1193,7 @@ public partial class RegisterFinalPage : ContentPage
             else
             {
                 Vibration.Vibrate();
-                tcframe.BorderColor = Colors.Red;
+                tcframe.Stroke = Colors.Red;
                // tcerror.IsVisible = true;
                 return;
             }
@@ -1414,19 +1414,19 @@ public partial class RegisterFinalPage : ContentPage
                 //SignaturePad Not required
                 if (additonalconsent.signaturepad == false)
                 {
-                    tcframe.BorderColor = Color.FromRgba("#BFDBF7");
+                    tcframe.Stroke = Color.FromRgba("#BFDBF7");
                     nextbtn.BackgroundColor = Color.FromArgb("#031926");
                 }
                 else
                 {
                     if (SignPadhaddata == true)
                     {
-                        tcframe.BorderColor = Color.FromRgba("#BFDBF7");
+                        tcframe.Stroke = Color.FromRgba("#BFDBF7");
                         nextbtn.BackgroundColor = Color.FromArgb("#031926");
                     }
                     else
                     {
-                        tcframe.BorderColor = Color.FromRgba("#BFDBF7");
+                        tcframe.Stroke = Color.FromRgba("#BFDBF7");
                         nextbtn.BackgroundColor = Colors.LightGray;
                     }
                 }

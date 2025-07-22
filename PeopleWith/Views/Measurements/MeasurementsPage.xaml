@@ -20,12 +20,12 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Text="Measurements" FontSize="26" Grid.Column="0" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
-                <Frame x:Name="MeasureInfo" HasShadow="False" Padding="0" CornerRadius="15" Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,0,20,0" BorderColor="#031926" BackgroundColor="Transparent">
+                <Border x:Name="MeasureInfo"  Padding="0" StrokeShape="RoundRectangle 15" Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,0,20,0" Stroke="#031926" BackgroundColor="Transparent">
                     <Label Text="i" FontFamily="HankenGroteskBold" HorizontalOptions="Center" TextColor="#031926" FontSize="12"  Grid.Column="1" VerticalOptions="Center" />
-                    <Frame.GestureRecognizers>
+                    <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="MeasureInfoTapped" NumberOfTapsRequired="1"/>
-                    </Frame.GestureRecognizers>
-                </Frame>
+                    </Border.GestureRecognizers>
+                </Border>
 
             </Grid>
 
@@ -38,9 +38,9 @@
                         <syncfusion:SfListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
-                                    <Frame CornerRadius="10"  Margin="0,5,0,5"
-        BackgroundColor="#e5f0fb" HasShadow="False"
-                       BorderColor="Transparent" InputTransparent="True"
+                                <Border StrokeShape="RoundRectangle 10"  Margin="0,5,0,5"
+        BackgroundColor="#e5f0fb" 
+                       Stroke="Transparent" InputTransparent="True"
        Padding="0">
                                         <StackLayout BackgroundColor="Transparent">
                                             <Grid Margin="0,10,0,0" RowSpacing="0">
@@ -69,7 +69,7 @@
                                                 <Image Source="nextdarker.png" HeightRequest="15" Margin="0,0,0,10"  Grid.Row="0" Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center" />
                                             </Grid>
                                         </StackLayout>
-                                    </Frame>
+                                    </Border>
                                 </ViewCell>
                             </DataTemplate>
                         </syncfusion:SfListView.ItemTemplate>
@@ -94,7 +94,7 @@
                             <DataTemplate>
                                 <ViewCell>
                                     <Frame CornerRadius="10"  Margin="0,5,0,5"
-        BackgroundColor="#e5e5e5" HasShadow="False" InputTransparent="True"
+        BackgroundColor="#e5e5e5"  InputTransparent="True"
                        BorderColor="Transparent"
        Padding="0">
                                         <StackLayout BackgroundColor="Transparent">

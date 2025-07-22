@@ -132,7 +132,7 @@
 
             <!-- New Duration Picker-->
 
-            <Frame HasShadow="False" Margin="20,10,20,10" BorderColor="Transparent"  Padding="10" CornerRadius="20"  BackgroundColor="#ffe4e1" >
+            <Border  Margin="20,10,20,10" Stroke="Transparent"  Padding="10" StrokeShape="RoundRectangle 20" BackgroundColor="#ffe4e1" >
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -183,11 +183,11 @@
 
 
                 </Grid>
-            </Frame>
+            </Border>
 
 
             <!-- Old Duration Picker -->
-            <Frame HasShadow="False" IsVisible="False" Margin="20,10,20,10" BorderColor="Transparent"  Padding="5" CornerRadius="20"  BackgroundColor="#ffe4e1" >
+            <Border  IsVisible="False" Margin="20,10,20,10" Stroke="Transparent"  Padding="5" StrokeShape="RoundRectangle 20" BackgroundColor="#ffe4e1" >
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -219,7 +219,7 @@
                         </picker:SfTimePicker.ColumnHeaderView>
                     </picker:SfTimePicker>
                 </Grid>
-            </Frame>
+            </Border>
 
 
             <!--Appointment Reminder  -->

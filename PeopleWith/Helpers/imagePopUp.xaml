@@ -17,7 +17,7 @@
             HasBackgroundAnimation="False"/>
     </Mopups:PopupPage.Animation>
     <VerticalStackLayout Margin="0" VerticalOptions="Center" BackgroundColor="Transparent" Opacity="0.1">
-        <Frame HasShadow="False" CornerRadius="20" Margin="10,0,10,0" Padding="5" BackgroundColor="Transparent" Opacity="1" BorderColor="Transparent">
+        <Border StrokeShape="RoundRectangle 20" Margin="10,0,10,0" Padding="5" BackgroundColor="Transparent" Opacity="1" Stroke="Transparent">
             <Grid Margin="20,0,20,0" RowSpacing="10" BackgroundColor="Transparent">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -27,13 +27,13 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Frame HasShadow="False" CornerRadius="5"  Grid.Row="0" Grid.Column="0" Padding="0" BackgroundColor="Transparent" Opacity="1" BorderColor="Transparent">
+                <Border StrokeShape="RoundRectangle 5"  Grid.Row="0" Grid.Column="0" Padding="0" BackgroundColor="Transparent" Opacity="1" Stroke="Transparent">
 
                     <Image x:Name="mainimage"
                        Aspect="AspectFit" Grid.Row="0" Grid.Column="0"
                        VerticalOptions="FillAndExpand"
                        HorizontalOptions="FillAndExpand" />
-                </Frame>
+                </Border>
 
                 <!-- Close Button -->
                 <Button Text="Close" CornerRadius="5" Background="#009fe3" BackgroundColor="#009fe3"
@@ -42,15 +42,7 @@
                  HorizontalOptions="FillAndExpand"
                  Clicked="Closebtn_Clicked"  />
 
-
             </Grid>
-        </Frame>
-
-
-       
-
-
-       
-        
+        </Border>
     </VerticalStackLayout>
 </Mopups:PopupPage>

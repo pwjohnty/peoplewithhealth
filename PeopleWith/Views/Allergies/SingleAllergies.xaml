@@ -6,14 +6,14 @@
     <VerticalStackLayout>
         <StackLayout x:Name="AllergySingle" >
 
-            <Frame x:Name="AllergyInfo" HasShadow="False" Padding="0" CornerRadius="15"  VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,10,20,5" BorderColor="#BC8F8F" BackgroundColor="Transparent">
+            <Border x:Name="AllergyInfo"  Padding="0" StrokeShape="RoundRectangle 15"  VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,10,20,5" Stroke="#BC8F8F" BackgroundColor="Transparent">
                 <Label Text="i" FontFamily="HankenGroteskBold" HorizontalOptions="Center" TextColor="#BC8F8F" FontSize="12"  VerticalOptions="Center" />
-                <Frame.GestureRecognizers>
+                <Border.GestureRecognizers>
                     <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
-                </Frame.GestureRecognizers>
-            </Frame>
+                </Border.GestureRecognizers>
+            </Border>
 
-            <Frame HasShadow="False" CornerRadius="10"  InputTransparent="True" Padding="5" BorderColor="Transparent" BackgroundColor="#FFF5EE"  Margin="10,0,10,5">
+            <Border  StrokeShape="RoundRectangle 10"  InputTransparent="True" Padding="5" Stroke="Transparent" BackgroundColor="#FFF5EE"  Margin="10,0,10,5">
                 <Grid Padding="5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -28,10 +28,10 @@
                     <Label x:Name="AllergyDate" FontFamily="HankenGroteskBold" VerticalOptions="Start" Margin="10,0,0,0" HorizontalOptions="Start" FontSize="12" Grid.Row="1" Grid.Column="0"  TextColor="DarkGray" />
 
                 </Grid>
-            </Frame>
+            </Border>
 
             <Label Text="Details" Margin="20,10,0,0" FontFamily="HankenGroteskBold"  FontSize="20" VerticalOptions="Center" TextColor="#031926" />
-            <Frame HasShadow="False" BorderColor="#E5E5E5" BackgroundColor="Transparent" Margin="10,10,10,0">
+            <Border  Stroke="#E5E5E5" BackgroundColor="Transparent" Margin="10,10,10,0">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="90*"/>
@@ -40,12 +40,12 @@
                     <Label Text="Information and Resources" Margin="0,0,0,0" Grid.Column="0" FontFamily="HankenGroteskBold"  FontSize="16" VerticalOptions="Center" TextColor="#031926" />
                     <Image  Source="backbutton.png" Grid.Column="1" Rotation="180" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="15" WidthRequest="15" />
                 </Grid>
-                <Frame.GestureRecognizers>
+                <Border.GestureRecognizers>
                     <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
-                </Frame.GestureRecognizers>
-            </Frame>
+                </Border.GestureRecognizers>
+            </Border>
 
-            <Grid  >
+            <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />

@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
              x:Class="PeopleWith.LoginPage" NavigationPage.IconColor="#031926" 
-              HideSoftInputOnTapped="True" NavigationPage.HasNavigationBar="False"
- Shell.NavBarHasShadow="False" Shell.NavBarIsVisible="False" BackgroundColor="#ffffff">
+             HideSoftInputOnTapped="True" NavigationPage.HasNavigationBar="False"
+             Shell.NavBarHasShadow="False"  Shell.NavBarIsVisible="False" BackgroundColor="#ffffff">
     <VerticalStackLayout>
 
         <Grid Padding="0,0,5,0" Margin="0,20,0,0">
@@ -94,11 +94,11 @@ HorizontalOptions="Start" />
             </Grid>
 
             <Button Grid.Row="5" x:Name="Signin"  Text="Sign in" Clicked="Signin_Clicked" Margin="0,20,0,0" Padding="0" BackgroundColor="#E5F0FB" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#031926" />
-            <Frame HasShadow="False" Grid.Row="5" IsVisible="False" x:Name="Signinload" BorderColor="Transparent" BackgroundColor="#E5F0FB" Background="#E5F0FB" Margin="0,20,0,0" Padding="0">
+            <Border  Grid.Row="5" IsVisible="False" x:Name="Signinload" Stroke="Transparent" BackgroundColor="#E5F0FB" Background="#E5F0FB" Margin="0,20,0,0" Padding="0">
                 <Grid>
                     <ActivityIndicator IsRunning="True" HorizontalOptions="Center" HeightRequest="42"  VerticalOptions="Center" Color="#031926" Background="Transparent" />
                 </Grid>
-            </Frame>
+            </Border>
 
         </Grid>
         

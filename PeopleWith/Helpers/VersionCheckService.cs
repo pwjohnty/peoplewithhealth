@@ -17,7 +17,7 @@ namespace PeopleWith
             }
             else
             {
-                latestVersion = "91.1";
+                latestVersion = "92.1";
             }
 
             if (string.IsNullOrEmpty(currentVersion) || string.IsNullOrEmpty(latestVersion)) return false;

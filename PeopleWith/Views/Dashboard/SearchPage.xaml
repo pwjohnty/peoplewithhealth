@@ -67,7 +67,7 @@
                         </Grid.RowDefinitions>
 
 
-                        <Frame Padding="0" HasShadow="False" Grid.Row="0" Grid.Column="0" Margin="0,0,0,0" InputTransparent="False" BorderColor="Transparent" BackgroundColor="#e7e7e7" CornerRadius="{OnPlatform Android='5', iOS='5'}" >
+                        <Border Padding="0"  Grid.Row="0" Grid.Column="0" Margin="0,0,0,0" InputTransparent="False" Stroke="Transparent" BackgroundColor="#e7e7e7" StrokeShape="RoundRectangle 5" >
                             <Grid >
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="10*"/>
@@ -78,7 +78,7 @@
                                 <Entry Grid.Row="0" Grid.Column="1"  FontFamily="HankenGroteskRegular" IsTextPredictionEnabled="False" IsSpellCheckEnabled="False" x:Name="searchbar" TextChanged="searchbar_TextChanged" ClearButtonVisibility="Never" InputTransparent="False" PlaceholderColor="#818c92"   Placeholder="Search"  BackgroundColor="Transparent" Background="Transparent" HeightRequest="60"  TextColor="#031926"/>
 
                             </Grid>
-                        </Frame>
+                        </Border>
 
 
 
@@ -104,9 +104,9 @@
                                                     <ColumnDefinition Width="70*"/>
                                                 </Grid.ColumnDefinitions>
 
-                                                <Frame HasShadow="False" Padding="0" Grid.Row="0" HeightRequest="50" InputTransparent="True"  VerticalOptions="Center" Grid.Column="0" Grid.RowSpan="2" CornerRadius="5" BorderColor="Transparent" BackgroundColor="Transparent">
+                                                <Border  Padding="0" Grid.Row="0" HeightRequest="50" InputTransparent="True"  VerticalOptions="Center" Grid.Column="0" Grid.RowSpan="2" StrokeShape="RoundRectangle 5" Stroke="Transparent" BackgroundColor="Transparent">
                                                     <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" HeightRequest="100" WidthRequest="220" Source="{Binding thumbnail}" />
-                                                </Frame>
+                                                </Border>
 
                                                 <Label Text="{Binding title}" FontFamily="HankenGroteskBold" Margin="5,0,0,0" Grid.Row="0" Grid.Column="1" Padding="0" HorizontalOptions="Start"  VerticalOptions="Start" TextColor="#031926" FontSize="14" FontAttributes="None" />
 

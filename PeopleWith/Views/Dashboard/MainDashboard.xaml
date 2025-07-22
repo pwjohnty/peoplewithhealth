@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             Shell.NavBarHasShadow="False" Shell.NavBarIsVisible="False"
+             Shell.NavBarIsVisible="False"
              xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
              ios:Page.UseSafeArea="True" 
              xmlns:data="clr-namespace:Syncfusion.Maui.DataSource;assembly=Syncfusion.Maui.DataSource"
@@ -178,7 +178,7 @@ Aspect="AspectFit" Grid.Row="0" Grid.Column="0"
                                                       
                                                         <Label VerticalOptions="Start" HorizontalOptions="Start" HorizontalTextAlignment="Start" x:Name="questionnaireinfotext" FontSize="14"  Margin="0,10,20,0"  TextColor="White" FontFamily="HankenGroteskBold"   Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0"/>
                                                         <Label VerticalOptions="Start" HorizontalOptions="Start" IsVisible="True" HorizontalTextAlignment="Start" Text="Please complete the questionnaire related to the research project" FontSize="12"  Margin="0,0,20,10"  TextColor="White" FontFamily="HankenGroteskRegular"   Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1"/>
-                                                        <!--<Frame CornerRadius="10" VerticalOptions="Start" BackgroundColor="White" BorderColor="White"   HorizontalOptions="FillAndExpand" HeightRequest="80" Margin="0,0,0,0" Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1"  Padding="0" HasShadow="False"  IsClippedToBounds="True" >
+                                                        <!--<Frame CornerRadius="10" VerticalOptions="Start" BackgroundColor="White" BorderColor="White"   HorizontalOptions="FillAndExpand" HeightRequest="80" Margin="0,0,0,0" Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1"  Padding="0"   IsClippedToBounds="True" >
 <StackLayout>
     </StackLayout>
 </Frame>-->
@@ -249,7 +249,7 @@ Aspect="AspectFit" Grid.Row="0" Grid.Column="0"
                                                             </Border>
                                                             <Label VerticalOptions="Start" HorizontalOptions="Start" HorizontalTextAlignment="Start" Text="{Binding Title} " FontSize="14"  Margin="10,10,0,0"  TextColor="#031926" FontFamily="HankenGroteskBold"   Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0"/>
                                                             <Label VerticalOptions="Start" HorizontalOptions="Start" IsVisible="False" HorizontalTextAlignment="Start" Text="Symptoms" FontSize="10"  Margin="10,-5,0,0"  TextColor="#031926" FontFamily="HankenGroteskRegular"   Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1"/>
-                                                            <!--<Frame CornerRadius="10" VerticalOptions="Start" BackgroundColor="White" BorderColor="White"   HorizontalOptions="FillAndExpand" HeightRequest="80" Margin="0,0,0,0" Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1"  Padding="0" HasShadow="False"  IsClippedToBounds="True" >
+                                                            <!--<Frame CornerRadius="10" VerticalOptions="Start" BackgroundColor="White" BorderColor="White"   HorizontalOptions="FillAndExpand" HeightRequest="80" Margin="0,0,0,0" Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1"  Padding="0"   IsClippedToBounds="True" >
   <StackLayout>
       </StackLayout>
   </Frame>-->
@@ -267,13 +267,13 @@ Aspect="AspectFit" Grid.Row="0" Grid.Column="0"
                             </StackLayout>
 
 
-           
 
-                            <Frame BorderColor="Transparent" BackgroundColor="White" IsClippedToBounds="True" InputTransparent="True" Margin="20,20,20,0" Padding="0" HeightRequest="120" HasShadow="False" CornerRadius="10">
+
+                        <Border Stroke="Transparent" BackgroundColor="White" InputTransparent="True" Margin="20,20,20,0" Padding="0" HeightRequest="120" StrokeShape="RoundRectangle 10">
 
                                 <Image Aspect="AspectFill" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" x:Name="maindashimage"/>
 
-                            </Frame>
+                            </Border>
                             
                             
                             <!-- Enable Notifications Prompt-->
@@ -551,7 +551,7 @@ FontSize="8" />
                                         <DataTemplate>
                                             <ViewCell>
                                                 <ViewCell.View>
-                                                    <Frame CornerRadius="10" BackgroundColor="White" InputTransparent="True" BorderColor="Transparent" HasShadow="False" Padding="0" Margin="10,5,0,5">
+                                                <Border StrokeShape="RoundRectangle 10" BackgroundColor="White" InputTransparent="True" Stroke="Transparent"  Padding="0" Margin="10,5,0,5">
                                                         <Grid>
                                                             <Grid.RowDefinitions>
                                                                 <!--<RowDefinition>
@@ -593,9 +593,9 @@ FontSize="8" />
                                                             <Label VerticalOptions="Center" IsVisible="False" HorizontalOptions="Start" HorizontalTextAlignment="Start" Text="{Binding improvelbl}" FontSize="14"  Margin="10,10,0,0"  TextColor="Orange" FontFamily="HankenGroteskBold"   Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="4"/>
 
 
-                                                            <Frame CornerRadius="10" IsVisible="False" BackgroundColor="#fff7ea" BorderColor="Transparent" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" HeightRequest="50" HasShadow="False" Padding="0" Margin="5,10,5,5">
+                                                        <Border StrokeShape="RoundRectangle 10" IsVisible="False" BackgroundColor="#fff7ea" Stroke="Transparent" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" HeightRequest="50"  Padding="0" Margin="5,10,5,5">
                                                                 <Label VerticalOptions="Center" HorizontalOptions="Center" HorizontalTextAlignment="Center" Text="{Binding symptominfo}" FontSize="12"  Margin="5,0,5,0"  TextColor="#031926" FontFamily="HankenGroteskRegular" />
-                                                            </Frame>
+                                                            </Border>
 
                                                             <!--<chart:SfCartesianChart Margin="-5,0,0,10" BackgroundColor="Transparent" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="5" x:Name="SymptomProgChart">
                                                                 <chart:SfCartesianChart.HeightRequest>
@@ -621,12 +621,12 @@ FontSize="8" />
                                                                 </chart:SfCartesianChart.Series>
                                                             </chart:SfCartesianChart>-->
 
-                                                            <!--<Frame CornerRadius="10" VerticalOptions="Start" BackgroundColor="White" BorderColor="White"   HorizontalOptions="FillAndExpand" HeightRequest="80" Margin="0,0,0,0" Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1"  Padding="0" HasShadow="False"  IsClippedToBounds="True" >
+                                                            <!--<Frame CornerRadius="10" VerticalOptions="Start" BackgroundColor="White" BorderColor="White"   HorizontalOptions="FillAndExpand" HeightRequest="80" Margin="0,0,0,0" Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1"  Padding="0"   IsClippedToBounds="True" >
 <StackLayout>
     </StackLayout>
 </Frame>-->
                                                         </Grid>
-                                                    </Frame>
+                                                    </Border>
                                                 </ViewCell.View>
                                             </ViewCell>
                                         </DataTemplate>
@@ -868,9 +868,9 @@ Text="Get Started" />
                                     </Grid>
                                 </Border>
 
-                             
 
-                                <Frame BorderColor="Transparent" IsVisible="False" BackgroundColor="Teal" Margin="10,20,10,0" HeightRequest="60" HasShadow="False" CornerRadius="10">
+
+                            <Border Stroke="Transparent" IsVisible="False" BackgroundColor="Teal" Margin="10,20,10,0" HeightRequest="60" StrokeShape="RoundRectangle 10">
                                     <Grid VerticalOptions="Center">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -890,7 +890,7 @@ Text="Get Started" />
                                     
                                     
                                     
-                                </Frame>
+                                </Border>
 
 
                                 <Label Text="Recent Measurement Updates" x:Name="measlbl" TextColor="#031926" FontFamily="HankenGroteskBold" FontSize="12" Margin="15,20,0,0" HorizontalOptions="Start" />
@@ -997,7 +997,7 @@ Text="Get Started" />
                                                                 </chart:SfCartesianChart.Series>
                                                             </chart:SfCartesianChart>
 
-                                                            --><!--<Frame CornerRadius="10" VerticalOptions="Start" BackgroundColor="White" BorderColor="White"   HorizontalOptions="FillAndExpand" HeightRequest="80" Margin="0,0,0,0" Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1"  Padding="0" HasShadow="False"  IsClippedToBounds="True" >
+                                                            --><!--<Frame CornerRadius="10" VerticalOptions="Start" BackgroundColor="White" BorderColor="White"   HorizontalOptions="FillAndExpand" HeightRequest="80" Margin="0,0,0,0" Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1"  Padding="0"   IsClippedToBounds="True" >
 <StackLayout>
     </StackLayout>
 </Frame>--><!--
@@ -1078,7 +1078,7 @@ Text="Get Started" />
                                                             <BoxView BackgroundColor="#e5f0fb" Margin="20,5,20,5" HorizontalOptions="FillAndExpand" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HeightRequest="1" />
 
 
-                                                            <!--<Frame CornerRadius="10" VerticalOptions="Start" BackgroundColor="White" BorderColor="White"   HorizontalOptions="FillAndExpand" HeightRequest="80" Margin="0,0,0,0" Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1"  Padding="0" HasShadow="False"  IsClippedToBounds="True" >
+                                                            <!--<Frame CornerRadius="10" VerticalOptions="Start" BackgroundColor="White" BorderColor="White"   HorizontalOptions="FillAndExpand" HeightRequest="80" Margin="0,0,0,0" Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1"  Padding="0"   IsClippedToBounds="True" >
 <StackLayout>
     </StackLayout>
 </Frame>-->
@@ -1366,7 +1366,7 @@ HorizontalOptions="FillAndExpand">
 
 
 
-                                <Frame BorderColor="Transparent" IsVisible="False"  BackgroundColor="#ac5735" Margin="10,20,10,0" HeightRequest="60" HasShadow="False" CornerRadius="10">
+                            <Border Stroke="Transparent" IsVisible="False"  BackgroundColor="#ac5735" Margin="10,20,10,0" HeightRequest="60" StrokeShape="RoundRectangle 10">
                                     <Grid VerticalOptions="Center">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -1376,7 +1376,7 @@ HorizontalOptions="FillAndExpand">
                                             <ColumnDefinition Width="85*"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <Frame CornerRadius="10" VerticalOptions="FillAndExpand" BackgroundColor="Transparent" BorderColor="Transparent"   HorizontalOptions="FillAndExpand"  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="1" Margin="0,0,0,0"  Padding="0" HasShadow="False"  IsClippedToBounds="True" >
+                                    <Border StrokeShape="RoundRectangle 10" VerticalOptions="FillAndExpand" BackgroundColor="Transparent" Stroke="Transparent"   HorizontalOptions="FillAndExpand"  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="1" Margin="0,0,0,0"  Padding="0">
                                             <Image
 Aspect="AspectFit"
  BackgroundColor="Transparent"
@@ -1385,7 +1385,7 @@ Aspect="AspectFit"
  HorizontalOptions="CenterAndExpand"
  VerticalOptions="FillAndExpand"
  />
-                                        </Frame>
+                                        </Border>
 
                                         <Label Text="You have supplements due at 12:40. Record now" TextColor="White" FontFamily="HankenGroteskBold" VerticalOptions="Center" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1" FontSize="14" Margin="0,0,0,0" HorizontalOptions="Start" />
 
@@ -1396,7 +1396,7 @@ Aspect="AspectFit"
 
 
 
-                                </Frame>
+                                </Border>
 
                                 <Label
 x:Name="exitidHome" IsVisible="False"
@@ -1436,21 +1436,21 @@ HorizontalOptions="Center" />
 
 
 
-                            <Frame BorderColor="Transparent" x:Name="MainDashimgFrame" Padding="0" BackgroundColor="Transparent" IsClippedToBounds="True" InputTransparent="True" Margin="20,20,20,0" HeightRequest="120" HasShadow="False" CornerRadius="10">
+                        <Border Stroke="Transparent" x:Name="MainDashimgFrame" Padding="0" BackgroundColor="Transparent" InputTransparent="True" Margin="20,20,20,0" HeightRequest="120" StrokeShape="RoundRectangle 10">
 
                                 <Image Aspect="AspectFill" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" x:Name="maindashimage2"/>
 
-                            </Frame>
+                            </Border>
 
                             <Label x:Name="signupdetailslbl" TextColor="#031926" FontFamily="HankenGroteskRegular" FontSize="14" Margin="20,10,20,0" HorizontalOptions="Start" />
 
-                            <Frame  x:Name="SecondDashimgFrame" BorderColor="#e5f0fb" IsVisible="False" BackgroundColor="Transparent" Margin="20,20,20,20"  Padding="5" HasShadow="False" CornerRadius="10">
+                        <Border  x:Name="SecondDashimgFrame" Stroke="#e5f0fb" IsVisible="False" BackgroundColor="Transparent" Margin="20,20,20,20"  Padding="5"  StrokeShape="RoundRectangle 10">
 
                                 <Image Aspect="AspectFill" Source="truthaboutweightjune23app.png" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
-                                <Frame.GestureRecognizers>
+                                <Border.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_7" NumberOfTapsRequired="1"/>
-                                </Frame.GestureRecognizers>
-                            </Frame>
+                                </Border.GestureRecognizers>
+                            </Border>
 
                             <Button Text="See more" x:Name="morebtn" Margin="20,10,20,0" HorizontalOptions="End" TextColor="White" Clicked="Button_Clicked" FontFamily="HankenGroteskBold" BackgroundColor="#031926" FontSize="12"/>
 
@@ -1500,7 +1500,7 @@ HorizontalOptions="Center" />
         <SfListView.ItemTemplate>-->
                                     <DataTemplate>
                                         <ViewCell>
-                                                <Frame CornerRadius="10" BackgroundColor="White" InputTransparent="True" BorderColor="White" Padding="{Binding Padding}"  HasShadow="False" Margin="10,10,10,0">
+                                            <Border StrokeShape="RoundRectangle 10" BackgroundColor="White" InputTransparent="True" Stroke="White" Padding="{Binding Padding}"   Margin="10,10,10,0">
                                                     <Grid >
                                                         <Grid.RowDefinitions>
                                                             <RowDefinition Height="Auto"/>
@@ -1511,14 +1511,14 @@ HorizontalOptions="Center" />
                                                             <ColumnDefinition Width="30*"/>
                                                             <ColumnDefinition  Width="70*"/>
                                                         </Grid.ColumnDefinitions>
-                                                        <Frame HasShadow="False" Padding="0" Grid.Row="0" HeightRequest="100"  VerticalOptions="Center" Grid.Column="0" Grid.RowSpan="3" CornerRadius="5" BorderColor="Transparent" BackgroundColor="Transparent">
+                                                    <Border Padding="0" Grid.Row="0" HeightRequest="100"  VerticalOptions="Center" Grid.Column="0" Grid.RowSpan="3" StrokeShape="RoundRectangle 5" Stroke="Transparent" BackgroundColor="Transparent">
                                                             <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" HeightRequest="100" WidthRequest="220" Source="{Binding thumbnail}" />
-                                                        </Frame>
+                                                        </Border>
                                                         <Label Text="{Binding title}" Margin="5,0,0,0" Grid.Row="0" Grid.Column="1" HeightRequest="20" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" FontSize="14" FontFamily="HankenGroteskBold" />
                                                         <Label Text="{Binding subtitleshort}" Margin="5,0,0,0" Grid.Row="1" Grid.Column="1" HeightRequest="55" HorizontalOptions="Start" VerticalOptions="Start" TextColor="DarkGray" FontSize="12" FontFamily="HankenGroteskBold" />
                                                         <Label Text="{Binding dateandlength}" Margin="5,0,0,0" Grid.Row="2" Grid.Column="1" HeightRequest="20" HorizontalOptions="Start" VerticalOptions="Start" TextColor="DarkGray" FontSize="12" FontFamily="HankenGroteskRegular" />
                                                     </Grid>
-                                                </Frame>
+                                                </Border>
                                         </ViewCell>
                                     </DataTemplate>
                                 </syncfusion:SfListView.ItemTemplate>
@@ -1595,7 +1595,7 @@ HorizontalOptions="Center" />
                         </StackLayout>
 
                         <StackLayout BackgroundColor="Transparent" IsVisible="False" x:Name="SFEWHStudy">
-                            <Frame  BackgroundColor="Transparent" InputTransparent="False" CornerRadius="10" BorderColor="#b3babd"  Padding="0" Margin="20,10,20,5" >
+                            <Border  BackgroundColor="Transparent" InputTransparent="False" StrokeShape="RoundRectangle 10" Stroke="#b3babd"  Padding="0" Margin="20,10,20,5" >
                                 <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
@@ -1616,9 +1616,9 @@ HorizontalOptions="Center" />
                                         <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_8" NumberOfTapsRequired="1"/>
                                     </Grid.GestureRecognizers>
                                 </Grid>
-                            </Frame>
+                            </Border>
 
-                            <Frame  BackgroundColor="Transparent" InputTransparent="False" CornerRadius="10" BorderColor="#b3babd"  Padding="0" Margin="20,10,20,5">
+                            <Border  BackgroundColor="Transparent" InputTransparent="False" StrokeShape="RoundRectangle 10" Stroke="#b3babd"  Padding="0" Margin="20,10,20,5">
                                 <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
@@ -1640,10 +1640,10 @@ HorizontalOptions="Center" />
                                         <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_10"/>
                                     </Grid.GestureRecognizers>
                                 </Grid>
-                            </Frame>
+                            </Border>
 
 
-                            <Frame  BackgroundColor="Transparent" InputTransparent="False" CornerRadius="10" BorderColor="#b3babd"  Padding="0" Margin="20,10,20,5">
+                            <Border  BackgroundColor="Transparent" InputTransparent="False" StrokeShape="RoundRectangle 10" Stroke="#b3babd"  Padding="0" Margin="20,10,20,5">
                                 <Grid>
                                 <Grid.RowDefinitions>
                                     
@@ -1665,10 +1665,10 @@ HorizontalOptions="Center" />
                                         <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_9"/>
                                     </Grid.GestureRecognizers>
                                 </Grid>
-                            </Frame>
+                            </Border>
 
 
-                            <Frame  BackgroundColor="Transparent" InputTransparent="False" CornerRadius="10" BorderColor="#b3babd"  Padding="0" Margin="20,10,20,5">
+                            <Border  BackgroundColor="Transparent" InputTransparent="False" StrokeShape="RoundRectangle 10" Stroke="#b3babd"  Padding="0" Margin="20,10,20,5">
                                 <Grid>
                                     <Grid.RowDefinitions>
 
@@ -1690,7 +1690,7 @@ HorizontalOptions="Center" />
                                         <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_11"/>
                                     </Grid.GestureRecognizers>
                                 </Grid>
-                            </Frame>
+                            </Border>
                         </StackLayout>
 
 
@@ -1708,7 +1708,7 @@ HorizontalOptions="Center" />
 
                             <StackLayout>
 
-                                <Frame Padding="10" HasShadow="False"  Margin="20,20,20,0" InputTransparent="False" BorderColor="Transparent" BackgroundColor="White" CornerRadius="{OnPlatform Android='10', iOS='10'}" >
+                            <Border Padding="10"   Margin="20,20,20,0" InputTransparent="False" Stroke="Transparent" BackgroundColor="White" StrokeShape="RoundRectangle 10">
                                     <StackLayout>
                                         <Grid>
                                         <Grid.ColumnDefinitions>
@@ -1755,10 +1755,10 @@ HorizontalOptions="Center" />
                                         </Grid>
 
                                     </StackLayout>
-                                    <Frame.GestureRecognizers>
+                                    <Border.GestureRecognizers>
                                         <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
-                                    </Frame.GestureRecognizers>
-                                </Frame>
+                                    </Border.GestureRecognizers>
+                                </Border>
 
 
 
@@ -1777,7 +1777,7 @@ HorizontalOptions="Center" />
                                             <DataTemplate>
                                                 <ViewCell>
                                                     <ViewCell.View>
-                                                        <Frame CornerRadius="10" BackgroundColor="{Binding BackgroundColor}" BorderColor="Transparent" InputTransparent="True" HasShadow="False" Padding="0" Margin="10,5,10,5">
+                                                    <Border StrokeShape="RoundRectangle 10" BackgroundColor="{Binding BackgroundColor}" Stroke="Transparent" InputTransparent="True"  Padding="0" Margin="10,5,10,5">
                                                             <Grid>
                                                                 <Grid.RowDefinitions>
                                                                     <!--<RowDefinition>
@@ -1791,7 +1791,7 @@ HorizontalOptions="Center" />
                                                                 <Grid.ColumnDefinitions>
                                                                     <ColumnDefinition Width="100*"/>
                                                                 </Grid.ColumnDefinitions>
-                                                                <Frame CornerRadius="10" VerticalOptions="FillAndExpand" BackgroundColor="Transparent" BorderColor="Transparent"   HorizontalOptions="FillAndExpand"  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="1" Margin="0,0,0,0"  Padding="0" HasShadow="False"  IsClippedToBounds="True" >
+                                                            <Border StrokeShape="RoundRectangle 10" VerticalOptions="FillAndExpand" BackgroundColor="Transparent" Stroke="Transparent"   HorizontalOptions="FillAndExpand"  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="1" Margin="0,0,0,0"  Padding="0" >
                                                                     <Image
  Aspect="AspectFit" HeightRequest="50"
   BackgroundColor="Transparent"
@@ -1800,14 +1800,14 @@ HorizontalOptions="Center" />
   HorizontalOptions="CenterAndExpand"
   VerticalOptions="FillAndExpand"
   />
-                                                                </Frame>
+                                                                </Border>
                                                                 <Label VerticalOptions="CenterAndExpand" HorizontalTextAlignment="Center" Text="{Binding Title}" FontSize="10"  Margin="0,0,0,0"  TextColor="#031926" FontFamily="HankenGroteskBold"   Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1"/>
-                                                                <!--<Frame CornerRadius="10" VerticalOptions="Start" BackgroundColor="White" BorderColor="White"   HorizontalOptions="FillAndExpand" HeightRequest="80" Margin="0,0,0,0" Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1"  Padding="0" HasShadow="False"  IsClippedToBounds="True" >
+                                                                <!--<Frame CornerRadius="10" VerticalOptions="Start" BackgroundColor="White" BorderColor="White"   HorizontalOptions="FillAndExpand" HeightRequest="80" Margin="0,0,0,0" Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1"  Padding="0"   IsClippedToBounds="True" >
  <StackLayout>
      </StackLayout>
  </Frame>-->
                                                             </Grid>
-                                                        </Frame>
+                                                        </Border>
                                                     </ViewCell.View>
                                                 </ViewCell>
                                             </DataTemplate>

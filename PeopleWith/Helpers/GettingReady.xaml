@@ -17,13 +17,13 @@
             HasBackgroundAnimation="False"/>
     </Mopups:PopupPage.Animation>
     <VerticalStackLayout Margin="10,0,10,0" VerticalOptions="Center" BackgroundColor="Transparent">
-        <Frame CornerRadius="10"  Margin="0,5,0,5"
-               BackgroundColor="Transparent" HasShadow="False"
-                BorderColor="Transparent" InputTransparent="True" Padding="0">
+        <Border StrokeShape="RoundRectangle 10"  Margin="0,5,0,5"
+               BackgroundColor="Transparent" 
+                Stroke="Transparent" InputTransparent="True" Padding="0">
             <StackLayout>
                 <Label x:Name="detaillbl" FontSize="16" TextColor="#031926" FontFamily="HankenGroteskBold" HorizontalOptions="Center" HorizontalTextAlignment="Center" Margin="0,10,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" />
                 <ActivityIndicator x:Name="Indicator" IsRunning="True" Color="#BFDBF7" Margin="0,10,0,0" HorizontalOptions="Center" VerticalOptions="Center" />
             </StackLayout>
-        </Frame>
+        </Border>
     </VerticalStackLayout>
 </Mopups:PopupPage>

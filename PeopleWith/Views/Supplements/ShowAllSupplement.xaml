@@ -66,26 +66,26 @@ VerticalOptions="Center" />
 
                     <Label Text="Not Recorded" TextColor="#031926" FontSize="12" FontAttributes="None" FontFamily="HankenGroteskBold" Margin="0,0,0,0" VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalOptions="Start"   Grid.Row="0" Grid.Column="7" Grid.ColumnSpan="1" />
 
-                    <Frame x:Name="AllFrame" Opacity="0.2" CornerRadius="5" BorderColor="LightBlue" BackgroundColor="LightBlue" Margin="0,0,2.5,0" Grid.Row="0" Grid.Column="0" Padding="5" Grid.ColumnSpan="2">
-                        <Frame.GestureRecognizers>
+                    <Border x:Name="AllFrame" Opacity="0.2" StrokeShape="RoundRectangle 5" Stroke="LightBlue" BackgroundColor="LightBlue" Margin="0,0,2.5,0" Grid.Row="0" Grid.Column="0" Padding="5" Grid.ColumnSpan="2">
+                        <Border.GestureRecognizers>
                             <TapGestureRecognizer CommandParameter="All" Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
-                        </Frame.GestureRecognizers>
-                    </Frame>
-                    <Frame x:Name="TakenFrame" Opacity="0"  CornerRadius="5" BorderColor="LightGreen" BackgroundColor="LightGreen" Margin="0,0,2.5,0" Grid.Column="2" Padding="5" Grid.ColumnSpan="2">
-                        <Frame.GestureRecognizers>
+                        </Border.GestureRecognizers>
+                    </Border>
+                    <Border x:Name="TakenFrame" Opacity="0" StrokeShape="RoundRectangle 5" Stroke="LightGreen" BackgroundColor="LightGreen" Margin="0,0,2.5,0" Grid.Column="2" Padding="5" Grid.ColumnSpan="2">
+                        <Border.GestureRecognizers>
                             <TapGestureRecognizer CommandParameter="Taken" Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
-                        </Frame.GestureRecognizers>
-                    </Frame>
-                    <Frame x:Name="NotTakenFrame" Opacity="0"  CornerRadius="5" BorderColor="#ff6666" BackgroundColor="#ff6666" Margin="0,0,2.5,0" Grid.Column="4" Padding="5" Grid.ColumnSpan="2">
-                        <Frame.GestureRecognizers>
+                        </Border.GestureRecognizers>
+                    </Border>
+                    <Border x:Name="NotTakenFrame" Opacity="0"  StrokeShape="RoundRectangle 5" Stroke="#ff6666" BackgroundColor="#ff6666" Margin="0,0,2.5,0" Grid.Column="4" Padding="5" Grid.ColumnSpan="2">
+                        <Border.GestureRecognizers>
                             <TapGestureRecognizer CommandParameter="NotTaken" Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
-                        </Frame.GestureRecognizers>
-                    </Frame>
-                    <Frame x:Name="NotRecordedFrame" Opacity="0" CornerRadius="5"  BorderColor="LightGray" BackgroundColor="LightGray"  Margin="0,0,0,0" Grid.Column="6" Padding="5" Grid.ColumnSpan="2">
-                        <Frame.GestureRecognizers>
+                        </Border.GestureRecognizers>
+                    </Border>
+                    <Border x:Name="NotRecordedFrame" Opacity="0" StrokeShape="RoundRectangle 5"  Stroke="LightGray" BackgroundColor="LightGray"  Margin="0,0,0,0" Grid.Column="6" Padding="5" Grid.ColumnSpan="2">
+                        <Border.GestureRecognizers>
                             <TapGestureRecognizer CommandParameter="NotRecorded" Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
-                        </Frame.GestureRecognizers>
-                    </Frame>
+                        </Border.GestureRecognizers>
+                    </Border>
 
                 </Grid>
 
@@ -100,9 +100,9 @@ VerticalOptions="Center" />
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <Frame CornerRadius="10" Grid.Row="0" Grid.Column="0"  Margin="5" Padding="2" BorderColor="#f9f4e5" BackgroundColor="Transparent" InputTransparent="True" HasShadow="False">
+                                    <Border StrokeShape="RoundRectangle 10" Grid.Row="0" Grid.Column="0"  Margin="5" Padding="2" Stroke="#f9f4e5" BackgroundColor="Transparent" InputTransparent="True" >
                                         <Label Text="{Binding DisplayText}" HorizontalTextAlignment="Center" FontFamily="HankenGroteskRegular" Padding="5" FontSize="12" FontAttributes="Bold" TextColor="Gray" />
-                                    </Frame>
+                                    </Border>
                                 </Grid>
                             </ViewCell>
                         </DataTemplate>
@@ -117,9 +117,9 @@ VerticalOptions="Center" />
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <Frame CornerRadius="10" Grid.Row="0" Grid.Column="0" Margin="5" Padding="2" BackgroundColor="#f9f4e5" BorderColor="#ac5735" HasShadow="False">
+                                    <Border StrokeShape="RoundRectangle 10" Grid.Row="0" Grid.Column="0" Margin="5" Padding="2" BackgroundColor="#f9f4e5" Stroke="#ac5735" >
                                         <Label Text="{Binding DisplayText}" HorizontalTextAlignment="Center" FontFamily="HankenGroteskRegular" Padding="5" FontSize="12" FontAttributes="Bold" TextColor="#ac5735" />
-                                    </Frame>
+                                    </Border>
                                 </Grid>
                             </ViewCell>
                         </DataTemplate>
@@ -131,7 +131,7 @@ VerticalOptions="Center" />
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <Frame CornerRadius="10"  Margin="0,5,0,5" BackgroundColor="Transparent" HasShadow="False" BorderColor="#f9f4e5" InputTransparent="True" Padding="0">
+                                <Border StrokeShape="RoundRectangle 10"  Margin="0,5,0,5" BackgroundColor="Transparent"  Stroke="#f9f4e5" InputTransparent="True" Padding="0">
                                     <StackLayout BackgroundColor="Transparent">
                                         <Grid Margin="0,10,0,0" RowSpacing="0">
                                             <Grid.ColumnDefinitions>
@@ -176,14 +176,14 @@ VerticalOptions="Center" />
 
                                             <Button Text="{Binding Action}" IsVisible="False" TextColor="#031926" FontSize="12" FontAttributes="None" FontFamily="HankenGroteskBold"  VerticalOptions="Center" HorizontalOptions="Center" Padding="0"  Grid.Row="1" Grid.Column="1" />
 
-                                            <Frame CornerRadius="5" Grid.Row="1" IsVisible="False" HeightRequest="35" WidthRequest="130" Grid.Column="1" Margin="0,0,20,0" BackgroundColor="{Binding Colour}"  BorderColor="Transparent" HasShadow="False" Padding="0">
+                                            <Border StrokeShape="RoundRectangle 5" Grid.Row="1" IsVisible="False" HeightRequest="35" WidthRequest="130" Grid.Column="1" Margin="0,0,20,0" BackgroundColor="{Binding Colour}"  Stroke="Transparent"  Padding="0">
 
                                                 <Label Text="{Binding Action}" TextColor="#031926" FontSize="12" FontAttributes="None" FontFamily="HankenGroteskBold"  VerticalOptions="Center" VerticalTextAlignment="Center" HorizontalOptions="Center" Padding="0"  Grid.Row="1" Grid.Column="1" />
-                                            </Frame>
+                                            </Border>
 
                                         </Grid>
                                     </StackLayout>
-                                </Frame>
+                                </Border>
                             </ViewCell>
                         </DataTemplate>
                     </syncfusion:SfListView.ItemTemplate>

@@ -41,9 +41,9 @@
                  
                 </Image>
 
-                <Frame HasShadow="False" BackgroundColor="Black" Padding="5" CornerRadius="5" HorizontalOptions="End" VerticalOptions="End" Margin="10" Opacity="0.8">
+                <Border  BackgroundColor="Black" Padding="5" StrokeShape="RoundRectangle 5" HorizontalOptions="End" VerticalOptions="End" Margin="10" Opacity="0.8">
                     <Label x:Name="lengthlbl" TextColor="White" FontSize="14" FontAttributes="Bold"/>
-                </Frame>
+                </Border>
             </Grid>
 
             <Label x:Name="Titlelbl" FontFamily="HankenGroteskBold" Grid.Row="1" Grid.Column="0" Margin="20,10,20,0" TextColor="#031926" FontSize="22" FontAttributes="Bold" VerticalOptions="Start"/>

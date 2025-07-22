@@ -31,18 +31,18 @@
                     </Grid.ColumnDefinitions>
                     <Label x:Name="measurementname" FontSize="20"  Grid.Column="0" Margin="0,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
 
-                    <Frame x:Name="SymInfo" HasShadow="False" Padding="0" CornerRadius="15" Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,0,20,0" BorderColor="#031926" BackgroundColor="Transparent">
+                    <Border x:Name="SymInfo"  Padding="0" StrokeShape="RoundRectangle 15" Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,0,20,0" Stroke="#031926" BackgroundColor="Transparent">
                         <Label Text="i" FontFamily="HankenGroteskBold" HorizontalOptions="Center" TextColor="#031926" FontSize="12"  Grid.Column="1" VerticalOptions="Center" />
-                        <Frame.GestureRecognizers>
+                        <Border.GestureRecognizers>
                             <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
-                        </Frame.GestureRecognizers>
-                    </Frame>
+                        </Border.GestureRecognizers>
+                    </Border>
 
                 </Grid>
 
-                <Frame CornerRadius="5"  Margin="0,5,0,5"
- BackgroundColor="#e5f0fb" HasShadow="False" x:Name="dataframe"
-                BorderColor="Transparent"
+                <Border StrokeShape="RoundRectangle 5"  Margin="0,5,0,5"
+ BackgroundColor="#e5f0fb"  x:Name="dataframe"
+                Stroke="Transparent"
 Padding="0">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -70,7 +70,7 @@ Padding="0">
                         <Image Source="charticon.png" x:Name="charticon" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" Grid.ColumnSpan="1" HeightRequest="40" WidthRequest="40" VerticalOptions="Center" HorizontalOptions="Center"/>
 
                     </Grid>
-                </Frame>
+                </Border>
 
                 <chart:SfCartesianChart x:Name="datachart" BackgroundColor="Transparent" Margin="-5,10,0,0">
                     <chart:SfCartesianChart.Resources>
@@ -110,9 +110,9 @@ Text="Add Data" />
 
                 <Label Text="Details" x:Name="detailslbl" IsVisible="False" FontSize="20" Margin="0,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
 
-                <Frame CornerRadius="5"  Margin="0,5,0,5"
- BackgroundColor="Transparent" HasShadow="False" x:Name="detailsframe" IsVisible="False"
-                BorderColor="#e5f0fb"
+                <Border StrokeShape="RoundRectangle 5"  Margin="0,5,0,5"
+ BackgroundColor="Transparent"  x:Name="detailsframe" IsVisible="False"
+                Stroke="#e5f0fb"
 Padding="10">
                     <Grid HorizontalOptions="FillAndExpand" Margin="0,10,0,10">
                         <Grid.RowDefinitions>
@@ -125,7 +125,7 @@ Padding="10">
 
 
                         <BoxView  HorizontalOptions="FillAndExpand" Margin="0,20,0,20" Color="#e5f0fb" BackgroundColor="#e5f0fb" HeightRequest="1" Grid.Row="1" />
-                        <Frame x:Name="NoDetialsAdded"  Padding="0" Grid.Row="2" HasShadow="False" BorderColor="Transparent" BackgroundColor="Transparent" >
+                        <Border x:Name="NoDetialsAdded"  Padding="0" Grid.Row="2"  Stroke="Transparent" BackgroundColor="Transparent" >
                             <Grid >
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="90*"/>
@@ -134,12 +134,12 @@ Padding="10">
                                 <Label Text="Information and Resources" FontSize="14" Margin="0,0,0,0" Grid.Column="0" TextColor="#031926" FontFamily="HankenGroteskBold" VerticalOptions="Center" FontAttributes="None" HorizontalOptions="Start" />
                                 <Image Source="nextdarker.png" HeightRequest="15" Margin="0,0,5,0"  Grid.Column="1" VerticalOptions="Center" HorizontalOptions="End" />
                             </Grid>
-                            <Frame.GestureRecognizers>
+                            <Border.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
-                            </Frame.GestureRecognizers>
-                        </Frame>
+                            </Border.GestureRecognizers>
+                        </Border>
 
-                        <!--<Frame x:Name="MeasDetails" Grid.Row="2" IsVisible="False"  Padding="0"  HasShadow="False" BorderColor="Transparent" BackgroundColor="Transparent" >
+                        <!--<Frame x:Name="MeasDetails" Grid.Row="2" IsVisible="False"  Padding="0"   BorderColor="Transparent" BackgroundColor="Transparent" >
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="15*"/>
@@ -156,7 +156,7 @@ Padding="10">
                         </Frame>-->
 
                     </Grid>
-                </Frame>
+                </Border>
 
                 <Label Text="Your Measurement Data" x:Name="showalllbl1" IsVisible="True" FontSize="20" Margin="0,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
 

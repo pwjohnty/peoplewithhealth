@@ -124,7 +124,7 @@
                         <DataTemplate>
                             <ViewCell>
                                 <Frame CornerRadius="10"  Margin="0,5,0,5"
-        BackgroundColor="Transparent" HasShadow="False"
+        BackgroundColor="Transparent" 
                        BorderColor="#e5f0fb" InputTransparent="True"
        Padding="0">
                                     <StackLayout BackgroundColor="Transparent">
@@ -173,7 +173,7 @@
                     <DataTemplate>
                         <ViewCell>
                             <Frame CornerRadius="10"  Margin="0,5,0,5"
- BackgroundColor="Transparent" HasShadow="False"
+ BackgroundColor="Transparent" 
                 BorderColor="#e5f0fb" InputTransparent="True"
 Padding="0">
                                 <StackLayout BackgroundColor="Transparent">

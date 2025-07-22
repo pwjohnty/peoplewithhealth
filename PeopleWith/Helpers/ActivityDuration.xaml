@@ -22,7 +22,7 @@
 
     <!-- Main Popup Container -->
     <Grid Grid.RowDefinitions="Auto" Grid.ColumnDefinitions="*" VerticalOptions="End" Padding="10">
-        <Frame Grid.Row="1" BackgroundColor="White" Padding="15" CornerRadius="20" Margin="10,0,10,30">
+        <Border Grid.Row="1" BackgroundColor="White" Padding="15" StrokeShape="RoundRectangle 20" Margin="10,0,10,30">
             <VerticalStackLayout Spacing="10">
 
                 <Grid ColumnDefinitions="50*,50*" RowDefinitions="Auto" >
@@ -111,7 +111,7 @@
                 </Grid>
 
             </VerticalStackLayout>
-        </Frame>
+        </Border>
     </Grid>
 
 </Mopups:PopupPage>

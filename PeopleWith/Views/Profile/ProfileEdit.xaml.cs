@@ -11,6 +11,7 @@ using Microsoft.Maui.Storage;
 using Microsoft.Maui.ApplicationModel.Communication;
 using Microsoft.Maui.Devices;
 using Microsoft.Maui.Networking;
+using System.Net;
 
 namespace PeopleWith;
 
@@ -1852,9 +1853,16 @@ public partial class ProfileEdit : ContentPage
             }
 
         }
-        catch (Exception Ex)
+        catch (Exception ex) when (
+           ex is HttpRequestException ||
+           ex is WebException ||
+           ex is TaskCanceledException)
         {
-            NotasyncMethod(Ex);
+            NotasyncMethod(ex);
+        }
+        catch (Exception ex)
+        {
+           NotasyncMethod(ex);
         }
     }
 

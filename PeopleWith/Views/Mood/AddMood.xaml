@@ -64,7 +64,7 @@
 
                 </Border>
 
-                <!--<Frame HasShadow="False" Margin="20,5,20,0" BorderColor="#E5E5E5" BackgroundColor="Transparent" CornerRadius="10"  Padding="0" >
+                <!--<Frame  Margin="20,5,20,0" BorderColor="#E5E5E5" BackgroundColor="Transparent" CornerRadius="10"  Padding="0" >
                     <Grid Margin="20,10,20,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="45"/>
@@ -75,7 +75,7 @@
                             <ColumnDefinition Width="15*"/>
                             <ColumnDefinition Width="35*"/>
                         </Grid.ColumnDefinitions>
-                        <Frame HasShadow="False" Margin="2.5,0,2.5,0" BorderColor="Transparent" BackgroundColor="Transparent" CornerRadius="10" Grid.Row="0" Grid.Column="0" Padding="0" Grid.ColumnSpan="2">
+                        <Frame  Margin="2.5,0,2.5,0" BorderColor="Transparent" BackgroundColor="Transparent" CornerRadius="10" Grid.Row="0" Grid.Column="0" Padding="0" Grid.ColumnSpan="2">
                             <Grid Margin="5,0,5,0" Padding="0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
@@ -89,7 +89,7 @@
                             </Frame.GestureRecognizers>
                         </Frame>
 
-                        <Frame HasShadow="False" Margin="2.5,0,2.5,0" BorderColor="Transparent" Padding="0" BackgroundColor="Transparent" CornerRadius="10" Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2">
+                        <Frame  Margin="2.5,0,2.5,0" BorderColor="Transparent" Padding="0" BackgroundColor="Transparent" CornerRadius="10" Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2">
                             <Grid Margin="5,0,5,0" Padding="0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
@@ -158,11 +158,11 @@
 
 
                 <Label Text="Add Notes" FontFamily="HankenGroteskBold" Margin="20,10,0,0"  VerticalOptions="Center" HorizontalOptions="Start"   FontSize="16" TextColor="#031926" />
-                <Frame  BorderColor="#E6E6E6" BackgroundColor="Transparent" HasShadow="False" CornerRadius="10" Padding="-11" Margin="20,5,20,0">
+                <Border  Stroke="#E6E6E6" BackgroundColor="Transparent" StrokeShape="RoundRectangle 10" Padding="-11" Margin="20,5,20,0">
                     <ScrollView Orientation="Vertical" HorizontalScrollBarVisibility="Never">
                         <Editor x:Name="Notes" HeightRequest="80" TextColor="#031926" FontFamily="HankenGroteskRegular"  BackgroundColor="Transparent"  HorizontalTextAlignment="Start"  Margin="20,10,5,10"  />
                     </ScrollView>
-                </Frame>
+                </Border>
 
 
                 <Button x:Name="AddMoodBtn" Text="Add Mood" FontFamily="HankenGroteskBold" Clicked="AddMoodBtn_Clicked" BackgroundColor="#FFF8DC" TextColor="#B8860B" Margin="20,20,20,0" HorizontalOptions="FillAndExpand"    />
