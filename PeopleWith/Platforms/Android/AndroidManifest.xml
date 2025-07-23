@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.peoplewith.peoplewith" android:versionCode="90" android:versionName="90.1">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.peoplewith.peoplewith" android:versionCode="90" android:versionName="90.1" xmlns:tools="http://schemas.android.com/tools">
 	<!-- Set minSdkVersion and targetSdkVersion -->
 	<!--<uses-sdk android:minSdkVersion="26" android:targetSdkVersion="34" />-->
+	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="35" tools:overrideLibrary="androidx.health.connect.client,androidx.health.services.client"/>
 	<application android:allowBackup="true" android:icon="@mipmap/pwhealthicon" android:supportsRtl="true">
 		<receiver android:name="com.google.firebase.iid.FirebaseInstanceIdInternalReceiver" android:exported="false" />
 		<receiver android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver" android:exported="true" android:permission="com.google.android.c2dm.permission.SEND">
@@ -27,12 +28,19 @@
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 	<uses-permission android:name="android.permission.CAMERA" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
+
+	<uses-permission android:name="android.permission.health.READ_SLEEP" />
+	<uses-permission android:name="android.permission.health.READ_SPEED" />
+	<uses-permission android:name="android.permission.health.READ_STEPS" />
+	<uses-permission android:name="android.permission.health.READ_DISTANCE" />
 	<!-- Check if Health Connect is installed -->
 	<queries>
 		<package android:name="com.google.android.apps.healthdata" />
 		<intent>
+			<action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE" />
+			<!--
 			<action android:name="android.intent.action.SENDTO" />
-			<data android:scheme="mailto" />
+			<data android:scheme="mailto" /> -->
 		</intent>
 	</queries>
 </manifest>
