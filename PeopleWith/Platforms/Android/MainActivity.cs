@@ -23,13 +23,26 @@ using AndroidX.Activity;
 using Android.Provider;
 using Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;
 using Plugin.Firebase.CloudMessaging;
+using AndroidX.Health.Connect.Client;
+using Newtonsoft.Json.Linq;
+using AndroidX.Activity.Result;
+using PeopleWith.Platforms.Android.Callbacks;
 
 
 namespace PeopleWith
 {
+
+    [IntentFilter(new[] { "androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE" })]
+    [IntentFilter(new[] { "android.intent.action.VIEW_PERMISSION_USAGE" },
+Categories = new[] { "android.intent.category.HEALTH_PERMISSIONS" })]
     [Activity(Theme = "@style/Maui.SplashTheme", LaunchMode = LaunchMode.SingleTop,  MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize | ConfigChanges.Density)]
     public class MainActivity : MauiAppCompatActivity
     {
+        private ActivityResultLauncher _permissionRequestLauncher = null!;
+        private TaskCompletionSource<Java.Lang.Object?> _permissionRequestCompletedSource;
+        public static readonly TimeSpan MaxPermissionRequestDuration = TimeSpan.FromMinutes(1);
+        private HealthConnectClient _healthConnectClient;
+
         private NotificationHubClient hub;
         private static string? GetDeviceId() => Secure.GetString(Android.App.Application.Context.ContentResolver, Secure.AndroidId);
         public static MainActivity Instance { get; private set; }
@@ -65,9 +78,16 @@ namespace PeopleWith
 
             }
 
+            _permissionRequestLauncher = RegisterForActivityResult(
+           PermissionController.CreateRequestPermissionResultContract(),
+           new AndroidActivityResultCallback(result =>
+           {
+               _permissionRequestCompletedSource?.TrySetResult(result);
+               _permissionRequestCompletedSource = null;
+           }));
             //if (Intent?.Extras != null)
             //{
-             //   HandleIntent(Intent);
+            //   HandleIntent(Intent);
             //}
 
 
@@ -149,6 +169,14 @@ namespace PeopleWith
         //        
         //    }
         //}
+
+        public Task RequestPermission(Java.Lang.Object permission, TaskCompletionSource<Java.Lang.Object?> whenCompletedSource)
+        {
+            _permissionRequestCompletedSource?.TrySetResult(null);
+            _permissionRequestCompletedSource = whenCompletedSource;
+            _permissionRequestLauncher.Launch(permission);
+            return whenCompletedSource.Task;
+        }
 
 
         //New Intent Code 
