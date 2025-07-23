@@ -127,15 +127,15 @@ namespace PeopleWith
                     Success = true;
                     //await Task.Delay(2000);
                     //Application.Current.MainPage = new NavigationPage(new MainDashboard());
-                    await Task.Run(async () =>
-                    {
-                        // Simulate some processing that may take up to 2 seconds
-                        await Task.Delay(500);
-                    });
+                    
+                                            // Simulate some processing that may take up to 2 seconds
+                    await Task.Delay(500);
+                   
 
                     MainThread.BeginInvokeOnMainThread(() =>
                     {
-                        Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                        App.SetMainPage(new NavigationPage(new MainDashboard()));
+                       // Application.Current.MainPage = new NavigationPage(new MainDashboard());
                     });
                 }
                 else

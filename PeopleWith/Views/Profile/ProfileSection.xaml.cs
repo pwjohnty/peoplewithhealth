@@ -8,6 +8,7 @@ using Microsoft.Maui.Devices;
 using Microsoft.Maui.ApplicationModel.Communication;
 using Microsoft.Maui.ApplicationModel;
 using System.Reflection.Metadata.Ecma335;
+using Microsoft.Extensions.Azure;
 
 namespace PeopleWith;
 
@@ -24,6 +25,8 @@ public partial class ProfileSection : ContentPage
     public HttpClient Client = new HttpClient();
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
+    AlertContent InitialQuestion;
+    AlertContent SecondQuestion; 
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
     bool isrunning = false; 
@@ -55,6 +58,14 @@ public partial class ProfileSection : ContentPage
         }
     }
 
+
+    public class AlertContent
+    {
+        public string Title { get; set; }
+        public string Message { get; set; }
+        public string Accept { get; set; }
+        public string Cancel { get; set; }
+    }
 
     //protected override async void OnAppearing()
     //{
@@ -110,6 +121,84 @@ public partial class ProfileSection : ContentPage
             //{
             //    Namelbl.Text = "Health Details"; 
             //}
+            if (!string.IsNullOrEmpty(Helpers.Settings.SignUp))
+            {
+                //Royal Brompton (Project) 
+                if (Helpers.Settings.SignUp.Contains("RBHTHCM"))
+                {
+                    DeleteAccount.Text = "Withdraw from project";
+
+                    var ItemOne = new AlertContent
+                    {
+                        Title = "Withdraw from Project",
+                        Message = "Are you sure you want to withdraw from this project?",
+                        Accept = "Yes, Withdraw",
+                        Cancel = "Cancel"
+                    };
+
+                    var ItemTwo = new AlertContent
+                    {
+                        Title = "This Action is Permanent",
+                        Message = "Once you withdraw from the project, your participant will end, and your associated data may be removed in alignment to the project consent given when registering. This action cannot be reversed and your account cannot be recovered.\n\nDo you really wish to proceed?",
+                        Accept = "Withdraw Permanently",
+                        Cancel = "Cancel"
+                    };
+
+                    InitialQuestion = ItemOne;
+                    SecondQuestion = ItemTwo;
+
+                    DeleteDetails.Text = "Once you withdraw from the project, your participation and associated data cannot be retrieved. Ensure you no longer wish to take part before proceeding with withdrawal.";
+
+                }
+                else
+                {
+                    //All Other Signup Codes 
+                    DeleteAccount.Text = "Withdraw from study";
+
+                    var ItemOne = new AlertContent
+                    {
+                        Title = "Withdraw from Study",
+                        Message = "Are you sure you want to withdraw from this study?",
+                        Accept = "Yes, Withdraw",
+                        Cancel = "Cancel"
+                    };
+
+                    var ItemTwo = new AlertContent
+                    {
+                        Title = "This Action is Permanent",
+                        Message = "Once you withdraw from the study, your participant will end, and your associated data may be removed in alignment to the study consent given when registering. This action cannot be reversed and your account cannot be recovered.\n\nDo you really wish to proceed?",
+                        Accept = "Withdraw Permanently",
+                        Cancel = "Cancel"
+                    };
+
+                    InitialQuestion = ItemOne;
+                    SecondQuestion = ItemTwo;
+
+                    DeleteDetails.Text = "Once you withdraw from the study, your participation and associated data cannot be retrieved. Ensure you no longer wish to take part before proceeding with withdrawal.";
+                }
+            }
+            else
+            {
+                var ItemOne = new AlertContent
+                {
+                    Title = "Delete Account",
+                    Message = "Are you sure you want to delete this account?",
+                    Accept = "Yes, Delete",
+                    Cancel = "Cancel"
+                };
+
+                var ItemTwo = new AlertContent
+                {
+                    Title = "This Action is Permanent",
+                    Message = "Once your account is deleted, it cannot be recovered.\n\nDo you really wish to proceed?",
+                    Accept = "Delete Permanently",
+                    Cancel = "Cancel"
+                };
+
+                InitialQuestion = ItemOne;
+                SecondQuestion = ItemTwo;
+            }
+
             Useridlbl.Text = Helpers.Settings.UserKey;
 
             string version = AppInfo.Current.VersionString;
@@ -661,80 +750,113 @@ public partial class ProfileSection : ContentPage
             if (accessType == NetworkAccess.Internet)
             {
                 //Limit No. of Taps 
-                DeleteAccount.IsEnabled = false; 
-                bool Answer = await DisplayAlert("Delete Account", "Are you sure you want to delete this Account? Once deleted it cannot be retrieved", "Delete Account", "Cancel");
+                DeleteAccount.IsEnabled = false;
+
+                bool Answer = await DisplayAlert(InitialQuestion.Title, InitialQuestion.Message, InitialQuestion.Accept, InitialQuestion.Cancel);
+
+                //bool Answer = await DisplayAlert("Delete Account", "Are you sure you want to delete this Account? Once deleted it cannot be retrieved", "Delete Account", "Cancel");
                 if (Answer)
                 {
-                    //Delete Account
-                    bool delete = true;
-                    bool Success = false;
-                    string id = Helpers.Settings.UserKey;
-                    var url = $"https://pwapi.peoplewith.com/api/user/userid/{id}";
 
-                    string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = delete });
-                    StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-                    ConfigureClient();
-                    using (var client = new HttpClient())
+                    bool Confirm = await DisplayAlert(SecondQuestion.Title, SecondQuestion.Message, SecondQuestion.Accept, SecondQuestion.Cancel);
+
+                    if (Confirm) 
                     {
-                        var request = new HttpRequestMessage(HttpMethod.Patch, url)
-                        {
-                            Content = content
-                        };
+                        //Delete Account
+                        bool delete = true;
+                        bool Success = false;
+                        var regstatus = "Active";
+                        var TimeDate = string.Empty;
+                        string id = Helpers.Settings.UserKey;
+                        var url = $"https://pwapi.peoplewith.com/api/user/userid/{id}";
 
-                        var response = await Client.SendAsync(request);
-
-                        if (!response.IsSuccessStatusCode)
+                        if (!string.IsNullOrEmpty(Helpers.Settings.SignUp))
                         {
-                            var errorResponse = await response.Content.ReadAsStringAsync();
+                            delete = false; 
+                            regstatus = "Withdrawn";
+                            TimeDate = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
                         }
-                        else
+                        string json = System.Text.Json.JsonSerializer.Serialize(new { deleted = delete, registrationstatus = regstatus, activationtimestamp = TimeDate });
+                        StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                        ConfigureClient();
+                        using (var client = new HttpClient())
                         {
-                            Success = true;
-                        }
-                    }
+                            var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                            {
+                                Content = content
+                            };
 
+                            var response = await Client.SendAsync(request);
 
-                    if (Success == true)
-                    {
-
-                        //Remove The Following Novo Preferences if Neccesary 
-                        if (!String.IsNullOrEmpty(Helpers.Settings.SignUp))
-                        {
-                            var signup = Helpers.Settings.SignUp;
-                            if (signup.Contains("SAX"))
-                            {   //Remove the Following 
-                                Preferences.Default.Remove("NovoMeds");
-                                Preferences.Default.Remove("NovoSyms");
-                                Preferences.Default.Remove("NovoSupps");
-                                Preferences.Default.Remove("NovoMeas");
-                                Preferences.Default.Remove("NovoDiag");
-                                Preferences.Default.Remove("NovoMood");
-                                Preferences.Default.Remove("NovoAppt");
-                                Preferences.Default.Remove("NovoHcp");
-                                Preferences.Default.Remove("NovoQues");
-                                Preferences.Default.Remove("NovoAllerg"); 
-                                Preferences.Default.Remove("NovoHeRep");
-                                Preferences.Default.Remove("NovoSched");
-                                Preferences.Default.Remove("NovoFood");
-                                Preferences.Default.Remove("NovoDiet");
-                                Preferences.Default.Remove("NovoInvest");
-                                Preferences.Default.Remove("NovoActivity");
-                                
+                            if (!response.IsSuccessStatusCode)
+                            {
+                                var errorResponse = await response.Content.ReadAsStringAsync();
+                            }
+                            else
+                            {
+                                Success = true;
                             }
                         }
-                       
 
-                        await MopupService.Instance.PushAsync(new PopupPageHelper("Account Deleted") { });
-                        await Task.Delay(1500);
-                        //Logout of Account 
-                        Logout HandleLogout = new Logout();
-                        await MopupService.Instance.PopAllAsync(false);
+
+                        if (Success == true)
+                        {
+
+                            //Remove The Following Novo Preferences if Neccesary 
+                            if (!String.IsNullOrEmpty(Helpers.Settings.SignUp))
+                            {
+                                var signup = Helpers.Settings.SignUp;
+                                if (signup.Contains("SAX"))
+                                {   //Remove the Following 
+                                    Preferences.Default.Remove("NovoMeds");
+                                    Preferences.Default.Remove("NovoSyms");
+                                    Preferences.Default.Remove("NovoSupps");
+                                    Preferences.Default.Remove("NovoMeas");
+                                    Preferences.Default.Remove("NovoDiag");
+                                    Preferences.Default.Remove("NovoMood");
+                                    Preferences.Default.Remove("NovoAppt");
+                                    Preferences.Default.Remove("NovoHcp");
+                                    Preferences.Default.Remove("NovoQues");
+                                    Preferences.Default.Remove("NovoAllerg");
+                                    Preferences.Default.Remove("NovoHeRep");
+                                    Preferences.Default.Remove("NovoSched");
+                                    Preferences.Default.Remove("NovoFood");
+                                    Preferences.Default.Remove("NovoDiet");
+                                    Preferences.Default.Remove("NovoInvest");
+                                    Preferences.Default.Remove("NovoActivity");
+
+                                }
+
+                                if (signup.Contains("RBHTHCM"))
+                                {
+                                    await MopupService.Instance.PushAsync(new PopupPageHelper("Withdrawn from Project") { });
+                                }
+                                else
+                                {
+                                    await MopupService.Instance.PushAsync(new PopupPageHelper("Withdrawn from Study") { });
+                                }
+                            }
+                            else
+                            {
+                                await MopupService.Instance.PushAsync(new PopupPageHelper("Account Deleted") { });
+                            }
+
+                            await Task.Delay(1500);
+                            //Logout of Account 
+                            Logout HandleLogout = new Logout();
+                            await MopupService.Instance.PopAllAsync(false);
+                        }
                     }
+                    else
+                    {
+                        DeleteAccount.IsEnabled = true;
+                        return; 
+                    }                
                 }
                 else
                 {
-                    DeleteAccount.IsEnabled = true; 
-                    //Do Nothing
+                    DeleteAccount.IsEnabled = true;
+                    return; 
                 }
             }
             else

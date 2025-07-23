@@ -19,6 +19,12 @@ using Sentry;
 using System.Globalization;
 using Plugin.Maui.Health;
 using Microsoft.Extensions.Options;
+using Microsoft.Maui.LifecycleEvents;
+
+#if ANDROID
+using Plugin.Firebase.CloudMessaging;
+using Plugin.Firebase.Core.Platforms.Android;
+#endif
 
 
 
@@ -46,7 +52,7 @@ namespace PeopleWith
             var builder = MauiApp.CreateBuilder();
             builder
                 .ConfigureSyncfusionCore()
-              //  .UseShiny()
+                //  .UseShiny()
                 .UseMauiCommunityToolkitMediaElement()
                 .UseMauiCommunityToolkit()
                 .UseMauiApp<App>()
@@ -64,7 +70,7 @@ namespace PeopleWith
                     // and are viewable in your IDE's debug console or with 'adb logcat', etc.
                     // Debug Mode = True/ Release = False;
 
-                    #if ANDROID
+#if ANDROID
                     options.Native.EnableActivityLifecycleBreadcrumbs = false;
                     options.Native.EnableAppComponentBreadcrumbs = false;
                     options.Native.EnableAppLifecycleBreadcrumbs = false;
@@ -74,8 +80,12 @@ namespace PeopleWith
                     options.Android.SuppressSegfaults = true;
 #endif
 
-               
+
+#if DEBUG
+                    options.Debug = true;
+#else
                     options.Debug = false;
+#endif
                     //options.EnableAndroidNativeNdk = true;
                     //options.EnableXamarinSupport = true;
                     options.AttachStacktrace = true;
@@ -112,7 +122,23 @@ namespace PeopleWith
                     fonts.AddFont("HankenGrotesk-SemiBold.ttf", "HankenGroteskSemiBold");
                     fonts.AddFont("HankenGrotesk-Regular.ttf", "HankenGroteskRegular");
                 })
+
+#if ANDROID
+                .ConfigureLifecycleEvents(events =>
+                {
+
+    events.AddAndroid(android => android
+        .OnCreate((activity, bundle) =>
+        {
+           FirebaseCloudMessagingImplementation.SmallIconRef = Resource.Drawable.pwicon; 
+
+            // Initialize Firebase after setting the icon reference
+            CrossFirebase.Initialize(activity);
+        }));
+                })
+#endif
                 .ConfigureMopups();
+
 
 
 #if DEBUG
@@ -125,8 +151,8 @@ namespace PeopleWith
 #endif
             });
 
-            //Remove Border on Entry (IOS)
-            Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("Borderless", (handler, view) =>
+        //Remove Border on Entry (IOS)
+        Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("Borderless", (handler, view) =>
             {
 #if IOS
             handler.PlatformView.BackgroundColor = UIKit.UIColor.Clear;
@@ -166,20 +192,16 @@ namespace PeopleWith
 #endif
             });
 
-
-            //builder.Services.AddSingleton(typeof(IFingerprint), CrossFingerprint.Current);
-            builder.ConfigureSyncfusionCore();
+        //builder.Services.AddSingleton(typeof(IFingerprint), CrossFingerprint.Current);
+        builder.ConfigureSyncfusionCore();
             builder.InitializeFreakyControls();
             builder.Services.AddSingleton(HealthDataProvider.Default);
 
             //  builder.Services.AddSingleton(HealthDataProvider.Default);
             //  builder.Services.AddSingleton(Health.Default);
 
-
             // Use with Dependency Injection
             builder.Services.AddSingleton<IBiometric>(BiometricAuthenticationService.Default);
-
-
 
             //Add IOS Done to Numeric Keybaord
             EntryHandler.AddDone();
@@ -221,7 +243,6 @@ namespace PeopleWith
                 SentrySdk.CaptureException(e.Exception);
                 SentrySdk.FlushAsync(TimeSpan.FromSeconds(2)).Wait(); // Ensure it's sent
             };
-
 
             return builder.Build();
         }

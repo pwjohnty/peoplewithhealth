@@ -22,6 +22,7 @@ using Android.Runtime;
 using AndroidX.Activity;
 using Android.Provider;
 using Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;
+using Plugin.Firebase.CloudMessaging;
 
 
 namespace PeopleWith
@@ -45,6 +46,32 @@ namespace PeopleWith
 
 
             base.OnCreate(savedInstanceState);
+            Instance = this;
+            RequestedOrientation = ScreenOrientation.Portrait;
+            initFontScale();
+
+            AppCompatDelegate.DefaultNightMode = AppCompatDelegate.ModeNightNo;
+
+            try
+            {
+                //Firebase.FirebaseApp.InitializeApp(this);
+                hub = NotificationHubClient.CreateClientFromConnectionString(Constants.ListenConnectionString, Constants.NotificationHubName);
+                HandleIntent(Intent);
+                NotificationChanelCreate();
+                //CreateNotificationChannel();
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            //if (Intent?.Extras != null)
+            //{
+             //   HandleIntent(Intent);
+            //}
+
+
+            //Old Code 
             // Window.SetStatusBarColor(Android.Graphics.Color.Transparent);
             // Window.SetNavigationBarColor(Android.Graphics.Color.Transparent);
 
@@ -69,18 +96,16 @@ namespace PeopleWith
             //    }
             //};
 
-            Instance = this;
+
             //Initalize Fingerprint 
             //CrossFingerprint.SetCurrentActivityResolver(() => this);
 
             // Set the screen orientation to portrait
-            RequestedOrientation = ScreenOrientation.Portrait;
-            initFontScale();
+
 
             // Set keyboard behavior (Fix this on reg, Fine everywhere else) 
             //App.Current.On<Microsoft.Maui.Controls.PlatformConfiguration.Android>().UseWindowSoftInputModeAdjust(WindowSoftInputModeAdjust.Resize);
 
-            AppCompatDelegate.DefaultNightMode = AppCompatDelegate.ModeNightNo;
 
             // Register the custom connectivity receiver
             //CustomConnectivityReceiver customReceiver = new CustomConnectivityReceiver();
@@ -88,27 +113,12 @@ namespace PeopleWith
             //RegisterReceiver(customReceiver, intentFilter);
 
 
-            try
-            {
-                //Firebase.FirebaseApp.InitializeApp(this);
-
-
-                //var hubName = "PWDevHub";
-                //var connectionString = "Endpoint=sb://PWDevelopment.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=ZiwsFi5CJVNru6prZMix/55OIDEZJvXumOSBkRjU4gM="; // Can be found in Access policy. Use Listen connection
-
-                hub = NotificationHubClient.CreateClientFromConnectionString(Constants.ListenConnectionString, Constants.NotificationHubName);
-
-                CreateNotificationChannel();
-            }
-            catch (Exception ex)
-            {
-            }
 
             // Handle notification tap if the activity was launched from a notification
-            if (Intent?.Extras != null)
-            {
-                HandleNotificationTap(Intent);
-            }
+            //if (Intent?.Extras != null)
+            //{
+            //    HandleNotificationTap(Intent);
+            //}
         }
 
         //internal class BackPressed : OnBackPressedCallback
@@ -136,9 +146,104 @@ namespace PeopleWith
         //                //Toast.MakeText(activity, "Close", ToastLength.Long)?.Show();
         //                //backPressed = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         //            }
-        //        }
+        //        
         //    }
         //}
+
+
+        //New Intent Code 
+
+        protected override void OnNewIntent(Intent intent)
+        {
+            base.OnNewIntent(intent);
+            HandleIntent(intent);
+            //if (intent?.Extras != null)
+            //{
+            //    HandleNotificationTap(intent);
+            //}
+        }
+
+        private static void HandleIntent(Intent intent)
+        {
+            FirebaseCloudMessagingImplementation.OnNewIntent(intent);
+        }
+
+        private async void NotificationChanelCreate()
+        {
+            try
+            {
+                var token = Preferences.Get("fcm_token", null);
+
+                if (string.IsNullOrEmpty(token))
+                {
+                    token = await CrossFirebaseCloudMessaging.Current.GetTokenAsync();
+                    Preferences.Set("fcm_token", token);
+                }
+
+                var deviceid = Preferences.Get("Device_token", null);
+
+                if (string.IsNullOrEmpty(deviceid))
+                {
+                    deviceid = GetDeviceId();
+                    Preferences.Set("Device_token", deviceid);
+                }
+
+                IList<string> tags = new List<string>();
+
+                if (!string.IsNullOrEmpty(Helpers.Settings.UserKey))
+                {
+                    tags.Add(Helpers.Settings.UserKey);
+                }
+
+                if (!string.IsNullOrEmpty(Helpers.Settings.SignUp))
+                {
+                    tags.Add(Helpers.Settings.SignUp);
+                }
+
+                var installation = new Microsoft.Azure.NotificationHubs.Installation
+                {
+                    InstallationId = deviceid,
+                    PushChannel = token,
+                    Platform = NotificationPlatform.FcmV1,
+                    Tags = tags
+                };
+
+                try
+                {
+                    await hub.CreateOrUpdateInstallationAsync(installation);
+                }
+                catch (Exception ex)
+                {
+
+                }
+
+                if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
+                {
+                    CreateNotificationChannel();
+                }
+            }
+            catch (Exception Ex)
+            {
+
+            }     
+        }
+
+        private void CreateNotificationChannel()
+        {
+            //var channelName = "default";
+            ////var channelId = $"{PackageName}.general";
+            //var notificationManager = (NotificationManager)GetSystemService(NotificationService);
+            //var channel = new NotificationChannel(channelName, channelName, NotificationImportance.High);
+            //notificationManager.CreateNotificationChannel(channel);
+            //FirebaseCloudMessagingImplementation.ChannelId = channelId;
+
+            var channelId = $"{PackageName}.general";
+            var notificationManager = (NotificationManager)GetSystemService(NotificationService);
+            var channel = new NotificationChannel(channelId, "General", NotificationImportance.Default);
+            notificationManager.CreateNotificationChannel(channel);
+            FirebaseCloudMessagingImplementation.ChannelId = channelId;
+
+        }
 
         private void initFontScale()
         {
@@ -157,77 +262,77 @@ namespace PeopleWith
 
         }
 
-        private async void CreateNotificationChannel()
-        {
-            try
-            {
-                var token = await SecureStorage.GetAsync("FireBaseToken");
+        //private async void CreateNotificationChannel()
+        //{
+        //    try
+        //    {
+        //        var token = await SecureStorage.GetAsync("FireBaseToken");
 
-                if (token == null)
-                {
-                   // token = FirebaseMessaging.Instance.GetToken().ToString();
-                }
+        //        if (token == null)
+        //        {
+        //           // token = FirebaseMessaging.Instance.GetToken().ToString();
+        //        }
 
-                Helpers.Settings.Token = token;
-                Helpers.Settings.DeviceID = GetDeviceId();
+        //        Helpers.Settings.Token = token;
+        //        Helpers.Settings.DeviceID = GetDeviceId();
 
-                //List<string> tags = new List<string>();
+        //        //List<string> tags = new List<string>();
 
-                //if (!string.IsNullOrEmpty(Helpers.Settings.UserKey))
-                //{
-                //    tags.Add(Helpers.Settings.UserKey);
-                //}
+        //        //if (!string.IsNullOrEmpty(Helpers.Settings.UserKey))
+        //        //{
+        //        //    tags.Add(Helpers.Settings.UserKey);
+        //        //}
 
-                //if (!string.IsNullOrEmpty(Helpers.Settings.SignUp))
-                //{
-                //    tags.Add(Helpers.Settings.SignUp);
-                //}
+        //        //if (!string.IsNullOrEmpty(Helpers.Settings.SignUp))
+        //        //{
+        //        //    tags.Add(Helpers.Settings.SignUp);
+        //        //}
 
-                //tags.Add("IID3");
-                IList<string> tags = new List<string>();
+        //        //tags.Add("IID3");
+        //        IList<string> tags = new List<string>();
 
-                if (!string.IsNullOrEmpty(Helpers.Settings.UserKey))
-                {
-                    tags.Add(Helpers.Settings.UserKey);
-                }
+        //        if (!string.IsNullOrEmpty(Helpers.Settings.UserKey))
+        //        {
+        //            tags.Add(Helpers.Settings.UserKey);
+        //        }
 
-                if (!string.IsNullOrEmpty(Helpers.Settings.SignUp))
-                {
-                    tags.Add(Helpers.Settings.SignUp);
-                }
+        //        if (!string.IsNullOrEmpty(Helpers.Settings.SignUp))
+        //        {
+        //            tags.Add(Helpers.Settings.SignUp);
+        //        }
 
-                //tags.Add("MARK");
+        //        //tags.Add("MARK");
 
-                var installation = new Microsoft.Azure.NotificationHubs.Installation
-                {
-                    InstallationId = GetDeviceId(),
-                    PushChannel = token,
-                    Platform = NotificationPlatform.FcmV1,
-                    Tags = tags
-                };
-                await hub.CreateOrUpdateInstallationAsync(installation);
+        //        var installation = new Microsoft.Azure.NotificationHubs.Installation
+        //        {
+        //            InstallationId = GetDeviceId(),
+        //            PushChannel = token,
+        //            Platform = NotificationPlatform.FcmV1,
+        //            Tags = tags
+        //        };
+        //        await hub.CreateOrUpdateInstallationAsync(installation);
 
-                //await SharedNotificationService.RegisterDeviceAsync(token, NotificationPlatform.Fcm, new string[] { "InitialTag" });
+        //        //await SharedNotificationService.RegisterDeviceAsync(token, NotificationPlatform.Fcm, new string[] { "InitialTag" });
 
 
-                if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
-                {
-                    var channelName = "default";
-                    var channelDescription = string.Empty;
-                    var channel = new NotificationChannel(channelName, channelName, NotificationImportance.High)
-                    {
-                        Description = channelDescription
-                    };
+        //        if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
+        //        {
+        //            var channelName = "default";
+        //            var channelDescription = string.Empty;
+        //            var channel = new NotificationChannel(channelName, channelName, NotificationImportance.High)
+        //            {
+        //                Description = channelDescription
+        //            };
 
-                    var notificationManager = (NotificationManager)GetSystemService(NotificationService);
-                    notificationManager.CreateNotificationChannel(channel);
-                }
-            }
-            catch(Exception ex) 
-            { 
+        //            var notificationManager = (NotificationManager)GetSystemService(NotificationService);
+        //            notificationManager.CreateNotificationChannel(channel);
+        //        }
+        //    }
+        //    catch(Exception ex) 
+        //    { 
 
-            }
-        }
+        //    }
+        //}
 
         //public static void OpenBatterySettings(Activity activity)
         //{
@@ -258,24 +363,24 @@ namespace PeopleWith
         }
 
         // Add this method to handle the navigation
-        protected override void OnNewIntent(Intent intent)
-        {
-            try
-            {
-                base.OnNewIntent(intent);
+        //protected override void OnNewIntent(Intent intent)
+        //{
+        //    try
+        //    {
+        //        base.OnNewIntent(intent);
 
-                // Handle notification tap if a new intent is received
-                if (intent?.Extras != null)
-                {
-                    HandleNotificationTap(intent);
-                }
-            }
-            catch (Exception ex)
-            {
+        //        // Handle notification tap if a new intent is received
+        //        if (intent?.Extras != null)
+        //        {
+        //            HandleNotificationTap(intent);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-            }
+        //    }
 
-        }
+        //}
 
         private void HandleNotificationTap(Intent intent)
         {

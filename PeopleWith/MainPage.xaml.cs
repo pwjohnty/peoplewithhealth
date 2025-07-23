@@ -15,28 +15,41 @@ namespace PeopleWith
         {
             InitializeComponent();
 
-           // checkuser();
-            // Checkifappisupdated();
+           // checkuser();   
             checkifuserisloggedin();
-            checkwifion(); 
+            checkwifion();
+            Checkifappisupdated();
         }
 
         private async void checkwifion()
         {
-            NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+            try
+            {
+                NetworkAccess accessType = Connectivity.Current.NetworkAccess;
 
-            if (accessType == NetworkAccess.Internet)
-            {
-               //Do Nothing 
-            }
-            else
-            {
-                var currentPage = Application.Current.MainPage.Navigation.NavigationStack.LastOrDefault();
-                if (!(currentPage is NoInternetPage))
+                if (accessType == NetworkAccess.Internet)
                 {
-                    await Application.Current.MainPage.Navigation.PushAsync(new NoInternetPage());
+                    //Do Nothing 
+                }
+                else
+                {
+                    //var currentPage = Application.Current.MainPage.Navigation.NavigationStack.LastOrDefault();
+                    //if (!(currentPage is NoInternetPage))
+                    //{
+                    //    await Application.Current.MainPage.Navigation.PushAsync(new NoInternetPage());
+                    //}
+
+                    if (!(Application.Current.MainPage is NoInternetPage))
+                    {
+                        //SetMainPage(new NoInternetPage());
+                        await Application.Current.MainPage.Navigation.PushAsync(new NoInternetPage());
+                    }
                 }
             }
+            catch (Exception ex) 
+            {
+                
+            }        
         }
 
         async void checkifuserisloggedin()
@@ -127,16 +140,16 @@ namespace PeopleWith
             }
         }
 
-        public async Task Checkifappisupdated()
+        public async void Checkifappisupdated()
         {
             try
             {
-                //  await SharedNotificationService.AddTagsAsync(new string[] { "NewMarkTag" });
-
                 var versionCheckService = new VersionCheckService();
-                await versionCheckService.CheckForUpdate();
-
-
+                bool Check = await versionCheckService.CheckForUpdate();
+                if (Check)
+                {
+                   await Navigation.PushAsync(new UpdatePage(), false);
+                }
             }
             catch (Exception ex)
             {

@@ -47,30 +47,82 @@ namespace PeopleWith
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            return new Window(new AppShell());
+            return new Window(new NavigationPage(new MainPage()));
+            //return new Window(new AppShell());
         }
+        public static void SetMainPage(Page newRootPage)
+        {
+                   //Set New RootPage
+                if (Application.Current != null && Application.Current.Windows.Any())
+                {
+                    Application.Current.Windows[0].Page = newRootPage;
+                }
+       
+        }
+
+        //private async void OnNotificationTapped(NotificationActionEventArgs e)
+        //{
+        //    try
+        //    {
+        //        if(e.Request.Title == "Complete your EQ-5D Questionnaire")
+        //        {
+        //            //get the questionnaire 
+        //            // var getQuestionairesTask = await aPICalls.GetSingleQuestionnaires();
+
+        //            // if(getQuestionairesTask != null)
+        //            // {
+        //            ///Application.Current.MainPage = new NavigationPage(new MainDashboard());
+        //            //Application.Current.MainPage = new NavigationPage(new MainDashboard());
+
+        //            App.SetMainPage(new NavigationPage(new MainDashboard()));
+
+        //            if (DeviceInfo.Platform == DevicePlatform.iOS)
+        //            {
+        //                await (Application.Current.MainPage as NavigationPage)?.Navigation.PushAsync(new QuestionnairePage("A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF"), false);
+        //            }
+        //            else
+        //            {
+        //                await (Application.Current.MainPage as NavigationPage)?.Navigation.PushAsync(new AndroidQuestionnaires("A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF"), false);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception Ex)
+        //    {
+        //        ConfigureSentryUserScope();
+        //        SentrySdk.CaptureException(Ex);
+        //    }
+        //}
 
         private async void OnNotificationTapped(NotificationActionEventArgs e)
         {
             try
             {
-                if(e.Request.Title == "Complete your EQ-5D Questionnaire")
+                //App.SetMainPage(new NavigationPage(new MainDashboard()));
+                string QuestionnaireID = string.Empty;
+                var userfeedbacklist = await aPICalls.GetUserFeedback();
+                if (e.Request.Title == "Complete your EQ-5D Questionnaire")
                 {
-                    //get the questionnaire 
-                    // var getQuestionairesTask = await aPICalls.GetSingleQuestionnaires();
-
-                    // if(getQuestionairesTask != null)
-                    // {
-                    Application.Current.MainPage = new NavigationPage(new MainDashboard());
-                    //Application.Current.MainPage = new NavigationPage(new MainDashboard());
-
+                    QuestionnaireID = "A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF";
+                }
+                else if (e.Request.Title == "Complete your SF-36 General Health Questionnaire")
+                {
+                    QuestionnaireID = "DC6A9FD7-242B-4299-9672-D745669FEAF0";
+                }
+                else if (e.Request.Title == "Complete Your HOCM Baseline Questionnaire")
+                {
+                    QuestionnaireID = "BE72B2A1-0707-4E8D-8E82-022BA4F959F4";
+                }
+                if (!String.IsNullOrEmpty(QuestionnaireID))
+                {
                     if (DeviceInfo.Platform == DevicePlatform.iOS)
                     {
-                        await (Application.Current.MainPage as NavigationPage)?.Navigation.PushAsync(new QuestionnairePage("A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF"), false);
+                        SetMainPageWithStack(new MainDashboard(),new AndroidQuestionnaires(QuestionnaireID, userfeedbacklist[0]));
+                        //await (Application.Current.Windows[0].Page)?.Navigation.PushAsync(new AndroidQuestionnaires(QuestionnaireID), false);
                     }
                     else
                     {
-                        await (Application.Current.MainPage as NavigationPage)?.Navigation.PushAsync(new AndroidQuestionnaires("A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF"), false);
+                        SetMainPageWithStack(new MainDashboard(), new AndroidONLYQuestionnaires(QuestionnaireID, userfeedbacklist[0]));
+                        //await (Application.Current.MainPage as NavigationPage)?.Navigation.PushAsync(new AndroidONLYQuestionnaires(QuestionnaireID), false);
                     }
                 }
             }
@@ -81,11 +133,28 @@ namespace PeopleWith
             }
         }
 
+
+        public static void SetMainPageWithStack(params Page[] pages)
+        {
+            if (Application.Current?.Windows.Any() != true || pages == null || pages.Length == 0) return;
+
+            var navPage = new NavigationPage(pages[0]);
+
+            for (int i = 1; i < pages.Length; i++)
+            {
+                navPage.Navigation.PushAsync(pages[i], false);
+            }
+
+            Application.Current.Windows[0].Page = navPage;
+        }
+
         protected override void OnResume()
         {
             try
             {
                 base.OnResume();
+
+                //NetworkAccess accessType = Connectivity.Current.NetworkAccess;
 
                 // Ensure MainPage and Navigation are not null
                 if (MainPage?.Navigation?.NavigationStack == null)
@@ -128,34 +197,89 @@ namespace PeopleWith
 
 
 
+        //private async void OnConnectivityChanged(object sender, bool isConnected)
+        //{
+        //    try
+        //    {
+
+        //        //Close any popup page 
+        //        if (MopupService.Instance.PopupStack.Count > 0)
+        //        {
+        //            await MopupService.Instance.PopAsync();
+        //        }
+              
+        //        if (!isConnected)
+        //        {
+        //            // Check if NoInternetPage is already on the navigation stack
+        //            var currentPage = MainPage.Navigation.NavigationStack.LastOrDefault();
+        //            if (!(currentPage is NoInternetPage))
+        //            {
+        //                await MainPage.Navigation.PushAsync(new NoInternetPage());
+        //            }
+        //        }
+        //        else
+        //        {
+        //                var pageToRemove = MainPage.Navigation.NavigationStack.FirstOrDefault(p => p is NoInternetPage);
+        //                if (pageToRemove != null)
+        //                {
+        //                    MainPage.Navigation.RemovePage(pageToRemove);
+        //                }
+
+        //            //var noInternetPage = MainPage.Navigation.NavigationStack.FirstOrDefault(p => p is NoInternetPage);
+        //            //if (noInternetPage != null)
+        //            //{
+        //            //    await MainPage.Navigation.PopAsync();
+        //            //}
+        //        }
+        //    }
+        //    catch(Exception Ex)
+        //    {
+
+        //    }
+        //}
+
         private async void OnConnectivityChanged(object sender, bool isConnected)
         {
             try
             {
-
-                //Close any popup page 
+                //Close any popup page
                 if (MopupService.Instance.PopupStack.Count > 0)
                 {
                     await MopupService.Instance.PopAsync();
                 }
-              
                 if (!isConnected)
                 {
                     // Check if NoInternetPage is already on the navigation stack
-                    var currentPage = MainPage.Navigation.NavigationStack.LastOrDefault();
-                    if (!(currentPage is NoInternetPage))
+                    //New
+                    if (!(Application.Current.MainPage is NoInternetPage))
                     {
-                        await MainPage.Navigation.PushAsync(new NoInternetPage());
+                        await Application.Current.MainPage.Navigation.PushAsync(new NoInternetPage());
                     }
+                    //Old
+                    //var currentPage = MainPage.Navigation.NavigationStack.LastOrDefault();
+                    //if (!(currentPage is NoInternetPage))
+                    //{
+                    //    await MainPage.Navigation.PushAsync(new NoInternetPage());
+                    //}
                 }
                 else
                 {
-                        var pageToRemove = MainPage.Navigation.NavigationStack.FirstOrDefault(p => p is NoInternetPage);
+                    //New
+                    var mainPage = Application.Current?.Windows.FirstOrDefault()?.Page;
+                    if (mainPage != null)
+                    {
+                        var pageToRemove = mainPage.Navigation.NavigationStack.FirstOrDefault(p => p is NoInternetPage);
                         if (pageToRemove != null)
                         {
-                            MainPage.Navigation.RemovePage(pageToRemove);
+                            mainPage.Navigation.RemovePage(pageToRemove);
                         }
-
+                    }
+                    //Old
+                    //var pageToRemove = MainPage.Navigation.NavigationStack.FirstOrDefault(p => p is NoInternetPage);
+                    //if (pageToRemove != null)
+                    //{
+                    //    MainPage.Navigation.RemovePage(pageToRemove);
+                    //}
                     //var noInternetPage = MainPage.Navigation.NavigationStack.FirstOrDefault(p => p is NoInternetPage);
                     //if (noInternetPage != null)
                     //{
@@ -163,9 +287,8 @@ namespace PeopleWith
                     //}
                 }
             }
-            catch(Exception Ex)
+            catch (Exception Ex)
             {
-
             }
         }
     }

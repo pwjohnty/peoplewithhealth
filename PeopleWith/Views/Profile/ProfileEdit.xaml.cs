@@ -136,17 +136,38 @@ public partial class ProfileEdit : ContentPage
                 HealthDetailsUpdate.Text = "Update " + ItemTitle;
                 genlist.Add("Male");
                 genlist.Add("Female");
-                genlist.Add("Other");
+                genlist.Add("Prefer not to disclose");
+                genlist.Add("Other (Specify)");
+
 
                 if (!String.IsNullOrEmpty(AllUserData.gender))
                 {
+                    bool CheckExists = genlist.Any(x => x.Equals(AllUserData.gender, StringComparison.OrdinalIgnoreCase));
 
-                    //Puts Selected item to top of list 
-                    genlist.Remove(AllUserData.gender);
-                    genlist.Insert(0, AllUserData.gender);
-                    genderlist.ItemsSource = genlist;
-                    genderlist.SelectedItem = AllUserData.gender;
+                    if (CheckExists) 
+                    {
+                        genderlist.ItemsSource = genlist;
+                        genderlist.SelectedItem = AllUserData.gender;
+                    }
+                    else
+                    {
+                        genderlist.ItemsSource = genlist;
 
+                        if (AllUserData.gender == "Other")
+                        {
+                            genderlist.SelectedItem = genlist.FirstOrDefault("Other (Specify)");
+                        }
+                        else if (AllUserData.gender == "Undisclosed")
+                        {
+                            genderlist.SelectedItem = genlist.FirstOrDefault("Prefer not to disclose"); 
+                        }
+                        else
+                        {
+                            genderlist.SelectedItem = "Other (Specify)";
+                            SpecifyPrompt.IsVisible = true;
+                            SpecifyGender.Text = AllUserData.gender;                       
+                        }
+                    }
                 }
                 else
                 {
@@ -689,6 +710,17 @@ public partial class ProfileEdit : ContentPage
             //Udpate DateofBirth in the Db 
             bool GenderChanged = false;
             string Gender = genderlist.SelectedItem.ToString();
+            if(Gender == "Other (Specify)")
+            {
+                if (String.IsNullOrEmpty(SpecifyGender.Text))
+                {
+                    Vibration.Vibrate();
+                    SpecifyGender.Focus(); 
+                    return;
+                }
+
+                Gender = SpecifyGender.Text;
+            }
             string id = Helpers.Settings.UserKey;
             var URL = $"https://pwapi.peoplewith.com/api/user/userid/{id}";
 
@@ -909,6 +941,8 @@ public partial class ProfileEdit : ContentPage
     {
         try
         {
+            bool CheckSelected = (genderlist.SelectedItem as string) != "Other (Specify)";
+            SpecifyPrompt.IsVisible = CheckSelected;
 
         }
         catch (Exception Ex)

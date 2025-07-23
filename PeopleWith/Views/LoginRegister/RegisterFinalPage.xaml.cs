@@ -16,6 +16,9 @@ using Microsoft.Maui.Networking;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Devices;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using System.Linq;
+using System.Net;
 
 namespace PeopleWith;
 
@@ -32,13 +35,14 @@ public partial class RegisterFinalPage : ContentPage
     public HttpClient Client = new HttpClient();
     userdiagnosis userdiag;
     bool SignPadhaddata = false;
+    signupcode signupcodeinfo;
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
     userfeedback userfeedbacklistpassed = new userfeedback();
     userfeedback UserFeedbackToAdd = new userfeedback();
-    userdiet DietToAdd = new userdiet(); 
+    userdiet DietToAdd;
 
     async public void NotasyncMethod(Exception Ex)
     {
@@ -139,7 +143,7 @@ public partial class RegisterFinalPage : ContentPage
 
     }
 
-    public RegisterFinalPage(user userpass, double progress, ObservableCollection<userresponse> userresponsep, ObservableCollection<usermeasurement> usermeasurementp, consent additonalcon)
+    public RegisterFinalPage(user userpass, double progress, ObservableCollection<userresponse> userresponsep, ObservableCollection<usermeasurement> usermeasurementp, consent additonalcon, signupcode signupcodeinfop)
     {
         try
         {
@@ -161,9 +165,15 @@ public partial class RegisterFinalPage : ContentPage
             accontent.Text = additonalconsent.content;
         }
 
-        
+            signupcodeinfo = signupcodeinfop;
 
-        topprogress.SetProgress(progress, 0);
+            if (!string.IsNullOrEmpty(signupcodeinfo.externalidentifier))
+            {
+                extidlbl.Text = signupcodeinfo.externalidentifier;
+            }
+
+
+            topprogress.SetProgress(progress, 0);
 
 
         //find out the amount left - only 2 pages left after this amount
@@ -178,7 +188,7 @@ public partial class RegisterFinalPage : ContentPage
         }
     }
 
-    public RegisterFinalPage(user userpass, double progress, ObservableCollection<userresponse> userresponsep, consent additonalcon, ObservableCollection<usersymptom> usersymptompassed, ObservableCollection<usermedication> usermedicationspassed, userdiagnosis userdiagpassed)
+    public RegisterFinalPage(user userpass, double progress, ObservableCollection<userresponse> userresponsep, consent additonalcon, ObservableCollection<usersymptom> usersymptompassed, ObservableCollection<usermedication> usermedicationspassed, userdiagnosis userdiagpassed, signupcode signupcodeinfop)
     {
         try
         {
@@ -192,6 +202,12 @@ public partial class RegisterFinalPage : ContentPage
             symptomstoadd = usersymptompassed;
             medicationstoadd = usermedicationspassed;
             userdiag = userdiagpassed;
+            signupcodeinfo = signupcodeinfop;
+
+            if (!string.IsNullOrEmpty(signupcodeinfo.externalidentifier))
+            {
+                extidlbl.Text = signupcodeinfo.externalidentifier;
+            }
 
             if (additonalcon != null)
             {
@@ -220,7 +236,7 @@ public partial class RegisterFinalPage : ContentPage
         }
     }
 
-    public RegisterFinalPage(user userpass, double progress, ObservableCollection<userresponse> userresponsep, consent additonalcon, ObservableCollection<usersymptom> usersymptompassed, ObservableCollection<usermedication> usermedicationspassed, ObservableCollection<userdiagnosis> userdiagpassed, ObservableCollection<usermeasurement> usermeasurementspass, userdiet DietPassed)
+    public RegisterFinalPage(user userpass, double progress, ObservableCollection<userresponse> userresponsep, consent additonalcon, ObservableCollection<usersymptom> usersymptompassed, ObservableCollection<usermedication> usermedicationspassed, ObservableCollection<userdiagnosis> userdiagpassed, ObservableCollection<usermeasurement> usermeasurementspass, userdiet DietPassed, signupcode signupcodeinfop)
     {
         try
         {
@@ -248,11 +264,63 @@ public partial class RegisterFinalPage : ContentPage
                 accontent.Text = additonalconsent.content;
             }
 
+            signupcodeinfo = signupcodeinfop;
 
+            if (!string.IsNullOrEmpty(signupcodeinfo.externalidentifier))
+            {
+                extidlbl.Text = signupcodeinfo.externalidentifier;
+            }
 
             topprogress.SetProgress(progress, 0);
 
 
+            //find out the amount left - only 2 pages left after this amount
+
+            progressamount = (100 - progress) / 2;
+
+            faceidstack.IsVisible = true;
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    public RegisterFinalPage(user userpass, double progress, ObservableCollection<userresponse> userresponsep, consent additonalcon, ObservableCollection<usersymptom> usersymptompassed, ObservableCollection<usermedication> usermedicationspassed, ObservableCollection<userdiagnosis> userdiagpassed, ObservableCollection<usermeasurement> usermeasurementspass, signupcode signupcodeinfop)
+    {
+        try
+        {
+            InitializeComponent();
+
+            //user with SFECORE code
+
+            newuser = userpass;
+            userresponsepassed = userresponsep;
+
+            symptomstoadd = usersymptompassed;
+            medicationstoadd = usermedicationspassed;
+            //userdiag = userdiagpassed;
+            usermeasurementpassed = usermeasurementspass;
+            userdiagnosispassed = userdiagpassed;
+
+            if (additonalcon != null)
+            {
+                Additonalconsentinfostack.IsVisible = true;
+                additonalconsent = additonalcon;
+
+                actitle.Text = additonalconsent.title;
+                acsubtitle.Text = additonalconsent.subtitle;
+                accontent.Text = additonalconsent.content;
+            }
+
+            signupcodeinfo = signupcodeinfop;
+
+            if (!string.IsNullOrEmpty(signupcodeinfo.externalidentifier))
+            {
+                extidlbl.Text = signupcodeinfo.externalidentifier;
+            }
+
+            topprogress.SetProgress(progress, 0);
             //find out the amount left - only 2 pages left after this amount
 
             progressamount = (100 - progress) / 2;
@@ -392,7 +460,7 @@ public partial class RegisterFinalPage : ContentPage
                     if (additonalconsent.signaturepad == false)
                     {
 
-                        HandleTCframe();
+                        await HandleTCframe();
                         nextbtn.IsEnabled = true;
                     }
                     else
@@ -423,12 +491,12 @@ public partial class RegisterFinalPage : ContentPage
                                 return;
                             }
 
-                            HandleTCframe();
+                           await HandleTCframe();
                             nextbtn.IsEnabled = true;
                         }
                         else
                         {
-                            HandleTCframe();
+                           await HandleTCframe();
                             nextbtn.IsEnabled = true;
                         }
                     }
@@ -488,7 +556,7 @@ public partial class RegisterFinalPage : ContentPage
         }
     }
 
-    async void HandleTCframe()
+    async Task HandleTCframe()
     {
         try
         {
@@ -577,6 +645,76 @@ public partial class RegisterFinalPage : ContentPage
                 }
 
 
+                //Udpate UserID on Sigupcode
+                if (!string.IsNullOrEmpty(newuser.signupcodeid))
+                {                   
+                    APICalls database = new APICalls();
+                    var UpdateUser = await database.UpdateUserID(newuser);
+
+                    if (UpdateUser != null)
+                    {
+                        newuser.userid = UpdateUser.userid;
+
+                        //Update userresponsepassed
+                        if (userresponsepassed != null || userresponsepassed.Count != 0)
+                        {
+                            foreach (var item in userresponsepassed)
+                            {
+                                item.userid = newuser.userid;
+                            }
+                        }
+
+                        //update symptomstoadd    
+                        if (symptomstoadd != null || symptomstoadd.Count != 0)
+                        {
+                            foreach (var item in symptomstoadd)
+                            {
+                                item.userid = newuser.userid;
+                            }
+                        }
+
+                        //update medicationstoadd
+                        if (medicationstoadd != null || medicationstoadd.Count != 0)
+                        {
+                            foreach (var item in medicationstoadd)
+                            {
+                                item.userid = newuser.userid;
+                            }
+                        }
+
+                        //Update userdiag    
+                        if (userdiag != null)
+                        {
+                            userdiag.userid = newuser.userid;
+                        }
+
+                        //Update userdiagnosispassed           
+                        if (userdiagnosispassed != null || userdiagnosispassed.Count != 0)
+                        {
+                            foreach (var item in userdiagnosispassed)
+                            {
+                                item.userid = newuser.userid;
+                            }
+                        }
+
+                        //update DietToAdd
+                        if (DietToAdd != null)
+                        {
+                            DietToAdd.userid = newuser.userid;
+                            //DietToAdd.datestarted = DateTime.Now.ToString("dd/MM/yyyy");
+                        }
+
+                        //Update usermeasurementpassed        
+                        if (usermeasurementpassed != null)
+                        {
+                            foreach (var item in usermeasurementpassed)
+                            {
+                                item.userid = newuser.userid;
+                            }
+                        }
+                    }
+                }
+
                 //upload the user
                 var serializerOptions = new JsonSerializerOptions
                 {
@@ -594,6 +732,7 @@ public partial class RegisterFinalPage : ContentPage
                 {
                 }
 
+           
                 if (!string.IsNullOrEmpty(newuser.signupcodeid))
                 {
                     //means they have sign up code so add additional stuff
@@ -624,7 +763,7 @@ public partial class RegisterFinalPage : ContentPage
 
                     }
 
-                    if (symptomstoadd != null || symptomstoadd.Count != 0)
+                    if (symptomstoadd != null && symptomstoadd.Count != 0)
                     {
                         if (userfeedbacklistpassed.symptomfeedbacklist == null)
                         {
@@ -652,16 +791,17 @@ public partial class RegisterFinalPage : ContentPage
                             }
 
 
-                            //add to feedback list
-                            var newsym = new feedbackdata();
-                            newsym.value = "50";
-                            newsym.datetime = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
-                            newsym.action = "add";
-                            newsym.label = item.symptomtitle;
-                            newsym.id = item.feedback[0].symptomfeedbackid;
-                            
+                            var newsym = new feedbackdata
+                            {
+                                value = "50",
+                                datetime = DateTime.Now.ToString("dd/MM/yyyy HH:mm"),
+                                action = "add",
+                                label = item.symptomtitle,
+                                id = item.feedback[0].symptomfeedbackid
+                            };
 
                             userfeedbacklistpassed.symptomfeedbacklist.Add(newsym);
+
                         }
 
                         string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklistpassed.symptomfeedbacklist);
@@ -672,7 +812,7 @@ public partial class RegisterFinalPage : ContentPage
 
                     }
 
-                    if (medicationstoadd != null || medicationstoadd.Count != 0)
+                    if (medicationstoadd != null && medicationstoadd.Count != 0)
                     {
                         //add the medications
                         //Ensures the same Diagnosis isnt added twice
@@ -705,7 +845,7 @@ public partial class RegisterFinalPage : ContentPage
                         }
                     }
 
-                    if (userdiagnosispassed != null || userdiagnosispassed.Count != 0)
+                    if (userdiagnosispassed != null && userdiagnosispassed.Count != 0)
                     {
                         //Ensures the same Diagnosis isnt added twice
                         var distinctDiagnoses = userdiagnosispassed.GroupBy(x => x.diagnosisid).Select(g => g.First());
@@ -762,13 +902,25 @@ public partial class RegisterFinalPage : ContentPage
                             }
 
                             //add to feedback list
-                            var newmeas = new feedbackdata();
-                            newmeas.id = ID;
-                            newmeas.value = item.value;
-                            newmeas.datetime = item.inputdatetime;
-                            newmeas.action = "update";
-                            newmeas.label = item.measurementname;
-                            newmeas.unit = item.unit;
+
+                            var newmeas = new feedbackdata
+                            {
+                                id = ID,
+                                value = item.value,
+                                datetime = item.inputdatetime,
+                                action = "update",
+                                label = item.measurementname,
+                                unit = item.unit
+                            };
+
+                            //Old
+                            //var newmeas = new feedbackdata();
+                            //newmeas.id = ID;
+                            //newmeas.value = item.value;
+                            //newmeas.datetime = item.inputdatetime;
+                            //newmeas.action = "update";
+                            //newmeas.label = item.measurementname;
+                            //newmeas.unit = item.unit;
 
                             userfeedbacklistpassed.measurementfeedbacklist.Add(newmeas);
                         }
@@ -844,7 +996,7 @@ public partial class RegisterFinalPage : ContentPage
                 //add the user settings
                 Preferences.Default.Set("userid", newuser.userid);
                 Preferences.Default.Set("signupcode", newuser.signupcodeid);
-                Preferences.Set("email", newuser.email);
+                Preferences.Default.Set("email", newuser.email);
                 Preferences.Default.Set("pincode", newuser.userpin);
                 Preferences.Default.Set("gender", newuser.gender);
                 Preferences.Default.Set("ethnicity", newuser.ethnicity);
@@ -901,6 +1053,7 @@ public partial class RegisterFinalPage : ContentPage
                              Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
                              {
                                  Priority = Plugin.LocalNotification.AndroidOption.AndroidPriority.High, // ?? Set priority here
+                                 Ongoing = true,
                              },
 
                             // Add any custom data you need to retrieve when the notification is tapped
@@ -922,19 +1075,95 @@ public partial class RegisterFinalPage : ContentPage
                         Preferences.Set("NsatNotID", notification.NotificationId.ToString());
                         
                     }
+                    else if (newuser.signupcodeid.Contains("SFECORE"))
+                    {
+                        var notification = new NotificationRequest
+                        {
+                            NotificationId = new Random().Next(1, int.MaxValue),
+                            Title = "Complete your SF-36 General Health Questionnaire",
+                            Description = "Please take a moment to complete your SF-36 questionnaire",
+                            BadgeNumber = 0,
+
+                            Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
+                            {
+                                Priority = Plugin.LocalNotification.AndroidOption.AndroidPriority.High, // ?? Set priority here
+                                Ongoing = true,
+                            },
+
+                            // Add any custom data you need to retrieve when the notification is tapped
+                            //ReturningData = "action=questionnaire&studyid=IID3",
+
+                            Schedule = new NotificationRequestSchedule
+                            {
+                                NotifyTime = DateTime.Now.AddDays(1),
+                                RepeatType = NotificationRepeat.No,
+                                NotifyRepeatInterval = null,
+
+                            }
+                        };
+
+                        LocalNotificationCenter.Current.Show(notification);
+
+                        //Save NotificationiD to local Storage
+                        Preferences.Set("SFEcoreNotID", notification.NotificationId.ToString());
+                    }
+                //BMS Study 
+                else if (newuser.signupcodeid.Contains("RBHTHCM"))
+                {
+                    var notification = new NotificationRequest
+                    {
+                        NotificationId = new Random().Next(1, int.MaxValue),
+                        Title = "Complete Your HOCM Baseline Questionnaire",
+                        Description = "Please take a moment to complete the Hypertrophic Obstructive Cardiomyopathy Baseline Questionnaire",
+                        BadgeNumber = 0,
+
+                        Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
+                        {
+                            Priority = Plugin.LocalNotification.AndroidOption.AndroidPriority.High, // ?? Set priority here
+                            Ongoing = true,
+                        },
+
+                        // Add any custom data you need to retrieve when the notification is tapped
+                        //ReturningData = "action=questionnaire&studyid=IID3",
+
+                        Schedule = new NotificationRequestSchedule
+                        {
+                            NotifyTime = DateTime.Now.AddDays(1),
+                            RepeatType = NotificationRepeat.No,
+                            NotifyRepeatInterval = null,
+                        }
+                    };
+
+                    LocalNotificationCenter.Current.Show(notification);
+
+                    //Save NotificationiD to local Storage
+                    Preferences.Set("HOCMNotID", notification.NotificationId.ToString());
                 }
+            }
 
 
                 // Preferences.Default.Set("validationcode", newuser.validationcode);
+                //await Task.Run(async () =>
+                //    {
+                //        // Simulate some processing that may take up to seconds
+                //        await Task.Delay(100);
+                //    });
+
+                //    MainThread.BeginInvokeOnMainThread(() =>
+                //    {
+                //        Application.Current.MainPage = new NavigationPage(new MainDashboard());
+
+                //    });
+
                 await Task.Run(async () =>
                 {
-                    // Simulate some processing that may take up to seconds
-                    await Task.Delay(100);
+                // Simulate some processing that may take up to seconds
+                await Task.Delay(500);
                 });
-
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                    App.SetMainPage(new NavigationPage(new MainDashboard()));
+                    //Application.Current.MainPage = new NavigationPage(new MainDashboard());
                 });
 
                 //Task.Run(async () =>
@@ -968,11 +1197,145 @@ public partial class RegisterFinalPage : ContentPage
                 return;
             }
         }
-        catch (Exception Ex)
+        catch (Exception ex) when (
+   ex is HttpRequestException ||
+   ex is WebException ||
+   ex is TaskCanceledException)
         {
-            NotasyncMethod(Ex);
+            NotasyncMethod(ex);
+        }
+        catch (Exception ex)
+        {
+            NotasyncMethod(ex);
         }
     }
+    //private async Task CheckUserID()
+    //{
+    //    try
+    //    {
+    //        var serializerOptions = new JsonSerializerOptions { };
+    //        string USER = "https://pwapi.peoplewith.com/api/user";
+    //        string SignupID = newuser.signupcodeid;
+    //        string urlWithQuery = $"{USER}?$filter=signupcodeid eq '{SignupID}'";
+    //        ConfigureClient();
+    //        HttpResponseMessage response = await Client.GetAsync(urlWithQuery);
+    //        if (response.IsSuccessStatusCode)
+    //        {
+    //            string contentconsent = await response.Content.ReadAsStringAsync();
+    //            var userResponseconsent = JsonConvert.DeserializeObject<APIUserResponse>(contentconsent);
+    //            var consent = userResponseconsent.Value;
+    //            var Contents = new ObservableCollection<user>(consent);
+    //            var IDList = Contents.Where(x => x.userid.Contains(SignupID)).Select(x => Int32.Parse(x.userid.Replace(SignupID, ""))).ToList();
+    //            var SetValue = IDList.Max() + 1;
+
+    //            //Update NewUserID 
+    //            newusersignup.userid = SignupID + SetValue.ToString();
+    //            //await UserIDSignupCode(); 
+    //        }
+    //        else
+    //        {
+    //            //Something went Wrong 
+    //        }
+    //    }
+    //    catch
+    //    {
+
+    //    }
+    //}
+    //private async Task UserIDSignupCode()
+    //{
+    //    try
+    //    {
+    //        var url = $"https://pwapi.peoplewith.com/api/user/userid/{newuser.userid}";
+
+    //        if (!string.IsNullOrEmpty(newusersignup.userid) && newusersignup.userid != newuser.userid)
+    //        {
+    //            //NewUserId = new PatchUserID { userid = newuser.userid };
+    //            newuser.userid = newusersignup.userid; 
+
+    //            var payload = new
+    //            {
+    //                userid = newuser.userid
+    //            };
+
+    //            // Serialize the object into JSON
+    //            string json = System.Text.Json.JsonSerializer.Serialize(payload);
+    //            StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+    //            ConfigureClient();
+    //            using (var client = new HttpClient())
+    //            {
+    //                var request = new HttpRequestMessage(HttpMethod.Patch, url)
+    //                {
+    //                    Content = content
+    //                };
+
+    //                var response = await Client.SendAsync(request);
+
+    //                if (!response.IsSuccessStatusCode)
+    //                {
+    //                    var errorResponse = await response.Content.ReadAsStringAsync();
+    //                }
+    //            }
+
+    //            //var payload = new { userid = newusersignup.userid};
+    //            //string json = System.Text.Json.JsonSerializer.Serialize(NewUserId);
+    //            //var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+    //            //// Send the PUT request
+    //            //ConfigureClient(); 
+    //            //HttpResponseMessage response = await Client.PatchAsync(url, content);
+
+    //            //if (response.IsSuccessStatusCode)
+    //            //{
+    //            //    //Successfull Update userid 
+    //            //    newuser.userid = newusersignup.userid;
+    //            //    Preferences.Set("userid", newuser.userid);
+    //            //}
+    //            //else
+    //            //{
+    //            //    var errorResponse = await response.Content.ReadAsStringAsync();
+
+    //            //    // Example 1: check for status code 409 Conflict
+    //            //    if (response.StatusCode == HttpStatusCode.Conflict)
+    //            //    {
+    //            //        //Update NewUserID and Try again with an increment of 1 
+    //            //        var GetValue = Int32.Parse(newusersignup.userid.Replace(newuser.signupcodeid, ""));
+    //            //        newusersignup.userid = newuser.signupcodeid + (GetValue + 1).ToString();
+
+    //            //        await UserIDSignupCode();
+    //            //        return;
+    //            //    }
+
+    //            //    // Example 2: check the response content for a keyword
+    //            //    else if (errorResponse.Contains("userid already exists", StringComparison.OrdinalIgnoreCase))
+    //            //    {
+    //            //        var GetValue = Int32.Parse(newusersignup.userid.Replace(newuser.signupcodeid, ""));
+    //            //        newusersignup.userid = newuser.signupcodeid + (GetValue + 1).ToString();
+
+    //            //        await UserIDSignupCode();
+    //            //        return;
+    //            //    }
+
+    //            //    else
+    //            //    {
+    //            //       //Dunno
+    //            //    }
+    //            //}
+    //        }
+    //    }
+    //    catch (Exception ex) when (
+    //     ex is HttpRequestException ||
+    //     ex is WebException ||
+    //     ex is TaskCanceledException)
+    //    {
+    //        NotasyncMethod(ex);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        NotasyncMethod(ex);
+    //    }
+    //}
+   
 
     async void UpdateProgress()
     {

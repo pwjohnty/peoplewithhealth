@@ -790,7 +790,7 @@ public partial class AllMedications : ContentPage
             {
                 if (checkonenotEmpty)
                 {
-                    SegmentDetails.Text = "Medications you have currently scheduled";
+                   // SegmentDetails.Text = "Medications you have currently scheduled";
                 }
                 if(PendingList.Count == 0)
                 {

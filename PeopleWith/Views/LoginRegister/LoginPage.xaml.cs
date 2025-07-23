@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Maui.Storage;
 using Microsoft.Maui.Devices;
 using Microsoft.Maui.Networking;
+using System.Net;
 
 
 namespace PeopleWith;
@@ -256,6 +257,7 @@ public partial class LoginPage : ContentPage
 
             var url = APICalls.Checkuseremail + "%27" + emailentry.Text + "%27";
             ConfigureClient();
+            
             HttpResponseMessage response = await Client.GetAsync(url);
 
             if (response.IsSuccessStatusCode)
@@ -281,11 +283,27 @@ public partial class LoginPage : ContentPage
                         await DisplayAlert("Account Deleted", "Your account has been deleted", "OK");
                         Signinload.IsVisible = false;
                         Signin.IsVisible = true;
-                        return; 
+                        return;
                     }
                     else if (users[0].registrationstatus == "Onboarding")
                     {
                         await DisplayAlert("Account Onboarding", "Please use your email to continue registering", "OK");
+                        Signinload.IsVisible = false;
+                        Signin.IsVisible = true;
+                        return;
+                    }
+                    else if (users[0].registrationstatus == "Withdrawn")
+                    {
+                        //Royal Brompton Prject 
+                        if (users[0].signupcodeid.Contains("RBHTHCM"))
+                        {
+                            await DisplayAlert("Withdrawn from Project", "You have withdrawn from the project and can no longer access your account", "OK");
+                        }
+                        else
+                        {
+                            //All Other Studies
+                            await DisplayAlert("Withdrawn from Study", "You have withdrawn from the study and can no longer access your account", "OK");
+                        }
                         Signinload.IsVisible = false;
                         Signin.IsVisible = true;
                         return;
@@ -357,8 +375,9 @@ public partial class LoginPage : ContentPage
 
                 //Add Push Notification Tags
                 var setnotificationloginbool = true;
-                await Task.Delay(2000); 
-                Application.Current.MainPage = new NavigationPage(new MainDashboard(setnotificationloginbool));
+                await Task.Delay(500);
+                //Application.Current.MainPage = new NavigationPage(new MainDashboard(setnotificationloginbool));
+                App.SetMainPage(new NavigationPage(new MainDashboard(setnotificationloginbool)));
 
             }
             else
@@ -368,9 +387,17 @@ public partial class LoginPage : ContentPage
                 return; 
             }
         }
-        catch (Exception Ex)
+        catch (Exception ex) when (
+            ex is HttpRequestException ||
+            ex is WebException ||
+            ex is TaskCanceledException)
         {
-            NotasyncMethod(Ex);
+            NotasyncMethod(ex);
+
+        }
+        catch (Exception ex)
+        {
+            NotasyncMethod(ex);
         }
     }
     private async void AddBackTags()

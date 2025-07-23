@@ -11,6 +11,8 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Maui.Storage;
+using System.Net;
+using System.Text.RegularExpressions;
 //using Windows.System;
 //using static Android.Gms.Common.Apis.Api;
 
@@ -116,20 +118,57 @@ namespace PeopleWith
         //Fitness
         public const string GetUserFitness = "https://pwapi.peoplewith.com/api/userfitnessdata";
 
+        //registryDataInputs
+        public const string GetDashQuestionnaire = "https://pwapi.peoplewith.com/api/registryDataInputs";
+
+        //registryData
+        public const string DashQuestionAnswers = "https://pwapi.peoplewith.com/api/registryData";
 
         //Authentication Test
         public const string GetAuth = "https://pwapicontainer.thankfulground-b43b4106.ukwest.azurecontainerapps.io/api/registryConfig";
 
-        public HttpClient Client = new HttpClient();
+        //public HttpClient Client = new HttpClient();
+        private static readonly HttpClient Client = new HttpClient();
+        CrashDetected crashHandler = new CrashDetected();
+
+        async public Task NotasyncMethod(Exception Ex)
+        {
+            try
+            {
+                await crashHandler.SentryCrashDetected(Ex);
+                //await Navigation.PushAsync(new ErrorPage("Dashboard"), false);
+            }
+            catch (Exception ex)
+            {
+                //Dunno 
+            }
+        }
+
+        async public void IntentionalCrash()
+        {
+            //Intentional Crash Data (Remove) 
+            //HttpResponseMessage response = await Client.GetAsync("http://10.255.255.1");
+            //HttpResponseMessage response = await Client.GetAsync("http://localhost:9999");
+            //HttpResponseMessage response = await Client.GetAsync("http://example.invalid");
+
+            //Client.Timeout = TimeSpan.FromMilliseconds(1);
+            //HttpResponseMessage response = await Client.GetAsync("https://google.com");
+            //HttpResponseMessage response = await Client.GetAsync("https://expired.badssl.com/");
+            //HttpResponseMessage response = await Client.GetAsync("https://self-signed.badssl.com/");
+            //HttpResponseMessage response = await Client.GetAsync("https://httpstat.us/404");
+            //HttpResponseMessage response = await Client.SendAsync(null);
+        }
 
 
         private void ConfigureClient()
         {
             try
             {
-                Client = new HttpClient();
-                Client.DefaultRequestHeaders.Add("X-MS-CLIENT-PRINCIPAL", "eyAgCiAgImlkZW50aXR5UHJvdmlkZXIiOiAidGVzdCIsCiAgInVzZXJJZCI6ICIxMjM0NSIsCiAgInVzZXJEZXRhaWxzIjogImpvaG5AY29udG9zby5jb20iLAogICJ1c2VyUm9sZXMiOiBbIjFFMzNDMEFDLTMzOTMtNEMzNC04MzRBLURFNUZEQkNCQjNDQyJdCn0=");
-                Client.DefaultRequestHeaders.Add("X-MS-API-ROLE", "1E33C0AC-3393-4C34-834A-DE5FDBCBB3CC");
+                if (!Client.DefaultRequestHeaders.Contains("X-MS-CLIENT-PRINCIPAL"))
+                {
+                    Client.DefaultRequestHeaders.Add("X-MS-CLIENT-PRINCIPAL", "eyAgCiAgImlkZW50aXR5UHJvdmlkZXIiOiAidGVzdCIsCiAgInVzZXJJZCI6ICIxMjM0NSIsCiAgInVzZXJEZXRhaWxzIjogImpvaG5AY29udG9zby5jb20iLAogICJ1c2VyUm9sZXMiOiBbIjFFMzNDMEFDLTMzOTMtNEMzNC04MzRBLURFNUZEQkNCQjNDQyJdCn0=");
+                    Client.DefaultRequestHeaders.Add("X-MS-API-ROLE", "1E33C0AC-3393-4C34-834A-DE5FDBCBB3CC");
+                }
             }
             catch (Exception Ex)
             {
@@ -163,8 +202,18 @@ namespace PeopleWith
                     return null;
                 }
             }
+
+            catch (Exception ex) when (
+            ex is HttpRequestException || 
+            ex is WebException ||
+            ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -195,8 +244,17 @@ namespace PeopleWith
                     return null;
                 }
             }
+            catch (Exception ex) when (
+            ex is HttpRequestException ||
+            ex is WebException ||
+            ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -229,8 +287,17 @@ namespace PeopleWith
                     return null;
                 }
             }
+            catch (Exception ex) when (
+            ex is HttpRequestException ||
+            ex is WebException ||
+            ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -259,8 +326,17 @@ namespace PeopleWith
                     return null;
                 }
             }
+            catch (Exception ex) when (
+           ex is HttpRequestException ||
+           ex is WebException ||
+           ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -283,28 +359,38 @@ namespace PeopleWith
                     var userResponseconsent = JsonConvert.DeserializeObject<ApiResponseUserMeasurement>(contentconsent);
                     var consent = userResponseconsent.Value;
 
-                    foreach (var item in consent)
-                    {
-                        if (item.deleted == true)
-                        {
-                            itemstoremove.Add(item);
-                        }
-                    }
-                    foreach (var i in itemstoremove)
-                    {
-                        consent.Remove(i);
-                    }
-
-                    return new ObservableCollection<usermeasurement>(consent);
-
+                    var FilterMeasure = consent?.Where(item => !item.deleted).ToObservableCollection() ?? new ObservableCollection<usermeasurement>();
+                    return new ObservableCollection<usermeasurement>(FilterMeasure);
+                    //old
+                    //foreach (var item in consent)
+                    //{
+                    //    if (item.deleted == true)
+                    //    {
+                    //        itemstoremove.Add(item);
+                    //    }
+                    //}
+                    //foreach (var i in itemstoremove)
+                    //{
+                    //    consent.Remove(i);
+                    //}
+                    //return new ObservableCollection<usermeasurement>(consent);
                 }
                 else
                 {
                     return null;
                 }
             }
+            catch (Exception ex) when (
+             ex is HttpRequestException ||
+             ex is WebException ||
+             ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -340,11 +426,18 @@ namespace PeopleWith
                     //throw new Exception("Failed to insert user measurement: " + response.ReasonPhrase);
                 }
             }
+           catch (Exception ex) when (
+           ex is HttpRequestException ||
+           ex is WebException ||
+           ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
-                // Handle exceptions
-                //throw new Exception("An error occurred while inserting user measurement: " + ex.Message);
             }
         }
 
@@ -376,11 +469,17 @@ namespace PeopleWith
                     }
                 }
             }
+            catch (Exception ex) when (
+            ex is HttpRequestException ||
+            ex is WebException ||
+            ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);              
+            }
             catch (Exception ex)
             {
-
+                await NotasyncMethod(ex);         
             }
-
         }
 
         public async Task DeleteSingleMeasurement(usermeasurement SingleMeasure)
@@ -407,11 +506,17 @@ namespace PeopleWith
                     }
                 }
             }
+            catch (Exception ex) when (
+            ex is HttpRequestException ||
+            ex is WebException ||
+            ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+            }
             catch (Exception ex)
             {
-
+                await NotasyncMethod(ex);
             }
-
         }
 
         //Update Single Measurement
@@ -440,12 +545,19 @@ namespace PeopleWith
                     }
                 }
             }
+            catch (Exception ex) when (
+          ex is HttpRequestException ||
+          ex is WebException ||
+          ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+            }
             catch (Exception ex)
             {
-
+                await NotasyncMethod(ex);
             }
-
         }
+
 
         //Delete User Symptom 
         public async Task DeleteSymptom(ObservableCollection<usersymptom> Updatefeedback)
@@ -475,9 +587,16 @@ namespace PeopleWith
 
                 return;
             }
+            catch (Exception ex) when (
+           ex is HttpRequestException ||
+           ex is WebException ||
+           ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+            }
             catch (Exception ex)
             {
-                return;
+                await NotasyncMethod(ex);
             }
         }
 
@@ -537,8 +656,17 @@ namespace PeopleWith
                 }
                 return new ObservableCollection<usersymptom>(userSymptomsList);
             }
+            catch (Exception ex) when (
+          ex is HttpRequestException ||
+          ex is WebException ||
+          ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return new ObservableCollection<usersymptom>();
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return new ObservableCollection<usersymptom>();
             }
         }
@@ -570,8 +698,17 @@ namespace PeopleWith
 
 
             }
+            catch (Exception ex) when (
+         ex is HttpRequestException ||
+         ex is WebException ||
+         ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -588,8 +725,17 @@ namespace PeopleWith
                 ObservableCollection<symptom> users = userResponse.Value;
                 return new ObservableCollection<symptom>(users.Take(Range.All));
             }
+            catch (Exception ex) when (
+        ex is HttpRequestException ||
+        ex is WebException ||
+        ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -611,8 +757,17 @@ namespace PeopleWith
                 return imageInput;
 
             }
+            catch (Exception ex) when (
+         ex is HttpRequestException ||
+         ex is WebException ||
+         ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return true;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return true;
             }
         }
@@ -635,8 +790,17 @@ namespace PeopleWith
                 return imageInput;
 
             }
+            catch (Exception ex) when (
+        ex is HttpRequestException ||
+        ex is WebException ||
+        ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return true;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return true;
             }
         }
@@ -674,8 +838,17 @@ namespace PeopleWith
                 }
                 // return null;
             }
+            catch (Exception ex) when (
+         ex is HttpRequestException ||
+         ex is WebException ||
+         ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -711,8 +884,16 @@ namespace PeopleWith
                     }
                 }
             }
+            catch (Exception ex) when (
+       ex is HttpRequestException ||
+       ex is WebException ||
+       ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
             }
         }
 
@@ -750,8 +931,16 @@ namespace PeopleWith
 
 
             }
+            catch (Exception ex) when (
+        ex is HttpRequestException ||
+        ex is WebException ||
+        ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
             }
         }
 
@@ -769,8 +958,17 @@ namespace PeopleWith
                 ObservableCollection<interventiontrigger> users = userResponse.Value;
                 return new ObservableCollection<interventiontrigger>(users.Take(Range.All));
             }
+            catch (Exception ex) when (
+       ex is HttpRequestException ||
+       ex is WebException ||
+       ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return new ObservableCollection<interventiontrigger>();
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return new ObservableCollection<interventiontrigger>();
             }
         }
@@ -798,12 +996,18 @@ namespace PeopleWith
                     var errorResponse = await responseconsent.Content.ReadAsStringAsync();
                     return null;
                 }
-
-
-
+            }
+            catch (Exception ex) when (
+         ex is HttpRequestException ||
+         ex is WebException ||
+         ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
             }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -853,8 +1057,17 @@ namespace PeopleWith
                 }
                 // return null;
             }
+            catch (Exception ex) when (
+         ex is HttpRequestException ||
+         ex is WebException ||
+         ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -904,8 +1117,17 @@ namespace PeopleWith
                 }
                 // return null;
             }
+            catch (Exception ex) when (
+         ex is HttpRequestException ||
+         ex is WebException ||
+         ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -941,13 +1163,17 @@ namespace PeopleWith
                         Console.WriteLine("Successfully updated feedback");
                     }
                 }
-
-
-
+            }
+            catch (Exception ex) when (
+          ex is HttpRequestException ||
+          ex is WebException ||
+          ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
             }
             catch (Exception ex)
             {
-
+                await NotasyncMethod(ex);
             }
         }
 
@@ -997,7 +1223,7 @@ namespace PeopleWith
                             preparation = rawSymptom.preparation,
                             unit = rawSymptom.unit,
                             schedule = new ObservableCollection<MedtimesDosages>(),
-                            medicationquestions = rawSymptom.medicationquestions, 
+                            medicationquestions = rawSymptom.medicationquestions,
                             groupscheduleid = rawSymptom.groupscheduleid
                         };
                         if (rawSymptom.schedule == null)
@@ -1093,8 +1319,17 @@ namespace PeopleWith
                 return new ObservableCollection<usermedication>(userSymptomsList);
 
             }
+            catch (Exception ex) when (
+        ex is HttpRequestException ||
+        ex is WebException ||
+        ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return new ObservableCollection<usermedication>();
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return new ObservableCollection<usermedication>();
             }
         }
@@ -1127,8 +1362,17 @@ namespace PeopleWith
 
                 return;
             }
+            catch (Exception ex) when (
+       ex is HttpRequestException ||
+       ex is WebException ||
+       ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return;
             }
         }
@@ -1159,9 +1403,16 @@ namespace PeopleWith
                     }
                 }
             }
+            catch (Exception ex) when (
+      ex is HttpRequestException ||
+      ex is WebException ||
+      ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+            }
             catch (Exception ex)
             {
-
+                await NotasyncMethod(ex);
             }
         }
 
@@ -1193,8 +1444,17 @@ namespace PeopleWith
 
                 return;
             }
+            catch (Exception ex) when (
+       ex is HttpRequestException ||
+       ex is WebException ||
+       ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return;
             }
         }
@@ -1243,8 +1503,17 @@ namespace PeopleWith
 
                 return;
             }
+            catch (Exception ex) when (
+       ex is HttpRequestException ||
+       ex is WebException ||
+       ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return;
             }
         }
@@ -1292,8 +1561,17 @@ namespace PeopleWith
 
                 return;
             }
+            catch (Exception ex) when (
+        ex is HttpRequestException ||
+        ex is WebException ||
+        ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return;
             }
         }
@@ -1331,8 +1609,17 @@ namespace PeopleWith
 
                 return;
             }
+            catch (Exception ex) when (
+       ex is HttpRequestException ||
+       ex is WebException ||
+       ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return;
             }
         }
@@ -1371,8 +1658,17 @@ namespace PeopleWith
 
                 return;
             }
+            catch (Exception ex) when (
+       ex is HttpRequestException ||
+       ex is WebException ||
+       ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return;
             }
         }
@@ -1443,8 +1739,16 @@ namespace PeopleWith
                     }
                 }
             }
+            catch (Exception ex) when (
+       ex is HttpRequestException ||
+       ex is WebException ||
+       ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
             }
         }
 
@@ -1478,8 +1782,16 @@ namespace PeopleWith
                     }
                 }
             }
+            catch (Exception ex) when (
+       ex is HttpRequestException ||
+       ex is WebException ||
+       ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
             }
         }
 
@@ -1537,7 +1849,10 @@ namespace PeopleWith
 
                             int Index = 0;
 
-                            foreach (var feedback in feedbackSymptoms)
+                            //Stops issue of schedule causing crash on As Required
+                            if (!newUserSymptom.frequency.Contains("As Required"))
+                            {
+                               foreach (var feedback in feedbackSymptoms)
                             {
                                 newUserSymptom.schedule.Add(feedback);
                                 var dosage = feedback.Dosage;
@@ -1584,7 +1899,7 @@ namespace PeopleWith
                                 }
 
                             }
-
+                          }
                         }
 
                         if (rawSymptom.feedback == null)
@@ -1618,8 +1933,17 @@ namespace PeopleWith
                 }
                 return new ObservableCollection<usersupplement>(userSymptomsList);
             }
+            catch (Exception ex) when (
+      ex is HttpRequestException ||
+      ex is WebException ||
+      ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return new ObservableCollection<usersupplement>();
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return new ObservableCollection<usersupplement>();
             }
         }
@@ -1647,10 +1971,18 @@ namespace PeopleWith
                     return null;
                 }
             }
+            catch (Exception ex) when (
+     ex is HttpRequestException ||
+     ex is WebException ||
+     ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
-                //Error Occured on Crashlog 
             }
         }
 
@@ -1673,8 +2005,17 @@ namespace PeopleWith
                 ObservableCollection<allergies> users = userResponse.Value;
                 return new ObservableCollection<allergies>(users.Take(Range.All));
             }
+            catch (Exception ex) when (
+   ex is HttpRequestException ||
+   ex is WebException ||
+   ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return new ObservableCollection<allergies>();
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return new ObservableCollection<allergies>();
             }
         }
@@ -1706,8 +2047,17 @@ namespace PeopleWith
                     return null;
                 }
             }
+            catch (Exception ex) when (
+ ex is HttpRequestException ||
+ ex is WebException ||
+ ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -1744,9 +2094,17 @@ namespace PeopleWith
 
                 return new ObservableCollection<userallergies>(AllergyPassed);
             }
-
+            catch (Exception ex) when (
+ex is HttpRequestException ||
+ex is WebException ||
+ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return new ObservableCollection<userallergies>();
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return new ObservableCollection<userallergies>();
             }
         }
@@ -1778,11 +2136,19 @@ namespace PeopleWith
 
                 return new ObservableCollection<userallergies>(users.Take(Range.All));
             }
-            catch (Exception ex)
+            catch (Exception ex) when (
+ex is HttpRequestException ||
+ex is WebException ||
+ex is TaskCanceledException)
             {
+                await NotasyncMethod(ex);
                 return new ObservableCollection<userallergies>();
             }
-
+            catch (Exception ex)
+            {
+                await NotasyncMethod(ex);
+                return new ObservableCollection<userallergies>();
+            }
         }
 
 
@@ -1813,8 +2179,17 @@ namespace PeopleWith
                 }
                 return;
             }
+            catch (Exception ex) when (
+            ex is HttpRequestException ||
+            ex is WebException ||
+            ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return;
             }
         }
@@ -1837,8 +2212,17 @@ namespace PeopleWith
                 ObservableCollection<diagnosis> users = userResponse.Value;
                 return new ObservableCollection<diagnosis>(users.Take(Range.All));
             }
+            catch (Exception ex) when (
+           ex is HttpRequestException ||
+           ex is WebException ||
+           ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return new ObservableCollection<diagnosis>();
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return new ObservableCollection<diagnosis>();
             }
         }
@@ -1875,8 +2259,17 @@ namespace PeopleWith
                     return null;
                 }
             }
+            catch (Exception ex) when (
+          ex is HttpRequestException ||
+          ex is WebException ||
+          ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -1911,9 +2304,17 @@ namespace PeopleWith
 
                 return new ObservableCollection<userdiagnosis>(UserDiagnosisPassed);
             }
-
+            catch (Exception ex) when (
+       ex is HttpRequestException ||
+       ex is WebException ||
+       ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return new ObservableCollection<userdiagnosis>();
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return new ObservableCollection<userdiagnosis>();
             }
         }
@@ -1937,11 +2338,19 @@ namespace PeopleWith
                 ObservableCollection<userdiagnosis> users = userResponse.Value;
                 return new ObservableCollection<userdiagnosis>(users.Take(Range.All));
             }
-            catch (Exception ex)
+            catch (Exception ex) when (
+      ex is HttpRequestException ||
+      ex is WebException ||
+      ex is TaskCanceledException)
             {
+                await NotasyncMethod(ex);
                 return new ObservableCollection<userdiagnosis>();
             }
-
+            catch (Exception ex)
+            {
+                await NotasyncMethod(ex);
+                return new ObservableCollection<userdiagnosis>();
+            }
         }
 
 
@@ -1972,8 +2381,17 @@ namespace PeopleWith
                 }
                 return;
             }
+            catch (Exception ex) when (
+      ex is HttpRequestException ||
+      ex is WebException ||
+      ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return;
             }
         }
@@ -2012,9 +2430,16 @@ namespace PeopleWith
                 }
             }
 
+            catch (Exception ex) when (
+    ex is HttpRequestException ||
+    ex is WebException ||
+    ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+            }
             catch (Exception ex)
             {
-
+                await NotasyncMethod(ex);
             }
         }
 
@@ -2125,11 +2550,19 @@ namespace PeopleWith
                 var FilterMood = users?.Where(item => !item.deleted).ToList() ?? new List<usermood>();
                 return new ObservableCollection<usermood>(FilterMood);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (
+             ex is HttpRequestException ||
+             ex is WebException ||
+             ex is TaskCanceledException)
             {
+                await NotasyncMethod(ex);
                 return new ObservableCollection<usermood>();
             }
-
+            catch (Exception ex)
+            {
+                await NotasyncMethod(ex);
+                return new ObservableCollection<usermood>();
+            }
         }
 
 
@@ -2167,9 +2600,17 @@ namespace PeopleWith
 
                 return new ObservableCollection<usermood>(MoodPassed);
             }
-
+           catch (Exception ex) when (
+           ex is HttpRequestException ||
+           ex is WebException ||
+           ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return new ObservableCollection<usermood>();
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return new ObservableCollection<usermood>();
             }
         }
@@ -2203,8 +2644,17 @@ namespace PeopleWith
                 }
                 return;
             }
+            catch (Exception ex) when (
+          ex is HttpRequestException ||
+          ex is WebException ||
+          ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return;
             }
         }
@@ -2251,9 +2701,16 @@ namespace PeopleWith
                 }
             }
 
+            catch (Exception ex) when (
+         ex is HttpRequestException ||
+         ex is WebException ||
+         ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+            }
             catch (Exception ex)
             {
-
+                await NotasyncMethod(ex);
             }
         }
 
@@ -2297,8 +2754,18 @@ namespace PeopleWith
                     return null;
                 }
             }
+
+            catch (Exception ex) when (
+         ex is HttpRequestException ||
+         ex is WebException ||
+         ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -2332,9 +2799,17 @@ namespace PeopleWith
 
                 return new ObservableCollection<hcp>(HCPPassed);
             }
-
+            catch (Exception ex) when (
+       ex is HttpRequestException ||
+       ex is WebException ||
+       ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return new ObservableCollection<hcp>();
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return new ObservableCollection<hcp>();
             }
         }
@@ -2365,8 +2840,17 @@ namespace PeopleWith
                 }
                 return;
             }
+            catch (Exception ex) when (
+      ex is HttpRequestException ||
+      ex is WebException ||
+      ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return;
             }
         }
@@ -2400,8 +2884,17 @@ namespace PeopleWith
                 }
                 return;
             }
+            catch (Exception ex) when (
+      ex is HttpRequestException ||
+      ex is WebException ||
+      ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return;
             }
         }
@@ -2449,12 +2942,18 @@ namespace PeopleWith
                 {
                     return null;
                 }
-
-
-
+            }
+            catch (Exception ex) when (
+        ex is HttpRequestException ||
+        ex is WebException ||
+        ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
             }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -2487,8 +2986,17 @@ namespace PeopleWith
                 }
                 return;
             }
+            catch (Exception ex) when (
+        ex is HttpRequestException ||
+        ex is WebException ||
+        ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return;
             }
         }
@@ -2520,8 +3028,17 @@ namespace PeopleWith
                 }
                 return;
             }
+            catch (Exception ex) when (
+      ex is HttpRequestException ||
+      ex is WebException ||
+      ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return;
             }
         }
@@ -2589,9 +3106,17 @@ namespace PeopleWith
 
                 return new ObservableCollection<appointment>(AppointmentPassed);
             }
-
+            catch (Exception ex) when (
+     ex is HttpRequestException ||
+     ex is WebException ||
+     ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return new ObservableCollection<appointment>();
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return new ObservableCollection<appointment>();
             }
         }
@@ -2620,7 +3145,7 @@ namespace PeopleWith
                     foreach (var item in consent)
                     {
                         //Return All items Including SignupCode 
-                        if(ReturnType == "All")
+                        if (ReturnType == "All")
                         {
                             if (item.deleted == true)
                             {
@@ -2672,8 +3197,17 @@ namespace PeopleWith
                     return null;
                 }
             }
+            catch (Exception ex) when (
+    ex is HttpRequestException ||
+    ex is WebException ||
+    ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -2738,8 +3272,17 @@ namespace PeopleWith
                     return null;
                 }
             }
+            catch (Exception ex) when (
+    ex is HttpRequestException ||
+    ex is WebException ||
+    ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -2843,8 +3386,17 @@ namespace PeopleWith
                 }
                 // return null;
             }
+            catch (Exception ex) when (
+    ex is HttpRequestException ||
+    ex is WebException ||
+    ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -2867,8 +3419,6 @@ namespace PeopleWith
                     // Read the response content as a string 
                     string responseContent = await response.Content.ReadAsStringAsync();
                     return null;
-
-
                 }
                 else
                 {
@@ -2877,8 +3427,17 @@ namespace PeopleWith
                     return null;
                 }
             }
+            catch (Exception ex) when (
+    ex is HttpRequestException ||
+    ex is WebException ||
+    ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -2957,12 +3516,18 @@ namespace PeopleWith
                 {
                     return null;
                 }
-
-
-
+            }
+            catch (Exception ex) when (
+    ex is HttpRequestException ||
+    ex is WebException ||
+    ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
             }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -3052,8 +3617,17 @@ namespace PeopleWith
 
 
             }
+            catch (Exception ex) when (
+     ex is HttpRequestException ||
+     ex is WebException ||
+     ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -3092,8 +3666,17 @@ namespace PeopleWith
                 }
                 // return null;
             }
+            catch (Exception ex) when (
+  ex is HttpRequestException ||
+  ex is WebException ||
+  ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -3124,7 +3707,7 @@ namespace PeopleWith
                     {
                         if (item.deleted == true)
                         {
-
+                            continue;
                         }
                         else
                         {
@@ -3157,8 +3740,17 @@ namespace PeopleWith
 
 
             }
+            catch (Exception ex) when (
+  ex is HttpRequestException ||
+  ex is WebException ||
+  ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -3331,13 +3923,22 @@ namespace PeopleWith
                 }
                 else
                 {
-                    return null;
+                    return new ObservableCollection<userfeedback>();
                 }
 
             }
+            catch (Exception ex) when (
+   ex is HttpRequestException ||
+   ex is WebException ||
+   ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return new ObservableCollection<userfeedback>();
+            }
             catch (Exception ex)
             {
-                return null;
+                await NotasyncMethod(ex);
+                return new ObservableCollection<userfeedback>();
             }
         }
 
@@ -3368,8 +3969,17 @@ namespace PeopleWith
 
                 return new ObservableCollection<privacypolicy>(users.Take(Range.All));
             }
+            catch (Exception ex) when (
+  ex is HttpRequestException ||
+  ex is WebException ||
+  ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return new ObservableCollection<privacypolicy>();
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return new ObservableCollection<privacypolicy>();
             }
         }
@@ -3378,73 +3988,60 @@ namespace PeopleWith
         {
             try
             {
-                ObservableCollection<signupcode> itemstoremove = new ObservableCollection<signupcode>();
-                var userid = Helpers.Settings.SignUp;
-                string urlWithQuery = $"{signupcode}?$filter=signupcodeid eq '{signupcodepassed}'";
+                //Ensure SignupCode Is not Null When Passed
+                if (String.IsNullOrEmpty(signupcodepassed)) { signupcodepassed = Helpers.Settings.SignUp; }
+                var SignupPathway = "https://pwapi.peoplewith.com/api/signupcode";
+                string urlWithQuery = $"{SignupPathway}?$filter=signupcodeid eq '{signupcodepassed}'";
                 ConfigureClient();
                 HttpResponseMessage responseconsent = await Client.GetAsync(urlWithQuery);
-
                 if (responseconsent.IsSuccessStatusCode)
                 {
                     string contentconsent = await responseconsent.Content.ReadAsStringAsync();
-                    // Add Feedback Converter
-                    //  var settings = new JsonSerializerSettings();
-                    //  settings.Converters.Add(new AppointmentFeedbackConverter());
-
                     var userResponseconsent = JsonConvert.DeserializeObject<ApiResponseSignUpCode>(contentconsent);
                     var consent = userResponseconsent.Value;
-
                     var newcollection = new ObservableCollection<signupcode>();
-
-                    //Remove All Deleted Items 
                     foreach (var item in consent)
                     {
-
-                        //string EncodeTrademark(string input)
-                        //{
-                        //    return input?.Replace("�", "\\u00AE");  // Replace "�" with Unicode escape sequence
-                        //}
-
-                        //string cleanedJson = EncodeTrademark(item.signupcodeinformation);
-                        //item.moodfeedbacklist = JsonConvert.DeserializeObject<ObservableCollection<feedbackdata>>(item.moodfeedback);
-
                         try
                         {
-                            // Attempt to deserialize as an array
-                            item.signupcodeinfolist = JsonConvert.DeserializeObject<ObservableCollection<signupcodeinformation>>(item.signupcodeinformation);
-
+                            if (!string.IsNullOrWhiteSpace(item.signupcodeinformation))
+                            {
+                                item.signupcodeinfolist = JsonConvert.DeserializeObject<ObservableCollection<signupcodeinformation>>(item.signupcodeinformation);
+                            }
+                            else
+                            {
+                                item.signupcodeinfolist = new ObservableCollection<signupcodeinformation>();
+                            }
                         }
                         catch (JsonSerializationException)
                         {
-                            // If the JSON is a single object, deserialize it as such and wrap it in a collection
                             var singleItem = JsonConvert.DeserializeObject<signupcodeinformation>(item.signupcodeinformation);
                             item.signupcodeinfolist = new ObservableCollection<signupcodeinformation> { singleItem };
                         }
-
-
-
                         newcollection.Add(item);
+
                     }
-
-
-
                     return new ObservableCollection<signupcode>(newcollection);
-
                 }
                 else
                 {
-                    return null;
+                    return new ObservableCollection<signupcode>();
                 }
-
-
-
+            }
+            catch (Exception ex) when (
+             ex is HttpRequestException ||
+             ex is WebException ||
+             ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return new ObservableCollection<signupcode>();
             }
             catch (Exception ex)
             {
-                return null;
+                await NotasyncMethod(ex);
+                return new ObservableCollection<signupcode>();
             }
         }
-
         public async Task UserfeedbackUpdateSymptomData(userfeedback Updatefeedback)
         {
             try
@@ -3475,8 +4072,16 @@ namespace PeopleWith
                     }
                 }
             }
+            catch (Exception ex) when (
+             ex is HttpRequestException ||
+             ex is WebException ||
+             ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
             }
         }
 
@@ -3510,8 +4115,16 @@ namespace PeopleWith
                     }
                 }
             }
+            catch (Exception ex) when (
+                ex is HttpRequestException ||
+                ex is WebException ||
+                ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
             }
         }
 
@@ -3545,8 +4158,16 @@ namespace PeopleWith
                     }
                 }
             }
+            catch (Exception ex) when (
+             ex is HttpRequestException ||
+             ex is WebException ||
+             ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
             }
         }
 
@@ -3580,8 +4201,16 @@ namespace PeopleWith
                     }
                 }
             }
+            catch (Exception ex) when (
+               ex is HttpRequestException ||
+               ex is WebException ||
+               ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
             }
         }
         public async Task<userfeedback> InsertUserFeedback(userfeedback item)
@@ -3604,10 +4233,18 @@ namespace PeopleWith
                     return null;
                 }
             }
+            catch (Exception ex) when (
+             ex is HttpRequestException ||
+             ex is WebException ||
+             ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
-                //Error Occured on Crashlog 
             }
         }
 
@@ -3647,8 +4284,17 @@ namespace PeopleWith
 
                 return;
             }
+            catch (Exception ex) when (
+             ex is HttpRequestException ||
+             ex is WebException ||
+             ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return;
             }
         }
@@ -3665,8 +4311,17 @@ namespace PeopleWith
                 ObservableCollection<postcode> users = userResponse.Value;
                 return new ObservableCollection<postcode>(users.Take(Range.All));
             }
+            catch (Exception ex) when (
+           ex is HttpRequestException ||
+           ex is WebException ||
+           ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return new ObservableCollection<postcode>();
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return new ObservableCollection<postcode>();
             }
         }
@@ -3715,17 +4370,20 @@ namespace PeopleWith
                     var s = errorcontent;
                     return null;
                 }
-
-
-
-
-
+            }
+            catch (Exception ex) when (
+          ex is HttpRequestException ||
+          ex is WebException ||
+          ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return new ObservableCollection<registryDataInputs>();
             }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return new ObservableCollection<registryDataInputs>();
             }
-
         }
 
 
@@ -3753,11 +4411,19 @@ namespace PeopleWith
 
                 return new ObservableCollection<userresponse>(users.Take(Range.All));
             }
-            catch (Exception ex)
+            catch (Exception ex) when (
+       ex is HttpRequestException ||
+       ex is WebException ||
+       ex is TaskCanceledException)
             {
+                await NotasyncMethod(ex);
                 return new ObservableCollection<userresponse>();
             }
-
+            catch (Exception ex)
+            {
+                await NotasyncMethod(ex);
+                return new ObservableCollection<userresponse>();
+            }
         }
 
 
@@ -3825,8 +4491,17 @@ namespace PeopleWith
                     return null;
                 }
             }
+            catch (Exception ex) when (
+      ex is HttpRequestException ||
+      ex is WebException ||
+      ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -3901,8 +4576,17 @@ namespace PeopleWith
                 return new ObservableCollection<userdiet>(filteredDiets);
 
             }
+            catch (Exception ex) when (
+   ex is HttpRequestException ||
+   ex is WebException ||
+   ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return new ObservableCollection<userdiet>();
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return new ObservableCollection<userdiet>();
             }
         }
@@ -3941,8 +4625,17 @@ namespace PeopleWith
                 }
                 // return null;
             }
+            catch (Exception ex) when (
+  ex is HttpRequestException ||
+  ex is WebException ||
+  ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -3980,8 +4673,16 @@ namespace PeopleWith
                     }
                 }
             }
+            catch (Exception ex) when (
+ex is HttpRequestException ||
+ex is WebException ||
+ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
             }
         }
 
@@ -4025,10 +4726,16 @@ namespace PeopleWith
                     }
                 }
             }
-
+            catch (Exception ex) when (
+      ex is HttpRequestException ||
+      ex is WebException ||
+      ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+            }
             catch (Exception ex)
             {
-
+                await NotasyncMethod(ex);
             }
         }
 
@@ -4061,9 +4768,16 @@ namespace PeopleWith
 
                 return;
             }
+            catch (Exception ex) when (
+ex is HttpRequestException ||
+ex is WebException ||
+ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+            }
             catch (Exception ex)
             {
-                return;
+                await NotasyncMethod(ex);
             }
         }
 
@@ -4124,11 +4838,19 @@ namespace PeopleWith
                     return null;
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) when (
+ex is HttpRequestException ||
+ex is WebException ||
+ex is TaskCanceledException)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
-
+            catch (Exception ex)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
         }
 
         //GetUserInvestigation  
@@ -4213,8 +4935,17 @@ namespace PeopleWith
                 return new ObservableCollection<userinvestigation>(filteredDiets);
 
             }
+            catch (Exception ex) when (
+ex is HttpRequestException ||
+ex is WebException ||
+ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return new ObservableCollection<userinvestigation>();
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return new ObservableCollection<userinvestigation>();
             }
         }
@@ -4254,8 +4985,17 @@ namespace PeopleWith
                 }
                 // return null;
             }
+            catch (Exception ex) when (
+ex is HttpRequestException ||
+ex is WebException ||
+ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -4292,8 +5032,16 @@ namespace PeopleWith
                     }
                 }
             }
+            catch (Exception ex) when (
+ex is HttpRequestException ||
+ex is WebException ||
+ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
             }
         }
 
@@ -4337,9 +5085,16 @@ namespace PeopleWith
                 }
             }
 
+            catch (Exception ex) when (
+ex is HttpRequestException ||
+ex is WebException ||
+ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+            }
             catch (Exception ex)
             {
-
+                await NotasyncMethod(ex);
             }
         }
 
@@ -4371,8 +5126,17 @@ namespace PeopleWith
 
                 return;
             }
+            catch (Exception ex) when (
+ex is HttpRequestException ||
+ex is WebException ||
+ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return;
             }
         }
@@ -4446,8 +5210,17 @@ namespace PeopleWith
                     return null;
                 }
             }
+            catch (Exception ex) when (
+ex is HttpRequestException ||
+ex is WebException ||
+ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -4487,8 +5260,17 @@ namespace PeopleWith
                 }
                 // return null;
             }
+            catch (Exception ex) when (
+ex is HttpRequestException ||
+ex is WebException ||
+ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -4576,9 +5358,17 @@ namespace PeopleWith
 
                 return UserActivity;
             }
+            catch (Exception ex) when (
+ex is HttpRequestException ||
+ex is WebException ||
+ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error fetching user activity: {ex.Message}");
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -4623,9 +5413,16 @@ namespace PeopleWith
                 }
             }
 
+            catch (Exception ex) when (
+ex is HttpRequestException ||
+ex is WebException ||
+ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+            }
             catch (Exception ex)
             {
-
+                await NotasyncMethod(ex);
             }
         }
 
@@ -4658,8 +5455,17 @@ namespace PeopleWith
 
                 return;
             }
+            catch (Exception ex) when (
+ex is HttpRequestException ||
+ex is WebException ||
+ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return;
             }
         }
@@ -4722,8 +5528,17 @@ namespace PeopleWith
                     return null;
                 }
             }
+            catch (Exception ex) when (
+ex is HttpRequestException ||
+ex is WebException ||
+ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -4767,8 +5582,17 @@ namespace PeopleWith
 
                 return;
             }
+            catch (Exception ex) when (
+ex is HttpRequestException ||
+ex is WebException ||
+ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return;
             }
         }
@@ -4945,8 +5769,17 @@ namespace PeopleWith
                 }
 
             }
+            catch (Exception ex) when (
+ex is HttpRequestException ||
+ex is WebException ||
+ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
             }
         }
@@ -4975,46 +5808,217 @@ namespace PeopleWith
                     return null;
                 }
             }
+            catch (Exception ex) when (
+ ex is HttpRequestException ||
+ ex is WebException ||
+ ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
             catch (Exception ex)
             {
+                await NotasyncMethod(ex);
                 return null;
-                //Error Occured on Crashlog 
             }
         }
 
-        //Used to Test HttpClient Auth
-        //public async Task<ObservableCollection<registryconfig>> GetAuthTest()
-        //{
-        //    try
-        //    {
-        //        var url = APICalls.GetAuth;
-        //        HttpClient client = new HttpClient();
-        //        client.DefaultRequestHeaders.Add("X-MS-CLIENT-PRINCIPAL", "eyAgCiAgImlkZW50aXR5UHJvdmlkZXIiOiAidGVzdCIsCiAgInVzZXJJZCI6ICIxMjM0NSIsCiAgInVzZXJEZXRhaWxzIjogImpvaG5AY29udG9zby5jb20iLAogICJ1c2VyUm9sZXMiOiBbIjFFMzNDMEFDLTMzOTMtNEMzNC04MzRBLURFNUZEQkNCQjNDQyJdCn0=");
-        //        client.DefaultRequestHeaders.Add("X-MS-API-ROLE", "1E33C0AC-3393-4C34-834A-DE5FDBCBB3CC");
-        //        HttpResponseMessage responseconsent = await client.GetAsync(url);
+        //Get DashQuestionnaire Data 
+        public async Task<ObservableCollection<registryDataInputs>> GetDashQuestions()
+        {
+            try
+            {
+                var userid = Helpers.Settings.UserKey;
+                var signupcode = Helpers.Settings.SignUp;
+                if (string.IsNullOrEmpty(signupcode)) return null;
 
-        //        if (responseconsent.IsSuccessStatusCode)
-        //        {
-        //            string contentconsent = await responseconsent.Content.ReadAsStringAsync();
-        //            var userResponseconsent = JsonConvert.DeserializeObject<ApiRegConfig>(contentconsent);
-        //            var consent = userResponseconsent.Value;
+                //Change only for SFECORE00
+                if (signupcode.Contains("SFECORE"))
+                {
+                    signupcode = "CORE01";
+                }
 
-        //            return new ObservableCollection<registryconfig>(consent);
+                string urlWithQuery = $"{GetDashQuestionnaire}?$filter=dataInputs eq '{signupcode}'";
+                ConfigureClient();
+                HttpResponseMessage responseconsent = await Client.GetAsync(urlWithQuery);
+                var newcollection = new ObservableCollection<registryDataInputs>();
 
-        //        }
-        //        else
-        //        {
+                if (responseconsent.IsSuccessStatusCode)
+                {
+                    string contentconsent = await responseconsent.Content.ReadAsStringAsync();
+                    var userResponseconsent = JsonConvert.DeserializeObject<ApiResponseregistyDataInputs>(contentconsent);
+                    var consent = userResponseconsent.Value;
 
-        //            return null;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return null;
-        //    }
-        //}
+                    newcollection = new ObservableCollection<registryDataInputs>(consent.Where(x => x.deleted != true && x.apporder != null));
+                    //var GroupedData = newcollection.GroupBy(s => s.dataTab).ToObservableCollection();
+                    return new ObservableCollection<registryDataInputs>(newcollection);
+                }
+                else
+                {
+                    string errorcontent = await responseconsent.Content.ReadAsStringAsync();
+                    var s = errorcontent;
+                    return null;
+                }
+
+            }
+            catch (Exception ex) when (
+ex is HttpRequestException ||
+ex is WebException ||
+ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return new ObservableCollection<registryDataInputs>();
+            }
+            catch (Exception ex)
+            {
+                await NotasyncMethod(ex);
+                return new ObservableCollection<registryDataInputs>();
+            }
+        }
+
+        //PostDashQuestionnaire 
+        public async Task PostDashQuestionnaire(ObservableCollection<registryData> RegistryAnswers)
+        {
+            try
+            {
+                for (int i = 0; i < RegistryAnswers.Count; i++)
+                {
+                    var urls = APICalls.DashQuestionAnswers;
+                    ConfigureClient();
+                    string jsonns = System.Text.Json.JsonSerializer.Serialize<registryData>(RegistryAnswers[i]);
+                    StringContent contenttts = new StringContent(jsonns, Encoding.UTF8, "application/json");
+                    var response = await Client.PostAsync(urls, contenttts);
+                    var errorResponse = await response.Content.ReadAsStringAsync();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        //Success
+                        string responseContent = await response.Content.ReadAsStringAsync();
+                    }
+                    else
+                    {
+                        //Failed
+                        string errorcontent = await response.Content.ReadAsStringAsync();
+                        var s = errorcontent;
+                    }
+                }
+            }
+            catch (Exception ex) when (
+ex is HttpRequestException ||
+ex is WebException ||
+ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+            }
+            catch (Exception ex)
+            {
+                await NotasyncMethod(ex);
+            }
+        }
 
 
+        //GetDashQuestioAnswers 
+        public async Task<ObservableCollection<registryData>> GetDashQuestionAnswers()
+        {
+            try
+            {
+                var userid = Helpers.Settings.UserKey;
+                string urlWithQuery = $"{DashQuestionAnswers}?$filter=userid eq '{userid}'";
+                ConfigureClient();
+                HttpResponseMessage responseconsent = await Client.GetAsync(urlWithQuery);
+                var newcollection = new ObservableCollection<registryData>();
 
+                if (responseconsent.IsSuccessStatusCode)
+                {
+                    string contentconsent = await responseconsent.Content.ReadAsStringAsync();
+                    var userResponseconsent = JsonConvert.DeserializeObject<ApiResponseregistyData>(contentconsent);
+                    var consent = userResponseconsent.Value;
+                    newcollection = new ObservableCollection<registryData>(consent.Where(x => x.deleted != true));
+
+                    return new ObservableCollection<registryData>(newcollection);
+
+                }
+                else
+                {
+                    string errorcontent = await responseconsent.Content.ReadAsStringAsync();
+                    var s = errorcontent;
+                    return null;
+                }
+            }
+            catch (Exception ex) when (
+ex is HttpRequestException ||
+ex is WebException ||
+ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return new ObservableCollection<registryData>();
+            }
+            catch (Exception ex)
+            {
+                await NotasyncMethod(ex);
+                return new ObservableCollection<registryData>();
+            }
+        }
+
+        public async Task<user> UpdateUserID(user UpdateUser)
+        {
+            try
+            {
+                string url = "https://portal.peoplewith.com/migration/sql-update-user.php?uid=" + UpdateUser.userid + "&sid=" + UpdateUser.signupcodeid;
+                //Old 
+                //string url = "https://core.peoplewith.com/sql-update-user.php?uid=" + UpdateUser.userid + "&sid=" + UpdateUser.signupcodeid;
+                using (HttpClient client = new HttpClient())
+                {
+                    try
+                    {
+                        // Send a GET request to the URL
+                        HttpResponseMessage response = await client.GetAsync(url);
+
+                        // Check if the response is successful
+                        if (response.IsSuccessStatusCode)
+                        {
+                            string content = await response.Content.ReadAsStringAsync();
+                            // Check if content is not empty
+                            if (!string.IsNullOrEmpty(content))
+                            {
+                                var match = Regex.Match(content, @"newUserID:\s*'([^']*)'");
+                                if (match.Success)
+                                {
+                                    string newUserId = match.Groups[1].Value;
+                                    UpdateUser.userid = newUserId;
+                                    return UpdateUser;
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("No content returned from the URL.");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Failed to retrieve content. Status code: {response.StatusCode}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error occurred: " + ex.Message);
+                    }
+                }
+
+                return null;
+            }
+            catch (Exception ex) when (
+       ex is HttpRequestException ||
+       ex is WebException ||
+       ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                await NotasyncMethod(ex);
+                return null;
+            }
+        }
     }
 }

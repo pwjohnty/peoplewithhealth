@@ -58,7 +58,8 @@
             <Grid x:Name="DateofBirthStack" Margin="10,0,10,0" IsVisible="False">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
@@ -73,7 +74,8 @@
             <Grid x:Name="GenderStack" Margin="10,0,10,0" IsVisible="False">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
@@ -85,8 +87,8 @@
                                        ScrollBarVisibility="Never" SelectionBackground="Transparent">
                     <syncfusion:SfListView.HeightRequest>
                         <OnPlatform x:TypeArguments="x:Double">
-                            <On Platform="Android" Value="220" />
-                            <On Platform="iOS" Value="200" />
+                            <On Platform="Android" Value="270" />
+                            <On Platform="iOS" Value="270" />
                         </OnPlatform>
                     </syncfusion:SfListView.HeightRequest>
 
@@ -97,7 +99,8 @@
                                     <Grid HorizontalOptions="FillAndExpand" Margin="0" Padding="0"  >
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="100*"/>
 
@@ -130,7 +133,14 @@
                         </DataTemplate>
                     </syncfusion:SfListView.SelectedItemTemplate>
                 </syncfusion:SfListView>
-            </Grid>
+
+                    <Border IsVisible="False" Grid.Row="1" x:Name="SpecifyPrompt" StrokeShape="RoundRectangle 10" InputTransparent="False" Padding="0"  Margin="5" BackgroundColor="Transparent">
+                        <Grid HorizontalOptions="FillAndExpand" Grid.RowDefinitions="Auto" Grid.ColumnDefinitions="100*" >
+                            <Editor Keyboard="Text" Grid.Row="0" Grid.Column="0"  x:Name="SpecifyGender" Placeholder="Enter Gender" Margin="15,10,15,5" VerticalOptions="Center" PlaceholderColor="LightGray" TextColor="#031926" FontSize="12"/>
+                        </Grid>
+                    </Border>
+
+                </Grid>
 
             <!-- Ethnicity-->
             <Grid x:Name="EthnicityStack" Margin="10,0,10,0" IsVisible="False">

@@ -30,7 +30,7 @@
                                 <Grid Grid.RowDefinitions="Auto,Auto,Auto"  Grid.ColumnDefinitions="*">
 
                                     <Label FontAutoScalingEnabled="False" HorizontalOptions="Fill" Text="{Binding SettingsTitle}"  FontFamily="HankenGroteskRegular" HeightRequest="20" FontSize="12" VerticalOptions="Center" Grid.Row="0" Grid.Column="0" Margin="10,10,0,0" TextColor="Gray" />
-                                    <Label HorizontalOptions="Fill" Text="{Binding SettingsItem}" FontFamily="HankenGroteskBold" HeightRequest="25" VerticalOptions="Center" FontSize="14" Grid.Row="1" Grid.Column="0" Margin="10,0,0,0" FontAttributes="Bold" TextColor="#031926" />
+                                    <Label HorizontalOptions="Fill" Text="{Binding SettingsItem}" LineBreakMode="TailTruncation" FontFamily="HankenGroteskBold" HeightRequest="25" VerticalOptions="Center" FontSize="14" Grid.Row="1" Grid.Column="0" Margin="10,0,20,0" FontAttributes="Bold" TextColor="#031926" />
                                     <Image Source="backbutton.png" Rotation="180" Grid.Row="0" HeightRequest="10" WidthRequest="10" Grid.RowSpan="2" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="End" Margin="0,10,10,0" />
 
                                     <BoxView HeightRequest="1" Color="#E8E8E8" BackgroundColor="#E8E8E8"  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="1" Margin="5,0,5,0" HorizontalOptions="Fill" />
@@ -131,7 +131,7 @@
             <!-- Delete Account  Button-->
             <Button Margin="20,440,20,5" x:Name="DeleteAccount" Text="Delete Account" Clicked="DeleteAccount_Clicked" FontFamily="HankenGroteskBold" HeightRequest="45" FontSize="14" Padding="5" CornerRadius="10" BorderColor="Transparent" BorderWidth="1" BackgroundColor="#ffe5e5" TextColor="red"/>
 
-            <Label HorizontalOptions="Fill" HorizontalTextAlignment="Center" Text="Once your Account is Deleted, it cannot be retrieved. Ensure you no longer require access to this Account before Deletion." FontFamily="HankenGroteskBold"  FontSize="10" VerticalOptions="Center" Margin="20,0,20,20" TextColor="DarkGray" />
+            <Label HorizontalOptions="Fill" x:Name="DeleteDetails" HorizontalTextAlignment="Center" Text="Once your Account is Deleted, it cannot be retrieved. Ensure you no longer require access to this Account before Deletion." FontFamily="HankenGroteskBold"  FontSize="10" VerticalOptions="Center" Margin="20,0,20,20" TextColor="DarkGray" />
 
         </VerticalStackLayout>
     </ScrollView>

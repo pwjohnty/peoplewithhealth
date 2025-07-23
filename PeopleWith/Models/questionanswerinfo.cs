@@ -229,10 +229,25 @@ namespace PeopleWith
             }
         }
 
-        private List<string> selectedansweridlist = new List<string>();
+        //private List<string> selectedansweridlist = new List<string>();
 
-        [System.Text.Json.Serialization.JsonIgnore]
-        public List<string> Selectedansweridlist
+        //[System.Text.Json.Serialization.JsonIgnore]
+        //public List<string> Selectedansweridlist
+        //{
+        //    get { return selectedansweridlist; }
+        //    set
+        //    {
+        //        selectedansweridlist = value;
+        //        if (PropertyChanged != null)
+        //        {
+        //            PropertyChanged(this, new PropertyChangedEventArgs(nameof(Selectedansweridlist)));
+        //        }
+        //    }
+        //}
+
+        private ObservableCollection<string> selectedansweridlist = new ObservableCollection<string>();
+        //[System.Text.Json.Serialization.JsonIgnore]
+        public ObservableCollection<string> Selectedansweridlist
         {
             get { return selectedansweridlist; }
             set
@@ -283,6 +298,11 @@ namespace PeopleWith
 
         [System.Text.Json.Serialization.JsonIgnore]
         public string doubleentry2 { get; set; }
+
+
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public string questionanswerstring { get; set; }
 
 
         public event PropertyChangedEventHandler PropertyChanged;

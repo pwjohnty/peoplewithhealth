@@ -171,7 +171,7 @@ public partial class AllMood : ContentPage
     .OrderByDescending(f => DateTime.Parse(f.datetime)) 
     .ToList();
                 //AllMoodView.ItemsSource = AllMoods.OrderByDescending(f => DateTime.Parse(f.datetime)).ToList();
-                AllMoodView.HeightRequest = AllMoods.Count * 80;
+                AllMoodView.HeightRequest = AllMoods.Count * 80 + 150;
                // NovoConsent.Margin = new Thickness(20, 300, 20, 10);
             }
             else

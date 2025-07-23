@@ -6,40 +6,28 @@ namespace PeopleWith
 {
     public class VersionCheckService
     {
-        public string GetCurrentVersion()
+        public async Task<bool> CheckForUpdate()
         {
-            try
+            var currentVersion = AppInfo.Current.VersionString;
+            var latestVersion = string.Empty;
+            //Ensure the following is changed
+            if (DeviceInfo.Platform == DevicePlatform.iOS)
             {
-                var version = AppInfo.Version.ToString();
-              //  var version = DependencyService.Get<IAppVersionProvider>().GetVersion();
-                return version;
+                latestVersion = "13.0.4";
             }
-            catch(Exception ex)
-            { 
-                return "0.0.0";
-                var s = ex.Message;
-                var ss= ex.StackTrace;
+            else
+            {
+                latestVersion = "90.1";
             }
 
-        }
-
-        public async Task<string> GetLatestVersion()
-        {
-            
-            // Add the new app version on every update
-            return await Task.FromResult("3.0.1"); // Replace with actual implementation
-        }
-
-        public async Task CheckForUpdate()
-        {
-            var currentVersion = GetCurrentVersion();
-            var latestVersion = await GetLatestVersion();
+            if (string.IsNullOrEmpty(currentVersion) || string.IsNullOrEmpty(latestVersion)) return false;
 
             if (currentVersion != latestVersion)
             {
-                // Prompt user to update
-
-                await Application.Current.MainPage.Navigation.PushAsync(new UpdatePage());
+                return true; 
+                //Application.Current.Windows[0].Page = new NavigationPage(new UpdatePage());
+                //await App.Current.MainPage.Navigation.PushAsync(new UpdatePage());
+                //await Navigation.PushAsync(new UpdatePage(), false);
 
                 //await Application.Current.MainPage.DisplayAlert(
                 //    "Update Available",
@@ -52,6 +40,10 @@ namespace PeopleWith
                 //    : "https://play.google.com/store/apps/details?id=com.peoplewith.peoplewith"; // Replace YOUR_PACKAGE_NAME with your app's package name
 
                 //await Launcher.Default.OpenAsync(new Uri(appStoreUrl));
+            }
+            else
+            {
+                return false; 
             }
         }
     }

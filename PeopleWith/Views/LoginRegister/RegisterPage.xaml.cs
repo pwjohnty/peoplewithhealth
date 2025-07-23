@@ -14,6 +14,7 @@ using static Microsoft.Maui.Controls.Device;
 using Microsoft.Maui.Devices;
 using Microsoft.Maui.Networking;
 using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Animations;
 //using CoreImage;
 //using static Android.Gms.Common.Apis.Api;
 //using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -82,7 +83,8 @@ public partial class RegisterPage : ContentPage
 
         genlist.Add("Male");
         genlist.Add("Female");
-        genlist.Add("Other");
+        genlist.Add("Prefer not to disclose");
+        genlist.Add("Other (Specify)");
 
         genderlist.ItemsSource = genlist;
 
@@ -304,7 +306,7 @@ public partial class RegisterPage : ContentPage
                 return;
 
             }
-
+            confirmpasshelper.HasError = false;
             nextbtn.IsVisible = false;
             nextbtnloader.IsVisible = true;
 
@@ -683,10 +685,16 @@ public partial class RegisterPage : ContentPage
                         });
 
                         //has medications and symptoms to get
-                        if(signupcodeinfo.referral == "SFEAT" || signupcodeinfo.referral == "SFEWH")
+                        if(signupcodeinfo.referral == "SFEAT" || signupcodeinfo.referral == "SFEWH" || signupcodeinfo.referral == "RBHTHCM")
                         {
                             getmedandsymptoms();
                         }
+
+                        if(signupcodeinfo.referral == "SFECORE")
+                        {
+                            getjustmeds();
+                        }
+
                        
                     }
                   
@@ -811,24 +819,24 @@ public partial class RegisterPage : ContentPage
                     //check signup code and go to page
                     if(signupcodeinfo.referral == "SFEAT")
                     {
-                       
-                       // UpdateProgress();
                         await Navigation.PushAsync(new SFENRAT(newuser, allsymptomlist, allmedicationlist, signupcodeinfo, topprogress.Progress, regquestionlist, reganswerlist, additionalconsent), false);
                     }
                     else if(signupcodeinfo.referral == "SFEWH")
                     {
                         await Navigation.PushAsync(new WH(newuser, allsymptomlist, allmedicationlist, signupcodeinfo, topprogress.Progress, regquestionlist, reganswerlist, additionalconsent), false);
                     }
-
+                    else if (signupcodeinfo.referral == "SFECORE")
+                    {
+                        await Navigation.PushAsync(new SFEOB(newuser, allsymptomlist, allmedicationlist, signupcodeinfo, topprogress.Progress, regquestionlist, reganswerlist, additionalconsent), false);
+                    }
+                    else if (signupcodeinfo.referral == "RBHTHCM")
+                    {
+                        await Navigation.PushAsync(new BMS(newuser, allsymptomlist, allmedicationlist, signupcodeinfo, topprogress.Progress, regquestionlist, reganswerlist, additionalconsent), false);
+                    }
                 }
                 else
                 {
-
-
-
-
                     //pass user and page progress
-
                     UpdateProgress();
                     await Navigation.PushAsync(new RegisterFinalPage(newuser, topprogress.Progress, additionalconsent), false);
                 }
@@ -1146,7 +1154,21 @@ public partial class RegisterPage : ContentPage
 
             if (item != null)
             {
-                newuser.gender = item;
+
+                if(item == "Other (Specify)")
+                {
+                    //Show Specify Box
+                    SpecifyPrompt.IsVisible = true;
+                    //Clear item 
+                    SpecifyGender.Focus();
+                    newuser.gender = null; 
+                }
+                else
+                {
+                    //Hide Specify box
+                    SpecifyPrompt.IsVisible = false;
+                    newuser.gender = item;
+                }           
             }
         }
         catch (Exception ex)
@@ -1788,7 +1810,7 @@ public partial class RegisterPage : ContentPage
 
                 allsymptomlist = consent;
 
-              //  additionalconsent = consent.Where(x => x.area == "Registration").SingleOrDefault();
+                //  additionalconsent = consent.Where(x => x.area == "Registration").SingleOrDefault();
 
             }
 
@@ -1807,12 +1829,37 @@ public partial class RegisterPage : ContentPage
                 allmedicationlist = meds;
 
                 //  additionalconsent = consent.Where(x => x.area == "Registration").SingleOrDefault();
-            
+
             }
 
 
         }
-        catch(Exception ex)
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+
+    async void getjustmeds()
+    {
+        try
+        {        
+            //get all medications
+            var urlmedications = APICalls.GetMedications;
+
+            HttpResponseMessage responsemeds = await Client.GetAsync(urlmedications);
+
+            if (responsemeds.IsSuccessStatusCode)
+            {
+                string contentmeds = await responsemeds.Content.ReadAsStringAsync();
+                var userResponsemed = JsonConvert.DeserializeObject<ApiResponseMedication>(contentmeds);
+                var meds = userResponsemed.Value;
+
+                allmedicationlist = meds;
+            }
+        }
+        catch (Exception ex)
         {
 
         }
@@ -1951,6 +1998,18 @@ public partial class RegisterPage : ContentPage
         }
         else
         {
+        }
+    }
+
+    private void SpecifyGender_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        try
+        {
+            newuser.gender = e.NewTextValue;
+        }
+        catch (Exception Ex)
+        {
+
         }
     }
 }

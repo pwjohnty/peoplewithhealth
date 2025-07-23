@@ -375,7 +375,7 @@ public partial class UpdateSingleSymptom : ContentPage
         try
         {
             var status = await Permissions.CheckStatusAsync<Permissions.Camera>();
-            PermissionStatus storageStatus = PermissionStatus.Granted;
+            //PermissionStatus storageStatus = PermissionStatus.Granted;
 
             //if (DeviceInfo.Current.Platform == DevicePlatform.Android)
             //{
@@ -394,8 +394,26 @@ public partial class UpdateSingleSymptom : ContentPage
 
             if (status != PermissionStatus.Granted) //|| (DeviceInfo.Current.Platform == DevicePlatform.Android && storageStatus != PermissionStatus.Granted))
             {
-                await DisplayAlert("Permission Required", "Camera access is required to take a photo", "Close");
-                return null;
+                bool openSettings = await Application.Current.MainPage.DisplayAlert(
+                "Permission Required",
+                "Camera access is required to take a photo. Please enable it in your device settings.",
+                "Open Settings",
+                "Cancel");
+
+                if (openSettings)
+                {
+                    AppInfo.ShowSettingsUI();
+                    status = await Permissions.CheckStatusAsync<Permissions.Camera>();
+
+                    if (status != PermissionStatus.Granted)
+                    {
+                        return null;
+                    }
+                }
+                else
+                {
+                    return null;
+                }                
             }
 
             if (MediaPicker.Default.IsCaptureSupported)
@@ -1564,7 +1582,7 @@ public partial class UpdateSingleSymptom : ContentPage
         try
         {
 
-            var userresponse = await DisplayAlert("Confirm Delete", "Are you sure you want to delete this Symptom Feedback? Once deleted it cannot be retrieved", "Cancel", "Delete");
+            var userresponse = await DisplayAlert("Confirm Delete", "Are you sure you want to delete this Symptom Entry? Once deleted it cannot be retrieved", "Cancel", "Delete");
 
             if (!userresponse)
             {
@@ -1612,7 +1630,7 @@ public partial class UpdateSingleSymptom : ContentPage
                 // Add the updated symptom
                 AllSymptomDataPassed.Add(PassedSymptom[0]);
 
-                await MopupService.Instance.PushAsync(new PopupPageHelper("Symptom Feedback Deleted") { });
+                await MopupService.Instance.PushAsync(new PopupPageHelper("Symptom Entry Deleted") { });
                 
                 //   await Navigation.PushAsync(new SingleSymptom(PassedSymptom, AllSymptomDataPassed));
 

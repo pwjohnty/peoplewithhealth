@@ -257,7 +257,7 @@ HorizontalOptions="Start" />
                             <Entry.Keyboard>
                                 <Keyboard x:FactoryMethod="Create">
                                     <x:Arguments>
-                                        <KeyboardFlags>Suggestions,CapitalizeCharacter</KeyboardFlags>
+                                        <KeyboardFlags>CapitalizeCharacter</KeyboardFlags>
                                     </x:Arguments>
                                 </Keyboard>
                             </Entry.Keyboard>
@@ -360,6 +360,7 @@ HorizontalOptions="Start" />
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="100*"/>
@@ -381,8 +382,8 @@ HorizontalOptions="Start" />
              >
                             <syncfusion:SfListView.HeightRequest>
                                 <OnPlatform x:TypeArguments="x:Double">
-                                    <On Platform="Android" Value="220" />
-                                    <On Platform="iOS" Value="220" />
+                                    <On Platform="Android" Value="270" />
+                                    <On Platform="iOS" Value="270" />
                                 </OnPlatform>
                             </syncfusion:SfListView.HeightRequest>
 
@@ -429,6 +430,13 @@ BorderColor="LightGray">
                                 </DataTemplate>
                             </syncfusion:SfListView.SelectedItemTemplate>
                         </syncfusion:SfListView>
+
+
+                        <Border IsVisible="False" Grid.Row="1" x:Name="SpecifyPrompt" StrokeShape="RoundRectangle 10" InputTransparent="False" Padding="0"  Margin="5" BackgroundColor="Transparent">
+                            <Grid HorizontalOptions="FillAndExpand" Grid.RowDefinitions="Auto" Grid.ColumnDefinitions="100*" >
+                                <Editor Keyboard="Text" TextChanged="SpecifyGender_TextChanged" Grid.Row="0" Grid.Column="0"  x:Name="SpecifyGender" Placeholder="Enter Gender" Margin="15,10,15,5" VerticalOptions="Center" PlaceholderColor="LightGray" TextColor="#031926" FontSize="12"/>
+                            </Grid>
+                        </Border>
 
 
 

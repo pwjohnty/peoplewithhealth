@@ -15,9 +15,10 @@ namespace PeopleWith
     /// <summary>
     /// User Object
     /// </summary>
-    public class user   
+    public class user
     {
         [System.Text.Json.Serialization.JsonIgnore]
+        //[System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public string userid { get; set; }
         //public DateTime CreatedAt { get; set; }
         //public DateTime UpdatedAt { get; set; }
@@ -60,7 +61,6 @@ namespace PeopleWith
         public string postcode { get; set; }
 
     }
-
     public class APIUserResponse
     {
         public ObservableCollection<user> Value { get; set; }

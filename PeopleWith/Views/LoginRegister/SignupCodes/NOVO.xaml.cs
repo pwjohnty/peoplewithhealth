@@ -783,7 +783,7 @@ public partial class NOVO : ContentPage
 
             UpdateProgress();
 
-            await Navigation.PushAsync(new RegisterFinalPage(userpassed, topprogress.Progress, userresponselist , usermeasurementlist, additonalconsent), false);
+            await Navigation.PushAsync(new RegisterFinalPage(userpassed, topprogress.Progress, userresponselist , usermeasurementlist, additonalconsent, signupcodepassed), false);
 
 
         }
