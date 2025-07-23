@@ -94,9 +94,9 @@ HorizontalOptions="Start" />
             </Grid>
 
             <Button Grid.Row="5" x:Name="Signin"  Text="Sign in" Clicked="Signin_Clicked" Margin="0,20,0,0" Padding="0" BackgroundColor="#E5F0FB" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#031926" />
-            <Border  Grid.Row="5" IsVisible="False" x:Name="Signinload" Stroke="Transparent" BackgroundColor="#E5F0FB" Background="#E5F0FB" Margin="0,20,0,0" Padding="0">
+            <Border  Grid.Row="5" IsVisible="False" x:Name="Signinload" Stroke="Transparent" BackgroundColor="#E5F0FB" StrokeShape="RoundRectangle 5" Background="#E5F0FB" Margin="0,20,0,0" Padding="0">
                 <Grid>
-                    <ActivityIndicator IsRunning="True" HorizontalOptions="Center" HeightRequest="42"  VerticalOptions="Center" Color="#031926" Background="Transparent" />
+                    <ActivityIndicator IsRunning="True" HorizontalOptions="Center" HeightRequest="42" VerticalOptions="Center" Color="#031926" Background="Transparent" />
                 </Grid>
             </Border>
 

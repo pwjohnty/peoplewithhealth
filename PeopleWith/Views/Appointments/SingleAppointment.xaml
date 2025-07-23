@@ -184,7 +184,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Text="Attended" HorizontalOptions="Start" VerticalOptions="Center"  Grid.Row="0" Grid.Column="0"  HorizontalTextAlignment="Start" FontFamily="HankenGroteskRegular" FontSize="14" TextColor="#031926"/>
-                        <Border Stroke="#d96783" BackgroundColor="Transparent" HorizontalOptions="End"   WidthRequest="75" Padding="5" Grid.Row="0" Grid.Column="1">
+                        <Border Stroke="#d96783" BackgroundColor="Transparent" HorizontalOptions="End" StrokeShape="RoundRectangle 5"  WidthRequest="75" Padding="5" Grid.Row="0" Grid.Column="1">
                             <Label  Text="No" HorizontalOptions="Center" Margin="0,0,0,0" Grid.Row="0" Grid.Column="1" FontFamily="HankenGroteskBold" HorizontalTextAlignment="Center" FontSize="16" TextColor="#d96783"/>
                         </Border>
 

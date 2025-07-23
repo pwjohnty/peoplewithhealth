@@ -2,8 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" BackgroundColor="White"
              x:Class="PeopleWith.NewPageVideoPlayer" Unloaded="ContentPage_Unloaded"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             >
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit" >
     <Grid x:Name="Video">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -14,10 +13,9 @@
         <Button Text="Close Video" TextColor="White" x:Name="closevideobtn" Clicked="closevideobtn_Clicked" BackgroundColor="#031926" FontFamily="HankenGroteskBold" Grid.Row="0" Grid.Column="0" Margin="10"/>
 
         <toolkit:MediaElement MediaEnded="MediaElement_MediaEnded" PositionChanged="MediaElement_PositionChanged" StateChanged="MediaElement_StateChanged"
- x:Name="MediaElement" Grid.Row="1" Grid.Column="0"  Aspect="AspectFit" 
- ShouldAutoPlay="True" WidthRequest="300" ShouldShowPlaybackControls="True"
- HorizontalOptions="Center" Background="Transparent" BackgroundColor="Transparent"
- />
+         x:Name="MediaElement" Grid.Row="1" Grid.Column="0"  Aspect="Fill"  HandlerProperties.DisconnectPolicy="Manual"
+         ShouldAutoPlay="True" WidthRequest="300" ShouldShowPlaybackControls="True"
+         HorizontalOptions="Center" Background="Transparent" BackgroundColor="Transparent" />
 
     </Grid>
 </ContentPage>

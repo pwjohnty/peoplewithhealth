@@ -52,8 +52,8 @@
     <!-- Versions -->
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
     <ApplicationVersion>1</ApplicationVersion>
-	   <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
-    <AndroidMinSdkVersion>21</AndroidMinSdkVersion>
+	   <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">26.0</SupportedOSPlatformVersion>
+    <AndroidMinSdkVersion>26</AndroidMinSdkVersion>
     <AndroidTargetSdkVersion>34</AndroidTargetSdkVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">15.1</SupportedOSPlatformVersion>
@@ -298,14 +298,16 @@
 
 	<ItemGroup>
     <PackageReference Include="Azure.Storage.Blobs" Version="12.22.0" />
-    <PackageReference Include="CommunityToolkit.Maui" Version="7.0.1" />
-    <PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="3.1.0" />
+    <PackageReference Include="CommunityToolkit.Maui" Version="11.2.0" />
+    <PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="6.0.2" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.0" />
     <PackageReference Include="FreakyControls" Version="0.5.0" />
     <PackageReference Include="Microsoft.Azure.NotificationHubs" Version="4.2.0" />
     <PackageReference Include="Microsoft.Datasync.Client" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
-    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+    <!--<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />-->
+		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.50" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.50" />
 	  <!--<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.50" />
 	  <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.50" />-->
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.3" />

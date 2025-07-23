@@ -2914,7 +2914,15 @@ public partial class DashQuestionnaire : ContentPage
 
                 newq4.userid = Helpers.Settings.UserKey;
                 newq4.questionid = "733DF4FB-6C01-42F0-AABB-5ABA16346300";
-                newq4.notes = q4entrytext.Text.ToString();
+                if (String.IsNullOrEmpty(q4entrytext.Text))
+                {
+                    //newq4.notes = "0";
+                }
+                else
+                {
+                    newq4.notes = q4entrytext.Text.ToString();
+
+                }
                 newq4.responsedate = DateTime.Now.ToString("dd/MM/yyyy");
 
                 newuserresponse.Add(newq4);

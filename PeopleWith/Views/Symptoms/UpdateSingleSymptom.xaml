@@ -274,7 +274,7 @@ HorizontalOptions="FillAndExpand">
                 <ScrollView Orientation="Horizontal" IsVisible="False" HorizontalScrollBarVisibility="Never">
                     <chip:SfChipGroup Padding="5" Margin="10,10,0,0" ChipFontFamily="HankenGroteskBold" ChipType="Input" ItemRemoved="TriggChips_ItemRemoved" SelectionIndicatorColor="Transparent" ChipStroke="Transparent"  CloseButtonColor="Gray" x:Name="TriggChips"  ShowIcon="False" ChipTextColor="Orange"   ChipBackground="#fff7ea"/>
                 </ScrollView>
-                <Border x:Name="trigList"  Stroke="#E6E6E6" BackgroundColor="Transparent" Margin="20,10,20,0" MaximumHeightRequest="250" StrokeShape="RoundRectangle 10">
+                <Border x:Name="trigList"  Stroke="#E6E6E6" BackgroundColor="Transparent" Padding="20" Margin="20,10,20,0" MaximumHeightRequest="250" StrokeShape="RoundRectangle 10">
                     <syncfusion:SfListView x:Name="TriggersLV"  ItemSize="35" ItemTapped="TriggersLV_ItemTapped" ScrollBarVisibility="Default" SelectionMode="SingleDeselect" SelectionBackground="Transparent">
                         <syncfusion:SfListView.ItemTemplate>
                             <DataTemplate>
@@ -351,8 +351,8 @@ HorizontalOptions="FillAndExpand">
                     <chip:SfChipGroup Padding="5" Margin="10,10,0,0"  ChipType="Input" ItemRemoved="IntervChips_ItemRemoved" ChipFontFamily="HankenGroteskBold" SelectionIndicatorColor="Transparent" ChipStroke="Transparent" CloseButtonColor="Gray" x:Name="IntervChips"  ShowIcon="False" ChipTextColor="Orange"   ChipBackground="#fff7ea"/>
                 </ScrollView>
 
-                <Border x:Name="IntList"  Stroke="#E6E6E6" BackgroundColor="Transparent" Margin="20,10,20,0" MaximumHeightRequest="250" StrokeShape="RoundRectangle 10">
-                    <syncfusion:SfListView x:Name="InterventionLV" ScrollBarVisibility="Never" ItemSize="35" ItemTapped="InterventionLV_ItemTapped"  SelectionMode="SingleDeselect" SelectionBackground="Transparent">
+                <Border x:Name="IntList"  Stroke="#E6E6E6" BackgroundColor="Transparent" Margin="20,10,20,0" Padding="20" MaximumHeightRequest="250" StrokeShape="RoundRectangle 10">
+                    <syncfusion:SfListView x:Name="InterventionLV" ScrollBarVisibility="Never"  ItemSize="35" ItemTapped="InterventionLV_ItemTapped"  SelectionMode="SingleDeselect" SelectionBackground="Transparent">
                         <syncfusion:SfListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>

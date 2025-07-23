@@ -68,7 +68,7 @@ Padding="0">
                         </Label.FormattedText>
                         </Label>
 
-                        <Label  FontFamily="HankenGroteskBold" HorizontalTextAlignment="Start"  Margin="10,10,0,0" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                        <Label  FontFamily="HankenGroteskBold" HorizontalTextAlignment="Start"  Margin="10,10,0,10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
                             <Label.FormattedText>
                                 <FormattedString>
                                     <Span Text="Start Date: " TextColor="Gray" FontSize="12" FontFamily="HankenGroteskRegular" />

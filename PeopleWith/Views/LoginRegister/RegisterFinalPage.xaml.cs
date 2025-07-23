@@ -19,6 +19,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Linq;
 using System.Net;
+using CommunityToolkit.Maui.Core;
 
 namespace PeopleWith;
 
@@ -958,8 +959,12 @@ public partial class RegisterFinalPage : ContentPage
 
                         var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
 
-                        Stream drawingStream = await (DrawingView.GetImageStream(drawingpad.Lines, new Size(150, 150),
-                                Microsoft.Maui.Graphics.Colors.Transparent, cts.Token));
+                        //old 
+                        //Stream drawingStream = await DrawingView.GetImageStream(drawingpad.Lines, new Size(150, 150),
+                        //        Microsoft.Maui.Graphics.Colors.Transparent, cts.Token);
+
+                        //new 
+                        Stream drawingStream = await drawingpad.GetImageStream(150, 150, cts.Token);
 
 
                         if (drawingStream != null)
@@ -1652,8 +1657,11 @@ public partial class RegisterFinalPage : ContentPage
         {
             var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
 
-            Stream drawingStream = await (DrawingView.GetImageStream(drawingpad.Lines, new Size(150, 150),
-                    Microsoft.Maui.Graphics.Colors.Transparent, cts.Token));
+            //Old
+            //Stream drawingStream = await (DrawingView.GetImageStream(drawingpad.Lines, new Size(150, 150),
+            //        Microsoft.Maui.Graphics.Colors.Transparent, cts.Token));
+
+            Stream drawingStream = await drawingpad.GetImageStream(150, 150, cts.Token);
             bool isSignatureBlank = drawingStream.Length == 0;
 
 

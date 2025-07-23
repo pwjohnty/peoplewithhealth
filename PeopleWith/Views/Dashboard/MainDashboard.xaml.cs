@@ -231,6 +231,7 @@ public partial class MainDashboard : ContentPage
             if (string.IsNullOrEmpty(Helpers.Settings.SignUp))
             {
                 infotab.IsVisible = false;
+                additionalquestionstab.IsVisible = false;
 
                 var getimagesource = new Uri("https://peoplewithappiamges.blob.core.windows.net/appimages/appimages/PeopleWithApp-AppImage-TemplateNov24.png");
 
@@ -315,6 +316,7 @@ public partial class MainDashboard : ContentPage
                     exitidHome.IsVisible = true;
                     exitidbrowse.IsVisible = true;
                     exitidexplore.IsVisible = true;
+                    additionalquestionstab.IsVisible = false; 
 
                     exitidHome.Text = signupcodecollection[0].externalidentifier;
                     exitidbrowse.Text = signupcodecollection[0].externalidentifier;
@@ -333,9 +335,17 @@ public partial class MainDashboard : ContentPage
                     Preferences.Default.Set("NovoContent", CleanString);
                 }
 
+
+                //Set DashQuestions Tab 
+                var signup = Helpers.Settings.SignUp;
+                additionalquestionstab.IsVisible = !string.IsNullOrEmpty(signup) &&
+                    //Only Two Signupcodes to Show DashQuestions
+                    (signup.Contains("SFEWH") || signup.Contains("SFECORE"));
+
+
                 //Additional Dash Questions  SFEWH && SFECORE 
                 //if (signupcodecollection[0].referral == "SFEWH" || signupcodecollection[0].referral == "SFECORE" || signupcodecollection[0].referral == "RBHTHCM")
-                if (signupcodecollection[0].referral == "SFECORE" )
+                if (signupcodecollection[0].referral == "SFECORE")
                 {
                     DashQuestions();
                 }
@@ -1408,7 +1418,7 @@ public partial class MainDashboard : ContentPage
             questionnaires = getQuestionairesTask;
 
 
-
+       
 
             if (signup.Contains("SFEWH"))
             {
@@ -1417,7 +1427,7 @@ public partial class MainDashboard : ContentPage
                 SFEWHStudy.IsVisible = true;
 
                 var ItemstoRemove = new List<string>();
-                additionalquestionstab.IsVisible = true;
+                //additionalquestionstab.IsVisible = true;
 
                 if (signup.Contains("SFEWHA1"))
                 {
@@ -1529,7 +1539,7 @@ public partial class MainDashboard : ContentPage
             {
                 var QuestionList = new ObservableCollection<questionnaire>();
                 completequestionnaireborder.IsVisible = false;
-                additionalquestionstab.IsVisible = true;
+                //additionalquestionstab.IsVisible = true;
                 SFECoreStudy.IsVisible = true;
 
                 //EQ-5D-5L
@@ -1566,6 +1576,7 @@ public partial class MainDashboard : ContentPage
                 var QuestionList = new ObservableCollection<questionnaire>();
                 completequestionnaireborder.IsVisible = false;
                 //additionalquestionstab.IsVisible = true;
+                //additionalquestionstab.IsVisible = false;
                 //SFECoreStudy.IsVisible = true;
 
                 //Hypertrophic Obstructive Cardiomyopathy Baseline Questionnaire
@@ -1609,6 +1620,7 @@ public partial class MainDashboard : ContentPage
             {
                 var QuestionList = new ObservableCollection<questionnaire>();
                 completequestionnaireborder.IsVisible = false;
+                //additionalquestionstab.IsVisible = false;
 
                 if (userfeedbacklist[0].initialquestionnairefeedbacklist != null)
                 {

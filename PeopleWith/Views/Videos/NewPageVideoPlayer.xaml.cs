@@ -255,15 +255,20 @@ public partial class NewPageVideoPlayer : ContentPage
     {
         try
         {
-          // Navigation.RemovePage(this);
-          //  await Navigation.PushAsync(new AllVideos(), false);
-          //  return;
+            // Navigation.RemovePage(this);
+            //  await Navigation.PushAsync(new AllVideos(), false);
+            //  return;
+
+            if (!Video.IsVisible || MediaElement == null) return;
 
             if (Video.IsVisible == true)
             {
-                MediaElement.Stop();
-                MediaElement.CancelAnimations();
-                
+                //if (MediaElement?.Handler?.PlatformView != null)
+                //{
+                    MediaElement.Stop();
+                    //MediaElement.Source = null;
+                    //MediaElement.DisconnectHandlers();
+                //}
 
                 isPlaying = false;
                 if (!string.IsNullOrEmpty(VideoEngagement.closeaction))
@@ -275,15 +280,18 @@ public partial class NewPageVideoPlayer : ContentPage
                     VideoEngagement.closeaction = "UserClosed";
                 }
                
-                MediaElement.Source = null;
+                //MediaElement.Source = null;
              //   Video.IsVisible = false;
               //  VideoDetails.IsVisible = true;
                // VideoEngagement.closeaction = "UserClosed";
                 closevideobtn.IsVisible = false;
                 NavigationPage.SetHasNavigationBar(this, true);
-                UpdateVideoEngagement();
+                await UpdateVideoEngagement();
 
+                MediaElement.Stop();
+                MediaElement.Source = null;
 
+                await Task.Delay(200);
 
                 var pages = Navigation.NavigationStack.ToList();
                 int i = 0;
@@ -334,10 +342,13 @@ public partial class NewPageVideoPlayer : ContentPage
 
             }
         }
+        catch (ObjectDisposedException)
+        {
+                 //Leave Empty
+        }
         catch (Exception Ex)
         {
             NotasyncMethod(Ex);
-            //  NotasyncMethod(Ex);
         }
     }
 
@@ -379,12 +390,12 @@ public partial class NewPageVideoPlayer : ContentPage
         try
         {
             // If you have a MediaElement, disconnect the handler when the page is unloaded
-            if (MediaElement.Handler != null)
+            if (MediaElement?.Handler?.PlatformView != null)
             {
                 // Stop the video and disconnect the handler
-                MediaElement.Stop(); 
-                MediaElement.Source = null;
-                MediaElement.Handler?.DisconnectHandler();
+                //MediaElement.Stop(); 
+                //MediaElement.Source = null;
+                //MediaElement.Handler?.DisconnectHandler();
                 // MediaElement.Stop();
                 // MediaElement.IsVisible = false;
                 //   MediaElement.Handler?.DisconnectHandler();
@@ -407,8 +418,7 @@ public partial class NewPageVideoPlayer : ContentPage
             PlayDuration.Stop();
             PauseDuration.Stop();
 
-            if (VideoEngagement == null)
-                return;
+            if (VideoEngagement == null) return;
 
             var zeroTimeSpan = TimeSpan.Zero;
             if (PauseDuration.Elapsed != zeroTimeSpan)

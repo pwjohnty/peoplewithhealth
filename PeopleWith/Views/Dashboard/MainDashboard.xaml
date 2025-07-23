@@ -649,7 +649,7 @@ FontSize="8" />
 
                                     <chart:SfCartesianChart.Resources>
                                         <DataTemplate x:Key="labelTemplate">
-                                            <Grid VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"  Padding="0">
+                                            <Grid VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand"  Padding="10">
                                                 <Label Text="{Binding Item.Count}" FontFamily="HankenGroteskBold" Padding="0"  TextColor="Black" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" FontSize="10"/>
                                             </Grid>
                                         </DataTemplate>
@@ -1551,7 +1551,7 @@ HorizontalOptions="Center" />
                 </tabView:SfTabItem.Content>
             </tabView:SfTabItem>
 
-            <tabView:SfTabItem x:Name="additionalquestionstab" IsVisible="False" Header="Questions" ImageSource="questiondashgrey.png" FontFamily="HankenGroteskRegular" FontSize="12" TextColor="#b3babd">
+            <tabView:SfTabItem x:Name="additionalquestionstab"  Header="Questions" ImageSource="questiondashgrey.png" FontFamily="HankenGroteskRegular" FontSize="12" TextColor="#b3babd">
                 <tabView:SfTabItem.Content>
                 <ScrollView VerticalScrollBarVisibility="Never">
                     <StackLayout BackgroundColor="Transparent" Margin="0,20,0,0">
