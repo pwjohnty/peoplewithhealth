@@ -20,7 +20,7 @@ namespace PeopleWith;
 
 public partial class AddMedication : ContentPage
 {
-    public HttpClient Client = new HttpClient();
+    private static readonly HttpClient Client = new HttpClient();
     ObservableCollection<medication> allmedicationlist = new ObservableCollection<medication>();
     ObservableCollection<medication> FilterResults = new ObservableCollection<medication>();
     usermedication newusermedication = new usermedication();
@@ -85,9 +85,11 @@ public partial class AddMedication : ContentPage
     {
         try
         {
-            Client = new HttpClient();
-            Client.DefaultRequestHeaders.Add("X-MS-CLIENT-PRINCIPAL", "eyAgCiAgImlkZW50aXR5UHJvdmlkZXIiOiAidGVzdCIsCiAgInVzZXJJZCI6ICIxMjM0NSIsCiAgInVzZXJEZXRhaWxzIjogImpvaG5AY29udG9zby5jb20iLAogICJ1c2VyUm9sZXMiOiBbIjFFMzNDMEFDLTMzOTMtNEMzNC04MzRBLURFNUZEQkNCQjNDQyJdCn0=");
-            Client.DefaultRequestHeaders.Add("X-MS-API-ROLE", "1E33C0AC-3393-4C34-834A-DE5FDBCBB3CC");
+            if (!Client.DefaultRequestHeaders.Contains("X-MS-CLIENT-PRINCIPAL"))
+            {
+                Client.DefaultRequestHeaders.Add("X-MS-CLIENT-PRINCIPAL", "eyAgCiAgImlkZW50aXR5UHJvdmlkZXIiOiAidGVzdCIsCiAgInVzZXJJZCI6ICIxMjM0NSIsCiAgInVzZXJEZXRhaWxzIjogImpvaG5AY29udG9zby5jb20iLAogICJ1c2VyUm9sZXMiOiBbIjFFMzNDMEFDLTMzOTMtNEMzNC04MzRBLURFNUZEQkNCQjNDQyJdCn0=");
+                Client.DefaultRequestHeaders.Add("X-MS-API-ROLE", "1E33C0AC-3393-4C34-834A-DE5FDBCBB3CC");
+            }
         }
         catch (Exception Ex)
         {
@@ -4146,7 +4148,10 @@ public partial class AddMedication : ContentPage
                         item.dateadded = DateTime.Now.ToString("g");
                         item.TimeDosage = string.Join(", ", newusermedication.TimeDosage);
                         // item.frequency = newusermedication.frequency;
-                        observableItemList.Add(item);
+                        if (item.id != 0)
+                        {
+                            observableItemList.Add(item);
+                        }
                     }
 
                    // Random randomgroup1 = new Random();

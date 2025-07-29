@@ -30,10 +30,10 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Frame  HeightRequest="30" WidthRequest="30" InputTransparent="True" CornerRadius="15" BorderColor="{Binding Bordercolour}" Opacity="{Binding Op}"  Grid.Row="0" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,5,0,0" Grid.Column="0" Padding="5"  BackgroundColor="{Binding Bgcolour}">
+                                <Border  HeightRequest="30" WidthRequest="30" InputTransparent="True" StrokeShape="RoundRectangle 15" Stroke="{Binding Bordercolour}" Opacity="{Binding Op}"  Grid.Row="0" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,5,0,0" Grid.Column="0" Padding="5"  BackgroundColor="{Binding Bgcolour}">
                                     <Label Text="{Binding Day}" FontFamily="HankenGroteskBold" Margin="0,0,0,0" Grid.Row="2" Grid.Column="0" Padding="0" HorizontalOptions="Center"  VerticalOptions="Start" TextColor="#031926" FontSize="14" FontAttributes="None" />
 
-                                </Frame>
+                                </Border>
 
 
                                 <Label Text="{Binding Date}" FontFamily="HankenGroteskRegular" Margin="0,5,0,0" Grid.Row="1" Grid.Column="0" Padding="0" HorizontalOptions="Center"  VerticalOptions="Start" TextColor="Gray" FontSize="10" FontAttributes="None" />
@@ -64,10 +64,10 @@
                             </Grid.ColumnDefinitions>
 
 
-                            <Frame  HeightRequest="30" WidthRequest="30" CornerRadius="15" BorderColor="Transparent" Grid.Row="0" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,5,0,0" Grid.Column="0" Padding="5"  BackgroundColor="#031926">
+                            <Border  HeightRequest="30" WidthRequest="30" StrokeShape="RoundRectangle 15" Stroke="Transparent" Grid.Row="0" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,5,0,0" Grid.Column="0" Padding="5"  BackgroundColor="#031926">
                                 <Label Text="{Binding Day}" FontFamily="HankenGroteskBold" Margin="0,0,0,0" Grid.Row="2" Grid.Column="0" Padding="0" HorizontalOptions="Center"  VerticalOptions="Start" TextColor="White" FontSize="14" FontAttributes="None" />
 
-                            </Frame>
+                            </Border>
 
 
                             <Label Text="{Binding Date}" FontFamily="HankenGroteskBold" Margin="0,5,0,0" Grid.Row="1" Grid.Column="0" Padding="0" HorizontalOptions="Center"  VerticalOptions="Start" TextColor="#031926" FontSize="10" FontAttributes="None" />
@@ -146,7 +146,7 @@ Text="As Required Medications/Supplements" />
                         <ViewCell>
                             <StackLayout>
 
-                                <Frame CornerRadius="10"  Margin="10,0,10,5"  Padding="5" HasShadow="False" BorderColor="Transparent" InputTransparent="False" BackgroundColor="{Binding ListBackgroundColor}">
+                                <Border StrokeShape="RoundRectangle 10" Margin="10,0,10,5"  Padding="5"  Stroke="Transparent" InputTransparent="False" BackgroundColor="{Binding ListBackgroundColor}">
                                     <Grid  HorizontalOptions="FillAndExpand">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -194,7 +194,7 @@ Text="As Required Medications/Supplements" />
 
 
                                     </Grid>
-                                </Frame>
+                                </Border>
 
                             </StackLayout>
                         </ViewCell>
@@ -229,7 +229,7 @@ Text="As Required Medications/Supplements" />
                         <ViewCell>
                             <StackLayout>
 
-                                <Frame CornerRadius="10"  Margin="10,0,10,5"  Padding="5" HasShadow="False" BorderColor="Transparent" InputTransparent="True" BackgroundColor="{Binding ListBackgroundColor}">
+                                <Border StrokeShape="RoundRectangle 10" Margin="10,0,10,5"  Padding="5"  Stroke="Transparent" InputTransparent="True" BackgroundColor="{Binding ListBackgroundColor}">
                                     <Grid  HorizontalOptions="FillAndExpand">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -261,7 +261,7 @@ Text="As Required Medications/Supplements" />
 
 
                                     </Grid>
-                                </Frame>
+                                </Border>
 
                             </StackLayout>
                         </ViewCell>

@@ -1225,12 +1225,12 @@ public partial class WH : ContentPage
                 userresponselist.Remove(itemToRemove);
             }
 
-            var itemToRemove1 = userresponselist.FirstOrDefault(q => q.questionid == exercisequestion2.questionid);
+            //var itemToRemove1 = userresponselist.FirstOrDefault(q => q.questionid == exercisequestion.questionid);
 
-            if (itemToRemove1 != null)
-            {
-                userresponselist.Remove(itemToRemove1);
-            }
+            //if (itemToRemove1 != null)
+            //{
+            //    userresponselist.Remove(itemToRemove1);
+            //}
 
             var itemToRemove2 = userresponselist.FirstOrDefault(q => q.questionid == exercisequestion2.questionid);
 
@@ -1282,7 +1282,7 @@ public partial class WH : ContentPage
 
                 var response2 = new userresponse();
                 response2.questionid = exercisequestion2.questionid;
-                response2.answerid = item.answerid;
+                response2.answerid = item2.answerid;
                 response2.userid = newuser.userid;
                 response2.responsedate = DateTime.Now.ToString("dd/MM/yyyy");
              
@@ -1296,7 +1296,7 @@ public partial class WH : ContentPage
 
                 var response3 = new userresponse();
                 response3.questionid = exercisequestion3.questionid;
-                response3.answerid = item.answerid;
+                response3.answerid = item3.answerid;
                 response3.userid = newuser.userid;
                 response3.responsedate = DateTime.Now.ToString("dd/MM/yyyy");
 

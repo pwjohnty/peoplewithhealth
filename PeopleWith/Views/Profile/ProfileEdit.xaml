@@ -95,7 +95,7 @@
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <Frame CornerRadius="10" InputTransparent="True"   Margin="5,5,5,5"  HasShadow="False" Opacity="1" BackgroundColor="Transparent" BorderColor="LightGray">
+                                    <Border StrokeShape="RoundRectangle 10" InputTransparent="True" Padding="20"  Margin="5,5,5,5"   Opacity="1" BackgroundColor="Transparent" Stroke="LightGray">
                                     <Grid HorizontalOptions="FillAndExpand" Margin="0" Padding="0"  >
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -109,14 +109,14 @@
                                         <Label Text="{Binding .}" FontFamily="HankenGroteskRegular" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="12" />
 
                                     </Grid>
-                                </Frame>
+                                </Border>
                             </ViewCell>
                         </DataTemplate>
                     </syncfusion:SfListView.ItemTemplate>
                     <syncfusion:SfListView.SelectedItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <Frame CornerRadius="10" Margin="5,5,5,5" InputTransparent="True" BackgroundColor="#BFDBF7"  HasShadow="False" BorderColor="Transparent">
+                                    <Border StrokeShape="RoundRectangle 10" Margin="5,5,5,5" Padding="20" InputTransparent="True" BackgroundColor="#BFDBF7"   Stroke="Transparent">
                                     <Grid HorizontalOptions="FillAndExpand">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -128,7 +128,7 @@
                                         <Label Text="{Binding .}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" FontAttributes="Bold"  TextColor="#031926" FontSize="12" />
 
                                     </Grid>
-                                </Frame>
+                                </Border>
                             </ViewCell>
                         </DataTemplate>
                     </syncfusion:SfListView.SelectedItemTemplate>
@@ -136,7 +136,7 @@
 
                     <Border IsVisible="False" Grid.Row="1" x:Name="SpecifyPrompt" StrokeShape="RoundRectangle 10" InputTransparent="False" Padding="0"  Margin="5" BackgroundColor="Transparent">
                         <Grid HorizontalOptions="FillAndExpand" Grid.RowDefinitions="Auto" Grid.ColumnDefinitions="100*" >
-                            <Editor Keyboard="Text" Grid.Row="0" Grid.Column="0"  x:Name="SpecifyGender" Placeholder="Enter Gender" Margin="15,10,15,5" VerticalOptions="Center" PlaceholderColor="LightGray" TextColor="#031926" FontSize="12"/>
+                            <Editor Keyboard="Text" Grid.Row="0" Grid.Column="0"  x:Name="SpecifyGender" Placeholder="Enter Gender" Margin="15,5,15,5" VerticalTextAlignment="Center" VerticalOptions="Center" PlaceholderColor="LightGray" TextColor="#031926" FontSize="12"/>
                         </Grid>
                     </Border>
 
@@ -166,7 +166,7 @@
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <Frame CornerRadius="10"  Margin="5,5,5,5" InputTransparent="True" HasShadow="False" Opacity="1" BackgroundColor="Transparent" BorderColor="LightGray">
+                                    <Border StrokeShape="RoundRectangle 10" Margin="5,5,5,5" Padding="20" InputTransparent="True"  Opacity="1" BackgroundColor="Transparent" Stroke="LightGray">
                                     <Grid HorizontalOptions="FillAndExpand" Margin="0" Padding="0"  >
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -179,14 +179,14 @@
                                         <Label Text="{Binding .}" FontFamily="HankenGroteskRegular" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" VerticalOptions="StartAndExpand"  TextColor="Gray" FontSize="12" />
 
                                     </Grid>
-                                </Frame>
+                                </Border>
                             </ViewCell>
                         </DataTemplate>
                     </syncfusion:SfListView.ItemTemplate>
                     <syncfusion:SfListView.SelectedItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <Frame CornerRadius="10"  Margin="5,5,5,5" InputTransparent="True" BackgroundColor="#BFDBF7"  HasShadow="False" BorderColor="Transparent">
+                                    <Border StrokeShape="RoundRectangle 10" Padding="20" Margin="5,5,5,5" InputTransparent="True" BackgroundColor="#BFDBF7"   Stroke="Transparent">
                                     <Grid HorizontalOptions="FillAndExpand">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -198,7 +198,7 @@
                                         <Label Text="{Binding .}" FontFamily="HankenGroteskBold" Margin="0,0,0,0"  VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0" FontAttributes="Bold"  TextColor="#031926" FontSize="12" />
 
                                     </Grid>
-                                </Frame>
+                                </Border>
                             </ViewCell>
                         </DataTemplate>
                     </syncfusion:SfListView.SelectedItemTemplate>
@@ -485,7 +485,7 @@ HorizontalOptions="Center" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Frame HasShadow="false" Margin="0,5,0,0"  BorderColor="#E8E8E8"  BackgroundColor="Transparent" >
+                    <Border  Margin="0,5,0,0"  Stroke="#E8E8E8"  BackgroundColor="Transparent" >
                         <Grid Grid.Row="0" RowSpacing="5" Grid.Column="0">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
@@ -506,7 +506,7 @@ HorizontalOptions="Center" >
                             <Switch x:Name="FingerSwitch" Toggled="FingerSwitch_Toggled" Grid.Row="2" Grid.Column="2"  OnColor="Green" ThumbColor="#E5E5E5" HeightRequest="40" WidthRequest="40" />
 
                         </Grid>
-                </Frame>
+                </Border>
                     
                 </Grid>
 

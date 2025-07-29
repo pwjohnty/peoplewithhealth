@@ -119,7 +119,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Label Text="Attendance:" FontSize="16" Margin="0,10,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
-                    <Frame BorderColor="#ffe4e1" BackgroundColor="#ffe4e1" HorizontalOptions="Start" HeightRequest="30" HasShadow="False" WidthRequest="75" Padding="5" Grid.Row="0" Grid.Column="1">
+                    <Frame BorderColor="#ffe4e1" BackgroundColor="#ffe4e1" HorizontalOptions="Start" HeightRequest="30"  WidthRequest="75" Padding="5" Grid.Row="0" Grid.Column="1">
                         <Label x:Name="Attendancelbl" FontSize="16"  Grid.Row="0" Grid.Column="1" TextColor="#031926" FontFamily="HankenGroteskBold" WidthRequest="75" HorizontalTextAlignment="Center" FontAttributes="Bold" HorizontalOptions="Center" />
                     </Frame>
                 </Grid>

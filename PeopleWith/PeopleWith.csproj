@@ -1,9 +1,21 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
+    <!--<TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>-->
     <!-- <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks> -->
-	  <RuntimeIdentifiers Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">android-arm;android-arm64;android-x86;android-x64</RuntimeIdentifiers>
-    <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
+	  <TargetFrameworks>net9.0-android</TargetFrameworks>
+	   <TargetFrameworks Condition="!$([MSBuild]::IsOSPlatform('windows'))">
+    $(TargetFrameworks);net9.0-ios;net9.0-maccatalyst
+  </TargetFrameworks>
+	  <!--<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>-->
+	  <RuntimeIdentifiers Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
+  android-arm;android-arm64;android-x86;android-x64
+</RuntimeIdentifiers>
+
+	  <!--<AndroidSdkVersion>34</AndroidSdkVersion>
+	  <AndroidTargetSdkVersion>34</AndroidTargetSdkVersion>
+	  <AndroidMinSdkVersion>24</AndroidMinSdkVersion>-->
+
+	  <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
     <!-- <TargetFrameworks>$(TargetFrameworks);net9.0-tizen</TargetFrameworks> -->
     <!-- Note for MacCatalyst:
 		The default runtime is maccatalyst-x64, except in Release config, in which case the default is maccatalyst-x64;maccatalyst-arm64.
@@ -20,11 +32,13 @@
     <Nullable>enable</Nullable>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
 
+	  <!--<PublishTrimmed>false</PublishTrimmed>
+	  <RunAOTCompilation>false</RunAOTCompilation>-->
 	  
 	<!--Added to Resoleve SIGSEGV Issue-->
 	<!--<AndroidLinkMode>None</AndroidLinkMode>
-	<MonoSymbolArchive>true</MonoSymbolArchive>
-	<EmbedAssembliesIntoApk>false</EmbedAssembliesIntoApk>-->
+	<MonoSymbolArchive>true</MonoSymbolArchive>-->
+	<!--<EmbedAssembliesIntoApk>false</EmbedAssembliesIntoApk>-->
 	<!--<MonoAOTMode>Full</MonoAOTMode>-->
 	<!--<PublishAot>true</PublishAot>-->
 	<!--<PublishTrimmed>true</PublishTrimmed>-->
@@ -39,8 +53,8 @@
     <!-- Versions -->
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
     <ApplicationVersion>1</ApplicationVersion>
-	   <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
-    <AndroidMinSdkVersion>21</AndroidMinSdkVersion>
+	   <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">26.0</SupportedOSPlatformVersion>
+    <AndroidMinSdkVersion>26</AndroidMinSdkVersion>
     <AndroidTargetSdkVersion>34</AndroidTargetSdkVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">15.1</SupportedOSPlatformVersion>
@@ -49,6 +63,13 @@
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</SupportedOSPlatformVersion>
   </PropertyGroup>
+	<!-- Code to Fix 32 Bit Release Build Crash-->
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
+		<RunAOTCompilation>false</RunAOTCompilation>
+		<!--<AndroidLinkMode>SdkOnly</AndroidLinkMode>-->
+		<AndroidLinkMode>None</AndroidLinkMode>
+		<PublishTrimmed>false</PublishTrimmed>
+	</PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)'=='net9.0-ios'">
     <CodesignKey>Apple Development: Created via API (9AF7WV24ZX)</CodesignKey>
     <CodesignProvision>VS: com.peoplewith.peoplewith Development</CodesignProvision>
@@ -57,6 +78,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-ios|AnyCPU'">
     <MtouchLink>None</MtouchLink>
 	  <CodesignEntitlements>Platforms\iOS\Entitlements.plist</CodesignEntitlements>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-android|AnyCPU'">
+    <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
   </PropertyGroup>
   <ItemGroup>
     <!-- App Icon -->
@@ -75,16 +99,25 @@
 	  <MauiImage Include="Resources\AppIcon\pwicon.png" />
 	  <!-- Custom Fonts -->
     <MauiFont Include="Resources\Fonts\*" />
+	  <!-- Hanken Grotesk Fonts -->
+	  <!--<MauiFont Include="Resources\Fonts\HankenGrotesk-Regular.ttf" Alias="HankenGroteskRegular" />
+	  <MauiFont Include="Resources\Fonts\HankenGrotesk-Bold.ttf" Alias="HankenGroteskBold" />
+	  <MauiFont Include="Resources\Fonts\HankenGrotesk-Light.ttf" Alias="HankenGroteskLight" />
+	  <MauiFont Include="Resources\Fonts\HankenGrotesk-SemiBold.ttf" Alias="HankenGroteskSemiBold" />-->
+
+	  <!-- OpenSans Fonts -->
+	  <!--<MauiFont Include="Resources\Fonts\HankenGrotesk-Regular.ttf" Alias="OpenSansRegular" />
+	  <MauiFont Include="Resources\Fonts\HankenGrotesk-Bold.ttf" Alias="OpenSansSemibold" />-->
     <!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
     <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Platforms\Android\google-services.json" />
+    <!--<None Remove="Platforms\Android\google-services.json" />-->
     <None Remove="Resources\AppIcon\pwhealthicon.svg" />
-    <None Remove="Resources\Fonts\HankenGrotesk-Bold.ttf" />
+    <!--<None Remove="Resources\Fonts\HankenGrotesk-Bold.ttf" />
     <None Remove="Resources\Fonts\HankenGrotesk-Light.ttf" />
     <None Remove="Resources\Fonts\HankenGrotesk-Regular.ttf" />
-    <None Remove="Resources\Fonts\HankenGrotesk-SemiBold.ttf" />
+    <None Remove="Resources\Fonts\HankenGrotesk-SemiBold.ttf" />-->
     <None Remove="Resources\Images\activityhome.png" />
     <None Remove="Resources\Images\adddataicon.png" />
     <None Remove="Resources\Images\agreement.png" />
@@ -265,21 +298,24 @@
   <!--<ItemGroup>
     <GoogleServicesJson Include="Platforms\Android\google-services.json" />
   </ItemGroup>-->
-	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
+	<!--<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-android'">-->
+	<ItemGroup Condition="'$(TargetFramework)' != '' and $(TargetFramework.Contains('-android'))">
   <GoogleServicesJson Include="Platforms\Android\google-services.json" />
   <PackageReference Include="Plugin.Firebase.CloudMessaging" Version="3.1.2" />
 	</ItemGroup>
 
 	<ItemGroup>
     <PackageReference Include="Azure.Storage.Blobs" Version="12.22.0" />
-    <PackageReference Include="CommunityToolkit.Maui" Version="7.0.1" />
-    <PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="3.1.0" />
+    <PackageReference Include="CommunityToolkit.Maui" Version="11.2.0" />
+    <PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="6.0.2" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.0" />
     <PackageReference Include="FreakyControls" Version="0.5.0" />
     <PackageReference Include="Microsoft.Azure.NotificationHubs" Version="4.2.0" />
     <PackageReference Include="Microsoft.Datasync.Client" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
-    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+    <!--<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />-->
+		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.50" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.50" />
 	  <!--<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.50" />
 	  <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.50" />-->
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.3" />
@@ -291,7 +327,7 @@
     <PackageReference Include="Plugin.LocalNotification" Version="11.1.0" />
     <PackageReference Include="Plugin.Maui.Biometric" Version="0.0.2" />
     <PackageReference Include="Plugin.Maui.SegmentedControl" Version="1.0.8" />
-    <PackageReference Include="Sentry.Maui" Version="5.4.0" />
+    <PackageReference Include="Sentry.Maui" Version="5.12.0" />
     <PackageReference Include="SkiaSharp.Views" Version="3.116.1" />
     <PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="3.116.1" />
     <PackageReference Include="SkiaSharp.Views.Maui.Core" Version="3.116.1" />
@@ -574,6 +610,9 @@
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
     <MauiXaml Update="Views\Profile\ProfileSection.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Profile\TakeProfilePicture.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
     <MauiXaml Update="Views\Questionnaires\AllQuestionnaires.xaml">

@@ -257,7 +257,7 @@ HorizontalOptions="Center" />
 
                     <StackLayout x:Name="ConsentBoxesStack">
 
-                    <Frame HasShadow="False" Padding="10" Margin="0,30,0,0" x:Name="tcframe" BackgroundColor="Transparent" BorderColor="#BFDBF7" CornerRadius="10">
+                        <Border  Padding="10" Margin="0,30,0,0" x:Name="tcframe" BackgroundColor="Transparent" Stroke="#BFDBF7" StrokeShape="RoundRectangle 10">
                         <Grid Margin="0,0,0,0" >
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
@@ -280,10 +280,10 @@ HorizontalOptions="Center" />
                                 </Label.GestureRecognizers>
                             </Label>
                         </Grid>
-                    </Frame>
+                    </Border>
                     <Label x:Name="tcerror" FontSize="10" IsVisible="false" TextColor="Red" HorizontalOptions="Start" Margin="10,10,0,10" />
 
-                    <!--<Frame HasShadow="False" Padding="10" Margin="0,10,0,0" BackgroundColor="Transparent" BorderColor="#BFDBF7" CornerRadius="10">
+                    <!--<Frame  Padding="10" Margin="0,10,0,0" BackgroundColor="Transparent" BorderColor="#BFDBF7" CornerRadius="10">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
@@ -304,8 +304,8 @@ HorizontalOptions="Center" />
                         </Grid>
                     </Frame>-->
 
-                    <Frame HasShadow="False" Padding="10" Margin="0,10,0,20" BackgroundColor="Transparent" BorderColor="#BFDBF7" CornerRadius="10">
-                        <Grid>
+                        <Border Padding="10" Margin="0,10,0,20" BackgroundColor="Transparent" Stroke="#BFDBF7"  StrokeShape="RoundRectangle 10">
+                            <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
@@ -323,7 +323,7 @@ HorizontalOptions="Center" />
                                 </Label.FormattedText>
                             </Label>
                         </Grid>
-                    </Frame>
+                    </Border>
                     </StackLayout>
 
                     <StackLayout x:Name="signaturePadStack"  IsVisible="False">

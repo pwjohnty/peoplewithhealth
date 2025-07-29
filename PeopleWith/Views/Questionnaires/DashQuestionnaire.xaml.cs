@@ -47,7 +47,7 @@ public partial class DashQuestionnaire : ContentPage
     public string Tq13 = "";
     public string Tq131 = "";
     public string Tq132 = "";
-    public HttpClient Client = new HttpClient();
+    private static readonly HttpClient Client = new HttpClient();
 
     public DashQuestionnaire()
 	{
@@ -58,9 +58,11 @@ public partial class DashQuestionnaire : ContentPage
     {
         try
         {
-            Client = new HttpClient();
-            Client.DefaultRequestHeaders.Add("X-MS-CLIENT-PRINCIPAL", "eyAgCiAgImlkZW50aXR5UHJvdmlkZXIiOiAidGVzdCIsCiAgInVzZXJJZCI6ICIxMjM0NSIsCiAgInVzZXJEZXRhaWxzIjogImpvaG5AY29udG9zby5jb20iLAogICJ1c2VyUm9sZXMiOiBbIjFFMzNDMEFDLTMzOTMtNEMzNC04MzRBLURFNUZEQkNCQjNDQyJdCn0=");
-            Client.DefaultRequestHeaders.Add("X-MS-API-ROLE", "1E33C0AC-3393-4C34-834A-DE5FDBCBB3CC");
+            if (!Client.DefaultRequestHeaders.Contains("X-MS-CLIENT-PRINCIPAL"))
+            {
+                Client.DefaultRequestHeaders.Add("X-MS-CLIENT-PRINCIPAL", "eyAgCiAgImlkZW50aXR5UHJvdmlkZXIiOiAidGVzdCIsCiAgInVzZXJJZCI6ICIxMjM0NSIsCiAgInVzZXJEZXRhaWxzIjogImpvaG5AY29udG9zby5jb20iLAogICJ1c2VyUm9sZXMiOiBbIjFFMzNDMEFDLTMzOTMtNEMzNC04MzRBLURFNUZEQkNCQjNDQyJdCn0=");
+                Client.DefaultRequestHeaders.Add("X-MS-API-ROLE", "1E33C0AC-3393-4C34-834A-DE5FDBCBB3CC");
+            }
         }
         catch (Exception Ex)
         {
@@ -2912,7 +2914,15 @@ public partial class DashQuestionnaire : ContentPage
 
                 newq4.userid = Helpers.Settings.UserKey;
                 newq4.questionid = "733DF4FB-6C01-42F0-AABB-5ABA16346300";
-                newq4.notes = q4entrytext.Text.ToString();
+                if (String.IsNullOrEmpty(q4entrytext.Text))
+                {
+                    //newq4.notes = "0";
+                }
+                else
+                {
+                    newq4.notes = q4entrytext.Text.ToString();
+
+                }
                 newq4.responsedate = DateTime.Now.ToString("dd/MM/yyyy");
 
                 newuserresponse.Add(newq4);

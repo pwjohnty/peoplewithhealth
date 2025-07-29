@@ -47,17 +47,22 @@ namespace PeopleWith
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
+            //return base.CreateWindow(activationState);
             return new Window(new NavigationPage(new MainPage()));
             //return new Window(new AppShell());
         }
         public static void SetMainPage(Page newRootPage)
         {
-                   //Set New RootPage
-                if (Application.Current != null && Application.Current.Windows.Any())
+            //Set New RootPage
+            if (Application.Current?.Windows?.FirstOrDefault() is Window window)
+            {
+                if (newRootPage is not NavigationPage && newRootPage is not Shell)
                 {
-                    Application.Current.Windows[0].Page = newRootPage;
+                    newRootPage = new NavigationPage(newRootPage);
                 }
-       
+                window.Page = newRootPage;
+                //Application.Current.Windows[0].Page = newRootPage;
+            }
         }
 
         //private async void OnNotificationTapped(NotificationActionEventArgs e)
@@ -148,7 +153,7 @@ namespace PeopleWith
             Application.Current.Windows[0].Page = navPage;
         }
 
-        protected override void OnResume()
+        protected async override void OnResume()
         {
             try
             {
@@ -177,6 +182,19 @@ namespace PeopleWith
                     //     MessagingCenter.Send<App>(this, "CallBatterySaver");
                     //#endif
 
+                }
+                NetworkAccess accessType = Connectivity.Current.NetworkAccess;
+                if (accessType == NetworkAccess.Internet)
+                {
+                    //Do Nothing 
+                }
+                else
+                {
+                    if (!(Application.Current.MainPage is NoInternetPage))
+                    {
+                        //SetMainPage(new NoInternetPage());
+                        await Application.Current.MainPage.Navigation.PushAsync(new NoInternetPage());
+                    }
                 }
 
                 //if (currentPage.GetType().Name == "ProfileSection")
@@ -207,7 +225,7 @@ namespace PeopleWith
         //        {
         //            await MopupService.Instance.PopAsync();
         //        }
-              
+
         //        if (!isConnected)
         //        {
         //            // Check if NoInternetPage is already on the navigation stack
@@ -291,5 +309,65 @@ namespace PeopleWith
             {
             }
         }
+
+        //Changed For Android issue on resume 
+        //private async void OnConnectivityChanged(object sender, bool isConnected)
+        //{
+        //    try
+        //    {
+        //        await Task.Delay(500);
+
+        //        // Close any popup page
+        //        if (MopupService.Instance.PopupStack.Count > 0)
+        //        {
+        //            await MopupService.Instance.PopAsync();
+        //        }
+
+        //        // Actually check if internet is reachable
+        //        bool internetIsReachable = await IsInternetAvailable(); 
+        //        if (!internetIsReachable)
+        //        {
+        //            if (!(Application.Current.MainPage is NoInternetPage))
+        //            {
+        //                await Application.Current.MainPage.Navigation.PushAsync(new NoInternetPage());
+        //            }
+        //        }
+        //        else
+        //        {
+        //            var mainPage = Application.Current?.Windows.FirstOrDefault()?.Page;
+        //            if (mainPage != null)
+        //            {
+        //                var pageToRemove = mainPage.Navigation.NavigationStack.FirstOrDefault(p => p is NoInternetPage);
+        //                if (pageToRemove != null)
+        //                {
+        //                    mainPage.Navigation.RemovePage(pageToRemove);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception Ex)
+        //    {
+        //    }
+        //}
+
+
+        //private async Task<bool> IsInternetAvailable()
+        //{
+        //    try
+        //    {
+        //        using var httpClient = new HttpClient
+        //        {
+        //            Timeout = TimeSpan.FromSeconds(3)
+        //        };
+
+        //        var response = await httpClient.GetAsync("https://clients3.google.com/generate_204");
+        //        return response.IsSuccessStatusCode;
+        //    }
+        //    catch
+        //    {
+        //        return false;
+        //    }
+        //}
+
     }
 }

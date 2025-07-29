@@ -9,7 +9,7 @@
     </ContentPage.ToolbarItems>
     <ScrollView VerticalScrollBarVisibility="Never">
         <StackLayout x:Name="MoodSingle">
-            <Frame HasShadow="False" CornerRadius="10"  InputTransparent="True" Padding="5" BorderColor="Transparent" BackgroundColor="#FFF8DC"  Margin="20,20,20,5">
+            <Border StrokeShape="RoundRectangle 10" InputTransparent="True" Padding="5" Stroke="Transparent" BackgroundColor="#FFF8DC"  Margin="20,20,20,5">
                 <Grid >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -29,7 +29,7 @@
                     <Label x:Name="MoodNotes" FontFamily="HankenGroteskBold" VerticalOptions="Start" Margin="10,5,0,0" HorizontalOptions="Start" FontSize="12" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3"  TextColor="#031926" />
 
                 </Grid>
-            </Frame>
+            </Border>
             
 
             <Button BackgroundColor="#B8860B" x:Name="AddDataBtn" Clicked="AddDataBtn_Clicked" HorizontalOptions="FillAndExpand" TextColor="White"  FontAttributes="None" Margin="20,20,20,0" FontFamily="HankenGroteskBold" Text="Add Data" />
@@ -91,7 +91,7 @@
             </StackLayout>
 
             <Label Text="Details" Margin="20,20,0,0" FontFamily="HankenGroteskBold"  FontSize="20" VerticalOptions="Center" TextColor="#031926" />
-            <Frame HasShadow="False" BorderColor="#E5E5E5" BackgroundColor="Transparent" Margin="10,10,10,50">
+            <Border  Stroke="#E5E5E5" BackgroundColor="Transparent" Padding="20" StrokeShape="RoundRectangle 10" Margin="10,10,10,50">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="90*"/>
@@ -100,10 +100,10 @@
                     <Label Text="Information and Resources" Margin="0,0,0,0" Grid.Column="0" FontFamily="HankenGroteskBold"  FontSize="16" VerticalOptions="Center" TextColor="#031926" />
                     <Image  Source="backbutton.png" Grid.Column="1" Rotation="180" VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="15" WidthRequest="15" />
                 </Grid>
-                <Frame.GestureRecognizers>
+                <Border.GestureRecognizers>
                     <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
-                </Frame.GestureRecognizers>
-            </Frame>
+                </Border.GestureRecognizers>
+            </Border>
 
             <Button x:Name="Deletebtn" IsVisible="False" Margin="20,50,20,0" FontSize="14" TextColor="Red" BackgroundColor="#ffe5e5" FontFamily="HankenGroteskBold" CornerRadius="10" Text="Delete Mood" Clicked="Deletebtn_Clicked" />
             <Label HorizontalTextAlignment="Start" IsVisible="False" Text="If this Mood is deleted, you will lose all of your Mood Data" Margin="20,0,20,20" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" FontSize="10" TextColor="DarkGray"  />

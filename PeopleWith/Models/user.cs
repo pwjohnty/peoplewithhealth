@@ -60,6 +60,8 @@ namespace PeopleWith
 
         public string postcode { get; set; }
 
+        public string profilepicture { get; set; }
+
     }
     public class APIUserResponse
     {

@@ -19,6 +19,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Linq;
 using System.Net;
+using CommunityToolkit.Maui.Core;
 
 namespace PeopleWith;
 
@@ -32,7 +33,6 @@ public partial class RegisterFinalPage : ContentPage
     public consent additonalconsent = new consent();
     ObservableCollection<usermedication> medicationstoadd = new ObservableCollection<usermedication>();
     ObservableCollection<usersymptom> symptomstoadd = new ObservableCollection<usersymptom>();
-    public HttpClient Client = new HttpClient();
     userdiagnosis userdiag;
     bool SignPadhaddata = false;
     signupcode signupcodeinfo;
@@ -43,7 +43,7 @@ public partial class RegisterFinalPage : ContentPage
     userfeedback userfeedbacklistpassed = new userfeedback();
     userfeedback UserFeedbackToAdd = new userfeedback();
     userdiet DietToAdd;
-
+    private static readonly HttpClient Client = new HttpClient();
     async public void NotasyncMethod(Exception Ex)
     {
         try
@@ -61,9 +61,11 @@ public partial class RegisterFinalPage : ContentPage
     {
         try
         {
-            Client = new HttpClient();
-            Client.DefaultRequestHeaders.Add("X-MS-CLIENT-PRINCIPAL", "eyAgCiAgImlkZW50aXR5UHJvdmlkZXIiOiAidGVzdCIsCiAgInVzZXJJZCI6ICIxMjM0NSIsCiAgInVzZXJEZXRhaWxzIjogImpvaG5AY29udG9zby5jb20iLAogICJ1c2VyUm9sZXMiOiBbIjFFMzNDMEFDLTMzOTMtNEMzNC04MzRBLURFNUZEQkNCQjNDQyJdCn0=");
-            Client.DefaultRequestHeaders.Add("X-MS-API-ROLE", "1E33C0AC-3393-4C34-834A-DE5FDBCBB3CC");
+            if (!Client.DefaultRequestHeaders.Contains("X-MS-CLIENT-PRINCIPAL"))
+            {
+                Client.DefaultRequestHeaders.Add("X-MS-CLIENT-PRINCIPAL", "eyAgCiAgImlkZW50aXR5UHJvdmlkZXIiOiAidGVzdCIsCiAgInVzZXJJZCI6ICIxMjM0NSIsCiAgInVzZXJEZXRhaWxzIjogImpvaG5AY29udG9zby5jb20iLAogICJ1c2VyUm9sZXMiOiBbIjFFMzNDMEFDLTMzOTMtNEMzNC04MzRBLURFNUZEQkNCQjNDQyJdCn0=");
+                Client.DefaultRequestHeaders.Add("X-MS-API-ROLE", "1E33C0AC-3393-4C34-834A-DE5FDBCBB3CC");
+            }
         }
         catch (Exception Ex)
         {
@@ -470,7 +472,7 @@ public partial class RegisterFinalPage : ContentPage
                             if (tccheckbox.IsChecked == false)
                             {
                                 Vibration.Vibrate();
-                                tcframe.BorderColor = Colors.Red;
+                                tcframe.Stroke = Colors.Red;
                                 nextbtn.IsEnabled = true;
                                 return;
                             }
@@ -957,8 +959,12 @@ public partial class RegisterFinalPage : ContentPage
 
                         var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
 
-                        Stream drawingStream = await (DrawingView.GetImageStream(drawingpad.Lines, new Size(150, 150),
-                                Microsoft.Maui.Graphics.Colors.Transparent, cts.Token));
+                        //old 
+                        //Stream drawingStream = await DrawingView.GetImageStream(drawingpad.Lines, new Size(150, 150),
+                        //        Microsoft.Maui.Graphics.Colors.Transparent, cts.Token);
+
+                        //new 
+                        Stream drawingStream = await drawingpad.GetImageStream(150, 150, cts.Token);
 
 
                         if (drawingStream != null)
@@ -1080,8 +1086,8 @@ public partial class RegisterFinalPage : ContentPage
                         var notification = new NotificationRequest
                         {
                             NotificationId = new Random().Next(1, int.MaxValue),
-                            Title = "Complete your SF-36 General Health Questionnaire",
-                            Description = "Please take a moment to complete your SF-36 questionnaire",
+                            Title = "EQ-5D-5L General Health Questionnaire",
+                            Description = "Please take a moment to complete your EQ-5D-5L questionnaire",
                             BadgeNumber = 0,
 
                             Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
@@ -1192,7 +1198,7 @@ public partial class RegisterFinalPage : ContentPage
             else
             {
                 Vibration.Vibrate();
-                tcframe.BorderColor = Colors.Red;
+                tcframe.Stroke = Colors.Red;
                // tcerror.IsVisible = true;
                 return;
             }
@@ -1413,19 +1419,19 @@ public partial class RegisterFinalPage : ContentPage
                 //SignaturePad Not required
                 if (additonalconsent.signaturepad == false)
                 {
-                    tcframe.BorderColor = Color.FromRgba("#BFDBF7");
+                    tcframe.Stroke = Color.FromRgba("#BFDBF7");
                     nextbtn.BackgroundColor = Color.FromArgb("#031926");
                 }
                 else
                 {
                     if (SignPadhaddata == true)
                     {
-                        tcframe.BorderColor = Color.FromRgba("#BFDBF7");
+                        tcframe.Stroke = Color.FromRgba("#BFDBF7");
                         nextbtn.BackgroundColor = Color.FromArgb("#031926");
                     }
                     else
                     {
-                        tcframe.BorderColor = Color.FromRgba("#BFDBF7");
+                        tcframe.Stroke = Color.FromRgba("#BFDBF7");
                         nextbtn.BackgroundColor = Colors.LightGray;
                     }
                 }
@@ -1651,8 +1657,11 @@ public partial class RegisterFinalPage : ContentPage
         {
             var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
 
-            Stream drawingStream = await (DrawingView.GetImageStream(drawingpad.Lines, new Size(150, 150),
-                    Microsoft.Maui.Graphics.Colors.Transparent, cts.Token));
+            //Old
+            //Stream drawingStream = await (DrawingView.GetImageStream(drawingpad.Lines, new Size(150, 150),
+            //        Microsoft.Maui.Graphics.Colors.Transparent, cts.Token));
+
+            Stream drawingStream = await drawingpad.GetImageStream(150, 150, cts.Token);
             bool isSignatureBlank = drawingStream.Length == 0;
 
 

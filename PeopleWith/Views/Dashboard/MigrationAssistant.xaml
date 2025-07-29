@@ -5,7 +5,7 @@
              xmlns:progressBar="clr-namespace:Syncfusion.Maui.ProgressBar;assembly=Syncfusion.Maui.ProgressBar"
               xmlns:stepProgressBar="clr-namespace:Syncfusion.Maui.ProgressBar;assembly=Syncfusion.Maui.ProgressBar"
              x:Class="PeopleWith.MigrationAssistant"  HideSoftInputOnTapped="True" NavigationPage.HasNavigationBar="False"
- Shell.NavBarHasShadow="False" Shell.NavBarIsVisible="False" BackgroundColor="White">
+             Shell.NavBarIsVisible="False" BackgroundColor="White">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -209,7 +209,7 @@ FontSize="15" HorizontalTextAlignment="Center"
 HorizontalOptions="Center" />
 
 
-                    <Frame HasShadow="False" Padding="10" Margin="0,20,0,0" BackgroundColor="Transparent" BorderColor="#BFDBF7" CornerRadius="10">
+                    <Border  Padding="10" Margin="0,20,0,0" BackgroundColor="Transparent" Stroke="#BFDBF7" StrokeShape="RoundRectangle 10" >
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
@@ -228,7 +228,7 @@ HorizontalOptions="Center" />
                                 </Label.FormattedText>
                             </Label>
                         </Grid>
-                    </Frame>
+                    </Border>
 
 
 

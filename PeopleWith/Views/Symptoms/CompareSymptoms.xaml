@@ -35,17 +35,17 @@
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <Frame HasShadow="False" CornerRadius="10" InputTransparent="True" Padding="5" BorderColor="LightGray"  BackgroundColor="Transparent"  Margin="0">
+                                <Border StrokeShape="RoundRectangle 10" InputTransparent="True" Padding="5" Stroke="LightGray"  BackgroundColor="Transparent"  Margin="0">
                                     <Label Text="{Binding Text}" FontFamily="HankenGroteskRegular"  FontSize="14" TextColor="Gray" />
-                                </Frame>
+                                </Border>
                             </ViewCell>
                         </DataTemplate>
                     </syncfusion:SfListView.ItemTemplate>
                     <syncfusion:SfListView.SelectedItemTemplate>
                         <DataTemplate>
-                        <Frame HasShadow="False" CornerRadius="10" InputTransparent="True" Padding="5" BorderColor="Orange"  BackgroundColor="#fff7ea"  Margin="0">
+                            <Border StrokeShape="RoundRectangle 10" InputTransparent="True" Padding="5" Stroke="Orange"  BackgroundColor="#fff7ea"  Margin="0">
                                 <Label Text="{Binding Text}" FontFamily="HankenGroteskBold"  FontSize="14" TextColor="Orange" />
-                            </Frame>
+                            </Border>
                         </DataTemplate>
                     </syncfusion:SfListView.SelectedItemTemplate>
 

@@ -89,7 +89,7 @@
                         </Grid.RowDefinitions>
 
 
-                        <Frame Padding="0" HasShadow="False" Grid.Row="0" Grid.Column="0" Margin="0,0,0,0" InputTransparent="False" BorderColor="Transparent" BackgroundColor="#f9f4e5" CornerRadius="{OnPlatform Android='5', iOS='5'}" >
+                        <Border Padding="0"  Grid.Row="0" Grid.Column="0" Margin="0,0,0,0" InputTransparent="False" Stroke="Transparent" BackgroundColor="#f9f4e5" StrokeShape="RoundRectangle 5" >
                             <Grid >
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="10*"/>
@@ -104,7 +104,7 @@
                                     </Image.GestureRecognizers>
                                 </Image>
                             </Grid>
-                        </Frame>
+                        </Border>
 
 
 
@@ -145,7 +145,7 @@
                                 <syncfusion:SfListView.SelectedItemTemplate>
                                     <DataTemplate>
 
-                                        <Frame HasShadow="False" CornerRadius="5" BackgroundColor="#f9f4e5" Margin="0,0,0,0" BorderColor="Transparent" Padding="0">
+                                        <Border  StrokeShape="RoundRectangle 5" BackgroundColor="#f9f4e5" Margin="0,0,0,0" Stroke="Transparent" Padding="0">
 
                                             <Grid VerticalOptions="Start" Margin="0,10,0,0">
                                                 <Grid.RowDefinitions>
@@ -165,7 +165,7 @@
                                                 <BoxView Grid.Column="0" Grid.Row="2" HeightRequest="1" HorizontalOptions="FillAndExpand" Margin="0,5,0,5" Color="#f9f4e5" BackgroundColor="#f9f4e5"/>
 
                                             </Grid>
-                                        </Frame>
+                                        </Border>
 
                                     </DataTemplate>
                                 </syncfusion:SfListView.SelectedItemTemplate>
@@ -1086,8 +1086,8 @@ HorizontalOptions="FillAndExpand">
                                             <StackLayout>
                                                 <Label Text="{Binding Day}" FontSize="12" Margin="20,0,0,0" VerticalOptions="Start" TextColor="#ac5735" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
 
-                                                <Frame CornerRadius="10"  Margin="5,5,5,5" Padding="5" HasShadow="False" BackgroundColor="Transparent" InputTransparent="False"
-BorderColor="#f9f4e5">
+                                                <Border StrokeShape="RoundRectangle 10"  Margin="5,5,5,5" Padding="5"  BackgroundColor="Transparent" InputTransparent="False"
+Stroke="#f9f4e5">
                                                     <Grid HorizontalOptions="FillAndExpand">
                                                         <Grid.RowDefinitions>
                                                             <RowDefinition Height="Auto"/>
@@ -1155,7 +1155,7 @@ BorderColor="#f9f4e5">
 
 
                                                     </Grid>
-                                                </Frame>
+                                                </Border>
 
 
                                             </StackLayout>

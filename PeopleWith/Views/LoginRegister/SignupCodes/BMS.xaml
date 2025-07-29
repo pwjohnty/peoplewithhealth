@@ -8,7 +8,7 @@
              xmlns:chip="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
              xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
              xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
-             Shell.NavBarHasShadow="False" Shell.NavBarIsVisible="False" BackgroundColor="White">
+             Shell.NavBarHasShadow="False"  Shell.NavBarIsVisible="False" BackgroundColor="White">
 
     <Grid x:Name="OverallGrid" Grid.RowDefinitions="Auto,*,Auto">
 

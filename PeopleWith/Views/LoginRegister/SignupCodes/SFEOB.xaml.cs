@@ -521,19 +521,16 @@ public partial class SFEOB : ContentPage
             Fixscrollview();
 
             var newuserdiag = new userdiagnosis();
+             
+            //Add Obesity Diagnosis 
+            newuserdiag.diagnosistitle = "Obesity";
+            newuserdiag.diagnosisid = "75A15B19-6E0D-4CF3-AB40-7186387B68F5";
+            newuserdiag.userid = newuser.userid;
 
-            if (newuser.signupcodeid != "SFECORE00")
+            //Ensure its not already in it
+            if (!adduserdiagnosis.Contains(newuserdiag))
             {
-                newuserdiag.diagnosistitle = "Obesity";
-                newuserdiag.diagnosisid = "75A15B19-6E0D-4CF3-AB40-7186387B68F5";
-                newuserdiag.userid = newuser.userid;
-
                 adduserdiagnosis.Add(newuserdiag);
-
-                if (!adduserdiagnosis.Contains(newuserdiag))
-                {
-                    adduserdiagnosis.Add(newuserdiag);
-                }
             }
 
             //8B0E4BE0-0362-44C1-9DA3-7E9012B53C24 (Type 1 Diabetes)
@@ -876,15 +873,18 @@ public partial class SFEOB : ContentPage
 
                 var newuserdiag = new userdiagnosis();
 
-                if(newuser.signupcodeid != "SFECORE00")
-                {
-                    newuserdiag.diagnosistitle = "Obesity";
-                    newuserdiag.diagnosisid = "75A15B19-6E0D-4CF3-AB40-7186387B68F5";
-                    newuserdiag.userid = newuser.userid;
 
+                newuserdiag.diagnosistitle = "Obesity";
+                newuserdiag.diagnosisid = "75A15B19-6E0D-4CF3-AB40-7186387B68F5";
+                newuserdiag.userid = newuser.userid;
+
+                //Ensure its not already in it
+                if (!adduserdiagnosis.Contains(newuserdiag))
+                {
                     adduserdiagnosis.Add(newuserdiag);
                 }
-              
+
+
                 conditionframe.IsVisible = false;
                 medicationsframe.IsVisible = true;
                 skipbtn.IsVisible = true;

@@ -82,7 +82,7 @@ HorizontalOptions="FillAndExpand">
 
             </Border>
 
-            <Frame HasShadow="False" Margin="20,5,20,0" IsVisible="False" BorderColor="#E5E5E5" BackgroundColor="Transparent" CornerRadius="10"  Grid.Column="0" Padding="0" >
+            <Border  Margin="20,5,20,0" IsVisible="False" Stroke="#E5E5E5" BackgroundColor="Transparent" StrokeShape="RoundRectangle 10" Grid.Column="0" Padding="0" >
 
                 <Grid Margin="20,10,20,0">
                     <Grid.RowDefinitions>
@@ -94,7 +94,7 @@ HorizontalOptions="FillAndExpand">
                         <ColumnDefinition Width="15*"/>
                         <ColumnDefinition Width="35*"/>
                     </Grid.ColumnDefinitions>
-                    <Frame HasShadow="False" Margin="2.5,0,2.5,0" BorderColor="Transparent" BackgroundColor="Transparent" CornerRadius="10" Grid.Row="0" Grid.Column="0" Padding="0" Grid.ColumnSpan="2">
+                    <Border  Margin="2.5,0,2.5,0" Stroke="Transparent" BackgroundColor="Transparent" StrokeShape="RoundRectangle 10" Grid.Row="0" Grid.Column="0" Padding="0" Grid.ColumnSpan="2">
                         <Grid Margin="5,0,5,0" Padding="0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
@@ -103,12 +103,12 @@ HorizontalOptions="FillAndExpand">
                             <Image Grid.Row="0" Grid.Column="0" HeightRequest="30" WidthRequest="30" VerticalOptions="Center" Source="icondatepicker.png" />
                             <Label x:Name="Datelbl" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="0" Grid.Column="1" FontSize="20" TextColor="#031926" />
                         </Grid>
-                        <Frame.GestureRecognizers>
+                        <Border.GestureRecognizers>
                             <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
-                        </Frame.GestureRecognizers>
-                    </Frame>
+                        </Border.GestureRecognizers>
+                    </Border>
 
-                    <Frame HasShadow="False" Margin="2.5,0,2.5,0" BorderColor="Transparent" Padding="0" BackgroundColor="Transparent" CornerRadius="10" Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2">
+                    <Border  Margin="2.5,0,2.5,0" Stroke="Transparent" Padding="0" BackgroundColor="Transparent" StrokeShape="RoundRectangle 10" Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2">
                         <Grid Margin="5,0,5,0" Padding="0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
@@ -117,12 +117,12 @@ HorizontalOptions="FillAndExpand">
                             <Image Grid.Row="0" Grid.Column="0" HeightRequest="30" WidthRequest="30" Source="icontimepicker.png" />
                             <Label x:Name="Timelbl" FontFamily="HankenGroteskRegular" VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="0" Grid.Column="1" FontSize="20" TextColor="#031926" />
                         </Grid>
-                        <Frame.GestureRecognizers>
+                        <Border.GestureRecognizers>
                             <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1" NumberOfTapsRequired="1"/>
-                        </Frame.GestureRecognizers>
-                    </Frame>
+                        </Border.GestureRecognizers>
+                    </Border>
                 </Grid>
-            </Frame>
+            </Border>
 
             <Label Text="34" FontFamily="HankenGroteskBold" x:Name="scorelbl"  Margin="0,20,0,0" VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="0" Grid.Column="0"  FontSize="60" TextColor="#031926" />
 
@@ -166,7 +166,7 @@ HorizontalOptions="FillAndExpand">
             <Label Text="Enter or select the duration of your symptom" FontFamily="HankenGroteskBold" Margin="20,5,0,0"  VerticalOptions="Center" HorizontalOptions="Start"   FontSize="12" TextColor="#031926" />
 
 
-            <Frame HasShadow="False" IsVisible="False" Margin="20,10,20,10" BorderColor="Transparent"  Padding="10" CornerRadius="20"  BackgroundColor="#fff7ea" >
+            <Border  IsVisible="False" Margin="20,10,20,10" Stroke="Transparent"  Padding="10" StrokeShape="RoundRectangle 20" BackgroundColor="#fff7ea" >
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -198,9 +198,9 @@ HorizontalOptions="FillAndExpand">
                     </picker:SfTimePicker.ColumnHeaderView>
                 </picker:SfTimePicker>
                 </Grid>
-            </Frame>
+            </Border>
 
-            <Frame HasShadow="False" Margin="20,10,20,10" BorderColor="Transparent"  Padding="10" CornerRadius="20"  BackgroundColor="#fff7ea" >
+            <Border  Margin="20,10,20,10" Stroke="Transparent"  Padding="10" StrokeShape="RoundRectangle 20"  BackgroundColor="#fff7ea" >
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -251,13 +251,13 @@ HorizontalOptions="FillAndExpand">
 
 
                 </Grid>
-            </Frame>
+            </Border>
 
 
             <StackLayout x:Name="TriggersStack" IsVisible="False">
                 <Label Text="Did anything trigger this symptom?" FontFamily="HankenGroteskBold" Margin="20,10,0,0"  VerticalOptions="Center" HorizontalOptions="Start"   FontSize="12" TextColor="#031926" />
 
-                <Frame Padding="0" HasShadow="False" Margin="20,10,20,0" InputTransparent="False" HeightRequest="40" BorderColor="Transparent" BackgroundColor="#fff7ea" CornerRadius="{OnPlatform Android='10', iOS='10'}" >
+                <Border Padding="0"  Margin="20,10,20,0" InputTransparent="False" HeightRequest="40" Stroke="Transparent" BackgroundColor="#fff7ea" StrokeShape="RoundRectangle 10" >
                     <Grid >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="10*"/>
@@ -266,7 +266,7 @@ HorizontalOptions="FillAndExpand">
                         <Image Source="search.png" HeightRequest="15" BackgroundColor="Transparent" WidthRequest="15"  Grid.Row="0" Grid.Column="0"  />
                         <Entry Grid.Row="0" Grid.Column="1" x:Name="TriggersSB"  ClearButtonVisibility="WhileEditing" InputTransparent="False"  TextChanged="TriggersSB_TextChanged" Placeholder="Search Triggers" PlaceholderColor="Gray"  BackgroundColor="Transparent" Background="Transparent" HeightRequest="60"  TextColor="#031926"/>
                     </Grid>
-                </Frame>
+                </Border>
 
 
                 <Label x:Name="ResultsTrig" Margin="20,5,0,0" IsVisible="False" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskRegular" />
@@ -274,7 +274,7 @@ HorizontalOptions="FillAndExpand">
                 <ScrollView Orientation="Horizontal" IsVisible="False" HorizontalScrollBarVisibility="Never">
                     <chip:SfChipGroup Padding="5" Margin="10,10,0,0" ChipFontFamily="HankenGroteskBold" ChipType="Input" ItemRemoved="TriggChips_ItemRemoved" SelectionIndicatorColor="Transparent" ChipStroke="Transparent"  CloseButtonColor="Gray" x:Name="TriggChips"  ShowIcon="False" ChipTextColor="Orange"   ChipBackground="#fff7ea"/>
                 </ScrollView>
-                <Frame x:Name="trigList" HasShadow="false" BorderColor="#E6E6E6" BackgroundColor="Transparent" Margin="20,10,20,0" MaximumHeightRequest="250" CornerRadius="10">
+                <Border x:Name="trigList"  Stroke="#E6E6E6" BackgroundColor="Transparent" Padding="20" Margin="20,10,20,0" MaximumHeightRequest="250" StrokeShape="RoundRectangle 10">
                     <syncfusion:SfListView x:Name="TriggersLV"  ItemSize="35" ItemTapped="TriggersLV_ItemTapped" ScrollBarVisibility="Default" SelectionMode="SingleDeselect" SelectionBackground="Transparent">
                         <syncfusion:SfListView.ItemTemplate>
                             <DataTemplate>
@@ -328,14 +328,14 @@ HorizontalOptions="FillAndExpand">
                         </syncfusion:SfListView.SelectedItemTemplate>
                     </syncfusion:SfListView>
                   
-                </Frame>
+                </Border>
            
             </StackLayout>
 
             <StackLayout x:Name="InterventionsStack" IsVisible="False">
                 <Label Text="What made your symptom better?" FontFamily="HankenGroteskBold" Margin="20,10,0,0"  VerticalOptions="Center" HorizontalOptions="Start"   FontSize="12" TextColor="#031926" />
 
-                <Frame Padding="0" HasShadow="False" Margin="20,10,20,0" InputTransparent="False" HeightRequest="40" BorderColor="Transparent" BackgroundColor="#fff7ea" CornerRadius="{OnPlatform Android='10', iOS='10'}"  >
+                <Border Padding="0"  Margin="20,10,20,0" InputTransparent="False" HeightRequest="40" Stroke="Transparent" BackgroundColor="#fff7ea" StrokeShape="RoundRectangle 10"  >
                     <Grid >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="10*"/>
@@ -344,15 +344,15 @@ HorizontalOptions="FillAndExpand">
                         <Image Source="search.png" HeightRequest="15" BackgroundColor="Transparent" WidthRequest="15"  Grid.Row="0" Grid.Column="0"  />
                         <Entry Grid.Row="0" Grid.Column="1" x:Name="InterventionSB" PlaceholderColor="Gray" ClearButtonVisibility="WhileEditing" InputTransparent="False" TextChanged="InterventionSB_TextChanged" Placeholder="Search Interventions"  BackgroundColor="Transparent" Background="Transparent" HeightRequest="60"  TextColor="#031926"/>
                     </Grid>
-                </Frame>
+                </Border>
 
                 <Label x:Name="ResultsInt" Margin="20,5,0,0" HorizontalOptions="Start" IsVisible="False" VerticalOptions="Center" TextColor="#031926" FontSize="16" FontFamily="HankenGroteskBold" />
                 <ScrollView Orientation="Horizontal" IsVisible="False" HorizontalScrollBarVisibility="Never">
                     <chip:SfChipGroup Padding="5" Margin="10,10,0,0"  ChipType="Input" ItemRemoved="IntervChips_ItemRemoved" ChipFontFamily="HankenGroteskBold" SelectionIndicatorColor="Transparent" ChipStroke="Transparent" CloseButtonColor="Gray" x:Name="IntervChips"  ShowIcon="False" ChipTextColor="Orange"   ChipBackground="#fff7ea"/>
                 </ScrollView>
 
-                <Frame x:Name="IntList" HasShadow="false" BorderColor="#E6E6E6" BackgroundColor="Transparent" Margin="20,10,20,0" MaximumHeightRequest="250" CornerRadius="10">
-                    <syncfusion:SfListView x:Name="InterventionLV" ScrollBarVisibility="Never" ItemSize="35" ItemTapped="InterventionLV_ItemTapped"  SelectionMode="SingleDeselect" SelectionBackground="Transparent">
+                <Border x:Name="IntList"  Stroke="#E6E6E6" BackgroundColor="Transparent" Margin="20,10,20,0" Padding="20" MaximumHeightRequest="250" StrokeShape="RoundRectangle 10">
+                    <syncfusion:SfListView x:Name="InterventionLV" ScrollBarVisibility="Never"  ItemSize="35" ItemTapped="InterventionLV_ItemTapped"  SelectionMode="SingleDeselect" SelectionBackground="Transparent">
                         <syncfusion:SfListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
@@ -404,11 +404,11 @@ HorizontalOptions="FillAndExpand">
                             </DataTemplate>
                         </syncfusion:SfListView.SelectedItemTemplate>
                     </syncfusion:SfListView>
-                </Frame>
+                </Border>
             </StackLayout>
 
 
-            <Frame x:Name="NoResults" IsVisible="False" HasShadow="false" BorderColor="#E6E6E6" BackgroundColor="Transparent" Margin="20,10,20,0" MaximumHeightRequest="400" CornerRadius="10">
+            <Border x:Name="NoResults" IsVisible="False"  Stroke="#E6E6E6" BackgroundColor="Transparent" Margin="20,10,20,0" MaximumHeightRequest="400" StrokeShape="RoundRectangle 10">
 
                 <Grid>
                     <Grid.RowDefinitions>
@@ -416,7 +416,7 @@ HorizontalOptions="FillAndExpand">
                     </Grid.RowDefinitions>
                     <Label Text="No Results Found" HorizontalOptions="Center" VerticalOptions="Center" FontFamily="HankenGroteskRegular" FontSize="14" TextColor="#031926"/>
                 </Grid>
-            </Frame>
+            </Border>
 
             <StackLayout x:Name="ImageStack"  IsVisible="False">
                 <Label Text="Add Image" FontFamily="HankenGroteskBold" Margin="20,10,0,0"  VerticalOptions="Center" HorizontalOptions="Start"   FontSize="16" TextColor="#031926" />
@@ -451,11 +451,11 @@ HorizontalOptions="FillAndExpand">
 
 
             <Label Text="Add Notes" FontFamily="HankenGroteskBold" Margin="20,10,0,0"  VerticalOptions="Center" HorizontalOptions="Start"   FontSize="16" TextColor="#031926" />
-            <Frame  BorderColor="#E6E6E6" BackgroundColor="Transparent" HasShadow="False" CornerRadius="10" Padding="-11" Margin="20,5,20,30">
+            <Border  Stroke="#E6E6E6" BackgroundColor="Transparent" StrokeShape="RoundRectangle 10" Padding="-11" Margin="20,5,20,30">
                
                     <Editor x:Name="Notes" HeightRequest="150" TextColor="#031926" BackgroundColor="Transparent"  HorizontalTextAlignment="Start"  Margin="20,10,10,10"  />
               
-            </Frame>
+            </Border>
 
 
             <Button  Text="Update" x:Name="UpdateBtn" TextColor="White" Clicked="Button_Clicked" FontSize="14" Margin="20,5,20,10" FontFamily="HankenGroteskBold" BackgroundColor="Orange" CornerRadius="10" />

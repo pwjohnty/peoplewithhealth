@@ -132,12 +132,12 @@
                 <Grid x:Name="ListviewHeader" Margin="20,20,0,0" ColumnDefinitions="70*, 15*, 15*" >
                     <Label Text="Activity Timeline" Grid.Row="0" FontFamily="HankenGroteskBold" FontSize="26"   HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" />
                     <ImageButton Grid.Column="1" x:Name="timelinebtn" Padding="3" Margin="0" Source="selectcalendar.png" Clicked="timelinebtn_Clicked"  VerticalOptions="End" HeightRequest="30" WidthRequest="30"/>
-                    <Frame x:Name="ActivityInfo" Grid.Row="0" HasShadow="False" Padding="0" CornerRadius="15" Grid.Column="2" VerticalOptions="Center" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,5,20,0" BorderColor="#991B1B" BackgroundColor="Transparent">
+                    <Border x:Name="ActivityInfo" Grid.Row="0"  Padding="0"  StrokeShape="RoundRectangle 15" Grid.Column="2" VerticalOptions="Center" HorizontalOptions="End" HeightRequest="30" WidthRequest="30" Margin="0,5,20,0" Stroke="#991B1B" BackgroundColor="Transparent">
                         <Label Text="i" FontFamily="HankenGroteskBold" HorizontalOptions="Center" TextColor="#991B1B" FontSize="12"  Grid.Column="1" VerticalOptions="Center" />
-                        <Frame.GestureRecognizers>
+                        <Border.GestureRecognizers>
                             <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
-                        </Frame.GestureRecognizers>
-                    </Frame>
+                        </Border.GestureRecognizers>
+                    </Border>
                 </Grid>
 
                 <syncfusion:SfListView x:Name="TimelineListview" 

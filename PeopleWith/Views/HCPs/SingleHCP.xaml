@@ -14,7 +14,7 @@
             <Label Text="Health Care Practitioner"  FontSize="26" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="Bold" HorizontalOptions="Start" />
                 
             <!--Name, Role, Location-->
-            <Frame CornerRadius="5"  Margin="10,5,10,5" BackgroundColor="#CBC3E3" BorderColor="Transparent" HasShadow="False" x:Name="dataframe" Padding="0">
+            <Border StrokeShape="RoundRectangle 5" Margin="10,5,10,5" BackgroundColor="#CBC3E3" Stroke="Transparent"  x:Name="dataframe" Padding="0">
                 <Grid Margin="0,10,0,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -38,14 +38,14 @@
                         </Label>
                         <Label x:Name="locationlbl" Margin="10,5,0,10" VerticalOptions="Center" HorizontalOptions="Start" VerticalTextAlignment="Center" TextColor="#031926" FontSize="25" FontFamily="HankenGroteskBold" FontAttributes="Bold"   Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" />
                     </Grid>
-            </Frame>
+            </Border>
 
 
 
                 <!-- Appointments Empty Stack -->
             <StackLayout x:Name="NoAppointmentsStack" IsVisible="False" Margin="10,0,10,0">
 
-                <Frame  Margin="10,10,10,0" x:Name="NoAppointFrame" BorderColor="Transparent" CornerRadius="10" BackgroundColor="#CBC3E3" HasShadow="false" Padding="10" >
+                <Border Margin="10,10,10,0" x:Name="NoAppointFrame" Stroke="Transparent" StrokeShape="RoundRectangle 10" BackgroundColor="#CBC3E3"  Padding="10" >
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -56,10 +56,10 @@
                         <Label x:Name="Appointlbltwo" FontFamily="HankenGroteskBold" HorizontalOptions="Center" VerticalOptions="Center" TextColor="#9F2B68" FontAttributes="Bold" FontSize="12" Grid.Row="1"  />
 
                     </Grid>
-                    <Frame.GestureRecognizers>
+                    <Border.GestureRecognizers>
                         <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
-                    </Frame.GestureRecognizers>
-                </Frame>
+                    </Border.GestureRecognizers>
+                </Border>
 
             </StackLayout>
 
@@ -88,18 +88,18 @@
                                                 <Label Text="{Binding datetimeConverted, StringFormat='{0:MMM}'}" FontFamily="HankenGroteskBold"  Padding="5,0,1,0"  CharacterSpacing="0.5"   TextColor="#9F2B68"
                                 FontAttributes="Bold" FontSize="16" VerticalOptions="Center" HorizontalOptions="Center" />
 
-                                                <Frame BackgroundColor="#CBC3E3"  HasShadow="False" Margin="4,0,0,0" CornerRadius="20"
-                                HeightRequest="40" WidthRequest="40" Padding="1,0,1,0" HorizontalOptions="Center" VerticalOptions="Center" BorderColor="Transparent">
+                                            <Border BackgroundColor="#CBC3E3"   Margin="4,0,0,0" StrokeShape="RoundRectangle 20"
+                                HeightRequest="40" WidthRequest="40" Padding="1,0,1,0" HorizontalOptions="Center" VerticalOptions="Center" Stroke="Transparent">
 
                                                     <Label HorizontalTextAlignment="Center" FontFamily="HankenGroteskBold" VerticalTextAlignment="Center" Text="{Binding datetimeConverted, StringFormat='{0:dd}'}"   TextColor="White" FontSize="20"
                                     FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" />
 
-                                                </Frame>
+                                                </Border>
                                             </StackLayout>
                                         </StackLayout>
 
                                         <!-- Appointment Details Section -->
-                                        <Frame Grid.Row="0"  Grid.Column="1"  CornerRadius="10"  BackgroundColor="#CBC3E3" HeightRequest="75" HasShadow="False" Padding="0" BorderColor="White">
+                                    <Border Grid.Row="0"  Grid.Column="1" StrokeShape="RoundRectangle 10"   BackgroundColor="#CBC3E3" HeightRequest="75"  Padding="0" Stroke="White">
                                             <Grid>
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="*"/>
@@ -116,7 +116,7 @@
                                                     </Label.FormattedText>
                                                 </Label>
                                             </Grid>
-                                        </Frame>
+                                        </Border>
                                     </Grid>
                                 </ViewCell>
                             </DataTemplate>
@@ -147,18 +147,18 @@
                                             <Label Text="{Binding datetimeConverted, StringFormat='{0:MMM}'}" FontFamily="HankenGroteskBold"  Padding="5,0,1,0"  CharacterSpacing="0.5"   TextColor="#9F2B68"
                 FontAttributes="Bold" FontSize="16" VerticalOptions="Center" HorizontalOptions="Center" />
 
-                                            <Frame BackgroundColor="#CBC3E3"  HasShadow="False" Margin="4,0,0,0" CornerRadius="20" InputTransparent="True"
-                HeightRequest="40" WidthRequest="40" Padding="1,0,1,0" HorizontalOptions="Center" VerticalOptions="Center" BorderColor="Transparent">
+                                            <Border BackgroundColor="#CBC3E3"   Margin="4,0,0,0" StrokeShape="RoundRectangle 20" InputTransparent="True"
+                HeightRequest="40" WidthRequest="40" Padding="1,0,1,0" HorizontalOptions="Center" VerticalOptions="Center" Stroke="Transparent">
 
                                                 <Label HorizontalTextAlignment="Center" FontFamily="HankenGroteskBold" VerticalTextAlignment="Center" Text="{Binding datetimeConverted, StringFormat='{0:dd}'}"   TextColor="White" FontSize="20"
                     FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" />
 
-                                            </Frame>
+                                            </Border>
                                         </StackLayout>
                                     </StackLayout>
 
                                     <!-- Appointment Details Section -->
-                                    <Frame Grid.Row="0"  Grid.Column="1"  CornerRadius="10" InputTransparent="True" BackgroundColor="#CBC3E3" HeightRequest="75" HasShadow="False" Padding="0" BorderColor="White">
+                                    <Border Grid.Row="0"  Grid.Column="1"  StrokeShape="RoundRectangle 10" InputTransparent="True" BackgroundColor="#CBC3E3" HeightRequest="75"  Padding="0" Stroke="White">
                                         <Grid>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="*"/>
@@ -175,7 +175,7 @@
                                                 </Label.FormattedText>
                                             </Label>
                                         </Grid>
-                                    </Frame>
+                                    </Border>
                                 </Grid>
                             </ViewCell>
                         </DataTemplate>
@@ -190,7 +190,7 @@
 
 
             <!-- Appointments Assocaited with Doc-->
-            <Frame HasShadow="false" x:Name="HCPContactFrame" IsVisible="False" Margin="20,5,20,0" BorderColor="#CBC3E3" Padding="-2" BackgroundColor="Transparent" >
+            <Border  x:Name="HCPContactFrame" IsVisible="False" Margin="20,5,20,0" StrokeShape="RoundRectangle 5" Stroke="#CBC3E3" Padding="0" BackgroundColor="Transparent" >
                 <syncfusion:SfListView x:Name="HCPContactDetails" SelectionBackground="Transparent" AutoFitMode="Height" >
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
@@ -217,7 +217,7 @@
                         </DataTemplate>
                     </syncfusion:SfListView.ItemTemplate>
                 </syncfusion:SfListView>
-            </Frame>
+            </Border>
 
             <!--<Label Text="Appointments"  IsVisible="True" FontSize="20" Margin="20,20,0,0" TextColor="#031926" FontFamily="HankenGroteskBold" FontAttributes="None" HorizontalOptions="Start" />
 

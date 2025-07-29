@@ -88,9 +88,9 @@
                     <Label Text="Appointment Feedback" TextDecorations="Underline" HorizontalOptions="Center" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontFamily="HankenGroteskBold" FontSize="24" TextColor="#031926"/>
 
                     <Label Text="Attended" HorizontalOptions="Start"  Grid.Row="1" Grid.Column="0" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#031926"/>
-                        <Frame BorderColor="#ffcccb" BackgroundColor="#ffcccb" HorizontalOptions="Start" HeightRequest="30" HasShadow="False" WidthRequest="75" Padding="5" Grid.Row="1" Grid.Column="1">
+                        <Border Stroke="#ffcccb" BackgroundColor="#ffcccb" StrokeShape="RoundRectangle 5" HorizontalOptions="Start" HeightRequest="30"  WidthRequest="75" Padding="5" Grid.Row="1" Grid.Column="1">
                             <Label x:Name="Attendedlbl" Text="Yes" HorizontalOptions="Center" Margin="0,0,0,0" Grid.Row="1" Grid.Column="1" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="14" TextColor="#031926"/>
-                        </Frame>
+                        </Border>
 
                     <Label Text="Actual Duration" HorizontalOptions="Start"   Grid.Row="2" Grid.Column="0" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#031926"/>
                     <Label x:Name="ActualDurationlbl" HorizontalOptions="Start" Margin="0,0,0,0" Grid.Row="2" Grid.Column="1" FontFamily="HankenGroteskRegular" FontSize="14" TextColor="#031926"/>
@@ -119,9 +119,9 @@
                         <Label Text="Appointment Feedback" TextDecorations="Underline" HorizontalOptions="Center" Margin="0,0,0,0"  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontFamily="HankenGroteskBold" FontSize="24" TextColor="#031926"/>
 
                         <Label Text="Attended" HorizontalOptions="Start"  Grid.Row="1" Grid.Column="0" FontFamily="HankenGroteskBold" FontSize="16" TextColor="#031926"/>
-                        <Frame BorderColor="#ffcccb" BackgroundColor="#ffcccb" HorizontalOptions="Start" HeightRequest="30" HasShadow="False" WidthRequest="75" Padding="5" Grid.Row="1" Grid.Column="1">
+                            <Border Stroke="#ffcccb" BackgroundColor="#ffcccb" StrokeShape="RoundRectangle 5" HorizontalOptions="Start" HeightRequest="30"  WidthRequest="75" Padding="5" Grid.Row="1" Grid.Column="1">
                             <Label Text="No" HorizontalOptions="Center" Margin="0,0,0,0" Grid.Row="1" Grid.Column="1" FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" FontSize="14" TextColor="#031926"/>
-                        </Frame>
+                        </Border>
 
                     </Grid>
 

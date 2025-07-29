@@ -9,15 +9,30 @@
     <ScrollView>
         <VerticalStackLayout>
             <!-- Logo & Name-->
-            <Grid Margin="0,20,0,0">
+            <Grid Margin="20,20,20,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
+                    <!--<RowDefinition Height="Auto"/>-->
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Border Grid.Row="0" StrokeShape="RoundRectangle 40" BackgroundColor="#E5F0FB" HeightRequest="80" WidthRequest="80" Stroke="Transparent">
-                    <Label x:Name="Initals" Padding="0" TextTransform="Uppercase" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" FontFamily="HankenGroteskBold" FontSize="22" TextColor="#031926"/>
+                <!--<Label Text="Tap to Edit Profile Picture" Grid.Row="0" HorizontalOptions="Center" Margin="0,5,0,0" FontFamily="HankenGroteskRegular" FontSize="12" TextColor="Gray"/>-->
+
+                <Border Grid.Row="0" StrokeShape="RoundRectangle 60" BackgroundColor="#E5F0FB" HorizontalOptions="Center" HeightRequest="120" WidthRequest="120" Stroke="Transparent">
+                    <Grid  RowDefinitions="3.5*,*">
+                        <Label x:Name="Initals"  Padding="0"  Margin="0,25,0,0" TextTransform="Uppercase" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" FontFamily="HankenGroteskBold" FontSize="36" TextColor="#031926"/>
+                        <Image x:Name="ProfilePic" Grid.Row="0" Grid.RowSpan="2" IsVisible="False" HorizontalOptions="Fill" Aspect="AspectFill" InputTransparent="True"/>
+                        <Grid x:Name="EditShow" Grid.Row="1">
+                            <Border Grid.Row="1"  BackgroundColor="#dedede" Stroke="Transparent" HorizontalOptions="Fill" VerticalOptions="Fill">
+                                <Label Text="Edit" HorizontalOptions="Center" VerticalOptions="Center" FontFamily="HankenGroteskBold" FontSize="14" TextColor="White"/>
+                            </Border>
+                        </Grid>
+                    </Grid>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="ProfileIConClicked" NumberOfTapsRequired="1" />
+                    </Border.GestureRecognizers>
                 </Border>
-                <Label Grid.Row="1" Text="Your Profile" HorizontalOptions="Center" Margin="0,5,0,0" FontFamily="HankenGroteskBold" FontSize="26" TextColor="#031926"/>
+                <Image Source="camera.png" Margin="0,0,120,0" IsVisible="False" x:Name="Camerapng" HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand" HeightRequest="30" WidthRequest="30" />
+                <Label Grid.Row="1" Text="Your Profile"  HorizontalOptions="Center" Margin="0,5,0,0" FontFamily="HankenGroteskBold" FontSize="26" TextColor="#031926"/>
             </Grid>
 
             <!-- Health Details-->
@@ -45,7 +60,7 @@
             <!-- Settings-->
             <Label Text="Settings"  HorizontalOptions="Start" Margin="20,10,0,0" FontFamily="HankenGroteskBold" FontSize="26" TextColor="#031926"/>
 
-            <!--<Frame HasShadow="false" Margin="20,10,20,0" Padding="5,0,5,-2" HeightRequest="112" BorderColor="#E8E8E8"  BackgroundColor="Transparent" >-->
+            <!--<Frame  Margin="20,10,20,0" Padding="5,0,5,-2" HeightRequest="112" BorderColor="#E8E8E8"  BackgroundColor="Transparent" >-->
             <Border  Stroke="#E8E8E8" StrokeShape="RoundRectangle 10" Margin="20,10,20,0" Padding="5,0,5,0" BackgroundColor="White" HeightRequest="113">
                 <syncfusion:SfListView x:Name="Settings" SelectionBackground="Transparent" SelectionMode="SingleDeselect" ScrollBarVisibility="Never" ItemTapped="Settings_ItemTapped" AutoFitMode="Height" >
                     <syncfusion:SfListView.ItemTemplate>
@@ -69,7 +84,7 @@
             <!-- Email Response -->
 
             <Border x:Name="ImproveSection" Stroke="Transparent" StrokeShape="RoundRectangle 10" Margin="20,10,20,0" HeightRequest="100" Padding="0" BackgroundColor="#031926" >
-                <!--<Frame   InputTransparent="False" CornerRadius="10"  Margin="20,10,20,0"  BackgroundColor="#031926" HasShadow="False" HeightRequest="100" BorderColor="White" Padding="0">-->
+                <!--<Frame   InputTransparent="False" CornerRadius="10"  Margin="20,10,20,0"  BackgroundColor="#031926"  HeightRequest="100" BorderColor="White" Padding="0">-->
                 <StackLayout >
                     <Label HorizontalOptions="Center" FontFamily="HankenGroteskBold" Text="Want to help us improve?" FontSize="20" FontAttributes="Bold" VerticalOptions="Start" Margin="0,10,0,0" TextColor="White" />
                     <Label HorizontalOptions="Center"  FontFamily="HankenGroteskRegular" HorizontalTextAlignment="Center" Text="If you find any issues or want to recommend any improvements click here to contact us" FontSize="15" FontAttributes="None" VerticalOptions="Start" Margin="10,0,10,0" TextColor="White" />
@@ -93,7 +108,7 @@
             <Label Text="Privacy"  HorizontalOptions="Start" Margin="20,10,0,0" FontFamily="HankenGroteskBold" FontSize="26" TextColor="#031926"/>
 
             <Border Stroke="#E8E8E8" StrokeShape="RoundRectangle 10" Margin="20,10,20,0" Padding="5,0,5,0" BackgroundColor="White" >
-                <!--<Frame HasShadow="false" Margin="20,10,20,0" Padding="5,0,5,-2" BorderColor="#E8E8E8"  BackgroundColor="Transparent" >-->
+                <!--<Frame  Margin="20,10,20,0" Padding="5,0,5,-2" BorderColor="#E8E8E8"  BackgroundColor="Transparent" >-->
                 <syncfusion:SfListView x:Name="PrivacyList" SelectionBackground="Transparent" SelectionMode="SingleDeselect" ScrollBarVisibility="Never" ItemTapped="PrivacyList_ItemTapped" AutoFitMode="Height" >
                     <syncfusion:SfListView.ItemTemplate>
                         <DataTemplate>
