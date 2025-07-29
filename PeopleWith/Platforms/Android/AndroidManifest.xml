@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.peoplewith.peoplewith" android:versionCode="95" android:versionName="95.1">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.peoplewith.peoplewith" android:versionCode="97" android:versionName="97.1">
 	<!-- Set minSdkVersion and targetSdkVersion -->
 	<!--<uses-sdk android:targetSdkVersion="34" />-->
 	<application android:allowBackup="true" android:icon="@mipmap/pwhealthicon" android:supportsRtl="true">

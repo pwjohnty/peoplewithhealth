@@ -16,6 +16,7 @@ public partial class BiometricsLogin : ContentPage
 {
     string one;
     string two;
+    string ImageFilename = string.Empty; 
     public event EventHandler<bool> ConnectivityChanged;
     public readonly struct UpdateBiometrics { }
     //Crash Handler
@@ -39,6 +40,9 @@ public partial class BiometricsLogin : ContentPage
             InitializeComponent();
 
             NavigationPage.SetHasNavigationBar(this, false);
+
+            //Get Profile Picture
+            CheckProfilePic();
 
             if (DeviceInfo.Current.Platform == DevicePlatform.Android)
             {
@@ -84,6 +88,27 @@ public partial class BiometricsLogin : ContentPage
             NotasyncMethod(Ex);
         }
 
+    }
+
+    private async void CheckProfilePic()
+    {
+        try
+        {
+            APICalls databse = new APICalls();
+            ImageFilename = await databse.GetProfilePicture();
+
+            if (!string.IsNullOrEmpty(ImageFilename))
+            {
+                ProfilePic.IsVisible = true; 
+                Initals.IsVisible = false;
+                var imagestring = $"https://peoplewithappiamges.blob.core.windows.net/profileuploads/{ImageFilename}?t={DateTime.UtcNow.Ticks}";
+                ProfilePic.Source = ImageSource.FromUri(new Uri(imagestring));
+            }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
     }
 
     async private void Pincode_PINEntryCompleted(object sender, PINView.Maui.Helpers.PINCompletedEventArgs e)

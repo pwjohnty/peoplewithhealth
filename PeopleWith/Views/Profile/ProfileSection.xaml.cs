@@ -9,6 +9,8 @@ using Microsoft.Maui.ApplicationModel.Communication;
 using Microsoft.Maui.ApplicationModel;
 using System.Reflection.Metadata.Ecma335;
 using Microsoft.Extensions.Azure;
+using Azure.Storage.Blobs.Models;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace PeopleWith;
 
@@ -26,7 +28,8 @@ public partial class ProfileSection : ContentPage
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
     AlertContent InitialQuestion;
-    AlertContent SecondQuestion; 
+    AlertContent SecondQuestion;
+    private byte[] ResizedImage;
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
     bool isrunning = false; 
@@ -95,29 +98,11 @@ public partial class ProfileSection : ContentPage
         try
         {
             InitializeComponent();
-           // AllUserData = AllUserDetails;
+            // AllUserData = AllUserDetails;
             //Icon and user's Name 
-            var FirstName = Helpers.Settings.FirstName;
-            var Surname = Helpers.Settings.Surname;
-            if (!string.IsNullOrEmpty(FirstName))
-            {
-                one = FirstName.Substring(0, 1);
-            }
+            GetAllUserData();
 
-            if (!string.IsNullOrEmpty(Surname))
-            {
-                two = Surname.Substring(0, 1);
-            }
-            if (!string.IsNullOrEmpty(one) && !string.IsNullOrEmpty(two))
-            {
-                var NameInt = one + two; 
-                Initals.Text = NameInt.ToUpper();
-            }
-
-            if (string.IsNullOrEmpty(Initals.Text))
-            {
-                Initals.Text = "PW";
-            }
+          
             //Namelbl.Text = Helpers.Settings.FirstName + " " + Helpers.Settings.Surname;
             //if(Namelbl.Text == " ")
             //{
@@ -207,17 +192,31 @@ public partial class ProfileSection : ContentPage
             string build = AppInfo.Current.BuildString;
             ReleaseVersion.Text = "ReleaseVersion " + version + " | " + "Build Version " + build;
 
-            GetAllUserData(); 
+         
 
             GetHealthDetails();
             GetSettings();
             GetPrivacyDetails();
 
-            MessagingCenter.Subscribe<App>(this, "CallMethodOnPage", (sender) => {
+            //Set Profile Pic/ Initals 
+           
+
+            MessagingCenter.Subscribe<App>(this, "CallMethodOnPage", (sender) =>
+            {
                 GetSettings();
             });
-
+            WeakReferenceMessenger.Default.Register<ProfilePicUpdate>(this, (r, m) =>
+            {
+                var ImageString = (String)m.Value;
+                Initals.IsVisible = false;
+                EditShow.IsVisible = false;
+                ProfilePic.IsVisible = true;
+                Camerapng.IsVisible = true; 
+                var FullString = $"https://peoplewithappiamges.blob.core.windows.net/profileuploads/{ImageString}?t={DateTime.UtcNow.Ticks}";
+                ProfilePic.Source = ImageSource.FromUri(new Uri(FullString));
+            });
         }
+
         catch (Exception Ex)
         {
             NotasyncMethod(Ex);
@@ -281,24 +280,71 @@ public partial class ProfileSection : ContentPage
     {
         try
         {
+            await GetUserData();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    private async Task GetUserData()
+    {
+        try
+        {
             APICalls Database = new APICalls();
             UserData = await Database.GetuserDetails();
-            AllUserData.password = UserData[0].password; 
+            AllUserData.password = UserData[0].password;
             AllUserData.firstname = UserData[0].firstname;
             AllUserData.surname = UserData[0].surname;
             AllUserData.email = UserData[0].email;
             AllUserData.dateofbirth = UserData[0].dateofbirth;
             AllUserData.gender = UserData[0].gender;
             AllUserData.ethnicity = UserData[0].ethnicity;
-            AllUserData.biometrics = UserData[0].biometrics; 
+            AllUserData.biometrics = UserData[0].biometrics;
             AllUserData.userpin = UserData[0].userpin;
+            AllUserData.profilepicture = UserData[0].profilepicture;
+
+            if (String.IsNullOrEmpty(AllUserData.profilepicture))
+            {
+                var FirstName = Helpers.Settings.FirstName;
+                var Surname = Helpers.Settings.Surname;
+                if (!string.IsNullOrEmpty(FirstName))
+                {
+                    one = FirstName.Substring(0, 1);
+                }
+
+                if (!string.IsNullOrEmpty(Surname))
+                {
+                    two = Surname.Substring(0, 1);
+                }
+                if (!string.IsNullOrEmpty(one) && !string.IsNullOrEmpty(two))
+                {
+                    var NameInt = one + two;
+                    Initals.Text = NameInt.ToUpper();
+                }
+
+                if (string.IsNullOrEmpty(Initals.Text))
+                {
+                    Initals.Text = "PW";
+                }
+            }
+            else
+            {
+                Initals.IsVisible = false;
+                EditShow.IsVisible = false;
+                ProfilePic.IsVisible = true;
+                Camerapng.IsVisible = true;
+                var imagestring = $"https://peoplewithappiamges.blob.core.windows.net/profileuploads/{AllUserData.profilepicture}?t={DateTime.UtcNow.Ticks}";
+                ProfilePic.Source = ImageSource.FromUri(new Uri(imagestring));
+            }
         }
         catch (Exception Ex)
         {
             NotasyncMethod(Ex);
         }
+    } 
 
-    }
     private void GetHealthDetails()
     {
         try
@@ -872,4 +918,56 @@ public partial class ProfileSection : ContentPage
             NotasyncMethod(Ex);
         }
     }
+
+    private async void ProfileIConClicked(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            if (ProfilePic.IsVisible == true)
+            {
+                await Navigation.PushAsync(new TakeProfilePicture(AllUserData.profilepicture), false);
+            }
+            else
+            {
+                await Navigation.PushAsync(new TakeProfilePicture(), false);
+            }
+        }
+        catch (Exception Ex)
+        {
+
+        }
+ 
+    }
+
+    public async Task<FileResult> CapturePhotoAsync()
+    {
+        try
+        {
+            var status = await Permissions.CheckStatusAsync<Permissions.Camera>();
+
+            if (status != PermissionStatus.Granted)
+            {
+                status = await Permissions.RequestAsync<Permissions.Camera>();
+
+                if (status != PermissionStatus.Granted)
+                {
+                    await DisplayAlert("Permission Required", "Camera access is required to take add a Profile Picture", "Close");
+                    return null;
+                }
+            }
+
+            if (MediaPicker.Default.IsCaptureSupported)
+            {
+                return await MediaPicker.Default.CapturePhotoAsync();
+            }
+
+            return null;
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+            return null;
+        }
+    }
+
 }

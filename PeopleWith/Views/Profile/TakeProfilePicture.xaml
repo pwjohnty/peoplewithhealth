@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PeopleWith.TakeProfilePicture"
+             xmlns:local="clr-namespace:PeopleWith"
+             NavigationPage.IconColor="#031926" NavigationPage.HasBackButton="True"        
+             NavigationPage.HasNavigationBar="True" BackgroundColor="#ffffff">
+    <StackLayout VerticalOptions="Fill">
+        <Label Text="Add a profile picture" FontFamily="HankenGroteskBold" FontSize="26"  Margin="20,10,0,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" />
+        <Border Margin="10,20,10,10" Background="#ebebeb" Stroke="#ebebeb" HeightRequest="350" WidthRequest="350" StrokeShape="RoundRectangle 200">
+            <Image x:Name="ProfilePic" HeightRequest="350" HorizontalOptions="Fill" Aspect="AspectFill"  />
+                <!--<GraphicsView HeightRequest="350" Background="Transparent"
+                  WidthRequest="400" IsVisible="False" x:Name="CirclePic"
+                  Drawable="{x:Static local:SpotlightDrawable.Instance}" />-->
+        </Border>
+        <Button CornerRadius="20" IsVisible="False" Text="Save Photo" x:Name="Savebtn" Clicked="Savebtn_Clicked" BackgroundColor="#e5f0fb" BorderColor="#e5f0fb" BorderWidth="1" FontFamily="HankenGroteskBold" HorizontalOptions="Fill" Padding="15" TextColor="#031926" FontSize="16" Margin="20,10,20,0" />
+
+        <StackLayout VerticalOptions="EndAndExpand">
+            <Button CornerRadius="20" Text="Upload A Photo" x:Name="UploadPhotobtn" Clicked="UploadPhoto_Clicked" BackgroundColor="#0e4a87" BorderColor="#0e4a87" BorderWidth="1" FontFamily="HankenGroteskRegular" HorizontalOptions="Fill" Padding="15" TextColor="White" FontSize="16" Margin="20,10,20,0" />
+            <Button CornerRadius="20" Text="Take A Photo" x:Name="TakePhotobtn" Clicked="TakePhoto_Clicked" BackgroundColor="White" BorderColor="#0e4a87" BorderWidth="1" FontFamily="HankenGroteskRegular" HorizontalOptions="Fill" Padding="15" TextColor="#0e4a87" FontSize="16" Margin="20,10,20,0" />
+
+            <Label Text="Privacy Policy" TextColor="#031926"  FontFamily="HankenGroteskRegular" FontAttributes="Bold" Margin="0,20,0,10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" FontSize="10" HorizontalOptions="Center" >
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"/>
+                </Label.GestureRecognizers>
+            </Label>
+            
+        </StackLayout>
+    </StackLayout>
+</ContentPage>

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <!--<TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>-->
     <!-- <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks> -->
@@ -31,6 +31,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+
 	  <!--<PublishTrimmed>false</PublishTrimmed>
 	  <RunAOTCompilation>false</RunAOTCompilation>-->
 	  
@@ -62,6 +63,13 @@
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</SupportedOSPlatformVersion>
   </PropertyGroup>
+	<!-- Code to Fix 32 Bit Release Build Crash-->
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
+		<RunAOTCompilation>false</RunAOTCompilation>
+		<!--<AndroidLinkMode>SdkOnly</AndroidLinkMode>-->
+		<AndroidLinkMode>None</AndroidLinkMode>
+		<PublishTrimmed>false</PublishTrimmed>
+	</PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)'=='net9.0-ios'">
     <CodesignKey>Apple Development: Created via API (9AF7WV24ZX)</CodesignKey>
     <CodesignProvision>VS: com.peoplewith.peoplewith Development</CodesignProvision>
@@ -602,6 +610,9 @@
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
     <MauiXaml Update="Views\Profile\ProfileSection.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\Profile\TakeProfilePicture.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
     <MauiXaml Update="Views\Questionnaires\AllQuestionnaires.xaml">

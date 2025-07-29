@@ -218,6 +218,38 @@ namespace PeopleWith
             }
         }
 
+        public async Task<string> GetProfilePicture()
+        {
+            try
+            {
+
+                var USERID = Helpers.Settings.UserKey;
+                var url = $"https://pwapi.peoplewith.com/api/user/userid/{USERID}";
+                var fullurl = $"{url}?$select=profilepicture";
+                ConfigureClient();
+                HttpResponseMessage response = await Client.GetAsync(fullurl);
+                string data = await response.Content.ReadAsStringAsync();
+
+                var jsonObject = JObject.Parse(data);
+                var Pic = jsonObject["value"]?[0]?["profilepicture"]?.Value<string>() ?? String.Empty;
+                return Pic;
+
+            }
+            catch (Exception ex) when (
+         ex is HttpRequestException ||
+         ex is WebException ||
+         ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return string.Empty;
+            }
+            catch (Exception ex)
+            {
+                await NotasyncMethod(ex);
+                return string.Empty;
+            }
+        }
+
 
         public async Task<consent> GetConsentAsync()
         {
@@ -858,31 +890,38 @@ namespace PeopleWith
         {
             try
             {
-                var id = Updatefeedback[0].id;
-                var url = $"https://pwapi.peoplewith.com/api/usersymptom/id/{id}";
-                var feedbacks = Updatefeedback[0].feedback;
-                string json = System.Text.Json.JsonSerializer.Serialize(new { feedback = feedbacks });
-                //string json = System.Text.Json.JsonSerializer.Serialize(new { feedback = feedbacks }, serializerOptions);
-                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-                ConfigureClient();
-                using (var client = new HttpClient())
+                var GetItem = Updatefeedback?.FirstOrDefault();
+
+                //Ensure Item is not Null 
+                if (GetItem != null)
                 {
-                    //works with patch
-                    //var request = new HttpRequestMessage(HttpMethod.Patch, url)
-                    var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                    var id = GetItem.id;
+                    var url = $"https://pwapi.peoplewith.com/api/usersymptom/id/{id}";
+                    var feedbacks = GetItem.feedback;
+
+                    string json = System.Text.Json.JsonSerializer.Serialize(new { feedback = feedbacks });
+                    //string json = System.Text.Json.JsonSerializer.Serialize(new { feedback = feedbacks }, serializerOptions);
+                    StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                    ConfigureClient();
+                    using (var client = new HttpClient())
                     {
-                        Content = content
-                    };
-                    var response = await Client.SendAsync(request);
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        var errorResponse = await response.Content.ReadAsStringAsync();
+                        //works with patch
+                        //var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                        var request = new HttpRequestMessage(HttpMethod.Patch, url)
+                        {
+                            Content = content
+                        };
+                        var response = await Client.SendAsync(request);
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            var errorResponse = await response.Content.ReadAsStringAsync();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Successfully updated feedback");
+                        }
                     }
-                    else
-                    {
-                        Console.WriteLine("Successfully updated feedback");
-                    }
-                }
+                }        
             }
             catch (Exception ex) when (
        ex is HttpRequestException ||
@@ -1226,7 +1265,7 @@ namespace PeopleWith
                             medicationquestions = rawSymptom.medicationquestions,
                             groupscheduleid = rawSymptom.groupscheduleid
                         };
-                        if (rawSymptom.schedule == null)
+                        if (rawSymptom.schedule == null || rawSymptom.schedule == "[]" || string.IsNullOrEmpty(rawSymptom.schedule))
                         {
 
                         }
@@ -1236,9 +1275,18 @@ namespace PeopleWith
                             // Add only the relevant feedback to this usersymptom
 
                             int Index = 0;
+                            var Scheduleremoveitem = new ObservableCollection<MedtimesDosages>();
 
                             foreach (var feedback in feedbackSymptoms)
                             {
+
+                                //Check for Empty Schedule item 
+                                if (feedback.id == 0)
+                                {
+                                    Scheduleremoveitem.Add(feedback);
+                                    continue;
+                                }
+
                                 newUserSymptom.schedule.Add(feedback);
                                 var dosage = feedback.Dosage;
                                 var Updatetime = DateTime.Parse(feedback.time).ToString("HH:mm");
@@ -1284,6 +1332,11 @@ namespace PeopleWith
                                     Index = Index + 1;
                                 }
 
+                            }
+
+                            foreach(var item in Scheduleremoveitem)
+                            {
+                                feedbackSymptoms.Remove(item);
                             }
                         }
 
@@ -1848,12 +1901,20 @@ namespace PeopleWith
                             // Add only the relevant feedback to this usersymptom
 
                             int Index = 0;
-
+                            var Scheduleremoveitem = new ObservableCollection<MedtimesDosages>();
                             //Stops issue of schedule causing crash on As Required
                             if (!newUserSymptom.frequency.Contains("As Required"))
                             {
                                foreach (var feedback in feedbackSymptoms)
                             {
+
+                                //Check for Empty Schedule item 
+                                if (feedback.id == 0)
+                                {
+                                    Scheduleremoveitem.Add(feedback);
+                                    continue;
+                                }
+
                                 newUserSymptom.schedule.Add(feedback);
                                 var dosage = feedback.Dosage;
                                 var Updatetime = DateTime.Parse(feedback.time).ToString("HH:mm");
@@ -1900,6 +1961,10 @@ namespace PeopleWith
 
                             }
                           }
+                            foreach (var item in Scheduleremoveitem)
+                            {
+                                feedbackSymptoms.Remove(item);
+                            }
                         }
 
                         if (rawSymptom.feedback == null)

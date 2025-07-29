@@ -4148,7 +4148,10 @@ public partial class AddMedication : ContentPage
                         item.dateadded = DateTime.Now.ToString("g");
                         item.TimeDosage = string.Join(", ", newusermedication.TimeDosage);
                         // item.frequency = newusermedication.frequency;
-                        observableItemList.Add(item);
+                        if (item.id != 0)
+                        {
+                            observableItemList.Add(item);
+                        }
                     }
 
                    // Random randomgroup1 = new Random();

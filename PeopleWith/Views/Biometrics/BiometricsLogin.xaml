@@ -26,7 +26,10 @@
 
                     <Image Source="logo.png" HeightRequest="125" WidthRequest="200" Grid.Row="0"/>
                     <Border Grid.Row="1" StrokeShape="RoundRectangle 40"  BackgroundColor="#E5F0FB" HeightRequest="80" WidthRequest="80" Stroke="Transparent">
-                        <Label x:Name="Initals" Padding="0" HorizontalOptions="CenterAndExpand" TextTransform="Uppercase" VerticalOptions="CenterAndExpand" FontFamily="HankenGroteskBold" FontSize="22" TextColor="#031926"/>
+                        <Grid>
+                            <Label x:Name="Initals" Padding="0" HorizontalOptions="CenterAndExpand" TextTransform="Uppercase" VerticalOptions="CenterAndExpand" FontFamily="HankenGroteskBold" FontSize="22" TextColor="#031926"/>
+                            <Image x:Name="ProfilePic"  Grid.Row="0" Grid.RowSpan="2" IsVisible="False" HorizontalOptions="Fill" Aspect="AspectFill" InputTransparent="True"/>
+                        </Grid>
                     </Border>
                     <Grid Grid.Row="2" >
                         <Grid.RowDefinitions>

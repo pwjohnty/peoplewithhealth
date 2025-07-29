@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using Mopups.Hosting;
 using Plugin.Maui.SegmentedControl;
 using Plugin.Fingerprint.Abstractions;
