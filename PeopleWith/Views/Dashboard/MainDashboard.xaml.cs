@@ -5172,6 +5172,8 @@ public partial class MainDashboard : ContentPage
             {
 #if ANDROID
                       BatterySettingsOpener.OpenBatterySettings();
+                      //Check Again after
+                      UserSettingsCheck();
 #endif
             }
             IsNavigating = false;

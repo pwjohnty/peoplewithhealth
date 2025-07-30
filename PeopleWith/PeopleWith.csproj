@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <!--<TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>-->
+    <TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
     <!-- <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks> -->
-	  <TargetFrameworks>net9.0-android</TargetFrameworks>
+	  <!--<TargetFrameworks>net9.0-android</TargetFrameworks>
 	   <TargetFrameworks Condition="!$([MSBuild]::IsOSPlatform('windows'))">
     $(TargetFrameworks);net9.0-ios;net9.0-maccatalyst
-  </TargetFrameworks>
+  </TargetFrameworks>-->
 	  <!--<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>-->
 	  <RuntimeIdentifiers Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
   android-arm;android-arm64;android-x86;android-x64
