@@ -1086,8 +1086,10 @@ public partial class RegisterFinalPage : ContentPage
                         var notification = new NotificationRequest
                         {
                             NotificationId = new Random().Next(1, int.MaxValue),
-                            Title = "EQ-5D-5L General Health Questionnaire",
-                            Description = "Please take a moment to complete your EQ-5D-5L questionnaire",
+
+                            //BODY-Q - Health-related Quality of Life Questionnaire
+                            Title = "BODY-Q-Health-related Quality of Life Questionnaire",
+                            Description = "Please take a moment to complete your BODY-Q-Health-related questionnaire",
                             BadgeNumber = 0,
 
                             Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
