@@ -186,6 +186,7 @@ public partial class DashQuestionnaire : ContentPage
             if(correctresponses.Count > 0)
             {
                 previouslist.ItemsSource = correctresponses;
+                previouslist.HeightRequest = correctresponses.Count * 110;
                 previouslist.IsVisible = true;
                 nodatastack.IsVisible = false; 
             }

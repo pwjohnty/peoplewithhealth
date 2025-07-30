@@ -33,6 +33,8 @@
 	<uses-permission android:name="android.permission.health.READ_SPEED" />
 	<uses-permission android:name="android.permission.health.READ_STEPS" />
 	<uses-permission android:name="android.permission.health.READ_DISTANCE" />
+	<uses-permission android:name="android.permission.health.READ_RESPIRATORY_RATE" />
+	<uses-permission android:name="android.permission.health.READ_HEART_RATE" />
 	<!-- Check if Health Connect is installed -->
 	<queries>
 		<package android:name="com.google.android.apps.healthdata" />

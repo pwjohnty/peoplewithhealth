@@ -9,6 +9,27 @@ using Syncfusion.Maui.Core;
 //using CloudKit;
 using System.Diagnostics;
 
+#if ANDROID
+using AndroidX.Health.Connect.Client;
+using AndroidX.Health.Connect.Client.Aggregate;
+using AndroidX.Health.Connect.Client.Request;
+using AndroidX.Health.Connect.Client.Records;
+using PeopleWith.Platforms.Android.Callbacks;
+using AndroidX.Health.Connect.Client.Time;
+using AndroidX.Health.Connect.Client.Records.Metadata;
+using Java.Time;
+using AndroidX.Activity.Result.Contract;
+using AndroidX.Activity.Result;
+using AndroidX.Health.Connect.Client.Permission;
+using Android.Runtime;
+using Kotlin.Jvm.Internal;
+using Java.Util;
+using PeopleWith.Platforms.Android.Permissions;
+using AndroidX.Health.Connect.Client.Units;
+using PeopleWith.Platforms.Android.Callbacks;
+using Length = AndroidX.Health.Connect.Client.Units.Length;
+#endif
+
 namespace PeopleWith;
 
 public partial class HealthDataPage : ContentPage
@@ -81,6 +102,15 @@ public partial class HealthDataPage : ContentPage
         health = HealthDataProvider.Default;
         //checkhealthdata();
     }
+
+#if ANDROID
+    private Instant DateTimeToInstant(DateTime date)
+    {
+        long unixTimestamp = ((DateTimeOffset)date).ToUnixTimeSeconds();
+        return Instant.OfEpochSecond(unixTimestamp);
+    }
+#endif
+
     async void checkhealthdata()
     {
         try
@@ -212,20 +242,150 @@ public partial class HealthDataPage : ContentPage
     {
         try
         {
-            var hasPermission = await health.CheckPermissionAsync(HealthParameter.StepCount, PermissionType.Read);
-
-            if (hasPermission)
+            if (DeviceInfo.Current.Platform == DevicePlatform.Android)
             {
 
-                stepsborder.Stroke = Color.FromArgb("#42c501");
-                stepsborder.StrokeThickness = 2;
-                stepsbtn.IsVisible = false;
-                stepstick.IsVisible = true;
+#if ANDROID
+                try
+                {
+                    DateTime startOfDay = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0, DateTimeKind.Local);
+                    Instant startTime = DateTimeToInstant(startOfDay);
+                    Instant endTime = DateTimeToInstant(DateTime.Now);
+
+                    double breathsPerMinute = 16.0;
+
+                    // Correct sample list
+                    var heartSamples = new List<HeartRateRecord.Sample>
+    {
+        new HeartRateRecord.Sample(startTime, 72)
+    };
+
+                    // Record objects (optional)
+                    StepsRecord stepsRecord = new StepsRecord(startTime, ZoneOffset.OfHours(2), endTime, ZoneOffset.OfHours(1), 1, new Metadata());
+                    HeartRateRecord hrrecord = new HeartRateRecord(startTime, ZoneOffset.OfHours(2), endTime, ZoneOffset.OfHours(1), heartSamples, new Metadata());
+                    RespiratoryRateRecord resprecord = new RespiratoryRateRecord(startTime, ZoneOffset.OfHours(2), breathsPerMinute, new Metadata());
+
+                    // Permission setup
+                    List<string> PermissionsToGrant = new List<string>
+    {
+        HealthPermission.GetReadPermission(Kotlin.Jvm.Internal.Reflection.GetOrCreateKotlinClass(stepsRecord.Class)),
+        HealthPermission.GetReadPermission(Kotlin.Jvm.Internal.Reflection.GetOrCreateKotlinClass(hrrecord.Class)),
+        HealthPermission.GetReadPermission(Kotlin.Jvm.Internal.Reflection.GetOrCreateKotlinClass(resprecord.Class))
+    };
+
+                    string packageName = Android.App.Application.Context.PackageName;
+                    string providerPackageName = packageName;
+
+                    int availabilityStatus = HealthConnectClient.GetSdkStatus(Platform.CurrentActivity, providerPackageName);
+                    if (availabilityStatus == HealthConnectClient.SdkUnavailable)
+                        return;
+
+                    if (availabilityStatus == HealthConnectClient.SdkUnavailableProviderUpdateRequired)
+                    {
+                        Platform.CurrentActivity.StartActivity(
+                            new Android.Content.Intent(Android.Content.Intent.ActionView,
+                                Android.Net.Uri.Parse($"market://details?id={providerPackageName}&url=healthconnect%3A%2F%2Fonboarding"))
+                            .SetPackage("com.android.vending")
+                            .PutExtra("overlay", true)
+                            .PutExtra("callerId", Platform.CurrentActivity.PackageName)
+                        );
+                        return;
+                    }
+
+                    if (OperatingSystem.IsAndroidVersionAtLeast(26) && (availabilityStatus == HealthConnectClient.SdkAvailable))
+                    {
+                        ICollection<AggregateMetric> metrics = new List<AggregateMetric> { StepsRecord.CountTotal };
+                        ICollection<DataOrigin> dataOrginFilter = new List<DataOrigin>();
+                        AggregateGroupByDurationRequest request = new AggregateGroupByDurationRequest(
+                            metrics,
+                            TimeRangeFilter.After(startTime),
+                            Java.Time.Duration.OfDays(1),
+                            dataOrginFilter
+                        );
+
+                        try
+                        {
+                            var healthConnectClient = new KotlinCallback(HealthConnectClient.GetOrCreate(Android.App.Application.Context));
+                            List<string> GrantedPermissions = await healthConnectClient.GetGrantedPermissions();
+                            List<string> MissingPermissions = PermissionsToGrant.Except(GrantedPermissions).ToList();
+
+                            if (MissingPermissions.Count > 0)
+                            {
+                                GrantedPermissions = await PermissionHandler.Request(new HashSet(MissingPermissions));
+                            }
+
+                            bool allPermissionsGranted = PermissionsToGrant.All(permission => GrantedPermissions.Contains(permission));
+
+                            if (allPermissionsGranted)
+                            {
+                                // Steps aggregation
+                                var Result = await healthConnectClient.AggregateGroupByDuration(request);
+                                var StepCountTotal = Result.FirstOrDefault(x => x.Result.Contains(StepsRecord.CountTotal))?
+                                    .Result.Get(StepsRecord.CountTotal).JavaCast<Java.Lang.Number>();
+
+                                if (StepCountTotal != null)
+                                {
+                                    stepslbl.Text = StepCountTotal.ToString();
+                                }
+
+                                //// Heart Rate Records
+                               // var heartRateRecords = await healthConnectClient.ReadRecordsAsync<HeartRateRecord>(
+                                //    new ReadRecordsRequest<HeartRateRecord>(TimeRangeFilter.Between(startTime, endTime)));
+                                //);
+
+                                //var allSamples = heartRateRecords.SelectMany(r => r.Samples).ToList();
+                                //if (allSamples.Any())
+                                //{
+                                //    double averageHeartRate = allSamples.Average(s => s.BeatsPerMinute);
+                                
+                                //}
+
+                                //// Respiratory Rate Records
+                                //var respRateRecords = await healthConnectClient.ReadRecordsAsync<RespiratoryRateRecord>(
+                                //    new ReadRecordsRequest<RespiratoryRateRecord>(TimeRangeFilter.Between(startTime, endTime))
+                                //);
+
+                                //if (respRateRecords.Any())
+                                //{
+                                //    double avgRespRate = respRateRecords.Average(r => r.BreathsPerMinute);
+                                //}
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Inner error: " + ex.Message);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Outer error: " + ex.Message);
+                }
+#endif
 
 
-                startbtn.Text = "Get Started";
             }
+            else if (DeviceInfo.Current.Platform == DevicePlatform.iOS)
+            {
 
+
+
+
+                var hasPermission = await health.CheckPermissionAsync(HealthParameter.StepCount, PermissionType.Read);
+
+                if (hasPermission)
+                {
+
+                    stepsborder.Stroke = Color.FromArgb("#42c501");
+                    stepsborder.StrokeThickness = 2;
+                    stepsbtn.IsVisible = false;
+                    stepstick.IsVisible = true;
+
+
+                    startbtn.Text = "Get Started";
+                }
+
+            }
 
         }
         catch (Exception ex)
@@ -341,20 +501,147 @@ public partial class HealthDataPage : ContentPage
     {
         try
         {
-            var hasPermission = await health.CheckPermissionAsync(HealthParameter.HeartRate, PermissionType.Read);
-
-            if (hasPermission)
+            if (DeviceInfo.Current.Platform == DevicePlatform.Android)
             {
 
-                hrborder.Stroke = Colors.HotPink;
-                hrborder.StrokeThickness = 2;
-                hrbtn.IsVisible = false;
-                hrtick.IsVisible = true;
+#if ANDROID
+                try
+                {
+                    DateTime startOfDay = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0, DateTimeKind.Local);
+                    Instant startTime = DateTimeToInstant(startOfDay);
+                    Instant endTime = DateTimeToInstant(DateTime.Now);
+
+                    double breathsPerMinute = 16.0;
+
+                    // Correct sample list
+                    var heartSamples = new List<HeartRateRecord.Sample>
+    {
+        new HeartRateRecord.Sample(startTime, 72)
+    };
+
+                    // Record objects (optional)
+                    StepsRecord stepsRecord = new StepsRecord(startTime, ZoneOffset.OfHours(2), endTime, ZoneOffset.OfHours(1), 1, new Metadata());
+                    HeartRateRecord hrrecord = new HeartRateRecord(startTime, ZoneOffset.OfHours(2), endTime, ZoneOffset.OfHours(1), heartSamples, new Metadata());
+                    RespiratoryRateRecord resprecord = new RespiratoryRateRecord(startTime, ZoneOffset.OfHours(2), breathsPerMinute, new Metadata());
+
+                    // Permission setup
+                    List<string> PermissionsToGrant = new List<string>
+    {
+        HealthPermission.GetReadPermission(Kotlin.Jvm.Internal.Reflection.GetOrCreateKotlinClass(stepsRecord.Class)),
+        HealthPermission.GetReadPermission(Kotlin.Jvm.Internal.Reflection.GetOrCreateKotlinClass(hrrecord.Class)),
+        HealthPermission.GetReadPermission(Kotlin.Jvm.Internal.Reflection.GetOrCreateKotlinClass(resprecord.Class))
+    };
+
+                    string packageName = Android.App.Application.Context.PackageName;
+                    string providerPackageName = packageName;
+
+                    int availabilityStatus = HealthConnectClient.GetSdkStatus(Platform.CurrentActivity, providerPackageName);
+                    if (availabilityStatus == HealthConnectClient.SdkUnavailable)
+                        return;
+
+                    if (availabilityStatus == HealthConnectClient.SdkUnavailableProviderUpdateRequired)
+                    {
+                        Platform.CurrentActivity.StartActivity(
+                            new Android.Content.Intent(Android.Content.Intent.ActionView,
+                                Android.Net.Uri.Parse($"market://details?id={providerPackageName}&url=healthconnect%3A%2F%2Fonboarding"))
+                            .SetPackage("com.android.vending")
+                            .PutExtra("overlay", true)
+                            .PutExtra("callerId", Platform.CurrentActivity.PackageName)
+                        );
+                        return;
+                    }
+
+                    if (OperatingSystem.IsAndroidVersionAtLeast(26) && (availabilityStatus == HealthConnectClient.SdkAvailable))
+                    {
+                        ICollection<AggregateMetric> metrics = new List<AggregateMetric> { StepsRecord.CountTotal };
+                        ICollection<DataOrigin> dataOrginFilter = new List<DataOrigin>();
+                        AggregateGroupByDurationRequest request = new AggregateGroupByDurationRequest(
+                            metrics,
+                            TimeRangeFilter.After(startTime),
+                            Java.Time.Duration.OfDays(1),
+                            dataOrginFilter
+                        );
+
+                        try
+                        {
+                            var healthConnectClient = new KotlinCallback(HealthConnectClient.GetOrCreate(Android.App.Application.Context));
+                            List<string> GrantedPermissions = await healthConnectClient.GetGrantedPermissions();
+                            List<string> MissingPermissions = PermissionsToGrant.Except(GrantedPermissions).ToList();
+
+                            if (MissingPermissions.Count > 0)
+                            {
+                                GrantedPermissions = await PermissionHandler.Request(new HashSet(MissingPermissions));
+                            }
+
+                            bool allPermissionsGranted = PermissionsToGrant.All(permission => GrantedPermissions.Contains(permission));
+
+                            if (allPermissionsGranted)
+                            {
+                                // Steps aggregation
+                                var Result = await healthConnectClient.AggregateGroupByDuration(request);
+                                //var StepCountTotal = Result.FirstOrDefault(x => x.Result.Contains(StepsRecord.CountTotal))?
+                                //    .Result.Get(StepsRecord.CountTotal).JavaCast<Java.Lang.Number>();
+
+                                //if (StepCountTotal != null)
+                                //{
+                                //    stepslbl.Text = StepCountTotal.ToString();
+                                //}
+
+                                //// Heart Rate Records
+                                // var heartRateRecords = await healthConnectClient.ReadRecordsAsync<HeartRateRecord>(
+                                //    new ReadRecordsRequest<HeartRateRecord>(TimeRangeFilter.Between(startTime, endTime)));
+                                //);
+
+                                //var allSamples = heartRateRecords.SelectMany(r => r.Samples).ToList();
+                                //if (allSamples.Any())
+                                //{
+                                //    double averageHeartRate = allSamples.Average(s => s.BeatsPerMinute);
+
+                                //}
+
+                                //// Respiratory Rate Records
+                                //var respRateRecords = await healthConnectClient.ReadRecordsAsync<RespiratoryRateRecord>(
+                                //    new ReadRecordsRequest<RespiratoryRateRecord>(TimeRangeFilter.Between(startTime, endTime))
+                                //);
+
+                                //if (respRateRecords.Any())
+                                //{
+                                //    double avgRespRate = respRateRecords.Average(r => r.BreathsPerMinute);
+                                //}
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Inner error: " + ex.Message);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Outer error: " + ex.Message);
+                }
+#endif
 
 
-                startbtn.Text = "Get Started";
             }
+            else if (DeviceInfo.Current.Platform == DevicePlatform.iOS)
+            {
 
+                var hasPermission = await health.CheckPermissionAsync(HealthParameter.HeartRate, PermissionType.Read);
+
+                if (hasPermission)
+                {
+
+                    hrborder.Stroke = Colors.HotPink;
+                    hrborder.StrokeThickness = 2;
+                    hrbtn.IsVisible = false;
+                    hrtick.IsVisible = true;
+
+
+                    startbtn.Text = "Get Started";
+                }
+
+            }
 
         }
         catch (Exception ex)
@@ -423,20 +710,146 @@ public partial class HealthDataPage : ContentPage
     {
         try
         {
-            var hasPermission = await health.CheckPermissionAsync(HealthParameter.RespiratoryRate, PermissionType.Read);
-
-            if (hasPermission)
+            if (DeviceInfo.Current.Platform == DevicePlatform.Android)
             {
 
-                resborder.Stroke = Color.FromArgb("#009fe3");
-                resborder.StrokeThickness = 2;
-                resbtn.IsVisible = false;
-                restick.IsVisible = true;
+#if ANDROID
+                try
+                {
+                    DateTime startOfDay = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0, DateTimeKind.Local);
+                    Instant startTime = DateTimeToInstant(startOfDay);
+                    Instant endTime = DateTimeToInstant(DateTime.Now);
+
+                    double breathsPerMinute = 16.0;
+
+                    // Correct sample list
+                    var heartSamples = new List<HeartRateRecord.Sample>
+    {
+        new HeartRateRecord.Sample(startTime, 72)
+    };
+
+                    // Record objects (optional)
+                    StepsRecord stepsRecord = new StepsRecord(startTime, ZoneOffset.OfHours(2), endTime, ZoneOffset.OfHours(1), 1, new Metadata());
+                    HeartRateRecord hrrecord = new HeartRateRecord(startTime, ZoneOffset.OfHours(2), endTime, ZoneOffset.OfHours(1), heartSamples, new Metadata());
+                    RespiratoryRateRecord resprecord = new RespiratoryRateRecord(startTime, ZoneOffset.OfHours(2), breathsPerMinute, new Metadata());
+
+                    // Permission setup
+                    List<string> PermissionsToGrant = new List<string>
+    {
+        HealthPermission.GetReadPermission(Kotlin.Jvm.Internal.Reflection.GetOrCreateKotlinClass(stepsRecord.Class)),
+        HealthPermission.GetReadPermission(Kotlin.Jvm.Internal.Reflection.GetOrCreateKotlinClass(hrrecord.Class)),
+        HealthPermission.GetReadPermission(Kotlin.Jvm.Internal.Reflection.GetOrCreateKotlinClass(resprecord.Class))
+    };
+
+                    string packageName = Android.App.Application.Context.PackageName;
+                    string providerPackageName = packageName;
+
+                    int availabilityStatus = HealthConnectClient.GetSdkStatus(Platform.CurrentActivity, providerPackageName);
+                    if (availabilityStatus == HealthConnectClient.SdkUnavailable)
+                        return;
+
+                    if (availabilityStatus == HealthConnectClient.SdkUnavailableProviderUpdateRequired)
+                    {
+                        Platform.CurrentActivity.StartActivity(
+                            new Android.Content.Intent(Android.Content.Intent.ActionView,
+                                Android.Net.Uri.Parse($"market://details?id={providerPackageName}&url=healthconnect%3A%2F%2Fonboarding"))
+                            .SetPackage("com.android.vending")
+                            .PutExtra("overlay", true)
+                            .PutExtra("callerId", Platform.CurrentActivity.PackageName)
+                        );
+                        return;
+                    }
+
+                    if (OperatingSystem.IsAndroidVersionAtLeast(26) && (availabilityStatus == HealthConnectClient.SdkAvailable))
+                    {
+                        ICollection<AggregateMetric> metrics = new List<AggregateMetric> { StepsRecord.CountTotal };
+                        ICollection<DataOrigin> dataOrginFilter = new List<DataOrigin>();
+                        AggregateGroupByDurationRequest request = new AggregateGroupByDurationRequest(
+                            metrics,
+                            TimeRangeFilter.After(startTime),
+                            Java.Time.Duration.OfDays(1),
+                            dataOrginFilter
+                        );
+
+                        try
+                        {
+                            var healthConnectClient = new KotlinCallback(HealthConnectClient.GetOrCreate(Android.App.Application.Context));
+                            List<string> GrantedPermissions = await healthConnectClient.GetGrantedPermissions();
+                            List<string> MissingPermissions = PermissionsToGrant.Except(GrantedPermissions).ToList();
+
+                            if (MissingPermissions.Count > 0)
+                            {
+                                GrantedPermissions = await PermissionHandler.Request(new HashSet(MissingPermissions));
+                            }
+
+                            bool allPermissionsGranted = PermissionsToGrant.All(permission => GrantedPermissions.Contains(permission));
+
+                            if (allPermissionsGranted)
+                            {
+                                // Steps aggregation
+                                var Result = await healthConnectClient.AggregateGroupByDuration(request);
+                                //var StepCountTotal = Result.FirstOrDefault(x => x.Result.Contains(StepsRecord.CountTotal))?
+                                //    .Result.Get(StepsRecord.CountTotal).JavaCast<Java.Lang.Number>();
+
+                                //if (StepCountTotal != null)
+                                //{
+                                //    stepslbl.Text = StepCountTotal.ToString();
+                                //}
+
+                                //// Heart Rate Records
+                                // var heartRateRecords = await healthConnectClient.ReadRecordsAsync<HeartRateRecord>(
+                                //    new ReadRecordsRequest<HeartRateRecord>(TimeRangeFilter.Between(startTime, endTime)));
+                                //);
+
+                                //var allSamples = heartRateRecords.SelectMany(r => r.Samples).ToList();
+                                //if (allSamples.Any())
+                                //{
+                                //    double averageHeartRate = allSamples.Average(s => s.BeatsPerMinute);
+
+                                //}
+
+                                //// Respiratory Rate Records
+                                //var respRateRecords = await healthConnectClient.ReadRecordsAsync<RespiratoryRateRecord>(
+                                //    new ReadRecordsRequest<RespiratoryRateRecord>(TimeRangeFilter.Between(startTime, endTime))
+                                //);
+
+                                //if (respRateRecords.Any())
+                                //{
+                                //    double avgRespRate = respRateRecords.Average(r => r.BreathsPerMinute);
+                                //}
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Inner error: " + ex.Message);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Outer error: " + ex.Message);
+                }
+#endif
 
 
-                startbtn.Text = "Get Started";
             }
+            else if (DeviceInfo.Current.Platform == DevicePlatform.iOS)
+            {
 
+                var hasPermission = await health.CheckPermissionAsync(HealthParameter.RespiratoryRate, PermissionType.Read);
+
+                if (hasPermission)
+                {
+
+                    resborder.Stroke = Color.FromArgb("#009fe3");
+                    resborder.StrokeThickness = 2;
+                    resbtn.IsVisible = false;
+                    restick.IsVisible = true;
+
+
+                    startbtn.Text = "Get Started";
+                }
+            }
 
         }
         catch (Exception ex)
