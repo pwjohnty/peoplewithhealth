@@ -1464,8 +1464,8 @@ public partial class AndroidQuestionnaires : ContentPage
                         else if (Signup.Contains("SFECORE"))
                         {
                             ListArray = new List<string>
-                        {    //EQ-5D-5L
-                            "A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF"
+                        {    //BODY-Q-Health-related
+                            "9CC7F59A-8F48-41BC-BD5D-BA5B83A81BEE"
                         };
                         }
                         else if (Signup.Contains("RBHTHCM"))

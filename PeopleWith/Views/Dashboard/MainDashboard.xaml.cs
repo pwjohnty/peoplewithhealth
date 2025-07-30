@@ -1542,11 +1542,17 @@ public partial class MainDashboard : ContentPage
                 //additionalquestionstab.IsVisible = true;
                 SFECoreStudy.IsVisible = true;
 
-                //EQ-5D-5L
-                string QID = "A37CF880-080D-40D4-8A8D-1C0CEEC2FEBF";
+                //Body-Q-Health-Related
+                string QID = "9CC7F59A-8F48-41BC-BD5D-BA5B83A81BEE";
                 if (questionnaires != null)
                 {
                     QuestionList = new ObservableCollection<questionnaire>(questionnaires.Where(q => QID.Contains(q.questionnaireid)));
+                    var GetItem = QuestionList?.FirstOrDefault();
+
+                    if(GetItem != null)
+                    {
+                        GetItem.description = "Please answer the questions to the best of your ability.";
+                    }
                 }
 
                 QuestionsIndicator.IsVisible = false;
