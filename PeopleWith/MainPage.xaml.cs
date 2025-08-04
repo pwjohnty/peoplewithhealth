@@ -69,9 +69,10 @@ namespace PeopleWith
                 if (!string.IsNullOrEmpty(userid))
                 {
                     //check if user has migrated
-                   // checkuser();
+                    // checkuser();
+                    if (string.IsNullOrEmpty(pincode)) { return; }
 
-                    if(um == "false" || string.IsNullOrEmpty(um) || um == "False")
+                    if (um == "false" || string.IsNullOrEmpty(um) || um == "False")
                     {
                         //go to migration assitant
 

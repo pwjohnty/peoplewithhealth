@@ -14,7 +14,8 @@ public partial class TakeProfilePicture : ContentPage
     private static readonly HttpClient Client = new HttpClient();
     private byte[] ResizedImage;
     string ImageFileName = string.Empty;
-    bool ExisitingPhoto = false; 
+    bool ExisitingPhoto = false;
+    bool Rotate = false; 
 
     //Change the following 
     private const string StorageConnectionString = "DefaultEndpointsProtocol=https;AccountName=peoplewithappiamges;AccountKey=9maBMGnjWp6KfOnOuXWHqveV4LPKyOnlCgtkiKQOeA+d+cr/trKApvPTdQ+piyQJlicOE6dpeAWA56uD39YJhg==;EndpointSuffix=core.windows.net";
@@ -146,12 +147,18 @@ public partial class TakeProfilePicture : ContentPage
             if (photo != null)
             {
                 using var stream = await photo.OpenReadAsync();
+                Rotate = true; 
                 var resizedImage = await ResizeImageAsync(stream, 1024, 1024, 80);
-
+                Rotate = false;
                 if (resizedImage != null)
                 {
                     ResizedImage = resizedImage;
-                    ProfilePic.Source = ImageSource.FromStream(() => new MemoryStream(resizedImage));
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        ProfilePic.Source = ImageSource.FromStream(() => new MemoryStream(resizedImage));
+                    });
+                    await Task.Delay(2000);
+                    //ProfilePic.Source = ImageSource.FromStream(() => new MemoryStream(resizedImage));
                     //Update FIleName
                     var backrandom = new Random();
                     var backrandomnum = backrandom.Next(1000, 10000000);
@@ -192,10 +199,17 @@ public partial class TakeProfilePicture : ContentPage
             using var rotated = new SKBitmap(resized.Height, resized.Width);
             using (var canvas = new SKCanvas(rotated))
             {
-                canvas.Translate(rotated.Width / 2, rotated.Height / 2);
-                canvas.RotateDegrees(90);
-                canvas.Translate(-resized.Width / 2, -resized.Height / 2);
-                canvas.DrawBitmap(resized, 0, 0);
+                if (Rotate)
+                {
+                    canvas.Translate(rotated.Width / 2, rotated.Height / 2);
+                    canvas.RotateDegrees(90);
+                    canvas.Translate(-resized.Width / 2, -resized.Height / 2);
+                    canvas.DrawBitmap(resized, 0, 0);
+                }
+                else
+                {
+                    canvas.DrawBitmap(resized, 0, 0);
+                }
             }
 
             using var image = SKImage.FromBitmap(rotated);
@@ -249,7 +263,12 @@ public partial class TakeProfilePicture : ContentPage
                 if (resizedImage != null)
                 {
                     ResizedImage = resizedImage;
-                    ProfilePic.Source = ImageSource.FromStream(() => new MemoryStream(resizedImage));
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        ProfilePic.Source = ImageSource.FromStream(() => new MemoryStream(resizedImage));
+                    });
+                    await Task.Delay(2000);
+                    //ProfilePic.Source = ImageSource.FromStream(() => new MemoryStream(resizedImage));
                     //Update FIleName
                     var backrandom = new Random();
                     var backrandomnum = backrandom.Next(1000, 10000000);

@@ -20,7 +20,14 @@ namespace PeopleWith
             Intent intent = new Intent();
             intent.SetAction(Settings.ActionBatterySaverSettings);
             intent.SetFlags(ActivityFlags.NewTask);
-            context.StartActivity(intent);
+            if (intent.ResolveActivity(context.PackageManager) != null)
+            {
+                context.StartActivity(intent);
+            }
+            else
+            {
+                Android.Util.Log.Warn("BatterySettingsOpener", "No activity found for battery saver settings.");
+            }
         }
 
         public static bool IsBatterySaverEnabled()

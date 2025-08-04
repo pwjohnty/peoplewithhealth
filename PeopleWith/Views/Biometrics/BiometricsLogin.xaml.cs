@@ -33,6 +33,24 @@ public partial class BiometricsLogin : ContentPage
             //Dunno 
         }
     }
+
+    //protected async override void OnAppearing()
+    //{
+    //    base.OnAppearing();
+
+    //    try
+    //    {
+    //        await MainThread.InvokeOnMainThreadAsync(async () =>
+    //        {
+    //            await CheckProfilePic();
+    //        });
+    //    }
+    //    catch (Exception Ex)
+    //    {
+    //        NotasyncMethod(Ex);
+    //    }
+    //}
+
     public BiometricsLogin()
 	{
         try
@@ -46,36 +64,12 @@ public partial class BiometricsLogin : ContentPage
 
             if (DeviceInfo.Current.Platform == DevicePlatform.Android)
             {
-                fingerprint.Source = "fingerprint.png"; 
+                fingerprint.Source = "fingerprint.png";
             }
             else if (DeviceInfo.Current.Platform == DevicePlatform.iOS)
             {
                 fingerprint.Source = "faceid.png";
             }
-
-            var Nameone = Helpers.Settings.FirstName;
-            var Nametwo = Helpers.Settings.Surname;
-            if (!string.IsNullOrEmpty(Nameone))
-            {
-                one = Nameone.Substring(0, 1);
-            }
-
-            if (!string.IsNullOrEmpty(Nametwo))
-            {
-                two = Nametwo.Substring(0, 1);
-            }
-            if (!string.IsNullOrEmpty(one) && !string.IsNullOrEmpty(two))
-            {
-                var NameInt = one + two; 
-                Initals.Text = NameInt.ToUpper();
-            }
-
-            if (string.IsNullOrEmpty(Initals.Text))
-            {
-                Initals.Text = "PW";
-            }
-
-            var pincode = Preferences.Default.Get("pincode", string.Empty);
 
             //Return to Normal Opacticy 
             //WeakReferenceMessenger.Default.Register<BiometricsOpacity>(this, (r, m) =>
@@ -99,10 +93,38 @@ public partial class BiometricsLogin : ContentPage
 
             if (!string.IsNullOrEmpty(ImageFilename))
             {
-                ProfilePic.IsVisible = true; 
+                ProfilePic.IsVisible = true;
                 Initals.IsVisible = false;
                 var imagestring = $"https://peoplewithappiamges.blob.core.windows.net/profileuploads/{ImageFilename}?t={DateTime.UtcNow.Ticks}";
+                //MainThread.BeginInvokeOnMainThread(() =>
+                //{
                 ProfilePic.Source = ImageSource.FromUri(new Uri(imagestring));
+                //});
+            }
+            else
+            {
+
+                var Nameone = Helpers.Settings.FirstName;
+                var Nametwo = Helpers.Settings.Surname;
+                if (!string.IsNullOrEmpty(Nameone))
+                {
+                    one = Nameone.Substring(0, 1);
+                }
+
+                if (!string.IsNullOrEmpty(Nametwo))
+                {
+                    two = Nametwo.Substring(0, 1);
+                }
+                if (!string.IsNullOrEmpty(one) && !string.IsNullOrEmpty(two))
+                {
+                    var NameInt = one + two;
+                    Initals.Text = NameInt.ToUpper();
+                }
+
+                if (string.IsNullOrEmpty(Initals.Text))
+                {
+                    Initals.Text = "PW";
+                }
             }
         }
         catch (Exception Ex)
@@ -110,6 +132,64 @@ public partial class BiometricsLogin : ContentPage
             NotasyncMethod(Ex);
         }
     }
+
+    //private async Task CheckProfilePic()
+    //{
+    //    try
+    //    {
+    //        APICalls databse = new APICalls();
+    //        ImageFilename = await databse.GetProfilePicture();
+
+    //        if (!string.IsNullOrEmpty(ImageFilename))
+    //        {
+    //            ProfilePic.IsVisible = true;
+    //            Initals.IsVisible = false;
+    //            var imagestring = $"https://peoplewithappiamges.blob.core.windows.net/profileuploads/{ImageFilename}?t={DateTime.UtcNow.Ticks}";
+    //            //MainThread.BeginInvokeOnMainThread(() =>
+    //            //{
+    //            ProfilePic.Source = ImageSource.FromUri(new Uri(imagestring));
+    //            //});
+    //        }
+    //        else
+    //        {
+
+    //            var Nameone = Helpers.Settings.FirstName;
+    //            var Nametwo = Helpers.Settings.Surname;
+    //            if (!string.IsNullOrEmpty(Nameone))
+    //            {
+    //                one = Nameone.Substring(0, 1);
+    //            }
+
+    //            if (!string.IsNullOrEmpty(Nametwo))
+    //            {
+    //                two = Nametwo.Substring(0, 1);
+    //            }
+    //            if (!string.IsNullOrEmpty(one) && !string.IsNullOrEmpty(two))
+    //            {
+    //                var NameInt = one + two;
+    //                Initals.Text = NameInt.ToUpper();
+    //            }
+
+    //            if (string.IsNullOrEmpty(Initals.Text))
+    //            {
+    //                Initals.Text = "PW";
+    //            }
+    //        }
+
+    //        if (DeviceInfo.Current.Platform == DevicePlatform.Android)
+    //        {
+    //            fingerprint.Source = "fingerprint.png";
+    //        }
+    //        else if (DeviceInfo.Current.Platform == DevicePlatform.iOS)
+    //        {
+    //            fingerprint.Source = "faceid.png";
+    //        }
+    //    }
+    //    catch(Exception Ex)
+    //    {
+
+    //    }
+    //}
 
     async private void Pincode_PINEntryCompleted(object sender, PINView.Maui.Helpers.PINCompletedEventArgs e)
     {

@@ -162,8 +162,7 @@ namespace PeopleWith
                 //NetworkAccess accessType = Connectivity.Current.NetworkAccess;
 
                 // Ensure MainPage and Navigation are not null
-                if (MainPage?.Navigation?.NavigationStack == null)
-                    return;
+                if (MainPage?.Navigation?.NavigationStack == null) return;
 
                 // Get the current page
                 var currentPage = MainPage.Navigation.NavigationStack.LastOrDefault();
