@@ -19,6 +19,10 @@ using Sentry;
 using System.Globalization;
 using Plugin.Maui.Health;
 using Microsoft.Maui.LifecycleEvents;
+using Android.App;
+using Plugin.LocalNotification.AndroidOption;
+
+
 
 #if ANDROID
 using Plugin.Firebase.CloudMessaging;
@@ -55,7 +59,29 @@ namespace PeopleWith
                 .UseMauiCommunityToolkitMediaElement()
                 .UseMauiCommunityToolkit()
                 .UseMauiApp<App>()
-                .UseLocalNotification()
+                .UseLocalNotification(config =>
+                {
+                    config.AddAndroid(android =>
+                    {
+                        // Channel with custom sound
+                        android.AddChannel(new NotificationChannelRequest
+                        {
+                            Id = "PeopleWithLocalNotifications",
+                            Name = "PWLocalNotifications",
+                            Sound = "pwjingo",
+                            Importance = AndroidImportance.High
+                        });
+
+                        // Add one for IOS
+                        //android.AddChannel(new NotificationChannelRequest
+                        //{
+                        //    Id = "silent_notifications",
+                        //    Name = "Silent Notifications",
+                        //    Description = "Notifications without sound",
+                        //    EnableSound = false
+                        //});
+                    });
+                })
                 .ConfigureSyncfusionToolkit()
                 .UseSegmentedControl()
                 // Add/Remove as Needed

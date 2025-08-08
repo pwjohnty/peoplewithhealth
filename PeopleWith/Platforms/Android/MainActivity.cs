@@ -23,6 +23,10 @@ using AndroidX.Activity;
 using Android.Provider;
 using Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;
 using Plugin.Firebase.CloudMessaging;
+using Android.Media;
+using System.Collections.ObjectModel;
+using Microsoft.Maui.Controls;
+using System.Text.Json;
 
 
 namespace PeopleWith
@@ -31,8 +35,25 @@ namespace PeopleWith
     public class MainActivity : MauiAppCompatActivity
     {
         private NotificationHubClient hub;
+        ObservableCollection<pushdata> NewNotification = new ObservableCollection<pushdata>(); 
         private static string? GetDeviceId() => Secure.GetString(Android.App.Application.Context.ContentResolver, Secure.AndroidId);
+
         public static MainActivity Instance { get; private set; }
+
+        void ConfigureSentryUserScope()
+        {
+            SentrySdk.ConfigureScope(scope =>
+            {
+                string UserID = Preferences.Default.Get("userid", "Unknown");
+                string UserEmail = Preferences.Default.Get("email", "Unknown");
+                scope.User = new SentryUser
+                {
+                    Id = UserID,
+                    Email = UserEmail
+                };
+            });
+        }
+
 
         protected override async void OnCreate(Bundle savedInstanceState)
         {
@@ -50,6 +71,7 @@ namespace PeopleWith
             RequestedOrientation = ScreenOrientation.Portrait;
             initFontScale();
 
+
             AppCompatDelegate.DefaultNightMode = AppCompatDelegate.ModeNightNo;
 
             try
@@ -65,61 +87,61 @@ namespace PeopleWith
 
             }
 
-            //if (Intent?.Extras != null)
-            //{
-             //   HandleIntent(Intent);
-            //}
+                //if (Intent?.Extras != null)
+                //{
+                //   HandleIntent(Intent);
+                //}
 
 
-            //Old Code 
-            // Window.SetStatusBarColor(Android.Graphics.Color.Transparent);
-            // Window.SetNavigationBarColor(Android.Graphics.Color.Transparent);
+                //Old Code 
+                // Window.SetStatusBarColor(Android.Graphics.Color.Transparent);
+                // Window.SetNavigationBarColor(Android.Graphics.Color.Transparent);
 
-            //Android on back Pressed 
-            //OnBackPressedDispatcher.AddCallback(this, new BackPressed(this));
-
-
-            //OnBackPressedDispatcher.OnBackPressed += async (sender, e) =>
-            //{
-            //    var navigation = Application.Current.MainPage?.Navigation;
-
-            //    if (navigation != null && navigation.NavigationStack.Count > 1)
-            //    {
-            //        await MainThread.InvokeOnMainThreadAsync(async () =>
-            //        {
-            //            await navigation.PopAsync();
-            //        });
-            //    }
-            //    else
-            //    {
-            //        Finish(); // or moveTaskToBack(true) if you want it to go to background
-            //    }
-            //};
+                //Android on back Pressed 
+                //OnBackPressedDispatcher.AddCallback(this, new BackPressed(this));
 
 
-            //Initalize Fingerprint 
-            //CrossFingerprint.SetCurrentActivityResolver(() => this);
+                //OnBackPressedDispatcher.OnBackPressed += async (sender, e) =>
+                //{
+                //    var navigation = Application.Current.MainPage?.Navigation;
 
-            // Set the screen orientation to portrait
+                //    if (navigation != null && navigation.NavigationStack.Count > 1)
+                //    {
+                //        await MainThread.InvokeOnMainThreadAsync(async () =>
+                //        {
+                //            await navigation.PopAsync();
+                //        });
+                //    }
+                //    else
+                //    {
+                //        Finish(); // or moveTaskToBack(true) if you want it to go to background
+                //    }
+                //};
 
 
-            // Set keyboard behavior (Fix this on reg, Fine everywhere else) 
-            //App.Current.On<Microsoft.Maui.Controls.PlatformConfiguration.Android>().UseWindowSoftInputModeAdjust(WindowSoftInputModeAdjust.Resize);
+                //Initalize Fingerprint 
+                //CrossFingerprint.SetCurrentActivityResolver(() => this);
+
+                // Set the screen orientation to portrait
 
 
-            // Register the custom connectivity receiver
-            //CustomConnectivityReceiver customReceiver = new CustomConnectivityReceiver();
-            //IntentFilter intentFilter = new IntentFilter(ConnectivityManager.ConnectivityAction);
-            //RegisterReceiver(customReceiver, intentFilter);
+                // Set keyboard behavior (Fix this on reg, Fine everywhere else) 
+                //App.Current.On<Microsoft.Maui.Controls.PlatformConfiguration.Android>().UseWindowSoftInputModeAdjust(WindowSoftInputModeAdjust.Resize);
+
+
+                // Register the custom connectivity receiver
+                //CustomConnectivityReceiver customReceiver = new CustomConnectivityReceiver();
+                //IntentFilter intentFilter = new IntentFilter(ConnectivityManager.ConnectivityAction);
+                //RegisterReceiver(customReceiver, intentFilter);
 
 
 
-            // Handle notification tap if the activity was launched from a notification
-            //if (Intent?.Extras != null)
-            //{
-            //    HandleNotificationTap(Intent);
-            //}
-        }
+                // Handle notification tap if the activity was launched from a notification
+                //if (Intent?.Extras != null)
+                //{
+                //    HandleNotificationTap(Intent);
+                //}
+            }
 
         //internal class BackPressed : OnBackPressedCallback
         //{
@@ -151,17 +173,133 @@ namespace PeopleWith
         //}
 
 
+
+
         //New Intent Code 
 
-        protected override void OnNewIntent(Intent intent)
+        protected override async void OnNewIntent(Intent intent)
         {
             base.OnNewIntent(intent);
             HandleIntent(intent);
-            //if (intent?.Extras != null)
-            //{
-            //    HandleNotificationTap(intent);
-            //}
+
+            if (intent?.Extras != null)
+            {
+                MainThread.BeginInvokeOnMainThread(async () =>
+                {
+                    NewNotification.Clear();
+                    foreach (var key in intent.Extras.KeySet())
+                    {
+                        var value = intent.Extras.Get(key);
+                        var NewValue = new pushdata
+                        {
+                            key = key?.ToString(),
+                            Data = value?.ToString()
+                        };
+                        NewNotification.Add(NewValue);
+                    }
+                    await App.AndroidPushNotificationTappedAsync(NewNotification);
+                });
+            }
         }
+
+        //if (intent?.Extras != null)
+        //{
+        //    NewNotification.Clear();
+        //    foreach (var key in intent.Extras.KeySet())
+        //    {
+        //        var value = intent.Extras.Get(key);
+        //        var NewValue = new pushdata
+        //        {
+        //            key = key.ToString(),
+        //            Data = value.ToString()
+        //        };
+        //        NewNotification.Add(NewValue);
+        //    }
+        //    await App.AndroidPushNotificationTappedAsync(NewNotification);
+
+        //var Area = NewNotification.FirstOrDefault(x => (!string.IsNullOrEmpty(x.key) && x.key == "action"));
+
+        //if (Area != null)
+        //{
+        //    var userid = Preferences.Default.Get("userid", string.Empty);
+        //    var pincode = Preferences.Default.Get("pincode", string.Empty);
+
+        //    APICalls database = new APICalls();
+        //    var userfeedbacklist = await database.GetUserFeedback();
+        //    var feedback = userfeedbacklist?.FirstOrDefault();
+
+        //    //user not logged in 
+        //    if (string.IsNullOrEmpty(userid) || string.IsNullOrEmpty(pincode)) return;
+
+        //    if (Area.Data.ToLower().Contains("question"))
+        //    {
+
+        //    }
+        //    else if (Area.Data.ToLower().Contains("med"))
+        //    {
+        //        await App.SetMainPageWithStack(new MainDashboard(), new AllMedications());
+        //    }
+        //    else if (Area.Data.ToLower().Contains("diag"))
+        //    {
+        //        await App.SetMainPageWithStack(new MainDashboard(), new AllDiagnosis());
+        //    }
+        //    else if (Area.Data.ToLower().Contains("meas"))
+        //    {
+        //        await App.SetMainPageWithStack(new MainDashboard(), new MeasurementsPage(feedback));
+        //    }
+        //    else if (Area.Data.ToLower().Contains("symp"))
+        //    {
+        //        await App.SetMainPageWithStack(new MainDashboard(), new AllSymptoms(feedback));
+        //    }
+
+        //    bool isAppOpen = Microsoft.Maui.Controls.Application.Current is not null;
+
+        //    if (!isAppOpen)
+        //    {
+        //        var context = Android.App.Application.Context;
+        //        var prefs = context.GetSharedPreferences("MyAppPrefs", FileCreationMode.Private);
+        //        var editor = prefs.Edit();
+
+        //        var existingJson = prefs.GetString("PWPushNotification", null);
+
+        //        if (!string.IsNullOrEmpty(existingJson))
+        //        {
+        //            //Clear Value
+        //            editor.Remove("PWPushNotification");
+        //            editor.Apply();
+        //        }
+        //        else
+        //        {
+        //            //Set Value
+        //            var json = JsonSerializer.Serialize(NewNotification);
+        //            editor.PutString("PWPushNotification", json);
+        //            editor.Apply(); 
+        //        }
+        //    }
+
+
+
+
+        //var Check = Preferences.Get("PWPushNotification", String.Empty);
+        //if (!string.IsNullOrEmpty(Check))
+        //{
+        //    //Clear Value
+        //    Preferences.Set("PWPushNotification", string.Empty);
+        //}
+        //else
+        //{
+        //    //Set Value
+        //    var json = JsonSerializer.Serialize(NewNotification);
+        //    Preferences.Set("PWPushNotification", json);
+        //}
+        //}
+
+        //MainThread.BeginInvokeOnMainThread(async () =>
+        //{
+        //    await App.AndroidPushNotificationTappedAsync(NewNotification);
+        //});
+        //}
+        //}
 
         private static void HandleIntent(Intent intent)
         {
@@ -200,12 +338,29 @@ namespace PeopleWith
                     tags.Add(Helpers.Settings.SignUp);
                 }
 
+                //check all User data 
+                APICalls database = new APICalls();
+                if (!string.IsNullOrEmpty(Helpers.Settings.UserKey))
+                {
+                   var NewTags = await database.GetUserTags();
+
+                    if (NewTags != null && NewTags.Count > 0)
+                    {
+                        foreach (var tag in NewTags)
+                        {
+                            tags.Add(tag);
+                        }
+                    }
+                }
+            
+
                 var installation = new Microsoft.Azure.NotificationHubs.Installation
                 {
                     InstallationId = deviceid,
                     PushChannel = token,
                     Platform = NotificationPlatform.FcmV1,
-                    Tags = tags
+                    Tags = tags, 
+                   
                 };
 
                 try
@@ -237,10 +392,30 @@ namespace PeopleWith
             //notificationManager.CreateNotificationChannel(channel);
             //FirebaseCloudMessagingImplementation.ChannelId = channelId;
 
+            //var channelId = $"{PackageName}.general";
+            //var notificationManager = (NotificationManager)GetSystemService(NotificationService);
+            //var channel = new NotificationChannel(channelId, "General", NotificationImportance.Default);
+            //notificationManager.CreateNotificationChannel(channel);
+            //FirebaseCloudMessagingImplementation.ChannelId = channelId;
+
+
             var channelId = $"{PackageName}.general";
             var notificationManager = (NotificationManager)GetSystemService(NotificationService);
-            var channel = new NotificationChannel(channelId, "General", NotificationImportance.Default);
+
+            // Uri to your sound in res/raw folder
+            var soundUri = Android.Net.Uri.Parse($"android.resource://{PackageName}/raw/pwjingo");
+
+            var audioAttributes = new AudioAttributes.Builder()
+                .SetUsage(AudioUsageKind.Notification)
+                .SetContentType(AudioContentType.Sonification)
+                .Build();
+
+            // Changed importance to High for better visibility and sound playback
+            var channel = new NotificationChannel(channelId, "General", NotificationImportance.High);
+            channel.SetSound(soundUri, audioAttributes);
+
             notificationManager.CreateNotificationChannel(channel);
+
             FirebaseCloudMessagingImplementation.ChannelId = channelId;
 
         }
@@ -381,6 +556,9 @@ namespace PeopleWith
         //    }
 
         //}
+
+
+       
 
         private void HandleNotificationTap(Intent intent)
         {

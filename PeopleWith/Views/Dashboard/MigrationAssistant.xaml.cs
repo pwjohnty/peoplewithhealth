@@ -367,7 +367,7 @@ public partial class MigrationAssistant : ContentPage
             Preferences.Default.Set("usermigrated", updateuser[0].usermigrated.ToString());
 
 
-            App.SetMainPage(new NavigationPage(new MainDashboard()));
+            await App.SetMainPage(new NavigationPage(new MainDashboard()));
 
 
 

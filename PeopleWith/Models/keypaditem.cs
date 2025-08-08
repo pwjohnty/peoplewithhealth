@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Mopups.Services;
 using CommunityToolkit.Mvvm.Messaging;
+using System.Text.Json;
 
 namespace PeopleWith
 {
@@ -130,12 +131,12 @@ namespace PeopleWith
                     
                                             // Simulate some processing that may take up to 2 seconds
                     await Task.Delay(500);
-                   
 
-                    MainThread.BeginInvokeOnMainThread(() =>
+                    //var checkNotif = Preferences.Get("PWPushNotification", String.Empty);
+
+                    MainThread.BeginInvokeOnMainThread(async () =>
                     {
-                        App.SetMainPage(new NavigationPage(new MainDashboard()));
-                       // Application.Current.MainPage = new NavigationPage(new MainDashboard());
+                        await App.CheckNotificationAfterLogin();
                     });
                 }
                 else

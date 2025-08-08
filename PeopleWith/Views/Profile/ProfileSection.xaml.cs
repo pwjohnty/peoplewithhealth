@@ -21,15 +21,13 @@ public partial class ProfileSection : ContentPage
     public List<user> PrivacyDetailsList = new List<user>();
     public ObservableCollection<user> UserData = new ObservableCollection<user>(); 
     user AllUserData = new user();
-    string one;
-    string two;
-    private bool settingsOpened = false;
+    string one = String.Empty;
+    string two = String.Empty;
     private static readonly HttpClient Client = new HttpClient();
     //Connectivity Changed 
     public event EventHandler<bool> ConnectivityChanged;
     AlertContent InitialQuestion;
     AlertContent SecondQuestion;
-    private byte[] ResizedImage;
     //Crash Handler
     CrashDetected crashHandler = new CrashDetected();
     bool isrunning = false; 
@@ -72,42 +70,158 @@ public partial class ProfileSection : ContentPage
         public string Cancel { get; set; }
     }
 
-    //protected override async void OnAppearing()
-    //{
-    //    try
-    //    {
-    //        base.OnAppearing();
-    //        //Check if Notifications has been updated
-    //        GetSettings();
-
-    //    }
-    //    catch (Exception Ex)
-    //    {
-    //        NotasyncMethod(Ex);
-    //    }
-    //}
-
-
-    //public ProfileSection()
-    //{
-    //	InitializeComponent();
-    //}
 
     public ProfileSection()
     {
         try
         {
             InitializeComponent();
-            // AllUserData = AllUserDetails;
-            //Icon and user's Name 
+
             GetAllUserData();
 
+            AssignDelete();
+
+            Useridlbl.Text = Helpers.Settings.UserKey;
+
+            string version = AppInfo.Current.VersionString;
+            string build = AppInfo.Current.BuildString;
+            ReleaseVersion.Text = "ReleaseVersion " + version + " | " + "Build Version " + build;
+
+            GetHealthDetails();
+            GetSettings();
+            GetPrivacyDetails();
+
           
-            //Namelbl.Text = Helpers.Settings.FirstName + " " + Helpers.Settings.Surname;
-            //if(Namelbl.Text == " ")
-            //{
-            //    Namelbl.Text = "Health Details"; 
-            //}
+            MessagingCenter.Subscribe<App>(this, "CallMethodOnPage", (sender) =>
+            {
+                GetSettings();
+            });
+            WeakReferenceMessenger.Default.Register<ProfilePicUpdate>(this, (r, m) =>
+            {
+                var ImageString = (String)m.Value;
+
+                if (String.IsNullOrEmpty(ImageString))
+                {
+                    //Profile Picture Deleted 
+                    Initals.IsVisible = true;
+                    EditShow.IsVisible = true;
+                    ProfilePic.IsVisible = false;
+                    Camerapng.IsVisible = false;
+
+                    AssignInitials();
+                }
+                else
+                {
+                    //Change Profile Picture
+                    Initals.IsVisible = false;
+                    EditShow.IsVisible = false;
+                    ProfilePic.IsVisible = true;
+                    Camerapng.IsVisible = true;
+                    var FullString = $"https://peoplewithappiamges.blob.core.windows.net/profileuploads/{ImageString}?t={DateTime.UtcNow.Ticks}";
+                    ProfilePic.Source = ImageSource.FromUri(new Uri(FullString));
+                }
+
+            });
+        }
+
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    public ProfileSection(user AllUserDetails)
+    {
+        try
+        {
+            InitializeComponent();
+
+            AssignDelete();
+
+            AllUserData = AllUserDetails;
+
+
+            //Check ProfilePic/Initials 
+            if (String.IsNullOrEmpty(AllUserData.profilepicture))
+            {
+                AssignInitials();
+            }
+            else
+            {
+                Initals.IsVisible = false;
+                EditShow.IsVisible = false;
+                ProfilePic.IsVisible = true;
+                Camerapng.IsVisible = true;
+                var imagestring = $"https://peoplewithappiamges.blob.core.windows.net/profileuploads/{AllUserData.profilepicture}?t={DateTime.UtcNow.Ticks}";
+                ProfilePic.Source = ImageSource.FromUri(new Uri(imagestring));
+            }
+
+            Useridlbl.Text = Helpers.Settings.UserKey;
+
+            string version = AppInfo.Current.VersionString;
+            string build = AppInfo.Current.BuildString;
+            ReleaseVersion.Text = "ReleaseVersion " + version + " | " + "Build Version " + build;  
+
+            GetHealthDetails();
+            GetSettings();
+            GetPrivacyDetails();
+
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+    async private void GetAllUserData()
+    {
+        try
+        {
+            await GetUserData();
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    private void AssignInitials()
+    {
+        try
+        {
+            var firstName = Helpers.Settings.FirstName;
+            var surname = Helpers.Settings.Surname;
+
+            if (!string.IsNullOrWhiteSpace(firstName))
+            {
+                char firstChar = firstName.Trim()[0];
+                one = char.IsLetter(firstChar) ? firstChar.ToString() : string.Empty;
+            }
+
+            if (!string.IsNullOrWhiteSpace(surname))
+            {
+                char firstChar = surname.Trim()[0];
+                two = char.IsLetter(firstChar) ? firstChar.ToString() : string.Empty;
+            }
+
+            if (!string.IsNullOrEmpty(one) && !string.IsNullOrEmpty(two))
+            {
+                Initals.Text = (one + two).ToUpper();
+            }
+            else
+            {
+                Initals.Text = "PW";
+            }
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
+
+    private void AssignDelete()
+    {
+        try
+        {
             if (!string.IsNullOrEmpty(Helpers.Settings.SignUp))
             {
                 //Royal Brompton (Project) 
@@ -185,102 +299,6 @@ public partial class ProfileSection : ContentPage
                 InitialQuestion = ItemOne;
                 SecondQuestion = ItemTwo;
             }
-
-            Useridlbl.Text = Helpers.Settings.UserKey;
-
-            string version = AppInfo.Current.VersionString;
-            string build = AppInfo.Current.BuildString;
-            ReleaseVersion.Text = "ReleaseVersion " + version + " | " + "Build Version " + build;
-
-         
-
-            GetHealthDetails();
-            GetSettings();
-            GetPrivacyDetails();
-
-            //Set Profile Pic/ Initals 
-           
-
-            MessagingCenter.Subscribe<App>(this, "CallMethodOnPage", (sender) =>
-            {
-                GetSettings();
-            });
-            WeakReferenceMessenger.Default.Register<ProfilePicUpdate>(this, (r, m) =>
-            {
-                var ImageString = (String)m.Value;
-                Initals.IsVisible = false;
-                EditShow.IsVisible = false;
-                ProfilePic.IsVisible = true;
-                Camerapng.IsVisible = true; 
-                var FullString = $"https://peoplewithappiamges.blob.core.windows.net/profileuploads/{ImageString}?t={DateTime.UtcNow.Ticks}";
-                ProfilePic.Source = ImageSource.FromUri(new Uri(FullString));
-            });
-        }
-
-        catch (Exception Ex)
-        {
-            NotasyncMethod(Ex);
-        }
-    }
-
-    public ProfileSection(user AllUserDetails)
-    {
-        try
-        {
-            InitializeComponent();
-            AllUserData = AllUserDetails;
-
-            //Icon and user's Name 
-            var FirstName = Helpers.Settings.FirstName;
-            var Surname = Helpers.Settings.Surname;
-            if (!string.IsNullOrEmpty(FirstName))
-            {
-                 one = FirstName.Substring(0, 1);
-            }
-    
-            if (!string.IsNullOrEmpty(Surname))
-            {
-                 two = Surname.Substring(0, 1);
-            }
-            if(!string.IsNullOrEmpty(one) && !string.IsNullOrEmpty(two))
-            {
-                Initals.Text = one + two;
-            }
-
-            if (string.IsNullOrEmpty(Initals.Text))
-            {
-                Initals.Text = "PW"; 
-            }
-            //Namelbl.Text = Helpers.Settings.FirstName + " " + Helpers.Settings.Surname;
-            //if(Namelbl.Text == " ")
-            //{
-            //    Namelbl.Text = "Health Details"; 
-            //}
-            Useridlbl.Text = Helpers.Settings.UserKey;
-
-            string version = AppInfo.Current.VersionString;
-            string build = AppInfo.Current.BuildString;
-            ReleaseVersion.Text = "ReleaseVersion " + version + " | " + "Build Version " + build;  
-
-            GetHealthDetails();
-            GetSettings();
-            GetPrivacyDetails();
-
-            MessagingCenter.Subscribe<App>(this, "CallMethodOnPage", (sender) => {
-                GetSettings();
-            });
-
-        }
-        catch (Exception Ex)
-        {
-            NotasyncMethod(Ex);
-        }
-    }
-    async private void GetAllUserData()
-    {
-        try
-        {
-            await GetUserData();
         }
         catch (Exception Ex)
         {
@@ -294,40 +312,41 @@ public partial class ProfileSection : ContentPage
         {
             APICalls Database = new APICalls();
             UserData = await Database.GetuserDetails();
-            AllUserData.password = UserData[0].password;
-            AllUserData.firstname = UserData[0].firstname;
-            AllUserData.surname = UserData[0].surname;
-            AllUserData.email = UserData[0].email;
-            AllUserData.dateofbirth = UserData[0].dateofbirth;
-            AllUserData.gender = UserData[0].gender;
-            AllUserData.ethnicity = UserData[0].ethnicity;
-            AllUserData.biometrics = UserData[0].biometrics;
-            AllUserData.userpin = UserData[0].userpin;
-            AllUserData.profilepicture = UserData[0].profilepicture;
+
+            var UserItem = UserData?.FirstOrDefault();
+            if(UserItem != null)
+            {
+                AllUserData = UserItem; 
+                //Old
+                //AllUserData.password = UserItem.password;
+                //AllUserData.firstname = UserItem.firstname;
+                //AllUserData.surname = UserItem.surname;
+                //AllUserData.email = UserItem.email;
+                //AllUserData.dateofbirth = UserItem.dateofbirth;
+                //AllUserData.gender = UUserItem.gender;
+                //AllUserData.ethnicity = UserData[0].ethnicity;
+                //AllUserData.biometrics = UserData[0].biometrics;
+                //AllUserData.userpin = UserData[0].userpin;
+                //AllUserData.profilepicture = UserData[0].profilepicture;
+            }
+            else
+            {
+                //Use Helpers.Settings 
+                //AllUserData.password = UserItem.password;
+                AllUserData.firstname = Helpers.Settings.FirstName;
+                AllUserData.surname = Helpers.Settings.Surname;
+                AllUserData.email = Helpers.Settings.Email;
+                AllUserData.dateofbirth = Helpers.Settings.DOB;
+                AllUserData.gender = Helpers.Settings.Gender;
+                AllUserData.ethnicity = Helpers.Settings.Ethnicity;
+                //AllUserData.biometrics = UserData[0].biometrics;
+                AllUserData.userpin = Helpers.Settings.PinCode;
+                AllUserData.profilepicture = Helpers.Settings.ProfilePic;
+            }
 
             if (String.IsNullOrEmpty(AllUserData.profilepicture))
             {
-                var FirstName = Helpers.Settings.FirstName;
-                var Surname = Helpers.Settings.Surname;
-                if (!string.IsNullOrEmpty(FirstName))
-                {
-                    one = FirstName.Substring(0, 1);
-                }
-
-                if (!string.IsNullOrEmpty(Surname))
-                {
-                    two = Surname.Substring(0, 1);
-                }
-                if (!string.IsNullOrEmpty(one) && !string.IsNullOrEmpty(two))
-                {
-                    var NameInt = one + two;
-                    Initals.Text = NameInt.ToUpper();
-                }
-
-                if (string.IsNullOrEmpty(Initals.Text))
-                {
-                    Initals.Text = "PW";
-                }
+                AssignInitials();
             }
             else
             {

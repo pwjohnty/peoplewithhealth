@@ -2,6 +2,8 @@
 using Android.Runtime;
 using Sentry;
 
+[assembly: UsesPermission(Android.Manifest.Permission.AccessNetworkState)]
+
 namespace PeopleWith
 {
     [Application]

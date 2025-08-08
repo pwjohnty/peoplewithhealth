@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.peoplewith.peoplewith" android:versionCode="99" android:versionName="99.1">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.peoplewith.peoplewith" android:versionCode="100" android:versionName="100.1">
 	<!-- Set minSdkVersion and targetSdkVersion -->
 	<!--<uses-sdk android:targetSdkVersion="34" />-->
 	<application android:allowBackup="true" android:icon="@mipmap/pwhealthicon" android:supportsRtl="true">
@@ -11,6 +11,12 @@
 				<category android:name="${applicationId}" />
 			</intent-filter>
 		</receiver>
+		<!--<service
+		android:name=".FirebaseService"  android:exported="false">
+			<intent-filter>
+				<action android:name="com.google.firebase.MESSAGING_EVENT" />
+			</intent-filter>
+		</service>-->
 	</application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.INTERNET" />
@@ -20,7 +26,7 @@
 	<uses-permission android:name="android.permission.READ_HEALTH_DATA" />
 	<uses-permission android:name="android.permission.USE_BIOMETRIC" />
 	<uses-permission android:name="android.permission.USE_FINGERPRINT" />
-	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />	
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 	<uses-permission android:name="android.permission.USE_EXACT_ALARM" />

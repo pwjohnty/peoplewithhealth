@@ -1055,12 +1055,14 @@ public partial class RegisterFinalPage : ContentPage
                             Title = "Complete your EQ-5D Questionnaire",
                             Description = "Please take a moment to complete your EQ-5D questionnaire",
                             BadgeNumber = 0,
-                           
-                             Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
+                            Sound = DeviceInfo.Platform == DevicePlatform.Android ? "pwjingo" : "pwjingo.mp3",
+
+                            Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
                              {
                                  Priority = Plugin.LocalNotification.AndroidOption.AndroidPriority.High, // ?? Set priority here
                                  Ongoing = true,
-                             },
+                                ChannelId = "PeopleWithLocalNotifications",
+                            },
 
                             // Add any custom data you need to retrieve when the notification is tapped
                             //ReturningData = "action=questionnaire&studyid=IID3",
@@ -1091,11 +1093,13 @@ public partial class RegisterFinalPage : ContentPage
                             Title = "BODY-Q-Health-related Quality of Life Questionnaire",
                             Description = "Please take a moment to complete your BODY-Q-Health-related questionnaire",
                             BadgeNumber = 0,
+                            Sound = DeviceInfo.Platform == DevicePlatform.Android ? "pwjingo" : "pwjingo.mp3",
 
                             Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
                             {
                                 Priority = Plugin.LocalNotification.AndroidOption.AndroidPriority.High, // ?? Set priority here
                                 Ongoing = true,
+                                ChannelId = "PeopleWithLocalNotifications",
                             },
 
                             // Add any custom data you need to retrieve when the notification is tapped
@@ -1124,11 +1128,13 @@ public partial class RegisterFinalPage : ContentPage
                         Title = "Complete Your HOCM Baseline Questionnaire",
                         Description = "Please take a moment to complete the Hypertrophic Obstructive Cardiomyopathy Baseline Questionnaire",
                         BadgeNumber = 0,
+                        Sound = DeviceInfo.Platform == DevicePlatform.Android ? "pwjingo" : "pwjingo.mp3",
 
                         Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
                         {
                             Priority = Plugin.LocalNotification.AndroidOption.AndroidPriority.High, // ?? Set priority here
                             Ongoing = true,
+                            ChannelId = "PeopleWithLocalNotifications",
                         },
 
                         // Add any custom data you need to retrieve when the notification is tapped
@@ -1168,9 +1174,9 @@ public partial class RegisterFinalPage : ContentPage
                 // Simulate some processing that may take up to seconds
                 await Task.Delay(500);
                 });
-                MainThread.BeginInvokeOnMainThread(() =>
+                MainThread.BeginInvokeOnMainThread(async() =>
                 {
-                    App.SetMainPage(new NavigationPage(new MainDashboard()));
+                    await App.SetMainPage(new NavigationPage(new MainDashboard()));
                     //Application.Current.MainPage = new NavigationPage(new MainDashboard());
                 });
 

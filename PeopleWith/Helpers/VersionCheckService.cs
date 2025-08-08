@@ -9,20 +9,22 @@ namespace PeopleWith
         public async Task<bool> CheckForUpdate()
         {
             var currentVersion = AppInfo.Current.VersionString;
-            var latestVersion = string.Empty;
+            //var latestVersion = string.Empty;
             //Ensure the following is changed
-            if (DeviceInfo.Platform == DevicePlatform.iOS)
-            {
-                latestVersion = "13.0.4";
-            }
-            else
-            {
-                latestVersion = "99.1";
-            }
+            APICalls database = new APICalls();
+            var AppStoreString =  await database.GetCurrentAppVersion(); 
+            //if (DeviceInfo.Platform == DevicePlatform.iOS)
+            //{
+            //    //latestVersion = "13.0.4";
+            //}
+            //else
+            //{
+            //    //latestVersion = "99.1";
+            //}
 
-            if (string.IsNullOrEmpty(currentVersion) || string.IsNullOrEmpty(latestVersion)) return false;
+            if (string.IsNullOrEmpty(currentVersion) || string.IsNullOrEmpty(AppStoreString)) return false;
 
-            if (currentVersion != latestVersion)
+            if (currentVersion != AppStoreString)
             {
                 return true; 
                 //Application.Current.Windows[0].Page = new NavigationPage(new UpdatePage());

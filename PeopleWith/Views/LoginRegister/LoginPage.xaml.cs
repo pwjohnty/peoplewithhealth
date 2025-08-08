@@ -379,7 +379,7 @@ public partial class LoginPage : ContentPage
                 var setnotificationloginbool = true;
                 await Task.Delay(500);
                 //Application.Current.MainPage = new NavigationPage(new MainDashboard(setnotificationloginbool));
-                App.SetMainPage(new NavigationPage(new MainDashboard(setnotificationloginbool)));
+                await App.SetMainPage(new NavigationPage(new MainDashboard(setnotificationloginbool)));
 
             }
             else
@@ -415,6 +415,21 @@ public partial class LoginPage : ContentPage
             {
                 tags.Add(Helpers.Settings.UserKey);
             }
+            //check all User data 
+            APICalls database = new APICalls();
+            if (!string.IsNullOrEmpty(Helpers.Settings.UserKey))
+            {
+                var NewTags = await database.GetUserTags();
+
+                if (NewTags != null && NewTags.Count > 0)
+                {
+                    foreach (var tag in NewTags)
+                    {
+                        tags.Add(tag);
+                    }
+                }
+            }
+
             if (tags.Count > 0)
             {
                 var notificationService = new PWNotificationService();

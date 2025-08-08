@@ -19,8 +19,6 @@ namespace PeopleWith
         public ConnectivityService()
         {
             Connectivity.ConnectivityChanged += OnConnectivityChanged;
-            //Connectivity.ConnectivityChanged += OnConnectivityChanged;
-          
         }
 
         private void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
@@ -33,8 +31,7 @@ namespace PeopleWith
             catch (Exception Ex)
             {
 
-            }
-          
+            }     
         }
     }
 }

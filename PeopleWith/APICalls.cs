@@ -204,7 +204,7 @@ namespace PeopleWith
             }
 
             catch (Exception ex) when (
-            ex is HttpRequestException || 
+            ex is HttpRequestException ||
             ex is WebException ||
             ex is TaskCanceledException)
             {
@@ -458,10 +458,10 @@ namespace PeopleWith
                     //throw new Exception("Failed to insert user measurement: " + response.ReasonPhrase);
                 }
             }
-           catch (Exception ex) when (
-           ex is HttpRequestException ||
-           ex is WebException ||
-           ex is TaskCanceledException)
+            catch (Exception ex) when (
+            ex is HttpRequestException ||
+            ex is WebException ||
+            ex is TaskCanceledException)
             {
                 await NotasyncMethod(ex);
                 return null;
@@ -506,11 +506,11 @@ namespace PeopleWith
             ex is WebException ||
             ex is TaskCanceledException)
             {
-                await NotasyncMethod(ex);              
+                await NotasyncMethod(ex);
             }
             catch (Exception ex)
             {
-                await NotasyncMethod(ex);         
+                await NotasyncMethod(ex);
             }
         }
 
@@ -782,12 +782,25 @@ namespace PeopleWith
                 var fullurl = $"{url}?$select=imageinput";
                 ConfigureClient();
                 HttpResponseMessage response = await Client.GetAsync(fullurl);
-                string data = await response.Content.ReadAsStringAsync();
 
-                var jsonObject = JObject.Parse(data);
-                bool imageInput = jsonObject["value"]?[0]?["imageinput"]?.Value<bool>() ?? false;
-                return imageInput;
-
+                if (response.IsSuccessStatusCode)
+                {
+                    string data = await response.Content.ReadAsStringAsync();
+                    try
+                    {
+                        var jsonObject = JObject.Parse(data);
+                        bool imageInput = jsonObject["value"]?[0]?["imageinput"]?.Value<bool>() ?? false;
+                        return imageInput;
+                    }
+                    catch (JsonReaderException)
+                    {
+                        return false;
+                    }       
+                }
+                else
+                {
+                    return false; 
+                }
             }
             catch (Exception ex) when (
          ex is HttpRequestException ||
@@ -795,12 +808,12 @@ namespace PeopleWith
          ex is TaskCanceledException)
             {
                 await NotasyncMethod(ex);
-                return true;
+                return false;
             }
             catch (Exception ex)
             {
                 await NotasyncMethod(ex);
-                return true;
+                return false;
             }
         }
 
@@ -921,7 +934,7 @@ namespace PeopleWith
                             Console.WriteLine("Successfully updated feedback");
                         }
                     }
-                }        
+                }
             }
             catch (Exception ex) when (
        ex is HttpRequestException ||
@@ -1334,7 +1347,7 @@ namespace PeopleWith
 
                             }
 
-                            foreach(var item in Scheduleremoveitem)
+                            foreach (var item in Scheduleremoveitem)
                             {
                                 feedbackSymptoms.Remove(item);
                             }
@@ -1905,62 +1918,62 @@ namespace PeopleWith
                             //Stops issue of schedule causing crash on As Required
                             if (!newUserSymptom.frequency.Contains("As Required"))
                             {
-                               foreach (var feedback in feedbackSymptoms)
-                            {
-
-                                //Check for Empty Schedule item 
-                                if (feedback.id == 0)
+                                foreach (var feedback in feedbackSymptoms)
                                 {
-                                    Scheduleremoveitem.Add(feedback);
-                                    continue;
-                                }
 
-                                newUserSymptom.schedule.Add(feedback);
-                                var dosage = feedback.Dosage;
-                                var Updatetime = DateTime.Parse(feedback.time).ToString("HH:mm");
-                                feedback.time = Updatetime;
-                                var time = feedback.time;
-                                List<string> days = new List<string>();
+                                    //Check for Empty Schedule item 
+                                    if (feedback.id == 0)
+                                    {
+                                        Scheduleremoveitem.Add(feedback);
+                                        continue;
+                                    }
 
-                                var getfreq = newUserSymptom.frequency.Split('|');
+                                    newUserSymptom.schedule.Add(feedback);
+                                    var dosage = feedback.Dosage;
+                                    var Updatetime = DateTime.Parse(feedback.time).ToString("HH:mm");
+                                    feedback.time = Updatetime;
+                                    var time = feedback.time;
+                                    List<string> days = new List<string>();
 
-                                //weekly Days
-                                if (getfreq[1].Contains(","))
-                                {
-                                    days = getfreq[1].Split(',').ToList();
-                                    int GetCount = feedbackSymptoms.Count() / days.Count;
-                                    var duplicatedDays = Enumerable.Repeat(days, GetCount).SelectMany(x => x).ToList();
-                                    var uniqueDays = duplicatedDays.Distinct().ToList();
-                                    days = uniqueDays.SelectMany(day => duplicatedDays.Where(d => d == day)).ToList();
-                                }
+                                    var getfreq = newUserSymptom.frequency.Split('|');
 
-                                //Daily
-                                if (getfreq[0] == "Daily" || getfreq[0] == "Days Interval")
-                                {
-                                    var DosageTime = time + "|" + dosage;
-                                    newUserSymptom.TimeDosage.Add(DosageTime);
-                                }
-                                //Weekly
-                                else if (getfreq[0] == "Weekly" || getfreq[0] == "Weekly ")
-                                {
-                                    string DosageTime = String.Empty;
+                                    //weekly Days
                                     if (getfreq[1].Contains(","))
                                     {
-                                        DosageTime = time + "|" + dosage + "|" + days[Index];
-
+                                        days = getfreq[1].Split(',').ToList();
+                                        int GetCount = feedbackSymptoms.Count() / days.Count;
+                                        var duplicatedDays = Enumerable.Repeat(days, GetCount).SelectMany(x => x).ToList();
+                                        var uniqueDays = duplicatedDays.Distinct().ToList();
+                                        days = uniqueDays.SelectMany(day => duplicatedDays.Where(d => d == day)).ToList();
                                     }
-                                    else
+
+                                    //Daily
+                                    if (getfreq[0] == "Daily" || getfreq[0] == "Days Interval")
                                     {
-                                        var day = getfreq[1];
-                                        DosageTime = time + "|" + dosage + "|" + day;
+                                        var DosageTime = time + "|" + dosage;
+                                        newUserSymptom.TimeDosage.Add(DosageTime);
+                                    }
+                                    //Weekly
+                                    else if (getfreq[0] == "Weekly" || getfreq[0] == "Weekly ")
+                                    {
+                                        string DosageTime = String.Empty;
+                                        if (getfreq[1].Contains(","))
+                                        {
+                                            DosageTime = time + "|" + dosage + "|" + days[Index];
+
+                                        }
+                                        else
+                                        {
+                                            var day = getfreq[1];
+                                            DosageTime = time + "|" + dosage + "|" + day;
+                                        }
+
+                                        newUserSymptom.TimeDosage.Add(DosageTime);
+                                        Index = Index + 1;
                                     }
 
-                                    newUserSymptom.TimeDosage.Add(DosageTime);
-                                    Index = Index + 1;
                                 }
-
                             }
-                          }
                             foreach (var item in Scheduleremoveitem)
                             {
                                 feedbackSymptoms.Remove(item);
@@ -2663,10 +2676,10 @@ ex is TaskCanceledException)
 
                 return new ObservableCollection<usermood>(MoodPassed);
             }
-           catch (Exception ex) when (
-           ex is HttpRequestException ||
-           ex is WebException ||
-           ex is TaskCanceledException)
+            catch (Exception ex) when (
+            ex is HttpRequestException ||
+            ex is WebException ||
+            ex is TaskCanceledException)
             {
                 await NotasyncMethod(ex);
                 return new ObservableCollection<usermood>();
@@ -6078,6 +6091,181 @@ ex is TaskCanceledException)
             {
                 await NotasyncMethod(ex);
                 return null;
+            }
+        }
+
+
+        public async Task<IList<string>> GetUserTags()
+        {
+            try
+            {
+
+                var tags = new List<string>();
+
+                string userid = Preferences.Default.Get("userid", string.Empty);
+
+                if (string.IsNullOrEmpty(userid)) return tags;
+
+                //Get User Symptoms
+                var SymptomURL = "https://pwapi.peoplewith.com/api/usersymptom";
+                string urlWithQuery = $"{SymptomURL}?$filter=userid eq '{userid}'&$select=symptomtitle,symptomid";
+
+                    ConfigureClient();
+                    HttpResponseMessage response = await Client.GetAsync(urlWithQuery);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string data = await response.Content.ReadAsStringAsync();
+                        var GetItem = JsonConvert.DeserializeObject<ApiResponseUserSymptom>(data);
+
+                        if (GetItem != null)
+                        {
+                            if (GetItem?.Value?.Count > 0)
+                            {
+
+                                tags.AddRange(GetItem.Value
+                                    .SelectMany(s => new[] { s.symptomtitle, s.symptomid })
+                                    .Where(x => !string.IsNullOrEmpty(x))
+                                    .Select(x => x.Contains(" ") ? x.Replace(" ", "-") : x));
+
+                            }
+                        }
+                    }
+
+                     //Get Medications Data 
+                    var MedURL = "https://pwapi.peoplewith.com/api/usermedication";
+                    string MedQuery = $"{MedURL}?$filter=userid eq '{userid}'&$select=medicationtitle,medicationid";
+                    ConfigureClient();
+                    HttpResponseMessage Medresponse = await Client.GetAsync(MedQuery);
+                    if (Medresponse.IsSuccessStatusCode)
+                    {
+                        string dataItem = await Medresponse.Content.ReadAsStringAsync();
+                        var ItemGet = JsonConvert.DeserializeObject<ApiResponseUserMedication>(dataItem);
+
+                        if (ItemGet != null)
+                        {
+                            if (ItemGet?.Value?.Count > 0)
+                            {
+
+                            tags.AddRange(ItemGet.Value
+                                  .SelectMany(s => new[] { s.medicationtitle, s.medicationid })
+                                  .Where(x => !string.IsNullOrEmpty(x))
+                                  .Select(x => x.Contains(" ") ? x.Replace(" ", "-") : x));
+
+                            }
+                        }
+                    }
+
+
+                //Get Measurements Data 
+                var MeasURL = "https://pwapi.peoplewith.com/api/usermeasurement";
+                string MeasQuery = $"{MeasURL}?$filter=userid eq '{userid}'&$select=measurementname,measurementid";
+                ConfigureClient();
+                HttpResponseMessage Measresponse = await Client.GetAsync(MeasQuery);
+                if (Measresponse.IsSuccessStatusCode)
+                {
+                    string itemsData = await Measresponse.Content.ReadAsStringAsync();
+                    var Get = JsonConvert.DeserializeObject<ApiResponseUserMeasurement>(itemsData);
+
+                    if (Get != null)
+                    {
+                        if (Get?.Value?.Count > 0)
+                        {
+                            tags.AddRange(Get.Value
+                                 .SelectMany(s => new[] { s.measurementname, s.measurementid })
+                                 .Where(x => !string.IsNullOrEmpty(x))
+                                 .Select(x => x.Contains(" ") ? x.Replace(" ", "-") : x));
+                        }
+                    }
+                }
+
+
+                //Get Diagnosis Data 
+                var DiagURL = "https://pwapi.peoplewith.com/api/userdiagnosis";
+                string DiagQuery = $"{DiagURL}?$filter=userid eq '{userid}'&$select=diagnosistitle,diagnosisid";
+                ConfigureClient();
+                HttpResponseMessage Diagresponse = await Client.GetAsync(DiagQuery);
+                if (Diagresponse.IsSuccessStatusCode)
+                {
+                    string Diagdata = await Diagresponse.Content.ReadAsStringAsync();
+                    var Get = JsonConvert.DeserializeObject<ApiResponseUserDiagnosis>(Diagdata);
+
+                    if (Get != null)
+                    {
+                        if (Get?.Value?.Count > 0)
+                        {
+                            tags.AddRange(Get.Value
+                                 .SelectMany(s => new[] { s.diagnosistitle, s.diagnosisid })
+                                 .Where(x => !string.IsNullOrEmpty(x))
+                                 .Select(x => x.Contains(" ") ? x.Replace(" ", "-") : x));
+                        }
+                    }
+                }
+
+                return tags; 
+            }
+            catch (Exception ex) when (
+         ex is HttpRequestException ||
+         ex is WebException ||
+         ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return new List<string>();
+            }
+            catch (Exception ex)
+            {
+                await NotasyncMethod(ex);
+                return new List<string>();
+            }
+        }
+
+
+        public async Task<string> GetCurrentAppVersion()
+        {
+            try
+            {
+                var url = $"https://pwapi.peoplewith.com/api/appversion";
+                ConfigureClient();
+                HttpResponseMessage response = await Client.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    string data = await response.Content.ReadAsStringAsync();
+                    var GetItem = JsonConvert.DeserializeObject<ApiAppVersion>(data);
+                    if (GetItem != null)
+                    {
+                        var Version = String.Empty;
+                        var Item = GetItem?.Value.FirstOrDefault();
+                        if (DeviceInfo.Current.Platform == DevicePlatform.iOS)
+                        {
+                            Version = Item.iosversion;
+                        }
+                        else
+                        {
+                            Version = Item.androidversion;
+                        }
+                        return Version;
+                    }
+                    else
+                    {
+                        return string.Empty;
+                    }
+                }
+                else
+                {
+                    return String.Empty;
+                }
+            }
+            catch (Exception ex) when (
+         ex is HttpRequestException ||
+         ex is WebException ||
+         ex is TaskCanceledException)
+            {
+                await NotasyncMethod(ex);
+                return string.Empty;
+            }
+            catch (Exception ex)
+            {
+                await NotasyncMethod(ex);
+                return string.Empty;
             }
         }
     }

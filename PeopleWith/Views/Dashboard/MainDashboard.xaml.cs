@@ -1687,30 +1687,93 @@ public partial class MainDashboard : ContentPage
         }
     }
 
+    //async Task fixnulluserfeedback()
+    //{
+    //    try
+    //    {
+    //        //if userfeedbacklist is null or doesnt contain any items 
+    //        if (userfeedbacklist == null || !userfeedbacklist.Any()) return;
+
+    //        var feedback = userfeedbacklist?.FirstOrDefault();
+
+    //        if (feedback == null) return; 
+
+    //        if(feedback.measurementfeedbacklist != null)
+    //        {
+    //            bool CheckForNull = feedback.measurementfeedbacklist.Any(x => string.IsNullOrEmpty(x.id));
+
+    //            if (CheckForNull)
+    //            {
+    //                //Get Usermeasurements 
+    //                UserMeasurementUpdate = await database.GetUserMeasurements();
+
+    //                foreach (var item in feedback.measurementfeedbacklist)
+    //                {
+    //                    if (string.IsNullOrEmpty(item.id))
+    //                    {
+    //                        //match user measurement to Value && inputdateTime 
+
+    //                        var selectedMeasurement = UserMeasurementUpdate.FirstOrDefault(x => x.value == item.value && DateTime.Parse(x.inputdatetime) == DateTime.Parse(item.datetime));
+
+    //                        if (selectedMeasurement != null)
+    //                        {
+    //                            item.id = selectedMeasurement.id;
+    //                        }
+    //                    }
+    //                }
+
+    //                //update userfeedback table (Measurement Data)
+    //                if (feedback.measurementfeedbacklist == null)
+    //                {
+    //                    feedback.measurementfeedbacklist = new ObservableCollection<feedbackdata>();
+    //                }
+
+    //                string newsymJson = System.Text.Json.JsonSerializer.Serialize(feedback.measurementfeedbacklist);
+    //                feedback.measurementfeedback = newsymJson;
+
+    //                await database.UserfeedbackUpdateMeasurementData(feedback);
+    //            }
+    //        }
+
+
+    //    }
+    //    catch (Exception Ex) 
+    //    {
+    //        NotasyncMethod(Ex);
+    //    }   
+    //}
+
     async void fixnulluserfeedback()
     {
         try
         {
-            if (userfeedbacklist != null)
+            if (userfeedbacklist == null || !userfeedbacklist.Any()) return;
+
+            var feedback = userfeedbacklist?.FirstOrDefault();
+
+            if (feedback == null) return;
+
+            //Check Measurements 
+
+            bool hasData = feedback.measurementfeedbacklist != null && feedback.measurementfeedbacklist.Any();
+
+            bool Empty = feedback.measurementfeedback == "[]";
+
+            if (hasData && !Empty)
             {
+                bool CheckForNull = feedback.measurementfeedbacklist?.Any(x => string.IsNullOrEmpty(x.id) || x.id == "null") == true;
 
-                if (userfeedbacklist[0].measurementfeedbacklist != null)
-                {
-
-                    bool CheckForNull = userfeedbacklist[0].measurementfeedbacklist.Any(x => string.IsNullOrEmpty(x.id));
-
-                    if (CheckForNull)
+                if (CheckForNull)
                     {
                         //Get Usermeasurements 
                         UserMeasurementUpdate = await database.GetUserMeasurements();
 
-                        foreach (var item in userfeedbacklist[0].measurementfeedbacklist)
+                        foreach (var item in feedback.measurementfeedbacklist)
                         {
-                            if (string.IsNullOrEmpty(item.id))
-                            {
+                            if (string.IsNullOrEmpty(item.id) || item.id == "null")
+                        {
                                 //match user measurement to Value && inputdateTime 
-
-                                var selectedMeasurement = UserMeasurementUpdate.Where(x => x.value == item.value && DateTime.Parse(x.inputdatetime) == DateTime.Parse(item.datetime)).FirstOrDefault();
+                                var selectedMeasurement = UserMeasurementUpdate.FirstOrDefault(x => x.value == item.value && DateTime.Parse(x.inputdatetime) == DateTime.Parse(item.datetime));
 
                                 if (selectedMeasurement != null)
                                 {
@@ -1720,37 +1783,42 @@ public partial class MainDashboard : ContentPage
                         }
 
                         //update userfeedback table (Measurement Data)
-                        if (userfeedbacklist[0].measurementfeedbacklist == null)
+                        if (feedback.measurementfeedbacklist == null)
                         {
-                            userfeedbacklist[0].measurementfeedbacklist = new ObservableCollection<feedbackdata>();
+                            feedback.measurementfeedbacklist = new ObservableCollection<feedbackdata>();
                         }
 
-                        string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklist[0].measurementfeedbacklist);
-                        userfeedbacklist[0].measurementfeedback = newsymJson;
+                        string newsymJson = System.Text.Json.JsonSerializer.Serialize(feedback.measurementfeedbacklist);
+                        feedback.measurementfeedback = newsymJson;
 
-                        await database.UserfeedbackUpdateMeasurementData(userfeedbacklist[0]);
+                        await database.UserfeedbackUpdateMeasurementData(feedback);
                     }
                 }
 
 
-                if (userfeedbacklist[0].symptomfeedbacklist != null)
+                //Check Symptoms 
+                bool DataHas = feedback.symptomfeedbacklist != null && feedback.symptomfeedbacklist.Any();
+
+                bool EmptyIs = feedback.symptomfeedback == "[]";
+
+                if (DataHas && !EmptyIs)
                 {
 
-                    //Check Symptoms 
-                    bool CheckisNull = userfeedbacklist[0].symptomfeedbacklist.Any(x => string.IsNullOrEmpty(x.id));
+                bool CheckisNull = feedback.symptomfeedbacklist?.Any(x => string.IsNullOrEmpty(x.id) || x.id == "null") == true;
 
-                    if (CheckisNull)
+                if (CheckisNull)
                     {
                         //Get Usersymptoms 
                         UserSymptomsUpdate = await database.GetUserSymptomAsync();
 
-                        foreach (var item in userfeedbacklist[0].symptomfeedbacklist)
+                        foreach (var item in feedback.symptomfeedbacklist)
                         {
-                            if (string.IsNullOrEmpty(item.id))
-                            {
-                                //match user Mood to label && datetime 
-
-                                var SelectedSymptom = UserSymptomsUpdate[0].feedback.Where(x => x.intensity == item.value && DateTime.Parse(x.timestamp) == DateTime.Parse(item.datetime)).FirstOrDefault();
+                            if (string.IsNullOrEmpty(item.id) || item.id == "null")
+                        {
+                            //match user Mood to label && datetime 
+                            //var SelectedSymptom = UserSymptomsUpdate[0].feedback.Where(x => x.intensity == item.value && DateTime.Parse(x.timestamp) == DateTime.Parse(item.datetime)).FirstOrDefault();
+                            var SelectedSymptom = UserSymptomsUpdate.Where(u => u.feedback != null).SelectMany(u => u.feedback)
+                            .FirstOrDefault(x => x.intensity == item.value && DateTime.Parse(x.timestamp) == DateTime.Parse(item.datetime));
 
                                 if (SelectedSymptom != null)
                                 {
@@ -1760,25 +1828,29 @@ public partial class MainDashboard : ContentPage
                         }
 
                         //update userfeedback table (Symptom Data)
-                        if (userfeedbacklist[0].symptomfeedbacklist == null)
+                        if (feedback.symptomfeedbacklist == null)
                         {
-                            userfeedbacklist[0].symptomfeedbacklist = new ObservableCollection<feedbackdata>();
+                            feedback.symptomfeedbacklist = new ObservableCollection<feedbackdata>();
                         }
 
-                        string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklist[0].symptomfeedbacklist);
-                        userfeedbacklist[0].symptomfeedback = newsymJson;
+                        string newsymJson = System.Text.Json.JsonSerializer.Serialize(feedback.symptomfeedbacklist);
+                        feedback.symptomfeedback = newsymJson;
 
-                        await database.UserfeedbackUpdateSymptomData(userfeedbacklist[0]);
+                        await database.UserfeedbackUpdateSymptomData(feedback);
 
                     }
                 }
 
 
-                if (userfeedbacklist[0].moodfeedbacklist != null)
+                //Check Mood 
+                bool MoodHas = feedback.moodfeedbacklist != null && feedback.moodfeedbacklist.Any();
+
+                bool IsEmpty = feedback.moodfeedback == "[]";
+
+                if (MoodHas && !IsEmpty)
                 {
 
-                    //Check mood 
-                    bool CheckNull = userfeedbacklist[0].moodfeedbacklist.Any(x => string.IsNullOrEmpty(x.id));
+                  bool CheckNull = feedback.moodfeedbacklist?.Any(x => string.IsNullOrEmpty(x.id) || x.id == "null") == true;
 
                     if (CheckNull)
                     {
@@ -1786,13 +1858,12 @@ public partial class MainDashboard : ContentPage
                         string userid = Preferences.Default.Get("userid", "Unknown");
                         UserMoodUpdate = await database.GetUserMoodsAsync(userid);
 
-                        foreach (var item in userfeedbacklist[0].moodfeedbacklist)
+                        foreach (var item in feedback.moodfeedbacklist)
                         {
-                            if (string.IsNullOrEmpty(item.id))
+                            if (string.IsNullOrEmpty(item.id) || item.id == "null")
                             {
                                 //match user Mood to label && datetime 
-
-                                var SelectedMood = UserMoodUpdate.Where(x => x.title == item.label && DateTime.Parse(x.datetime) == DateTime.Parse(item.datetime)).FirstOrDefault();
+                                var SelectedMood = UserMoodUpdate.FirstOrDefault(x => x.title == item.label && DateTime.Parse(x.datetime) == DateTime.Parse(item.datetime));
 
                                 if (SelectedMood != null)
                                 {
@@ -1802,19 +1873,18 @@ public partial class MainDashboard : ContentPage
                         }
 
                         //update userfeedback table (Mood Data)
-                        if (userfeedbacklist[0].moodfeedbacklist == null)
+                        if (feedback.moodfeedbacklist == null)
                         {
-                            userfeedbacklist[0].moodfeedbacklist = new ObservableCollection<feedbackdata>();
+                              feedback.moodfeedbacklist = new ObservableCollection<feedbackdata>();
                         }
 
-                        string newsymJson = System.Text.Json.JsonSerializer.Serialize(userfeedbacklist[0].moodfeedbacklist);
-                        userfeedbacklist[0].moodfeedback = newsymJson;
+                        string newsymJson = System.Text.Json.JsonSerializer.Serialize(feedback.moodfeedbacklist);
+                        feedback.moodfeedback = newsymJson;
 
-                        await database.UserfeedbackUpdateMoodData(userfeedbacklist[0]);
+                        await database.UserfeedbackUpdateMoodData(feedback);
                     }
                 }
             }
-        }
         catch (Exception Ex)
         {
             NotasyncMethod(Ex);

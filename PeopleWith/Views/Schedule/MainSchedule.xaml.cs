@@ -4962,11 +4962,29 @@ item.schedule
             if (accessType == NetworkAccess.Internet)
             {
                 //taken (tick) tapped on schedule
-
                 // Get the tapped Image
-                ExtendedImage label = (ExtendedImage)sender;
 
-                var getitem = ScheduleList.Where(x => x.Feedbackid == label.FeedbackID).FirstOrDefault();
+                var feedbackID = string.Empty;
+                var usermedID = string.Empty;
+
+                if (sender is ExtendedImage image)
+                {
+                    feedbackID = image.FeedbackID;
+                    usermedID = image.UsermedID;
+                }
+                else
+                {
+                    return; 
+                }
+
+                //Old
+                //ExtendedImage label = (ExtendedImage)sender;
+
+                if (String.IsNullOrEmpty(feedbackID) || string.IsNullOrEmpty(usermedID)) return;
+
+                //Old
+                //var getitem = ScheduleList.Where(x => x.Feedbackid == label.FeedbackID).FirstOrDefault();
+                var getitem = ScheduleList.FirstOrDefault(x => x.Feedbackid == feedbackID);
 
                 if (getitem != null)
                 {
@@ -4975,19 +4993,33 @@ item.schedule
 
                     if (getitem.Type == "Medication")
                     {
+                        //old
+                        // var getusermeditem = AllUserMedications.Where(x => x.id == label.UsermedID).FirstOrDefault();
 
-                        var getusermeditem = AllUserMedications.Where(x => x.id == label.UsermedID).FirstOrDefault();
-
+                        var getusermeditem = AllUserMedications.FirstOrDefault(x => x.id == usermedID);
                         getitem.Buttonop = 1;
 
-                        var newfeedback = new MedSuppFeedback();
-                        newfeedback.id = label.FeedbackID;
-                        newfeedback.Recorded = "Taken";
-                        TimeSpan timeSpan = TimeSpan.Parse(getitem.time);
-                        var dt = dateforschedule.Date + timeSpan;
-                        newfeedback.datetime = dt.ToString("HH:mm, dd/MM/yyyy");
-                        newfeedback.dosage = getitem.Dosage + " " + getitem.dosageunit;
-                        newfeedback.datetimerecorded = DateTime.Now.ToString("HH:mm, dd/MM/yyyy");
+                        var timeSpan = TimeSpan.Parse(getitem.time);
+                        var scheduledDateTime = dateforschedule.Date + timeSpan;
+
+                        var newfeedback = new MedSuppFeedback()
+                        {
+                            id = feedbackID,
+                            Recorded = "Taken",
+                            datetime = scheduledDateTime.ToString("HH:mm, dd/MM/yyyy"),
+                            dosage = $"{getitem.Dosage} {getitem.dosageunit}",
+                            datetimerecorded = DateTime.Now.ToString("HH:mm, dd/MM/yyyy")
+                        };
+
+
+                        //var newfeedback = new MedSuppFeedback();
+                        //newfeedback.id = feedbackID;
+                        //newfeedback.Recorded = "Taken";
+                        //TimeSpan timeSpan = TimeSpan.Parse(getitem.time);
+                        //var dt = dateforschedule.Date + timeSpan;
+                        //newfeedback.datetime = dt.ToString("HH:mm, dd/MM/yyyy");
+                        //newfeedback.dosage = getitem.Dosage + " " + getitem.dosageunit;
+                        //newfeedback.datetimerecorded = DateTime.Now.ToString("HH:mm, dd/MM/yyyy");
 
 
                         if (getusermeditem.feedback == null || !getusermeditem.feedback.Any())
@@ -5021,19 +5053,32 @@ item.schedule
                     else
                     {
                         //update supplement feedback
-                        var getusermeditem = AllUserSupplements.Where(x => x.id == label.UsermedID).FirstOrDefault();
+                        //Old
+                        //var getusermeditem = AllUserSupplements.Where(x => x.id == label.UsermedID).FirstOrDefault();
 
-
+                        var getusermeditem = AllUserSupplements.FirstOrDefault(x => x.id == usermedID);
                         getitem.Buttonop = 1;
 
-                        var newfeedback = new MedSuppFeedback();
-                        newfeedback.id = label.FeedbackID;
-                        newfeedback.Recorded = "Taken";
-                        TimeSpan timeSpan = TimeSpan.Parse(getitem.time);
-                        var dt = dateforschedule.Date + timeSpan;
-                        newfeedback.datetime = dt.ToString("HH:mm, dd/MM/yyyy");
-                        newfeedback.dosage = getitem.Dosage + " " + getitem.dosageunit;
-                        newfeedback.datetimerecorded = DateTime.Now.ToString("HH:mm, dd/MM/yyyy");
+                        var timeSpan = TimeSpan.Parse(getitem.time);
+                        var scheduledDateTime = dateforschedule.Date + timeSpan;
+
+                        var newfeedback = new MedSuppFeedback()
+                        {
+                            id = feedbackID,
+                            Recorded = "Taken",
+                            datetime = scheduledDateTime.ToString("HH:mm, dd/MM/yyyy"),
+                            dosage = $"{getitem.Dosage} {getitem.dosageunit}",
+                            datetimerecorded = DateTime.Now.ToString("HH:mm, dd/MM/yyyy")
+                        };
+
+                        //var newfeedback = new MedSuppFeedback();
+                        //newfeedback.id = feedbackID;
+                        //newfeedback.Recorded = "Taken";
+                        //TimeSpan timeSpan = TimeSpan.Parse(getitem.time);
+                        //var dt = dateforschedule.Date + timeSpan;
+                        //newfeedback.datetime = dt.ToString("HH:mm, dd/MM/yyyy");
+                        //newfeedback.dosage = getitem.Dosage + " " + getitem.dosageunit;
+                        //newfeedback.datetimerecorded = DateTime.Now.ToString("HH:mm, dd/MM/yyyy");
 
                         if (getusermeditem.feedback == null || !getusermeditem.feedback.Any())
                         {
@@ -5066,7 +5111,9 @@ item.schedule
                     }
 
                     //update Button On / Off View 
-                    var Updateitem = ScheduleList.Where(x => x.Feedbackid == label.FeedbackID).FirstOrDefault();
+                    //old
+                    //var Updateitem = ScheduleList.Where(x => x.Feedbackid == label.FeedbackID).FirstOrDefault();
+                    var Updateitem = ScheduleList.FirstOrDefault(x => x.Feedbackid == feedbackID);
                     Updateitem.Buttonntop = 0.2;
 
                     }
@@ -5096,9 +5143,28 @@ item.schedule
                 //not taken (x) tapped on schedule
 
                 // Get the tapped Image
-                ExtendedImage label = (ExtendedImage)sender;
+                //ExtendedImage label = (ExtendedImage)sender;
+                var feedbackID = string.Empty;
+                var usermedID = string.Empty;
 
-                var getitem = ScheduleList.Where(x => x.Feedbackid == label.FeedbackID).FirstOrDefault();
+                if (sender is ExtendedImage image)
+                {
+                    feedbackID = image.FeedbackID;
+                    usermedID = image.UsermedID;
+                }
+                else
+                {
+                    return;
+                }
+
+                //Old
+                //ExtendedImage label = (ExtendedImage)sender;
+
+                if (String.IsNullOrEmpty(feedbackID) || string.IsNullOrEmpty(usermedID)) return;
+
+                //old
+                //var getitem = ScheduleList.Where(x => x.Feedbackid == label.FeedbackID).FirstOrDefault();
+                var getitem = ScheduleList.FirstOrDefault(x => x.Feedbackid == feedbackID);
                 if (getitem != null)
                 {
                     getitem.Buttonenabled = false;
@@ -5106,19 +5172,32 @@ item.schedule
 
                     if (getitem.Type == "Medication")
                     {
-
-                        var getusermeditem = AllUserMedications.Where(x => x.id == label.UsermedID).FirstOrDefault();
+                        //Old
+                        //var getusermeditem = AllUserMedications.Where(x => x.id == label.UsermedID).FirstOrDefault();
+                        var getusermeditem = AllUserMedications.FirstOrDefault(x => x.id == usermedID);
 
                         getitem.Buttonntop = 1;
 
-                        var newfeedback = new MedSuppFeedback();
-                        newfeedback.id = label.FeedbackID;
-                        newfeedback.Recorded = "Not Taken";
-                        TimeSpan timeSpan = TimeSpan.Parse(getitem.time);
-                        var dt = dateforschedule.Date + timeSpan;
-                        newfeedback.datetime = dt.ToString("HH:mm, dd/MM/yyyy");
-                        newfeedback.dosage = getitem.Dosage + " " + getitem.dosageunit;
-                        newfeedback.datetimerecorded = DateTime.Now.ToString("HH:mm, dd/MM/yyyy");
+                        var timeSpan = TimeSpan.Parse(getitem.time);
+                        var scheduledDateTime = dateforschedule.Date + timeSpan;
+
+                        var newfeedback = new MedSuppFeedback()
+                        {
+                            id = feedbackID,
+                            Recorded = "Not Taken",
+                            datetime = scheduledDateTime.ToString("HH:mm, dd/MM/yyyy"),
+                            dosage = $"{getitem.Dosage} {getitem.dosageunit}",
+                            datetimerecorded = DateTime.Now.ToString("HH:mm, dd/MM/yyyy")
+                        };
+
+                        //var newfeedback = new MedSuppFeedback();
+                        //newfeedback.id = label.FeedbackID;
+                        //newfeedback.Recorded = "Not Taken";
+                        //TimeSpan timeSpan = TimeSpan.Parse(getitem.time);
+                        //var dt = dateforschedule.Date + timeSpan;
+                        //newfeedback.datetime = dt.ToString("HH:mm, dd/MM/yyyy");
+                        //newfeedback.dosage = getitem.Dosage + " " + getitem.dosageunit;
+                        //newfeedback.datetimerecorded = DateTime.Now.ToString("HH:mm, dd/MM/yyyy");
 
                         if (getusermeditem.feedback == null || !getusermeditem.feedback.Any())
                         {
@@ -5152,18 +5231,32 @@ item.schedule
                     else
                     {
                         //update supplement feedback
-                        var getusermeditem = AllUserSupplements.Where(x => x.id == label.UsermedID).FirstOrDefault();
+                        //Old
+                        //var getusermeditem = AllUserSupplements.Where(x => x.id == label.UsermedID).FirstOrDefault();
+                        var getusermeditem = AllUserSupplements.FirstOrDefault(x => x.id == usermedID);
 
                         getitem.Buttonntop = 1;
 
-                        var newfeedback = new MedSuppFeedback();
-                        newfeedback.id = label.FeedbackID;
-                        newfeedback.Recorded = "Not Taken";
-                        TimeSpan timeSpan = TimeSpan.Parse(getitem.time);
-                        var dt = dateforschedule.Date + timeSpan;
-                        newfeedback.datetime = dt.ToString("HH:mm, dd/MM/yyyy");
-                        newfeedback.dosage = getitem.Dosage + " " + getitem.dosageunit;
-                        newfeedback.datetimerecorded = DateTime.Now.ToString("HH:mm, dd/MM/yyyy");
+                        var timeSpan = TimeSpan.Parse(getitem.time);
+                        var scheduledDateTime = dateforschedule.Date + timeSpan;
+
+                        var newfeedback = new MedSuppFeedback()
+                        {
+                            id = feedbackID,
+                            Recorded = "Not Taken",
+                            datetime = scheduledDateTime.ToString("HH:mm, dd/MM/yyyy"),
+                            dosage = $"{getitem.Dosage} {getitem.dosageunit}",
+                            datetimerecorded = DateTime.Now.ToString("HH:mm, dd/MM/yyyy")
+                        };
+
+                        //var newfeedback = new MedSuppFeedback();
+                        //newfeedback.id = label.FeedbackID;
+                        //newfeedback.Recorded = "Not Taken";
+                        //TimeSpan timeSpan = TimeSpan.Parse(getitem.time);
+                        //var dt = dateforschedule.Date + timeSpan;
+                        //newfeedback.datetime = dt.ToString("HH:mm, dd/MM/yyyy");
+                        //newfeedback.dosage = getitem.Dosage + " " + getitem.dosageunit;
+                        //newfeedback.datetimerecorded = DateTime.Now.ToString("HH:mm, dd/MM/yyyy");
 
                         if (getusermeditem.feedback == null || !getusermeditem.feedback.Any())
                         {
@@ -5196,7 +5289,8 @@ item.schedule
                     }
 
                     //update Button On / Off View 
-                    var Updateitem = ScheduleList.Where(x => x.Feedbackid == label.FeedbackID).FirstOrDefault();
+                    //var Updateitem = ScheduleList.Where(x => x.Feedbackid == label.FeedbackID).FirstOrDefault();
+                    var Updateitem = ScheduleList.FirstOrDefault(x => x.Feedbackid == feedbackID);
                     Updateitem.Buttonop = 0.2;
                 }
 

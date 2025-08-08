@@ -1124,9 +1124,14 @@ public partial class RegisterPage : ContentPage
                     }
                     else
                     {
-                        dateEntry.TextColor = Colors.Red; // Invalid date
+                        dateEntry.TextColor = Colors.Red; // Invalid date range
                         validdob = false;
                     }
+                }
+                else
+                {
+                    dateEntry.TextColor = Colors.Red; // Invalid date
+                    validdob = false;
                 }
             }
             else

@@ -76,6 +76,14 @@ namespace PeopleWith.Helpers
             set => Preferences.Set(UserIDKey, value);
         }
 
+        private const string ProfilePicKey = "profilepic";
+        private static readonly string ProfilePicDefault = string.Empty;
+        public static string ProfilePic
+        {
+            get => Preferences.Get(ProfilePicKey, ProfilePicDefault);
+            set => Preferences.Set(ProfilePicKey, value);
+        }
+
 
         private const string FirstNameKey = "firstname";
         private static readonly string FirstNameDefault = string.Empty;

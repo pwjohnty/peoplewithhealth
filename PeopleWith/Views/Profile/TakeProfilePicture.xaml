@@ -8,12 +8,14 @@
     <StackLayout VerticalOptions="Fill">
         <Label Text="Add a profile picture" FontFamily="HankenGroteskBold" FontSize="26"  Margin="20,10,0,0" HorizontalOptions="Start" VerticalOptions="Center" TextColor="#031926" />
         <Border Margin="10,20,10,10" Background="#ebebeb" Stroke="#ebebeb" HeightRequest="350" WidthRequest="350" StrokeShape="RoundRectangle 200">
-            <Image x:Name="ProfilePic" HeightRequest="350" HorizontalOptions="Fill" Aspect="AspectFill"  />
+            <Image x:Name="ProfilePic" HeightRequest="350" WidthRequest="350" HorizontalOptions="Fill" VerticalOptions="Fill" Aspect="AspectFill"  />
                 <!--<GraphicsView HeightRequest="350" Background="Transparent"
                   WidthRequest="400" IsVisible="False" x:Name="CirclePic"
                   Drawable="{x:Static local:SpotlightDrawable.Instance}" />-->
         </Border>
         <Button CornerRadius="20" IsVisible="False" Text="Save Photo" x:Name="Savebtn" Clicked="Savebtn_Clicked" BackgroundColor="#e5f0fb" BorderColor="#e5f0fb" BorderWidth="1" FontFamily="HankenGroteskBold" HorizontalOptions="Fill" Padding="15" TextColor="#031926" FontSize="16" Margin="20,10,20,0" />
+        <Button CornerRadius="20" IsVisible="False" Text="Delete Photo" x:Name="Deletebtn" Clicked="Deletebtn_Clicked" BackgroundColor="#ffe5e5" BorderColor="#ffe5e5" BorderWidth="1" FontFamily="HankenGroteskBold" HorizontalOptions="Fill" Padding="15" TextColor="Red" FontSize="16" Margin="20,10,20,0" />
+
 
         <StackLayout VerticalOptions="EndAndExpand">
             <Button CornerRadius="20" Text="Upload A Photo" x:Name="UploadPhotobtn" Clicked="UploadPhoto_Clicked" BackgroundColor="#0e4a87" BorderColor="#0e4a87" BorderWidth="1" FontFamily="HankenGroteskRegular" HorizontalOptions="Fill" Padding="15" TextColor="White" FontSize="16" Margin="20,10,20,0" />

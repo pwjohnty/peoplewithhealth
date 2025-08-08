@@ -444,7 +444,17 @@ public partial class AddSymptom : ContentPage
             //If FilterTabs item is Selected - UnSelect it 
             if (string.IsNullOrEmpty(searchbar.Text) || searchbar.Text == "")
             {
-                FilterTabs.SelectedItem = FilterTabsList[0];
+                var Item = FilterTabsList?.FirstOrDefault();
+                if (Item != null) 
+                {
+                    FilterTabs.SelectedItem = Item;
+                }
+                else
+                {
+                    FilterTabs.SelectedItem = null;
+                }
+                //old 
+                //FilterTabs.SelectedItem = FilterTabsList[0];
             }
             else
             {

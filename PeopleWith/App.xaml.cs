@@ -4,6 +4,13 @@ using Plugin.LocalNotification.EventArgs;
 using Microsoft.Maui.Devices;
 using Microsoft.Maui.ApplicationModel;
 using Mopups.Services;
+using Android.Telephony;
+using Org.Apache.Http.Impl.Client;
+using System.Collections.ObjectModel;
+using System.Text.Json;
+using Android.Content;
+using AndroidX.Annotations;
+
 
 namespace PeopleWith
 {
@@ -16,8 +23,10 @@ namespace PeopleWith
             InitializeComponent();
 
             // Initialize connectivity service
+            //_connectivityService = new ConnectivityService();
+            //_connectivityService.ConnectivityChanged += OnConnectivityChanged;
             _connectivityService = new ConnectivityService();
-            _connectivityService.ConnectivityChanged += OnConnectivityChanged;
+            SubscribeConnectivity();
 
             Application.Current.UserAppTheme = AppTheme.Light;
 
@@ -31,7 +40,7 @@ namespace PeopleWith
             //  MainPage = new AppShell();
         }
 
-        void ConfigureSentryUserScope()
+        public static void ConfigureSentryUserScope()
         {
             SentrySdk.ConfigureScope(scope =>
             {
@@ -51,7 +60,7 @@ namespace PeopleWith
             return new Window(new NavigationPage(new MainPage()));
             //return new Window(new AppShell());
         }
-        public static void SetMainPage(Page newRootPage)
+        public static async Task SetMainPage(Page newRootPage)
         {
             //Set New RootPage
             if (Application.Current?.Windows?.FirstOrDefault() is Window window)
@@ -63,6 +72,17 @@ namespace PeopleWith
                 window.Page = newRootPage;
                 //Application.Current.Windows[0].Page = newRootPage;
             }
+        }
+
+      
+        private void SubscribeConnectivity()
+        {
+            _connectivityService.ConnectivityChanged += ConnectivityHandler;
+        }
+
+        private void UnsubscribeConnectivity()
+        {
+            _connectivityService.ConnectivityChanged -= ConnectivityHandler;
         }
 
         //private async void OnNotificationTapped(NotificationActionEventArgs e)
@@ -121,7 +141,7 @@ namespace PeopleWith
                 {
                     if (DeviceInfo.Platform == DevicePlatform.iOS)
                     {
-                        SetMainPageWithStack(new MainDashboard(),new AndroidQuestionnaires(QuestionnaireID, userfeedbacklist[0]));
+                        SetMainPageWithStack(new MainDashboard(), new AndroidQuestionnaires(QuestionnaireID, userfeedbacklist[0]));
                         //await (Application.Current.Windows[0].Page)?.Navigation.PushAsync(new AndroidQuestionnaires(QuestionnaireID), false);
                     }
                     else
@@ -139,18 +159,33 @@ namespace PeopleWith
         }
 
 
-        public static void SetMainPageWithStack(params Page[] pages)
+        public static async Task SetMainPageWithStack(params Page[] pages)
         {
             if (Application.Current?.Windows.Any() != true || pages == null || pages.Length == 0) return;
 
             var navPage = new NavigationPage(pages[0]);
 
+            Application.Current.Windows[0].Page = navPage;
+
+            await Task.Delay(100);
+
             for (int i = 1; i < pages.Length; i++)
             {
-                navPage.Navigation.PushAsync(pages[i], false);
+                await navPage.Navigation.PushAsync(pages[i], false);
             }
+        }
 
-            Application.Current.Windows[0].Page = navPage;
+        protected async override void OnSleep()
+        {
+            try
+            {
+                UnsubscribeConnectivity();
+            }
+            catch (Exception Ex)
+            {
+                ConfigureSentryUserScope();
+                SentrySdk.CaptureException(Ex);
+            }
         }
 
         protected async override void OnResume()
@@ -159,14 +194,12 @@ namespace PeopleWith
             {
                 base.OnResume();
 
-                //NetworkAccess accessType = Connectivity.Current.NetworkAccess;
-
                 // Ensure MainPage and Navigation are not null
                 if (MainPage?.Navigation?.NavigationStack == null) return;
 
                 // Get the current page
                 var currentPage = MainPage.Navigation.NavigationStack.LastOrDefault();
-                if (currentPage == null)  return;
+                if (currentPage == null) return;
 
                 // Check the type of the current page and send appropriate messages
                 if (currentPage is ProfileSection)
@@ -176,25 +209,9 @@ namespace PeopleWith
                 else if (currentPage is MainDashboard)
                 {
                     MessagingCenter.Send<App>(this, "CheckUserSettings");
-                    //MessagingCenter.Send<App>(this, "CallNotifications");
-                    //#if ANDROID
-                    //     MessagingCenter.Send<App>(this, "CallBatterySaver");
-                    //#endif
+                }
 
-                }
-                NetworkAccess accessType = Connectivity.Current.NetworkAccess;
-                if (accessType == NetworkAccess.Internet)
-                {
-                    //Do Nothing 
-                }
-                else
-                {
-                    if (!(Application.Current.MainPage is NoInternetPage))
-                    {
-                        //SetMainPage(new NoInternetPage());
-                        await Application.Current.MainPage.Navigation.PushAsync(new NoInternetPage());
-                    }
-                }
+                SubscribeConnectivity();
 
                 //if (currentPage.GetType().Name == "ProfileSection")
                 //{
@@ -213,49 +230,144 @@ namespace PeopleWith
         }
 
 
+        public static async Task AndroidPushNotificationTappedAsync(ObservableCollection<pushdata> NewNotification)
+        {
+            try
+            {
+                if(NewNotification == null) return;
 
-        //private async void OnConnectivityChanged(object sender, bool isConnected)
-        //{
-        //    try
-        //    {
+                var Area = NewNotification.FirstOrDefault(x => (!string.IsNullOrEmpty(x.key) && x.key == "action"));
 
-        //        //Close any popup page 
-        //        if (MopupService.Instance.PopupStack.Count > 0)
-        //        {
-        //            await MopupService.Instance.PopAsync();
-        //        }
+                if (Area != null)
+                {
+                    var userid = Preferences.Default.Get("userid", string.Empty);
+                    var pincode = Preferences.Default.Get("pincode", string.Empty);
 
-        //        if (!isConnected)
-        //        {
-        //            // Check if NoInternetPage is already on the navigation stack
-        //            var currentPage = MainPage.Navigation.NavigationStack.LastOrDefault();
-        //            if (!(currentPage is NoInternetPage))
-        //            {
-        //                await MainPage.Navigation.PushAsync(new NoInternetPage());
-        //            }
-        //        }
-        //        else
-        //        {
-        //                var pageToRemove = MainPage.Navigation.NavigationStack.FirstOrDefault(p => p is NoInternetPage);
-        //                if (pageToRemove != null)
-        //                {
-        //                    MainPage.Navigation.RemovePage(pageToRemove);
-        //                }
+                    APICalls database = new APICalls();
+                    var userfeedbacklist = await database.GetUserFeedback();
+                    var feedback = userfeedbacklist?.FirstOrDefault(); 
 
-        //            //var noInternetPage = MainPage.Navigation.NavigationStack.FirstOrDefault(p => p is NoInternetPage);
-        //            //if (noInternetPage != null)
-        //            //{
-        //            //    await MainPage.Navigation.PopAsync();
-        //            //}
-        //        }
-        //    }
-        //    catch(Exception Ex)
-        //    {
+                    //user not logged in 
+                    if (string.IsNullOrEmpty(userid) || string.IsNullOrEmpty(pincode)) return; 
 
-        //    }
-        //}
+                    if (Area.Data.ToLower().Contains("question"))
+                    {
+                        var QuestionID = NewNotification.FirstOrDefault(x => (!string.IsNullOrEmpty(x.key) && x.key == "questionnaireid"));
 
-        private async void OnConnectivityChanged(object sender, bool isConnected)
+                        if (QuestionID != null)
+                        {
+                            if (!String.IsNullOrEmpty(QuestionID.Data))
+                            {
+                                if (feedback != null)
+                                {
+                                    if (DeviceInfo.Platform == DevicePlatform.iOS)
+                                    {
+                                        await SetMainPageWithStack(new MainDashboard(), new AndroidQuestionnaires(QuestionID.Data, feedback));
+                                    }
+                                    else
+                                    {
+                                        await SetMainPageWithStack(new MainDashboard(), new AndroidONLYQuestionnaires(QuestionID.Data, feedback));
+                                    }
+                                }           
+                            }
+                        }                
+                    }
+                    else if (Area.Data.ToLower().Contains("med"))
+                    {
+                        await SetMainPageWithStack(new MainDashboard(), new AllMedications());
+                    }
+                    else if (Area.Data.ToLower().Contains("diag"))
+                    {
+                        await SetMainPageWithStack(new MainDashboard(), new AllDiagnosis());
+                    }
+                    else if (Area.Data.ToLower().Contains("meas"))
+                    {
+                        if (feedback != null)
+                        {
+                            await SetMainPageWithStack(new MainDashboard(), new MeasurementsPage(feedback));
+                        }                    
+                    }
+                    else if (Area.Data.ToLower().Contains("symp"))
+                    {
+                        if (feedback != null)
+                        {
+                            await SetMainPageWithStack(new MainDashboard(), new AllSymptoms(feedback));
+                        }                    
+                    }
+
+                    //Always Remove Data When this metod loads
+
+                    var filePath = Path.Combine(FileSystem.AppDataDirectory, "PWPushNotification.json");
+
+                    if (File.Exists(filePath))
+                    {
+                        try
+                        {
+                            File.Delete(filePath);
+                        }
+                        catch (Exception ex)
+                        {
+                            //Dunno
+                        }
+                    }
+
+                    //var context = Android.App.Application.Context;
+                    //var prefs = context.GetSharedPreferences("MyAppPrefs", FileCreationMode.Private);
+                    //var editor = prefs.Edit();
+                    //editor.Remove("PWPushNotification");
+                    //editor.Apply();
+                }
+            }
+            catch (Exception Ex)
+            {
+                ConfigureSentryUserScope();
+                SentrySdk.CaptureException(Ex);
+            }
+        }
+
+        public static async Task CheckNotificationAfterLogin()
+        {
+#if ANDROID
+            //var context = Android.App.Application.Context;
+            //var prefs = context.GetSharedPreferences("MyAppPrefs", FileCreationMode.Private);
+            //var json = prefs.GetString("PWPushNotification", null);
+            var json = string.Empty; 
+
+            var filePath = Path.Combine(FileSystem.AppDataDirectory, "PWPushNotification.json");
+            if (File.Exists(filePath))
+            {
+               json = await File.ReadAllTextAsync(filePath);
+            }
+
+            if (!string.IsNullOrEmpty(json))
+            {
+                try
+                {
+                    var dataItem = JsonSerializer.Deserialize<ObservableCollection<pushdata>>(json);
+                    if (dataItem != null && dataItem.Count > 0)
+                    {
+                        await App.AndroidPushNotificationTappedAsync(dataItem);
+                    }
+                }
+                catch
+                {
+                    await App.SetMainPage(new NavigationPage(new MainDashboard()));
+                }
+            }
+            else
+            {
+                await App.SetMainPage(new NavigationPage(new MainDashboard()));
+            }
+#else
+
+    //Ios for not Normal Navigation 
+    await App.SetMainPage(new NavigationPage(new MainDashboard()));
+
+#endif
+        }
+
+
+        private async void ConnectivityHandler(object sender, bool isConnected)
         {
             try
             {
@@ -268,6 +380,7 @@ namespace PeopleWith
                 {
                     // Check if NoInternetPage is already on the navigation stack
                     //New
+
                     if (!(Application.Current.MainPage is NoInternetPage))
                     {
                         await Application.Current.MainPage.Navigation.PushAsync(new NoInternetPage());
@@ -308,65 +421,5 @@ namespace PeopleWith
             {
             }
         }
-
-        //Changed For Android issue on resume 
-        //private async void OnConnectivityChanged(object sender, bool isConnected)
-        //{
-        //    try
-        //    {
-        //        await Task.Delay(500);
-
-        //        // Close any popup page
-        //        if (MopupService.Instance.PopupStack.Count > 0)
-        //        {
-        //            await MopupService.Instance.PopAsync();
-        //        }
-
-        //        // Actually check if internet is reachable
-        //        bool internetIsReachable = await IsInternetAvailable(); 
-        //        if (!internetIsReachable)
-        //        {
-        //            if (!(Application.Current.MainPage is NoInternetPage))
-        //            {
-        //                await Application.Current.MainPage.Navigation.PushAsync(new NoInternetPage());
-        //            }
-        //        }
-        //        else
-        //        {
-        //            var mainPage = Application.Current?.Windows.FirstOrDefault()?.Page;
-        //            if (mainPage != null)
-        //            {
-        //                var pageToRemove = mainPage.Navigation.NavigationStack.FirstOrDefault(p => p is NoInternetPage);
-        //                if (pageToRemove != null)
-        //                {
-        //                    mainPage.Navigation.RemovePage(pageToRemove);
-        //                }
-        //            }
-        //        }
-        //    }
-        //    catch (Exception Ex)
-        //    {
-        //    }
-        //}
-
-
-        //private async Task<bool> IsInternetAvailable()
-        //{
-        //    try
-        //    {
-        //        using var httpClient = new HttpClient
-        //        {
-        //            Timeout = TimeSpan.FromSeconds(3)
-        //        };
-
-        //        var response = await httpClient.GetAsync("https://clients3.google.com/generate_204");
-        //        return response.IsSuccessStatusCode;
-        //    }
-        //    catch
-        //    {
-        //        return false;
-        //    }
-        //}
-
     }
 }

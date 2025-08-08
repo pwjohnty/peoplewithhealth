@@ -27,29 +27,26 @@ namespace PeopleWith
             {
                 NetworkAccess accessType = Connectivity.Current.NetworkAccess;
 
-                if (accessType == NetworkAccess.Internet)
+                if (accessType != NetworkAccess.Internet)
                 {
-                    //Do Nothing 
-                }
-                else
-                {
-                    //var currentPage = Application.Current.MainPage.Navigation.NavigationStack.LastOrDefault();
-                    //if (!(currentPage is NoInternetPage))
-                    //{
-                    //    await Application.Current.MainPage.Navigation.PushAsync(new NoInternetPage());
-                    //}
-
-                    if (!(Application.Current.MainPage is NoInternetPage))
+                    if (Application.Current?.Windows.Any() != true)
                     {
-                        //SetMainPage(new NoInternetPage());
-                        await Application.Current.MainPage.Navigation.PushAsync(new NoInternetPage());
+                        await Navigation.PushAsync(new NoInternetPage());
+                    }
+                    else
+                    {
+                        var currentPage = Application.Current?.MainPage;
+                        if (!(Application.Current?.Windows?.LastOrDefault() is NoInternetPage))
+                        {
+                            await Application.Current.MainPage.Navigation.PushAsync(new NoInternetPage());
+                        }
                     }
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
-                
-            }        
+
+            }
         }
 
         async void checkifuserisloggedin()

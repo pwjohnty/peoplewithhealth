@@ -5,6 +5,11 @@ using SkiaSharp;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Maui.Devices;
+using System;
+using System.IO;
+using System.Threading.Tasks;
+using Microsoft.Maui.Devices;
 
 namespace PeopleWith;
 
@@ -62,6 +67,7 @@ public partial class TakeProfilePicture : ContentPage
         TakePhotobtn.Text = "Retake Photo";
         ImageFileName = Passed;
         ExisitingPhoto = true;
+        Deletebtn.IsVisible = true;
     }
 
 
@@ -157,9 +163,10 @@ public partial class TakeProfilePicture : ContentPage
                     {
                         ProfilePic.Source = ImageSource.FromStream(() => new MemoryStream(resizedImage));
                     });
-                    await Task.Delay(2000);
-                    //ProfilePic.Source = ImageSource.FromStream(() => new MemoryStream(resizedImage));
-                    //Update FIleName
+                    Savebtn.IsVisible = true;
+                    Deletebtn.IsVisible = false;
+                    TakePhotobtn.Text = "Retake Photo";
+
                     var backrandom = new Random();
                     var backrandomnum = backrandom.Next(1000, 10000000);
                     var Filename = Helpers.Settings.UserKey + "-" + DateTime.Now.ToString("dd-MM-yyyy-ss-mm-HH") + "-" + backrandomnum + ".Jpeg";
@@ -168,9 +175,14 @@ public partial class TakeProfilePicture : ContentPage
                         //New Instance
                         ImageFileName = Filename;
                     }
-                    TakePhotobtn.Text = "Retake Photo";
+
+                    await Task.Delay(2000);
+                    //ProfilePic.Source = ImageSource.FromStream(() => new MemoryStream(resizedImage));
+                    //Update FIleName
+                  
+                 
                     //ProfilePic.Rotation = 90;
-                    Savebtn.IsVisible = true; 
+                   
                 }
             }
         }
@@ -179,48 +191,174 @@ public partial class TakeProfilePicture : ContentPage
             NotasyncMethod(Ex);
         }
     }
-    private async Task<byte[]> ResizeImageAsync(Stream imageStream, int maxWidth, int maxHeight, int quality)
+    //private async Task<byte[]> ResizeImageAsync(Stream imageStream, int maxWidth, int maxHeight, int quality)
+    // {
+    //    try
+    //  {
+    //using var ms = new MemoryStream();
+    //await imageStream.CopyToAsync(ms);
+
+    //using var original = SKBitmap.Decode(ms.ToArray());
+
+    //float scale = Math.Min((float)maxWidth / original.Width, (float)maxHeight / original.Height);
+    //int newWidth = (int)(original.Width * scale);
+    //int newHeight = (int)(original.Height * scale);
+
+    //using var resized = original.Resize(new SKImageInfo(newWidth, newHeight),
+    //                                    new SKSamplingOptions(SKFilterMode.Linear));
+
+    //// Rotate 90 degrees
+    //using var rotated = new SKBitmap(resized.Height, resized.Width);
+    //using (var canvas = new SKCanvas(rotated))
+    //{
+    //    //Android only fix 
+    //    if (Rotate && DeviceInfo.Current.Platform == DevicePlatform.Android)
+    //    {
+    //        canvas.Translate(rotated.Width / 2, rotated.Height / 2);
+    //        canvas.RotateDegrees(90);
+    //        canvas.Translate(-resized.Width / 2, -resized.Height / 2);
+    //        canvas.DrawBitmap(resized, 0, 0);
+    //    }
+    //    else
+    //    {
+    //        canvas.DrawBitmap(resized, 0, 0);
+    //    }
+    //}
+
+    //using var image = SKImage.FromBitmap(rotated);
+    //return image.Encode(SKEncodedImageFormat.Png, quality).ToArray();
+
+
+
+    //using var ms = new MemoryStream();
+    //await imageStream.CopyToAsync(ms);
+
+    //using var original = SKBitmap.Decode(ms.ToArray());
+    //if (original == null) return null;
+
+    //float scale = Math.Min((float)maxWidth / original.Width, (float)maxHeight / original.Height);
+    //int newWidth = (int)(original.Width * scale);
+    //int newHeight = (int)(original.Height * scale);
+
+    //using var resized = original.Resize(new SKImageInfo(newWidth, newHeight),
+    //                                    new SKSamplingOptions(SKFilterMode.Linear));
+
+    //using var image = SKImage.FromBitmap(resized);
+    //return image.Encode(SKEncodedImageFormat.Png, quality).ToArray();
+
+    //  }
+    //   catch (Exception ex)
+    //  {
+    //       NotasyncMethod(ex);
+    //       return null;
+    //   }
+    //  }
+
+    public async Task<byte[]> ResizeImageAsync(Stream imageStream, int maxWidth, int maxHeight, int quality)
     {
         try
         {
             using var ms = new MemoryStream();
             await imageStream.CopyToAsync(ms);
+            var imageData = ms.ToArray();
 
-            using var original = SKBitmap.Decode(ms.ToArray());
+            using var codecStream = new MemoryStream(imageData);
+            using var codec = SKCodec.Create(codecStream);
+            if (codec == null)
+                return null;
+
+            var orientation = codec.EncodedOrigin;
+
+            using var original = SKBitmap.Decode(codec);
+            if (original == null)
+                return null;
 
             float scale = Math.Min((float)maxWidth / original.Width, (float)maxHeight / original.Height);
             int newWidth = (int)(original.Width * scale);
             int newHeight = (int)(original.Height * scale);
 
-            using var resized = original.Resize(new SKImageInfo(newWidth, newHeight),
-                                                new SKSamplingOptions(SKFilterMode.Linear));
+            using var resized = original.Resize(new SKImageInfo(newWidth, newHeight), new SKSamplingOptions(SKFilterMode.Linear));
+            if (resized == null)
+                return null;
 
-            // Rotate 90 degrees
-            using var rotated = new SKBitmap(resized.Height, resized.Width);
-            using (var canvas = new SKCanvas(rotated))
-            {
-                if (Rotate)
-                {
-                    canvas.Translate(rotated.Width / 2, rotated.Height / 2);
-                    canvas.RotateDegrees(90);
-                    canvas.Translate(-resized.Width / 2, -resized.Height / 2);
-                    canvas.DrawBitmap(resized, 0, 0);
-                }
-                else
-                {
-                    canvas.DrawBitmap(resized, 0, 0);
-                }
-            }
+            using var corrected = ApplyExifOrientation(resized, orientation);
 
-            using var image = SKImage.FromBitmap(rotated);
-            return image.Encode(SKEncodedImageFormat.Png, quality).ToArray();
+            using var image = SKImage.FromBitmap(corrected);
+            using var encodedData = image.Encode(SKEncodedImageFormat.Png, quality);
+            return encodedData.ToArray();
         }
         catch (Exception ex)
         {
-            NotasyncMethod(ex);
+            Console.WriteLine($"Error resizing image: {ex.Message}");
             return null;
         }
     }
+
+    private SKBitmap ApplyExifOrientation(SKBitmap bitmap, SKEncodedOrigin orientation)
+    {
+        int width = bitmap.Width;
+        int height = bitmap.Height;
+
+        // Swap dimensions for 90 or 270 rotation
+        bool rotate90 = orientation == SKEncodedOrigin.RightTop ||
+                        orientation == SKEncodedOrigin.LeftBottom ||
+                        orientation == SKEncodedOrigin.RightBottom ||
+                        orientation == SKEncodedOrigin.LeftTop;
+
+        var correctedBitmap = new SKBitmap(
+            rotate90 ? height : width,
+            rotate90 ? width : height
+        );
+
+        using var canvas = new SKCanvas(correctedBitmap);
+        switch (orientation)
+        {
+            case SKEncodedOrigin.RightTop:
+                canvas.Translate(height, 0);
+                canvas.RotateDegrees(90);
+                break;
+            case SKEncodedOrigin.BottomRight:
+                canvas.Translate(width, height);
+                canvas.RotateDegrees(180);
+                break;
+            case SKEncodedOrigin.LeftBottom:
+                canvas.Translate(0, width);
+                canvas.RotateDegrees(270);
+                break;
+            case SKEncodedOrigin.TopRight:
+                canvas.Scale(-1, 1);
+                canvas.Translate(-width, 0);
+                break;
+            case SKEncodedOrigin.LeftTop:
+                canvas.Translate(height, 0);
+                canvas.RotateDegrees(90);
+                canvas.Scale(-1, 1);
+                canvas.Translate(-height, 0);
+                break;
+            case SKEncodedOrigin.BottomLeft:
+                canvas.Translate(width, height);
+                canvas.RotateDegrees(180);
+                canvas.Scale(-1, 1);
+                canvas.Translate(-width, 0);
+                break;
+            case SKEncodedOrigin.RightBottom:
+                canvas.Translate(0, width);
+                canvas.RotateDegrees(270);
+                canvas.Scale(-1, 1);
+                canvas.Translate(-width, 0);
+                break;
+            default:
+                // TopLeft (no rotation needed)
+                break;
+        }
+
+        canvas.DrawBitmap(bitmap, 0, 0);
+        return correctedBitmap;
+    }
+
+
+
+
     //private async Task<byte[]> ResizeImageAsync(Stream imageStream, int maxWidth, int maxHeight, int quality)
     //{
     //    try
@@ -258,6 +396,7 @@ public partial class TakeProfilePicture : ContentPage
             if (photo != null)
             {
                 using var stream = await photo.OpenReadAsync();
+                Rotate = false;
                 var resizedImage = await ResizeImageAsync(stream, 1024, 1024, 80);
 
                 if (resizedImage != null)
@@ -267,9 +406,10 @@ public partial class TakeProfilePicture : ContentPage
                     {
                         ProfilePic.Source = ImageSource.FromStream(() => new MemoryStream(resizedImage));
                     });
-                    await Task.Delay(2000);
-                    //ProfilePic.Source = ImageSource.FromStream(() => new MemoryStream(resizedImage));
-                    //Update FIleName
+
+                    Savebtn.IsVisible = true;
+                    Deletebtn.IsVisible = false;
+                    TakePhotobtn.Text = "Take A Photo";
                     var backrandom = new Random();
                     var backrandomnum = backrandom.Next(1000, 10000000);
                     var Filename = Helpers.Settings.UserKey + "-" + DateTime.Now.ToString("dd-MM-yyyy-ss-mm-HH") + "-" + backrandomnum + ".Jpeg";
@@ -278,8 +418,10 @@ public partial class TakeProfilePicture : ContentPage
                         //New Instance
                         ImageFileName = Filename;
                     }
-                    TakePhotobtn.Text = "Take A Photo";
-                    Savebtn.IsVisible = true;
+                    await Task.Delay(2000);
+                    //ProfilePic.Source = ImageSource.FromStream(() => new MemoryStream(resizedImage));
+                    //Update FIleName
+                                             
                 }
             }
         }
@@ -308,7 +450,8 @@ public partial class TakeProfilePicture : ContentPage
             //Checks Succesful
             if (response.GetRawResponse().Status is >= 200 and < 300)
             {
-               await UpdateProfilePic();
+               bool isDelete = false; 
+               await UpdateProfilePic(isDelete);
             }
 
         }
@@ -318,12 +461,17 @@ public partial class TakeProfilePicture : ContentPage
         }
     }
 
-    public async Task UpdateProfilePic()
+    public async Task UpdateProfilePic(bool isDelete)
     {
         try
         {
             string id = Helpers.Settings.UserKey;
             var url = $"https://pwapi.peoplewith.com/api/user/userid/{id}";
+
+            if(isDelete == true)
+            {
+                ImageFileName = null; 
+            }
 
             var payload = new
             {
@@ -350,8 +498,18 @@ public partial class TakeProfilePicture : ContentPage
                 else
                 {
                     //Show Success page
+                    
                     WeakReferenceMessenger.Default.Send(new ProfilePicUpdate(ImageFileName));
-                    await MopupService.Instance.PushAsync(new PopupPageHelper("Profile Picture Uploaded") { });
+                    if (isDelete == true)
+                    {
+                        await MopupService.Instance.PushAsync(new PopupPageHelper("Profile Picture Deleted") { });
+                        Preferences.Set("profilepic", string.Empty);
+                    }
+                    else
+                    {
+                        await MopupService.Instance.PushAsync(new PopupPageHelper("Profile Picture Uploaded") { });
+                        Preferences.Set("profilepic", ImageFileName);
+                    }
                     await Task.Delay(1500);
                     await MopupService.Instance.PopAllAsync(false);
                     Navigation.RemovePage(this);
@@ -368,9 +526,10 @@ public partial class TakeProfilePicture : ContentPage
         }
         catch (Exception ex)
         {
-             NotasyncMethod(ex);
+            NotasyncMethod(ex);
         }
     }
+
 
     private void Savebtn_Clicked(object sender, EventArgs e)
     {
@@ -388,4 +547,16 @@ public partial class TakeProfilePicture : ContentPage
         }
     }
 
+    private async void Deletebtn_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            bool isDelete = true; 
+            await UpdateProfilePic(isDelete); 
+        }
+        catch (Exception Ex)
+        {
+            NotasyncMethod(Ex);
+        }
+    }
 }

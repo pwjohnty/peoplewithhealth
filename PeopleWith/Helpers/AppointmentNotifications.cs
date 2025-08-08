@@ -73,10 +73,12 @@ namespace PeopleWith
                     Title = nottitle,
                     Description = notdescription,
                     BadgeNumber = 0,
+                    Sound = DeviceInfo.Platform == DevicePlatform.Android ? "pwjingo" : "pwjingo.mp3",
                     Android = new Plugin.LocalNotification.AndroidOption.AndroidOptions
                     {
                         Priority = Plugin.LocalNotification.AndroidOption.AndroidPriority.High, // 🔥 Set priority here
                         Ongoing = true,
+                        ChannelId = "PeopleWithLocalNotifications",
                     },
                     Schedule = new NotificationRequestSchedule
                     {

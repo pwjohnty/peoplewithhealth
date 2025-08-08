@@ -9,6 +9,13 @@ using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Devices;
 using Mopups.Services;
 using CommunityToolkit.Mvvm.Messaging;
+using System.Text.Json;
+using System.Collections.ObjectModel;
+#if ANDROID
+using Android.Content;
+using Android.App;
+#endif
+
 
 namespace PeopleWith;
 
@@ -90,6 +97,7 @@ public partial class BiometricsLogin : ContentPage
         {
             APICalls databse = new APICalls();
             ImageFilename = await databse.GetProfilePicture();
+            //ImageFilename = Helpers.Settings.ProfilePic;
 
             if (!string.IsNullOrEmpty(ImageFilename))
             {
@@ -227,9 +235,13 @@ public partial class BiometricsLogin : ContentPage
                             await Task.Delay(500);
                         });
 
-                        MainThread.BeginInvokeOnMainThread(() =>
+                      //var checkNotif = Preferences.Get("PWPushNotification", String.Empty);
+
+
+                    MainThread.BeginInvokeOnMainThread(async () =>
                         {
-                            App.SetMainPage(new NavigationPage(new MainDashboard()));
+                            await App.CheckNotificationAfterLogin(); 
+                 
                         });
                     }
                     else
@@ -249,6 +261,9 @@ public partial class BiometricsLogin : ContentPage
             NotasyncMethod(Ex);
         }
     }
+
+
+  
 
     async private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {

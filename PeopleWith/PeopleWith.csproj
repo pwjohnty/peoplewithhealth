@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
-    <!-- <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks> -->
-	  <!--<TargetFrameworks>net9.0-android</TargetFrameworks>
+    <!--<TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>-->
+     <!--<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>--> 
+	  <TargetFrameworks>net9.0-android</TargetFrameworks>
 	   <TargetFrameworks Condition="!$([MSBuild]::IsOSPlatform('windows'))">
     $(TargetFrameworks);net9.0-ios;net9.0-maccatalyst
-  </TargetFrameworks>-->
+  </TargetFrameworks>
 	  <!--<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>-->
 	  <RuntimeIdentifiers Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
   android-arm;android-arm64;android-x86;android-x64
@@ -112,7 +112,16 @@
     <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
   <ItemGroup>
+    <MauiAsset Remove="Resources\Raw\pwjingo.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Platforms\Android\Resources\raw\pwjingo.mp3" />
+    <AndroidResource Include="Resources\Raw\pwjingo.mp3" />
+  </ItemGroup>
+  <ItemGroup>
     <!--<None Remove="Platforms\Android\google-services.json" />-->
+    <None Remove="Platforms\Android\Resources\raw\pwjingo.mp3" />
+    <None Remove="Platforms\iOS\Resources\Raw\pwjingo.mp3" />
     <None Remove="Resources\AppIcon\pwhealthicon.svg" />
     <!--<None Remove="Resources\Fonts\HankenGrotesk-Bold.ttf" />
     <None Remove="Resources\Fonts\HankenGrotesk-Light.ttf" />
@@ -302,6 +311,9 @@
 	<ItemGroup Condition="'$(TargetFramework)' != '' and $(TargetFramework.Contains('-android'))">
   <GoogleServicesJson Include="Platforms\Android\google-services.json" />
   <PackageReference Include="Plugin.Firebase.CloudMessaging" Version="3.1.2" />
+	</ItemGroup>
+	<ItemGroup>
+	  <MauiAsset Include="Platforms\iOS\Resources\Raw\pwjingo.mp3" />
 	</ItemGroup>
 
 	<ItemGroup>
